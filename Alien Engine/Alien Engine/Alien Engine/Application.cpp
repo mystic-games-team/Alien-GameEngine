@@ -111,7 +111,8 @@ update_status Application::Update()
 		ret = (*item)->PostUpdate(dt);
 		++item;
 	}
-
+	if (quit)
+		ret = UPDATE_STOP;
 	FinishUpdate();
 	return ret;
 }
@@ -127,6 +128,11 @@ bool Application::CleanUp()
 		++item;
 	}
 	return ret;
+}
+
+void Application::QuitApp()
+{
+	quit = true;
 }
 
 void Application::AddModule(Module* mod)

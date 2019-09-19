@@ -31,6 +31,7 @@ private:
 	Timer	ms_timer;
 	float	dt;
 	std::list<Module*> list_modules;
+	bool quit = false;
 
 public:
 
@@ -40,6 +41,8 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
+
+	void QuitApp();
 
 private:
 

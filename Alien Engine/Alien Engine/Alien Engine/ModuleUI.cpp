@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleUI.h"
 #include "imgui/imgui.h"
-
+#include "imgui/imgui_internal.h"
 #include <gl/GL.h>
 
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -24,7 +24,7 @@ bool ModuleUI::Start()
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls ImGuiWindowFlags_MenuBar
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
@@ -50,7 +50,6 @@ bool ModuleUI::CleanUp()
 	return true;
 }
 
-
 update_status ModuleUI::PreUpdate(float dt)
 {
 
@@ -66,7 +65,7 @@ update_status ModuleUI::Update(float dt)
 {
 	bool show_demo_wndow = true;
 	ImGui::ShowDemoWindow(&show_demo_wndow);
-
+	Menu();
 
 	return UPDATE_CONTINUE;
 }
@@ -76,7 +75,7 @@ update_status ModuleUI::PostUpdate(float dt)
 
 	ImGui::Render();
 
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	ImVec4 clear_color = ImVec4(0.1f, 0.87f, 0.32f, 0.64f);
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
@@ -92,6 +91,25 @@ update_status ModuleUI::PostUpdate(float dt)
 
 
 	return UPDATE_CONTINUE;
+}
+
+
+
+void ModuleUI::Menu()
+{
+	ImGui::Begin("TestMenu", (bool*)0, ImGuiWindowFlags_MenuBar);
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("Menu"))
+		{
+			if (ImGui::MenuItem("Close", "Ctrl+W")) { 
+				App->QuitApp();
+			}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenuBar();
+	}
+	ImGui::End();
 }
 
 
