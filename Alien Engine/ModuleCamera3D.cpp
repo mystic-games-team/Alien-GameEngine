@@ -1,9 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "PhysBody3D.h"
-#include "ModulePlayer.h"
 #include "ModulePhysics3D.h"
-#include "PhysVehicle3D.h"
 #include "ModuleCamera3D.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -102,7 +100,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 
 	
-	btTransform transform = App->player->vehicle->vehicle->getChassisWorldTransform();
+	/*btTransform transform = App->player->vehicle->vehicle->getChassisWorldTransform();
 
 	vec3 pos = TransformToVec3(transform.getOrigin());
 	vec3 dir = TransformToVec3(transform.getBasis().getColumn(2));
@@ -113,9 +111,9 @@ update_status ModuleCamera3D::Update(float dt)
 
 	vec3 pop;
 	pastDirections.Pop(pop);
-	vec3 CamDir = pos - 10 * pop;
+	vec3 CamDir = pos - 10 * pop;*/
 
-	Look(CamPos, CamDir, true);
+	//Look(CamPos, CamDir, true);
 
 
 
