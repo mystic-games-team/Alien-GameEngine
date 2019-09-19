@@ -66,6 +66,7 @@ update_status ModuleUI::Update(float dt)
 	bool show_demo_wndow = true;
 	ImGui::ShowDemoWindow(&show_demo_wndow);
 	Menu();
+	Close_Menu();
 
 	return UPDATE_CONTINUE;
 }
@@ -108,6 +109,17 @@ void ModuleUI::Menu()
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenuBar();
+	}
+	ImGui::End();
+}
+
+void ModuleUI::Close_Menu()
+{
+	ImGui::Begin("PANIC BUTTON", (bool*)0, ImGuiWindowFlags_MenuBar| ImGuiWindowFlags_NoBackground|ImGuiWindowFlags_NoTitleBar);
+	
+	if (ImGui::Button("PANIC CLOSE",ImVec2(250, 250)))
+	{
+		App->QuitApp();
 	}
 	ImGui::End();
 }
