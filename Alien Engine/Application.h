@@ -16,6 +16,7 @@
 class Application
 {
 public:
+	ModuleUI* ui;
 	ModuleWindow* window;
 	ModuleInput* input;
 	ModuleAudio* audio;
@@ -23,7 +24,7 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModulePhysics3D* physics;
-	ModuleUI* ui;
+	
 
 private:
 

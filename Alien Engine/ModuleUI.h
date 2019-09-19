@@ -1,5 +1,4 @@
-#ifndef __MODULE_UI__
-#define __MODULE_UI__
+#pragma once
 
 #include "Globals.h"
 #include "Application.h"
@@ -18,4 +17,4 @@ public:
 
 };
 
-#endif // !__MODULE_UI__
+
