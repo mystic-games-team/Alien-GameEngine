@@ -113,11 +113,24 @@ void ModuleUI::MainMenuBar()
 	ImGui::End();*/
 
 	ImGui::BeginMainMenuBar();
-	if (ImGui::BeginMenu("Menu"))
+	if (ImGui::BeginMenu("File"))
 	{
-		if (ImGui::MenuItem("Close", "Ctrl+W")) {
+		if (ImGui::BeginMenu("New", "Ctrl+N")) 
+		{
+				if (ImGui::MenuItem("haha"))
+				{
+					LOG("haha");
+				}
+				ImGui::EndMenu();
+		}
+		if (ImGui::MenuItem("Open", "Ctrl+W")) 
+		{
+		}
+		if (ImGui::MenuItem("Close", "Ctrl+W")) 
+		{
 			App->QuitApp();
 		}
+
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
