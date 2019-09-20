@@ -33,7 +33,6 @@
 #include "SDL_stdinc.h"
 #include "SDL_assert.h"
 #include "SDL_atomic.h"
-#include "SDL_audio.h"
 #include "SDL_clipboard.h"
 #include "SDL_cpuinfo.h"
 #include "SDL_endian.h"

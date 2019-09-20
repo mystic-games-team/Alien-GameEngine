@@ -3,6 +3,7 @@
 #include "ModuleUI.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "imgui/examples/imgui_impl_opengl3.h"
 #include <gl/GL.h>
 
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -32,10 +33,8 @@ bool ModuleUI::Start()
 
 	// Setup Platform/Renderer bindings
 	//ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init();
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
-	ImGui_ImplOpenGL2_Init();
-	
-
 
 	return ret;
 }
@@ -53,7 +52,7 @@ bool ModuleUI::CleanUp()
 update_status ModuleUI::PreUpdate(float dt)
 {
 
-	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
@@ -87,7 +86,7 @@ update_status ModuleUI::PostUpdate(float dt)
 	//GLint last_program; 
 	//glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
 	//glUseProgram(0);
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	//glUseProgram(last_program);
 
 
