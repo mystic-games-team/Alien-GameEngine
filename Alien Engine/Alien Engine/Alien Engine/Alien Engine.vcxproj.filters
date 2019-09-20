@@ -36,12 +36,6 @@
     <ClInclude Include="ModuleInput.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="p2Point.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="p2DynArray.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Tools</Filter>
     </ClInclude>
