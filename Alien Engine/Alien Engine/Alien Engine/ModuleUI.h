@@ -2,7 +2,6 @@
 #include "Module.h"
 #include "p2DynArray.h"
 #include "Globals.h"
-#include "Primitive.h"
 
 #include "imgui/imgui.h"
 #include "imgui/examples/imgui_impl_sdl.h"

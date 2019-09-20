@@ -27,9 +27,6 @@
     <ClInclude Include="ModuleRenderer3D.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModulePhysics3D.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleCamera3D.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -87,13 +84,7 @@
     <ClInclude Include="Light.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="PhysBody3D.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="glmath.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitive.h">
       <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
@@ -105,9 +96,6 @@
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleInput.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModulePhysics3D.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
@@ -158,13 +146,7 @@
     <ClCompile Include="Light.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="PhysBody3D.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
     <ClCompile Include="glmath.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitive.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
