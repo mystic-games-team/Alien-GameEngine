@@ -98,7 +98,7 @@ update_status ModuleUI::PostUpdate(float dt)
 
 void ModuleUI::Menu()
 {
-	ImGui::Begin("TestMenu", (bool*)0, ImGuiWindowFlags_MenuBar);
+	/*ImGui::Begin("TestMenu", (bool*)0, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::BeginMenu("Menu"))
@@ -110,12 +110,22 @@ void ModuleUI::Menu()
 		}
 		ImGui::EndMenuBar();
 	}
-	ImGui::End();
+	ImGui::End();*/
+
+	ImGui::BeginMainMenuBar();
+	if (ImGui::BeginMenu("Menu"))
+	{
+		if (ImGui::MenuItem("Close", "Ctrl+W")) {
+			App->QuitApp();
+		}
+		ImGui::EndMenu();
+	}
+	ImGui::EndMainMenuBar();
 }
 
 void ModuleUI::Close_Menu()
 {
-	ImGui::Begin("PANIC BUTTON", (bool*)0, ImGuiWindowFlags_MenuBar| ImGuiWindowFlags_NoBackground|ImGuiWindowFlags_NoTitleBar);
+	ImGui::Begin("PANIC BUTTON", (bool*)1, ImGuiWindowFlags_MenuBar| ImGuiWindowFlags_NoBackground|ImGuiWindowFlags_NoTitleBar);
 	
 	if (ImGui::Button("PANIC CLOSE",ImVec2(250, 250)))
 	{
