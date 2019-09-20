@@ -78,6 +78,9 @@
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h">
       <Filter>ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="PCG\pcg_basic.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -136,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp">
       <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="PCG\pcg_basic.c">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
