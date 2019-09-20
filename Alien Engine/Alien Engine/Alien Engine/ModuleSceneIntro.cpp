@@ -1,7 +1,13 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "MathGeoLib/include/Geometry/Plane.h"
 
+#ifdef NDEBUG //no debug
+#pragma comment (lib, "MathGeoLib/libx86/Release/MathGeoLib.lib") 
+#else
+#pragma comment (lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib") 
+#endif
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -37,7 +43,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	
+	Sphere s({ 0,0,0 }, 4);
 	
 
 	return UPDATE_CONTINUE;
