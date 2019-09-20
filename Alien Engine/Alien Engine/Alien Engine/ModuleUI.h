@@ -21,7 +21,7 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
-	void Menu();
+	void MainMenuBar();
 	void Close_Menu();
 
 public:

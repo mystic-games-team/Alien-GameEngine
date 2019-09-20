@@ -65,7 +65,7 @@ update_status ModuleUI::Update(float dt)
 {
 	bool show_demo_wndow = true;
 	ImGui::ShowDemoWindow(&show_demo_wndow);
-	Menu();
+	MainMenuBar();
 	Close_Menu();
 
 	return UPDATE_CONTINUE;
@@ -96,7 +96,7 @@ update_status ModuleUI::PostUpdate(float dt)
 
 
 
-void ModuleUI::Menu()
+void ModuleUI::MainMenuBar()
 {
 	/*ImGui::Begin("TestMenu", (bool*)0, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar())
