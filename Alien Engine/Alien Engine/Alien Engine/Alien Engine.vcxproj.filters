@@ -81,9 +81,6 @@
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="PCG\pcg_basic.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h">
       <Filter>Tools\Math</Filter>
     </ClInclude>
@@ -322,9 +319,6 @@
     </ClCompile>
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp">
       <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="PCG\pcg_basic.c">
-      <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>Tools\Math</Filter>

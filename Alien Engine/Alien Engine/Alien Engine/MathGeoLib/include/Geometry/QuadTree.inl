@@ -669,7 +669,7 @@ void QuadTree<T>::GrowImpl(int quadrantForRoot)
 template<typename T>
 int QuadTree<T>::NumNodes() const
 {
-	return std::max<int>(0, nodes.size() - 3); // The nodes rootNodeIndex+1, rootNodeIndex+2 and rootNodeIndex+3 are dummy unused, since the root node is not a quadrant.
+	return max(0, nodes.size() - 3); // The nodes rootNodeIndex+1, rootNodeIndex+2 and rootNodeIndex+3 are dummy unused, since the root node is not a quadrant.
 }
 
 template<typename T>

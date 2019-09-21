@@ -205,7 +205,6 @@
     <ClInclude Include="ModuleSceneIntro.h" />
     <ClInclude Include="ModuleUI.h" />
     <ClInclude Include="ModuleWindow.h" />
-    <ClInclude Include="PCG\pcg_basic.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -259,7 +258,6 @@
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
-    <ClCompile Include="PCG\pcg_basic.c" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

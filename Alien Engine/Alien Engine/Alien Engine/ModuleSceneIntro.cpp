@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
-#include "MathGeoLib/include/Geometry/Plane.h"
+
 
 #ifdef NDEBUG //no debug
 #pragma comment (lib, "MathGeoLib/libx86/Release/MathGeoLib.lib") 
@@ -49,7 +49,4 @@ update_status ModuleSceneIntro::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
-{
-}
 
