@@ -6,6 +6,7 @@
 #include "imgui/examples/imgui_impl_opengl3.h"
 #include <gl/GL.h>
 
+
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -44,7 +45,9 @@ bool ModuleUI::Start()
 bool ModuleUI::CleanUp()
 {
 	LOG("Unloading UI scene");
-
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 
 	return true;
 }

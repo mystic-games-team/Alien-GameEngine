@@ -3,6 +3,12 @@
 #include "ModuleSceneIntro.h"
 
 
+#ifdef NDEBUG //no debug
+#pragma comment (lib, "MathGeoLib/libx86/Release/MathGeoLib.lib") 
+#else
+#pragma comment (lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib") 
+#endif
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -37,13 +43,15 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
+	Sphere s({ 0,0,0 }, 4);
+	Sphere f({ 0,0,0 }, 7);
+	if (f.Intersects(s)) {
+		LOG("INTERSECTION DETECTED!!!");
+	}
 	
 	
 
 	return UPDATE_CONTINUE;
 }
 
-void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
-{
-}
 
