@@ -273,6 +273,9 @@
     <ClInclude Include="PCG\pcg_extras.hpp">
       <Filter>Tools\PCG</Filter>
     </ClInclude>
+    <ClInclude Include="RandomHelper.h">
+      <Filter>Tools\PCG</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">

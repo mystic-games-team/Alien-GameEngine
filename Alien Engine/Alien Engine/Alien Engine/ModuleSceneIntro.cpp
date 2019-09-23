@@ -2,14 +2,13 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 
-
 #ifdef NDEBUG //no debug
 #pragma comment (lib, "MathGeoLib/libx86/Release/MathGeoLib.lib") 
 #else
 #pragma comment (lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib") 
 #endif
 
-#include "PCG/pcg_random.hpp"
+#include "RandomHelper.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -51,8 +50,8 @@ update_status ModuleSceneIntro::Update(float dt)
 		LOG("INTERSECTION DETECTED!!!");
 	}
 	
+	LOG("RAND %i",RandomHelper::GetRandomIntBetweenTwo(-100, 100));
 	
-
 	return UPDATE_CONTINUE;
 }
 
