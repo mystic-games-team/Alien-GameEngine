@@ -9,6 +9,8 @@
 #pragma comment (lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib") 
 #endif
 
+#include "PCG/pcg_random.hpp"
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }

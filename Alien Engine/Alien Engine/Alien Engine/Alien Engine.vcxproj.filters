@@ -16,6 +16,9 @@
     <Filter Include="Tools\Math">
       <UniqueIdentifier>{9636fa87-2143-4102-b473-91cb98fad9cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\PCG">
+      <UniqueIdentifier>{e45de44f-ad64-4e16-afa9-35b47fe1b430}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -260,6 +263,15 @@
     </ClInclude>
     <ClInclude Include="MathGeoLib\include\MathGeoLibFwd.h">
       <Filter>Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG\pcg_random.hpp">
+      <Filter>Tools\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG\pcg_uint128.hpp">
+      <Filter>Tools\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG\pcg_extras.hpp">
+      <Filter>Tools\PCG</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
