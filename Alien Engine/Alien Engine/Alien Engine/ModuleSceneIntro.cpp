@@ -50,7 +50,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		LOG("INTERSECTION DETECTED!!!");
 	}
 	
-	LOG("RAND %i",GetRandomIntBetweenTwo(-100, 100));
+	LOG("RAND %.1f",GetRandomFloatBetweenTwo(-103.3f,1.8f));
 	
 	return UPDATE_CONTINUE;
 }
