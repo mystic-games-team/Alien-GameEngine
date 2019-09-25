@@ -9,6 +9,7 @@
 #endif
 
 #include "RandomHelper.h"
+#include "Parson/parson.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -27,6 +28,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	if(json_parse_file("ip.json")!=NULL)
+		LOG("Readed!");
 
 	return ret;
 }
@@ -44,14 +47,16 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	Sphere s({ 0,0,0 }, 4);
-	Sphere f({ 0,0,0 }, 7);
-	if (f.Intersects(s)) {
-		LOG("INTERSECTION DETECTED!!!");
-	}
-	
-	LOG("RAND %.1f",GetRandomFloatBetweenTwo(-103.3f,1.8f));
-	
+	//Sphere s({ 0,0,0 }, 4);
+	//Sphere f({ 0,0,0 }, 7);
+	//if (f.Intersects(s)) {
+	//	LOG("INTERSECTION DETECTED!!!");
+	//}
+	//
+	//LOG("RAND %.1f",GetRandomFloatBetweenTwo(-103.3f,1.8f));
+	//
+
+
 	return UPDATE_CONTINUE;
 }
 

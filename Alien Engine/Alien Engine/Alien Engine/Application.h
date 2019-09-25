@@ -40,6 +40,8 @@ public:
 
 	void QuitApp();
 
+	void OpenWebsite(const std::string& website);
+
 private:
 
 	void AddModule(Module* mod);

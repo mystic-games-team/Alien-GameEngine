@@ -22,6 +22,9 @@
     <Filter Include="Panels">
       <UniqueIdentifier>{b7dececf-db22-4816-90a8-ab45882999fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Parson">
+      <UniqueIdentifier>{b2879790-8bef-4b74-9d0b-78f75068c69f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -285,6 +288,9 @@
     <ClInclude Include="PanelAbout.h">
       <Filter>Panels</Filter>
     </ClInclude>
+    <ClInclude Include="Parson\parson.h">
+      <Filter>Tools\Parson</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -445,6 +451,9 @@
     </ClCompile>
     <ClCompile Include="PanelAbout.cpp">
       <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="Parson\parson.c">
+      <Filter>Tools\Parson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
