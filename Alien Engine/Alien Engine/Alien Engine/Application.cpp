@@ -38,6 +38,7 @@ Application::~Application()
 	}
 
 	list_modules.clear();
+	json_value_free(json_object_get_value(config, "Configuration/Configuration.json"));
 }
 
 bool Application::LoadConfig()
@@ -161,6 +162,7 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
+	SaveConfig();
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
 	while(item != list_modules.rend() && ret == true)

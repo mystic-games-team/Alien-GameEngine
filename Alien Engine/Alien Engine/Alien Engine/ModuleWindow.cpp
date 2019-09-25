@@ -27,9 +27,6 @@ bool ModuleWindow::Init()
 	}
 	else
 	{
-		//Create window
-		int width = SCREEN_WIDTH * SCREEN_SIZE;
-		int height = SCREEN_HEIGHT * SCREEN_SIZE;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
@@ -56,7 +53,7 @@ bool ModuleWindow::Init()
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width * SCREEN_SIZE, height * SCREEN_SIZE, flags);
 
 		if(window == NULL)
 		{
@@ -91,9 +88,8 @@ bool ModuleWindow::CleanUp()
 
 void ModuleWindow::LoadConfig(JSON_Object*& config)
 {
-	if (config != nullptr) {
-		int x = 0;
-	}
+	width = json_object_dotget_number(config, "Configuration.Window.Width");
+	height = json_object_dotget_number(config, "Configuration.Window.Height");
 }
 
 void ModuleWindow::SetTitle(const char* title)
