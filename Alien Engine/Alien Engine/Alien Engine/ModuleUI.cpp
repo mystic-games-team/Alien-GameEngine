@@ -5,7 +5,7 @@
 #include "imgui/imgui_internal.h"
 #include "imgui/examples/imgui_impl_opengl3.h"
 #include <gl/GL.h>
-
+#include "PanelAbout.h"
 
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -37,6 +37,8 @@ bool ModuleUI::Start()
 	ImGui_ImplOpenGL3_Init();
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
+	InitPanels();
+
 	return ret;
 }
 
@@ -48,6 +50,15 @@ bool ModuleUI::CleanUp()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+
+	std::vector<Panel*>::iterator item = panels.begin();
+	for (; item != panels.end(); ++item) {
+		if ((*item) != nullptr) {
+			delete *item;
+			*item = nullptr;
+		}
+	}
+	panels.clear();
 
 	return true;
 }
@@ -67,7 +78,9 @@ update_status ModuleUI::Update(float dt)
 {
 	bool show_demo_wndow = true;
 	ImGui::ShowDemoWindow(&show_demo_wndow);
+
 	MainMenuBar();
+	UpdatePanels();
 
 	return UPDATE_CONTINUE;
 }
@@ -135,6 +148,27 @@ void ModuleUI::MainMenuBar()
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
+}
+
+void ModuleUI::InitPanels()
+{
+	panels.push_back(new PanelAbout("About", (std::vector<SDL_Scancode>)(SDL_SCANCODE_LCTRL, SDL_SCANCODE_A)));
+
+
+}
+
+void ModuleUI::UpdatePanels()
+{
+	std::vector<Panel*>::iterator item = panels.begin();
+	for (; item != panels.end(); ++item) {
+		if (*item != nullptr) {
+			if ((*item)->ShortCutClicked())
+				(*item)->ChangeEnable();
+			if ((*item)->IsEnabled()) {
+				(*item)->PanelLogic();
+			}
+		}
+	}
 }
 
 
