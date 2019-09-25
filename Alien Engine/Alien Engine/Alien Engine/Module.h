@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <string>
 
 class Module
 {
@@ -44,5 +44,7 @@ public:
 	{ 
 		return true; 
 	}
+		
+	std::string name;
 
 };

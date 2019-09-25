@@ -25,6 +25,9 @@
     <Filter Include="Tools\Parson">
       <UniqueIdentifier>{b2879790-8bef-4b74-9d0b-78f75068c69f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JONSONS">
+      <UniqueIdentifier>{c3226d6a-964e-4040-a00c-a42ec6835acf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -480,6 +483,9 @@
     </None>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
       <Filter>Tools\Math</Filter>
+    </None>
+    <None Include="Game\Configuration\Configuration.json">
+      <Filter>JONSONS</Filter>
     </None>
   </ItemGroup>
 </Project>

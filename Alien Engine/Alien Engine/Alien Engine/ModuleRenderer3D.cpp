@@ -14,6 +14,7 @@
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
+	name.assign("Renderer3D");
 }
 
 // Destructor

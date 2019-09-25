@@ -47,6 +47,7 @@ private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+	void LoadJSONFile(const std::string &path);
 };
 
 extern Application* App;

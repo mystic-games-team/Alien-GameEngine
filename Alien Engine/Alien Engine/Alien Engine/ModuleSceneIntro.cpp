@@ -13,6 +13,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
 {
+	name.assign("SceneIntro");
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()

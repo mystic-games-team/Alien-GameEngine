@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Parson/parson.h"
 
 Application::Application()
 {
@@ -61,7 +62,7 @@ bool Application::Init()
 		ret = (*item)->Start();
 		++item;
 	}
-	
+	LoadJSONFile("Configuration/Configuration.json");
 	ms_timer.Start();
 	return ret;
 }
@@ -76,6 +77,23 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+}
+
+void Application::LoadJSONFile(const std::string& path)
+{
+	JSON_Value* value = json_parse_file(path.data());
+	JSON_Object* object = json_value_get_object(value);
+
+	if (value == nullptr || object == nullptr)
+	{
+		LOG("Error loading %s", path);
+	}
+
+
+	int f = json_object_dotget_number(object, "Configuration.Window.Height");
+	if (f == 800) {
+		int x = 0;
+	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules

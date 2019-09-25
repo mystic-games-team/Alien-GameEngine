@@ -11,6 +11,7 @@
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
+	name.assign("UI");
 }
 
 ModuleUI::~ModuleUI()

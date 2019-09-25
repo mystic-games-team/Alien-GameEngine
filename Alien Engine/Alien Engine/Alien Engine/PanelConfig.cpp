@@ -19,7 +19,7 @@ void PanelConfig::PanelLogic()
 	{
 	}
 
-
+	
 	ImGui::End();
 
 }
