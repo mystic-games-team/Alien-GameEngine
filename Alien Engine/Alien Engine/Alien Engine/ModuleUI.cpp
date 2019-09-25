@@ -144,7 +144,10 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("Help"))
 	{
-
+		if (ImGui::MenuItem("About Us..."))
+		{
+			App->OpenWebsite("https://github.com/VictorSegura99/Alien-GameEngine");
+		}
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
