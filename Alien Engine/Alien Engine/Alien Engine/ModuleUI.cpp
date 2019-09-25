@@ -127,7 +127,10 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("View"))
 	{
+		if (ImGui::MenuItem("Configuration", "Ctrl + C"))
+		{
 
+		}
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Help"))
