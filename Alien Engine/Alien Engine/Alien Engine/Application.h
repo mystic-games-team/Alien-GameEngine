@@ -22,10 +22,8 @@ public:
 	ModuleCamera3D* camera = nullptr;
 	ModuleUI* ui = nullptr;
 
-	JSON_Object* config = nullptr;
-
-
 private:
+	JSON_Object* config = nullptr;
 	Timer	ms_timer;
 	float	dt;
 	std::list<Module*> list_modules;
@@ -38,8 +36,6 @@ public:
 
 	bool LoadConfig();
 	bool SaveConfig();
-
-	JSON_Object* LoadJSONFile(const std::string& path);
 
 	bool Init();
 	update_status Update();
@@ -54,7 +50,7 @@ private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
-	
+	JSON_Object* LoadJSONFile(const std::string &path);
 };
 
 extern Application* App;

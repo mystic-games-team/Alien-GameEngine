@@ -91,7 +91,9 @@ bool ModuleWindow::CleanUp()
 
 void ModuleWindow::LoadConfig(JSON_Object*& config)
 {
-	int x = 0;
+	if (config != nullptr) {
+		int x = 0;
+	}
 }
 
 void ModuleWindow::SetTitle(const char* title)

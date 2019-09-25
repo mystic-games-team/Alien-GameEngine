@@ -73,10 +73,8 @@ bool Application::SaveConfig()
 bool Application::Init()
 {
 	bool ret = true;
-
 	config = LoadJSONFile("Configuration/Configuration.json");
 	LoadConfig();
-
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
@@ -95,7 +93,7 @@ bool Application::Init()
 		ret = (*item)->Start();
 		++item;
 	}
-
+	
 	ms_timer.Start();
 	return ret;
 }
@@ -121,7 +119,7 @@ JSON_Object* Application::LoadJSONFile(const std::string& path)
 	{
 		LOG("Error loading %s", path);
 	}
-	
+
 	return object;
 }
 
@@ -163,9 +161,6 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
-
-	SaveConfig();
-
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
 	while(item != list_modules.rend() && ret == true)

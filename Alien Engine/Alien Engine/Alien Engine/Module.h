@@ -16,6 +16,9 @@ public:
 	virtual ~Module()
 	{}
 
+	virtual void LoadConfig(JSON_Object*& config){}
+	virtual void SaveConfig(JSON_Object*& config) {}
+
 	virtual bool Init() 
 	{
 		return true; 
@@ -25,9 +28,6 @@ public:
 	{
 		return true;
 	}
-
-	virtual void LoadConfig(JSON_Object*& config) {}
-	virtual void SaveConfig(JSON_Object*& config) {}
 
 	virtual update_status PreUpdate(float dt)
 	{

@@ -462,7 +462,7 @@
       <Filter>Panels</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Core</Filter>
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
