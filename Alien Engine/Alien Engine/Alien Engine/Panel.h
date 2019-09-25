@@ -35,7 +35,7 @@ public:
 	const std::string& GetName();
 	void ChangeEnable();
 	bool IsEnabled();
-	bool ShortCutClicked(Application*& app);
+	bool ShortCutClicked();
 
 private:
 

@@ -157,7 +157,7 @@ void ModuleUI::UpdatePanels()
 	std::vector<Panel*>::iterator item = panels.begin();
 	for (; item != panels.end(); ++item) {
 		if (*item != nullptr) {
-			if ((*item)->ShortCutClicked(App))
+			if ((*item)->ShortCutClicked())
 				(*item)->ChangeEnable();
 			if ((*item)->IsEnabled()) {
 				(*item)->PanelLogic();

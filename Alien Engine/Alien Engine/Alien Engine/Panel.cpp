@@ -28,7 +28,7 @@ void Panel::ChangeEnable()
 	enabled = !enabled;
 }
 
-bool Panel::ShortCutClicked(Application*& app)
+bool Panel::ShortCutClicked()
 {
 	bool ret = true;
 
@@ -39,15 +39,15 @@ bool Panel::ShortCutClicked(Application*& app)
 		if ((*item) != nullptr) {
 			switch ((*item)->shortcut_state) {
 			case ShortCutState::WAITING_SHORTCUT:
-				if (app->input->GetKey((*item)->shortcut_code) == KEY_REPEAT)
+				if (App->input->GetKey((*item)->shortcut_code) == KEY_REPEAT)
 					(*item)->shortcut_state = ShortCutState::CLICKED;
 				break;
 			case ShortCutState::CLICKED:
-				if (app->input->GetKey((*item)->shortcut_code) == KEY_UP)
+				if (App->input->GetKey((*item)->shortcut_code) == KEY_UP)
 					(*item)->shortcut_state = ShortCutState::WAITING_SHORTCUT;
 				break;
 			case ShortCutState::SHORTCUT_DONE:
-				if (app->input->GetKey((*item)->shortcut_code) == KEY_UP)
+				if (App->input->GetKey((*item)->shortcut_code) == KEY_UP)
 					shortcut_can_be_done_again = true;
 				break;
 			default:
