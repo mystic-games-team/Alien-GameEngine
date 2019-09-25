@@ -143,7 +143,7 @@ void ModuleUI::MainMenuBar()
 
 void ModuleUI::InitPanels()
 {
-	panels.push_back(new PanelAbout("About", (std::vector<SDL_Scancode>)(SDL_SCANCODE_LCTRL, SDL_SCANCODE_A)));
+	panels.push_back(new PanelAbout("About", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A}));
 
 
 }
@@ -153,7 +153,7 @@ void ModuleUI::UpdatePanels()
 	std::vector<Panel*>::iterator item = panels.begin();
 	for (; item != panels.end(); ++item) {
 		if (*item != nullptr) {
-			if ((*item)->ShortCutClicked())
+			if ((*item)->ShortCutClicked(App))
 				(*item)->ChangeEnable();
 			if ((*item)->IsEnabled()) {
 				(*item)->PanelLogic();

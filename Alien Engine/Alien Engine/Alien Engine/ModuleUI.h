@@ -7,6 +7,8 @@
 #include "imgui/examples/imgui_impl_opengl3.h"
 #include "Panel.h"
 
+class Panel;
+
 
 class ModuleUI : public Module
 {

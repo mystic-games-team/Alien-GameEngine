@@ -4,6 +4,24 @@
 #include "SDL/include/SDL.h"
 #include <string>
 #include <vector>
+#include "Application.h"
+
+enum class ShortCutState {
+
+	CLICKED,
+	SHORTCUT_DONE,
+	WAITING_SHORTCUT,
+
+	NONE
+};
+
+struct ShortCuts {
+
+	ShortCuts(const SDL_Scancode& code) : shortcut_code(code) {}
+
+	SDL_Scancode shortcut_code = SDL_SCANCODE_UNKNOWN;
+	ShortCutState shortcut_state = ShortCutState::WAITING_SHORTCUT;
+};
 
 class Panel {
 
@@ -17,12 +35,12 @@ public:
 	const std::string& GetName();
 	void ChangeEnable();
 	bool IsEnabled();
-	bool ShortCutClicked();
+	bool ShortCutClicked(Application*& app);
 
 private:
 
 	bool enabled = false;
-	std::vector<SDL_Scancode>shortcuts;
+	std::vector<ShortCuts*>shortcuts;
 	std::string panel_name;
 	
 
