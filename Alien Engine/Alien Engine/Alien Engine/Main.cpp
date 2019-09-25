@@ -14,14 +14,14 @@ enum main_states
 	MAIN_FINISH,
 	MAIN_EXIT
 };
-
+Application* App = NULL;
 int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
-	Application* App = NULL;
+
 
 	while (state != MAIN_EXIT)
 	{

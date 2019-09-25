@@ -9,7 +9,7 @@
 #include "PanelConfig.h"
 #include "SDL/include/SDL_assert.h"
 
-ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
 }
 
@@ -138,7 +138,7 @@ void ModuleUI::MainMenuBar()
 	{
 		if (ImGui::MenuItem("About", "Ctrl + A"))
 		{
-			GetPanelByName("About")->ChangeEnable();
+			GetPanelByName("About Alien Engine")->ChangeEnable();
 		}
 		ImGui::EndMenu();
 	}
@@ -147,7 +147,7 @@ void ModuleUI::MainMenuBar()
 
 void ModuleUI::InitPanels()
 {
-	panels.push_back(new PanelAbout("About", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A}));
+	panels.push_back(new PanelAbout("About Alien Engine", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A}));
 	panels.push_back(new PanelConfig("Configuration", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_C}));
 
 }
