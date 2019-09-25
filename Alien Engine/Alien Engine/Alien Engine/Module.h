@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "Parson/parson.h"
 
 class Module
 {
@@ -24,6 +25,9 @@ public:
 	{
 		return true;
 	}
+
+	virtual void LoadConfig(JSON_Object*& config) {}
+	virtual void SaveConfig(JSON_Object*& config) {}
 
 	virtual update_status PreUpdate(float dt)
 	{

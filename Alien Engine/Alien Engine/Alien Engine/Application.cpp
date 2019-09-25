@@ -40,9 +40,42 @@ Application::~Application()
 	list_modules.clear();
 }
 
+bool Application::LoadConfig()
+{
+	bool ret = true;
+
+	std::list<Module*>::iterator item = list_modules.begin();
+
+	while (item != list_modules.end())
+	{
+		(*item)->LoadConfig(config);
+		++item;
+	}
+
+	return true;
+}
+
+bool Application::SaveConfig()
+{
+	bool ret = true;
+
+	std::list<Module*>::iterator item = list_modules.begin();
+
+	while (item != list_modules.end())
+	{
+		(*item)->SaveConfig(config);
+		++item;
+	}
+
+	return true;
+}
+
 bool Application::Init()
 {
 	bool ret = true;
+
+	config = LoadJSONFile("Configuration/Configuration.json");
+	LoadConfig();
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
@@ -62,7 +95,7 @@ bool Application::Init()
 		ret = (*item)->Start();
 		++item;
 	}
-	LoadJSONFile("Configuration/Configuration.json");
+
 	ms_timer.Start();
 	return ret;
 }
@@ -79,7 +112,7 @@ void Application::FinishUpdate()
 {
 }
 
-void Application::LoadJSONFile(const std::string& path)
+JSON_Object* Application::LoadJSONFile(const std::string& path)
 {
 	JSON_Value* value = json_parse_file(path.data());
 	JSON_Object* object = json_value_get_object(value);
@@ -88,12 +121,8 @@ void Application::LoadJSONFile(const std::string& path)
 	{
 		LOG("Error loading %s", path);
 	}
-
-
-	int f = json_object_dotget_number(object, "Configuration.Window.Height");
-	if (f == 800) {
-		int x = 0;
-	}
+	
+	return object;
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -134,6 +163,9 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
+
+	SaveConfig();
+
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
 	while(item != list_modules.rend() && ret == true)

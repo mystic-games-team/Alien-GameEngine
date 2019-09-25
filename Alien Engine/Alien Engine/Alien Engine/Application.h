@@ -9,7 +9,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleUI.h"
-
+#include "Parson/parson.h"
 #include <list>
 
 class Application
@@ -22,8 +22,10 @@ public:
 	ModuleCamera3D* camera = nullptr;
 	ModuleUI* ui = nullptr;
 
-private:
+	JSON_Object* config = nullptr;
 
+
+private:
 	Timer	ms_timer;
 	float	dt;
 	std::list<Module*> list_modules;
@@ -33,6 +35,11 @@ public:
 
 	Application();
 	~Application();
+
+	bool LoadConfig();
+	bool SaveConfig();
+
+	JSON_Object* LoadJSONFile(const std::string& path);
 
 	bool Init();
 	update_status Update();
@@ -47,7 +54,7 @@ private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
-	void LoadJSONFile(const std::string &path);
+	
 };
 
 extern Application* App;

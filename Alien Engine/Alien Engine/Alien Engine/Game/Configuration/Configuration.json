@@ -1,7 +1,10 @@
 {
 	"Configuration": {
+		"Application": {
+		
+		},
 		"Window": {
 			"Height": 800, "Width": 1280
-		}
+		},
 	}
 }
