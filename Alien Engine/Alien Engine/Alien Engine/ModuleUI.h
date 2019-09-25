@@ -20,7 +20,6 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 	void MainMenuBar();
-	void Close_Menu();
 
 public:
 

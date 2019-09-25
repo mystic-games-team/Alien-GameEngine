@@ -68,7 +68,6 @@ update_status ModuleUI::Update(float dt)
 	bool show_demo_wndow = true;
 	ImGui::ShowDemoWindow(&show_demo_wndow);
 	MainMenuBar();
-	Close_Menu();
 
 	return UPDATE_CONTINUE;
 }
@@ -78,19 +77,8 @@ update_status ModuleUI::PostUpdate(float dt)
 
 	ImGui::Render();
 
-	ImVec4 clear_color = ImVec4(0.1f, 0.87f, 0.32f, 0.64f);
 
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-	//glClear(GL_COLOR_BUFFER_BIT);
-
-	// If you are using this code with non-legacy OpenGL header/contexts (which you should not, prefer using imgui_impl_opengl3.cpp!!), 
-	// you may need to backup/reset/restore current shader using the commented lines below.
-	//GLint last_program; 
-	//glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
-	//glUseProgram(0);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	//glUseProgram(last_program);
 
 
 	return UPDATE_CONTINUE;
@@ -135,18 +123,17 @@ void ModuleUI::MainMenuBar()
 
 		ImGui::EndMenu();
 	}
-	ImGui::EndMainMenuBar();
-}
-
-void ModuleUI::Close_Menu()
-{
-	ImGui::Begin("PANIC BUTTON", (bool*)1, ImGuiWindowFlags_MenuBar| ImGuiWindowFlags_NoBackground|ImGuiWindowFlags_NoTitleBar);
-	
-	if (ImGui::Button("PANIC CLOSE",ImVec2(250, 250)))
+	if (ImGui::BeginMenu("View"))
 	{
-		App->QuitApp();
+
+		ImGui::EndMenu();
 	}
-	ImGui::End();
+	if (ImGui::BeginMenu("Help"))
+	{
+
+		ImGui::EndMenu();
+	}
+	ImGui::EndMainMenuBar();
 }
 
 
