@@ -6,6 +6,7 @@
 #include "imgui/examples/imgui_impl_opengl3.h"
 #include <gl/GL.h>
 #include "PanelAbout.h"
+#include "PanelConfig.h"
 #include "SDL/include/SDL_assert.h"
 
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -129,7 +130,7 @@ void ModuleUI::MainMenuBar()
 	{
 		if (ImGui::MenuItem("Configuration", "Ctrl + C"))
 		{
-
+			GetPanelByName("Configuration")->ChangeEnable();
 		}
 		ImGui::EndMenu();
 	}
@@ -147,7 +148,7 @@ void ModuleUI::MainMenuBar()
 void ModuleUI::InitPanels()
 {
 	panels.push_back(new PanelAbout("About", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A}));
-
+	panels.push_back(new PanelConfig("Configuration", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_C}));
 
 }
 

@@ -39,9 +39,11 @@ public:
 
 private:
 
-	bool enabled = false;
-	std::vector<ShortCuts*>shortcuts;
-	std::string panel_name;
 	
+	std::vector<ShortCuts*>shortcuts;
 
+	
+protected:
+	std::string panel_name;
+	bool enabled = false;
 };

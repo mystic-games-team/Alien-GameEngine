@@ -291,6 +291,9 @@
     <ClInclude Include="Parson\parson.h">
       <Filter>Tools\Parson</Filter>
     </ClInclude>
+    <ClInclude Include="PanelConfig.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -454,6 +457,9 @@
     </ClCompile>
     <ClCompile Include="Parson\parson.c">
       <Filter>Tools\Parson</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelConfig.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
