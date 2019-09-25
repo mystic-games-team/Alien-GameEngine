@@ -19,6 +19,9 @@
     <Filter Include="Tools\ImGui">
       <UniqueIdentifier>{e6233645-0200-40f6-9097-799b50ae324e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Panels">
+      <UniqueIdentifier>{b7dececf-db22-4816-90a8-ab45882999fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -276,6 +279,12 @@
     <ClInclude Include="RandomHelper.h">
       <Filter>Tools\PCG</Filter>
     </ClInclude>
+    <ClInclude Include="Panel.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelAbout.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -430,6 +439,12 @@
     </ClCompile>
     <ClCompile Include="MathGeoLib\include\Time\Clock.cpp">
       <Filter>Tools\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelAbout.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

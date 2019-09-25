@@ -209,6 +209,8 @@
     <ClInclude Include="ModuleSceneIntro.h" />
     <ClInclude Include="ModuleUI.h" />
     <ClInclude Include="ModuleWindow.h" />
+    <ClInclude Include="Panel.h" />
+    <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PCG\pcg_extras.hpp" />
     <ClInclude Include="PCG\pcg_random.hpp" />
     <ClInclude Include="PCG\pcg_uint128.hpp" />
@@ -266,6 +268,8 @@
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -115,6 +115,7 @@ void ModuleUI::MainMenuBar()
 		}
 		if (ImGui::MenuItem("Open", "Ctrl+W")) 
 		{
+
 		}
 		if (ImGui::MenuItem("Close", "Ctrl+W")) 
 		{
