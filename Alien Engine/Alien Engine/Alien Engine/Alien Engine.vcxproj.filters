@@ -338,9 +338,6 @@
     <ClCompile Include="Application.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
@@ -460,6 +457,9 @@
     </ClCompile>
     <ClCompile Include="PanelConfig.cpp">
       <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
