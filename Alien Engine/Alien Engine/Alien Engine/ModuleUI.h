@@ -22,8 +22,10 @@ public:
 
 	void MainMenuBar();
 
+private:
 	void InitPanels();
 	void UpdatePanels();
+	Panel*& GetPanelByName(const std::string& panel_name);
 
 public:
 

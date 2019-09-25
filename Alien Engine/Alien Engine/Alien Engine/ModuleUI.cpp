@@ -6,6 +6,7 @@
 #include "imgui/examples/imgui_impl_opengl3.h"
 #include <gl/GL.h>
 #include "PanelAbout.h"
+#include "SDL/include/SDL_assert.h"
 
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -101,19 +102,6 @@ update_status ModuleUI::PostUpdate(float dt)
 
 void ModuleUI::MainMenuBar()
 {
-	/*ImGui::Begin("TestMenu", (bool*)0, ImGuiWindowFlags_MenuBar);
-	if (ImGui::BeginMenuBar())
-	{
-		if (ImGui::BeginMenu("Menu"))
-		{
-			if (ImGui::MenuItem("Close", "Ctrl+W")) { 
-				App->QuitApp();
-			}
-			ImGui::EndMenu();
-		}
-		ImGui::EndMenuBar();
-	}
-	ImGui::End();*/
 
 	ImGui::BeginMainMenuBar();
 	if (ImGui::BeginMenu("File"))
@@ -144,9 +132,9 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("Help"))
 	{
-		if (ImGui::MenuItem("About Us..."))
+		if (ImGui::MenuItem("About", "Ctrl + A"))
 		{
-			App->OpenWebsite("https://github.com/VictorSegura99/Alien-GameEngine");
+			GetPanelByName("About")->ChangeEnable();
 		}
 		ImGui::EndMenu();
 	}
@@ -172,6 +160,17 @@ void ModuleUI::UpdatePanels()
 			}
 		}
 	}
+}
+
+Panel*& ModuleUI::GetPanelByName(const std::string& panel_name)
+{
+	std::vector<Panel*>::iterator item = panels.begin();
+	for (; item != panels.end(); ++item) {
+		if (*item != nullptr && (*item)->GetName() == panel_name) {
+			return (*item);
+		}
+	}
+	SDL_assert(1 == 0); //panel name is not correct, revise panels names!!
 }
 
 
