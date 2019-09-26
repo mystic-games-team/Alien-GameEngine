@@ -23,9 +23,6 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	if(json_parse_file("ip.json")!=NULL)
-		LOG("Readed!");
-
 	return ret;
 }
 

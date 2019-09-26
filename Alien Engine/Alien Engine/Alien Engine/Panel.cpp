@@ -16,6 +16,16 @@ Panel::Panel(const std::string& panel_name, const std::vector<SDL_Scancode>&shor
 
 Panel::~Panel()
 {
+	if (!shortcuts.empty()) {
+		std::vector<ShortCuts*>::iterator item = shortcuts.begin();
+		for (; item != shortcuts.end(); ++item) {
+			if (*item != nullptr) {
+				delete* item;
+				*item = nullptr;
+			}
+		}
+		shortcuts.clear();
+	}
 }
 
 const std::string& Panel::GetName()
