@@ -11,6 +11,7 @@
 #include "ModuleUI.h"
 #include "Parson/parson.h"
 #include <list>
+#include "j1PerfTimer.h"
 
 class Application
 {
@@ -22,12 +23,25 @@ public:
 	ModuleCamera3D* camera = nullptr;
 	ModuleUI* ui = nullptr;
 
+	bool fps_cap = true;
+	uint16_t framerate_cap;
+	int fps_limit = 30;
+
 private:
 	JSON_Object* config = nullptr;
-	Timer	ms_timer;
-	float	dt;
+
 	std::list<Module*> list_modules;
 	bool quit = false;
+
+	j1PerfTimer			ptimer;
+	unsigned __int64				frame_count = 0;
+	Timer				startup_time;
+	Timer				frame_time;
+	Timer				last_sec_frame_time;
+	unsigned __int32				last_sec_frame_count = 0;
+	unsigned __int32				prev_last_sec_frame_count = 0;
+	
+	float				dt;
 
 public:
 

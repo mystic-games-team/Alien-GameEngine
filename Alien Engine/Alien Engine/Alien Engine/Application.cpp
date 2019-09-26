@@ -46,6 +46,14 @@ bool Application::LoadConfig()
 {
 	bool ret = true;
 
+
+	fps_cap = json_object_dotget_boolean(config, "Configuration.Application.CapFPS");
+	fps_limit = json_object_dotget_number(config, "Configuration.Application.LimitFPS");
+	if (fps_limit > 0)
+	{
+		framerate_cap = 1000 / fps_limit;
+	}
+
 	std::list<Module*>::iterator item = list_modules.begin();
 
 	while (item != list_modules.end())
@@ -97,21 +105,42 @@ bool Application::Init()
 		++item;
 	}
 	
-	ms_timer.Start();
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();
+	frame_count++;
+	last_sec_frame_count++;
+	dt = frame_time.ReadSec();
+	frame_time.Start();
+	ptimer.Start();
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	if (last_sec_frame_time.Read() > 1000)
+	{
+		last_sec_frame_time.Start();
+		prev_last_sec_frame_count = last_sec_frame_count;
+		last_sec_frame_count = 0;
+	}
 
+	float avg_fps = float(frame_count) / startup_time.ReadSec();
+	float seconds_since_startup = startup_time.ReadSec();
+	unsigned __int32 last_frame_ms = frame_time.Read();
+	unsigned __int32 frames_on_last_update = prev_last_sec_frame_count;
+
+	if (framerate_cap > 0 && last_frame_ms < framerate_cap && fps_cap)
+	{
+		j1PerfTimer time;
+		float delaytimestart = time.ReadMs();
+		SDL_Delay(framerate_cap - last_frame_ms);
+		float delaytimefinish = time.ReadMs();
+		LOG("We waited for %i milliseconds and got back in %.6f", framerate_cap - last_frame_ms, delaytimefinish - delaytimestart);
+	}
 }
 
 JSON_Object* Application::LoadJSONFile(const std::string& path)

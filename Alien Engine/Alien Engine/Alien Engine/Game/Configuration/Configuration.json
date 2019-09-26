@@ -2,7 +2,9 @@
 	"Configuration": {
 		"Application": {
 			"Name": "Alien Engine",
-			"Organitzation": "UPC CITM"
+			"Organitzation": "UPC CITM",
+			"LimitFPS": 60,
+			"CapFPS": true
 		},
 		"Window": {
 			"Height": 675,

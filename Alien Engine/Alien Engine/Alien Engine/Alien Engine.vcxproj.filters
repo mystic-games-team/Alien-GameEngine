@@ -312,6 +312,9 @@
     <ClInclude Include="glew\include\eglew.h">
       <Filter>Tools\Glew</Filter>
     </ClInclude>
+    <ClInclude Include="j1PerfTimer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -478,6 +481,9 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="j1PerfTimer.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
