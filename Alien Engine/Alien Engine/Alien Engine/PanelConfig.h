@@ -10,5 +10,9 @@ public:
 	virtual ~PanelConfig();
 
 	void PanelLogic();
+
+private:
+
+	SDL_DisplayMode display_mode;
 };
 

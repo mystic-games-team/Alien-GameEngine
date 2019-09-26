@@ -40,7 +40,7 @@ void PanelConfig::PanelLogic()
 			SDL_SetWindowBrightness(App->window->window, App->window->brightness);
 		}
 		ImGui::Spacing();
-		ImGui::Text("Refresh Rate:"); ImGui::SameLine(); ImGui::TextColored({ 255,0,0,255 }, "TODOOOOOOOOOOOOOOOOOOO SAD");
+		ImGui::Text("Refresh Rate:"); ImGui::SameLine(); ImGui::TextColored({ 255,0,0,255 }, "%i", display_mode.refresh_rate);
 		ImGui::Spacing();
 		if (ImGui::Checkbox(" FullScreen", &App->window->fullscreen)) {
 			if (App->window->fullscreen) {
