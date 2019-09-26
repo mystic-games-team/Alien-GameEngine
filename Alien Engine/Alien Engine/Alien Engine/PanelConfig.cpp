@@ -20,11 +20,28 @@ void PanelConfig::PanelLogic()
 	if (ImGui::CollapsingHeader("Application"))
 	{
 		ImGui::Spacing();
-		if (ImGui::InputText("Application Name", App->window->window_name, 20)) {
+		if (ImGui::InputText(" Application Name", App->window->window_name, 20)) {
 			SDL_SetWindowTitle(App->window->window, App->window->window_name);
 		}
 		ImGui::Spacing();
-		ImGui::InputText("Organitzation Name", App->window->organitzation_name, 20);
+		ImGui::InputText(" Organitzation Name", App->window->organitzation_name, 20);
+		ImGui::Spacing();
+		if (ImGui::SliderInt(" Max FPS", &App->fps_limit, 0, 120)) {
+			if (App->fps_limit <= 0) {
+				App->fps_cap = false;
+			}
+			else {
+				App->fps_cap = true;
+				App->framerate_cap = 1000 / App->fps_limit;
+			}
+		}
+		ImGui::Spacing();
+		if (App->fps_limit <= 0)
+			ImGui::Text("Limit FPS: No Limit", App->fps_limit);
+		else
+			ImGui::Text("Limit FPS: %i", App->fps_limit);
+		ImGui::Spacing();
+
 		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Window"))

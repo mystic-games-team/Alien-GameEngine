@@ -24,6 +24,7 @@ public:
 	ModuleUI* ui = nullptr;
 
 	bool fps_cap = true;
+	uint16_t framerate_cap;
 	int fps_limit = 30;
 
 private:
@@ -39,7 +40,7 @@ private:
 	Timer				last_sec_frame_time;
 	unsigned __int32				last_sec_frame_count = 0;
 	unsigned __int32				prev_last_sec_frame_count = 0;
-	uint16_t			framerate_cap;
+	
 	float				dt;
 
 public:
