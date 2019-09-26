@@ -27,13 +27,13 @@ public:
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
 
-	int width = 0;
-	int height = 0;
-	float brightness = 0;
+	int width = 1200;
+	int height = 675;
+	float brightness = 1.0;
 	bool fullscreen = false;
 	bool full_desktop = false;
 	bool borderless = false;
-	bool resizable = false;
+	bool resizable = true;
 
 };
 

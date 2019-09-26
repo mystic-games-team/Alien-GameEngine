@@ -75,7 +75,8 @@ bool Application::Init()
 {
 	bool ret = true;
 	config = LoadJSONFile("Configuration/Configuration.json");
-	LoadConfig();
+	if (config != nullptr)
+		LoadConfig();
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
