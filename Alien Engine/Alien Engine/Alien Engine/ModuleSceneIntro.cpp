@@ -2,12 +2,6 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 
-#ifdef NDEBUG //no debug
-#pragma comment (lib, "MathGeoLib/libx86/Release/MathGeoLib.lib") 
-#else
-#pragma comment (lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib") 
-#endif
-
 #include "RandomHelper.h"
 #include "Parson/parson.h"
 

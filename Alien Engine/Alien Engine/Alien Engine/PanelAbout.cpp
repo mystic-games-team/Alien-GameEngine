@@ -39,7 +39,7 @@ void PanelAbout::PanelLogic()
 		ImGui::BulletText("Glew %i", GL_VERSION_1_1);
 		ImGui::BulletText("ImGui %s", IMGUI_VERSION);
 		ImGui::BulletText("MathGeoLib 1.5");
-		ImGui::BulletText("OpenGL X");
+		ImGui::BulletText("OpenGL %s",glGetString(GL_VERSION));
 		ImGui::Text("");
 		if (ImGui::CollapsingHeader("License"))
 		{
