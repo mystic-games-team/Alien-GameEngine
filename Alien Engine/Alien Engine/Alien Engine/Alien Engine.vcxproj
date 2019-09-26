@@ -131,6 +131,10 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="glew\include\eglew.h" />
+    <ClInclude Include="glew\include\glew.h" />
+    <ClInclude Include="glew\include\glxew.h" />
+    <ClInclude Include="glew\include\wglew.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h" />
