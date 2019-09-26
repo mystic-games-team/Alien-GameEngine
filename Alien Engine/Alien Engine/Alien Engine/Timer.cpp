@@ -1,9 +1,10 @@
 // ----------------------------------------------------
-// Timer.cpp
-// Body for CPU Tick Timer class
+// j1Timer.cpp
+// Fast timer with milisecons precision
 // ----------------------------------------------------
 
 #include "Timer.h"
+#include "SDL\include\SDL_timer.h"
 
 // ---------------------------------------------
 Timer::Timer()
@@ -14,28 +15,17 @@ Timer::Timer()
 // ---------------------------------------------
 void Timer::Start()
 {
-	running = true;
 	started_at = SDL_GetTicks();
 }
 
 // ---------------------------------------------
-void Timer::Stop()
+unsigned __int32 Timer::Read() const
 {
-	running = false;
-	stopped_at = SDL_GetTicks();
+	return SDL_GetTicks() - started_at;
 }
 
 // ---------------------------------------------
-Uint32 Timer::Read()
+float Timer::ReadSec() const
 {
-	if(running == true)
-	{
-		return SDL_GetTicks() - started_at;
-	}
-	else
-	{
-		return stopped_at - started_at;
-	}
+	return float(SDL_GetTicks() - started_at) / 1000.0f;
 }
-
-
