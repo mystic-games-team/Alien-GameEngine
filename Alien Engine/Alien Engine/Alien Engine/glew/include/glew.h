@@ -23643,6 +23643,8 @@ VERSION_MINOR 1
 VERSION_MICRO 0
 */
 
+#define VERSION_GLEW "2.1.0"
+
 /* API */
 GLEWAPI GLenum GLEWAPIENTRY glewInit (void);
 GLEWAPI GLboolean GLEWAPIENTRY glewIsSupported (const char *name);

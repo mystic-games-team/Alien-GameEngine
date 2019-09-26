@@ -2,6 +2,8 @@
 #include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
 
+#include <Windows.h>
+
 PanelConfig::PanelConfig(const std::string& panel_name, const std::vector<SDL_Scancode>& shortcuts) : Panel(panel_name, shortcuts)
 {
 }
@@ -58,6 +60,17 @@ void PanelConfig::PanelLogic()
 		}
 
 	}
+	if (ImGui::CollapsingHeader("Hardware"))
+	{
+		ImGui::Text("OS: %s", SDL_GetCurrentVideoDriver());
+		ImGui::Text("CPUs: %i Cache: %ikb", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+		ImGui::Text("System RAM %.2fGB", (float(SDL_GetSystemRAM())/1000));
+		ImGui::Text("Caps: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "PREGUNTARLI AL MARC");
+		ImGui::Separator();
+		ImGui::Text("GPU Brand: %s", glGetString(GL_VENDOR));
+		ImGui::Text("GPU: %s", glGetString(GL_RENDERER));
+		ImGui::Text("VRAM: %i GB", sizeof(LPMEMORYSTATUSEX));
+		ImGui::Spacing();
+	}
 	ImGui::End();
-
 }

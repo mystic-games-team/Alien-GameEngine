@@ -36,7 +36,7 @@ void PanelAbout::PanelLogic()
 		}
 		ImGui::Text("Libraries Versions:");
 		ImGui::BulletText("SDL %i.%i.%i", SDL_MAJOR_VERSION,SDL_MINOR_VERSION,SDL_PATCHLEVEL);
-		ImGui::BulletText("Glew %i", GL_VERSION_1_1);
+		ImGui::BulletText("Glew %s", VERSION_GLEW);
 		ImGui::BulletText("ImGui %s", IMGUI_VERSION);
 		ImGui::BulletText("MathGeoLib 1.5");
 		ImGui::BulletText("OpenGL %s",glGetString(GL_VERSION));

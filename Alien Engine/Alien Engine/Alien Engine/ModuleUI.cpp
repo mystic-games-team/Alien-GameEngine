@@ -129,7 +129,7 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("View"))
 	{
-		if (ImGui::MenuItem("Configuration", "Ctrl + C"))
+		if (ImGui::MenuItem("Configuration", "Ctrl + O"))
 		{
 			GetPanelByName("Configuration")->ChangeEnable();
 		}
@@ -149,7 +149,7 @@ void ModuleUI::MainMenuBar()
 void ModuleUI::InitPanels()
 {
 	panels.push_back(new PanelAbout("About Alien Engine", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A}));
-	panels.push_back(new PanelConfig("Configuration", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_C}));
+	panels.push_back(new PanelConfig("Configuration", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_O}));
 
 }
 
