@@ -109,6 +109,7 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+
 }
 
 JSON_Object* Application::LoadJSONFile(const std::string& path)

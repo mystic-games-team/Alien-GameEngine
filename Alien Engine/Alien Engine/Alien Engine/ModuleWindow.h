@@ -29,6 +29,11 @@ public:
 
 	int width = 0;
 	int height = 0;
+	float brightness = 0;
+	bool fullscreen = false;
+	bool full_desktop = false;
+	bool borderless = false;
+	bool resizable = false;
 
 };
 

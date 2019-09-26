@@ -33,28 +33,28 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-		if(WIN_FULLSCREEN == true)
+		if(fullscreen)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(WIN_RESIZABLE == true)
+		if(resizable)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(WIN_BORDERLESS == true)
+		if(borderless)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(WIN_FULLSCREEN_DESKTOP == true)
+		if(full_desktop)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
 		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width * SCREEN_SIZE, height * SCREEN_SIZE, flags);
-
+		SDL_SetWindowBrightness(window, brightness);
 		if(window == NULL)
 		{
 			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -66,7 +66,6 @@ bool ModuleWindow::Init()
 			screen_surface = SDL_GetWindowSurface(window);
 		}
 	}
-
 	return ret;
 }
 
@@ -90,6 +89,11 @@ void ModuleWindow::LoadConfig(JSON_Object*& config)
 {
 	width = json_object_dotget_number(config, "Configuration.Window.Width");
 	height = json_object_dotget_number(config, "Configuration.Window.Height");
+	brightness = json_object_dotget_number(config, "Configuration.Window.Brightness");
+	fullscreen = json_object_dotget_boolean(config, "Configuration.Window.Fullscreen");
+	full_desktop = json_object_dotget_boolean(config, "Configuration.Window.Fulldesktop");
+	resizable = json_object_dotget_boolean(config, "Configuration.Window.Resizable");
+	borderless = json_object_dotget_boolean(config, "Configuration.Window.Borderless");
 }
 
 void ModuleWindow::SetTitle(const char* title)
