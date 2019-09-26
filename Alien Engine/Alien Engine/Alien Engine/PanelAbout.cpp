@@ -11,7 +11,7 @@ PanelAbout::~PanelAbout()
 void PanelAbout::PanelLogic()
 {
 	ImGui::OpenPopup(panel_name.c_str());
-	ImGui::SetNextWindowSize({ 500,700 });
+	ImGui::SetNextWindowSize({ 500,600 });
 	if (ImGui::BeginPopupModal(panel_name.c_str(), &enabled, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoMove))
 	{
 		ImGui::Text("ALIEN ENGINE %f", ALIEN_ENGINE_VERSION);

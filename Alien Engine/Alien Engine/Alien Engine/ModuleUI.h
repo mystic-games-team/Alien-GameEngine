@@ -32,7 +32,7 @@ private:
 public:
 
 private:
-
+	bool show_demo_wndow = false;
 	std::vector<Panel*> panels;
 
 };

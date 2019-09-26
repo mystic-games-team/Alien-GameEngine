@@ -87,8 +87,8 @@ update_status ModuleUI::PreUpdate(float dt)
 // Update
 update_status ModuleUI::Update(float dt)
 {
-	bool show_demo_wndow = true;
-	ImGui::ShowDemoWindow(&show_demo_wndow);
+	if (show_demo_wndow)
+		ImGui::ShowDemoWindow(&show_demo_wndow);
 
 	MainMenuBar();
 	UpdatePanels();
@@ -148,6 +148,18 @@ void ModuleUI::MainMenuBar()
 		if (ImGui::MenuItem("About", "Ctrl + A"))
 		{
 			GetPanelByName("About Alien Engine")->ChangeEnable();
+		}
+		if (ImGui::MenuItem("Show Gui Demo"))
+		{
+			show_demo_wndow = !show_demo_wndow;
+		}
+		if (ImGui::MenuItem("Documentation"))
+		{
+			LOG("Put link wiki");
+		}
+		if (ImGui::MenuItem("Report a bug"))
+		{
+			App->OpenWebsite("https://github.com/VictorSegura99/Alien-GameEngine/issues");
 		}
 		ImGui::EndMenu();
 	}
