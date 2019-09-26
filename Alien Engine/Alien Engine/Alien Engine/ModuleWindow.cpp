@@ -53,7 +53,7 @@ bool ModuleWindow::Init()
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width * SCREEN_SIZE, height * SCREEN_SIZE, flags);
+		window = SDL_CreateWindow(window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width * SCREEN_SIZE, height * SCREEN_SIZE, flags);
 		SDL_SetWindowBrightness(window, brightness);
 		if(window == NULL)
 		{
@@ -94,6 +94,13 @@ void ModuleWindow::LoadConfig(JSON_Object*& config)
 	full_desktop = json_object_dotget_boolean(config, "Configuration.Window.Fulldesktop");
 	resizable = json_object_dotget_boolean(config, "Configuration.Window.Resizable");
 	borderless = json_object_dotget_boolean(config, "Configuration.Window.Borderless");
+	style = json_object_dotget_number(config, "Configuration.Window.Style.Type");
+	style_color.r = json_object_dotget_number(config, "Configuration.Window.Style.ColorR");
+	style_color.b = json_object_dotget_number(config, "Configuration.Window.Style.ColorB");
+	style_color.g = json_object_dotget_number(config, "Configuration.Window.Style.ColorG");
+	style_color.a = json_object_dotget_number(config, "Configuration.Window.Style.ColorA");
+	window_name = (char*)json_object_dotget_string(config, "Configuration.Application.Name");
+	organitzation_name = (char*)json_object_dotget_string(config, "Configuration.Application.Organitzation");
 }
 
 void ModuleWindow::SetTitle(const char* title)

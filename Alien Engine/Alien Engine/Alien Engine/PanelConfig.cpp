@@ -1,6 +1,7 @@
 #include "PanelConfig.h"
 #include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
+#include "imgui/imgui.h"
 
 #include <Windows.h>
 
@@ -18,6 +19,13 @@ void PanelConfig::PanelLogic()
 
 	if (ImGui::CollapsingHeader("Application"))
 	{
+		ImGui::Spacing();
+		if (ImGui::InputText("Application Name", App->window->window_name, 20)) {
+			SDL_SetWindowTitle(App->window->window, App->window->window_name);
+		}
+		ImGui::Spacing();
+		ImGui::InputText("Organitzation Name", App->window->organitzation_name, 20);
+		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Window"))
 	{
@@ -58,7 +66,22 @@ void PanelConfig::PanelLogic()
 		if (ImGui::Checkbox(" Resizable", &App->window->resizable)) {
 			SDL_SetWindowResizable(App->window->window, (SDL_bool)App->window->resizable);
 		}
-
+		ImGui::Spacing();
+	}
+	if (ImGui::CollapsingHeader("Style")) {
+		ImGui::Spacing();
+		ImGui::Text("Select the style");
+		ImGui::Spacing();
+		if (ImGui::Combo("", &App->window->style, "Classic\0Dark\0Light\0"))
+		{
+			switch (App->window->style)
+			{
+			case 0: ImGui::StyleColorsClassic(); break;
+			case 1: ImGui::StyleColorsDark(); break;
+			case 2: ImGui::StyleColorsLight(); break;
+			}
+		}
+		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Hardware"))
 	{

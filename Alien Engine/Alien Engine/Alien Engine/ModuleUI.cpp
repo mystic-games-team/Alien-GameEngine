@@ -28,15 +28,23 @@ bool ModuleUI::Start()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls ImGuiWindowFlags_MenuBar
 
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
+	switch (App->window->style) {
+		case 0:
+			ImGui::StyleColorsClassic();
+			break;
+		case 1:
+			ImGui::StyleColorsDark();
+			break;
+		case 2:
+			ImGui::StyleColorsLight();
+			break;
+		case 3:
+			break;
+	}
+
 
 	// Setup Platform/Renderer bindings
-	//ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init();
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
