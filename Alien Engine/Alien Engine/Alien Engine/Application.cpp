@@ -29,6 +29,7 @@ Application::Application()
 
 Application::~Application()
 {
+	json_value_free(json_object_get_value(config, "Configuration/Configuration.json"));
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
 	while(item != list_modules.rend())
@@ -38,7 +39,7 @@ Application::~Application()
 	}
 
 	list_modules.clear();
-	json_value_free(json_object_get_value(config, "Configuration/Configuration.json"));
+
 }
 
 bool Application::LoadConfig()

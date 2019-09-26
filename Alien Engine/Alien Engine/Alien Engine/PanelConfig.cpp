@@ -17,6 +17,13 @@ void PanelConfig::PanelLogic()
 
 	if (ImGui::CollapsingHeader("Application"))
 	{
+		ImGui::Spacing();
+		if (ImGui::InputText("Application Name", App->window->window_name, 20)) {
+			SDL_SetWindowTitle(App->window->window, App->window->window_name);
+		}
+		ImGui::Spacing();
+		ImGui::InputText("Organitzation Name", App->window->organitzation_name, 20);
+		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Window"))
 	{
@@ -57,7 +64,7 @@ void PanelConfig::PanelLogic()
 		if (ImGui::Checkbox(" Resizable", &App->window->resizable)) {
 			SDL_SetWindowResizable(App->window->window, (SDL_bool)App->window->resizable);
 		}
-
+		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Style")) {
 		ImGui::Spacing();
@@ -72,6 +79,7 @@ void PanelConfig::PanelLogic()
 			case 2: ImGui::StyleColorsLight(); break;
 			}
 		}
+		ImGui::Spacing();
 	}
 	ImGui::End();
 

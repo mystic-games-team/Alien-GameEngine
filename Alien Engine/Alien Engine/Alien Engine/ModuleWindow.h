@@ -37,6 +37,8 @@ public:
 	bool resizable = true;
 	int style = 1;
 	Color style_color{ 100,100,100,100 };
+	char* window_name = "Alien Engine";
+	char* organitzation_name = "UPC CITM";
 
 };
 

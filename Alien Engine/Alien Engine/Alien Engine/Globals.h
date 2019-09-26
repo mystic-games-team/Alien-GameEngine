@@ -30,4 +30,3 @@ enum update_status
 // Configuration -----------
 #define SCREEN_SIZE 1
 #define VSYNC true
-#define TITLE "ALIEN ENGINE"
