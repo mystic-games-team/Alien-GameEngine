@@ -28,6 +28,9 @@
     <Filter Include="JONSONS">
       <UniqueIdentifier>{c3226d6a-964e-4040-a00c-a42ec6835acf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Glew">
+      <UniqueIdentifier>{75f53a86-3879-4d72-b5f8-b3b96873018f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -296,6 +299,18 @@
     </ClInclude>
     <ClInclude Include="PanelConfig.h">
       <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\include\glew.h">
+      <Filter>Tools\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\include\glxew.h">
+      <Filter>Tools\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\include\wglew.h">
+      <Filter>Tools\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\include\eglew.h">
+      <Filter>Tools\Glew</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
