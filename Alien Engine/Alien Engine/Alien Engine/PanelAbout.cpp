@@ -45,6 +45,7 @@ void PanelAbout::PanelLogic()
 		{
 			ImGui::Text("MIT License");
 			ImGui::Text("Copyright (c) 2019 Victor Segura Blanco & Oriol Capdevila Salinas");
+			ImGui::Text("");
 			ImGui::Text("Permission is hereby granted, free of charge, to any person \nobtaining a copy of this software and associated documentation \nfiles(the 'Software'), to deal in the Software without restriction, \nincluding without limitation the rights to use, copy, modify, merge, \npublish, distribute, sublicense, and /or sell copies of the Software, \nand to permit persons to whom the Software is furnished to do so, \nsubject to the following conditions :");
 			ImGui::Text("");
 			ImGui::Text("The above copyright notice and this permission notice shall \nbe included in all copies or substantial portions of the Software.");
