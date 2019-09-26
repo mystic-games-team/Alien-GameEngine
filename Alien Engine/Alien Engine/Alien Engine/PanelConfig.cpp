@@ -1,6 +1,7 @@
 #include "PanelConfig.h"
 #include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
+#include "imgui/imgui.h"
 
 PanelConfig::PanelConfig(const std::string& panel_name, const std::vector<SDL_Scancode>& shortcuts) : Panel(panel_name, shortcuts)
 {
@@ -57,6 +58,20 @@ void PanelConfig::PanelLogic()
 			SDL_SetWindowResizable(App->window->window, (SDL_bool)App->window->resizable);
 		}
 
+	}
+	if (ImGui::CollapsingHeader("Style")) {
+		ImGui::Spacing();
+		ImGui::Text("Select the style");
+		ImGui::Spacing();
+		if (ImGui::Combo("", &App->window->style, "Classic\0Dark\0Light\0"))
+		{
+			switch (App->window->style)
+			{
+			case 0: ImGui::StyleColorsClassic(); break;
+			case 1: ImGui::StyleColorsDark(); break;
+			case 2: ImGui::StyleColorsLight(); break;
+			}
+		}
 	}
 	ImGui::End();
 

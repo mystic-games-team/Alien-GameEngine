@@ -1,13 +1,20 @@
 {
 	"Configuration": {
-    "Window": {
-      "Height": 675,
-      "Width": 1200,
-      "Brightness": 1.0,
-      "Fullscreen": false,
-      "Borderless": false,
-      "Resizable": true,
-      "Fulldesktop": false
-    }
+		"Window": {
+		  "Height": 675,
+		  "Width": 1200,
+		  "Brightness": 1.0,
+		  "Fullscreen": false,
+		  "Borderless": false,
+		  "Resizable": true,
+		  "Fulldesktop": false,
+		  "Style": {
+				"Type": 2,
+				"ColorR": 100,
+				"ColorG": 100,
+				"ColorB": 100,
+				"ColorA": 100
+		   }
+		  }
 	}
 }

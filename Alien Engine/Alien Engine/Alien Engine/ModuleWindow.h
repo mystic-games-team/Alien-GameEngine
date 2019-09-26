@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "SDL/include/SDL.h"
+#include "Color.h"
 
 class Application;
 
@@ -34,6 +35,8 @@ public:
 	bool full_desktop = false;
 	bool borderless = false;
 	bool resizable = true;
+	int style = 1;
+	Color style_color{ 100,100,100,100 };
 
 };
 

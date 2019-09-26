@@ -94,6 +94,11 @@ void ModuleWindow::LoadConfig(JSON_Object*& config)
 	full_desktop = json_object_dotget_boolean(config, "Configuration.Window.Fulldesktop");
 	resizable = json_object_dotget_boolean(config, "Configuration.Window.Resizable");
 	borderless = json_object_dotget_boolean(config, "Configuration.Window.Borderless");
+	style = json_object_dotget_number(config, "Configuration.Window.Style.Type");
+	style_color.r = json_object_dotget_number(config, "Configuration.Window.Style.ColorR");
+	style_color.b = json_object_dotget_number(config, "Configuration.Window.Style.ColorB");
+	style_color.g = json_object_dotget_number(config, "Configuration.Window.Style.ColorG");
+	style_color.a = json_object_dotget_number(config, "Configuration.Window.Style.ColorA");
 }
 
 void ModuleWindow::SetTitle(const char* title)
