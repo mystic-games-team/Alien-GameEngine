@@ -99,6 +99,7 @@ void ModuleWindow::LoadConfig(JSONfilepack*& config)
 	style = config->GetNumber("Configuration.Window.StyleType");
 	if (ImGui::GetCurrentContext() != nullptr)
 		App->ui->ChangeStyle(style);
+	SDL_SetWindowTitle(window, window_name);
 }
 
 void ModuleWindow::SaveConfig(JSONfilepack*& config)
