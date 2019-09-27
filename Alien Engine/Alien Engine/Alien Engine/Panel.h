@@ -30,12 +30,16 @@ public:
 	Panel(const std::string& panel_name, const std::vector<SDL_Scancode>&shortcuts);
 	virtual ~Panel();
 
-	virtual void PanelLogic();
+	virtual void PanelLogic() {};
 
 	const std::string& GetName();
 	void ChangeEnable();
 	bool IsEnabled();
 	bool ShortCutClicked();
+
+private:
+
+	virtual void OnPanelDesactive() {};
 
 private:
 

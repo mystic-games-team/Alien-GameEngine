@@ -36,6 +36,9 @@ const std::string& Panel::GetName()
 void Panel::ChangeEnable()
 {
 	enabled = !enabled;
+
+	if (!enabled)
+		OnPanelDesactive();
 }
 
 bool Panel::ShortCutClicked()
@@ -91,11 +94,6 @@ bool Panel::ShortCutClicked()
 	}
 	return ret;
 }
-
-void Panel::PanelLogic()
-{
-}
-
 
 
 bool Panel::IsEnabled()

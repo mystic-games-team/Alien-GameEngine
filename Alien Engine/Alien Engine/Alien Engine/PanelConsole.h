@@ -10,6 +10,12 @@ public:
 	virtual ~PanelConsole();
 
 	void PanelLogic();
+	void OnPanelDesactive();
+
+private:
+
+	bool scroll_x = true;
+	bool scroll_y = true;
 
 };
 
