@@ -103,6 +103,25 @@ void ModuleWindow::LoadConfig(JSON_Object*& config)
 	organitzation_name = (char*)json_object_dotget_string(config, "Configuration.Application.Organitzation");
 }
 
+void ModuleWindow::SaveConfig(JSON_Object*& config) 
+{
+	json_object_dotset_number(config, "Configuration.Window.Width", width);
+	json_object_dotset_number(config, "Configuration.Window.height", height);
+	json_object_dotset_number(config, "Configuration.Window.Brightness", brightness);
+	json_object_dotset_boolean(config, "Configuration.Window.Fullscreen", fullscreen);
+	json_object_dotset_boolean(config, "Configuration.Window.Fulldesktop", full_desktop);
+	json_object_dotset_boolean(config, "Configuration.Window.Resizable", resizable);
+	json_object_dotset_boolean(config, "Configuration.Window.Borderless", borderless);
+	json_object_dotset_number(config, "Configuration.Window.Style.Type", style);
+	json_object_dotset_number(config, "Configuration.Window.Style.ColorR", style_color.r);
+	json_object_dotset_number(config, "Configuration.Window.Style.ColorG", style_color.g);
+	json_object_dotset_number(config, "Configuration.Window.Style.ColorB", style_color.b);
+	json_object_dotset_number(config, "Configuration.Window.Style.ColorA", style_color.a);
+	json_object_dotset_string(config, "Configuration.Application.Name", window_name);
+	json_object_dotset_string(config, "Configuration.Application.Organitzation", organitzation_name);
+
+}
+
 void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);

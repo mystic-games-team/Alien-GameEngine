@@ -29,7 +29,8 @@ Application::Application()
 
 Application::~Application()
 {
-	json_value_free(json_object_get_value(config, "Configuration/Configuration.json"));
+	json_value_free(json_object_get_value(config, "Configuration/DefaultConfiguration.json"));
+	json_value_free(json_object_get_value(config, "Configuration/CustomConfiguration.json"));
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
 	while(item != list_modules.rend())
@@ -42,10 +43,37 @@ Application::~Application()
 
 }
 
+void Application::LoadDefaultConfig()
+{
+	if (FileExists("Configuration/CustomConfiguration.json")) {
+		json_value_free(json_object_get_value(config, "Configuration/CustomConfiguration.json"));
+		remove("Configuration/CustomConfiguration.json");
+	}
+	else {
+		json_value_free(json_object_get_value(config, "Configuration/DefaultConfiguration.json"));
+	}
+	config = LoadJSONFile("Configuration/DefaultConfiguration.json");
+	if (config != nullptr) {
+		LoadConfig();
+	}
+}
+
+void Application::SaveCustomConfig()
+{
+	/*if (!FileExists("Configuration/CustomConfiguration.json")) {
+		JSON_Value* value = json_value_init_object();
+		config = json_value_get_object(value);
+		json_serialize_to_file_pretty(value, "Configuration/CustomConfiguration.json");
+	}
+	if (config != nullptr)
+		SaveConfig();
+		*/
+	SaveConfig();
+}
+
 bool Application::LoadConfig()
 {
 	bool ret = true;
-
 
 	fps_cap = json_object_dotget_boolean(config, "Configuration.Application.CapFPS");
 	fps_limit = json_object_dotget_number(config, "Configuration.Application.LimitFPS");
@@ -69,6 +97,9 @@ bool Application::SaveConfig()
 {
 	bool ret = true;
 
+	json_object_dotset_number(config, "Application.LimitFPS", fps_limit);
+	json_object_dotset_boolean(config, "Configuration.Application.CapFPS", fps_cap);
+
 	std::list<Module*>::iterator item = list_modules.begin();
 
 	while (item != list_modules.end())
@@ -80,10 +111,21 @@ bool Application::SaveConfig()
 	return true;
 }
 
+inline bool Application::FileExists(const std::string& name) {
+	struct stat buffer;
+	return (stat(name.c_str(), &buffer) == 0);
+}
+
 bool Application::Init()
 {
 	bool ret = true;
-	config = LoadJSONFile("Configuration/Configuration.json");
+
+	if (FileExists("Configuration/CustomConfiguration.json")) {
+		config = LoadJSONFile("Configuration/CustomConfiguration.json");
+	}
+	else {
+		config = LoadJSONFile("Configuration/DefaultConfiguration.json");
+	}
 	if (config != nullptr)
 		LoadConfig();
 	// Call Init() in all modules

@@ -122,6 +122,14 @@ void PanelConfig::PanelLogic()
 		ImGui::Text("VRAM: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i GB",sizeof(LPMEMORYSTATUSEX));
 		ImGui::Spacing();
 	}
+	ImGui::Spacing();
+	if (ImGui::Button("Save Configuration", { 150,30 })) {
+		App->SaveCustomConfig();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Load Default Configuration", { 200,30 })) {
+		App->LoadDefaultConfig();
+	}
 	ImGui::End();
 }
 

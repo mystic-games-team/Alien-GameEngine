@@ -511,7 +511,7 @@
     <None Include="MathGeoLib\include\Math\Matrix.inl">
       <Filter>Tools\Math</Filter>
     </None>
-    <None Include="Game\Configuration\Configuration.json">
+    <None Include="Game\Configuration\DefaultConfiguration.json">
       <Filter>JSON</Filter>
     </None>
   </ItemGroup>

@@ -51,8 +51,10 @@ public:
 	Application();
 	~Application();
 
-	bool LoadConfig();
-	bool SaveConfig();
+	void LoadDefaultConfig();
+	void SaveCustomConfig();
+
+	bool FileExists(const std::string& name);
 
 	bool Init();
 	update_status Update();
@@ -69,7 +71,8 @@ private:
 	void FinishUpdate();
 	JSON_Object* LoadJSONFile(const std::string &path);
 
-	
+	bool LoadConfig();
+	bool SaveConfig();
 };
 
 extern Application* App;

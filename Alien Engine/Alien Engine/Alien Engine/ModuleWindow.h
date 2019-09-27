@@ -19,6 +19,7 @@ public:
 	bool Init();
 	bool CleanUp();
 	void LoadConfig(JSON_Object*& config);
+	void SaveConfig(JSON_Object*& config);
 	void SetTitle(const char* title);
 
 public:
