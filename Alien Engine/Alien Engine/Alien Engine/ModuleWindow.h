@@ -18,8 +18,8 @@ public:
 
 	bool Init();
 	bool CleanUp();
-	void LoadConfig(JSON_Object*& config);
-	void SaveConfig(JSON_Object*& config);
+	void LoadConfig(JSONfilepack*& config);
+	void SaveConfig(JSONfilepack*& config);
 	void SetTitle(const char* title);
 
 public:
@@ -29,17 +29,16 @@ public:
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
 
-	int width = 1200;
-	int height = 675;
-	float brightness = 1.0;
+	int width = 0;
+	int height = 0;
+	float brightness = 0.0f;
 	bool fullscreen = false;
 	bool full_desktop = false;
 	bool borderless = false;
-	bool resizable = true;
-	int style = 1;
-	Color style_color{ 100,100,100,100 };
-	char* window_name = "Alien Engine";
-	char* organitzation_name = "UPC CITM";
+	bool resizable = false;
+	int style = 0;
+	char* window_name = "";
+	char* organitzation_name = "";
 
 };
 

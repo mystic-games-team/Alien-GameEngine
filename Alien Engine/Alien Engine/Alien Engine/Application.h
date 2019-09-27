@@ -9,9 +9,9 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleUI.h"
-#include "Parson/parson.h"
 #include <list>
 #include "j1PerfTimer.h"
+#include "JSONfilepack.h"
 
 class Application
 {
@@ -31,7 +31,9 @@ public:
 	
 
 private:
-	JSON_Object* config = nullptr;
+	JSONfilepack* config = nullptr;
+
+	std::list<JSONfilepack*> json_files;
 
 	std::list<Module*> list_modules;
 	bool quit = false;
@@ -64,12 +66,15 @@ public:
 
 	void OpenWebsite(const std::string& website);
 
+	JSONfilepack* LoadJSONFile(const std::string& path);
+	JSONfilepack* CreateJSONFile(const std::string& path);
+
 private:
 
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
-	JSON_Object* LoadJSONFile(const std::string &path);
+
 
 	bool LoadConfig();
 	bool SaveConfig();

@@ -85,47 +85,32 @@ bool ModuleWindow::CleanUp()
 	return true;
 }
 
-void ModuleWindow::LoadConfig(JSON_Object*& config)
+void ModuleWindow::LoadConfig(JSONfilepack*& config)
 {
-	width = json_object_dotget_number(config, "Configuration.Window.Width");
-	height = json_object_dotget_number(config, "Configuration.Window.Height");
-	brightness = json_object_dotget_number(config, "Configuration.Window.Brightness");
-	fullscreen = json_object_dotget_boolean(config, "Configuration.Window.Fullscreen");
-	full_desktop = json_object_dotget_boolean(config, "Configuration.Window.Fulldesktop");
-	resizable = json_object_dotget_boolean(config, "Configuration.Window.Resizable");
-	borderless = json_object_dotget_boolean(config, "Configuration.Window.Borderless");
-	style = json_object_dotget_number(config, "Configuration.Window.Style.Type");
-	style_color.r = json_object_dotget_number(config, "Configuration.Window.Style.ColorR");
-	style_color.b = json_object_dotget_number(config, "Configuration.Window.Style.ColorB");
-	style_color.g = json_object_dotget_number(config, "Configuration.Window.Style.ColorG");
-	style_color.a = json_object_dotget_number(config, "Configuration.Window.Style.ColorA");
-	window_name = (char*)json_object_dotget_string(config, "Configuration.Application.Name");
-	organitzation_name = (char*)json_object_dotget_string(config, "Configuration.Application.Organitzation");
+	width = config->GetNumber("Configuration.Window.Width");
+	height = config->GetNumber("Configuration.Window.Height");
+	brightness = config->GetNumber("Configuration.Window.Brightness");
+	fullscreen = config->GetBoolean("Configuration.Window.Fullscreen");
+	full_desktop = config->GetBoolean("Configuration.Window.Fulldesktop");
+	resizable = config->GetBoolean("Configuration.Window.Resizable");
+	borderless = config->GetBoolean("Configuration.Window.Borderless");
+	window_name = (char*)config->GetString("Configuration.Application.Name");
+	organitzation_name = (char*)config->GetString("Configuration.Application.Organitzation");
+	style = config->GetNumber("Configuration.Window.StyleType");
 }
 
-void ModuleWindow::SaveConfig(JSON_Object*& config) 
+void ModuleWindow::SaveConfig(JSONfilepack*& config)
 {
-
-	JSON_Value* user_data = json_parse_file("Configuration/DefaultConfiguration.json");
-
-	user_data = json_value_init_object();
-
-	json_object_dotset_number(json_object(user_data), "Configuration.Window.Width", width);
-	json_object_dotset_number(json_object(user_data), "Configuration.Window.height", height);
-	json_object_dotset_number(json_object(user_data), "Configuration.Window.Brightness", brightness);
-	json_object_dotset_boolean(json_object(user_data), "Configuration.Window.Fullscreen", fullscreen);
-	json_object_dotset_boolean(json_object(user_data), "Configuration.Window.Fulldesktop", full_desktop);
-	json_object_dotset_boolean(json_object(user_data), "Configuration.Window.Resizable", resizable);
-	json_object_dotset_boolean(json_object(user_data), "Configuration.Window.Borderless", borderless);
-	json_object_dotset_number(json_object(user_data), "Configuration.Window.Style.Type", style);
-	json_object_dotset_number(json_object(user_data), "Configuration.Window.Style.ColorR", style_color.r);
-	json_object_dotset_number(json_object(user_data), "Configuration.Window.Style.ColorG", style_color.g);
-	json_object_dotset_number(json_object(user_data), "Configuration.Window.Style.ColorB", style_color.b);
-	json_object_dotset_number(json_object(user_data), "Configuration.Window.Style.ColorA", style_color.a);
-	json_object_dotset_string(json_object(user_data), "Configuration.Application.Name", window_name);
-	json_object_dotset_string(json_object(user_data), "Configuration.Application.Organitzation", organitzation_name);
-
-	json_serialize_to_file_pretty(user_data, "Configuration/DefaultConfiguration.json");
+	config->SetNumber("Configuration.Window.Width", width);
+	config->SetNumber("Configuration.Window.Height", height);
+	config->SetNumber("Configuration.Window.Brightness", brightness);
+	config->SetBoolean("Configuration.Window.Fullscreen", fullscreen);
+	config->SetBoolean("Configuration.Window.Fulldesktop", full_desktop);
+	config->SetBoolean("Configuration.Window.Resizable", resizable);
+	config->SetBoolean("Configuration.Window.Borderless", borderless);
+	config->SetNumber("Configuration.Window.StyleType", style);
+	config->SetString("Configuration.Application.Name", window_name);
+	config->SetString("Configuration.Application.Organitzation", organitzation_name);
 }
 
 void ModuleWindow::SetTitle(const char* title)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Parson/parson.h"
+#include "JSONfilepack.h"
 
 class Module
 {
@@ -16,8 +16,8 @@ public:
 	virtual ~Module()
 	{}
 
-	virtual void LoadConfig(JSON_Object*& config){}
-	virtual void SaveConfig(JSON_Object*& config) {}
+	virtual void LoadConfig(JSONfilepack*& config) {}
+	virtual void SaveConfig(JSONfilepack*& config) {}
 
 	virtual bool Init() 
 	{

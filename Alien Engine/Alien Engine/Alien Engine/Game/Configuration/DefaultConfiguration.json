@@ -2,23 +2,19 @@
     "Configuration": {
         "Window": {
             "Width": 1200,
-            "height": 0,
+            "Height": 650,
             "Brightness": 1,
             "Fullscreen": false,
             "Fulldesktop": false,
             "Resizable": true,
             "Borderless": false,
-            "Style": {
-                "Type": 0,
-                "ColorR": 100,
-                "ColorG": 100,
-                "ColorB": 100,
-                "ColorA": 100
-            }
+            "StyleType": 0
         },
         "Application": {
             "Name": "Alien Engine",
-            "Organitzation": "UPC CITM"
+            "Organitzation": "UPC CITM",
+            "LimitFPS": 118,
+            "CapFPS": true
         }
     }
 }
