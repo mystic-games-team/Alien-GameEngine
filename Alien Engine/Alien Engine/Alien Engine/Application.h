@@ -28,8 +28,6 @@ public:
 	int fps_limit = 30;
 	ImGuiTextBuffer log_string;
 
-	
-
 private:
 	JSONfilepack* config = nullptr;
 

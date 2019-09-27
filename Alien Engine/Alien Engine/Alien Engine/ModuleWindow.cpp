@@ -97,6 +97,8 @@ void ModuleWindow::LoadConfig(JSONfilepack*& config)
 	window_name = (char*)config->GetString("Configuration.Application.Name");
 	organitzation_name = (char*)config->GetString("Configuration.Application.Organitzation");
 	style = config->GetNumber("Configuration.Window.StyleType");
+	if (ImGui::GetCurrentContext() != nullptr)
+		App->ui->ChangeStyle(style);
 }
 
 void ModuleWindow::SaveConfig(JSONfilepack*& config)

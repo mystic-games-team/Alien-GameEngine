@@ -30,19 +30,7 @@ bool ModuleUI::Start()
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-	switch (App->window->style) {
-		case 0:
-			ImGui::StyleColorsClassic();
-			break;
-		case 1:
-			ImGui::StyleColorsDark();
-			break;
-		case 2:
-			ImGui::StyleColorsLight();
-			break;
-		case 3:
-			break;
-	}
+	ChangeStyle(App->window->style);
 
 
 	// Setup Platform/Renderer bindings
@@ -157,6 +145,23 @@ void ModuleUI::MainMenuBar()
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
+}
+
+void ModuleUI::ChangeStyle(const int& style_number)
+{
+	switch (style_number) {
+	case 0:
+		ImGui::StyleColorsClassic();
+		break;
+	case 1:
+		ImGui::StyleColorsDark();
+		break;
+	case 2:
+		ImGui::StyleColorsLight();
+		break;
+	case 3:
+		break;
+	}
 }
 
 void ModuleUI::InitPanels()

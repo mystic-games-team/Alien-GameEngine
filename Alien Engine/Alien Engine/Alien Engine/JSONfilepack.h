@@ -24,7 +24,7 @@ public:
 	const char* GetString(const std::string& name);
 
 
-public:
+private:
 
 	std::string path;
 	JSON_Object* object = nullptr;

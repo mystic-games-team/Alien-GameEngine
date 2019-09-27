@@ -21,6 +21,7 @@ public:
 	bool CleanUp();
 	void Draw();
 	void MainMenuBar();
+	void ChangeStyle(const int& style_number);
 
 private:
 	void InitPanels();

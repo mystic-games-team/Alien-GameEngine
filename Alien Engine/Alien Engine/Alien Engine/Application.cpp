@@ -127,14 +127,16 @@ bool Application::Init()
 {
 	bool ret = true;
 
-	if (FileExists("Configuration/CustomConfiguration.json")) {
+	if (FileExists("Configuration/CustomConfiguration.json")) { // look if it has custom settings
 		config = LoadJSONFile("Configuration/CustomConfiguration.json");
 	}
-	else {
+	else { // load default settings if no custom
 		config = LoadJSONFile("Configuration/DefaultConfiguration.json");
 	}
+
 	if (config != nullptr)
 		LoadConfig();
+
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
