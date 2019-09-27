@@ -10,12 +10,12 @@ PanelConsole::~PanelConsole()
 
 void PanelConsole::PanelLogic()
 {
-
-	ImGui::Begin(panel_name.data(), &enabled);
 	
-
-
+	ImGui::Begin("Configuration", &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_HorizontalScrollbar);
 	
+	ImGui::TextUnformatted(App->log_string.begin());
+
 	ImGui::End();
+
 	
 }
