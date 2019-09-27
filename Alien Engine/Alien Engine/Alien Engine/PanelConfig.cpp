@@ -105,10 +105,10 @@ void PanelConfig::PanelLogic()
 		ImGui::Text("OS: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%s", SDL_GetCurrentVideoDriver());
 		ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i Cores  ", SDL_GetCPUCount());  ImGui::SameLine(); ImGui::Text("Cache: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i kb", SDL_GetCPUCacheLineSize());
 		ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%.2fGB", (float(SDL_GetSystemRAM()) / 1000));
-		ImGui::Text("Caps: "); ImGui::SameLine(); if (SDL_Has3DNow)ImGui::TextColored({ 255,216,0,100 }, "3D, "); ImGui::SameLine(); if (SDL_HasAVX)ImGui::TextColored({ 255,216,0,100 }, "AVX, "); ImGui::SameLine();  if (SDL_HasAVX2)ImGui::TextColored({ 255,216,0,100 }, "AVX2, ");
-		ImGui::SameLine();  if (SDL_HasAltiVec)ImGui::TextColored({ 255,216,0,100 }, "AltiVec, "); ImGui::SameLine();  if (SDL_HasMMX)ImGui::TextColored({ 255,216,0,100 }, "MMX, ");
-		ImGui::SameLine();  if (SDL_HasRDTSC)ImGui::TextColored({ 255,216,0,100 }, "RDTSC, "); ImGui::SameLine();  if (SDL_HasSSE)ImGui::TextColored({ 255,216,0,100 }, "SSE, "); ImGui::SameLine();  if (SDL_HasSSE2)ImGui::TextColored({ 255,216,0,100 }, "SSE2, ");
-		if (SDL_HasSSE3)ImGui::TextColored({ 255,216,0,100 }, "SSE3, "); ImGui::SameLine();  if (SDL_HasSSE41)ImGui::TextColored({ 255,216,0,100 }, "SSE41, "); ImGui::SameLine();  if (SDL_HasSSE42)ImGui::TextColored({ 255,216,0,100 }, "SSE42 ");
+		ImGui::Text("Caps: "); ImGui::SameLine(); if (SDL_Has3DNow())ImGui::TextColored({ 255,216,0,100 }, "3D, "); ImGui::SameLine(); if (SDL_HasAVX())ImGui::TextColored({ 255,216,0,100 }, "AVX, "); ImGui::SameLine();  if (SDL_HasAVX2())ImGui::TextColored({ 255,216,0,100 }, "AVX2, ");
+		ImGui::SameLine();  if (SDL_HasAltiVec())ImGui::TextColored({ 255,216,0,100 }, "AltiVec, "); ImGui::SameLine();  if (SDL_HasMMX())ImGui::TextColored({ 255,216,0,100 }, "MMX, ");
+		ImGui::SameLine();  if (SDL_HasRDTSC())ImGui::TextColored({ 255,216,0,100 }, "RDTSC, "); ImGui::SameLine();  if (SDL_HasSSE())ImGui::TextColored({ 255,216,0,100 }, "SSE, "); ImGui::SameLine();  if (SDL_HasSSE2())ImGui::TextColored({ 255,216,0,100 }, "SSE2, ");
+		if (SDL_HasSSE3())ImGui::TextColored({ 255,216,0,100 }, "SSE3, "); ImGui::SameLine();  if (SDL_HasSSE41())ImGui::TextColored({ 255,216,0,100 }, "SSE41, "); ImGui::SameLine();  if (SDL_HasSSE42())ImGui::TextColored({ 255,216,0,100 }, "SSE42 ");
 		ImGui::Separator();
 		ImGui::Text("GPU Brand: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%s", glGetString(GL_VENDOR));
 		ImGui::Text("GPU: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%s", glGetString(GL_RENDERER));
