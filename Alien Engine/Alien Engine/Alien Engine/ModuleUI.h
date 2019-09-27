@@ -28,6 +28,7 @@ private:
 	Panel*& GetPanelByName(const std::string& panel_name);
 
 public:
+	void LogFPS(float frames, float ms);
 
 private:
 	bool show_demo_wndow = false;

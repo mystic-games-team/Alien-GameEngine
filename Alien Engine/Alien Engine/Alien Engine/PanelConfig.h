@@ -11,5 +11,10 @@ public:
 
 	void PanelLogic();
 
+	void FramerateInfo(float frames, float ms);
+
+public:
+	std::vector<float> fps_log;
+	std::vector<float> ms_log;
 };
 

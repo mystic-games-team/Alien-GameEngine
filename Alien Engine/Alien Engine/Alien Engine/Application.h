@@ -27,6 +27,8 @@ public:
 	uint16_t framerate_cap;
 	int fps_limit = 30;
 
+	
+
 private:
 	JSON_Object* config = nullptr;
 
@@ -65,6 +67,8 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 	JSON_Object* LoadJSONFile(const std::string &path);
+
+	
 };
 
 extern Application* App;

@@ -123,9 +123,9 @@ void Application::FinishUpdate()
 {
 	if (last_sec_frame_time.Read() > 1000)
 	{
-		last_sec_frame_time.Start();
 		prev_last_sec_frame_count = last_sec_frame_count;
 		last_sec_frame_count = 0;
+		last_sec_frame_time.Start();
 	}
 
 	float avg_fps = float(frame_count) / startup_time.ReadSec();
@@ -141,6 +141,8 @@ void Application::FinishUpdate()
 		float delaytimefinish = time.ReadMs();
 		LOG("We waited for %i milliseconds and got back in %.6f", framerate_cap - last_frame_ms, delaytimefinish - delaytimestart);
 	}
+
+	ui->LogFPS((float)prev_last_sec_frame_count, (float)last_frame_ms);
 }
 
 JSON_Object* Application::LoadJSONFile(const std::string& path)
@@ -214,7 +216,6 @@ void Application::OpenWebsite(const std::string& website)
 {
 	ShellExecuteA(NULL, "open", website.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
-
 
 void Application::AddModule(Module* mod)
 {
