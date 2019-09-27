@@ -13,7 +13,7 @@
         "Application": {
             "Name": "Alien Engine",
             "Organitzation": "UPC CITM",
-            "LimitFPS": 118,
+            "LimitFPS": 60,
             "CapFPS": true
         }
     }

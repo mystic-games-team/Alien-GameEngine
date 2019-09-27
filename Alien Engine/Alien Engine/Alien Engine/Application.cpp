@@ -39,6 +39,14 @@ Application::~Application()
 
 	list_modules.clear();
 
+	std::list<JSONfilepack*>::iterator json_item = json_files.begin();
+	for (; json_item != json_files.end(); ++json_item) {
+		if (*json_item != nullptr) {
+			delete* json_item;
+			*json_item = nullptr;
+		}
+	}
+	json_files.clear();
 }
 
 void Application::LoadDefaultConfig()
@@ -57,13 +65,12 @@ void Application::LoadDefaultConfig()
 
 void Application::SaveCustomConfig()
 {
-	/*if (!FileExists("Configuration/CustomConfiguration.json")) {
+	if (!FileExists("Configuration/CustomConfiguration.json")) {
 		config = CreateJSONFile("Configuration/CustomConfiguration.json");
 	}
 	if (config != nullptr)
 		SaveConfig();
-		*/
-	SaveConfig();
+		
 }
 
 bool Application::LoadConfig()
@@ -207,7 +214,7 @@ JSONfilepack* Application::CreateJSONFile(const std::string& path)
 {
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* object = json_value_get_object(value);
-
+	json_serialize_to_file_pretty(value, path.data());
 	if (value == nullptr || object == nullptr) {
 		LOG("Error creating JSON with path %s", path.data());
 		return nullptr;
@@ -256,7 +263,7 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
-	SaveConfig();
+
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
 	while(item != list_modules.rend() && ret == true)
