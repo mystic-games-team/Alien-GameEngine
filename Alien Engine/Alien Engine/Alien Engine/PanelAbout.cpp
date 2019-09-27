@@ -14,7 +14,7 @@ void PanelAbout::PanelLogic()
 	ImGui::SetNextWindowSize({ 500,600 });
 	if (ImGui::BeginPopupModal(panel_name.c_str(), &enabled, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoMove))
 	{
-		ImGui::Text("ALIEN ENGINE %f", ALIEN_ENGINE_VERSION);
+		ImGui::Text("ALIEN ENGINE %.2f", ALIEN_ENGINE_VERSION);
 		if (ImGui::Button("Github", { 50, 25 }))
 		{
 			App->OpenWebsite("https://github.com/VictorSegura99/Alien-GameEngine");
