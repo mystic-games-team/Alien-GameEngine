@@ -84,31 +84,19 @@ update_status ModuleUI::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-// Update
-update_status ModuleUI::Update(float dt)
-{
+void ModuleUI::Draw() {
+
+
 	if (show_demo_wndow)
 		ImGui::ShowDemoWindow(&show_demo_wndow);
 
 	MainMenuBar();
 	UpdatePanels();
 
-	return UPDATE_CONTINUE;
-}
-
-update_status ModuleUI::PostUpdate(float dt)
-{
 
 	ImGui::Render();
-
-
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-
-	return UPDATE_CONTINUE;
 }
-
-
 
 void ModuleUI::MainMenuBar()
 {
