@@ -11,8 +11,5 @@ public:
 
 	void PanelLogic();
 
-private:
-
-	SDL_DisplayMode display_mode;
 };
 
