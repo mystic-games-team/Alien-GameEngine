@@ -315,6 +315,9 @@
     <ClInclude Include="j1PerfTimer.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="PanelConsole.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -485,6 +488,7 @@
     <ClCompile Include="j1PerfTimer.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="PanelConsole.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
