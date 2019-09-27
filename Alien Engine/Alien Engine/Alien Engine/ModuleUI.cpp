@@ -7,6 +7,7 @@
 #include <gl/GL.h>
 #include "PanelAbout.h"
 #include "PanelConfig.h"
+#include "PanelConsole.h"
 #include "SDL/include/SDL_assert.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
@@ -129,6 +130,10 @@ void ModuleUI::MainMenuBar()
 		{
 			GetPanelByName("Configuration")->ChangeEnable();
 		}
+		if (ImGui::MenuItem("Console", "Ctrl + T"))
+		{
+			GetPanelByName("Console")->ChangeEnable();
+		}
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Help"))
@@ -158,6 +163,7 @@ void ModuleUI::InitPanels()
 {
 	panels.push_back(new PanelAbout("About Alien Engine", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A}));
 	panels.push_back(new PanelConfig("Configuration", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_O}));
+	panels.push_back(new PanelConsole("Console", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_T}));
 
 }
 
