@@ -192,7 +192,7 @@ Panel*& ModuleUI::GetPanelByName(const std::string& panel_name)
 	SDL_assert(1 == 0); //panel name is not correct, revise panels names!!
 }
 
-void ModuleUI::LogFPS(float frames, float ms)
+void ModuleUI::FramerateRegister(float frames, float ms)
 {
 	PanelConfig* pc = (PanelConfig*)GetPanelByName("Configuration");
 	if (pc->IsEnabled())

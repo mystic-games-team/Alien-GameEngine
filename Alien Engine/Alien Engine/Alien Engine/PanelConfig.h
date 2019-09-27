@@ -14,7 +14,7 @@ public:
 	void FramerateInfo(float frames, float ms);
 
 public:
-	std::vector<float> fps_log;
-	std::vector<float> ms_log;
+	std::vector<float> fps_keeper;
+	std::vector<float> ms_keeper;
 };
 

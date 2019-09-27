@@ -5,7 +5,7 @@
 
 #include <Windows.h>
 
-PanelConfig::PanelConfig(const std::string& panel_name, const std::vector<SDL_Scancode>& shortcuts) : Panel(panel_name, shortcuts), fps_log(100), ms_log(100)
+PanelConfig::PanelConfig(const std::string& panel_name, const std::vector<SDL_Scancode>& shortcuts) : Panel(panel_name, shortcuts), fps_keeper(100), ms_keeper(100)
 {
 	
 }
@@ -43,9 +43,10 @@ void PanelConfig::PanelLogic()
 			ImGui::Text("Limit FPS: %i", App->fps_limit);
 		ImGui::Spacing();
 		char title[25];
-		sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
-		ImGui::PlotHistogram("Framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-
+		sprintf_s(title, 25, "Framerate %.1f", fps_keeper[fps_keeper.size() - 1]);
+		ImGui::PlotHistogram("Framerate", &fps_keeper[0], fps_keeper.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+		sprintf_s(title, 25, "Ms %.1f", ms_keeper[ms_keeper.size() - 1]);
+		ImGui::PlotHistogram("ms", &ms_keeper[0], ms_keeper.size(), 0, title, 0.0f, 60.0f, ImVec2(310, 100));
 		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Window"))
@@ -133,14 +134,14 @@ void PanelConfig::FramerateInfo(float frames, float ms)
 	{
 		for (uint i = 0; i < 100 - 1; ++i)
 		{
-			fps_log[i] = fps_log[i + 1];
-			ms_log[i] = ms_log[i + 1];
+			fps_keeper[i] = fps_keeper[i + 1];
+			ms_keeper[i] = ms_keeper[i + 1];
 		}
 	}
 	else
 		++count;
 
-	fps_log[count - 1] = frames;
-	ms_log[count - 1] = ms;
+	fps_keeper[count - 1] = frames;
+	ms_keeper[count - 1] = ms;
 }
 

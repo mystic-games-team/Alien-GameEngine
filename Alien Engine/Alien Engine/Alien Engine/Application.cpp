@@ -142,7 +142,7 @@ void Application::FinishUpdate()
 		LOG("We waited for %i milliseconds and got back in %.6f", framerate_cap - last_frame_ms, delaytimefinish - delaytimestart);
 	}
 
-	ui->LogFPS((float)prev_last_sec_frame_count, (float)last_frame_ms);
+	ui->FramerateRegister((float)prev_last_sec_frame_count, (float)(framerate_cap+last_frame_ms));
 }
 
 JSON_Object* Application::LoadJSONFile(const std::string& path)
