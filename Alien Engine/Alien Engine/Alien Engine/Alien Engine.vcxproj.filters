@@ -488,7 +488,9 @@
     <ClCompile Include="j1PerfTimer.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="PanelConsole.cpp" />
+    <ClCompile Include="PanelConsole.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
