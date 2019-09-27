@@ -75,8 +75,8 @@ bool Application::LoadConfig()
 {
 	bool ret = true;
 
-	fps_cap = json_object_dotget_boolean(config, "Configuration.Application.CapFPS");
-	fps_limit = json_object_dotget_number(config, "Configuration.Application.LimitFPS");
+	//fps_cap = json_object_dotget_boolean(config, "Configuration.Application.CapFPS");
+	//fps_limit = json_object_dotget_number(config, "Configuration.Application.LimitFPS");
 	if (fps_limit > 0)
 	{
 		framerate_cap = 1000 / fps_limit;

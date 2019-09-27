@@ -1,26 +1,24 @@
 {
-	"Configuration": {
-		"Application": {
-			"Name": "Alien Engine",
-			"Organitzation": "UPC CITM",
-			"LimitFPS": 60,
-			"CapFPS": true
-		},
-		"Window": {
-			"Height": 675,
-			"Width": 1200,
-			"Brightness": 1.0,
-			"Fullscreen": false,
-			"Borderless": false,
-			"Resizable": true,
-			"Fulldesktop": false,
-			"Style": {
-				"Type": 1,
-				"ColorR": 100,
-				"ColorG": 100,
-				"ColorB": 100,
-				"ColorA": 100
-			}
-		  }
-	}
+    "Configuration": {
+        "Window": {
+            "Width": 1200,
+            "height": 0,
+            "Brightness": 1,
+            "Fullscreen": false,
+            "Fulldesktop": false,
+            "Resizable": true,
+            "Borderless": false,
+            "Style": {
+                "Type": 0,
+                "ColorR": 100,
+                "ColorG": 100,
+                "ColorB": 100,
+                "ColorA": 100
+            }
+        },
+        "Application": {
+            "Name": "Alien Engine",
+            "Organitzation": "UPC CITM"
+        }
+    }
 }
