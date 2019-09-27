@@ -29,7 +29,6 @@ Application::Application()
 
 Application::~Application()
 {
-	json_value_free(json_object_get_value(config, "Configuration/Configuration.json"));
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
 	while(item != list_modules.rend())
@@ -40,15 +39,47 @@ Application::~Application()
 
 	list_modules.clear();
 
+	std::list<JSONfilepack*>::iterator json_item = json_files.begin();
+	for (; json_item != json_files.end(); ++json_item) {
+		if (*json_item != nullptr) {
+			delete* json_item;
+			*json_item = nullptr;
+		}
+	}
+	json_files.clear();
+}
+
+void Application::LoadDefaultConfig()
+{
+	if (FileExists("Configuration/CustomConfiguration.json")) {
+		remove("Configuration/CustomConfiguration.json");
+		json_files.remove(config);
+		delete config;
+		config = nullptr;
+	}
+	config = LoadJSONFile("Configuration/DefaultConfiguration.json");
+	if (config != nullptr) {
+		LoadConfig();
+	}
+}
+
+void Application::SaveCustomConfig()
+{
+	if (!FileExists("Configuration/CustomConfiguration.json")) {
+		config = CreateJSONFile("Configuration/CustomConfiguration.json");
+	}
+	if (config != nullptr)
+		SaveConfig();
+		
 }
 
 bool Application::LoadConfig()
 {
 	bool ret = true;
 
+	fps_cap = config->GetBoolean("Configuration.Application.CapFPS");
+	fps_limit = config->GetNumber("Configuration.Application.LimitFPS");
 
-	fps_cap = json_object_dotget_boolean(config, "Configuration.Application.CapFPS");
-	fps_limit = json_object_dotget_number(config, "Configuration.Application.LimitFPS");
 	if (fps_limit > 0)
 	{
 		framerate_cap = 1000 / fps_limit;
@@ -69,6 +100,11 @@ bool Application::SaveConfig()
 {
 	bool ret = true;
 
+	config->StartSave();
+
+	config->SetBoolean("Configuration.Application.CapFPS", fps_cap);
+	config->SetNumber("Configuration.Application.LimitFPS", fps_limit);
+
 	std::list<Module*>::iterator item = list_modules.begin();
 
 	while (item != list_modules.end())
@@ -77,13 +113,26 @@ bool Application::SaveConfig()
 		++item;
 	}
 
+	config->FinishSave();
+
 	return true;
+}
+
+inline bool Application::FileExists(const std::string& name) {
+	struct stat buffer;
+	return (stat(name.c_str(), &buffer) == 0);
 }
 
 bool Application::Init()
 {
 	bool ret = true;
-	config = LoadJSONFile("Configuration/Configuration.json");
+
+	if (FileExists("Configuration/CustomConfiguration.json")) {
+		config = LoadJSONFile("Configuration/CustomConfiguration.json");
+	}
+	else {
+		config = LoadJSONFile("Configuration/DefaultConfiguration.json");
+	}
 	if (config != nullptr)
 		LoadConfig();
 	// Call Init() in all modules
@@ -145,7 +194,7 @@ void Application::FinishUpdate()
 	ui->FramerateRegister((float)prev_last_sec_frame_count, (float)(framerate_cap+last_frame_ms));
 }
 
-JSON_Object* Application::LoadJSONFile(const std::string& path)
+JSONfilepack* Application::LoadJSONFile(const std::string& path)
 {
 	JSON_Value* value = json_parse_file(path.data());
 	JSON_Object* object = json_value_get_object(value);
@@ -153,9 +202,27 @@ JSON_Object* Application::LoadJSONFile(const std::string& path)
 	if (value == nullptr || object == nullptr)
 	{
 		LOG("Error loading %s", path);
+		return nullptr;
 	}
+	else {
+		json_files.push_back(new JSONfilepack(path, object, value));
+		return json_files.back();
+	}
+}
 
-	return object;
+JSONfilepack* Application::CreateJSONFile(const std::string& path)
+{
+	JSON_Value* value = json_value_init_object();
+	JSON_Object* object = json_value_get_object(value);
+	json_serialize_to_file_pretty(value, path.data());
+	if (value == nullptr || object == nullptr) {
+		LOG("Error creating JSON with path %s", path.data());
+		return nullptr;
+	}
+	else {
+		json_files.push_back(new JSONfilepack(path, object, value));
+		return json_files.back();
+	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -196,7 +263,7 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
-	SaveConfig();
+
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
 	while(item != list_modules.rend() && ret == true)

@@ -1,0 +1,20 @@
+{
+    "Configuration": {
+        "Window": {
+            "Width": 1200,
+            "Height": 650,
+            "Brightness": 1,
+            "Fullscreen": false,
+            "Fulldesktop": false,
+            "Resizable": true,
+            "Borderless": false,
+            "StyleType": 0
+        },
+        "Application": {
+            "Name": "Alien Engine",
+            "Organitzation": "UPC CITM",
+            "LimitFPS": 60,
+            "CapFPS": true
+        }
+    }
+}
