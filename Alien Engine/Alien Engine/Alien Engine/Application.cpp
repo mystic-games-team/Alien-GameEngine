@@ -190,7 +190,6 @@ void Application::FinishUpdate()
 		float delaytimestart = time.ReadMs();
 		SDL_Delay(framerate_cap - last_frame_ms);
 		float delaytimefinish = time.ReadMs();
-		LOG("We waited for %i milliseconds and got back in %.6f", framerate_cap - last_frame_ms, delaytimefinish - delaytimestart);
 	}
 
 	ui->FramerateRegister((float)prev_last_sec_frame_count, (float)(framerate_cap+last_frame_ms));

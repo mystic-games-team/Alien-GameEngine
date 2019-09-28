@@ -47,18 +47,27 @@ update_status ModuleInput::PreUpdate(float dt)
 	{
 		if(keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
+			if (keyboard[i] == KEY_IDLE) {
 				keyboard[i] = KEY_DOWN;
-			else
+				AddInputBuff(i, KEY_DOWN);
+			}
+			else {
 				keyboard[i] = KEY_REPEAT;
+				AddInputBuff(i, KEY_REPEAT);
+			}
 		}
 		else
 		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN) {
 				keyboard[i] = KEY_UP;
+				AddInputBuff(i, KEY_UP);
+			}
 			else
 				keyboard[i] = KEY_IDLE;
 		}
+
+
+
 	}
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -71,15 +80,21 @@ update_status ModuleInput::PreUpdate(float dt)
 	{
 		if(buttons & SDL_BUTTON(i))
 		{
-			if(mouse_buttons[i] == KEY_IDLE)
+			if (mouse_buttons[i] == KEY_IDLE) {
 				mouse_buttons[i] = KEY_DOWN;
-			else
+				AddInputBuff(i, KEY_DOWN, true);
+			}
+			else {
 				mouse_buttons[i] = KEY_REPEAT;
+				AddInputBuff(i, KEY_REPEAT, true);
+			}
 		}
 		else
 		{
-			if(mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
+			if (mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN) {
 				mouse_buttons[i] = KEY_UP;
+				AddInputBuff(i, KEY_UP, true);
+			}
 			else
 				mouse_buttons[i] = KEY_IDLE;
 		}
@@ -130,4 +145,33 @@ bool ModuleInput::CleanUp()
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
+}
+
+void ModuleInput::AddInputBuff(const uint& key, const uint& state, const bool& is_mouse)
+{
+	static char text[60];
+	const char* state_string = nullptr;
+	switch (state) {
+	case KEY_DOWN:
+		state_string = "KEY_DOWN";
+		break;
+	case KEY_UP:
+		state_string = "KEY_UP";
+		break;
+	case KEY_REPEAT:
+		state_string = "KEY_REPEAT";
+		break;
+	}
+
+	if (is_mouse)
+		sprintf_s(text, 60, "MOUSE: %i - %s \n", key, state_string);
+	else
+		sprintf_s(text, 60, "KEYBOARD: %i - %s \n", key, state_string);
+	
+	static char repeat[60] = "";
+
+	if (strcmp(repeat, text))
+		input.appendf(text);
+
+	strcpy(repeat, text);
 }

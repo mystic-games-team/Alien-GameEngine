@@ -19,3 +19,5 @@ void log(const char file[], int line, const char* format, ...)
 		App->log_string.appendf(tmp_string2);
 }
 
+
+

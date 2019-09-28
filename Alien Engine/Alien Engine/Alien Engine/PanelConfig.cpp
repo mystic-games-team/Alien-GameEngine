@@ -126,6 +126,19 @@ void PanelConfig::PanelLogic()
 		ImGui::SameLine();
 		ImGui::TextColored({ 255,216,0,100 }, "%i", App->input->GetMouseZ());
 		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::BeginChild("Input Output", { 0, 150 });
+		ImGui::TextUnformatted(App->input->input.begin());
+		if (scroll_y) {
+			scroll_y = false;
+			ImGui::SetScrollHereY(1.0F);
+		}
+
+		if (ImGui::GetScrollY() / ImGui::GetScrollMaxY() >= 0.8F) {
+			ImGui::SetScrollHereY(1.0F);
+		}
+		ImGui::EndChild();
+
 		
 	}
 	if (ImGui::CollapsingHeader("Hardware"))
@@ -171,5 +184,10 @@ void PanelConfig::FramerateInfo(float frames, float ms)
 
 	fps_keeper[count - 1] = frames;
 	ms_keeper[count - 1] = ms;
+}
+
+void PanelConfig::OnPanelDesactive()
+{
+	scroll_y = true;
 }
 

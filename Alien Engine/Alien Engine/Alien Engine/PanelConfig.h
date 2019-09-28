@@ -12,9 +12,15 @@ public:
 	void PanelLogic();
 
 	void FramerateInfo(float frames, float ms);
+	void OnPanelDesactive();
 
 public:
 	std::vector<float> fps_keeper;
 	std::vector<float> ms_keeper;
+
+private:
+
+	bool scroll_y = true;
+
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "imgui/imgui.h"
 
 #define MAX_MOUSE_BUTTONS 5
 
@@ -59,6 +60,10 @@ public:
 	}
 
 private:
+
+	void AddInputBuff(const uint& key, const uint& state, const bool& is_mouse = false);
+
+private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
 	int mouse_x;
@@ -67,4 +72,9 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 	//int mouse_z_motion;
+
+public:
+
+	ImGuiTextBuffer input;
+
 };
