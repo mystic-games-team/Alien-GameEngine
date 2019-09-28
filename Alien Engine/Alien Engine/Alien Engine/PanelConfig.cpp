@@ -114,6 +114,20 @@ void PanelConfig::PanelLogic()
 		}
 		ImGui::Spacing();
 	}
+	if (ImGui::CollapsingHeader("Input")) {
+		ImGui::Spacing();
+		ImGui::Text("Mouse Position:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,216,0,100 }, "%i, %i", App->input->GetMouseX(), App->input->GetMouseY());
+		ImGui::Text("Mouse Motion:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,216,0,100 }, "%i, %i", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+		ImGui::Text("Mouse Wheel:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,216,0,100 }, "%i", App->input->GetMouseZ());
+		ImGui::Spacing();
+		
+	}
 	if (ImGui::CollapsingHeader("Hardware"))
 	{
 		ImGui::Text("OS: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%s", SDL_GetCurrentVideoDriver());
