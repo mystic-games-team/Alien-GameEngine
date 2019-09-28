@@ -22,6 +22,9 @@ public:
 	void SaveConfig(JSONfilepack*& config);
 	void SetTitle(const char* title);
 
+	void SetWindowName(const char* name);
+	void SetOrganitzationName(const char* name);
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

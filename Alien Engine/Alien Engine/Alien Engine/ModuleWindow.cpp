@@ -120,3 +120,14 @@ void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);
 }
+
+void ModuleWindow::SetWindowName(const char* name)
+{
+	window_name = (char*)name;
+	SDL_SetWindowTitle(window, window_name);
+}
+
+void ModuleWindow::SetOrganitzationName(const char* name)
+{
+	organitzation_name = (char*)name;
+}

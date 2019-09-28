@@ -21,11 +21,17 @@ void PanelConfig::PanelLogic()
 	if (ImGui::CollapsingHeader("Application"))
 	{
 		ImGui::Spacing();
-		if (ImGui::InputText(" Application Name", App->window->window_name, 20)) {
-			SDL_SetWindowTitle(App->window->window, App->window->window_name);
+		static char window_name[20];
+		strcpy_s(window_name, 20, App->window->window_name);
+		if (ImGui::InputText(" Application Name", window_name, 20)) {
+			App->window->SetWindowName(window_name);
 		}
 		ImGui::Spacing();
-		ImGui::InputText(" Organitzation Name", App->window->organitzation_name, 20);
+		static char organitzation_name[20];
+		strcpy_s(organitzation_name, 20, App->window->organitzation_name);
+		if (ImGui::InputText(" Organitzation Name", organitzation_name, 20)) {
+			App->window->SetOrganitzationName(organitzation_name);
+		}
 		ImGui::Spacing();
 		if (ImGui::SliderInt(" Max FPS", &App->fps_limit, 0, 120)) {
 			if (App->fps_limit <= 0) {
@@ -44,9 +50,9 @@ void PanelConfig::PanelLogic()
 		ImGui::Spacing();
 		char title[25];
 		sprintf_s(title, 25, "Framerate %.1f", fps_keeper[fps_keeper.size() - 1]);
-		ImGui::PlotHistogram("Framerate", &fps_keeper[0], fps_keeper.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+		ImGui::PlotHistogram("", &fps_keeper[0], fps_keeper.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 		sprintf_s(title, 25, "Ms %.1f", ms_keeper[ms_keeper.size() - 1]);
-		ImGui::PlotHistogram("ms", &ms_keeper[0], ms_keeper.size(), 0, title, 0.0f, 60.0f, ImVec2(310, 100));
+		ImGui::PlotHistogram("", &ms_keeper[0], ms_keeper.size(), 0, title, 0.0f, 60.0f, ImVec2(310, 100));
 		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Window"))
