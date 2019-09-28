@@ -100,6 +100,22 @@ void ModuleWindow::LoadConfig(JSONfilepack*& config)
 	if (ImGui::GetCurrentContext() != nullptr)
 		App->ui->ChangeStyle(style);
 	SDL_SetWindowTitle(window, window_name);
+	SDL_SetWindowSize(window, width, height);
+	if (fullscreen) {
+		SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN);
+	}
+	else {
+		SDL_SetWindowFullscreen(App->window->window, 0);
+	}
+	if (full_desktop) {
+		SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}
+	else {
+		SDL_SetWindowFullscreen(App->window->window, 0);
+	}
+	SDL_SetWindowBordered(window, (SDL_bool)!borderless);
+	SDL_SetWindowResizable(window, (SDL_bool)resizable);
+	SDL_SetWindowBrightness(window, brightness);
 }
 
 void ModuleWindow::SaveConfig(JSONfilepack*& config)

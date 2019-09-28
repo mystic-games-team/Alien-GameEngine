@@ -8,7 +8,7 @@
             "Fulldesktop": false,
             "Resizable": true,
             "Borderless": false,
-            "StyleType": 0
+            "StyleType": 1
         },
         "Application": {
             "Name": "Alien Engine",
