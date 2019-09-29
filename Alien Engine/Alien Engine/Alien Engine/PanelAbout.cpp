@@ -10,6 +10,8 @@ PanelAbout::~PanelAbout()
 
 void PanelAbout::PanelLogic()
 {
+	bool is_hovering = false;
+
 	ImGui::OpenPopup(panel_name.c_str());
 	ImGui::SetNextWindowSize({ 500,600 });
 	if (ImGui::BeginPopupModal(panel_name.c_str(), &enabled, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoMove))
@@ -36,10 +38,40 @@ void PanelAbout::PanelLogic()
 		}
 		ImGui::Text("Libraries Versions:");
 		ImGui::BulletText("SDL %i.%i.%i", SDL_MAJOR_VERSION,SDL_MINOR_VERSION,SDL_PATCHLEVEL);
+		if (ImGui::IsItemHovered()) {
+			is_hovering = true;
+		}
+		if (ImGui::IsItemClicked()) {
+			App->OpenWebsite("https://www.sdl.com/");
+		}
 		ImGui::BulletText("Glew %s", VERSION_GLEW);
+		if (ImGui::IsItemHovered()) {
+			is_hovering = true;
+		}
+		if (ImGui::IsItemClicked()) {
+			App->OpenWebsite("http://glew.sourceforge.net/");
+		}
 		ImGui::BulletText("ImGui %s", IMGUI_VERSION);
+		if (ImGui::IsItemHovered()) {
+			is_hovering = true;
+		}
+		if (ImGui::IsItemClicked()) {
+			App->OpenWebsite("https://github.com/ocornut/imgui");
+		}
 		ImGui::BulletText("MathGeoLib 1.5");
+		if (ImGui::IsItemHovered()) {
+			is_hovering = true;
+		}
+		if (ImGui::IsItemClicked()) {
+			App->OpenWebsite("https://github.com/juj/MathGeoLib");
+		}
 		ImGui::BulletText("OpenGL %s",glGetString(GL_VERSION));
+		if (ImGui::IsItemHovered()) {
+			is_hovering = true;
+		}
+		if (ImGui::IsItemClicked()) {
+			App->OpenWebsite("https://www.opengl.org/?");
+		}
 		ImGui::Text("");
 		if (ImGui::CollapsingHeader("License"))
 		{
@@ -54,4 +86,17 @@ void PanelAbout::PanelLogic()
 		}
 		ImGui::EndPopup();
 	}
+	if (is_hovering) {
+		SDL_Cursor* cursor;
+		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
+		SDL_SetCursor(cursor);
+	}
+	else {
+		SDL_FreeCursor(SDL_GetCursor());
+	}
+}
+
+void PanelAbout::OnPanelDesactive()
+{
+	SDL_FreeCursor(SDL_GetCursor());
 }
