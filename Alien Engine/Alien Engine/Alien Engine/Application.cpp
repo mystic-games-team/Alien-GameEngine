@@ -192,7 +192,7 @@ void Application::FinishUpdate()
 		float delaytimefinish = time.ReadMs();
 	}
 
-	ui->FramerateRegister((float)prev_last_sec_frame_count, (float)(framerate_cap+last_frame_ms));
+	ui->FramerateRegister((float)prev_last_sec_frame_count, (float)(framerate_cap));
 }
 
 JSONfilepack* Application::LoadJSONFile(const std::string& path)

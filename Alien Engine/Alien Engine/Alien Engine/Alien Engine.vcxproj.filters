@@ -321,6 +321,12 @@
     <ClInclude Include="JSONfilepack.h">
       <Filter>JSON</Filter>
     </ClInclude>
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -496,6 +502,9 @@
     </ClCompile>
     <ClCompile Include="JSONfilepack.cpp">
       <Filter>JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

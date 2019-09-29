@@ -2,6 +2,7 @@
 #include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
 #include "imgui/imgui.h"
+#include "mmgr/mmgr.h"
 
 #include <Windows.h>
 
@@ -48,11 +49,51 @@ void PanelConfig::PanelLogic()
 		else
 			ImGui::Text("Limit FPS: %i", App->fps_limit);
 		ImGui::Spacing();
+
+		// Framerate Histogram
 		char title[25];
 		sprintf_s(title, 25, "Framerate %.1f", fps_keeper[fps_keeper.size() - 1]);
 		ImGui::PlotHistogram("", &fps_keeper[0], fps_keeper.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+
+		// Ms Histogram
 		sprintf_s(title, 25, "Ms %.1f", ms_keeper[ms_keeper.size() - 1]);
 		ImGui::PlotHistogram("", &ms_keeper[0], ms_keeper.size(), 0, title, 0.0f, 60.0f, ImVec2(310, 100));
+
+		// Memory Histogram
+		sMStats memory_stats = m_getMemoryStatistics();
+		static int memory_count = 0;
+		static std::vector<float> memory(100);
+		if (++memory_count < 20)
+		{
+			memory_count = 0;
+			if (memory.size() == 100)
+			{
+				for (uint i = 0; i < 99; i++)
+				{
+					memory[i] = memory[i + 1];
+				}
+				memory[100 - 1] = memory_stats.totalReportedMemory;
+			}
+			else
+			{
+				memory.push_back(memory_stats.totalReportedMemory);
+			}
+		}
+
+		ImGui::PlotHistogram("Memory", &memory[0], memory.size(), 0, "Memory Use", 0.0f, (float)memory_stats.peakReportedMemory*1.2f, ImVec2(310, 100));
+		
+
+		ImGui::Text("Total Reported Memory: %u", memory_stats.totalReportedMemory);
+		ImGui::Text("Total Actual Memory: %u", memory_stats.totalActualMemory);
+		ImGui::Text("Max Reported Memory: %u", memory_stats.peakReportedMemory);
+		ImGui::Text("Max Actual Mem: %u", memory_stats.peakActualMemory);
+		ImGui::Text("Accumulated Reported Mem: %u", memory_stats.accumulatedReportedMemory);
+		ImGui::Text("Accumulated Actual Mem: %u", memory_stats.accumulatedActualMemory);
+		ImGui::Text("Accumulated Alloc Unit Count: %u", memory_stats.accumulatedAllocUnitCount);
+		ImGui::Text("Total Alloc Unit Count: %u", memory_stats.totalAllocUnitCount);
+		ImGui::Text("Peak Alloc Unit Count: %u", memory_stats.peakAllocUnitCount);
+
+
 		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Window"))
