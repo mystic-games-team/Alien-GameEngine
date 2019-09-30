@@ -3,6 +3,7 @@
 #include "SDL/include/SDL.h"
 #include "imgui/imgui.h"
 #include "mmgr/mmgr.h"
+#include "gpudetect/DeviceId.h"
 
 #include <Windows.h>
 
@@ -184,17 +185,29 @@ void PanelConfig::PanelLogic()
 	}
 	if (ImGui::CollapsingHeader("Hardware"))
 	{
+		std::wstring gpu;
+		char gpu_brand[250] = "";
+		unsigned __int64 video_mem_budget;
+		unsigned __int64 video_mem_usage;
+		unsigned __int64 video_mem_available;
+		unsigned __int64 video_mem_reserved;
+
+		getGraphicsDeviceInfo(NULL,NULL, &gpu, &video_mem_budget, &video_mem_usage, &video_mem_available, &video_mem_reserved);
+
 		ImGui::Text("OS: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%s", SDL_GetCurrentVideoDriver());
 		ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i Cores  ", SDL_GetCPUCount());  ImGui::SameLine(); ImGui::Text("Cache: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i kb", SDL_GetCPUCacheLineSize());
-		ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%.2fGB", (float(SDL_GetSystemRAM()) / 1000));
+		ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%.2fGB", (float(SDL_GetSystemRAM()) / 1024.f));
 		ImGui::Text("Caps: "); ImGui::SameLine(); if (SDL_Has3DNow())ImGui::TextColored({ 255,216,0,100 }, "3D, "); ImGui::SameLine(); if (SDL_HasAVX())ImGui::TextColored({ 255,216,0,100 }, "AVX, "); ImGui::SameLine();  if (SDL_HasAVX2())ImGui::TextColored({ 255,216,0,100 }, "AVX2, ");
 		ImGui::SameLine();  if (SDL_HasAltiVec())ImGui::TextColored({ 255,216,0,100 }, "AltiVec, "); ImGui::SameLine();  if (SDL_HasMMX())ImGui::TextColored({ 255,216,0,100 }, "MMX, ");
 		ImGui::SameLine();  if (SDL_HasRDTSC())ImGui::TextColored({ 255,216,0,100 }, "RDTSC, "); ImGui::SameLine();  if (SDL_HasSSE())ImGui::TextColored({ 255,216,0,100 }, "SSE, "); ImGui::SameLine();  if (SDL_HasSSE2())ImGui::TextColored({ 255,216,0,100 }, "SSE2, ");
 		if (SDL_HasSSE3())ImGui::TextColored({ 255,216,0,100 }, "SSE3, "); ImGui::SameLine();  if (SDL_HasSSE41())ImGui::TextColored({ 255,216,0,100 }, "SSE41, "); ImGui::SameLine();  if (SDL_HasSSE42())ImGui::TextColored({ 255,216,0,100 }, "SSE42 ");
 		ImGui::Separator();
-		ImGui::Text("GPU Brand: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%s", glGetString(GL_VENDOR));
-		ImGui::Text("GPU: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%s", glGetString(GL_RENDERER));
-		ImGui::Text("VRAM: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i GB",sizeof(LPMEMORYSTATUSEX));
+		sprintf_s(gpu_brand, 250, "%S", gpu.c_str());
+		ImGui::Text("GPU: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, gpu_brand);
+		ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i Mb", (float(video_mem_budget)/(1024.f * 1024.f)));
+		ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i Mb", (float(video_mem_usage) / (1024.f * 1024.f )));
+		ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i Mb", (float(video_mem_available)/ (1024.f * 1024.f)));
+		ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "%i Mb", (float(video_mem_reserved)/ (1024.f * 1024.f)));
 		ImGui::Spacing();
 	}
 	ImGui::Spacing();

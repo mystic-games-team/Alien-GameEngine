@@ -137,6 +137,8 @@
     <ClInclude Include="glew\include\wglew.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="gpudetect\DeviceId.h" />
+    <ClInclude Include="gpudetect\dxgi1_4.h" />
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h" />
     <ClInclude Include="imgui\examples\imgui_impl_sdl.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -232,6 +234,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="gpudetect\DeviceId.cpp" />
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\examples\imgui_impl_sdl.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />

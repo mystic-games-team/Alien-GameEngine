@@ -31,6 +31,9 @@
     <Filter Include="JSON">
       <UniqueIdentifier>{c3226d6a-964e-4040-a00c-a42ec6835acf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\GPUdetect">
+      <UniqueIdentifier>{aeb00a0a-0f61-426d-957f-8adcfe5e595b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -327,6 +330,12 @@
     <ClInclude Include="mmgr\nommgr.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="gpudetect\DeviceId.h">
+      <Filter>Tools\GPUdetect</Filter>
+    </ClInclude>
+    <ClInclude Include="gpudetect\dxgi1_4.h">
+      <Filter>Tools\GPUdetect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -505,6 +514,9 @@
     </ClCompile>
     <ClCompile Include="mmgr\mmgr.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="gpudetect\DeviceId.cpp">
+      <Filter>Tools\GPUdetect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
