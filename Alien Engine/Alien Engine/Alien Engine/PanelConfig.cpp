@@ -7,9 +7,9 @@
 
 #include <Windows.h>
 
-PanelConfig::PanelConfig(const std::string& panel_name, const std::vector<SDL_Scancode>& shortcuts) : Panel(panel_name, shortcuts), fps_keeper(100), ms_keeper(100)
+PanelConfig::PanelConfig(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra) :
+	Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra), fps_keeper(100), ms_keeper(100)
 {
-	
 }
 
 PanelConfig::~PanelConfig()

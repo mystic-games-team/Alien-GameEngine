@@ -170,9 +170,9 @@ void ModuleUI::ChangeStyle(const int& style_number)
 
 void ModuleUI::InitPanels()
 {
-	panel_about = new PanelAbout("About Alien Engine", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A});
-	panel_config = new PanelConfig("Configuration", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_O});
-	panel_console = new PanelConsole("Console", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_T});
+	panel_about = new PanelAbout("About Alien Engine", SDL_SCANCODE_A, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+	panel_config = new PanelConfig("Configuration", SDL_SCANCODE_O, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+	panel_console = new PanelConsole("Console", SDL_SCANCODE_T, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
@@ -185,8 +185,6 @@ void ModuleUI::UpdatePanels()
 	std::vector<Panel*>::iterator item = panels.begin();
 	for (; item != panels.end(); ++item) {
 		if (*item != nullptr) {
-			if ((*item)->ShortCutClicked())
-				(*item)->ChangeEnable();
 			if ((*item)->IsEnabled()) {
 				(*item)->PanelLogic();
 			}

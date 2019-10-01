@@ -12,6 +12,7 @@
 #include <list>
 #include "j1PerfTimer.h"
 #include "JSONfilepack.h"
+#include "ShortCutManager.h"
 
 class Application
 {
@@ -26,7 +27,8 @@ public:
 	bool fps_cap = true;
 	uint16_t framerate_cap;
 	int fps_limit = 30;
-	ImGuiTextBuffer log_string;
+	ImGuiTextBuffer log_string; 
+	ShortCutManager* shortcut_manager = nullptr;
 
 private:
 	JSONfilepack* config = nullptr;
