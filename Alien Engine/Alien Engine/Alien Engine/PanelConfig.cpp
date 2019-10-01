@@ -160,19 +160,19 @@ void PanelConfig::PanelLogic()
 	}
 	if (ImGui::CollapsingHeader("ShortCuts")) {
 		ImGui::Spacing();
-		ImGui::BeginChild("", { 500,0 },true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
-		ImGui::Columns(4,0,true);
-		ImGui::SetColumnWidth(0,100);
+		ImGui::BeginChild("", { 440,0 },true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::Columns(4, 0, false);
+		ImGui::SetColumnWidth(0,110);
 		ImGui::SetColumnWidth(1, 100);
-		ImGui::SetColumnWidth(2, 120);
+		ImGui::SetColumnWidth(2, 100);
 		ImGui::SetColumnWidth(3, 130);
 		//ImGui::Text("");
 		ImGui::NextColumn();
-		ImGui::Text("   OnKeyDown");
+		ImGui::Text("OnKeyDown");
 		ImGui::NextColumn();
-		ImGui::Text("   OnKeyRepeat");
+		ImGui::Text("OnKeyRepeat");
 		ImGui::NextColumn();
-		ImGui::Text("   OnExtraKeyDown");
+		ImGui::Text("ExtraKeyRepeat");
 		ImGui::NextColumn();
 		std::vector<ShortCut*> shortcuts = App->shortcut_manager->GetShortCuts();
 		std::vector<ShortCut*>::iterator item = shortcuts.begin();
