@@ -40,7 +40,8 @@ bool ModuleUI::Start()
 	InitPanels();
 
 	shortcut_demo = App->shortcut_manager->AddShortCut(SDL_SCANCODE_D, std::bind(&ModuleUI::ChangeEnableDemo, App->ui), SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
-
+	shortcut_close = App->shortcut_manager->AddShortCut(SDL_SCANCODE_F4, std::bind(&Application::QuitApp, App), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
+	
 	return ret;
 }
 
@@ -107,7 +108,7 @@ void ModuleUI::MainMenuBar()
 		{
 
 		}
-		if (ImGui::MenuItem("Close")) 
+		if (ImGui::MenuItem("Close", GetCharFromShortcut(shortcut_close))) 
 		{
 			App->QuitApp();
 		}
@@ -116,13 +117,11 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("View"))
 	{
-		sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(panel_config->shortcut->key2_repeat), SDL_GetScancodeName(panel_config->shortcut->key3_repeat_extra), SDL_GetScancodeName(panel_config->shortcut->key1_down));
-		if (ImGui::MenuItem("Configuration", shortcut_char))
+		if (ImGui::MenuItem("Configuration", GetCharFromShortcut(panel_config->shortcut)))
 		{
 			panel_config->ChangeEnable();
 		}
-		sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(panel_console->shortcut->key2_repeat), SDL_GetScancodeName(panel_console->shortcut->key3_repeat_extra), SDL_GetScancodeName(panel_console->shortcut->key1_down));
-		if (ImGui::MenuItem("Console", shortcut_char))
+		if (ImGui::MenuItem("Console", GetCharFromShortcut(panel_console->shortcut)))
 		{
 			panel_console->ChangeEnable();
 		}
@@ -130,13 +129,11 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("Help"))
 	{
-		sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(panel_about->shortcut->key2_repeat), SDL_GetScancodeName(panel_about->shortcut->key3_repeat_extra), SDL_GetScancodeName(panel_about->shortcut->key1_down));
-		if (ImGui::MenuItem("About", shortcut_char))
+		if (ImGui::MenuItem("About", GetCharFromShortcut(panel_about->shortcut)))
 		{
 			panel_about->ChangeEnable();
 		}
-		sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(shortcut_demo->key2_repeat), SDL_GetScancodeName(shortcut_demo->key3_repeat_extra), SDL_GetScancodeName(shortcut_demo->key1_down));
-		if (ImGui::MenuItem("Show Gui Demo", shortcut_char))
+		if (ImGui::MenuItem("Show Gui Demo", GetCharFromShortcut(shortcut_demo)))
 		{
 			ChangeEnableDemo();
 		}
@@ -168,6 +165,12 @@ void ModuleUI::ChangeStyle(const int& style_number)
 	case 3:
 		break;
 	}
+}
+const char* ModuleUI::GetCharFromShortcut(ShortCut*& shortcut)
+{
+	static char shortcut_char[50];
+	sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(shortcut->key2_repeat), SDL_GetScancodeName(shortcut->key3_repeat_extra), SDL_GetScancodeName(shortcut->key1_down));
+	return shortcut_char;
 }
 
 void ModuleUI::ChangeEnableDemo()
