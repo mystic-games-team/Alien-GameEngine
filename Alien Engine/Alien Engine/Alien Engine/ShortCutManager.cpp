@@ -44,10 +44,10 @@ void ShortCutManager::UpdateShortCuts()
 	}
 }
 
-ShortCut* ShortCutManager::AddShortCut(const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
+ShortCut* ShortCutManager::AddShortCut(const char* order_name, const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 {
 	ShortCut* new_shortcut = nullptr;
-	new_shortcut = new ShortCut(key1_down, funct, key2_repeat, key3_repeat_extra);
+	new_shortcut = new ShortCut(order_name, key1_down, funct, key2_repeat, key3_repeat_extra);
 	if (new_shortcut != nullptr) {
 		shortcuts.push_back(new_shortcut);
 		return new_shortcut;
@@ -56,6 +56,11 @@ ShortCut* ShortCutManager::AddShortCut(const SDL_Scancode& key1_down, std::funct
 		LOG("Fail adding a shortcut");
 		return nullptr;
 	}
+}
+
+std::vector<ShortCut*> ShortCutManager::GetShortCuts()
+{
+	return shortcuts;
 }
 
 const char* ShortCut::GetShortcutName()
@@ -91,7 +96,33 @@ void ShortCut::SetShortcutKeys(const SDL_Scancode& key1_down, const SDL_Scancode
 	name = GetShortcutName();
 }
 
-const char* ShortCut::GetName()
+const char* ShortCut::GetNameScancodes()
 {
 	return name;
+}
+
+const char* ShortCut::GetNameOrder()
+{
+	return order_name;
+}
+
+const char* ShortCut::GetKeyDownName()
+{
+	return SDL_GetScancodeName(key1_down);
+}
+
+const char* ShortCut::GetKeyRepeatName()
+{
+	if (key2_repeat != SDL_SCANCODE_UNKNOWN)
+		return SDL_GetScancodeName(key2_repeat);
+	else
+		return "No Key On";
+}
+
+const char* ShortCut::GetExtraKeyRepeatName()
+{
+	if (key3_repeat_extra != SDL_SCANCODE_UNKNOWN)
+		return SDL_GetScancodeName(key3_repeat_extra);
+	else
+		return "No Key On";
 }

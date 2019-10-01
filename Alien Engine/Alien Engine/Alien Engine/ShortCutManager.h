@@ -14,11 +14,12 @@ enum class ShortCutType {
 
 struct ShortCut {
 
-	ShortCut(const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN) {
+	ShortCut(const char* order_name, const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN) {
 		this->key1_down = key1_down;
 		this->key2_repeat = key2_repeat;
 		this->key3_repeat_extra = key3_repeat_extra;
 		this->funct = funct;
+		this->order_name = order_name;
 
 		if (key3_repeat_extra != SDL_SCANCODE_UNKNOWN)
 			type = ShortCutType::COMPLETE;
@@ -32,7 +33,12 @@ struct ShortCut {
 
 	// functions
 	void SetShortcutKeys(const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN);
-	const char* GetName();
+	const char* GetNameScancodes();
+	const char* GetNameOrder();
+
+	const char* GetKeyDownName();
+	const char* GetKeyRepeatName();
+	const char* GetExtraKeyRepeatName();
 
 	// variables
 	SDL_Scancode key1_down = SDL_SCANCODE_UNKNOWN;
@@ -43,11 +49,13 @@ struct ShortCut {
 	
 
 	private:
+
 	// functions
 	const char* GetShortcutName();
 
 	// variables
 	const char* name = nullptr;
+	const char* order_name = nullptr;
 
 };
 
@@ -59,7 +67,8 @@ public:
 	~ShortCutManager();
 
 	void UpdateShortCuts();
-	ShortCut* AddShortCut(const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN);
+	ShortCut* AddShortCut(const char* order_name, const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN);
+	std::vector<ShortCut*> GetShortCuts();
 
 private:
 
