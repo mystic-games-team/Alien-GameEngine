@@ -61,6 +61,16 @@ ShortCut* ShortCutManager::AddShortCut(const SDL_Scancode& key1_down, std::funct
 const char* ShortCut::GetShortcutName()
 {
 	static char shortcut_char[50];
-	sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(key2_repeat), SDL_GetScancodeName(key3_repeat_extra), SDL_GetScancodeName(key1_down));
+	switch (type) {
+	case ShortCutType::ONE_KEY:
+		sprintf_s(shortcut_char, 50, "%s", SDL_GetScancodeName(key1_down));
+		break;
+	case ShortCutType::TWO_KEYS:
+		sprintf_s(shortcut_char, 50, "%s + %s", SDL_GetScancodeName(key2_repeat), SDL_GetScancodeName(key1_down));
+		break;
+	case ShortCutType::COMPLETE:
+		sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(key2_repeat), SDL_GetScancodeName(key3_repeat_extra), SDL_GetScancodeName(key1_down));
+		break;
+	}
 	return shortcut_char;
 }
