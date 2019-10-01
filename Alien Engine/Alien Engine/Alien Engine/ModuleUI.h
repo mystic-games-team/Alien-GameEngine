@@ -8,6 +8,9 @@
 #include "Panel.h"
 
 class Panel;
+class PanelConfig;
+class PanelAbout;
+class PanelConsole;
 
 
 class ModuleUI : public Module
@@ -34,6 +37,9 @@ public:
 private:
 	bool show_demo_wndow = false;
 	std::vector<Panel*> panels;
+	PanelConfig* panel_config = nullptr;
+	PanelAbout* panel_about = nullptr;
+	PanelConsole* panel_console = nullptr;
 
 };
 

@@ -34,6 +34,9 @@
     <Filter Include="Tools\GPUdetect">
       <UniqueIdentifier>{aeb00a0a-0f61-426d-957f-8adcfe5e595b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\OurClassHelpers">
+      <UniqueIdentifier>{767de33a-3413-424c-8989-ba578dfbb09c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -288,9 +291,6 @@
     <ClInclude Include="PCG\pcg_extras.hpp">
       <Filter>Tools\PCG</Filter>
     </ClInclude>
-    <ClInclude Include="RandomHelper.h">
-      <Filter>Tools\PCG</Filter>
-    </ClInclude>
     <ClInclude Include="Panel.h">
       <Filter>Panels</Filter>
     </ClInclude>
@@ -321,9 +321,6 @@
     <ClInclude Include="PanelConsole.h">
       <Filter>Panels</Filter>
     </ClInclude>
-    <ClInclude Include="JSONfilepack.h">
-      <Filter>JSON</Filter>
-    </ClInclude>
     <ClInclude Include="mmgr\mmgr.h">
       <Filter>Tools</Filter>
     </ClInclude>
@@ -335,6 +332,15 @@
     </ClInclude>
     <ClInclude Include="gpudetect\dxgi1_4.h">
       <Filter>Tools\GPUdetect</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONfilepack.h">
+      <Filter>Tools\OurClassHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomHelper.h">
+      <Filter>Tools\OurClassHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShortCutManager.h">
+      <Filter>Tools\OurClassHelpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -509,14 +515,17 @@
     <ClCompile Include="PanelConsole.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
-    <ClCompile Include="JSONfilepack.cpp">
-      <Filter>JSON</Filter>
-    </ClCompile>
     <ClCompile Include="mmgr\mmgr.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="gpudetect\DeviceId.cpp">
       <Filter>Tools\GPUdetect</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONfilepack.cpp">
+      <Filter>Tools\OurClassHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ShortCutManager.cpp">
+      <Filter>Tools\OurClassHelpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

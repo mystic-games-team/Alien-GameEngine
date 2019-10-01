@@ -95,6 +95,11 @@ bool Panel::ShortCutClicked()
 	return ret;
 }
 
+const SDL_Scancode& Panel::GetScancodeShortcut(const uint& index)
+{
+	return shortcuts[index]->shortcut_code;
+}
+
 
 bool Panel::IsEnabled()
 {

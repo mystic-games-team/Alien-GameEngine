@@ -81,7 +81,7 @@ void PanelConfig::PanelLogic()
 			}
 		}
 
-		ImGui::PlotHistogram("Memory", &memory[0], memory.size(), 0, "Memory Use", 0.0f, (float)memory_stats.peakReportedMemory*1.2f, ImVec2(310, 100));
+		ImGui::PlotHistogram("", &memory[0], memory.size(), 0, "Memory Use", 0.0f, (float)memory_stats.peakReportedMemory*1.2f, ImVec2(310, 100));
 		
 
 		ImGui::Text("Total Reported Memory: %u", memory_stats.totalReportedMemory);

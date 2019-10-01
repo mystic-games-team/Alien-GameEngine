@@ -91,9 +91,10 @@ void ModuleUI::MainMenuBar()
 {
 
 	ImGui::BeginMainMenuBar();
+	static char short_cut[25];
 	if (ImGui::BeginMenu("File"))
 	{
-		if (ImGui::BeginMenu("New", "Ctrl+N")) 
+		if (ImGui::BeginMenu("New")) 
 		{
 				if (ImGui::MenuItem("haha"))
 				{
@@ -101,11 +102,11 @@ void ModuleUI::MainMenuBar()
 				}
 				ImGui::EndMenu();
 		}
-		if (ImGui::MenuItem("Open", "Ctrl+W")) 
+		if (ImGui::MenuItem("Open")) 
 		{
 
 		}
-		if (ImGui::MenuItem("Close", "Ctrl+W")) 
+		if (ImGui::MenuItem("Close")) 
 		{
 			App->QuitApp();
 		}
@@ -114,21 +115,24 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("View"))
 	{
-		if (ImGui::MenuItem("Configuration", "Ctrl + O"))
+		sprintf_s(short_cut, 25, "%s + %s", SDL_GetKeyName(SDL_GetKeyFromScancode(panel_config->GetScancodeShortcut(0))), SDL_GetKeyName(SDL_GetKeyFromScancode(panel_config->GetScancodeShortcut(1))));
+		if (ImGui::MenuItem("Configuration", short_cut))
 		{
-			GetPanelByName("Configuration")->ChangeEnable();
+			panel_config->ChangeEnable();
 		}
-		if (ImGui::MenuItem("Console", "Ctrl + T"))
+		sprintf_s(short_cut, 25, "%s + %s", SDL_GetKeyName(SDL_GetKeyFromScancode(panel_console->GetScancodeShortcut(0))), SDL_GetKeyName(SDL_GetKeyFromScancode(panel_console->GetScancodeShortcut(1))));
+		if (ImGui::MenuItem("Console", short_cut))
 		{
-			GetPanelByName("Console")->ChangeEnable();
+			panel_console->ChangeEnable();
 		}
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Help"))
 	{
-		if (ImGui::MenuItem("About", "Ctrl + A"))
+		sprintf_s(short_cut, 25, "%s + %s", SDL_GetKeyName(SDL_GetKeyFromScancode(panel_about->GetScancodeShortcut(0))), SDL_GetKeyName(SDL_GetKeyFromScancode(panel_about->GetScancodeShortcut(1))));
+		if (ImGui::MenuItem("About", short_cut))
 		{
-			GetPanelByName("About Alien Engine")->ChangeEnable();
+			panel_about->ChangeEnable();
 		}
 		if (ImGui::MenuItem("Show Gui Demo"))
 		{
@@ -166,9 +170,13 @@ void ModuleUI::ChangeStyle(const int& style_number)
 
 void ModuleUI::InitPanels()
 {
-	panels.push_back(new PanelAbout("About Alien Engine", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A}));
-	panels.push_back(new PanelConfig("Configuration", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_O}));
-	panels.push_back(new PanelConsole("Console", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_T}));
+	panel_about = new PanelAbout("About Alien Engine", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A});
+	panel_config = new PanelConfig("Configuration", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_O});
+	panel_console = new PanelConsole("Console", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_T});
+
+	panels.push_back(panel_about);
+	panels.push_back(panel_config);
+	panels.push_back(panel_console);
 
 }
 
@@ -199,9 +207,8 @@ Panel*& ModuleUI::GetPanelByName(const std::string& panel_name)
 
 void ModuleUI::FramerateRegister(float frames, float ms)
 {
-	PanelConfig* pc = (PanelConfig*)GetPanelByName("Configuration");
-	if (pc->IsEnabled())
-		pc->FramerateInfo(frames,ms);
+	if (panel_config->IsEnabled())
+		panel_config->FramerateInfo(frames,ms);
 }
 
 

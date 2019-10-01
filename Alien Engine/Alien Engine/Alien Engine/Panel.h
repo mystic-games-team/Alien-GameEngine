@@ -36,6 +36,7 @@ public:
 	void ChangeEnable();
 	bool IsEnabled();
 	bool ShortCutClicked();
+	const SDL_Scancode& GetScancodeShortcut(const uint& index);
 
 private:
 
