@@ -57,3 +57,4 @@ ShortCut* ShortCutManager::AddShortCut(const SDL_Scancode& key1_down, std::funct
 		return nullptr;
 	}
 }
+

@@ -26,7 +26,7 @@ private:
 
 	virtual void OnPanelDesactive() {};
 
-private:
+public:
 
 	ShortCut* shortcut = nullptr;
 

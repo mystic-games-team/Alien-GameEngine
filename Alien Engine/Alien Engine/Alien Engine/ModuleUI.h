@@ -11,7 +11,7 @@ class Panel;
 class PanelConfig;
 class PanelAbout;
 class PanelConsole;
-
+struct ShortCut;
 
 class ModuleUI : public Module
 {
@@ -25,6 +25,7 @@ public:
 	void Draw();
 	void MainMenuBar();
 	void ChangeStyle(const int& style_number);
+	void ChangeEnableDemo();
 
 private:
 	void InitPanels();
@@ -40,6 +41,7 @@ private:
 	PanelConfig* panel_config = nullptr;
 	PanelAbout* panel_about = nullptr;
 	PanelConsole* panel_console = nullptr;
+	ShortCut* shortcut_demo = nullptr;
 
 };
 
