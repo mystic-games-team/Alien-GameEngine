@@ -108,7 +108,7 @@ void ModuleUI::MainMenuBar()
 		{
 
 		}
-		if (ImGui::MenuItem("Close", shortcut_close->GetShortcutName())) 
+		if (ImGui::MenuItem("Close", shortcut_close->GetName()))
 		{
 			App->QuitApp();
 		}
@@ -117,11 +117,11 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("View"))
 	{
-		if (ImGui::MenuItem("Configuration", panel_config->shortcut->GetShortcutName()))
+		if (ImGui::MenuItem("Configuration", panel_config->shortcut->GetName()))
 		{
 			panel_config->ChangeEnable();
 		}
-		if (ImGui::MenuItem("Console", panel_console->shortcut->GetShortcutName()))
+		if (ImGui::MenuItem("Console", panel_console->shortcut->GetName()))
 		{
 			panel_console->ChangeEnable();
 		}
@@ -129,11 +129,11 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("Help"))
 	{
-		if (ImGui::MenuItem("About", panel_about->shortcut->GetShortcutName()))
+		if (ImGui::MenuItem("About", panel_about->shortcut->GetName()))
 		{
 			panel_about->ChangeEnable();
 		}
-		if (ImGui::MenuItem("Show Gui Demo", shortcut_demo->GetShortcutName()))
+		if (ImGui::MenuItem("Show Gui Demo", shortcut_demo->GetName()))
 		{
 			ChangeEnableDemo();
 		}
@@ -141,7 +141,7 @@ void ModuleUI::MainMenuBar()
 		{
 			LOG("Put link wiki");
 		}
-		if (ImGui::MenuItem("Report a bug", shortcut_report_bug->GetShortcutName()))
+		if (ImGui::MenuItem("Report a bug", shortcut_report_bug->GetName()))
 		{
 			ReportBug();
 		}

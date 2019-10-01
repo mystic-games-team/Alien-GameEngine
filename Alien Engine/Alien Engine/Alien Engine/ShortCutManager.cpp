@@ -74,3 +74,24 @@ const char* ShortCut::GetShortcutName()
 	}
 	return shortcut_char;
 }
+
+void ShortCut::SetShortcutKeys(const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
+{
+	this->key1_down = key1_down;
+	this->key2_repeat = key2_repeat;
+	this->key3_repeat_extra = key3_repeat_extra;
+
+	if (key3_repeat_extra != SDL_SCANCODE_UNKNOWN)
+		type = ShortCutType::COMPLETE;
+	else if (key2_repeat != SDL_SCANCODE_UNKNOWN)
+		type = ShortCutType::TWO_KEYS;
+	else
+		type = ShortCutType::ONE_KEY;
+
+	name = GetShortcutName();
+}
+
+const char* ShortCut::GetName()
+{
+	return name;
+}
