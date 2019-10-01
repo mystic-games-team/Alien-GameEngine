@@ -102,6 +102,8 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	mouse_x_motion = mouse_y_motion = 0;
 
+	bool first_key = true;
+	first_key_pressed = SDL_SCANCODE_UNKNOWN;
 	bool quit = false;
 	SDL_Event e;
 	while(SDL_PollEvent(&e))
@@ -112,7 +114,12 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_MOUSEWHEEL:
 			mouse_z = e.wheel.y;
 			break;
-
+			case SDL_KEYDOWN:
+			if (first_key) {
+				first_key = false;
+				first_key_pressed = e.key.keysym.scancode;
+			}
+			break;
 			case SDL_MOUSEMOTION:
 			mouse_x = e.motion.x / SCREEN_SIZE;
 			mouse_y = e.motion.y / SCREEN_SIZE;
@@ -124,7 +131,6 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_QUIT:
 			quit = true;
 			break;
-
 			case SDL_WINDOWEVENT:
 			{
 				if(e.window.event == SDL_WINDOWEVENT_RESIZED)

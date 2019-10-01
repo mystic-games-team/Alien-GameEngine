@@ -58,6 +58,9 @@ public:
 	{
 		return mouse_y_motion;
 	}
+	SDL_Scancode GetFirstKeyPressed() const {
+		return first_key_pressed;
+	}
 
 private:
 
@@ -72,6 +75,7 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 	//int mouse_z_motion;
+	SDL_Scancode first_key_pressed = SDL_SCANCODE_UNKNOWN;
 
 public:
 

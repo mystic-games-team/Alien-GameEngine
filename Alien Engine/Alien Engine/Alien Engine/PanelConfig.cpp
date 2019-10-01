@@ -182,13 +182,19 @@ void PanelConfig::PanelLogic()
 				ImGui::Text((*item)->GetNameOrder());
 				ImGui::NextColumn();
 				ImGui::Spacing();
-				ImGui::Button((*item)->GetKeyRepeatName(), { 75,30 });
+				if (ImGui::Button((*item)->GetKeyRepeatName(), { 75,30 })) {
+
+				}
 				ImGui::NextColumn();
 				ImGui::Spacing();
-				ImGui::Button((*item)->GetKeyDownName(), { 75,30 });
+				if (ImGui::Button((*item)->GetKeyDownName(), { 75,30 })) {
+
+				}
 				ImGui::NextColumn();
 				ImGui::Spacing();
-				ImGui::Button((*item)->GetExtraKeyRepeatName(), { 75,30 });
+				if (ImGui::Button((*item)->GetExtraKeyRepeatName(), { 75,30 })) {
+
+				}
 				ImGui::NextColumn();
 			}
 		}
