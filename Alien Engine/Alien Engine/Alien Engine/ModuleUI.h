@@ -24,6 +24,7 @@ public:
 	bool CleanUp();
 	void Draw();
 	void MainMenuBar();
+	void ReportBug();
 	void ChangeStyle(const int& style_number);
 	void ChangeEnableDemo();
 
@@ -49,6 +50,7 @@ private:
 
 	ShortCut* shortcut_demo = nullptr;
 	ShortCut* shortcut_close = nullptr;
+	ShortCut* shortcut_report_bug = nullptr;
 
 };
 

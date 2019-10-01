@@ -41,7 +41,8 @@ bool ModuleUI::Start()
 
 	shortcut_demo = App->shortcut_manager->AddShortCut(SDL_SCANCODE_D, std::bind(&ModuleUI::ChangeEnableDemo, App->ui), SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
 	shortcut_close = App->shortcut_manager->AddShortCut(SDL_SCANCODE_F4, std::bind(&Application::QuitApp, App), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
-	
+	shortcut_report_bug = App->shortcut_manager->AddShortCut(SDL_SCANCODE_F1, std::bind(&ModuleUI::ReportBug, App->ui), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
+
 	return ret;
 }
 
@@ -140,13 +141,18 @@ void ModuleUI::MainMenuBar()
 		{
 			LOG("Put link wiki");
 		}
-		if (ImGui::MenuItem("Report a bug"))
+		if (ImGui::MenuItem("Report a bug", shortcut_report_bug->GetShortcutName()))
 		{
-			App->OpenWebsite("https://github.com/VictorSegura99/Alien-GameEngine/issues");
+			ReportBug();
 		}
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
+}
+
+void ModuleUI::ReportBug()
+{
+	App->OpenWebsite("https://github.com/VictorSegura99/Alien-GameEngine/issues");
 }
 
 void ModuleUI::ChangeStyle(const int& style_number)
