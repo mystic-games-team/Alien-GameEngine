@@ -28,6 +28,8 @@ struct ShortCut {
 			type = ShortCutType::ONE_KEY;
 	}
 
+	const char* GetShortcutName();
+
 	SDL_Scancode key1_down = SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode key2_repeat = SDL_SCANCODE_UNKNOWN; 
 	SDL_Scancode key3_repeat_extra = SDL_SCANCODE_UNKNOWN;

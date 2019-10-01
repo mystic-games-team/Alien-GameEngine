@@ -92,7 +92,6 @@ void ModuleUI::Draw() {
 
 void ModuleUI::MainMenuBar()
 {
-	static char shortcut_char[50];
 	ImGui::BeginMainMenuBar();
 	if (ImGui::BeginMenu("File"))
 	{
@@ -108,7 +107,7 @@ void ModuleUI::MainMenuBar()
 		{
 
 		}
-		if (ImGui::MenuItem("Close", GetCharFromShortcut(shortcut_close))) 
+		if (ImGui::MenuItem("Close", shortcut_close->GetShortcutName())) 
 		{
 			App->QuitApp();
 		}
@@ -117,11 +116,11 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("View"))
 	{
-		if (ImGui::MenuItem("Configuration", GetCharFromShortcut(panel_config->shortcut)))
+		if (ImGui::MenuItem("Configuration", panel_config->shortcut->GetShortcutName()))
 		{
 			panel_config->ChangeEnable();
 		}
-		if (ImGui::MenuItem("Console", GetCharFromShortcut(panel_console->shortcut)))
+		if (ImGui::MenuItem("Console", panel_console->shortcut->GetShortcutName()))
 		{
 			panel_console->ChangeEnable();
 		}
@@ -129,11 +128,11 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("Help"))
 	{
-		if (ImGui::MenuItem("About", GetCharFromShortcut(panel_about->shortcut)))
+		if (ImGui::MenuItem("About", panel_about->shortcut->GetShortcutName()))
 		{
 			panel_about->ChangeEnable();
 		}
-		if (ImGui::MenuItem("Show Gui Demo", GetCharFromShortcut(shortcut_demo)))
+		if (ImGui::MenuItem("Show Gui Demo", shortcut_demo->GetShortcutName()))
 		{
 			ChangeEnableDemo();
 		}
@@ -165,12 +164,6 @@ void ModuleUI::ChangeStyle(const int& style_number)
 	case 3:
 		break;
 	}
-}
-const char* ModuleUI::GetCharFromShortcut(ShortCut*& shortcut)
-{
-	static char shortcut_char[50];
-	sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(shortcut->key2_repeat), SDL_GetScancodeName(shortcut->key3_repeat_extra), SDL_GetScancodeName(shortcut->key1_down));
-	return shortcut_char;
 }
 
 void ModuleUI::ChangeEnableDemo()

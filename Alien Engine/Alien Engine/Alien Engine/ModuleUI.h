@@ -24,7 +24,6 @@ public:
 	bool CleanUp();
 	void Draw();
 	void MainMenuBar();
-	const char* GetCharFromShortcut(ShortCut*& shortcut);
 	void ChangeStyle(const int& style_number);
 	void ChangeEnableDemo();
 
