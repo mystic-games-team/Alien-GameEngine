@@ -12,6 +12,13 @@ enum class ShortCutType {
 	NONE
 };
 
+enum class ShortCutStateChange {
+	WAITING_KEY_DOWN,
+	WAITING_KEY_REPEAT,
+	WAITING_EXTRA_KEY_REPEAT,
+
+	NONE
+};
 struct ShortCut {
 
 	ShortCut(const char* order_name, const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN) {
@@ -46,7 +53,7 @@ struct ShortCut {
 	SDL_Scancode key3_repeat_extra = SDL_SCANCODE_UNKNOWN;
 	std::function<void()> funct = nullptr;
 	ShortCutType type = ShortCutType::NONE;
-	
+	ShortCutStateChange state = ShortCutStateChange::NONE;
 
 	private:
 
@@ -56,6 +63,8 @@ struct ShortCut {
 	// variables
 	const char* name = nullptr;
 	const char* order_name = nullptr;
+	char shortcut_char[50];
+
 
 };
 

@@ -168,9 +168,9 @@ void PanelConfig::PanelLogic()
 		ImGui::SetColumnWidth(3, 130);
 		//ImGui::Text("");
 		ImGui::NextColumn();
-		ImGui::Text("OnKeyDown");
-		ImGui::NextColumn();
 		ImGui::Text("OnKeyRepeat");
+		ImGui::NextColumn();
+		ImGui::Text("OnKeyDown");
 		ImGui::NextColumn();
 		ImGui::Text("ExtraKeyRepeat");
 		ImGui::NextColumn();
@@ -182,18 +182,21 @@ void PanelConfig::PanelLogic()
 				ImGui::Text((*item)->GetNameOrder());
 				ImGui::NextColumn();
 				ImGui::Spacing();
-				if (ImGui::Button((*item)->GetKeyRepeatName(), { 75,30 })) {
-
+				ImGui::Button((*item)->GetKeyRepeatName(), { 75,30 });
+				if (ImGui::IsItemClicked()) {
+					(*item)->state = ShortCutStateChange::WAITING_KEY_REPEAT;
 				}
 				ImGui::NextColumn();
 				ImGui::Spacing();
-				if (ImGui::Button((*item)->GetKeyDownName(), { 75,30 })) {
-
+				ImGui::Button((*item)->GetKeyDownName(), { 75,30 });
+				if (ImGui::IsItemClicked()) {
+					(*item)->state = ShortCutStateChange::WAITING_KEY_DOWN;
 				}
 				ImGui::NextColumn();
 				ImGui::Spacing();
-				if (ImGui::Button((*item)->GetExtraKeyRepeatName(), { 75,30 })) {
-
+				ImGui::Button((*item)->GetExtraKeyRepeatName(), { 75,30 });
+				if (ImGui::IsItemClicked()) {
+					(*item)->state = ShortCutStateChange::WAITING_EXTRA_KEY_REPEAT;
 				}
 				ImGui::NextColumn();
 			}

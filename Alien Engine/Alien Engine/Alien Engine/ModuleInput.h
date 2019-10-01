@@ -61,6 +61,9 @@ public:
 	SDL_Scancode GetFirstKeyPressed() const {
 		return first_key_pressed;
 	}
+	bool IsMousePressed() const {
+		return mouse_pressed;
+	}
 
 private:
 
@@ -76,7 +79,7 @@ private:
 	int mouse_y_motion;
 	//int mouse_z_motion;
 	SDL_Scancode first_key_pressed = SDL_SCANCODE_UNKNOWN;
-
+	bool mouse_pressed = false;
 public:
 
 	ImGuiTextBuffer input;

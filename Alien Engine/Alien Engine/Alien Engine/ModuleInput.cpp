@@ -103,6 +103,7 @@ update_status ModuleInput::PreUpdate(float dt)
 	mouse_x_motion = mouse_y_motion = 0;
 
 	bool first_key = true;
+	mouse_pressed = false;
 	first_key_pressed = SDL_SCANCODE_UNKNOWN;
 	bool quit = false;
 	SDL_Event e;
@@ -127,7 +128,9 @@ update_status ModuleInput::PreUpdate(float dt)
 			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
 			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
 			break;
-
+			case SDL_MOUSEBUTTONDOWN:
+				mouse_pressed = true;
+				break;
 			case SDL_QUIT:
 			quit = true;
 			break;
