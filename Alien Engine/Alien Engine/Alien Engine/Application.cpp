@@ -47,6 +47,9 @@ Application::~Application()
 		}
 	}
 	json_files.clear();
+
+	if (shortcut_manager != nullptr)
+		delete shortcut_manager;
 }
 
 void Application::LoadDefaultConfig()
@@ -136,6 +139,8 @@ bool Application::Init()
 
 	if (config != nullptr)
 		LoadConfig();
+
+	shortcut_manager = new ShortCutManager();
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
@@ -241,6 +246,8 @@ update_status Application::Update()
 	}
 
 	item = list_modules.begin();
+
+	shortcut_manager->UpdateShortCuts();
 
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{

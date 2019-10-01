@@ -39,6 +39,10 @@ bool ModuleUI::Start()
 
 	InitPanels();
 
+	shortcut_demo = App->shortcut_manager->AddShortCut(SDL_SCANCODE_D, std::bind(&ModuleUI::ChangeEnableDemo, App->ui), SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+	shortcut_close = App->shortcut_manager->AddShortCut(SDL_SCANCODE_F4, std::bind(&Application::QuitApp, App), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
+	shortcut_report_bug = App->shortcut_manager->AddShortCut(SDL_SCANCODE_F1, std::bind(&ModuleUI::ReportBug, App->ui), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
+
 	return ret;
 }
 
@@ -89,11 +93,10 @@ void ModuleUI::Draw() {
 
 void ModuleUI::MainMenuBar()
 {
-
 	ImGui::BeginMainMenuBar();
 	if (ImGui::BeginMenu("File"))
 	{
-		if (ImGui::BeginMenu("New", "Ctrl+N")) 
+		if (ImGui::BeginMenu("New")) 
 		{
 				if (ImGui::MenuItem("haha"))
 				{
@@ -101,11 +104,11 @@ void ModuleUI::MainMenuBar()
 				}
 				ImGui::EndMenu();
 		}
-		if (ImGui::MenuItem("Open", "Ctrl+W")) 
+		if (ImGui::MenuItem("Open")) 
 		{
 
 		}
-		if (ImGui::MenuItem("Close", "Ctrl+W")) 
+		if (ImGui::MenuItem("Close", shortcut_close->GetName()))
 		{
 			App->QuitApp();
 		}
@@ -114,37 +117,42 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("View"))
 	{
-		if (ImGui::MenuItem("Configuration", "Ctrl + O"))
+		if (ImGui::MenuItem("Configuration", panel_config->shortcut->GetName()))
 		{
-			GetPanelByName("Configuration")->ChangeEnable();
+			panel_config->ChangeEnable();
 		}
-		if (ImGui::MenuItem("Console", "Ctrl + T"))
+		if (ImGui::MenuItem("Console", panel_console->shortcut->GetName()))
 		{
-			GetPanelByName("Console")->ChangeEnable();
+			panel_console->ChangeEnable();
 		}
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Help"))
 	{
-		if (ImGui::MenuItem("About", "Ctrl + A"))
+		if (ImGui::MenuItem("About", panel_about->shortcut->GetName()))
 		{
-			GetPanelByName("About Alien Engine")->ChangeEnable();
+			panel_about->ChangeEnable();
 		}
-		if (ImGui::MenuItem("Show Gui Demo"))
+		if (ImGui::MenuItem("Show Gui Demo", shortcut_demo->GetName()))
 		{
-			show_demo_wndow = !show_demo_wndow;
+			ChangeEnableDemo();
 		}
 		if (ImGui::MenuItem("Documentation"))
 		{
 			LOG("Put link wiki");
 		}
-		if (ImGui::MenuItem("Report a bug"))
+		if (ImGui::MenuItem("Report a bug", shortcut_report_bug->GetName()))
 		{
-			App->OpenWebsite("https://github.com/VictorSegura99/Alien-GameEngine/issues");
+			ReportBug();
 		}
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
+}
+
+void ModuleUI::ReportBug()
+{
+	App->OpenWebsite("https://github.com/VictorSegura99/Alien-GameEngine/issues");
 }
 
 void ModuleUI::ChangeStyle(const int& style_number)
@@ -164,11 +172,20 @@ void ModuleUI::ChangeStyle(const int& style_number)
 	}
 }
 
+void ModuleUI::ChangeEnableDemo()
+{
+	show_demo_wndow = !show_demo_wndow;
+}
+
 void ModuleUI::InitPanels()
 {
-	panels.push_back(new PanelAbout("About Alien Engine", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_A}));
-	panels.push_back(new PanelConfig("Configuration", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_O}));
-	panels.push_back(new PanelConsole("Console", std::vector<SDL_Scancode>{SDL_SCANCODE_LCTRL, SDL_SCANCODE_T}));
+	panel_about = new PanelAbout("About Alien Engine", SDL_SCANCODE_A, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+	panel_config = new PanelConfig("Configuration", SDL_SCANCODE_O, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+	panel_console = new PanelConsole("Console", SDL_SCANCODE_T, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+
+	panels.push_back(panel_about);
+	panels.push_back(panel_config);
+	panels.push_back(panel_console);
 
 }
 
@@ -177,8 +194,6 @@ void ModuleUI::UpdatePanels()
 	std::vector<Panel*>::iterator item = panels.begin();
 	for (; item != panels.end(); ++item) {
 		if (*item != nullptr) {
-			if ((*item)->ShortCutClicked())
-				(*item)->ChangeEnable();
 			if ((*item)->IsEnabled()) {
 				(*item)->PanelLogic();
 			}
@@ -199,9 +214,8 @@ Panel*& ModuleUI::GetPanelByName(const std::string& panel_name)
 
 void ModuleUI::FramerateRegister(float frames, float ms)
 {
-	PanelConfig* pc = (PanelConfig*)GetPanelByName("Configuration");
-	if (pc->IsEnabled())
-		pc->FramerateInfo(frames,ms);
+	if (panel_config->IsEnabled())
+		panel_config->FramerateInfo(frames,ms);
 }
 
 

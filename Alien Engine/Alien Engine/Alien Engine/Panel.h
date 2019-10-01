@@ -6,28 +6,13 @@
 #include <vector>
 #include "Application.h"
 
-enum class ShortCutState {
-
-	CLICKED,
-	SHORTCUT_DONE,
-	WAITING_SHORTCUT,
-
-	NONE
-};
-
-struct ShortCuts {
-
-	ShortCuts(const SDL_Scancode& code) : shortcut_code(code) {}
-
-	SDL_Scancode shortcut_code = SDL_SCANCODE_UNKNOWN;
-	ShortCutState shortcut_state = ShortCutState::WAITING_SHORTCUT;
-};
+struct ShortCut;
 
 class Panel {
 
 public:
 
-	Panel(const std::string& panel_name, const std::vector<SDL_Scancode>&shortcuts);
+	Panel(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN);
 	virtual ~Panel();
 
 	virtual void PanelLogic() {};
@@ -35,18 +20,16 @@ public:
 	const std::string& GetName();
 	void ChangeEnable();
 	bool IsEnabled();
-	bool ShortCutClicked();
+	const SDL_Scancode& GetScancodeShortcut(const uint& index);
 
 private:
 
 	virtual void OnPanelDesactive() {};
 
-private:
+public:
 
-	
-	std::vector<ShortCuts*>shortcuts;
+	ShortCut* shortcut = nullptr;
 
-	
 protected:
 	std::string panel_name;
 	bool enabled = false;
