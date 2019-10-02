@@ -5,6 +5,7 @@
 #include "RandomHelper.h"
 #include "Parson/parson.h"
 #include "glew/include/glew.h"
+#include "Shapes.h"
 
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
 {
@@ -116,8 +117,8 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//glEnd();
 
-	//Cone1=par_shapes_create_cone(5,1);
-	//par_shapes_translate(Cone1, 0, 0, 0);
+	par_shapes_mesh* Cone1 = par_shapes_create_cone(5,1);
+	par_shapes_translate(Cone1, 0, 0, 0);
 
 
 	//glEnableClientState(GL_VERTEX_ARRAY);

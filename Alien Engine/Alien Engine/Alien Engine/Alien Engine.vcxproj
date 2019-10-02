@@ -225,11 +225,11 @@
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="PanelCreateObject.h" />
     <ClInclude Include="Parson\parson.h" />
-    <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PCG\pcg_extras.hpp" />
     <ClInclude Include="PCG\pcg_random.hpp" />
     <ClInclude Include="PCG\pcg_uint128.hpp" />
     <ClInclude Include="RandomHelper.h" />
+    <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
@@ -294,6 +294,7 @@
     <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PanelCreateObject.cpp" />
     <ClCompile Include="Parson\parson.c" />
+    <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>

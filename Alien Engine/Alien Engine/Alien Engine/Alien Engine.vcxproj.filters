@@ -342,11 +342,11 @@
     <ClInclude Include="ShortCutManager.h">
       <Filter>Tools\OurClassHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="par_shapes.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="PanelCreateObject.h">
       <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -535,6 +535,9 @@
     </ClCompile>
     <ClCompile Include="PanelCreateObject.cpp">
       <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="Shapes.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
