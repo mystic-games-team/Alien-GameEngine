@@ -116,8 +116,8 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//glEnd();
 
-	Cone1=par_shapes_create_cone(5,1);
-	par_shapes_translate(Cone1, 0, 0, 0);
+	//Cone1=par_shapes_create_cone(5,1);
+	//par_shapes_translate(Cone1, 0, 0, 0);
 
 
 	//glEnableClientState(GL_VERTEX_ARRAY);
