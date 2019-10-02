@@ -25,9 +25,9 @@ public:
 private:
 	//std::vector <vec3> vertex;
 
-	//uint id = 0;
-	//int num_vertices = 2;
-	//float vertices[];
+	uint id = 0;
+	int num_vertices = 2;
+	float vertices[];
 	
 	
 	
