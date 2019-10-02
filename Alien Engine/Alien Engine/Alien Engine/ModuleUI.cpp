@@ -40,7 +40,6 @@ bool ModuleUI::Start()
 	InitPanels();
 
 	shortcut_demo = App->shortcut_manager->AddShortCut("imGui Demo", SDL_SCANCODE_D, std::bind(&ModuleUI::ChangeEnableDemo, App->ui), SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
-	shortcut_close = App->shortcut_manager->AddShortCut("Close", SDL_SCANCODE_F4, std::bind(&Application::QuitApp, App), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
 	shortcut_report_bug = App->shortcut_manager->AddShortCut("Report Bug", SDL_SCANCODE_F1, std::bind(&ModuleUI::ReportBug, App->ui), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
 
 	return ret;
@@ -108,7 +107,7 @@ void ModuleUI::MainMenuBar()
 		{
 
 		}
-		if (ImGui::MenuItem("Close", shortcut_close->GetNameScancodes()))
+		if (ImGui::MenuItem("Close", "Alt + F4"))
 		{
 			App->QuitApp();
 		}
