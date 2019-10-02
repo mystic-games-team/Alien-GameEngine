@@ -24,6 +24,7 @@ bool ModuleSceneIntro::Start()
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
+	
 	//
 	//vertex[0] = { 0,0,0 };
 	//vertex[1] = { 0,0,1 };
@@ -117,21 +118,20 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//glEnd();
 
-	par_shapes_mesh* Cone1 = par_shapes_create_cone(5,1);
-	par_shapes_translate(Cone1, 0, 0, 0);
+	par_shapes_mesh* cube = par_shapes_create_cube();
 
+	glGenBuffers(2, (GLuint*)& id);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	//glEnableClientState(GL_VERTEX_ARRAY);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, id);
+	glBufferData(GL_ARRAY_BUFFER, cube->npoints*3*sizeof(float), cube->points, GL_STATIC_DRAW);
 
-	//glGenBuffers(1, (GLuint*)& id);
-	//glBindBuffer(GL_ARRAY_BUFFER, id);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vertices, GL_STATIC_DRAW);
-
-
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	
 	//// … draw other buffers
-	//glDrawArrays(GL_LINES, 0, num_vertices);
-	//glDisableClientState(GL_VERTEX_ARRAY);
+	glDrawArrays(GL_TRIANGLE_STRIP , 0, cube->npoints);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 	return UPDATE_CONTINUE;
 }
