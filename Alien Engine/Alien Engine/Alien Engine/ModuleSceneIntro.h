@@ -5,6 +5,7 @@
 #include "MathGeoLib/include/MathBuildConfig.h"
 #include "MathGeoLib/include/MathGeoLibFwd.h"
 
+#include "glew/include/glew.h"
 
 
 class ModuleSceneIntro : public Module
@@ -20,4 +21,8 @@ public:
 
 public:
 
+private:
+	uint id = 0;
+	int num_vertices = 2;
+	float vertices[];
 };
