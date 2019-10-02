@@ -1,5 +1,30 @@
 #pragma once
 
+// SHAPES :: https://github.com/prideout/par
+// Simple C library for creation and manipulation of triangle meshes.
+//
+// The API is divided into three sections:
+//
+//   - Generators.  Create parametric surfaces, platonic solids, etc.
+//   - Queries.     Ask a mesh for its axis-aligned bounding box, etc.
+//   - Transforms.  Rotate a mesh, merge it with another, add normals, etc.
+//
+// In addition to the comment block above each function declaration, the API
+// has informal documentation here:
+//
+//     https://prideout.net/shapes
+//
+// For our purposes, a "mesh" is a list of points and a list of triangles; the
+// former is a flattened list of three-tuples (32-bit floats) and the latter is
+// also a flattened list of three-tuples (16-bit uints).  Triangles are always
+// oriented such that their front face winds counter-clockwise.
+//
+// Optionally, meshes can contain 3D normals (one per vertex), and 2D texture
+// coordinates (one per vertex).  That's it!  If you need something fancier,
+// look elsewhere.
+//
+// Distributed under the MIT License, see bottom of file.
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,6 +55,7 @@
 #endif
 
 typedef struct par_shapes_mesh_s {
+public:
 	float* points;           // Flat list of 3-tuples (X Y Z X Y Z...)
 	int npoints;             // Number of points
 	PAR_SHAPES_T* triangles; // Flat list of 3-tuples (I J K I J K...)
@@ -166,3 +192,25 @@ struct osn_context;
 static int par__simplex_noise(int64_t seed, struct osn_context** ctx);
 static void par__simplex_noise_free(struct osn_context* ctx);
 static double par__simplex_noise2(struct osn_context* ctx, double x, double y);
+
+// par_shapes is distributed under the MIT license:
+//
+// Copyright (c) 2019 Philip Rideout
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
