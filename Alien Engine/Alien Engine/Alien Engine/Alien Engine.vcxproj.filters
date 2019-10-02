@@ -342,6 +342,9 @@
     <ClInclude Include="ShortCutManager.h">
       <Filter>Tools\OurClassHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="par_shapes.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">

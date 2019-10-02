@@ -23,9 +23,17 @@ bool ModuleSceneIntro::Start()
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
+	//
+	//vertex[0] = { 0,0,0 };
+	//vertex[1] = { 0,0,1 };
+	//vertex[2] = { 0,1,0 };
+	//vertex[3] = { 1,0,0 };
+	//vertex[4] = { 0,1,1 };
+	//vertex[5] = { 1,0,1 };
+	//vertex[6] = { 1,1,0 };
+	//vertex[7] = { 1,1,1 };
 	
-
-
+	
 	return ret;
 }
 
@@ -108,24 +116,21 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//glEnd();
 
-	vertices[0] = 0;
-	vertices[1] = 0;
-	vertices[2] = 0;
-	vertices[3] = 0;
-	vertices[4] = 0;
-	vertices[5] = 1;
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glGenBuffers(1, (GLuint*)& id);
-	glBindBuffer(GL_ARRAY_BUFFER, id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vertices, GL_STATIC_DRAW);
+	Cone1=par_shapes_create_cone(5,1);
+	par_shapes_translate(Cone1, 0, 0, 0);
 
 
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	// … draw other buffers
-	glDrawArrays(GL_LINES, 0, num_vertices);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	//glEnableClientState(GL_VERTEX_ARRAY);
+
+	//glGenBuffers(1, (GLuint*)& id);
+	//glBindBuffer(GL_ARRAY_BUFFER, id);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vertices, GL_STATIC_DRAW);
+
+
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//// … draw other buffers
+	//glDrawArrays(GL_LINES, 0, num_vertices);
+	//glDisableClientState(GL_VERTEX_ARRAY);
 
 	return UPDATE_CONTINUE;
 }

@@ -224,6 +224,7 @@
     <ClInclude Include="PanelConfig.h" />
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="Parson\parson.h" />
+    <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PCG\pcg_extras.hpp" />
     <ClInclude Include="PCG\pcg_random.hpp" />
     <ClInclude Include="PCG\pcg_uint128.hpp" />
