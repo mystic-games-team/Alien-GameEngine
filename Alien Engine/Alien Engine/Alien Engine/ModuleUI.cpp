@@ -8,6 +8,7 @@
 #include "PanelAbout.h"
 #include "PanelConfig.h"
 #include "PanelConsole.h"
+#include "PanelCreateObject.h"
 #include "SDL/include/SDL_assert.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
@@ -126,6 +127,40 @@ void ModuleUI::MainMenuBar()
 		}
 		ImGui::EndMenu();
 	}
+	if (ImGui::BeginMenu("Create"))
+	{
+		if (ImGui::MenuItem("Cube"))
+		{
+
+		}
+		if (ImGui::MenuItem("Sphere"))
+		{
+		}
+		if (ImGui::MenuItem("Line"))
+		{
+		}
+		if (ImGui::BeginMenu("Other"))
+		{
+			if (ImGui::MenuItem("Cone"))
+			{
+			}
+			if (ImGui::MenuItem("Cylinder"))
+			{
+			}
+			if (ImGui::MenuItem("Hemisphere"))
+			{
+			}
+			if (ImGui::MenuItem("Point"))
+			{
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::MenuItem("Create...",panel_create_object->shortcut->GetNameScancodes()))
+		{
+			panel_create_object->ChangeEnable();
+		}
+		ImGui::EndMenu();
+	}
 	if (ImGui::BeginMenu("Help"))
 	{
 		if (ImGui::MenuItem("About", panel_about->shortcut->GetNameScancodes()))
@@ -181,10 +216,12 @@ void ModuleUI::InitPanels()
 	panel_about = new PanelAbout("About Alien Engine", SDL_SCANCODE_A, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
 	panel_config = new PanelConfig("Configuration", SDL_SCANCODE_O, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
 	panel_console = new PanelConsole("Console", SDL_SCANCODE_T, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+	panel_create_object = new PanelCreateObject("Create Object", SDL_SCANCODE_P, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
 	panels.push_back(panel_console);
+	panels.push_back(panel_create_object);
 
 }
 

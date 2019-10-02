@@ -345,6 +345,9 @@
     <ClInclude Include="par_shapes.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="PanelCreateObject.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -529,6 +532,9 @@
     </ClCompile>
     <ClCompile Include="ShortCutManager.cpp">
       <Filter>Tools\OurClassHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelCreateObject.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

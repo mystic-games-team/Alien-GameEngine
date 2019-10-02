@@ -223,6 +223,7 @@
     <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PanelConfig.h" />
     <ClInclude Include="PanelConsole.h" />
+    <ClInclude Include="PanelCreateObject.h" />
     <ClInclude Include="Parson\parson.h" />
     <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PCG\pcg_extras.hpp" />
@@ -291,6 +292,7 @@
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfig.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
+    <ClCompile Include="PanelCreateObject.cpp" />
     <ClCompile Include="Parson\parson.c" />
     <ClCompile Include="ShortCutManager.cpp" />
     <ClCompile Include="Timer.cpp" />

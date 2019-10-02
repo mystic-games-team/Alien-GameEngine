@@ -11,6 +11,7 @@ class Panel;
 class PanelConfig;
 class PanelAbout;
 class PanelConsole;
+class PanelCreateObject;
 struct ShortCut;
 
 class ModuleUI : public Module
@@ -45,6 +46,7 @@ private:
 	PanelConfig* panel_config = nullptr;
 	PanelAbout* panel_about = nullptr;
 	PanelConsole* panel_console = nullptr;
+	PanelCreateObject* panel_create_object = nullptr;
 
 	// ShortCuts
 
