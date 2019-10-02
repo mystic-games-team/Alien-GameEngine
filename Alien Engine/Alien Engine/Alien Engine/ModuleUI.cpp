@@ -39,9 +39,9 @@ bool ModuleUI::Start()
 
 	InitPanels();
 
-	shortcut_demo = App->shortcut_manager->AddShortCut(SDL_SCANCODE_D, std::bind(&ModuleUI::ChangeEnableDemo, App->ui), SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
-	shortcut_close = App->shortcut_manager->AddShortCut(SDL_SCANCODE_F4, std::bind(&Application::QuitApp, App), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
-	shortcut_report_bug = App->shortcut_manager->AddShortCut(SDL_SCANCODE_F1, std::bind(&ModuleUI::ReportBug, App->ui), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
+	shortcut_demo = App->shortcut_manager->AddShortCut("imGui Demo", SDL_SCANCODE_D, std::bind(&ModuleUI::ChangeEnableDemo, App->ui), SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+	shortcut_close = App->shortcut_manager->AddShortCut("Close", SDL_SCANCODE_F4, std::bind(&Application::QuitApp, App), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
+	shortcut_report_bug = App->shortcut_manager->AddShortCut("Report Bug", SDL_SCANCODE_F1, std::bind(&ModuleUI::ReportBug, App->ui), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
 
 	return ret;
 }
@@ -108,7 +108,7 @@ void ModuleUI::MainMenuBar()
 		{
 
 		}
-		if (ImGui::MenuItem("Close", shortcut_close->GetName()))
+		if (ImGui::MenuItem("Close", shortcut_close->GetNameScancodes()))
 		{
 			App->QuitApp();
 		}
@@ -117,11 +117,11 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("View"))
 	{
-		if (ImGui::MenuItem("Configuration", panel_config->shortcut->GetName()))
+		if (ImGui::MenuItem("Configuration", panel_config->shortcut->GetNameScancodes()))
 		{
 			panel_config->ChangeEnable();
 		}
-		if (ImGui::MenuItem("Console", panel_console->shortcut->GetName()))
+		if (ImGui::MenuItem("Console", panel_console->shortcut->GetNameScancodes()))
 		{
 			panel_console->ChangeEnable();
 		}
@@ -129,11 +129,11 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("Help"))
 	{
-		if (ImGui::MenuItem("About", panel_about->shortcut->GetName()))
+		if (ImGui::MenuItem("About", panel_about->shortcut->GetNameScancodes()))
 		{
 			panel_about->ChangeEnable();
 		}
-		if (ImGui::MenuItem("Show Gui Demo", shortcut_demo->GetName()))
+		if (ImGui::MenuItem("Show Gui Demo", shortcut_demo->GetNameScancodes()))
 		{
 			ChangeEnableDemo();
 		}
@@ -141,7 +141,7 @@ void ModuleUI::MainMenuBar()
 		{
 			LOG("Put link wiki");
 		}
-		if (ImGui::MenuItem("Report a bug", shortcut_report_bug->GetName()))
+		if (ImGui::MenuItem("Report a bug", shortcut_report_bug->GetNameScancodes()))
 		{
 			ReportBug();
 		}

@@ -10,6 +10,8 @@
 PanelConfig::PanelConfig(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra) :
 	Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra), fps_keeper(100), ms_keeper(100)
 {
+	shortcut = App->shortcut_manager->AddShortCut("Panel Config", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
+	enabled = true;
 }
 
 PanelConfig::~PanelConfig()
@@ -155,6 +157,51 @@ void PanelConfig::PanelLogic()
 			}
 		}
 		ImGui::Spacing();
+	}
+	if (ImGui::CollapsingHeader("ShortCuts")) {
+		ImGui::Spacing();
+		ImGui::BeginChild("", { 440,0 },true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::Columns(4, 0, false);
+		ImGui::SetColumnWidth(0,110);
+		ImGui::SetColumnWidth(1, 100);
+		ImGui::SetColumnWidth(2, 100);
+		ImGui::SetColumnWidth(3, 130);
+		//ImGui::Text("");
+		ImGui::NextColumn();
+		ImGui::Text("OnKeyRepeat");
+		ImGui::NextColumn();
+		ImGui::Text("OnKeyDown");
+		ImGui::NextColumn();
+		ImGui::Text("ExtraKeyRepeat");
+		ImGui::NextColumn();
+		std::vector<ShortCut*> shortcuts = App->shortcut_manager->GetShortCuts();
+		std::vector<ShortCut*>::iterator item = shortcuts.begin();
+		for (; item != shortcuts.end(); ++item) {
+			if (*item != nullptr) {
+				ImGui::Spacing();
+				ImGui::Text((*item)->GetNameOrder());
+				ImGui::NextColumn();
+				ImGui::Spacing();
+				ImGui::Button((*item)->GetKeyRepeatName(), { 75,30 });
+				if (ImGui::IsItemClicked()) {
+					(*item)->state = ShortCutStateChange::WAITING_KEY_REPEAT;
+				}
+				ImGui::NextColumn();
+				ImGui::Spacing();
+				ImGui::Button((*item)->GetKeyDownName(), { 75,30 });
+				if (ImGui::IsItemClicked()) {
+					(*item)->state = ShortCutStateChange::WAITING_KEY_DOWN;
+				}
+				ImGui::NextColumn();
+				ImGui::Spacing();
+				ImGui::Button((*item)->GetExtraKeyRepeatName(), { 75,30 });
+				if (ImGui::IsItemClicked()) {
+					(*item)->state = ShortCutStateChange::WAITING_EXTRA_KEY_REPEAT;
+				}
+				ImGui::NextColumn();
+			}
+		}
+		ImGui::EndChild();
 	}
 	if (ImGui::CollapsingHeader("Input")) {
 		ImGui::Spacing();
