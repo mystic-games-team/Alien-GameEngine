@@ -49,16 +49,22 @@ void ShortCutManager::UpdateShortCuts()
 				if (App->input->GetFirstKeyPressed() != SDL_SCANCODE_UNKNOWN) {
 					switch ((*item)->state) {
 					case ShortCutStateChange::WAITING_KEY_REPEAT:
-						(*item)->SetShortcutKeys((*item)->key1_down, App->input->GetFirstKeyPressed(), (*item)->key3_repeat_extra);
-						(*item)->state = ShortCutStateChange::NONE;
+						if (App->input->GetFirstKeyPressed() != (*item)->key1_down && App->input->GetFirstKeyPressed() != (*item)->key3_repeat_extra) {
+							(*item)->SetShortcutKeys((*item)->key1_down, App->input->GetFirstKeyPressed(), (*item)->key3_repeat_extra);
+							(*item)->state = ShortCutStateChange::NONE;
+						}
 						break;
 					case ShortCutStateChange::WAITING_KEY_DOWN:
-						(*item)->SetShortcutKeys(App->input->GetFirstKeyPressed(), (*item)->key2_repeat, (*item)->key3_repeat_extra);
-						(*item)->state = ShortCutStateChange::NONE;
+						if (App->input->GetFirstKeyPressed() != (*item)->key2_repeat && App->input->GetFirstKeyPressed() != (*item)->key3_repeat_extra) {
+							(*item)->SetShortcutKeys(App->input->GetFirstKeyPressed(), (*item)->key2_repeat, (*item)->key3_repeat_extra);
+							(*item)->state = ShortCutStateChange::NONE;
+						}
 						break;
 					case ShortCutStateChange::WAITING_EXTRA_KEY_REPEAT:
-						(*item)->SetShortcutKeys((*item)->key1_down, (*item)->key2_repeat, App->input->GetFirstKeyPressed());
-						(*item)->state = ShortCutStateChange::NONE;
+						if (App->input->GetFirstKeyPressed() != (*item)->key1_down && App->input->GetFirstKeyPressed() != (*item)->key2_repeat) {
+							(*item)->SetShortcutKeys((*item)->key1_down, (*item)->key2_repeat, App->input->GetFirstKeyPressed());
+							(*item)->state = ShortCutStateChange::NONE;
+						}
 						break;
 					}
 				}
