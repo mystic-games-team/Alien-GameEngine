@@ -40,8 +40,8 @@ public:
 	bool borderless = false;
 	bool resizable = false;
 	int style = 0;
-	char* window_name = "";
-	char* organitzation_name = "";
+	char* window_name = nullptr;
+	char* organitzation_name = nullptr;
 
 };
 
