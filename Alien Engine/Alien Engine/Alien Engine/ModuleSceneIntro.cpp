@@ -147,8 +147,36 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 
+	par_shapes_mesh* sphere = par_shapes_create_subdivided_sphere(2);
+	par_shapes_translate(sphere, -2, 0, 0);
+
+	my_id = 0;
+	my_index = 0;
+
+	// buffer points
+	glGenBuffers(1, &my_id);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * sphere->npoints * 3, sphere->points, GL_STATIC_DRAW);
+
+	// buffer index
+	glGenBuffers(1, &my_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * sphere->ntriangles * 3, sphere->triangles, GL_STATIC_DRAW);
 
 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_index);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glDrawElements(GL_TRIANGLES, sphere->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
+
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
+	par_shapes_free_mesh(cube);
+	par_shapes_free_mesh(sphere);
 
 	return UPDATE_CONTINUE;
 }
