@@ -35,6 +35,18 @@ bool ModuleSceneIntro::Start()
 	//vertex[6] = { 1,1,0 };
 	//vertex[7] = { 1,1,1 };
 	
+
+
+    cube = par_shapes_create_cube();
+	sphere = par_shapes_create_subdivided_sphere(2);
+	par_shapes_translate(sphere, -2, 0, 0);
+
+	// Sphere
+	glGenBuffers(1, &sphere_index);
+	glBindBuffer(GL_ARRAY_BUFFER, sphere_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * sphere->npoints * 3, sphere->points, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sphere_id);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * sphere->ntriangles * 3, sphere->triangles, GL_STATIC_DRAW);
 	
 	return ret;
 }
@@ -44,6 +56,9 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
+
+	par_shapes_free_mesh(cube);
+	par_shapes_free_mesh(sphere);
 	
 	return true;
 }
@@ -118,65 +133,34 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//glEnd();
 
-
-
-	 par_shapes_mesh* cube = par_shapes_create_cube();
-
-
-	 uint my_id = 0;
-	 uint my_index = 0;
-
-	 // buffer points
-	glGenBuffers(1, &my_id);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * cube->npoints * 3, cube->points, GL_STATIC_DRAW);
-
-	// buffer index
-	glGenBuffers(1, &my_index);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float)* cube->ntriangles * 3, cube->triangles, GL_STATIC_DRAW);
-
-
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_index);
+
+	glBindBuffer(GL_ARRAY_BUFFER, sphere_id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sphere_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	glDrawElements(GL_TRIANGLES, cube->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
-
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	par_shapes_mesh* sphere = par_shapes_create_subdivided_sphere(2);
-	par_shapes_translate(sphere, -2, 0, 0);
-
-	my_id = 0;
-	my_index = 0;
-
-	// buffer points
-	glGenBuffers(1, &my_id);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * sphere->npoints * 3, sphere->points, GL_STATIC_DRAW);
-
-	// buffer index
-	glGenBuffers(1, &my_index);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * sphere->ntriangles * 3, sphere->triangles, GL_STATIC_DRAW);
-
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_index);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
 	glDrawElements(GL_TRIANGLES, sphere->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
 
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 
-	par_shapes_free_mesh(cube);
-	par_shapes_free_mesh(sphere);
+	// Cube
+	glGenBuffers(1, &cube_index);
+	glBindBuffer(GL_ARRAY_BUFFER, cube_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * cube->npoints * 3, cube->points, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube_id);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * cube->ntriangles * 3, cube->triangles, GL_STATIC_DRAW);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, cube_id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube_index);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, cube->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
 
 	return UPDATE_CONTINUE;
 }
