@@ -118,20 +118,37 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//glEnd();
 
-	par_shapes_mesh* cube = par_shapes_create_cube();
 
-	glGenBuffers(2, (GLuint*)& id);
+
+	 par_shapes_mesh* cube = par_shapes_create_cube();
+
+
+	 uint my_id = 0;
+	 uint my_index = 0;
+
+	 // buffer points
+	glGenBuffers(1, &my_id);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * cube->npoints * 3, cube->points, GL_STATIC_DRAW);
+
+	// buffer index
+	glGenBuffers(1, &my_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float)* cube->ntriangles * 3, cube->triangles, GL_STATIC_DRAW);
+
+
 	glEnableClientState(GL_VERTEX_ARRAY);
-
-	
-	glBindBuffer(GL_ARRAY_BUFFER, id);
-	glBufferData(GL_ARRAY_BUFFER, cube->npoints*3*sizeof(float), cube->points, GL_STATIC_DRAW);
-
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	
-	//// … draw other buffers
-	glDrawArrays(GL_TRIANGLE_STRIP , 0, cube->npoints);
+
+	glDrawElements(GL_TRIANGLES, cube->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
+
+
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+
+
 
 	return UPDATE_CONTINUE;
 }
