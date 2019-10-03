@@ -4,7 +4,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MathGeoLib/include/MathBuildConfig.h"
 #include "MathGeoLib/include/MathGeoLibFwd.h"
-
+#include "Shapes.h"
 #include "glew/include/glew.h"
 #include "Shapes.h"
 
@@ -27,4 +27,5 @@ public:
 	uint sphere_id = 0;
 	uint cube_index = 0;
 	uint sphere_index = 0;
+
 };

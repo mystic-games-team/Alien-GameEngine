@@ -11,7 +11,6 @@ PanelConfig::PanelConfig(const std::string& panel_name, const SDL_Scancode& key1
 	Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra), fps_keeper(100), ms_keeper(100)
 {
 	shortcut = App->shortcut_manager->AddShortCut("Panel Config", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
-	enabled = true;
 }
 
 PanelConfig::~PanelConfig()
