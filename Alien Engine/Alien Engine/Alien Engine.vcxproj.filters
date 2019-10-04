@@ -372,6 +372,9 @@
     <ClInclude Include="Sphere_Alien.h">
       <Filter>Objects\Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="Rock.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -576,6 +579,9 @@
       <Filter>Objects\Primitives</Filter>
     </ClCompile>
     <ClCompile Include="Sphere_Alien.cpp">
+      <Filter>Objects\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock.cpp">
       <Filter>Objects\Primitives</Filter>
     </ClCompile>
   </ItemGroup>

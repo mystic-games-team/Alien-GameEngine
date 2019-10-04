@@ -26,9 +26,6 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	App->objects->CreatePrimitive(PrimitiveType::CUBE, -5, 10, 3);
-	App->objects->CreatePrimitive(PrimitiveType::CUBE, 2, 0, 3);
-	App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN, 0, 5, 3);
 	//
 	//vertex[0] = { 0,0,0 };
 	//vertex[1] = { 0,0,1 };

@@ -6,6 +6,7 @@
 
 #include "Cube.h"
 #include "Sphere_Alien.h"
+#include "Rock.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {
@@ -89,7 +90,7 @@ bool ModuleObjects::CleanUp()
 	return true;
 }
 
-Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z)
+Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const int &subdivisions, const int &extra)
 {
 	Primitive* ret = nullptr;
 	switch (type)
@@ -100,8 +101,13 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float
 		objects.push_back(ret);
 		break;
 	case PrimitiveType::SPHERE_ALIEN:
-		ret = new Sphere_Alien(position_x, position_y, position_z);
+		ret = new Sphere_Alien(position_x, position_y, position_z, subdivisions);
 		ret->type = PrimitiveType::SPHERE_ALIEN;
+		objects.push_back(ret);
+		break;
+	case PrimitiveType::ROCK:
+		ret = new Rock(position_x, position_y, position_z, subdivisions, extra);
+		ret->type = PrimitiveType::ROCK;
 		objects.push_back(ret);
 		break;
 	}

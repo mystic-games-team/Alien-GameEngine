@@ -19,7 +19,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	Primitive* CreatePrimitive(const PrimitiveType &type, const float &position_x, const float &position_y, const float &position_z);
+	// Subdivions only for Sphere and Rock, and extra only for Rock seed
+	Primitive* CreatePrimitive(const PrimitiveType &type, const float &position_x=0, const float &position_y=0, const float &position_z=0, const int &subdivions=5, const int &extra=0);
 
 	void DrawPrimitive();
 

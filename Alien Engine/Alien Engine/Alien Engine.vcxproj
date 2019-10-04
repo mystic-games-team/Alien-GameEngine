@@ -234,6 +234,7 @@
     <ClInclude Include="PCG\pcg_uint128.hpp" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="RandomHelper.h" />
+    <ClInclude Include="Rock.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
     <ClInclude Include="Sphere_Alien.h" />
@@ -304,6 +305,7 @@
     <ClCompile Include="PanelCreateObject.cpp" />
     <ClCompile Include="Parson\parson.c" />
     <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="Rock.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
     <ClCompile Include="Sphere_Alien.cpp" />
