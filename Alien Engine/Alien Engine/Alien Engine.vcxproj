@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="glew\include\eglew.h" />
     <ClInclude Include="glew\include\glew.h" />
     <ClInclude Include="glew\include\glxew.h" />
@@ -216,10 +217,12 @@
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleInput.h" />
+    <ClInclude Include="ModuleObjects.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="ModuleSceneIntro.h" />
     <ClInclude Include="ModuleUI.h" />
     <ClInclude Include="ModuleWindow.h" />
+    <ClInclude Include="Objects.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PanelConfig.h" />
@@ -229,14 +232,18 @@
     <ClInclude Include="PCG\pcg_extras.hpp" />
     <ClInclude Include="PCG\pcg_random.hpp" />
     <ClInclude Include="PCG\pcg_uint128.hpp" />
+    <ClInclude Include="Primitive.h" />
     <ClInclude Include="RandomHelper.h" />
+    <ClInclude Include="Rock.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
+    <ClInclude Include="Sphere_Alien.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="gpudetect\DeviceId.cpp" />
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp" />
@@ -285,18 +292,23 @@
     <ClCompile Include="mmgr\mmgr.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
+    <ClCompile Include="ModuleObjects.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfig.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PanelCreateObject.cpp" />
     <ClCompile Include="Parson\parson.c" />
+    <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="Rock.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
+    <ClCompile Include="Sphere_Alien.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

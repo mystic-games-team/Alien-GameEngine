@@ -1,4 +1,7 @@
+#include "Application.h"
 #include "PanelCreateObject.h"
+#include "Objects.h"
+#include "ModuleObjects.h"
 
 PanelCreateObject::PanelCreateObject(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra) :
 	Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -15,8 +18,10 @@ void PanelCreateObject::PanelLogic()
 	static float x = 0.0f;
 	static float y = 0.f;
 	static float z = 0.f;
+	static int subdivions = 0;
+	static int seed = 0;
 
-	static int objects = 0;
+	static int objects_combo = 0;
 
 	ImGui::OpenPopup(panel_name.c_str());
 	ImGui::SetNextWindowSize({ 300,150 });
@@ -54,25 +59,48 @@ void PanelCreateObject::PanelLogic()
 
 		ImGui::Text("Object:  "); ImGui::SameLine();
 		ImGui::PushItemWidth(100);
-		ImGui::Combo("", &objects, "Cube\0Sphere\0Triangle\0");
-		
-		switch (objects)
-		{
-		case 0: break;
-		case 1:  break;
-		case 2:  break;
-		}
+		ImGui::Combo("", &objects_combo, "Cube\0Sphere\0Rock\0");
+
 		ImGui::SameLine(0,30);
 		if (ImGui::Button("Create", { 50,20 }))
 		{
+			switch (objects_combo)
+			{
+			case 0:
+				App->objects->CreatePrimitive(PrimitiveType::CUBE, x, y, z);
+				break;
+			case 1:
+				App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN, x, y, z,subdivions);
+				break;
+			case 2: 
+				App->objects->CreatePrimitive(PrimitiveType::ROCK, x, y, z,subdivions,seed);
+				break;
+			}
+
+			
 			ChangeEnable();
+		}
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		switch (objects_combo)
+		{
+		case 0: 
+			break;
+		case 1:
+			ImGui::Text("Subdivions:"); ImGui::SameLine();
+			ImGui::SliderInt("", &subdivions, 1, 5);
+			break;
+		case 2:
+			ImGui::Text("Subdivions:"); ImGui::SameLine();
+			ImGui::SliderInt(".", &subdivions, 1, 5);
+
+			ImGui::Text("Seed:"); ImGui::SameLine();
+			ImGui::InputInt("", &seed,0,0);
+			break;
 		}
 
 		ImGui::EndPopup();
 	}
-}
-
-void PanelCreateObject::OnPanelDesactive()
-{
-	SDL_FreeCursor(SDL_GetCursor());
 }
