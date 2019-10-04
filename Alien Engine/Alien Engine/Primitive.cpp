@@ -1,9 +1,11 @@
 #include "Primitive.h"
+#include "Shapes.h"
 
-Primitive::Primitive(float position_x, float position_y, float position_z): Object(position_x,position_y,position_z)
+Primitive::Primitive(const float& position_x, const float& position_y, const float& position_z, const float& scale) : Object(position_x,position_y,position_z)
 {
 }
 
 Primitive::~Primitive()
 {
+	par_shapes_free_mesh(shape);
 }

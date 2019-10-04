@@ -3,9 +3,9 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Objects.h"
+#include "Primitive.h"
 
 #include <vector>
-
 
 class ModuleObjects : public Module
 {
@@ -18,6 +18,10 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+
+	Primitive* CreatePrimitive(const PrimitiveType &type, const float &position_x, const float &position_y, const float &position_z, const float &scale=0);
+
+	void DrawPrimitive();
 
 public:
 	std::vector<Object*> objects;

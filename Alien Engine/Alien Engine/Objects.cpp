@@ -1,6 +1,6 @@
 #include "Objects.h"
 
-Object::Object(float position_x, float position_y, float position_z)
+Object::Object(const float& position_x, const float& position_y, const float& position_z)
 {
 	position.Set(position_x, position_y, position_z);
 }

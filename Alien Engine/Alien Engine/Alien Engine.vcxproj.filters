@@ -43,6 +43,9 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{9245c810-9473-4611-ab0d-41e5a8a7f915}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects\Primitives">
+      <UniqueIdentifier>{12e1da08-d32f-4856-9317-6696bafc288a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -363,6 +366,9 @@
     <ClInclude Include="Primitive.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -562,6 +568,9 @@
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Objects\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,20 @@
 #pragma once
 
+#include "Globals.h"
 #include "glmath.h"
+
+enum class ObjectType
+{
+	PRIMITIVE,
+	CAMERA,
+
+	UNKONWN
+};
 
 class Object
 {
 public:
-	Object(float position_x, float position_y, float position_z);
+	Object(const float& position_x, const float& position_y, const float& position_z);
 	virtual ~Object();
 
 	void ChangeEnable();
@@ -16,7 +25,12 @@ public:
 protected:
 	bool enabled = true;
 
-private:
+public:
+
+	ObjectType type = ObjectType::UNKONWN;
+
 	vec3 position = { 0,0,0 };
 
+	uint iter_id = 0;
+	uint iter_index = 0;
 };
