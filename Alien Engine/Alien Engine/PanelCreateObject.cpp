@@ -71,8 +71,3 @@ void PanelCreateObject::PanelLogic()
 		ImGui::EndPopup();
 	}
 }
-
-void PanelCreateObject::OnPanelDesactive()
-{
-	SDL_FreeCursor(SDL_GetCursor());
-}

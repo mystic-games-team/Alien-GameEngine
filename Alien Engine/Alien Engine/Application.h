@@ -8,6 +8,7 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
+#include "ModuleObjects.h"
 #include "ModuleUI.h"
 #include <list>
 #include "j1PerfTimer.h"
@@ -23,6 +24,7 @@ public:
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;
 	ModuleUI* ui = nullptr;
+	ModuleObjects* objects = nullptr;
 
 	bool fps_cap = true;
 	uint16_t framerate_cap;

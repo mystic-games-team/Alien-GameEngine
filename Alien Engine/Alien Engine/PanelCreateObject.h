@@ -10,6 +10,5 @@ public:
 	virtual ~PanelCreateObject();
 	void PanelLogic();
 
-	void OnPanelDesactive();
 };
 
