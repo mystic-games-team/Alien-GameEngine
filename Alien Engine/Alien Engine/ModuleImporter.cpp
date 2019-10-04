@@ -34,13 +34,6 @@ update_status ModuleImporter::Update(float dt)
 			glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 			glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_SHORT, NULL);
-
-
-			
-
-
-
-			
 		}
 	}
 	glDisableClientState(GL_VERTEX_ARRAY);
