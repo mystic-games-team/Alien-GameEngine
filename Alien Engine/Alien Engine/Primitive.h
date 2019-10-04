@@ -6,7 +6,7 @@
 enum class PrimitiveType
 {
 	CUBE,
-	SPHERE,
+	SPHERE_ALIEN,
 	ROCK,
 
 	UNKONWN
@@ -15,7 +15,7 @@ enum class PrimitiveType
 class Primitive : public Object
 {
 public:
-	Primitive(const float& position_x, const float& position_y, const float& position_z, const float& scale);
+	Primitive(const float& position_x, const float& position_y, const float& position_z);
 	virtual ~Primitive();
 
 	PrimitiveType type = PrimitiveType::UNKONWN;

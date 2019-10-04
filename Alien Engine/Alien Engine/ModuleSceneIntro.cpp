@@ -28,7 +28,7 @@ bool ModuleSceneIntro::Start()
 
 	App->objects->CreatePrimitive(PrimitiveType::CUBE, -5, 10, 3);
 	App->objects->CreatePrimitive(PrimitiveType::CUBE, 2, 0, 3);
-
+	App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN, 0, 5, 3);
 	//
 	//vertex[0] = { 0,0,0 };
 	//vertex[1] = { 0,0,1 };

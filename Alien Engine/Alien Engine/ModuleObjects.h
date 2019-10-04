@@ -19,7 +19,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	Primitive* CreatePrimitive(const PrimitiveType &type, const float &position_x, const float &position_y, const float &position_z, const float &scale=0);
+	Primitive* CreatePrimitive(const PrimitiveType &type, const float &position_x, const float &position_y, const float &position_z);
 
 	void DrawPrimitive();
 

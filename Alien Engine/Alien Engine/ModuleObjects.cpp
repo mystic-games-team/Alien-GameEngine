@@ -5,6 +5,7 @@
 #include "glew/include/glew.h"
 
 #include "Cube.h"
+#include "Sphere_Alien.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {
@@ -88,14 +89,19 @@ bool ModuleObjects::CleanUp()
 	return true;
 }
 
-Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const float& scale)
+Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z)
 {
 	Primitive* ret = nullptr;
 	switch (type)
 	{
 	case PrimitiveType::CUBE:
-		ret = new Cube(position_x, position_y, position_z, scale);
+		ret = new Cube(position_x, position_y, position_z);
 		ret->type = PrimitiveType::CUBE;
+		objects.push_back(ret);
+		break;
+	case PrimitiveType::SPHERE_ALIEN:
+		ret = new Sphere_Alien(position_x, position_y, position_z);
+		ret->type = PrimitiveType::SPHERE_ALIEN;
 		objects.push_back(ret);
 		break;
 	}
