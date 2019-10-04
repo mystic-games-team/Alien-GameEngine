@@ -173,9 +173,9 @@ void ModuleInput::AddInputBuff(const uint& key, const uint& state, const bool& i
 	}
 
 	if (is_mouse)
-		sprintf_s(text, 60, "MOUSE: %i - %s \n", key, state_string);
+		sprintf_s(text, 60, "MOUSE: %i - %s \n", SDL_GetScancodeName((SDL_Scancode)key), state_string);
 	else
-		sprintf_s(text, 60, "KEYBOARD: %i - %s \n", key, state_string);
+		sprintf_s(text, 60, "KEYBOARD: %s - %s \n", SDL_GetScancodeName((SDL_Scancode)key), state_string);
 	
 	static char repeat[60] = "";
 

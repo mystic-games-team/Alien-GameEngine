@@ -35,7 +35,7 @@ bool ModuleSceneIntro::Start()
 	//vertex[6] = { 1,1,0 };
 	//vertex[7] = { 1,1,1 };
 
-	sphere = par_shapes_create_subdivided_sphere(5);
+	sphere = par_shapes_create_torus(5,10,1);
 	par_shapes_translate(sphere, -2, 0, 0);
 
 
