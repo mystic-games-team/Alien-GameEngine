@@ -31,7 +31,7 @@ update_status ModuleImporter::Update(float dt)
 			// draw model
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glEnable(GL_POLYGON_OFFSET_FILL);
-			glPolygonOffset(1.0f, 0.375f);
+			glPolygonOffset(1.0f, 0.4f);
 
 			glColor3f(0.75f, 0.75f, 0.75f);
 
@@ -52,6 +52,8 @@ update_status ModuleImporter::Update(float dt)
 			glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 			glDrawElements(GL_TRIANGLES, (*it)->num_index, GL_UNSIGNED_INT, NULL);
+
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		}
 	}

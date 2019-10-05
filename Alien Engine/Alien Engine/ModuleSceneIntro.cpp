@@ -42,15 +42,6 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	//Sphere s({ 0,0,0 }, 4);
-	//Sphere f({ 0,0,0 }, 7);
-	//if (f.Intersects(s)) {
-	//	LOG("INTERSECTION DETECTED!!!");
-	//}
-	//
-	//LOG("RAND %.1f",GetRandomFloatBetweenTwo(-103.3f,1.8f));
-	//
-	//glBegin(GL_TRIANGLES);
 
 	return UPDATE_CONTINUE;
 }

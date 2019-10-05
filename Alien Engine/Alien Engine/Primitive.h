@@ -21,6 +21,6 @@ public:
 	PrimitiveType type = PrimitiveType::UNKONWN;
 
 public:
-	par_shapes_mesh* shape=nullptr;
+	par_shapes_mesh* shape = nullptr;
 
 };

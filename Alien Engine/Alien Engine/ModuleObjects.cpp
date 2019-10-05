@@ -90,7 +90,7 @@ bool ModuleObjects::CleanUp()
 	return true;
 }
 
-Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const int &subdivisions, const int &extra)
+Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint &subdivisions, const uint &extra)
 {
 	Primitive* ret = nullptr;
 	switch (type)
