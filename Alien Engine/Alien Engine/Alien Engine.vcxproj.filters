@@ -357,6 +357,9 @@
     <ClInclude Include="Shapes.h">
       <Filter>Tools\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleImporter.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
     <ClInclude Include="ModuleObjects.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -565,6 +568,9 @@
     </ClCompile>
     <ClCompile Include="Shapes.cpp">
       <Filter>Tools\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleImporter.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="Objects.cpp">
       <Filter>Objects</Filter>

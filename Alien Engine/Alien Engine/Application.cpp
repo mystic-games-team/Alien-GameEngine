@@ -9,6 +9,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D();
 	camera = new ModuleCamera3D();
 	ui = new ModuleUI();
+	importer = new ModuleImporter();
 	objects = new ModuleObjects();
 
 	// The order of calls is very important!
@@ -19,7 +20,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-
+	AddModule(importer);
 	// Scenes
 	AddModule(scene_intro);
 	AddModule(objects);

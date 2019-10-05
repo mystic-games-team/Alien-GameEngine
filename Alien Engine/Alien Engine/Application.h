@@ -14,6 +14,7 @@
 #include "j1PerfTimer.h"
 #include "JSONfilepack.h"
 #include "ShortCutManager.h"
+#include "ModuleImporter.h"
 
 class Application
 {
@@ -24,13 +25,15 @@ public:
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;
 	ModuleUI* ui = nullptr;
+	ModuleImporter* importer = nullptr;
+	ShortCutManager* shortcut_manager = nullptr;
 	ModuleObjects* objects = nullptr;
 
 	bool fps_cap = true;
 	uint16_t framerate_cap;
 	int fps_limit = 30;
 	ImGuiTextBuffer log_string; 
-	ShortCutManager* shortcut_manager = nullptr;
+	
 
 private:
 	JSONfilepack* config = nullptr;
