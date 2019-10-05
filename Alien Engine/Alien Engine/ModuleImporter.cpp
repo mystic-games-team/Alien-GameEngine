@@ -15,24 +15,44 @@ bool ModuleImporter::Start()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-	LoadFBX("Assets/warrior.fbx");
+	LoadModelFile("Assets/warrior.fbx");
 	return true;
 }
 
 update_status ModuleImporter::Update(float dt)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
-	std::vector<FBXdata*>::iterator item = fbx_data.begin();
+	std::vector<Object3DData*>::iterator item = fbx_data.begin();
 	for (; item != fbx_data.end(); ++item) {
 		std::vector<Mesh*>::iterator it = (*item)->meshes.begin();
 
 		for (; it != (*item)->meshes.end(); ++it) {
+
+			// draw model
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glEnable(GL_POLYGON_OFFSET_FILL);
+			glPolygonOffset(1.0f, 0.375f);
+
+			glColor3f(0.75f, 0.75f, 0.75f);
 
 			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
 			glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 			glDrawElements(GL_TRIANGLES, (*it)->num_index, GL_UNSIGNED_INT, NULL);
+
+			glDisable(GL_POLYGON_OFFSET_FILL);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+			// draw model lines
+			glColor3f(1.0f, 1.0f, 1.0f);
+
+			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+			glDrawElements(GL_TRIANGLES, (*it)->num_index, GL_UNSIGNED_INT, NULL);
+
 		}
 	}
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -45,7 +65,7 @@ bool ModuleImporter::CleanUp()
 	return true;
 }
 
-bool ModuleImporter::LoadFBX(const char* path)
+bool ModuleImporter::LoadModelFile(const char* path)
 {
 	bool ret = true;
 
@@ -57,7 +77,7 @@ bool ModuleImporter::LoadFBX(const char* path)
 	}
 	else {
 		ret = false;
-		LOG("Error loading fbx %s", path);
+		LOG("Error loading model %s", path);
 		LOG("Error type: %s", aiGetErrorString());
 	}
 	aiReleaseImport(scene);
@@ -66,7 +86,7 @@ bool ModuleImporter::LoadFBX(const char* path)
 
 void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 {
-	FBXdata* data = new FBXdata();
+	Object3DData* data = new Object3DData();
 	data->path = path;
 	data->textures.resize(scene->mNumMaterials);
 
@@ -103,6 +123,7 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 		mesh->texture_cords.push_back(text_cords->y);
 		mesh->texture_cords.push_back(text_cords->z);
 	}
+	mesh->num_vertex = mesh->vertex.size();
 
 	for (uint i = 0; i < ai_mesh->mNumFaces; ++i) {
 		const aiFace& face = ai_mesh->mFaces[i];
@@ -127,7 +148,7 @@ void ModuleImporter::InitGLBuffers(Mesh* mesh)
 	// vertex
 	glGenBuffers(1, &mesh->id_vertex);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->vertex.size(),
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex,
 		&mesh->vertex[0], GL_STATIC_DRAW);
 
 	// index

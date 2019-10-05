@@ -12,27 +12,27 @@
 #include <vector>
 
 struct Mesh {
-	uint id_index = 0; // index in VRAM
-	uint id_vertex = 0; // unique vertex in VRAM
+	uint id_index = 0;
+	uint id_vertex = 0; 
 
-	uint num_index = 0; // done
-	std::vector<uint> index; // done
+	uint num_index = 0; 
+	std::vector<uint> index; 
 
-	uint num_vertex = 0; // done
-	std::vector<float> vertex; // done
+	uint num_vertex = 0; 
+	std::vector<float> vertex; 
 
-	uint material_index = 0; // done
+	uint material_index = 0; 
 
-	std::vector<float> normals; // done
+	std::vector<float> normals;
 
-	std::vector<float> texture_cords; // done
+	std::vector<float> texture_cords; 
 };
 
 struct Textures {
 
 };
 
-struct FBXdata {
+struct Object3DData {
 	std::vector<Mesh*> meshes;
 	std::vector<Textures*> textures;
 	const char* path = nullptr;
@@ -48,7 +48,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	bool LoadFBX(const char* path);
+	bool LoadModelFile(const char* path);
 
 private:
 
@@ -58,6 +58,6 @@ private:
 
 private:
 
-	std::vector<FBXdata*> fbx_data;
+	std::vector<Object3DData*> fbx_data;
 
 };
