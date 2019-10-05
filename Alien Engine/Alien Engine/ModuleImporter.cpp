@@ -28,7 +28,6 @@ update_status ModuleImporter::Update(float dt)
 
 		for (; it != (*item)->meshes.end(); ++it) {
 
-			
 			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
 			glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -107,10 +106,14 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 
 	for (uint i = 0; i < ai_mesh->mNumFaces; ++i) {
 		const aiFace& face = ai_mesh->mFaces[i];
-		assert(face.mNumIndices == 3);
-		mesh->index.push_back(face.mIndices[0]);
-		mesh->index.push_back(face.mIndices[1]);
-		mesh->index.push_back(face.mIndices[2]);
+		if (face.mNumIndices < 3) {
+			LOG("Face with less than 3 index");
+		}
+		else {
+			mesh->index.push_back(face.mIndices[0]);
+			mesh->index.push_back(face.mIndices[1]);
+			mesh->index.push_back(face.mIndices[2]);
+		}
 	}
 	mesh->num_index = mesh->index.size();
 
