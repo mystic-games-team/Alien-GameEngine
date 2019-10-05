@@ -10,6 +10,7 @@
 #include "PanelConsole.h"
 #include "PanelCreateObject.h"
 #include "SDL/include/SDL_assert.h"
+#include "ModuleObjects.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -131,13 +132,15 @@ void ModuleUI::MainMenuBar()
 	{
 		if (ImGui::MenuItem("Cube"))
 		{
-
+			App->objects->CreatePrimitive(PrimitiveType::CUBE);
 		}
 		if (ImGui::MenuItem("Sphere"))
 		{
+			App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN);
 		}
-		if (ImGui::MenuItem("Line"))
+		if (ImGui::MenuItem("Rock"))
 		{
+			App->objects->CreatePrimitive(PrimitiveType::ROCK);
 		}
 		if (ImGui::BeginMenu("Other"))
 		{
@@ -145,9 +148,6 @@ void ModuleUI::MainMenuBar()
 			{
 			}
 			if (ImGui::MenuItem("Cylinder"))
-			{
-			}
-			if (ImGui::MenuItem("Hemisphere"))
 			{
 			}
 			if (ImGui::MenuItem("Point"))

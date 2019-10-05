@@ -40,6 +40,12 @@
     <Filter Include="Tools\Shapes">
       <UniqueIdentifier>{0752db38-f4b0-402f-8639-807c71caf188}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{9245c810-9473-4611-ab0d-41e5a8a7f915}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Primitives">
+      <UniqueIdentifier>{12e1da08-d32f-4856-9317-6696bafc288a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -354,6 +360,24 @@
     <ClInclude Include="ModuleImporter.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleObjects.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere_Alien.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -547,6 +571,24 @@
     </ClCompile>
     <ClCompile Include="ModuleImporter.cpp">
       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleObjects.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Objects\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive.cpp">
+      <Filter>Objects\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere_Alien.cpp">
+      <Filter>Objects\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock.cpp">
+      <Filter>Objects\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

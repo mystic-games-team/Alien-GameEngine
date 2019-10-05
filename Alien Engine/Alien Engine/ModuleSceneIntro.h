@@ -6,6 +6,7 @@
 #include "MathGeoLib/include/MathGeoLibFwd.h"
 #include "Shapes.h"
 #include "glew/include/glew.h"
+#include "ModuleObjects.h"
 
 class ModuleSceneIntro : public Module
 {
@@ -16,10 +17,4 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
-
-
-public:
-	par_shapes_mesh* sphere = nullptr;
-	uint my_id = 0;
-	uint my_index = 0;
 };
