@@ -20,7 +20,6 @@ public:
 	void ChangeEnable();
 	bool IsEnabled();
 
-
 	void Draw();
 
 	vec3 GetPosition();

@@ -10,6 +10,7 @@ Object::Object(const float& position_x, const float& position_y, const float& po
 
 Object::~Object()
 {
+
 	delete[] vertex;
 	delete[] index;
 

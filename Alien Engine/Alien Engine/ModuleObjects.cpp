@@ -2,7 +2,9 @@
 #include "ModuleObjects.h"
 #include "Objects.h"
 #include "Primitive.h"
+#include "ModuleInput.h"
 #include "glew/include/glew.h"
+#include "Application.h"
 
 #include "Cube.h"
 #include "Sphere_Alien.h"
@@ -53,7 +55,13 @@ update_status ModuleObjects::Update(float dt)
 		else
 			++iter;
 	}
-
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
+		view_mesh_mode = !view_mesh_mode;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
+		view_mesh_mode = true;
+		wirframe_mode = !wirframe_mode;
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -66,7 +74,24 @@ update_status ModuleObjects::PostUpdate(float dt)
 		{
 			if ((*item)->num_index == 0 || (*item)->num_vertex == 0 || !(*item)->IsEnabled())
 				continue;
-			(*item)->Draw();
+
+			if (!wirframe_mode) {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				glEnable(GL_POLYGON_OFFSET_FILL);
+				glPolygonOffset(1.0f, 0.4f);
+
+				glColor3f(0.75f, 0.75f, 0.75f);
+
+				(*item)->Draw();
+				glDisable(GL_POLYGON_OFFSET_FILL);
+			}
+			if (wirframe_mode || view_mesh_mode) {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				// draw model lines
+				glColor3f(1.0f, 1.0f, 1.0f);
+
+				(*item)->Draw();
+			}
 		}
 
 	}

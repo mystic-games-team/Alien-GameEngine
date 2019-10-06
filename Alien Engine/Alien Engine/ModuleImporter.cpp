@@ -53,7 +53,7 @@ update_status ModuleImporter::Update(float dt)
 
 			glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
 
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		}
 	}

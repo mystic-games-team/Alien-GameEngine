@@ -24,4 +24,6 @@ public:
 
 public:
 	std::vector<Object*> objects;
+	bool wirframe_mode = false;
+	bool view_mesh_mode = true;
 };

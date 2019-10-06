@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "imgui/imgui.h"
+#include "SDL/include/SDL_scancode.h"
 
 #define MAX_MOUSE_BUTTONS 5
 
