@@ -20,6 +20,10 @@ public:
 
 	PrimitiveType type = PrimitiveType::UNKONWN;
 
+protected:
+
+	void InitBuffers();
+
 public:
 	par_shapes_mesh* shape = nullptr;
 

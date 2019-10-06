@@ -131,17 +131,6 @@ void ModuleObjects::DrawPrimitive()
 
 			glEnableClientState(GL_VERTEX_ARRAY);
 
-			// buffer points
-			glGenBuffers(1, &((*iter)->iter_id));
-			glBindBuffer(GL_ARRAY_BUFFER, ((*iter)->iter_id));
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * primitive->shape->npoints * 3, primitive->shape->points, GL_STATIC_DRAW);
-
-			// buffer index
-			glGenBuffers(1, &((*iter)->iter_index));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*iter)->iter_index);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * primitive->shape->ntriangles * 3, primitive->shape->triangles, GL_STATIC_DRAW);
-
-
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glBindBuffer(GL_ARRAY_BUFFER, (*iter)->iter_id);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*iter)->iter_index);
