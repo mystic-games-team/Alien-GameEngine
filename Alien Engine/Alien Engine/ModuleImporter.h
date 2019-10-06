@@ -16,16 +16,16 @@ struct Mesh {
 	uint id_vertex = 0; 
 
 	uint num_index = 0; 
-	std::vector<uint> index; 
+	uint* index = nullptr; 
 
 	uint num_vertex = 0; 
-	std::vector<float> vertex; 
+	float* vertex = nullptr; 
 
 	uint material_index = 0; 
 
-	std::vector<float> normals;
+	float* normals = nullptr;
 
-	std::vector<float> texture_cords; 
+	float* texture_cords = nullptr; 
 };
 
 struct Textures {

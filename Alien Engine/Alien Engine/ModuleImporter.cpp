@@ -39,7 +39,7 @@ update_status ModuleImporter::Update(float dt)
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
 			glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-			glDrawElements(GL_TRIANGLES, (*it)->num_index, GL_UNSIGNED_INT, NULL);
+			glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
 
 			glDisable(GL_POLYGON_OFFSET_FILL);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -51,7 +51,7 @@ update_status ModuleImporter::Update(float dt)
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
 			glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-			glDrawElements(GL_TRIANGLES, (*it)->num_index, GL_UNSIGNED_INT, NULL);
+			glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
 
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -105,40 +105,24 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 	mesh->material_index = ai_mesh->mMaterialIndex;
 
 	const aiVector3D zeros(0.0f, 0.0f, 0.0f);
+	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
+	memcpy(mesh->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
+	mesh->num_vertex = ai_mesh->mNumVertices;
 
-	// save vertex, normals and text cord
-	for (uint i = 0; i < ai_mesh->mNumVertices; ++i) { 
-		const aiVector3D* vertex_pos = &(ai_mesh->mVertices[i]);
-		const aiVector3D* normal_pos = &(ai_mesh->mNormals[i]);
-		const aiVector3D* text_cords = ai_mesh->HasTextureCoords(0) ? &(ai_mesh->mTextureCoords[0][i]) : &zeros;
-
-		// vertex
-		mesh->vertex.push_back(vertex_pos->x);
-		mesh->vertex.push_back(vertex_pos->y);
-		mesh->vertex.push_back(vertex_pos->z);
-		// normals
-		mesh->normals.push_back(normal_pos->x);
-		mesh->normals.push_back(normal_pos->y);
-		mesh->normals.push_back(normal_pos->z);
-		// texture cords
-		mesh->texture_cords.push_back(text_cords->x);
-		mesh->texture_cords.push_back(text_cords->y);
-		mesh->texture_cords.push_back(text_cords->z);
-	}
-	mesh->num_vertex = mesh->vertex.size();
-
-	for (uint i = 0; i < ai_mesh->mNumFaces; ++i) {
-		const aiFace& face = ai_mesh->mFaces[i];
-		if (face.mNumIndices < 3) {
-			LOG("Face with less than 3 index");
-		}
-		else {
-			mesh->index.push_back(face.mIndices[0]);
-			mesh->index.push_back(face.mIndices[1]);
-			mesh->index.push_back(face.mIndices[2]);
+	if (ai_mesh->HasFaces())
+	{
+		mesh->num_index = ai_mesh->mNumFaces * 3;
+		mesh->index = new uint[mesh->num_index]; // assume each face is a triangle
+		for (uint i = 0; i < ai_mesh->mNumFaces; ++i)
+		{
+			if (ai_mesh->mFaces[i].mNumIndices != 3) {
+				LOG("WARNING, geometry face with != 3 indices!");
+			}
+			else {
+				memcpy(&mesh->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+			}
 		}
 	}
-	mesh->num_index = mesh->index.size();
 
 	InitGLBuffers(mesh);
 
@@ -150,7 +134,7 @@ void ModuleImporter::InitGLBuffers(Mesh* mesh)
 	// vertex
 	glGenBuffers(1, &mesh->id_vertex);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex,
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
 		&mesh->vertex[0], GL_STATIC_DRAW);
 
 	// index
