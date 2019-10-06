@@ -23,8 +23,9 @@ public:
 protected:
 
 	void InitBuffers();
+	void MemCpy();
 
-public:
+protected:
 	par_shapes_mesh* shape = nullptr;
 
 };

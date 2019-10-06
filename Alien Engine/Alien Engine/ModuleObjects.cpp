@@ -59,15 +59,16 @@ update_status ModuleObjects::Update(float dt)
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
-	std::vector<Object*>::iterator iter;
-	for (iter = objects.begin(); iter != objects.end(); ++iter)
+	std::vector<Object*>::iterator item;
+	for (item = objects.begin(); item != objects.end(); ++item)
 	{
-		if ((*iter) != nullptr)
+		if ((*item) != nullptr)
 		{
-			// Print
+			if ((*item)->num_index == 0 || (*item)->num_vertex == 0 || !(*item)->IsEnabled())
+				continue;
+			(*item)->Draw();
 		}
-		else
-			++iter;
+
 	}
 
 	return UPDATE_CONTINUE;
@@ -118,31 +119,6 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float
 	}
 
 	return ret;
-}
-
-void ModuleObjects::DrawPrimitive()
-{
-	std::vector<Object*>::iterator iter;
-	for (iter = objects.begin(); iter != objects.end(); ++iter)
-	{
-		if ((*iter) != nullptr&&(*iter)->type==ObjectType::PRIMITIVE)
-		{
-			Primitive* primitive = static_cast<Primitive*>(*iter);
-
-			glEnableClientState(GL_VERTEX_ARRAY);
-
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glBindBuffer(GL_ARRAY_BUFFER, (*iter)->iter_id);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*iter)->iter_index);
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-			glDrawElements(GL_TRIANGLES, primitive->shape->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
-
-
-			glDisableClientState(GL_VERTEX_ARRAY);
-
-		}
-	}
 }
 
 

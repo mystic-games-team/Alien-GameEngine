@@ -141,7 +141,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 
 	App->ui->Draw(); // last draw UI!!!
-	App->objects->DrawPrimitive();
 
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
