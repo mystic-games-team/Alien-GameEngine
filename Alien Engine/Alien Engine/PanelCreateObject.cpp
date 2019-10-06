@@ -68,12 +68,15 @@ void PanelCreateObject::PanelLogic()
 			{
 			case 0:
 				App->objects->CreatePrimitive(PrimitiveType::CUBE, x, y, z);
+				x = y = z = 0;
 				break;
 			case 1:
 				App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN, x, y, z, subdivions);
+				x = y = z = subdivions = 0;
 				break;
 			case 2: 
 				App->objects->CreatePrimitive(PrimitiveType::ROCK, x, y, z, subdivions, seed);
+				x = y = z = subdivions = seed = 0;
 				break;
 			}
 
