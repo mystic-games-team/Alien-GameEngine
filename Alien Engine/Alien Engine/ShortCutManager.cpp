@@ -70,6 +70,8 @@ void ShortCutManager::ChangeKey()
 					if (App->input->GetFirstKeyPressed() != (*item)->key1_down && App->input->GetFirstKeyPressed() != (*item)->key3_repeat_extra) {
 						(*item)->SetShortcutKeys((*item)->key1_down, App->input->GetFirstKeyPressed(), (*item)->key3_repeat_extra);
 						(*item)->state = ShortCutStateChange::NONE;
+						if ((*item)->type == ShortCutType::ONE_KEY)
+							(*item)->type = ShortCutType::TWO_KEYS;
 						OrderShortCuts();
 						return;
 					}
@@ -86,6 +88,8 @@ void ShortCutManager::ChangeKey()
 					if (App->input->GetFirstKeyPressed() != (*item)->key1_down && App->input->GetFirstKeyPressed() != (*item)->key2_repeat) {
 						(*item)->SetShortcutKeys((*item)->key1_down, (*item)->key2_repeat, App->input->GetFirstKeyPressed());
 						(*item)->state = ShortCutStateChange::NONE;
+						if ((*item)->type == ShortCutType::TWO_KEYS)
+							(*item)->type = ShortCutType::COMPLETE;
 						OrderShortCuts();
 						return;
 					}

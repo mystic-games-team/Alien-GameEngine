@@ -195,7 +195,10 @@ void PanelConfig::PanelLogic()
 				ImGui::Spacing();
 				ImGui::Button((*item)->GetExtraKeyRepeatName(), { 75,30 });
 				if (ImGui::IsItemClicked()) {
-					(*item)->state = ShortCutStateChange::WAITING_EXTRA_KEY_REPEAT;
+					if ((*item)->type == ShortCutType::ONE_KEY)
+						(*item)->state = ShortCutStateChange::WAITING_KEY_REPEAT;
+					else
+						(*item)->state = ShortCutStateChange::WAITING_EXTRA_KEY_REPEAT;
 				}
 				ImGui::NextColumn();
 			}
