@@ -78,6 +78,13 @@ public:
 	void UpdateShortCuts();
 	ShortCut* AddShortCut(const char* order_name, const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN);
 	std::vector<ShortCut*> GetShortCuts();
+	void OrderShortCuts();
+	static bool SortByType(const ShortCut* shortcut1, const ShortCut* shortcut2);
+
+private:
+
+	void ChangeKey();
+	void ShortCutClicked();
 
 private:
 

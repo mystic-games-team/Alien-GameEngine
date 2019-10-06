@@ -33,6 +33,7 @@ private:
 	void InitPanels();
 	void UpdatePanels();
 	Panel*& GetPanelByName(const std::string& panel_name);
+	void InitShortCuts();
 
 public:
 	void FramerateRegister(float frames, float ms);
@@ -43,7 +44,7 @@ private:
 	// Panels
 
 	std::vector<Panel*> panels;
-	PanelConfig* panel_config = nullptr;
+
 	PanelAbout* panel_about = nullptr;
 	PanelConsole* panel_console = nullptr;
 	PanelCreateObject* panel_create_object = nullptr;
@@ -52,6 +53,11 @@ private:
 
 	ShortCut* shortcut_demo = nullptr;
 	ShortCut* shortcut_report_bug = nullptr;
+	ShortCut* shortcut_wireframe = nullptr;
+	ShortCut* shortcut_view_mesh = nullptr;
+
+public:
+	PanelConfig* panel_config = nullptr;
 
 };
 

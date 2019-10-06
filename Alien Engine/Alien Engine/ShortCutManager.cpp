@@ -1,6 +1,8 @@
 #include "ShortCutManager.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "PanelConfig.h"
+#include <algorithm>
 
 ShortCutManager::ShortCutManager()
 {
@@ -20,57 +22,9 @@ ShortCutManager::~ShortCutManager()
 
 void ShortCutManager::UpdateShortCuts()
 {
-	std::vector<ShortCut*>::iterator item = shortcuts.begin();
-	for (; item != shortcuts.end(); ++item) {
-		if (*item != nullptr) {
-			if ((*item)->state == ShortCutStateChange::NONE) {
-				switch ((*item)->type) {
-				case ShortCutType::ONE_KEY:
-					if (App->input->GetKey((*item)->key1_down) == KEY_DOWN)
-						(*item)->funct();
-					break;
-				case ShortCutType::TWO_KEYS:
-					if (App->input->GetKey((*item)->key1_down) == KEY_DOWN && App->input->GetKey((*item)->key2_repeat) == KEY_REPEAT)
-						(*item)->funct();
-					break;
-				case ShortCutType::COMPLETE:
-					if (App->input->GetKey((*item)->key1_down) == KEY_DOWN && (App->input->GetKey((*item)->key2_repeat) == KEY_REPEAT || App->input->GetKey((*item)->key3_repeat_extra) == KEY_REPEAT))
-						(*item)->funct();
-					break;
-				default:
-					LOG("ShortCutTypeUnknown");
-					break;
-				}
-			}
-			else {
-				if (App->input->IsMousePressed()) {
-					(*item)->state = ShortCutStateChange::NONE;
-				}
-				if (App->input->GetFirstKeyPressed() != SDL_SCANCODE_UNKNOWN) {
-					switch ((*item)->state) {
-					case ShortCutStateChange::WAITING_KEY_REPEAT:
-						if (App->input->GetFirstKeyPressed() != (*item)->key1_down && App->input->GetFirstKeyPressed() != (*item)->key3_repeat_extra) {
-							(*item)->SetShortcutKeys((*item)->key1_down, App->input->GetFirstKeyPressed(), (*item)->key3_repeat_extra);
-							(*item)->state = ShortCutStateChange::NONE;
-						}
-						break;
-					case ShortCutStateChange::WAITING_KEY_DOWN:
-						if (App->input->GetFirstKeyPressed() != (*item)->key2_repeat && App->input->GetFirstKeyPressed() != (*item)->key3_repeat_extra) {
-							(*item)->SetShortcutKeys(App->input->GetFirstKeyPressed(), (*item)->key2_repeat, (*item)->key3_repeat_extra);
-							(*item)->state = ShortCutStateChange::NONE;
-						}
-						break;
-					case ShortCutStateChange::WAITING_EXTRA_KEY_REPEAT:
-						if (App->input->GetFirstKeyPressed() != (*item)->key1_down && App->input->GetFirstKeyPressed() != (*item)->key2_repeat) {
-							(*item)->SetShortcutKeys((*item)->key1_down, (*item)->key2_repeat, App->input->GetFirstKeyPressed());
-							(*item)->state = ShortCutStateChange::NONE;
-						}
-						break;
-					}
-				}
-			}
-		}
-	}
+	if (App->ui->panel_config->IsEnabled())
+		ChangeKey();
+	ShortCutClicked();
 }
 
 ShortCut* ShortCutManager::AddShortCut(const char* order_name, const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -90,6 +44,90 @@ ShortCut* ShortCutManager::AddShortCut(const char* order_name, const SDL_Scancod
 std::vector<ShortCut*> ShortCutManager::GetShortCuts()
 {
 	return shortcuts;
+}
+
+void ShortCutManager::OrderShortCuts()
+{
+	std::sort(shortcuts.begin(), shortcuts.end(), ShortCutManager::SortByType);
+}
+
+bool ShortCutManager::SortByType(const ShortCut* shortcut1, const ShortCut* shortcut2)
+{
+	return (uint)shortcut1->type < (uint)shortcut2->type;
+}
+
+void ShortCutManager::ChangeKey()
+{
+	std::vector<ShortCut*>::iterator item = shortcuts.begin();
+	for (; item != shortcuts.end(); ++item) {
+		if (*item != nullptr && (*item)->state != ShortCutStateChange::NONE) {
+			if (App->input->IsMousePressed()) {
+				(*item)->state = ShortCutStateChange::NONE;
+			}
+			if (App->input->GetFirstKeyPressed() != SDL_SCANCODE_UNKNOWN) {
+				switch ((*item)->state) {
+				case ShortCutStateChange::WAITING_KEY_REPEAT:
+					if (App->input->GetFirstKeyPressed() != (*item)->key1_down && App->input->GetFirstKeyPressed() != (*item)->key3_repeat_extra) {
+						(*item)->SetShortcutKeys((*item)->key1_down, App->input->GetFirstKeyPressed(), (*item)->key3_repeat_extra);
+						(*item)->state = ShortCutStateChange::NONE;
+						OrderShortCuts();
+						return;
+					}
+					break;
+				case ShortCutStateChange::WAITING_KEY_DOWN:
+					if (App->input->GetFirstKeyPressed() != (*item)->key2_repeat && App->input->GetFirstKeyPressed() != (*item)->key3_repeat_extra) {
+						(*item)->SetShortcutKeys(App->input->GetFirstKeyPressed(), (*item)->key2_repeat, (*item)->key3_repeat_extra);
+						(*item)->state = ShortCutStateChange::NONE;
+						OrderShortCuts();
+						return;
+					}
+					break;
+				case ShortCutStateChange::WAITING_EXTRA_KEY_REPEAT:
+					if (App->input->GetFirstKeyPressed() != (*item)->key1_down && App->input->GetFirstKeyPressed() != (*item)->key2_repeat) {
+						(*item)->SetShortcutKeys((*item)->key1_down, (*item)->key2_repeat, App->input->GetFirstKeyPressed());
+						(*item)->state = ShortCutStateChange::NONE;
+						OrderShortCuts();
+						return;
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+void ShortCutManager::ShortCutClicked()
+{
+	std::vector<ShortCut*>::iterator item = shortcuts.begin();
+	for (; item != shortcuts.end(); ++item) {
+		if (*item != nullptr) {
+			if ((*item)->state == ShortCutStateChange::NONE) {
+				switch ((*item)->type) {
+				case ShortCutType::ONE_KEY:
+					if (App->input->GetKey((*item)->key1_down) == KEY_DOWN) {
+						(*item)->funct();
+						return;
+					}
+					break;
+				case ShortCutType::TWO_KEYS:
+					if (App->input->GetKey((*item)->key1_down) == KEY_DOWN && App->input->GetKey((*item)->key2_repeat) == KEY_REPEAT) {
+						(*item)->funct();
+						return;
+					}
+					break;
+				case ShortCutType::COMPLETE:
+					if (App->input->GetKey((*item)->key1_down) == KEY_DOWN && (App->input->GetKey((*item)->key2_repeat) == KEY_REPEAT || App->input->GetKey((*item)->key3_repeat_extra) == KEY_REPEAT)) {
+						(*item)->funct();
+						return;
+					}
+					break;
+				default:
+					LOG("ShortCutTypeUnknown");
+					break;
+				}
+			}
+		}
+	}
 }
 
 const char* ShortCut::GetShortcutName()

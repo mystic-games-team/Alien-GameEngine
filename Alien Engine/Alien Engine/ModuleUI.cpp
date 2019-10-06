@@ -40,10 +40,8 @@ bool ModuleUI::Start()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
 	InitPanels();
-
-	shortcut_demo = App->shortcut_manager->AddShortCut("imGui Demo", SDL_SCANCODE_D, std::bind(&ModuleUI::ChangeEnableDemo, App->ui), SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
-	shortcut_report_bug = App->shortcut_manager->AddShortCut("Report Bug", SDL_SCANCODE_F1, std::bind(&ModuleUI::ReportBug, App->ui), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
-
+	InitShortCuts();
+	
 	return ret;
 }
 
@@ -246,6 +244,17 @@ Panel*& ModuleUI::GetPanelByName(const std::string& panel_name)
 		}
 	}
 	SDL_assert(1 == 0); //panel name is not correct, revise panels names!!
+}
+
+void ModuleUI::InitShortCuts()
+{
+	shortcut_demo = App->shortcut_manager->AddShortCut("imGui Demo", SDL_SCANCODE_D, std::bind(&ModuleUI::ChangeEnableDemo, App->ui), SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+	shortcut_report_bug = App->shortcut_manager->AddShortCut("Report Bug", SDL_SCANCODE_F1, std::bind(&ModuleUI::ReportBug, App->ui), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
+	shortcut_view_mesh = App->shortcut_manager->AddShortCut("Active/Desactive Mesh", SDL_SCANCODE_F3, std::bind(&ModuleObjects::ChangeViewMeshMode, App->objects));
+	shortcut_wireframe = App->shortcut_manager->AddShortCut("Active/Desactive Wireframe", SDL_SCANCODE_F4, std::bind(&ModuleObjects::ChangeWireframeMode, App->objects));
+
+	// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
+	App->shortcut_manager->OrderShortCuts();
 }
 
 void ModuleUI::FramerateRegister(float frames, float ms)

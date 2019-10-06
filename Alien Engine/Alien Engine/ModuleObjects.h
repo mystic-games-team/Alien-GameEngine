@@ -22,8 +22,12 @@ public:
 	// Subdivions only for Sphere and Rock, and extra only for Rock seed
 	Primitive* CreatePrimitive(const PrimitiveType& type, const float& position_x = 0, const float& position_y = 0, const float& position_z = 0, const uint& subdivions = 5, const uint& extra = 0);
 
+	void ChangeWireframeMode();
+	void ChangeViewMeshMode();
+
 public:
 	std::vector<Object*> objects;
-	bool wirframe_mode = false;
+
+	bool wireframe_mode = false;
 	bool view_mesh_mode = true;
 };
