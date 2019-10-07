@@ -18,7 +18,9 @@ struct Mesh {
 		delete[] vertex;
 		delete[] normals;
 		delete[] texture_cords;
+		delete[] center_point_normal;
 
+		center_point_normal = nullptr;
 		index = nullptr;
 		vertex = nullptr;
 		normals = nullptr;
@@ -37,6 +39,9 @@ struct Mesh {
 	uint material_index = 0; 
 
 	float* normals = nullptr;
+
+	float* center_point_normal = nullptr;
+	uint num_faces = 0;
 
 	float* texture_cords = nullptr; 
 };

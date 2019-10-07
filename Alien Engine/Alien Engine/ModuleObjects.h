@@ -32,4 +32,7 @@ public:
 
 	bool wireframe_mode = false;
 	bool view_mesh_mode = true;
+	uint vertex_normal_length = 5;
+	uint face_normal_length = 5;
+
 };
