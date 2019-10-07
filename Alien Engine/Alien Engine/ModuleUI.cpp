@@ -185,14 +185,21 @@ void ModuleUI::MainMenuBar()
 		}
 		if (ImGui::BeginMenu("Other"))
 		{
-			if (ImGui::MenuItem("Cone"))
+			if (ImGui::MenuItem("Dodecahedron"))
 			{
+				App->objects->CreatePrimitive(PrimitiveType::DODECAHEDRON);
 			}
-			if (ImGui::MenuItem("Cylinder"))
+			if (ImGui::MenuItem("Octahedron"))
 			{
+				App->objects->CreatePrimitive(PrimitiveType::OCTAHEDRON);
 			}
-			if (ImGui::MenuItem("Point"))
+			if (ImGui::MenuItem("Icosahedron"))
 			{
+				App->objects->CreatePrimitive(PrimitiveType::ICOSAHEDRON);
+			}
+			if (ImGui::MenuItem("Torus"))
+			{
+				App->objects->CreatePrimitive(PrimitiveType::TORUS);
 			}
 			ImGui::EndMenu();
 		}

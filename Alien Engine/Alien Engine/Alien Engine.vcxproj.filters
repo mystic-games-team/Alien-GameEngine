@@ -381,6 +381,18 @@
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Dodecahedron.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Octahedron.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Icosahedron.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Torus_Alien.h">
+      <Filter>Objects\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -595,6 +607,18 @@
     </ClCompile>
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Dodecahedron.cpp">
+      <Filter>Objects\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Octahedron.cpp">
+      <Filter>Objects\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Icosahedron.cpp">
+      <Filter>Objects\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Torus_Alien.cpp">
+      <Filter>Objects\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
