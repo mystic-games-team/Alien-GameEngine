@@ -34,7 +34,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 
 	// Make sure standard paths exist
 	const char* dirs[] = {
-		"/Assets/", "/Library/","/Configuration/"
+		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER,
 	};
 
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
@@ -419,6 +419,58 @@ const char* ModuleFileSystem::GetReadPaths() const
 	}
 
 	return paths;
+}
+
+void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
+{
+	LOG("File Dropped with path %s", extern_path);
+
+	std::string final_path;
+	SplitFilePath(extern_path, nullptr, &final_path);
+
+	FileDropType type = SearchExtension(std::string(extern_path));
+
+	switch (type) {
+	case FileDropType::MODEL3D: 
+		final_path = MODELS_FOLDER + final_path;
+		break;
+	}
+	if (CopyFromOutsideFS(extern_path, final_path.c_str()))
+	{
+		std::string extension;
+		SplitFilePath(extern_path, nullptr, nullptr, &extension);
+		switch (type) {
+		case FileDropType::MODEL3D:
+			LOG("Start Loading Model");
+			App->importer->LoadModelFile(final_path.data());
+			break;
+		}
+	}
+}
+
+const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_path)
+{
+	
+	std::string extension("");
+
+	std::string::const_reverse_iterator item = extern_path.crbegin();
+	for (; item != extern_path.crend(); ++item)
+	{
+		if (*item == '.')
+			break;
+		else
+			extension = *item + extension;
+	}
+	
+	FileDropType ext_type = FileDropType::UNKNOWN;
+
+	if (strcmp(extension.data(), "fbx"))
+		ext_type = FileDropType::MODEL3D;
+	else
+		LOG("Extension unknown!");
+
+
+	return ext_type;
 }
 
 // -----------------------------------------------------

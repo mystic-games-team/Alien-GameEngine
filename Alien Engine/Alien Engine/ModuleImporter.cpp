@@ -15,7 +15,7 @@ bool ModuleImporter::Start()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-	LoadModelFile("Assets/monkey.fbx");
+	LoadModelFile("Assets/Models/warrior.fbx");
 	return true;
 }
 
@@ -80,11 +80,13 @@ bool ModuleImporter::LoadModelFile(const char* path)
 {
 	bool ret = true;
 
+	LOG("Loading %s", path);
 	const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
 		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr) {
 		InitScene(scene, path);
+		LOG("Succesfully loaded");
 	}
 	else {
 		ret = false;

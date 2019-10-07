@@ -10,6 +10,19 @@ struct aiFileIO;
 #include "Bass/include/bass.h"
 //struct BASS_FILEPROCS;
 
+
+#define ASSETS_FOLDER "Assets/"
+#define LIBRARY_FOLDER "Library/"
+#define CONFIGURATION_FOLDER "Configuration/"
+#define MODELS_FOLDER "Assets/Models/"
+
+
+enum class FileDropType {
+	MODEL3D,
+
+	UNKNOWN
+};
+
 class ModuleFileSystem : public Module
 {
 public:
@@ -54,6 +67,9 @@ public:
 	const char* GetBasePath() const;
 	const char* GetWritePath() const;
 	const char* GetReadPaths() const;
+
+	void ManageNewDropFile(const char* extern_path);
+	const FileDropType& SearchExtension(const std::string& extern_path);
 
 private:
 
