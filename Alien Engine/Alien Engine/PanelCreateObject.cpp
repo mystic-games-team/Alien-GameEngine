@@ -18,7 +18,7 @@ void PanelCreateObject::PanelLogic()
 	static float x = 0.0f;
 	static float y = 0.f;
 	static float z = 0.f;
-	static int subdivions = 0;
+	static int subdivions = 5;
 	static int seed = 0;
 
 	static int objects_combo = 0;
@@ -72,11 +72,13 @@ void PanelCreateObject::PanelLogic()
 				break;
 			case 1:
 				App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN, x, y, z, subdivions);
-				x = y = z = subdivions = 0;
+				x = y = z = 0;
+				subdivions = 5;
 				break;
 			case 2: 
 				App->objects->CreatePrimitive(PrimitiveType::ROCK, x, y, z, subdivions, seed);
-				x = y = z = subdivions = seed = 0;
+				x = y = z = seed = 0;
+				subdivions = 5;
 				break;
 			}
 
@@ -97,10 +99,10 @@ void PanelCreateObject::PanelLogic()
 			break;
 		case 2:
 			ImGui::Text("Subdivions:"); ImGui::SameLine();
-			ImGui::SliderInt(".", &subdivions, 1, 5);
+			ImGui::SliderInt("##slider int", &subdivions, 1, 5);
 
 			ImGui::Text("Seed:"); ImGui::SameLine();
-			ImGui::InputInt("", &seed,0,0);
+			ImGui::InputInt("##input int", &seed,0,0);
 			break;
 		}
 
