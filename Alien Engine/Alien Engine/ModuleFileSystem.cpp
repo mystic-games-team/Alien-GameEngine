@@ -34,7 +34,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 
 	// Make sure standard paths exist
 	const char* dirs[] = {
-		"/Asstes/", "/Library/","/Configuration/"
+		"/Assets/", "/Library/","/Configuration/"
 	};
 
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
