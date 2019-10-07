@@ -1,5 +1,11 @@
 {
     "Configuration": {
+        "Application": {
+            "CapFPS": true,
+            "LimitFPS": 60,
+            "Name": "Alien Engine",
+            "Organitzation": "UPC CITM"
+        },
         "Window": {
             "Width": 1200,
             "Height": 650,
@@ -10,35 +16,49 @@
             "Borderless": false,
             "StyleType": 1
         },
-        "Application": {
-            "Name": "Alien Engine",
-            "Organitzation": "UPC CITM",
-            "LimitFPS": 60,
-            "CapFPS": true
-        },
-		"UI": {
-			"ShortCuts": {
-				"PanelConfig": [
-					18,
-					224,
-					228
-				],
-				"PanelAbout": [
-					4,
-					224,
-					228
-				],
-				"PanelConsole": [
-					23,
-					224,
-					228
-				],
-				"PanelCreate": [
-					19,
-					224,
-					228
-				]
-			}
-		}
+        "UI": {
+            "ShortCuts": {
+                "PanelConfig": [
+                    18,
+                    224,
+                    228
+                ],
+                "PanelAbout": [
+                    4,
+                    224,
+                    228
+                ],
+                "PanelConsole": [
+                    23,
+                    224,
+                    228
+                ],
+                "PanelCreate": [
+                    19,
+                    224,
+                    228
+                ],
+                "WireframeMode": [
+                    61,
+                    0,
+                    0
+                ],
+                "ViewMesh": [
+                    60,
+                    0,
+                    0
+                ],
+                "ReportBug": [
+                    58,
+                    226,
+                    230
+                ],
+                "ImGuiDemo": [
+                    7,
+                    224,
+                    228
+                ]
+            }
+        }
     }
 }

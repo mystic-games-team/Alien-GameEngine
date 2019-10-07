@@ -73,6 +73,10 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		panel_about_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", i);
 		panel_create_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
 		panel_console_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", i);
+		shortcut_demo_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ImGuiDemo", i);
+		shortcut_report_bug_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ReportBug", i);
+		shortcut_view_mesh_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ViewMesh", i);
+		shortcut_wireframe_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.WireframeMode", i);
 	}
 
 }
@@ -84,6 +88,10 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", (uint)panel_console->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", (uint)panel_create_object->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.WireframeMode", (uint)shortcut_wireframe->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ViewMesh", (uint)shortcut_view_mesh->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ReportBug", (uint)shortcut_report_bug->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ImGuiDemo", (uint)shortcut_demo->GetScancode(i));
 	}
 }
 
@@ -283,10 +291,10 @@ Panel*& ModuleUI::GetPanelByName(const std::string& panel_name)
 
 void ModuleUI::InitShortCuts()
 {
-	shortcut_demo = App->shortcut_manager->AddShortCut("imGui Demo", SDL_SCANCODE_D, std::bind(&ModuleUI::ChangeEnableDemo, App->ui), SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
-	shortcut_report_bug = App->shortcut_manager->AddShortCut("Report Bug", SDL_SCANCODE_F1, std::bind(&ModuleUI::ReportBug, App->ui), SDL_SCANCODE_LALT, SDL_SCANCODE_RALT);
-	shortcut_view_mesh = App->shortcut_manager->AddShortCut("Mesh View", SDL_SCANCODE_F3, std::bind(&ModuleObjects::ChangeViewMeshMode, App->objects));
-	shortcut_wireframe = App->shortcut_manager->AddShortCut("Wireframe Mode", SDL_SCANCODE_F4, std::bind(&ModuleObjects::ChangeWireframeMode, App->objects));
+	shortcut_demo = App->shortcut_manager->AddShortCut("imGui Demo", shortcut_demo_codes[0], std::bind(&ModuleUI::ChangeEnableDemo, App->ui), shortcut_demo_codes[1], shortcut_demo_codes[2]);
+	shortcut_report_bug = App->shortcut_manager->AddShortCut("Report Bug", shortcut_report_bug_codes[0], std::bind(&ModuleUI::ReportBug, App->ui), shortcut_report_bug_codes[1], shortcut_report_bug_codes[2]);
+	shortcut_view_mesh = App->shortcut_manager->AddShortCut("Mesh View", shortcut_view_mesh_codes[0], std::bind(&ModuleObjects::ChangeViewMeshMode, App->objects), shortcut_view_mesh_codes[1], shortcut_view_mesh_codes[2]);
+	shortcut_wireframe = App->shortcut_manager->AddShortCut("Wireframe Mode", shortcut_wireframe_codes[0], std::bind(&ModuleObjects::ChangeWireframeMode, App->objects), shortcut_wireframe_codes[1], shortcut_wireframe_codes[2]);
 
 	// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 	App->shortcut_manager->OrderShortCuts();
