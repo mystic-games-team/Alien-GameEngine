@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "imgui/examples/imgui_impl_sdl.h"
+#include "ModuleFileSystem.h"
 
 #define MAX_KEYS 300
 
@@ -134,6 +135,22 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_QUIT:
 			quit = true;
 			break;
+			case SDL_DROPFILE: {
+				char* path = e.drop.file;
+
+				std::string final_path;
+
+				App->file_system->SplitFilePath(path, nullptr, &final_path);
+				final_path = "Assets/" + final_path;
+
+				if (App->file_system->CopyFromOutsideFS(path, final_path.c_str()) == true)
+				{
+					std::string extension;
+					App->file_system->SplitFilePath(path, nullptr, nullptr, &extension);
+					App->importer->LoadModelFile(final_path.data());
+				}
+				SDL_free(e.drop.file);
+				break; }
 			case SDL_WINDOWEVENT:
 			{
 				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
