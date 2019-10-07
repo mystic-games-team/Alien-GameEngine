@@ -79,14 +79,11 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 
 void ModuleUI::SaveConfig(JSONfilepack*& config)
 {
-
-	JSON_Array* arr_config = config->InitNewArray("Configuration.UI.ShortCuts.PanelConfig");
-
 	for (uint i = 0; i < 3; ++i) {
-		config->SetArrayNumber(arr_config, "Configuration.UI.ShortCuts.PanelConfig", (uint)panel_config->shortcut->GetScancode(i), i);
-		//config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i), i);
-		//config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", (uint)panel_console->shortcut->GetScancode(i), i);
-		//config->SetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", (uint)panel_create_object->shortcut->GetScancode(i), i);
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_config->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", (uint)panel_console->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", (uint)panel_create_object->shortcut->GetScancode(i));
 	}
 }
 

@@ -4,7 +4,6 @@
 #include <string>
 #include "Globals.h"
 
-
 class JSONfilepack {
 
 public:
@@ -22,7 +21,7 @@ public:
 	void SetBoolean(const std::string& name, const bool& boolean);
 	bool GetBoolean(const std::string& name);
 
-	void SetArrayNumber(JSON_Array*& arr, const std::string& name, const double& number, const uint& index);
+	void SetArrayNumber(const std::string& name, const double& number);
 	double GetArrayNumber(const std::string& name, const uint& index);
 
 	void SetString(const std::string& name, const std::string& string_parameter);
