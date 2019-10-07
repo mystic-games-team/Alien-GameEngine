@@ -1,6 +1,7 @@
 #include "ModuleImporter.h"
 #include "glew/include/glew.h"
-
+#include "Application.h"
+#include "ModuleObjects.h"
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -28,31 +29,34 @@ update_status ModuleImporter::Update(float dt)
 
 		for (; it != (*item)->meshes.end(); ++it) {
 
-			// draw model
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			glEnable(GL_POLYGON_OFFSET_FILL);
-			glPolygonOffset(1.0f, 0.4f);
+			if (!App->objects->wireframe_mode) {
+				// draw model
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				glEnable(GL_POLYGON_OFFSET_FILL);
+				glPolygonOffset(1.0f, 0.4f);
 
-			glColor3f(0.75f, 0.75f, 0.75f);
+				glColor3f(0.75f, 0.75f, 0.75f);
 
-			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
+				glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
+				glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-			glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
+				glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
 
-			glDisable(GL_POLYGON_OFFSET_FILL);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				glDisable(GL_POLYGON_OFFSET_FILL);
+			}
+			if (App->objects->wireframe_mode || App->objects->view_mesh_mode) {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-			// draw model lines
-			glColor3f(1.0f, 1.0f, 1.0f);
+				// draw model lines
+				glColor3f(1.0f, 1.0f, 1.0f);
 
-			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
+				glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
+				glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-			glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
-
+				glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
+			}
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		}
