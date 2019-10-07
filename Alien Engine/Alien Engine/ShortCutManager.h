@@ -3,6 +3,7 @@
 #include "SDL/include/SDL_scancode.h"
 #include <functional>
 #include <vector>
+#include "Globals.h"
 
 enum class ShortCutType {
 	COMPLETE,
@@ -46,6 +47,7 @@ struct ShortCut {
 	const char* GetKeyDownName();
 	const char* GetKeyRepeatName();
 	const char* GetExtraKeyRepeatName();
+	const SDL_Scancode& GetScancode(const uint& index);
 
 	// variables
 	SDL_Scancode key1_down = SDL_SCANCODE_UNKNOWN;

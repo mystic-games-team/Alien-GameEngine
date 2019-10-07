@@ -209,3 +209,23 @@ const char* ShortCut::GetExtraKeyRepeatName()
 		return "Click Key";
 	
 }
+
+const SDL_Scancode& ShortCut::GetScancode(const uint& index)
+{
+	SDL_Scancode ret = SDL_SCANCODE_UNKNOWN;
+	switch (index) {
+	case 0: {
+		ret = key1_down;
+		break; }
+	case 1: {
+		ret = key2_repeat;
+		break; }
+	case 2: {
+		ret = key3_repeat_extra;
+		break; }
+	default: {
+		LOG("ShortCutIndex not valid %i", index);
+		break; }
+	}
+	return ret;
+}

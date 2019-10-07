@@ -68,7 +68,6 @@ bool ModuleUI::CleanUp()
 
 void ModuleUI::LoadConfig(JSONfilepack*& config)
 {
-
 	for (uint i = 0; i < 3; ++i) {
 		panel_config_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", i);
 		panel_about_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", i);
@@ -80,6 +79,15 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 
 void ModuleUI::SaveConfig(JSONfilepack*& config)
 {
+
+	JSON_Array* arr_config = config->InitNewArray("Configuration.UI.ShortCuts.PanelConfig");
+
+	for (uint i = 0; i < 3; ++i) {
+		config->SetArrayNumber(arr_config, "Configuration.UI.ShortCuts.PanelConfig", (uint)panel_config->shortcut->GetScancode(i), i);
+		//config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i), i);
+		//config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", (uint)panel_console->shortcut->GetScancode(i), i);
+		//config->SetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", (uint)panel_create_object->shortcut->GetScancode(i), i);
+	}
 }
 
 update_status ModuleUI::PreUpdate(float dt)

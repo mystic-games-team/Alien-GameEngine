@@ -44,6 +44,11 @@ bool JSONfilepack::GetBoolean(const std::string& name)
 	return json_object_dotget_boolean(object, name.data());
 }
 
+void JSONfilepack::SetArrayNumber(JSON_Array*& arr, const std::string& name, const double& number, const uint& index)
+{
+	json_array_append_number(arr, number);
+}
+
 double JSONfilepack::GetArrayNumber(const std::string& name, const uint& index)
 {
 	JSON_Array* arr = json_object_dotget_array(object, name.data());
@@ -58,4 +63,16 @@ void JSONfilepack::SetString(const std::string& name, const std::string& string_
 const char* JSONfilepack::GetString(const std::string& name)
 {
 	return json_object_dotget_string(object, name.data());
+}
+
+JSON_Array* JSONfilepack::InitNewArray(const std::string& name)
+{
+	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
+	if (arr == nullptr) {
+		JSON_Value* new_val = json_value_init_array();
+		arr = json_value_get_array(new_val);
+
+		json_object_dotset_value(save_object, name.data(), new_val);
+	}
+	return arr;
 }

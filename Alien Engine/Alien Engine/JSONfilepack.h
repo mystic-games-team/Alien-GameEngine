@@ -22,11 +22,13 @@ public:
 	void SetBoolean(const std::string& name, const bool& boolean);
 	bool GetBoolean(const std::string& name);
 
+	void SetArrayNumber(JSON_Array*& arr, const std::string& name, const double& number, const uint& index);
 	double GetArrayNumber(const std::string& name, const uint& index);
 
 	void SetString(const std::string& name, const std::string& string_parameter);
 	const char* GetString(const std::string& name);
 
+	JSON_Array* InitNewArray(const std::string& name);
 
 private:
 
