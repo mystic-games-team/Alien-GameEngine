@@ -34,5 +34,7 @@ public:
 	bool view_mesh_mode = true;
 	uint vertex_normal_length = 5;
 	uint face_normal_length = 5;
+	bool draw_vertex_normals = true;
+	bool draw_face_normals = true;
 
 };

@@ -59,32 +59,34 @@ update_status ModuleImporter::Update(float dt)
 			}
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-			// vertex normals
-			glColor3f(0.0f, 1.0f, 1.0f);
-			glBegin(GL_LINES);
-			for (uint i = 0; i < (*it)->num_vertex * 3; i += 3)
-			{
-				glVertex3f((*it)->vertex[i], (*it)->vertex[i + 1], (*it)->vertex[i + 2]);
-				glVertex3f((*it)->vertex[i] + (*it)->normals[i] * App->objects->vertex_normal_length, (*it)->vertex[i + 1] + (*it)->normals[i + 1] * App->objects->vertex_normal_length, (*it)->vertex[i + 2] + (*it)->normals[i + 2] * App->objects->vertex_normal_length);
+			if (App->objects->draw_vertex_normals) { // vertex normals
+				glColor3f(0.0f, 1.0f, 1.0f);
+				glBegin(GL_LINES);
+				for (uint i = 0; i < (*it)->num_vertex * 3; i += 3)
+				{
+					glVertex3f((*it)->vertex[i], (*it)->vertex[i + 1], (*it)->vertex[i + 2]);
+					glVertex3f((*it)->vertex[i] + (*it)->normals[i] * App->objects->vertex_normal_length, (*it)->vertex[i + 1] + (*it)->normals[i + 1] * App->objects->vertex_normal_length, (*it)->vertex[i + 2] + (*it)->normals[i + 2] * App->objects->vertex_normal_length);
+				}
+				glEnd();
 			}
-			glEnd();
+			if (App->objects->draw_face_normals) { // face normals
+				glColor3f(1.0f, 0.0f, 1.0f);
+				glBegin(GL_LINES);
+				uint i = 0;
+				uint k = 0;
+				for (uint j = 0; j < (*it)->num_faces; ++j)
+				{
+					float centered_x = ((*it)->vertex[i] + (*it)->vertex[i + 3] + (*it)->vertex[i + 6]) / 3;
+					float centered_y = ((*it)->vertex[i + 1] + (*it)->vertex[i + 4] + (*it)->vertex[i + 7]) / 3;
+					float centered_z = ((*it)->vertex[i + 2] + (*it)->vertex[i + 5] + (*it)->vertex[i + 8]) / 3;
 
-			glColor3f(1.0f, 0.0f, 1.0f);
-			glBegin(GL_LINES);
-			uint i = 0;
-			uint k = 0;
-			for (uint j = 0; j < (*it)->num_faces; ++j)
-			{
-				float centered_x = ((*it)->vertex[i] + (*it)->vertex[i + 3] + (*it)->vertex[i + 6]) / 3;
-				float centered_y = ((*it)->vertex[i + 1] + (*it)->vertex[i + 4] + (*it)->vertex[i + 7]) / 3;
-				float centered_z = ((*it)->vertex[i + 2] + (*it)->vertex[i + 5] + (*it)->vertex[i + 8]) / 3;
-
-				glVertex3f(centered_x, centered_y, centered_z);
-				glVertex3f(centered_x + (*it)->center_point_normal[k] * App->objects->face_normal_length, centered_y + (*it)->center_point_normal[k + 1] * App->objects->face_normal_length, centered_z + (*it)->center_point_normal[k + 2] * App->objects->face_normal_length);
-				i += 9;
-				k += 3;
+					glVertex3f(centered_x, centered_y, centered_z);
+					glVertex3f(centered_x + (*it)->center_point_normal[k] * App->objects->face_normal_length, centered_y + (*it)->center_point_normal[k + 1] * App->objects->face_normal_length, centered_z + (*it)->center_point_normal[k + 2] * App->objects->face_normal_length);
+					i += 9;
+					k += 3;
+				}
+				glEnd();
 			}
-			glEnd();
 		}
 	}
 	glDisableClientState(GL_VERTEX_ARRAY);
