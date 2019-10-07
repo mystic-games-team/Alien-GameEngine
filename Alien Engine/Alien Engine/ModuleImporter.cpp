@@ -15,15 +15,15 @@ bool ModuleImporter::Start()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-	LoadModelFile("Assets/warrior.fbx");
+	LoadModelFile("Assets/monkey.fbx");
 	return true;
 }
 
 update_status ModuleImporter::Update(float dt)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
-	std::vector<Object3DData*>::iterator item = fbx_data.begin();
-	for (; item != fbx_data.end(); ++item) {
+	std::vector<Object3DData*>::iterator item = objects3Ddata.begin();
+	for (; item != objects3Ddata.end(); ++item) {
 		std::vector<Mesh*>::iterator it = (*item)->meshes.begin();
 
 		for (; it != (*item)->meshes.end(); ++it) {
@@ -64,6 +64,15 @@ update_status ModuleImporter::Update(float dt)
 bool ModuleImporter::CleanUp()
 {
 	aiDetachAllLogStreams();
+
+	std::vector<Object3DData*>::iterator item = objects3Ddata.begin();
+	for (; item != objects3Ddata.end(); ++item) {
+		if (*item != nullptr) {
+			delete* item;
+			*item = nullptr;
+		}
+	}
+	objects3Ddata.clear();
 	return true;
 }
 
@@ -96,7 +105,7 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 		const aiMesh* mesh = scene->mMeshes[i];
 		data->meshes.push_back(InitMesh(mesh));
 	}
-	fbx_data.push_back(data);
+	objects3Ddata.push_back(data);
 }
 
 Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
@@ -142,4 +151,16 @@ void ModuleImporter::InitGLBuffers(Mesh* mesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_index,
 		&mesh->index[0], GL_STATIC_DRAW);
+}
+
+Object3DData::~Object3DData()
+{
+	std::vector<Mesh*>::iterator item = meshes.begin();
+	for (; item != meshes.end(); ++item) {
+		if (*item != nullptr) {
+			delete* item;
+			*item = nullptr;
+		}
+	}
+	meshes.clear();
 }

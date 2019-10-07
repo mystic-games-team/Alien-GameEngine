@@ -92,7 +92,6 @@ void ModuleUI::Draw() {
 	}
 	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 		App->objects->DeleteAllObjects();
-
 	}
 
 	ImGui::Render();

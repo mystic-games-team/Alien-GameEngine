@@ -12,6 +12,19 @@
 #include <vector>
 
 struct Mesh {
+
+	~Mesh() {
+		delete[] index;
+		delete[] vertex;
+		delete[] normals;
+		delete[] texture_cords;
+
+		index = nullptr;
+		vertex = nullptr;
+		normals = nullptr;
+		texture_cords = nullptr;
+	}
+
 	uint id_index = 0;
 	uint id_vertex = 0; 
 
@@ -33,8 +46,11 @@ struct Textures {
 };
 
 struct Object3DData {
+
+	~Object3DData();
+
 	std::vector<Mesh*> meshes;
-	std::vector<Textures*> textures;
+	std::vector<Textures*> textures; // TODO clean up this :)
 	const char* path = nullptr;
 };
 
@@ -58,6 +74,6 @@ private:
 
 private:
 
-	std::vector<Object3DData*> fbx_data;
+	std::vector<Object3DData*> objects3Ddata;
 
 };
