@@ -59,6 +59,34 @@ update_status ModuleImporter::Update(float dt)
 			}
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+			if (App->objects->draw_vertex_normals) { // vertex normals
+				glColor3f(0.0f, 1.0f, 1.0f);
+				glBegin(GL_LINES);
+				for (uint i = 0; i < (*it)->num_vertex * 3; i += 3)
+				{
+					glVertex3f((*it)->vertex[i], (*it)->vertex[i + 1], (*it)->vertex[i + 2]);
+					glVertex3f((*it)->vertex[i] + (*it)->normals[i] * App->objects->vertex_normal_length, (*it)->vertex[i + 1] + (*it)->normals[i + 1] * App->objects->vertex_normal_length, (*it)->vertex[i + 2] + (*it)->normals[i + 2] * App->objects->vertex_normal_length);
+				}
+				glEnd();
+			}
+			if (App->objects->draw_face_normals) { // face normals
+				glColor3f(1.0f, 0.0f, 1.0f);
+				glBegin(GL_LINES);
+				uint i = 0;
+				uint k = 0;
+				for (uint j = 0; j < (*it)->num_faces; ++j)
+				{
+					float centered_x = ((*it)->vertex[i] + (*it)->vertex[i + 3] + (*it)->vertex[i + 6]) / 3;
+					float centered_y = ((*it)->vertex[i + 1] + (*it)->vertex[i + 4] + (*it)->vertex[i + 7]) / 3;
+					float centered_z = ((*it)->vertex[i + 2] + (*it)->vertex[i + 5] + (*it)->vertex[i + 8]) / 3;
+
+					glVertex3f(centered_x, centered_y, centered_z);
+					glVertex3f(centered_x + (*it)->center_point_normal[k] * App->objects->face_normal_length, centered_y + (*it)->center_point_normal[k + 1] * App->objects->face_normal_length, centered_z + (*it)->center_point_normal[k + 2] * App->objects->face_normal_length);
+					i += 9;
+					k += 3;
+				}
+				glEnd();
+			}
 		}
 	}
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -137,6 +165,36 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 				memcpy(&mesh->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 			}
 		}
+	}
+	if (ai_mesh->HasNormals())
+	{
+		mesh->normals = new float[ai_mesh->mNumVertices * 3];
+		memcpy(mesh->normals, ai_mesh->mNormals, sizeof(float) * ai_mesh->mNumVertices * 3);
+
+		mesh->center_point_normal = new float[ai_mesh->mNumFaces * 3];
+		mesh->num_faces = ai_mesh->mNumFaces;
+		uint i = 0;
+		uint j = 0;
+		for (uint k = 0; k < mesh->num_faces; ++k)
+		{
+			vec3 x0(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]);
+			vec3 x1(mesh->vertex[i + 3], mesh->vertex[i + 4], mesh->vertex[i + 5]);
+			vec3 x2(mesh->vertex[i + 6], mesh->vertex[i + 7], mesh->vertex[i + 8]);
+
+			vec3 v0 = x0 - x2;
+			vec3 v1 = x1 - x2;
+			vec3 n = cross(v0, v1);
+			
+			vec3 normalized = normalize(n);
+
+			mesh->center_point_normal[j] = normalized.x;
+			mesh->center_point_normal[j + 1] = normalized.y;
+			mesh->center_point_normal[j + 2] = normalized.z;
+			i += 9;
+			j += 3;
+		}
+
+		
 	}
 
 	InitGLBuffers(mesh);
