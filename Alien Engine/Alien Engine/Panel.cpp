@@ -24,12 +24,6 @@ void Panel::ChangeEnable()
 		OnPanelDesactive();
 }
 
-const SDL_Scancode& Panel::GetScancodeShortcut(const uint& index)
-{
-	return SDL_SCANCODE_A;
-}
-
-
 bool Panel::IsEnabled()
 {
 	return enabled;

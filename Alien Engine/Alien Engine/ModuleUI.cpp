@@ -66,6 +66,22 @@ bool ModuleUI::CleanUp()
 	return true;
 }
 
+void ModuleUI::LoadConfig(JSONfilepack*& config)
+{
+
+	for (uint i = 0; i < 3; ++i) {
+		panel_config_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", i);
+		panel_about_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", i);
+		panel_create_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
+		panel_console_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", i);
+	}
+
+}
+
+void ModuleUI::SaveConfig(JSONfilepack*& config)
+{
+}
+
 update_status ModuleUI::PreUpdate(float dt)
 {
 
@@ -225,10 +241,10 @@ void ModuleUI::ChangeEnableDemo()
 
 void ModuleUI::InitPanels()
 {
-	panel_about = new PanelAbout("About Alien Engine", SDL_SCANCODE_A, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
-	panel_config = new PanelConfig("Configuration", SDL_SCANCODE_O, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
-	panel_console = new PanelConsole("Console", SDL_SCANCODE_T, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
-	panel_create_object = new PanelCreateObject("Create Object", SDL_SCANCODE_P, SDL_SCANCODE_LCTRL, SDL_SCANCODE_RCTRL);
+	panel_about = new PanelAbout("About Alien Engine", panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
+	panel_config = new PanelConfig("Configuration", panel_config_codes[0], panel_config_codes[1], panel_config_codes[2]);
+	panel_console = new PanelConsole("Console", panel_console_codes[0], panel_console_codes[1], panel_console_codes[2]);
+	panel_create_object = new PanelCreateObject("Create Object", panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);

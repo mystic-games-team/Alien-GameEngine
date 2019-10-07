@@ -2,6 +2,8 @@
 
 #include "Parson/parson.h"
 #include <string>
+#include "Globals.h"
+
 
 class JSONfilepack {
 
@@ -19,6 +21,8 @@ public:
 
 	void SetBoolean(const std::string& name, const bool& boolean);
 	bool GetBoolean(const std::string& name);
+
+	double GetArrayNumber(const std::string& name, const uint& index);
 
 	void SetString(const std::string& name, const std::string& string_parameter);
 	const char* GetString(const std::string& name);

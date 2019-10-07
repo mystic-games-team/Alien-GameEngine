@@ -23,6 +23,10 @@ public:
 	bool Start();
 	update_status PreUpdate(float dt);
 	bool CleanUp();
+	void LoadConfig(JSONfilepack*& config);
+	void SaveConfig(JSONfilepack*& config);
+
+
 	void Draw();
 	void MainMenuBar();
 	void ReportBug();
@@ -55,6 +59,14 @@ private:
 	ShortCut* shortcut_report_bug = nullptr;
 	ShortCut* shortcut_wireframe = nullptr;
 	ShortCut* shortcut_view_mesh = nullptr;
+
+
+
+	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_about_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_create_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_console_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+
 
 public:
 	PanelConfig* panel_config = nullptr;

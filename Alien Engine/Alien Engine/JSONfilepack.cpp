@@ -44,6 +44,12 @@ bool JSONfilepack::GetBoolean(const std::string& name)
 	return json_object_dotget_boolean(object, name.data());
 }
 
+double JSONfilepack::GetArrayNumber(const std::string& name, const uint& index)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+	return json_array_get_number(arr, index);
+}
+
 void JSONfilepack::SetString(const std::string& name, const std::string& string_parameter)
 {
 	json_object_dotset_string(save_object, name.data(), string_parameter.data());

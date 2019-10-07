@@ -20,7 +20,6 @@ public:
 	const std::string& GetName();
 	void ChangeEnable();
 	bool IsEnabled();
-	const SDL_Scancode& GetScancodeShortcut(const uint& index);
 
 private:
 

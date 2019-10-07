@@ -15,6 +15,30 @@
             "Organitzation": "UPC CITM",
             "LimitFPS": 60,
             "CapFPS": true
-        }
+        },
+		"UI": {
+			"ShortCuts": {
+				"PanelConfig": [
+					18,
+					224,
+					228
+				],
+				"PanelAbout": [
+					4,
+					224,
+					228
+				],
+				"PanelConsole": [
+					23,
+					224,
+					228
+				],
+				"PanelCreate": [
+					19,
+					224,
+					228
+				]
+			}
+		}
     }
 }
