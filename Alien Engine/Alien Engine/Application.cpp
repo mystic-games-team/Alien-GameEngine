@@ -11,6 +11,7 @@ Application::Application()
 	ui = new ModuleUI();
 	importer = new ModuleImporter();
 	objects = new ModuleObjects();
+	file_system = new ModuleFileSystem();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -20,6 +21,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(file_system);
 	AddModule(importer);
 	// Scenes
 	AddModule(scene_intro);

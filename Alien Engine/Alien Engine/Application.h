@@ -15,6 +15,7 @@
 #include "JSONfilepack.h"
 #include "ShortCutManager.h"
 #include "ModuleImporter.h"
+#include "ModuleFileSystem.h"
 
 class Application
 {
@@ -28,6 +29,7 @@ public:
 	ModuleImporter* importer = nullptr;
 	ShortCutManager* shortcut_manager = nullptr;
 	ModuleObjects* objects = nullptr;
+	ModuleFileSystem* file_system = nullptr;
 
 	bool fps_cap = true;
 	uint16_t framerate_cap;

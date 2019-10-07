@@ -378,6 +378,9 @@
     <ClInclude Include="Rock.h">
       <Filter>Objects\Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleFileSystem.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -589,6 +592,9 @@
     </ClCompile>
     <ClCompile Include="Rock.cpp">
       <Filter>Objects\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleFileSystem.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

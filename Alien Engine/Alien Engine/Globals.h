@@ -18,6 +18,26 @@ void log(const char file[], int line, const char* format, ...);
 #define HAVE_M_PI
 #define ALIEN_ENGINE_VERSION 0.1
 
+
+#define RELEASE( x )\
+    {\
+       if( x != nullptr )\
+       {\
+         delete x;\
+	     x = nullptr;\
+       }\
+    }
+
+// Deletes an array of buffers
+#define RELEASE_ARRAY( x )\
+	{\
+       if( x != nullptr )\
+       {\
+           delete[] x;\
+	       x = nullptr;\
+		 }\
+	 }
+
 typedef unsigned int uint;
 
 enum update_status
