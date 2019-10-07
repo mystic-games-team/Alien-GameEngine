@@ -24,28 +24,30 @@ void PanelCreateObject::PanelLogic()
 	static int objects_combo = 0;
 
 	ImGui::OpenPopup(panel_name.c_str());
-	ImGui::SetNextWindowSize({ 300,150 });
-	if (ImGui::BeginPopupModal(panel_name.c_str(), &enabled, ImGuiWindowFlags_NoResize))
+	ImGui::SetNextWindowContentWidth(200);
+	if (ImGui::BeginPopupModal(panel_name.c_str(), &enabled, ImGuiWindowFlags_NoResize| ImGuiWindowFlags_AlwaysAutoResize))
 	{
+		LOG("%f", ImGui::GetWindowWidth());
 		ImGui::Spacing();
 		ImGui::Spacing();
-		ImGui::Spacing();
-		ImGui::Spacing();
-		ImGui::Columns(3,0,false);
-		ImGui::SetColumnWidth(0, 100);
-		ImGui::SetColumnWidth(1, 80);
-		ImGui::SetColumnWidth(2, 80);
-		ImGui::Text("");  ImGui::SameLine(0,20);
-		ImGui::Text("X:");  ImGui::SameLine(0, 0); ImGui::PushItemWidth(60); ImGui::InputFloat("x", &x, 0, 0, 2);
-		ImGui::NextColumn();
-		ImGui::Text("Y:"); ImGui::SameLine(0,0); ImGui::PushItemWidth(60); ImGui::InputFloat("y", &y, 0, 0, 2);
-		ImGui::NextColumn();
-		ImGui::Text("Z:"); ImGui::SameLine(0,0); ImGui::PushItemWidth(60); ImGui::InputFloat("z", &z, 0, 0, 2);
-		ImGui::Columns(1);
+
+		ImGui::PushItemWidth(100);
+		ImGui::Text("Object:  "); ImGui::SameLine();
+		ImGui::PushItemWidth(100);
+		ImGui::Combo("", &objects_combo, "Cube\0Sphere\0Rock\0");
 
 		ImGui::Spacing();
 		ImGui::Spacing();
-		ImGui::Spacing();
+
+
+		ImGui::Columns(3,0,false);
+		ImGui::Text("X:");  ImGui::SameLine(0, 0); ImGui::PushItemWidth(40); ImGui::InputFloat("##x", &x, 0, 0, 2);
+		ImGui::NextColumn();
+		ImGui::Text("Y:"); ImGui::SameLine(0,0); ImGui::PushItemWidth(40); ImGui::InputFloat("##y", &y, 0, 0, 2);
+		ImGui::NextColumn();
+		ImGui::Text("Z:"); ImGui::SameLine(0,0); ImGui::PushItemWidth(40); ImGui::InputFloat("##z", &z, 0, 0, 2);
+		ImGui::Columns(1);
+
 		ImGui::Spacing();
 		ImGui::Spacing();
 
@@ -53,16 +55,31 @@ void PanelCreateObject::PanelLogic()
 
 		ImGui::Spacing();
 		ImGui::Spacing();
-		ImGui::Spacing();
-		ImGui::Spacing();
-		ImGui::Spacing();
 
-		ImGui::Text("Object:  "); ImGui::SameLine();
-		ImGui::PushItemWidth(100);
-		ImGui::Combo("", &objects_combo, "Cube\0Sphere\0Rock\0");
+		switch (objects_combo)
+		{
+		case 0: 
+			break;
+		case 1:
+			ImGui::Text("Subdivions:"); ImGui::SameLine();
+			ImGui::SliderInt("##subdivisions", &subdivions, 1, 5);
+			ImGui::Spacing();
+			ImGui::Spacing();
+			break;
+		case 2:
+			ImGui::Text("Subdivions:"); ImGui::SameLine();
+			ImGui::SliderInt("##slider int", &subdivions, 1, 5);
 
-		ImGui::SameLine(0,30);
-		if (ImGui::Button("Create", { 50,20 }))
+			ImGui::Text("Seed:"); ImGui::SameLine();
+			ImGui::InputInt("##input int", &seed,0,0);
+			ImGui::Spacing();
+			ImGui::Spacing();
+			break;
+		}
+
+		LOG("%f", ImGui::GetWindowWidth());
+
+		if (ImGui::Button("Create", { ImGui::GetWindowWidth()-16,25 }))
 		{
 			switch (objects_combo)
 			{
@@ -75,36 +92,20 @@ void PanelCreateObject::PanelLogic()
 				x = y = z = 0;
 				subdivions = 5;
 				break;
-			case 2: 
+			case 2:
 				App->objects->CreatePrimitive(PrimitiveType::ROCK, x, y, z, subdivions, seed);
 				x = y = z = seed = 0;
 				subdivions = 5;
 				break;
 			}
 
-			
+
 			ChangeEnable();
 		}
 
+
 		ImGui::Spacing();
 		ImGui::Spacing();
-
-		switch (objects_combo)
-		{
-		case 0: 
-			break;
-		case 1:
-			ImGui::Text("Subdivions:"); ImGui::SameLine();
-			ImGui::SliderInt("", &subdivions, 1, 5);
-			break;
-		case 2:
-			ImGui::Text("Subdivions:"); ImGui::SameLine();
-			ImGui::SliderInt("##slider int", &subdivions, 1, 5);
-
-			ImGui::Text("Seed:"); ImGui::SameLine();
-			ImGui::InputInt("##input int", &seed,0,0);
-			break;
-		}
 
 		ImGui::EndPopup();
 	}
