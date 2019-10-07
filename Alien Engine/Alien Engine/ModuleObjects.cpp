@@ -117,23 +117,21 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float
 	case PrimitiveType::CUBE:
 		ret = new Cube(position_x, position_y, position_z);
 		ret->type = PrimitiveType::CUBE;
-		objects.push_back(ret);
 		break;
 	case PrimitiveType::SPHERE_ALIEN:
 		ret = new Sphere_Alien(position_x, position_y, position_z, subdivisions);
 		ret->type = PrimitiveType::SPHERE_ALIEN;
-		objects.push_back(ret);
 		break;
 	case PrimitiveType::ROCK:
 		ret = new Rock(position_x, position_y, position_z, subdivisions, extra);
 		ret->type = PrimitiveType::ROCK;
-		objects.push_back(ret);
 		break;
 	}
 
 	if (ret != nullptr)
 	{
 		static_cast<Object*>(ret)->type = ObjectType::PRIMITIVE;
+		objects.push_back(ret);
 	}
 
 	return ret;
@@ -148,6 +146,21 @@ void ModuleObjects::ChangeWireframeMode()
 void ModuleObjects::ChangeViewMeshMode()
 {
 	view_mesh_mode = !view_mesh_mode;
+}
+
+void ModuleObjects::DeleteAllObjects() 
+{
+	std::vector<Object*>::iterator iter;
+	for (iter = objects.begin(); iter != objects.end(); ++iter)
+	{
+		if ((*iter) != nullptr)
+		{
+			delete (*iter);
+			(*iter) = nullptr;
+		}
+	}
+
+	objects.clear();
 }
 
 

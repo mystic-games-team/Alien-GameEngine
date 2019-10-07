@@ -25,6 +25,8 @@ public:
 	void ChangeWireframeMode();
 	void ChangeViewMeshMode();
 
+	void DeleteAllObjects();
+
 public:
 	std::vector<Object*> objects;
 

@@ -85,6 +85,15 @@ void ModuleUI::Draw() {
 	MainMenuBar();
 	UpdatePanels();
 
+	if (App->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN) {
+		for (int i = 0;i<100;++i)
+			App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN);
+
+	}
+	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+		App->objects->DeleteAllObjects();
+
+	}
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -159,7 +168,7 @@ void ModuleUI::MainMenuBar()
 			}
 			ImGui::EndMenu();
 		}
-		if (ImGui::MenuItem("Create...",panel_create_object->shortcut->GetNameScancodes()))
+		if (ImGui::MenuItem("Create...", panel_create_object->shortcut->GetNameScancodes()))
 		{
 			panel_create_object->ChangeEnable();
 		}
