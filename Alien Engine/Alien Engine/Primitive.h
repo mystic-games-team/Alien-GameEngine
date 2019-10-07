@@ -8,6 +8,10 @@ enum class PrimitiveType
 	CUBE,
 	SPHERE_ALIEN,
 	ROCK,
+	DODECAHEDRON,
+	OCTAHEDRON,
+	TORUS,
+	ICOSAHEDRON,
 
 	UNKONWN
 };

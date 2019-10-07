@@ -22,7 +22,7 @@ public:
 	void SaveConfig(JSONfilepack*& config);
 
 	// Subdivions only for Sphere and Rock, and extra only for Rock seed
-	Primitive* CreatePrimitive(const PrimitiveType& type, const float& position_x = 0, const float& position_y = 0, const float& position_z = 0, const uint& subdivions = 5, const uint& extra = 0);
+	Primitive* CreatePrimitive(const PrimitiveType& type, const float& position_x = 0, const float& position_y = 0, const float& position_z = 0, const uint & subdivions = 5, const uint & seed = 0, const uint & slices = 10, const uint & slacks = 10, const float& radious = 0.5);
 
 	void ChangeWireframeMode();
 	void ChangeViewMeshMode();

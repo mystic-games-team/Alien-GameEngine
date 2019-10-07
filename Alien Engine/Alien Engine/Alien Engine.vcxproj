@@ -133,6 +133,7 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Dodecahedron.h" />
     <ClInclude Include="glew\include\eglew.h" />
     <ClInclude Include="glew\include\glew.h" />
     <ClInclude Include="glew\include\glxew.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="gpudetect\DeviceId.h" />
     <ClInclude Include="gpudetect\dxgi1_4.h" />
+    <ClInclude Include="Icosahedron.h" />
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h" />
     <ClInclude Include="imgui\examples\imgui_impl_sdl.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -225,6 +227,7 @@
     <ClInclude Include="ModuleUI.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Objects.h" />
+    <ClInclude Include="Octahedron.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PanelConfig.h" />
@@ -241,13 +244,16 @@
     <ClInclude Include="ShortCutManager.h" />
     <ClInclude Include="Sphere_Alien.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Torus_Alien.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Dodecahedron.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="gpudetect\DeviceId.cpp" />
+    <ClCompile Include="Icosahedron.cpp" />
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\examples\imgui_impl_sdl.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -302,6 +308,7 @@
     <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Objects.cpp" />
+    <ClCompile Include="Octahedron.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfig.cpp" />
@@ -314,6 +321,7 @@
     <ClCompile Include="ShortCutManager.cpp" />
     <ClCompile Include="Sphere_Alien.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Torus_Alien.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Game\Configuration\CustomConfiguration.json" />
