@@ -59,6 +59,12 @@
                     228
                 ]
             }
-        }
+        },
+		"Renderer": {
+			"Wireframe": false,
+			"MeshView": true,
+			"VertexNormals": true,
+			"FaceNormals": true
+		}
     }
 }

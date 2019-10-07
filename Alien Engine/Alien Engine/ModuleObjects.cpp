@@ -163,4 +163,20 @@ void ModuleObjects::DeleteAllObjects()
 	objects.clear();
 }
 
+void ModuleObjects::LoadConfig(JSONfilepack*& config) 
+{
+	wireframe_mode = config->GetBoolean("Configuration.Renderer.Wireframe");
+	view_mesh_mode = config->GetBoolean("Configuration.Renderer.MeshView");
+	draw_vertex_normals = config->GetBoolean("Configuration.Renderer.VertexNormals");
+	draw_face_normals = config->GetBoolean("Configuration.Renderer.FaceNormals");
+}
+
+void ModuleObjects::SaveConfig(JSONfilepack*& config)
+{
+	config->SetBoolean("Configuration.Renderer.Wireframe", wireframe_mode);
+	config->SetBoolean("Configuration.Renderer.MeshView", view_mesh_mode);
+	config->SetBoolean("Configuration.Renderer.VertexNormals", draw_vertex_normals);
+	config->SetBoolean("Configuration.Renderer.FaceNormals", draw_face_normals);
+}
+
 

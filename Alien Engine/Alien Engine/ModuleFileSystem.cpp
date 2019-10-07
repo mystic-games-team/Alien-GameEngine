@@ -466,6 +466,8 @@ const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_
 
 	if (strcmp(extension.data(), "fbx"))
 		ext_type = FileDropType::MODEL3D;
+	else if (strcmp(extension.data(), "FBX"))
+		ext_type = FileDropType::MODEL3D;
 	else
 		LOG("Extension unknown!");
 
