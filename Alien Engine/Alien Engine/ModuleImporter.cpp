@@ -72,18 +72,18 @@ update_status ModuleImporter::Update(float dt)
 			if (App->objects->draw_face_normals) { // face normals
 				glColor3f(1.0f, 0.0f, 1.0f);
 				glBegin(GL_LINES);
-				uint i = 0;
-				uint k = 0;
-				for (uint j = 0; j < (*it)->num_faces; ++j)
+				for (uint i = 0; i < (*it)->num_index; i += 3)
 				{
-					float centered_x = ((*it)->vertex[i] + (*it)->vertex[i + 3] + (*it)->vertex[i + 6]) / 3;
-					float centered_y = ((*it)->vertex[i + 1] + (*it)->vertex[i + 4] + (*it)->vertex[i + 7]) / 3;
-					float centered_z = ((*it)->vertex[i + 2] + (*it)->vertex[i + 5] + (*it)->vertex[i + 8]) / 3;
+					uint index1 = (*it)->index[i] * 3;
+					uint index2 = (*it)->index[i + 1] * 3;
+					uint index3 = (*it)->index[i + 2] * 3;
+
+					float centered_x = ((*it)->vertex[index1] + (*it)->vertex[index2] + (*it)->vertex[index3]) / 3;
+					float centered_y = ((*it)->vertex[index1 + 1] + (*it)->vertex[index2 + 1] + (*it)->vertex[index3 + 1]) / 3;
+					float centered_z = ((*it)->vertex[index1 + 2] + (*it)->vertex[index2 + 2] + (*it)->vertex[index3 + 2]) / 3;
 
 					glVertex3f(centered_x, centered_y, centered_z);
-					glVertex3f(centered_x + (*it)->center_point_normal[k] * App->objects->face_normal_length, centered_y + (*it)->center_point_normal[k + 1] * App->objects->face_normal_length, centered_z + (*it)->center_point_normal[k + 2] * App->objects->face_normal_length);
-					i += 9;
-					k += 3;
+					glVertex3f(centered_x + (*it)->center_point_normal[i] * App->objects->face_normal_length, centered_y + (*it)->center_point_normal[i+ 1] * App->objects->face_normal_length, centered_z + (*it)->center_point_normal[i + 2] * App->objects->face_normal_length);
 				}
 				glEnd();
 			}
@@ -173,13 +173,15 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 
 		mesh->center_point_normal = new float[ai_mesh->mNumFaces * 3];
 		mesh->num_faces = ai_mesh->mNumFaces;
-		uint i = 0;
-		uint j = 0;
-		for (uint k = 0; k < mesh->num_faces; ++k)
+		for (uint i = 0; i < mesh->num_index; i += 3)
 		{
-			vec3 x0(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]);
-			vec3 x1(mesh->vertex[i + 3], mesh->vertex[i + 4], mesh->vertex[i + 5]);
-			vec3 x2(mesh->vertex[i + 6], mesh->vertex[i + 7], mesh->vertex[i + 8]);
+			uint index1 = mesh->index[i] * 3;
+			uint index2 = mesh->index[i + 1] * 3;
+			uint index3 = mesh->index[i + 2] * 3;
+
+			vec3 x0(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
+			vec3 x1(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
+			vec3 x2(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
 
 			vec3 v0 = x0 - x2;
 			vec3 v1 = x1 - x2;
@@ -187,11 +189,9 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 			
 			vec3 normalized = normalize(n);
 
-			mesh->center_point_normal[j] = normalized.x;
-			mesh->center_point_normal[j + 1] = normalized.y;
-			mesh->center_point_normal[j + 2] = normalized.z;
-			i += 9;
-			j += 3;
+			mesh->center_point_normal[i] = normalized.x;
+			mesh->center_point_normal[i + 1] = normalized.y;
+			mesh->center_point_normal[i + 2] = normalized.z;
 		}
 
 		
