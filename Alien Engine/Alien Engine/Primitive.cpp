@@ -2,6 +2,8 @@
 #include "Shapes.h"
 #include "glew/include/glew.h"
 
+#include "Rock.h"
+
 Primitive::Primitive() : Object()
 {
 }
@@ -54,7 +56,6 @@ void Primitive::SetPosition(const float& position_x, const float& position_y, co
 void Primitive::SetSubdivisions(const int & subdivisions)
 {
 	par_shapes_free_mesh(shape);
-	RestartBuffers();
 	this->subdivisions = subdivisions;
 	if (type == PrimitiveType::SPHERE_ALIEN)
 	{
@@ -62,7 +63,8 @@ void Primitive::SetSubdivisions(const int & subdivisions)
 	}
 	else if (type == PrimitiveType::ROCK)
 	{
-		par_shapes_create_rock((static_cast<uint>(shape)->seed,subdivisions);
+		par_shapes_create_rock((static_cast<Rock*>(this)->seed),subdivisions);
 	}
+	RestartBuffers();
 }
 
