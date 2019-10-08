@@ -41,5 +41,6 @@ public:
 	bool draw_face_normals = true;
 
 	Color mesh_color{ 1,1,1,255 };
+	int mesh_line_width = 1;
 
 };

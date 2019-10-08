@@ -24,9 +24,11 @@ void PanelRender::PanelLogic()
 		if (ImGui::Checkbox(" Wireframe Mode", &App->objects->wireframe_mode)) {
 			App->objects->view_mesh_mode = true;
 		}
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(50);
+		ImGui::SliderInt("Mesh Line Width", &App->objects->mesh_line_width, 1, 30);
 		ImGui::Spacing();
 		ImGui::ColorEdit3("Mesh Color", (float*)& App->objects->mesh_color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
-
 	}
 	if (ImGui::CollapsingHeader("Background Color")) {
 

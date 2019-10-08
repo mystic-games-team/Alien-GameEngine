@@ -86,8 +86,11 @@ update_status ModuleObjects::PostUpdate(float dt)
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				// draw model lines
 				glColor3f(mesh_color.r, mesh_color.g, mesh_color.b);
+				glLineWidth(mesh_line_width);
 
 				(*item)->Draw();
+
+				glLineWidth(1);
 			}
 		}
 

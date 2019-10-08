@@ -49,12 +49,15 @@ update_status ModuleImporter::Update(float dt)
 
 				// draw model lines
 				glColor3f(App->objects->mesh_color.r, App->objects->mesh_color.g, App->objects->mesh_color.b);
+				glLineWidth(App->objects->mesh_line_width);
 
 				glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
 				glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 				glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
+
+				glLineWidth(1);
 			}
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
