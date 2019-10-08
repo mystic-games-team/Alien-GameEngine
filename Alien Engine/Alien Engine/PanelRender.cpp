@@ -1,4 +1,5 @@
 #include "PanelRender.h"
+#include "Color.h"
 
 PanelRender::PanelRender(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -14,9 +15,17 @@ void PanelRender::PanelLogic()
 {
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
 
-	if (ImGui::Checkbox("##CheckBox", &App->objects->view_mesh_mode));
+	
 
 	if (ImGui::CollapsingHeader("Mesh Settings")) {
+		ImGui::Spacing();
+		ImGui::Checkbox(" View Mesh", &App->objects->view_mesh_mode);
+		ImGui::SameLine();
+		if (ImGui::Checkbox(" Wireframe Mode", &App->objects->wireframe_mode)) {
+			App->objects->view_mesh_mode = true;
+		}
+		ImGui::Spacing();
+		ImGui::ColorEdit3("Mesh Color", (float*)& App->objects->mesh_color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
 
 	}
 	if (ImGui::CollapsingHeader("Background Color")) {

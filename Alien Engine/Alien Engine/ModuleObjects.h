@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include "Objects.h"
 #include "Primitive.h"
-
+#include "Color.h"
 #include <vector>
 
 class ModuleObjects : public Module
@@ -39,5 +39,7 @@ public:
 	uint face_normal_length = 1;
 	bool draw_vertex_normals = true;
 	bool draw_face_normals = true;
+
+	Color mesh_color{ 1,1,1,255 };
 
 };

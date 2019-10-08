@@ -48,7 +48,7 @@ update_status ModuleImporter::Update(float dt)
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 				// draw model lines
-				glColor3f(1.0f, 1.0f, 1.0f);
+				glColor3f(App->objects->mesh_color.r, App->objects->mesh_color.g, App->objects->mesh_color.b);
 
 				glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);

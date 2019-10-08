@@ -85,7 +85,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			if (wireframe_mode || view_mesh_mode) {
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				// draw model lines
-				glColor3f(1.0f, 1.0f, 1.0f);
+				glColor3f(mesh_color.r, mesh_color.g, mesh_color.b);
 
 				(*item)->Draw();
 			}
