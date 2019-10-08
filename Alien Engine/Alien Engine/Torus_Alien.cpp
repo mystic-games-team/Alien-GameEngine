@@ -10,7 +10,7 @@ Torus_Alien::Torus_Alien() : Primitive()
 	InitBuffers();
 }
 
-Torus_Alien::Torus_Alien(const float& x, const float& y, const float& z, const int& slices, const int& stacks, const float& radius) : Primitive()
+Torus_Alien::Torus_Alien(const float& x, const float& y, const float& z, const uint& slices, const uint& stacks, const float& radius) : Primitive()
 {
 	this->slices = slices;
 	this->stacks = stacks;

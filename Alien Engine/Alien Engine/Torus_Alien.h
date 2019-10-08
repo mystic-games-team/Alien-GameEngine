@@ -7,7 +7,7 @@ class Torus_Alien :public Primitive
 public:
 
 	Torus_Alien();
-	Torus_Alien(const float& x, const float& y, const float& z, const int& slices, const int& stacks, const float& radius);
+	Torus_Alien(const float& x, const float& y, const float& z, const uint& slices, const uint& stacks, const float& radius);
 	~Torus_Alien();
 
 	void SetParameters(const int& slices, const int& stacks, const float& radius);

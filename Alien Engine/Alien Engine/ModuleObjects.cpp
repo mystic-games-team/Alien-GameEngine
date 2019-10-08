@@ -157,6 +157,42 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type)
 	return ret;
 }
 
+Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint & subdivisions = 5, const uint & seed = 0, const uint & slices = 5, const uint & slacks = 5, const float & radius = 0.5)
+{
+	Primitive* ret = nullptr;
+	switch (type)
+	{
+	case PrimitiveType::CUBE:
+		ret = new Cube(position_x, position_y, position_z);
+		ret->type = PrimitiveType::CUBE;
+		break;
+	case PrimitiveType::SPHERE_ALIEN:
+		ret = new Sphere_Alien(position_x, position_y, position_z, subdivisions);
+		ret->type = PrimitiveType::SPHERE_ALIEN;
+		break;
+	case PrimitiveType::ROCK:
+		ret = new Rock(position_x, position_y, position_z, seed, subdivisions);
+		ret->type = PrimitiveType::ROCK;
+		break;
+	case PrimitiveType::DODECAHEDRON:
+		ret = new Dodecahedron(position_x, position_y, position_z);
+		ret->type = PrimitiveType::DODECAHEDRON;
+		break;
+	case PrimitiveType::OCTAHEDRON:
+		ret = new Octahedron(position_x, position_y, position_z);
+		ret->type = PrimitiveType::OCTAHEDRON;
+		break;
+	case PrimitiveType::ICOSAHEDRON:
+		ret = new Icosahedron(position_x, position_y, position_z);
+		ret->type = PrimitiveType::ICOSAHEDRON;
+		break;
+	case PrimitiveType::TORUS:
+		ret = new Torus_Alien(position_x, position_y, position_z, slices, slacks, radius);
+		ret->type = PrimitiveType::TORUS;
+		break;
+	}
+}
+
 void ModuleObjects::ChangeWireframeMode()
 {
 	view_mesh_mode = true;

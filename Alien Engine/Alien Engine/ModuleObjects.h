@@ -23,6 +23,8 @@ public:
 
 	Primitive* CreatePrimitive(const PrimitiveType& type);
 
+	Primitive* CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint & subdivisions, const uint & seed, const uint & slices, const uint & slacks, const float & radius);
+
 	void ChangeWireframeMode();
 	void ChangeViewMeshMode();
 

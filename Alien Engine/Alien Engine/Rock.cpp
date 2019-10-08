@@ -10,7 +10,7 @@ Rock::Rock() : Primitive()
 	InitBuffers();
 }
 
-Rock::Rock(const float& x, const float& y, const float& z, const uint& seed, const int& subdivisions) : Primitive()
+Rock::Rock(const float& x, const float& y, const float& z, const uint& seed, const uint& subdivisions) : Primitive()
 {
 	this->seed = seed;
 	this->subdivisions = subdivisions;
