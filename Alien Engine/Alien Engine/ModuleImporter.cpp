@@ -74,16 +74,8 @@ update_status ModuleImporter::Update(float dt)
 				glBegin(GL_LINES);
 				for (uint i = 0; i < (*it)->num_index; i += 3)
 				{
-					uint index1 = (*it)->index[i] * 3;
-					uint index2 = (*it)->index[i + 1] * 3;
-					uint index3 = (*it)->index[i + 2] * 3;
-
-					float centered_x = ((*it)->vertex[index1] + (*it)->vertex[index2] + (*it)->vertex[index3]) / 3;
-					float centered_y = ((*it)->vertex[index1 + 1] + (*it)->vertex[index2 + 1] + (*it)->vertex[index3 + 1]) / 3;
-					float centered_z = ((*it)->vertex[index1 + 2] + (*it)->vertex[index2 + 2] + (*it)->vertex[index3 + 2]) / 3;
-
-					glVertex3f(centered_x, centered_y, centered_z);
-					glVertex3f(centered_x + (*it)->center_point_normal[i] * App->objects->face_normal_length, centered_y + (*it)->center_point_normal[i+ 1] * App->objects->face_normal_length, centered_z + (*it)->center_point_normal[i + 2] * App->objects->face_normal_length);
+					glVertex3f((*it)->center_point[i], (*it)->center_point[i + 1], (*it)->center_point[i + 2]);
+					glVertex3f((*it)->center_point[i] + (*it)->center_point_normal[i] * App->objects->face_normal_length, (*it)->center_point[i + 1] + (*it)->center_point_normal[i+ 1] * App->objects->face_normal_length, (*it)->center_point[i + 2] + (*it)->center_point_normal[i + 2] * App->objects->face_normal_length);
 				}
 				glEnd();
 			}
@@ -172,6 +164,7 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 		memcpy(mesh->normals, ai_mesh->mNormals, sizeof(float) * ai_mesh->mNumVertices * 3);
 
 		mesh->center_point_normal = new float[ai_mesh->mNumFaces * 3];
+		mesh->center_point = new float[ai_mesh->mNumFaces * 3];
 		mesh->num_faces = ai_mesh->mNumFaces;
 		for (uint i = 0; i < mesh->num_index; i += 3)
 		{
@@ -188,6 +181,10 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 			vec3 n = cross(v0, v1);
 			
 			vec3 normalized = normalize(n);
+
+			mesh->center_point[i] = (x0.x + x1.x + x2.x) / 3;
+			mesh->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
+			mesh->center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
 
 			mesh->center_point_normal[i] = normalized.x;
 			mesh->center_point_normal[i + 1] = normalized.y;

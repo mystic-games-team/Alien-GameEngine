@@ -19,8 +19,10 @@ struct Mesh {
 		delete[] normals;
 		delete[] texture_cords;
 		delete[] center_point_normal;
+		delete[] center_point;
 
 		center_point_normal = nullptr;
+		center_point = nullptr;
 		index = nullptr;
 		vertex = nullptr;
 		normals = nullptr;
@@ -41,6 +43,7 @@ struct Mesh {
 	float* normals = nullptr;
 
 	float* center_point_normal = nullptr;
+	float* center_point = nullptr;
 	uint num_faces = 0;
 
 	float* texture_cords = nullptr; 
