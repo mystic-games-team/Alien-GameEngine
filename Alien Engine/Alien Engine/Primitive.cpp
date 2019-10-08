@@ -63,8 +63,11 @@ void Primitive::SetSubdivisions(const int & subdivisions)
 	}
 	else if (type == PrimitiveType::ROCK)
 	{
-		par_shapes_create_rock((static_cast<Rock*>(this)->seed),subdivisions);
+		par_shapes_create_rock((static_cast<Rock*>(this)->seed), subdivisions);
 	}
+	else
+		assert("No type allowed");
+
 	RestartBuffers();
 }
 
