@@ -191,6 +191,13 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float
 		ret->type = PrimitiveType::TORUS;
 		break;
 	}
+	if (ret != nullptr)
+	{
+		static_cast<Object*>(ret)->type = ObjectType::PRIMITIVE;
+		objects.push_back(ret);
+	}
+
+	return ret;
 }
 
 void ModuleObjects::ChangeWireframeMode()
