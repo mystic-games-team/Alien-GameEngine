@@ -233,6 +233,7 @@
     <ClInclude Include="PanelConfig.h" />
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="PanelCreateObject.h" />
+    <ClInclude Include="PanelRender.h" />
     <ClInclude Include="Parson\parson.h" />
     <ClInclude Include="PCG\pcg_extras.hpp" />
     <ClInclude Include="PCG\pcg_random.hpp" />
@@ -314,6 +315,7 @@
     <ClCompile Include="PanelConfig.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PanelCreateObject.cpp" />
+    <ClCompile Include="PanelRender.cpp" />
     <ClCompile Include="Parson\parson.c" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Rock.cpp" />

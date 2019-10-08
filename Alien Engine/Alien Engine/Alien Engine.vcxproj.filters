@@ -393,6 +393,9 @@
     <ClInclude Include="Torus_Alien.h">
       <Filter>Objects\Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="PanelRender.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -619,6 +622,9 @@
     </ClCompile>
     <ClCompile Include="Torus_Alien.cpp">
       <Filter>Objects\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelRender.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

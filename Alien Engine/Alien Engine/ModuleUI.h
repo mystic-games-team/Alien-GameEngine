@@ -12,6 +12,8 @@ class PanelConfig;
 class PanelAbout;
 class PanelConsole;
 class PanelCreateObject;
+class PanelRender;
+
 struct ShortCut;
 
 class ModuleUI : public Module
@@ -52,6 +54,7 @@ private:
 	PanelAbout* panel_about = nullptr;
 	PanelConsole* panel_console = nullptr;
 	PanelCreateObject* panel_create_object = nullptr;
+	PanelRender* panel_render = nullptr;
 
 	// ShortCuts
 
@@ -66,6 +69,7 @@ private:
 	SDL_Scancode panel_about_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_create_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_console_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_render_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_demo_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_report_bug_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_wireframe_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
