@@ -34,6 +34,8 @@
 #include <math.h>
 #include <errno.h>
 
+typedef unsigned int uint;
+
 #ifndef PAR_PI
 #define PAR_PI (3.14159265359)
 #define PAR_MIN(a, b) (a > b ? b : a)
@@ -44,7 +46,7 @@
 #endif
 
 #ifndef PAR_SHAPES_T
-#define PAR_SHAPES_T uint16_t
+#define PAR_SHAPES_T uint
 #endif
 
 #ifndef PAR_MALLOC
