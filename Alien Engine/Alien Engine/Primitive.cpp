@@ -2,7 +2,7 @@
 #include "Shapes.h"
 #include "glew/include/glew.h"
 
-Primitive::Primitive(const float& position_x, const float& position_y, const float& position_z) : Object(position_x,position_y,position_z)
+Primitive::Primitive() : Object()
 {
 }
 
@@ -37,3 +37,32 @@ void Primitive::MemCpy()
 	memcpy(index, shape->triangles, sizeof(PAR_SHAPES_T) * num_index * 3);
 
 }
+
+void Primitive::RestartBuffers()
+{
+	delete[] vertex;
+	delete[] index;
+	MemCpy();
+	InitBuffers();
+}
+
+void Primitive::SetPosition(const float& position_x, const float& position_y, const float& position_z)
+{
+	par_shapes_translate(shape, position_x, position_y, position_z);
+}
+
+void Primitive::SetSubdivisions(const int & subdivisions)
+{
+	par_shapes_free_mesh(shape);
+	RestartBuffers();
+	this->subdivisions = subdivisions;
+	if (type == PrimitiveType::SPHERE_ALIEN)
+	{
+		par_shapes_create_subdivided_sphere(subdivisions);
+	}
+	else if (type == PrimitiveType::ROCK)
+	{
+		par_shapes_create_rock((static_cast<uint>(shape)->seed,subdivisions);
+	}
+}
+

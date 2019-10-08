@@ -113,37 +113,37 @@ bool ModuleObjects::CleanUp()
 	return true;
 }
 
-Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint &subdivisions, const uint &extra, const uint& slices, const uint& slacks, const float& radious)
+Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type)
 {
 	Primitive* ret = nullptr;
 	switch (type)
 	{
 	case PrimitiveType::CUBE:
-		ret = new Cube(position_x, position_y, position_z);
+		ret = new Cube();
 		ret->type = PrimitiveType::CUBE;
 		break;
 	case PrimitiveType::SPHERE_ALIEN:
-		ret = new Sphere_Alien(position_x, position_y, position_z, subdivisions);
+		ret = new Sphere_Alien();
 		ret->type = PrimitiveType::SPHERE_ALIEN;
 		break;
 	case PrimitiveType::ROCK:
-		ret = new Rock(position_x, position_y, position_z, subdivisions, extra);
+		ret = new Rock();
 		ret->type = PrimitiveType::ROCK;
 		break;
 	case PrimitiveType::DODECAHEDRON:
-		ret = new Dodecahedron(position_x, position_y, position_z);
+		ret = new Dodecahedron();
 		ret->type = PrimitiveType::DODECAHEDRON;
 		break;
 	case PrimitiveType::OCTAHEDRON:
-		ret = new Octahedron(position_x, position_y, position_z);
+		ret = new Octahedron();
 		ret->type = PrimitiveType::OCTAHEDRON;
 		break;
 	case PrimitiveType::ICOSAHEDRON:
-		ret = new Icosahedron(position_x, position_y, position_z);
+		ret = new Icosahedron();
 		ret->type = PrimitiveType::ICOSAHEDRON;
 		break;
 	case PrimitiveType::TORUS:
-		ret = new Torus_Alien(position_x, position_y, position_z, slices, slacks, radious);
+		ret = new Torus_Alien();
 		ret->type = PrimitiveType::TORUS;
 		break;
 	}

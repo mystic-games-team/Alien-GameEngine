@@ -14,7 +14,7 @@ enum class ObjectType
 class Object
 {
 public:
-	Object(const float& position_x, const float& position_y, const float& position_z);
+	Object();
 	virtual ~Object();
 
 	void ChangeEnable();
@@ -23,6 +23,8 @@ public:
 	void Draw();
 
 	vec3 GetPosition();
+
+	
 
 protected:
 	bool enabled = true;

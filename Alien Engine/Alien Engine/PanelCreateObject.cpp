@@ -84,16 +84,16 @@ void PanelCreateObject::PanelLogic()
 			switch (objects_combo)
 			{
 			case 0:
-				App->objects->CreatePrimitive(PrimitiveType::CUBE, x, y, z);
+				App->objects->CreatePrimitive(PrimitiveType::CUBE);
 				x = y = z = 0;
 				break;
 			case 1:
-				App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN, x, y, z, subdivions);
+				App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN);
 				x = y = z = 0;
 				subdivions = 5;
 				break;
 			case 2:
-				App->objects->CreatePrimitive(PrimitiveType::ROCK, x, y, z, subdivions, seed);
+				App->objects->CreatePrimitive(PrimitiveType::ROCK);
 				x = y = z = seed = 0;
 				subdivions = 5;
 				break;
