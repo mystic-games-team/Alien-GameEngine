@@ -115,7 +115,7 @@ void ModuleUI::Draw() {
 	UpdatePanels();
 
 	if (App->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN) {
-		for (int i = 0;i<100;++i)
+		for (int i = 0;i<10;++i)
 			App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN);
 
 	}

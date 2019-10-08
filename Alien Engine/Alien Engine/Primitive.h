@@ -36,6 +36,6 @@ protected:
 
 protected:
 	par_shapes_mesh* shape = nullptr;
-	int subdivisions = 10;
+	int subdivisions = 5;
 
 };

@@ -1,5 +1,4 @@
 #include "ModuleImporter.h"
-#include "glew/include/glew.h"
 #include "Application.h"
 #include "ModuleObjects.h"
 
@@ -190,8 +189,6 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 			mesh->center_point_normal[i + 1] = normalized.y;
 			mesh->center_point_normal[i + 2] = normalized.z;
 		}
-
-		
 	}
 
 	InitGLBuffers(mesh);

@@ -9,6 +9,9 @@ Object::Object()
 Object::~Object()
 {
 
+	glDeleteBuffers(num_vertex, &id_vertex);
+	glDeleteBuffers(num_index, &id_index);
+
 	delete[] vertex;
 	delete[] index;
 

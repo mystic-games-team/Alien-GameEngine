@@ -10,10 +10,15 @@
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 #include <vector>
+#include "glew/include/glew.h"
 
 struct Mesh {
 
 	~Mesh() {
+
+		glDeleteBuffers(num_vertex, &id_vertex);
+		glDeleteBuffers(num_index, &id_index);
+
 		delete[] index;
 		delete[] vertex;
 		delete[] normals;
