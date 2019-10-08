@@ -10,11 +10,22 @@ Torus_Alien::Torus_Alien() : Primitive()
 	InitBuffers();
 }
 
+Torus_Alien::Torus_Alien(const float& x, const float& y, const float& z, const int& slices, const int& stacks, const float& radius) : Primitive()
+{
+	this->slices = slices;
+	this->stacks = stacks;
+	this->radius = radius;
+	shape = par_shapes_create_torus(slices, stacks,radius);
+	SetPosition(x, y, z);
+	MemCpy();
+	InitBuffers();
+}
+
 Torus_Alien::~Torus_Alien()
 {
 }
 
-void Torus_Alien::SetParameters(par_shapes_mesh* mesh, const int& slices, const int& stacks, const float& radius)
+void Torus_Alien::SetParameters(const int& slices, const int& stacks, const float& radius)
 {
 	par_shapes_free_mesh(shape);
 	RestartBuffers();
@@ -24,17 +35,17 @@ void Torus_Alien::SetParameters(par_shapes_mesh* mesh, const int& slices, const 
 	shape = par_shapes_create_torus(slices, stacks, radius);
 }
 
-int Torus_Alien::GetTorusSlices(par_shapes_mesh* mesh)
+int Torus_Alien::GetTorusSlices()
 {
 	return this->slices;
 }
 
-int Torus_Alien::GetTorusStacks(par_shapes_mesh* mesh)
+int Torus_Alien::GetTorusStacks()
 {
 	return this->stacks;
 }
 
-float Torus_Alien::GetTorusRadius(par_shapes_mesh* mesh)
+float Torus_Alien::GetTorusRadius()
 {
 	return this->radius;
 }

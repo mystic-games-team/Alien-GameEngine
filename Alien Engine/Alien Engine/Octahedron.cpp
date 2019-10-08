@@ -10,6 +10,15 @@ Octahedron::Octahedron() : Primitive()
 	InitBuffers();
 }
 
+Octahedron::Octahedron(const float& x, const float& y, const float& z) : Primitive()
+{
+	shape = par_shapes_create_octahedron();
+	SetPosition(x, y, z);
+	MemCpy();
+	InitBuffers();
+}
+
 Octahedron::~Octahedron()
 {
 }
+

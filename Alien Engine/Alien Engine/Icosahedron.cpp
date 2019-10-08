@@ -10,6 +10,14 @@ Icosahedron::Icosahedron() : Primitive()
 	InitBuffers();
 }
 
+Icosahedron::Icosahedron(const float& x, const float& y, const float& z) : Primitive()
+{
+	shape = par_shapes_create_icosahedron();
+	SetPosition(x, y, z);
+	MemCpy();
+	InitBuffers();
+}
+
 Icosahedron::~Icosahedron()
 {
 }

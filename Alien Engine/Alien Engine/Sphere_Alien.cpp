@@ -10,6 +10,15 @@ Sphere_Alien::Sphere_Alien() : Primitive()
 	InitBuffers();
 }
 
+Sphere_Alien::Sphere_Alien(const float& x, const float& y, const float& z, const int& subdivisions) : Primitive()
+{
+	this->subdivisions = subdivisions;
+	shape = par_shapes_create_subdivided_sphere(subdivisions);
+	SetPosition(x, y, z);
+	MemCpy();
+	InitBuffers();
+}
+
 Sphere_Alien::~Sphere_Alien()
 {
 }

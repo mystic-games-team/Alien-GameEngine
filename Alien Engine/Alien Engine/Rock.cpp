@@ -2,10 +2,20 @@
 #include "Primitive.h"
 #include "Shapes.h"
 
-Rock::Rock( ) :Primitive()
+Rock::Rock() : Primitive()
 {
 	shape = par_shapes_create_rock(seed, subdivisions);
 	SetPosition( 0, 0, 0);
+	MemCpy();
+	InitBuffers();
+}
+
+Rock::Rock(const float& x, const float& y, const float& z, const uint& seed, const int& subdivisions) : Primitive()
+{
+	this->seed = seed;
+	this->subdivisions = subdivisions;
+	shape = par_shapes_create_rock(seed, subdivisions);
+	SetPosition(x, y, z);
 	MemCpy();
 	InitBuffers();
 }

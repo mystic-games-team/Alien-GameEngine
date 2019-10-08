@@ -14,6 +14,7 @@ void PanelRender::PanelLogic()
 {
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
 
+	if (ImGui::Checkbox("##CheckBox", &App->objects->view_mesh_mode));
 
 	if (ImGui::CollapsingHeader("Mesh Settings")) {
 
