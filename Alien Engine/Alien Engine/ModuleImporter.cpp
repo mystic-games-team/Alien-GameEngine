@@ -37,6 +37,14 @@ update_status ModuleImporter::Update(float dt)
 		std::vector<Mesh*>::iterator it = (*item)->meshes.begin();
 
 		for (; it != (*item)->meshes.end(); ++it) {
+			glEnable(GL_TEXTURE_2D);
+			ilutRenderer(ILUT_OPENGL);
+			//GLuint Texture;
+			//Texture = ilutGLBindTexImage();
+			
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_uv);
+			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
 			if (!App->objects->wireframe_mode) {
 				// draw model
@@ -261,6 +269,26 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 {
 	bool ret = true;
 
+	
+
+
+	ilLoadImage(path);
+
+	ILuint Width, Height;
+	Width = ilGetInteger(IL_IMAGE_WIDTH);
+	Height = ilGetInteger(IL_IMAGE_HEIGHT);
+	ILubyte* Data = ilGetData();
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &test_id);
+	glBindTexture(GL_TEXTURE_2D, test_id);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 
 
 	return ret;

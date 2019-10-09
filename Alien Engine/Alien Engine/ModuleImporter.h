@@ -91,6 +91,9 @@ private:
 	Mesh* InitMesh(const aiMesh* ai_mesh);
 	void InitGLBuffers(Mesh* mesh);
 
+	uint ImageName;
+	uint test_id = 0;
+
 private:
 
 	std::vector<Object3DData*> objects3Ddata;
