@@ -2,6 +2,10 @@
 #include "Application.h"
 #include "ModuleObjects.h"
 
+#include "Devil/include/IL/il.h"
+#include "Devil/include/IL/ilu.h"
+#include "Devil/include/IL/ilut.h"
+
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
 }
@@ -203,6 +207,12 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 			mesh->center_point_normal[i + 2] = normalized.z;
 		}
 	}
+	//SAD
+	for (uint i = 0; i < 0; ++i) {
+		if (ai_mesh->HasTextureCoords(i)) {
+			int j = 0;
+		}
+	}
 
 	InitGLBuffers(mesh);
 
@@ -234,4 +244,12 @@ Object3DData::~Object3DData()
 		}
 	}
 	meshes.clear();
+}
+
+bool ModuleImporter::LoadTextureFile(const char* path)
+{
+	bool ret = true;
+
+
+	return ret;
 }

@@ -9,6 +9,10 @@
 #include "Assimp/include/cfileio.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
+#pragma comment (lib, "Devil/lib/x86/DevIL.lib")
+#pragma comment (lib, "Devil/lib/x86/ILU.lib")
+#pragma comment (lib, "Devil/lib/x86/ILUT.lib")
+
 #include <vector>
 #include "glew/include/glew.h"
 
@@ -78,6 +82,7 @@ public:
 	bool CleanUp();
 
 	bool LoadModelFile(const char* path);
+	bool LoadTextureFile(const char* path);
 
 private:
 
