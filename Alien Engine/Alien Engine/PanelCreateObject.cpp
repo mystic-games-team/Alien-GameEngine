@@ -22,6 +22,10 @@ void PanelCreateObject::PanelLogic()
 	static int subdivions = 5;
 	static int seed = 0;
 
+	static int slices = 5;
+	static int stacks = 5;
+	static float radius = 0.5f;
+
 	static int objects_combo = 0;
 
 	ImGui::OpenPopup(panel_name.c_str());
@@ -35,7 +39,7 @@ void PanelCreateObject::PanelLogic()
 		ImGui::PushItemWidth(100);
 		ImGui::Text("Object:  "); ImGui::SameLine();
 		ImGui::PushItemWidth(100);
-		ImGui::Combo("", &objects_combo, "Cube\0Sphere\0Rock\0");
+		ImGui::Combo("", &objects_combo, "Cube\0Sphere\0Rock\0Dodecahedron\0Icosahedron\0Octahedron\0Torus\0");
 
 		ImGui::Spacing();
 		ImGui::Spacing();
@@ -82,6 +86,21 @@ void PanelCreateObject::PanelLogic()
 			ImGui::Spacing();
 			ImGui::Spacing();
 			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			ImGui::Text("Slices"); ImGui::SameLine();
+			ImGui::SliderInt("##Slices Slider", &slices, 3, 20);
+			ImGui::Text("Stacks"); ImGui::SameLine();
+			ImGui::SliderInt("##Stacks Slider", &stacks, 3, 20);
+			ImGui::Text("Radius"); ImGui::SameLine();
+			ImGui::SliderFloat("##Radius Slider", &radius, 0.1f, 1);
+
+			break;
 		}
 
 		LOG("%f", ImGui::GetWindowWidth());
@@ -105,7 +124,26 @@ void PanelCreateObject::PanelLogic()
 				x = y = z = seed = 0;
 				subdivions = 5;
 				break;
+			case 3:
+				object = App->objects->CreatePrimitive(PrimitiveType::DODECAHEDRON, x, y, z);
+				x = y = z = 0;
+				break;
+			case 4:
+				object = App->objects->CreatePrimitive(PrimitiveType::ICOSAHEDRON, x, y, z);
+				x = y = z = 0;
+				break;
+			case 5:
+				object = App->objects->CreatePrimitive(PrimitiveType::OCTAHEDRON, x, y, z);
+				x = y = z = 0;
+				break;
+			case 6:
+				object = App->objects->CreatePrimitive(PrimitiveType::TORUS, x, y, z,NULL,NULL,slices,stacks,radius);
+				x = y = z = 0;
+				slices = stacks = 5;
+				radius = 0.5f;
+				break;
 			}
+
 			object->SetColor(create_color);
 			create_color = { 1,1,1 };
 

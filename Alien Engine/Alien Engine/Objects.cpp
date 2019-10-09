@@ -35,6 +35,7 @@ void Object::Draw()
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	SetColor(color);
+	glColor3f(color.r, color.g, color.b);
 
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
@@ -53,7 +54,6 @@ vec3 Object::GetPosition()
 void Object::SetColor(Color color)
 {
 	this->color = color;
-	glColor3f(color.r, color.g, color.b);
 }
 
 
