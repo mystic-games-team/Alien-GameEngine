@@ -84,6 +84,11 @@ public:
 	bool LoadModelFile(const char* path);
 	bool LoadTextureFile(const char* path);
 
+	uint image = 0;
+	BYTE* pixmap = nullptr;
+	int width = 0;
+	int height = 0;
+
 private:
 
 	void InitScene(const aiScene* scene, const char* path);

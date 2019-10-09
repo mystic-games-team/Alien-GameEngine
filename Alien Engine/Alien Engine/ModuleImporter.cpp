@@ -19,7 +19,13 @@ bool ModuleImporter::Start()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-	LoadModelFile("Assets/Models/warrior.fbx");
+
+	ilInit();
+
+	LoadModelFile("Assets/Models/cube.fbx");
+	LoadTextureFile("Assets/test2.dds");
+
+
 	return true;
 }
 
@@ -84,6 +90,8 @@ update_status ModuleImporter::Update(float dt)
 					glVertex3f((*it)->center_point[i] + (*it)->center_point_normal[i] * App->objects->face_normal_length, (*it)->center_point[i + 1] + (*it)->center_point_normal[i+ 1] * App->objects->face_normal_length, (*it)->center_point[i + 2] + (*it)->center_point_normal[i + 2] * App->objects->face_normal_length);
 				}
 				glEnd();
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, image);
 			}
 		}
 	}
@@ -208,10 +216,9 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 		}
 	}
 	//SAD
-	for (uint i = 0; i < 0; ++i) {
-		if (ai_mesh->HasTextureCoords(i)) {
-			int j = 0;
-		}
+	int j = ai_mesh->GetNumUVChannels();
+	if (ai_mesh->HasTextureCoords(j)) {
+		mesh->id_index = 3;
 	}
 
 	InitGLBuffers(mesh);
@@ -249,6 +256,33 @@ Object3DData::~Object3DData()
 bool ModuleImporter::LoadTextureFile(const char* path)
 {
 	bool ret = true;
+
+	ILuint ImgId = 0;
+	ilGenImages(1, &ImgId);
+	ilBindImage(ImgId);
+
+	ilLoadImage(path);
+	
+
+	width = ilGetInteger(IL_IMAGE_WIDTH);
+	height = ilGetInteger(IL_IMAGE_HEIGHT);
+	pixmap = new BYTE[width * height * 3];
+	ilCopyPixels(0, 0, 0, width, height, 1, IL_RGB,
+		IL_UNSIGNED_BYTE, pixmap);
+
+	ilBindImage(0);
+	ilDeleteImage(ImgId);
+	
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &image);
+	glBindTexture(GL_TEXTURE_2D, image);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, pixmap);
 
 
 	return ret;
