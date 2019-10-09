@@ -25,7 +25,7 @@ public:
 
 	vec3 GetPosition();
 
-	
+	void SetColor(Color color);
 
 protected:
 	bool enabled = true;

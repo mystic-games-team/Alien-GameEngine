@@ -243,4 +243,3 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetBoolean("Configuration.Renderer.FaceNormals", draw_face_normals);
 }
 
-

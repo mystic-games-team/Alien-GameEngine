@@ -52,6 +52,7 @@ void PanelCreateObject::PanelLogic()
 		ImGui::Spacing();
 		ImGui::Spacing();
 
+		ImGui::Text("Choose Color"); ImGui::SameLine();
 		ImGui::ColorEdit3("##colorcreate", (float*)& create_color, ImGuiColorEditFlags_Float| ImGuiColorEditFlags_NoInputs| ImGuiColorEditFlags_NoLabel);
 
 		ImGui::Spacing();
@@ -87,24 +88,26 @@ void PanelCreateObject::PanelLogic()
 
 		if (ImGui::Button("Create", { ImGui::GetWindowWidth()-16,25 }))
 		{
+			Object* object;
 			switch (objects_combo)
 			{
 			case 0:
-				App->objects->CreatePrimitive(PrimitiveType::CUBE, x,y,z);
+				object=App->objects->CreatePrimitive(PrimitiveType::CUBE, x,y,z);
 				x = y = z = 0;
 				break;
 			case 1:
-				App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN);
+				object=App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN, x, y, z,subdivions);
 				x = y = z = 0;
 				subdivions = 5;
 				break;
 			case 2:
-				App->objects->CreatePrimitive(PrimitiveType::ROCK);
+				object=App->objects->CreatePrimitive(PrimitiveType::ROCK, x, y, z,subdivions,seed);
 				x = y = z = seed = 0;
 				subdivions = 5;
 				break;
 			}
-
+			object->SetColor(create_color);
+			create_color = { 1,1,1 };
 
 			ChangeEnable();
 		}

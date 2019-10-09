@@ -1,3 +1,4 @@
+#include "Color.h"
 #include "Objects.h"
 #include "glew/include/glew.h"
 
@@ -33,7 +34,7 @@ void Object::Draw()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glColor3f(color.r, color.g, color.b);
+	SetColor(color);
 
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
@@ -48,5 +49,12 @@ vec3 Object::GetPosition()
 {
 	return position;
 }
+
+void Object::SetColor(Color color)
+{
+	this->color = color;
+	glColor3f(color.r, color.g, color.b);
+}
+
 
 
