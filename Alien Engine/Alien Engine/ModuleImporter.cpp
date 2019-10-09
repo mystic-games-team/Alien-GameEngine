@@ -129,10 +129,20 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	data->path = path;
 	data->textures.resize(scene->mNumMaterials);
 
-	for (uint i = 0; i < scene->mNumMeshes; ++i) {
-		const aiMesh* mesh = scene->mMeshes[i];
-		data->meshes.push_back(InitMesh(mesh));
+	if (scene->HasMeshes()) {
+		for (uint i = 0; i < scene->mNumMeshes; ++i) {
+			const aiMesh* mesh = scene->mMeshes[i];
+			data->meshes.push_back(InitMesh(mesh));
+		}
 	}
+	// TODO: load .obj and other 3Ds that have textures
+	/*if (scene->HasTextures()) {
+		for (uint i = 0; i < scene->mNumTextures; ++i) {
+			const aiMesh* mesh = scene->mMeshes[i];
+			data->meshes.push_back(InitMesh(mesh));
+		}
+	}*/
+
 	objects3Ddata.push_back(data);
 }
 
