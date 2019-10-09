@@ -26,7 +26,7 @@ struct Mesh {
 		delete[] index;
 		delete[] vertex;
 		delete[] normals;
-		delete[] texture_cords;
+		delete[] uv_cords;
 		delete[] center_point_normal;
 		delete[] center_point;
 
@@ -35,7 +35,7 @@ struct Mesh {
 		index = nullptr;
 		vertex = nullptr;
 		normals = nullptr;
-		texture_cords = nullptr;
+		uv_cords = nullptr;
 	}
 
 	uint id_index = 0;
@@ -55,7 +55,8 @@ struct Mesh {
 	float* center_point = nullptr;
 	uint num_faces = 0;
 
-	float* texture_cords = nullptr; 
+	float* uv_cords = nullptr; 
+	uint id_uv = 0;
 };
 
 struct Textures {
@@ -83,11 +84,6 @@ public:
 
 	bool LoadModelFile(const char* path);
 	bool LoadTextureFile(const char* path);
-
-	uint image = 0;
-	BYTE* pixmap = nullptr;
-	int width = 0;
-	int height = 0;
 
 private:
 

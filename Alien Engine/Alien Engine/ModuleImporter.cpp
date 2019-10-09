@@ -90,8 +90,7 @@ update_status ModuleImporter::Update(float dt)
 					glVertex3f((*it)->center_point[i] + (*it)->center_point_normal[i] * App->objects->face_normal_length, (*it)->center_point[i + 1] + (*it)->center_point_normal[i+ 1] * App->objects->face_normal_length, (*it)->center_point[i + 2] + (*it)->center_point_normal[i + 2] * App->objects->face_normal_length);
 				}
 				glEnd();
-				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, image);
+
 			}
 		}
 	}
@@ -215,10 +214,9 @@ Mesh* ModuleImporter::InitMesh(const aiMesh* ai_mesh)
 			mesh->center_point_normal[i + 2] = normalized.z;
 		}
 	}
-	//SAD
-	int j = ai_mesh->GetNumUVChannels();
-	if (ai_mesh->HasTextureCoords(j)) {
-		mesh->id_index = 3;
+	if (ai_mesh->HasTextureCoords(0)) {
+		mesh->uv_cords = new float[ai_mesh->mNumVertices * 3];
+		memcpy(mesh->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
 	}
 
 	InitGLBuffers(mesh);
@@ -239,6 +237,12 @@ void ModuleImporter::InitGLBuffers(Mesh* mesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_index,
 		&mesh->index[0], GL_STATIC_DRAW);
+
+	// UV
+	glGenBuffers(1, &mesh->id_uv);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+		&mesh->uv_cords[0], GL_STATIC_DRAW);
 }
 
 Object3DData::~Object3DData()
@@ -257,32 +261,6 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 {
 	bool ret = true;
 
-	ILuint ImgId = 0;
-	ilGenImages(1, &ImgId);
-	ilBindImage(ImgId);
-
-	ilLoadImage(path);
-	
-
-	width = ilGetInteger(IL_IMAGE_WIDTH);
-	height = ilGetInteger(IL_IMAGE_HEIGHT);
-	pixmap = new BYTE[width * height * 3];
-	ilCopyPixels(0, 0, 0, width, height, 1, IL_RGB,
-		IL_UNSIGNED_BYTE, pixmap);
-
-	ilBindImage(0);
-	ilDeleteImage(ImgId);
-	
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &image);
-	glBindTexture(GL_TEXTURE_2D, image);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, pixmap);
 
 
 	return ret;
