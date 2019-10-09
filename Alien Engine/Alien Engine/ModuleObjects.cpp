@@ -77,8 +77,6 @@ update_status ModuleObjects::PostUpdate(float dt)
 				glEnable(GL_POLYGON_OFFSET_FILL);
 				glPolygonOffset(1.0f, 0.4f);
 
-				glColor3f(0.75f, 0.75f, 0.75f);
-
 				(*item)->Draw();
 				glDisable(GL_POLYGON_OFFSET_FILL);
 			}
@@ -160,7 +158,7 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type)
 	return ret;
 }
 
-Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint & subdivisions = 5, const uint & seed = 0, const uint & slices = 5, const uint & slacks = 5, const float & radius = 0.5)
+Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint & subdivisions , const uint & seed , const uint & slices , const uint & slacks , const float & radius)
 {
 	Primitive* ret = nullptr;
 	switch (type)

@@ -33,6 +33,8 @@ void Object::Draw()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
+	glColor3f(color.r, color.g, color.b);
+
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -46,4 +48,5 @@ vec3 Object::GetPosition()
 {
 	return position;
 }
+
 

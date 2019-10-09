@@ -2,6 +2,7 @@
 #include "PanelCreateObject.h"
 #include "Objects.h"
 #include "ModuleObjects.h"
+#include "Primitive.h"
 
 PanelCreateObject::PanelCreateObject(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra) :
 	Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -51,6 +52,11 @@ void PanelCreateObject::PanelLogic()
 		ImGui::Spacing();
 		ImGui::Spacing();
 
+		ImGui::ColorEdit3("##colorcreate", (float*)& create_color, ImGuiColorEditFlags_Float| ImGuiColorEditFlags_NoInputs| ImGuiColorEditFlags_NoLabel);
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+
 		ImGui::Separator();
 
 		ImGui::Spacing();
@@ -84,7 +90,7 @@ void PanelCreateObject::PanelLogic()
 			switch (objects_combo)
 			{
 			case 0:
-				App->objects->CreatePrimitive(PrimitiveType::CUBE);
+				App->objects->CreatePrimitive(PrimitiveType::CUBE, x,y,z);
 				x = y = z = 0;
 				break;
 			case 1:
