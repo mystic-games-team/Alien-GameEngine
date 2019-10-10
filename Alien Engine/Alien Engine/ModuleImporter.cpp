@@ -278,5 +278,6 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 			0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 	}
 	App->objects->objects.back()->id_texture = test_id;
+	App->objects->objects.front()->id_texture = test_id;
 	return ret;
 }
