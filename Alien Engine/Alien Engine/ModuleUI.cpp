@@ -168,12 +168,6 @@ void ModuleUI::MainMenuBar()
 		{
 			panel_render->ChangeEnable();
 		}
-		if (ImGui::MenuItem("View Mesh", shortcut_view_mesh->GetNameScancodes())) {
-			App->objects->ChangeViewMeshMode();
-		}
-		if (ImGui::MenuItem("Wireframe Mode", shortcut_wireframe->GetNameScancodes())) {
-			App->objects->ChangeWireframeMode();
-		}
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Create"))

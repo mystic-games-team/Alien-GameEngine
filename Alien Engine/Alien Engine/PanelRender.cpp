@@ -17,7 +17,8 @@ void PanelRender::PanelLogic()
 
 	
 
-	if (ImGui::CollapsingHeader("Mesh Settings")) {
+	if (ImGui::CollapsingHeader("Mesh Settings")) 
+	{
 		ImGui::Spacing();
 		ImGui::Checkbox(" View Mesh", &App->objects->view_mesh_mode);
 		ImGui::SameLine();
@@ -30,16 +31,20 @@ void PanelRender::PanelLogic()
 		ImGui::Spacing();
 		ImGui::ColorEdit3("Mesh Color", (float*)& App->objects->mesh_color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
 	}
-	if (ImGui::CollapsingHeader("Background Color")) {
+	if (ImGui::CollapsingHeader("Background")) 
+	{
+		ImGui::ColorEdit3("Background Color", (float*)&App->renderer3D->background_color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
+	}
+	if (ImGui::CollapsingHeader("Personalize Grid")) 
+	{
 
 	}
-	if (ImGui::CollapsingHeader("Personalize Grid")) {
+	if (ImGui::CollapsingHeader("Vertex Normals")) 
+	{
 
 	}
-	if (ImGui::CollapsingHeader("Vertex Normals")) {
-
-	}
-	if (ImGui::CollapsingHeader("Face Normals")) {
+	if (ImGui::CollapsingHeader("Face Normals")) 
+	{
 
 	}
 	ImGui::End();

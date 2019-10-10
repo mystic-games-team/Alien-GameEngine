@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 #include "glmath.h"
+#include "Color.h"
 
 enum class ObjectType
 {
@@ -24,7 +25,7 @@ public:
 
 	vec3 GetPosition();
 
-	
+	void SetColor(Color color);
 
 protected:
 	bool enabled = true;
@@ -43,4 +44,6 @@ public:
 
 	uint num_vertex = 0;
 	uint num_index = 0;
+
+	Color color{ 1,1,1 };
 };

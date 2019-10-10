@@ -22,8 +22,7 @@ public:
 	void SaveConfig(JSONfilepack*& config);
 
 	Primitive* CreatePrimitive(const PrimitiveType& type);
-
-	Primitive* CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint & subdivisions, const uint & seed, const uint & slices, const uint & slacks, const float & radius);
+	Primitive* CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint& subdivisions = 5, const uint & seed = 0, const uint & slices = 5, const uint & slacks = 5, const float& radius = 0.5);
 
 	void ChangeWireframeMode();
 	void ChangeViewMeshMode();
