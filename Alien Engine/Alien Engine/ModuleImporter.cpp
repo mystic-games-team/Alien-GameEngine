@@ -26,7 +26,7 @@ bool ModuleImporter::Start()
 	ilutInit();
 
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
-	LoadTextureFile("Assets/Baker.dds");
+	LoadTextureFile("Assets/Textures/Baker.dds");
 
 	return true;
 }
