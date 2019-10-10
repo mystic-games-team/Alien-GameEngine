@@ -16,6 +16,11 @@ public:
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
+
+	void Movement();
+	void Rotation();
+	void Zoom();
+
 	float* GetViewMatrix();
 
 private:
@@ -27,8 +32,13 @@ public:
 	vec3 X, Y, Z, Position, Reference;
 
 	float camera_speed = 30.0f;
+	float camera_zoom_speed = 1.0f;
 
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
+
+	vec3 newPos{ 0,0,0 };
+	float speed = 0.f;
+	float zoom_speed = 0.f;
 };
