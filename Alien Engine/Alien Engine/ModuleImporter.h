@@ -9,12 +9,16 @@
 #include "Assimp/include/cfileio.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
-#pragma comment (lib, "Devil/lib/x86/DevIL.lib")
-#pragma comment (lib, "Devil/lib/x86/ILU.lib")
-#pragma comment (lib, "Devil/lib/x86/ILUT.lib")
+#pragma comment (lib, "Devil/libx86/DevIL.lib")
+#pragma comment (lib, "Devil/libx86/ILU.lib")
+#pragma comment (lib, "Devil/libx86/ILUT.lib")
 
 #include <vector>
 #include "glew/include/glew.h"
+
+
+#define cube_width 200
+#define cube_height 200
 
 struct Mesh {
 
@@ -22,6 +26,7 @@ struct Mesh {
 
 		glDeleteBuffers(num_vertex, &id_vertex);
 		glDeleteBuffers(num_index, &id_index);
+		glDeleteBuffers(num_vertex * 3, &id_uv);
 
 		delete[] index;
 		delete[] vertex;
@@ -97,5 +102,7 @@ private:
 private:
 
 	std::vector<Object3DData*> objects3Ddata;
+
+
 
 };

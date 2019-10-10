@@ -2,9 +2,9 @@
 #include "Application.h"
 #include "ModuleObjects.h"
 
-#include "Devil/include/IL/il.h"
-#include "Devil/include/IL/ilu.h"
-#include "Devil/include/IL/ilut.h"
+#include "Devil/include/il.h"
+#include "Devil/include/ilu.h"
+#include "Devil/include/ilut.h"
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -21,10 +21,33 @@ bool ModuleImporter::Start()
 	aiAttachLogStream(&stream);
 
 	ilInit();
+	iluInit();
+	ilutInit();
 
 	LoadModelFile("Assets/Models/cube.fbx");
 	LoadTextureFile("Assets/test2.dds");
 
+	/*GLubyte checkImage[cube_height][cube_width][4];
+	for (int i = 0; i < cube_height; i++) {
+		for (int j = 0; j < cube_width; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+	uint id = 0;
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, cube_width, cube_height,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);*/
 
 	return true;
 }
@@ -38,10 +61,11 @@ update_status ModuleImporter::Update(float dt)
 
 		for (; it != (*item)->meshes.end(); ++it) {
 			glEnable(GL_TEXTURE_2D);
+
 			ilutRenderer(ILUT_OPENGL);
 			//GLuint Texture;
 			//Texture = ilutGLBindTexImage();
-			
+			glBindTexture(GL_TEXTURE_2D, test_id);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_uv);
 			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
@@ -251,6 +275,7 @@ void ModuleImporter::InitGLBuffers(Mesh* mesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
 		&mesh->uv_cords[0], GL_STATIC_DRAW);
+
 }
 
 Object3DData::~Object3DData()
@@ -272,23 +297,25 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 	
 
 
-	ilLoadImage(path);
+	if (ilLoadImage(path)) {
+		ILuint Width, Height;
+		Width = ilGetInteger(IL_IMAGE_WIDTH);
+		Height = ilGetInteger(IL_IMAGE_HEIGHT);
+		ILubyte* Data = ilGetData();
 
-	ILuint Width, Height;
-	Width = ilGetInteger(IL_IMAGE_WIDTH);
-	Height = ilGetInteger(IL_IMAGE_HEIGHT);
-	ILubyte* Data = ilGetData();
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glGenTextures(1, &test_id);
+		glBindTexture(GL_TEXTURE_2D, test_id);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &test_id);
-	glBindTexture(GL_TEXTURE_2D, test_id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height,
+			0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
+	}
+
 
 
 	return ret;
