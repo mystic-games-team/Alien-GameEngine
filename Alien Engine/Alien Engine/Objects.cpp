@@ -10,14 +10,24 @@ Object::Object()
 Object::~Object()
 {
 
-	glDeleteBuffers(num_vertex, &id_vertex);
-	glDeleteBuffers(num_index, &id_index);
+	glDeleteBuffers(1, &id_vertex);
+	glDeleteBuffers(1, &id_index);
+	glDeleteBuffers(1, &id_uv);
+	glDeleteBuffers(1, &id_normals);
 
-	delete[] vertex;
 	delete[] index;
+	delete[] vertex;
+	delete[] normals;
+	delete[] uv_cords;
+	delete[] center_point_normal;
+	delete[] center_point;
 
-	vertex = nullptr;
+	center_point_normal = nullptr;
+	center_point = nullptr;
 	index = nullptr;
+	vertex = nullptr;
+	normals = nullptr;
+	uv_cords = nullptr;
 }
 
 void Object::ChangeEnable()
