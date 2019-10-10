@@ -72,7 +72,7 @@ bool ModuleRenderer3D::Init()
 		glClearDepth(1.0f);
 		
 		//Initialize clear color
-		glClearColor(0.f, 0.f, 0.f, 1.f);
+		glClearColor(background_color.r,background_color.g,background_color.b,background_color.a);
 
 		//Check for error
 		error = glGetError();
@@ -102,7 +102,7 @@ bool ModuleRenderer3D::Init()
 
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
-		glClearColor(0.f, 0.f, 0.f, 1.f);
+		glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
@@ -122,6 +122,7 @@ bool ModuleRenderer3D::Init()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
@@ -168,4 +169,9 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void ModuleRenderer3D::SetBackgroundColor(const Color & bg_color)
+{
+	background_color = bg_color;
 }
