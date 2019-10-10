@@ -246,6 +246,7 @@ void ModuleImporter::InitGLBuffers(Model3D* model3D)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_uv);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
 		&model3D->uv_cords[0], GL_STATIC_DRAW);
+
 	// normals
 	glGenBuffers(1, &model3D->id_normals);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_normals);
