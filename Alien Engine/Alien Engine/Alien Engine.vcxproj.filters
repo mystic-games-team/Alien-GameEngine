@@ -46,6 +46,9 @@
     <Filter Include="Objects\Primitives">
       <UniqueIdentifier>{12e1da08-d32f-4856-9317-6696bafc288a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Devil">
+      <UniqueIdentifier>{49d97f8c-ec3e-4b52-b93d-a16156a59750}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -398,6 +401,30 @@
     </ClInclude>
     <ClInclude Include="Model3D.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Devil\include\config.h">
+      <Filter>Tools\Devil</Filter>
+    </ClInclude>
+    <ClInclude Include="Devil\include\devil_internal_exports.h">
+      <Filter>Tools\Devil</Filter>
+    </ClInclude>
+    <ClInclude Include="Devil\include\il.h">
+      <Filter>Tools\Devil</Filter>
+    </ClInclude>
+    <ClInclude Include="Devil\include\il_wrap.h">
+      <Filter>Tools\Devil</Filter>
+    </ClInclude>
+    <ClInclude Include="Devil\include\ilu.h">
+      <Filter>Tools\Devil</Filter>
+    </ClInclude>
+    <ClInclude Include="Devil\include\ilu_region.h">
+      <Filter>Tools\Devil</Filter>
+    </ClInclude>
+    <ClInclude Include="Devil\include\ilut.h">
+      <Filter>Tools\Devil</Filter>
+    </ClInclude>
+    <ClInclude Include="Devil\include\ilut_config.h">
+      <Filter>Tools\Devil</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

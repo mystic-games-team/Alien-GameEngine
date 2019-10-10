@@ -57,11 +57,17 @@ void PanelRender::PanelLogic()
 	}
 	if (ImGui::CollapsingHeader("Vertex Normals")) 
 	{
-
+		ImGui::Checkbox("Show Normals", &App->objects->draw_vertex_normals);
+		ImGui::ColorEdit3("Normals Color", (float*)&App->objects->vertex_n_color,  ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("Vertex Line Length", (int*)&App->objects->vertex_normal_length, 1, 10);
+		ImGui::SliderInt("Vertex Line Width", &App->objects->vertex_n_width, 1, 30);
 	}
 	if (ImGui::CollapsingHeader("Face Normals")) 
 	{
-
+		ImGui::Checkbox("Show Face Normals", &App->objects->draw_face_normals);
+		ImGui::ColorEdit3("Face Normals Color", (float*)&App->objects->face_n_color, ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("Face Line Length", (int*)&App->objects->face_normal_length, 1, 10);
+		ImGui::SliderInt("Face Line Width", &App->objects->face_n_width, 1, 30);
 	}
 	ImGui::End();
 }

@@ -38,7 +38,8 @@ extern "C" {
 
 
 #define ILU_VERSION_1_7_8 1
-#define ILU_VERSION       178
+#define ILU_VERSION       1.7.8
+#define ILU_VERSION_S     "1.7.8"
 
 
 #define ILU_FILTER         0x2600

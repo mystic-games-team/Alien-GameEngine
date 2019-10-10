@@ -36,11 +36,17 @@ public:
 	bool view_mesh_mode = true;
 	uint vertex_normal_length = 1;
 	uint face_normal_length = 1;
-	bool draw_vertex_normals = true;
-	bool draw_face_normals = true;
+	bool draw_vertex_normals = false;
+	bool draw_face_normals = false;
 
 	Color mesh_color{ 1,1,1,255 };
 	int mesh_line_width = 1;
 
 	bool allow_grid = true;
+
+	Color vertex_n_color{ 0,1,1, };
+	Color face_n_color{ 1,0,1, };
+
+	int face_n_width = 1;
+	int vertex_n_width = 1;
 };
