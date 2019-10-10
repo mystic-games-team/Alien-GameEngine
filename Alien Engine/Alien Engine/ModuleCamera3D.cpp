@@ -49,7 +49,6 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
 		speed = camera_speed * 2 * dt;
 		zoom_speed = camera_zoom_speed * 2 * dt;
-
 	}
 
 	Movement();
