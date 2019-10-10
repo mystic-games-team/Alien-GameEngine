@@ -49,6 +49,9 @@
     <Filter Include="Tools\Devil">
       <UniqueIdentifier>{49d97f8c-ec3e-4b52-b93d-a16156a59750}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Icon">
+      <UniqueIdentifier>{939e6cfa-00fc-4d11-8476-50bc390ec094}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -426,6 +429,9 @@
     <ClInclude Include="Devil\include\ilut_config.h">
       <Filter>Tools\Devil</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Icon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -685,5 +691,15 @@
     <None Include="Game\Configuration\CustomConfiguration.json">
       <Filter>JSON</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Alien Engine.rc">
+      <Filter>Icon</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Game\alienYellow.ico">
+      <Filter>Icon</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -249,6 +249,7 @@
     <ClInclude Include="PCG\pcg_uint128.hpp" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="RandomHelper.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Rock.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
@@ -344,6 +345,12 @@
     <None Include="MathGeoLib\include\Geometry\TriangleMesh_IntersectRay_CPP.inl" />
     <None Include="MathGeoLib\include\Geometry\TriangleMesh_IntersectRay_SSE.inl" />
     <None Include="MathGeoLib\include\Math\Matrix.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Alien Engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Game\alienYellow.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
