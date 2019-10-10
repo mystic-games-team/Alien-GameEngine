@@ -277,7 +277,13 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height,
 			0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 	}
-	App->objects->objects.back()->id_texture = test_id;
-	App->objects->objects.front()->id_texture = test_id;
+	
+	std::vector<Object*>::iterator item = App->objects->objects.begin();
+	for (; item != App->objects->objects.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->id_texture = test_id;
+		}
+	}
+
 	return ret;
 }

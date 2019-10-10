@@ -451,22 +451,23 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_path)
 {
 	
-	std::string extension("");
+	std::string extension;
 
 	std::string::const_reverse_iterator item = extern_path.crbegin();
 	for (; item != extern_path.crend(); ++item)
 	{
 		if (*item == '.')
 			break;
-		else
-			extension = *item + extension;
+		else {
+			std::string lower;
+			lower =(*item);
+			extension = lower + extension;
+		}
 	}
 	
 	FileDropType ext_type = FileDropType::UNKNOWN;
 
 	if (strcmp(extension.data(), "fbx"))
-		ext_type = FileDropType::MODEL3D;
-	else if (strcmp(extension.data(), "FBX"))
 		ext_type = FileDropType::MODEL3D;
 	else
 		LOG("Extension unknown!");
