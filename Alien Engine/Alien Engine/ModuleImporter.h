@@ -9,12 +9,13 @@
 #include "Assimp/include/cfileio.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
-#pragma comment (lib, "Devil/lib/x86/DevIL.lib")
-#pragma comment (lib, "Devil/lib/x86/ILU.lib")
-#pragma comment (lib, "Devil/lib/x86/ILUT.lib")
+#pragma comment (lib, "Devil/libx86/DevIL.lib")
+#pragma comment (lib, "Devil/libx86/ILU.lib")
+#pragma comment (lib, "Devil/libx86/ILUT.lib")
 
 #include <vector>
 #include "glew/include/glew.h"
+
 
 struct Mesh {
 
@@ -22,11 +23,12 @@ struct Mesh {
 
 		glDeleteBuffers(num_vertex, &id_vertex);
 		glDeleteBuffers(num_index, &id_index);
+		glDeleteBuffers(num_vertex * 3, &id_uv);
 
 		delete[] index;
 		delete[] vertex;
 		delete[] normals;
-		delete[] texture_cords;
+		delete[] uv_cords;
 		delete[] center_point_normal;
 		delete[] center_point;
 
@@ -35,7 +37,7 @@ struct Mesh {
 		index = nullptr;
 		vertex = nullptr;
 		normals = nullptr;
-		texture_cords = nullptr;
+		uv_cords = nullptr;
 	}
 
 	uint id_index = 0;
@@ -55,7 +57,8 @@ struct Mesh {
 	float* center_point = nullptr;
 	uint num_faces = 0;
 
-	float* texture_cords = nullptr; 
+	float* uv_cords = nullptr; 
+	uint id_uv = 0;
 };
 
 struct Textures {
@@ -90,8 +93,12 @@ private:
 	Mesh* InitMesh(const aiMesh* ai_mesh);
 	void InitGLBuffers(Mesh* mesh);
 
+	uint test_id = 0;
+
 private:
 
 	std::vector<Object3DData*> objects3Ddata;
+
+
 
 };
