@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "ModuleObjects.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -58,6 +59,9 @@ update_status ModuleCamera3D::Update(float dt)
 	Reference += newPos;
 
 	Rotation();
+
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		Focus();
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
@@ -169,6 +173,18 @@ void ModuleCamera3D::Rotation()
 
 		Position = Reference + Z * length(Position);
 	}
+}
+
+void ModuleCamera3D::Focus()
+{
+	if (focus_at == nullptr)
+	{
+		focus_at=App->objects->objects.front();
+	}
+
+	LookAt(focus_at->position);
+	// TODO ELSE
+	
 }
 
 // -----------------------------------------------------------------

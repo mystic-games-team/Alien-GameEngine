@@ -29,41 +29,36 @@ void PanelCreateObject::PanelLogic()
 	static int objects_combo = 0;
 
 	ImGui::OpenPopup(panel_name.c_str());
-	ImGui::SetNextWindowContentWidth(200);
+	ImGui::SetNextWindowContentWidth(300);
 	if (ImGui::BeginPopupModal(panel_name.c_str(), &enabled, ImGuiWindowFlags_NoResize| ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		LOG("%f", ImGui::GetWindowWidth());
 		ImGui::Spacing();
 		ImGui::Spacing();
 
-		ImGui::PushItemWidth(100);
-		ImGui::Text("Object:  "); ImGui::SameLine();
-		ImGui::PushItemWidth(100);
-		ImGui::Combo("", &objects_combo, "Cube\0Sphere\0Rock\0Dodecahedron\0Icosahedron\0Octahedron\0Torus\0");
+		
+		ImGui::Combo("Select Object", &objects_combo, "Cube\0Sphere\0Rock\0Dodecahedron\0Icosahedron\0Octahedron\0Torus\0");
 
 		ImGui::Spacing();
+		
+		ImGui::ColorEdit3("Select Color", (float*)&create_color, ImGuiColorEditFlags_Float);
+
+		ImGui::Spacing();
+		ImGui::Separator();
 		ImGui::Spacing();
 
-
+		ImGui::Text("Position");
 		ImGui::Columns(3,0,false);
-		ImGui::Text("X:");  ImGui::SameLine(0, 0); ImGui::PushItemWidth(40); ImGui::InputFloat("##x", &x, 0, 0, 2);
+		ImGui::Text("   X:");  ImGui::SameLine(0, 0); ImGui::PushItemWidth(40); ImGui::InputFloat("##x", &x, 0, 0, 2);
 		ImGui::NextColumn();
 		ImGui::Text("Y:"); ImGui::SameLine(0,0); ImGui::PushItemWidth(40); ImGui::InputFloat("##y", &y, 0, 0, 2);
 		ImGui::NextColumn();
 		ImGui::Text("Z:"); ImGui::SameLine(0,0); ImGui::PushItemWidth(40); ImGui::InputFloat("##z", &z, 0, 0, 2);
+		ImGui::NextColumn();
 		ImGui::Columns(1);
 
 		ImGui::Spacing();
-		ImGui::Spacing();
-
-		ImGui::Text("Choose Color"); ImGui::SameLine();
-		ImGui::ColorEdit3("##colorcreate", (float*)& create_color, ImGuiColorEditFlags_Float| ImGuiColorEditFlags_NoInputs| ImGuiColorEditFlags_NoLabel);
-
-		ImGui::Spacing();
-		ImGui::Spacing();
-
 		ImGui::Separator();
-
 		ImGui::Spacing();
 		ImGui::Spacing();
 
@@ -74,8 +69,6 @@ void PanelCreateObject::PanelLogic()
 		case 1:
 			ImGui::Text("Subdivions:"); ImGui::SameLine();
 			ImGui::SliderInt("##subdivisions", &subdivions, 1, 5);
-			ImGui::Spacing();
-			ImGui::Spacing();
 			break;
 		case 2:
 			ImGui::Text("Subdivions:"); ImGui::SameLine();
@@ -83,8 +76,6 @@ void PanelCreateObject::PanelLogic()
 
 			ImGui::Text("Seed:"); ImGui::SameLine();
 			ImGui::InputInt("##input int", &seed,0,0);
-			ImGui::Spacing();
-			ImGui::Spacing();
 			break;
 		case 3:
 			break;
@@ -103,7 +94,8 @@ void PanelCreateObject::PanelLogic()
 			break;
 		}
 
-		LOG("%f", ImGui::GetWindowWidth());
+		ImGui::Spacing();
+		ImGui::Spacing();
 
 		if (ImGui::Button("Create", { ImGui::GetWindowWidth()-16,25 }))
 		{

@@ -19,6 +19,7 @@ public:
 
 	void Movement();
 	void Rotation();
+	void Focus();
 	void Zoom();
 
 	float* GetViewMatrix();
@@ -41,4 +42,6 @@ private:
 	vec3 newPos{ 0,0,0 };
 	float speed = 0.f;
 	float zoom_speed = 0.f;
+
+	Object* focus_at = nullptr;
 };
