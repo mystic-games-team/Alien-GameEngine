@@ -21,7 +21,10 @@ public:
 	void ChangeEnable();
 	bool IsEnabled();
 
-	void Draw();
+	void DrawPolygon();
+	void DrawMesh();
+	void DrawVertexNormals();
+	void DrawFaceNormals();
 
 	vec3 GetPosition();
 
@@ -56,6 +59,8 @@ public:
 
 	float* uv_cords = nullptr;
 	uint id_uv = 0;
+
+	int id_texture = -1;
 
 	Color color{ 1,1,1 };
 };

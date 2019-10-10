@@ -76,22 +76,19 @@ update_status ModuleObjects::PostUpdate(float dt)
 				continue;
 
 			if (!wireframe_mode) {
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				glEnable(GL_POLYGON_OFFSET_FILL);
-				glPolygonOffset(1.0f, 0.1f);
-
-				(*item)->Draw();
-				glDisable(GL_POLYGON_OFFSET_FILL);
+				(*item)->DrawPolygon();
 			}
 			if (wireframe_mode || view_mesh_mode) {
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				// draw model lines
 				glColor3f(mesh_color.r, mesh_color.g, mesh_color.b);
 				glLineWidth(mesh_line_width);
-
-				(*item)->Draw();
-
+				(*item)->DrawMesh();
 				glLineWidth(1);
+			}
+			if (draw_vertex_normals) {
+				(*item)->DrawVertexNormals();
+			}
+			if (draw_face_normals) {
+				(*item)->DrawFaceNormals();
 			}
 		}
 

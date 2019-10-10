@@ -68,7 +68,7 @@
 		"Renderer": {
 			"Wireframe": false,
 			"MeshView": true,
-			"VertexNormals": false,
+			"VertexNormals": true,
 			"FaceNormals": false
 		}
     }
