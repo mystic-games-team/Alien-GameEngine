@@ -39,7 +39,7 @@ void Primitive::InitBuffers()
 void Primitive::MemCpy()
 {
 	num_vertex = shape->npoints;
-	num_index = shape->ntriangles;
+	num_index = shape->ntriangles * 3;
 
 	vertex = new float[num_vertex * 3];
 	index = new uint[num_index * 3];
