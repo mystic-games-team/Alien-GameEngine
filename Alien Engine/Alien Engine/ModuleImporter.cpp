@@ -33,18 +33,22 @@ bool ModuleImporter::Start()
 update_status ModuleImporter::Update(float dt)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnable(GL_TEXTURE_2D);
+
 	std::vector<Object3DData*>::iterator item = objects3Ddata.begin();
 	for (; item != objects3Ddata.end(); ++item) {
 		std::vector<Mesh*>::iterator it = (*item)->meshes.begin();
 
 		for (; it != (*item)->meshes.end(); ++it) {
-			glEnable(GL_TEXTURE_2D);
-
-
+			
 			glBindTexture(GL_TEXTURE_2D, test_id);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_uv);
 			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_normals);
+			glNormalPointer(GL_FLOAT, 0, NULL);
 
 			if (!App->objects->wireframe_mode) {
 				// draw model
@@ -253,6 +257,12 @@ void ModuleImporter::InitGLBuffers(Mesh* mesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
 		&mesh->uv_cords[0], GL_STATIC_DRAW);
+	// normals
+	glGenBuffers(1, &mesh->id_normals);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_normals);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+		&mesh->normals[0], GL_STATIC_DRAW);
+
 
 }
 
