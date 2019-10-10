@@ -101,7 +101,8 @@ void Object::DrawMesh()
 void Object::DrawVertexNormals()
 {
 	if (normals != nullptr) {
-		glColor3f(0.0f, 1.0f, 1.0f);
+		glColor3f(App->objects->vertex_n_color.r, App->objects->vertex_n_color.g, App->objects->vertex_n_color.b);
+		glLineWidth(App->objects->vertex_n_width);
 		glBegin(GL_LINES);
 		for (uint i = 0; i < num_vertex * 3; i += 3)
 		{
@@ -109,13 +110,15 @@ void Object::DrawVertexNormals()
 			glVertex3f(vertex[i] + normals[i] * App->objects->vertex_normal_length, vertex[i + 1] + normals[i + 1] * App->objects->vertex_normal_length, vertex[i + 2] + normals[i + 2] * App->objects->vertex_normal_length);
 		}
 		glEnd();
+		glLineWidth(1);
 	}
 }
 
 void Object::DrawFaceNormals()
 {
 	if (normals != nullptr) {
-		glColor3f(1.0f, 0.0f, 1.0f);
+		glColor3f(App->objects->face_n_color.r, App->objects->face_n_color.g, App->objects->face_n_color.b);
+		glLineWidth(App->objects->face_n_width);
 		glBegin(GL_LINES);
 		for (uint i = 0; i < num_index; i += 3)
 		{
@@ -123,6 +126,7 @@ void Object::DrawFaceNormals()
 			glVertex3f(center_point[i] + center_point_normal[i] * App->objects->face_normal_length, center_point[i + 1] + center_point_normal[i+ 1] * App->objects->face_normal_length, center_point[i + 2] + center_point_normal[i + 2] * App->objects->face_normal_length);
 		}
 		glEnd();
+		glLineWidth(1);
 	}
 }
 
