@@ -1,5 +1,5 @@
 #include "PanelAbout.h"
-
+#include "Devil/include/ilu.h"
 PanelAbout::PanelAbout(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra) :
 	Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
@@ -73,6 +73,13 @@ void PanelAbout::PanelLogic()
 		}
 		if (ImGui::IsItemClicked()) {
 			App->OpenWebsite("https://www.opengl.org/?");
+		}
+		ImGui::BulletText("Devil %s", ILU_VERSION_S);
+		if (ImGui::IsItemHovered()) {
+			is_hovering = true;
+		}
+		if (ImGui::IsItemClicked()) {
+			App->OpenWebsite("http://openil.sourceforge.net");
 		}
 		ImGui::Text("");
 		if (ImGui::CollapsingHeader("License"))
