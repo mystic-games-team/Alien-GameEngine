@@ -25,7 +25,7 @@ bool ModuleImporter::Start()
 	ilutInit();
 
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
-	LoadTextureFile("Assets/test2.dds");
+	LoadTextureFile("Assets/Baker.dds");
 
 	/*GLubyte checkImage[cube_height][cube_width][4];
 	for (int i = 0; i < cube_height; i++) {
