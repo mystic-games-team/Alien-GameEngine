@@ -17,9 +17,6 @@
 #include "glew/include/glew.h"
 
 
-#define cube_width 200
-#define cube_height 200
-
 struct Mesh {
 
 	~Mesh() {
@@ -96,7 +93,6 @@ private:
 	Mesh* InitMesh(const aiMesh* ai_mesh);
 	void InitGLBuffers(Mesh* mesh);
 
-	uint ImageName;
 	uint test_id = 0;
 
 private:
