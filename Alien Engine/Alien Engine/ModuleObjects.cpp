@@ -227,6 +227,21 @@ void ModuleObjects::DeleteAllObjects()
 	objects.clear();
 }
 
+void ModuleObjects::ChangeEnableGrid()
+{
+	allow_grid = !allow_grid;
+}
+
+void ModuleObjects::ChangeEnableNormalVertex()
+{
+	draw_vertex_normals = !draw_vertex_normals;
+}
+
+void ModuleObjects::ChangeEnableNormalFace()
+{
+	draw_face_normals = !draw_face_normals;
+}
+
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 
 {
 	wireframe_mode = config->GetBoolean("Configuration.Renderer.Wireframe");

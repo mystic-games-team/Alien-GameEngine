@@ -53,7 +53,7 @@
                     226,
                     230
                 ],
-				        "PanelRender": [
+				"PanelRender": [
                     21,
                     224,
                     228
@@ -62,6 +62,21 @@
                     7,
                     224,
                     228
+                ],
+				"ShowGrid": [
+                    62,
+                    0,
+                    0
+                ],
+				"ShowNormalVertex": [
+                    63,
+                    0,
+                    0
+                ],
+				"ShowNormalFace": [
+                    64,
+                    0,
+                    0
                 ]
             }
         },

@@ -29,6 +29,10 @@ public:
 
 	void DeleteAllObjects();
 
+	void ChangeEnableGrid();
+	void ChangeEnableNormalVertex();
+	void ChangeEnableNormalFace();
+
 public:
 	std::vector<Object*> objects;
 
