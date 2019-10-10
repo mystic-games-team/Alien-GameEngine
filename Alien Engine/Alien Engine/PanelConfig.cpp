@@ -205,7 +205,14 @@ void PanelConfig::PanelLogic()
 		}
 		ImGui::EndChild();
 	}
-	if (ImGui::CollapsingHeader("Input")) {
+	if (ImGui::CollapsingHeader("Input")) 
+	{
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		ImGui::InputFloat("Camera Speed", &App->camera->camera_speed, 1, 5, 2);
+
+		ImGui::Spacing();
 		ImGui::Spacing();
 		ImGui::Text("Mouse Position:");
 		ImGui::SameLine();
