@@ -24,7 +24,7 @@ bool ModuleImporter::Start()
 	iluInit();
 	ilutInit();
 
-	LoadModelFile("Assets/Models/cube.fbx");
+	LoadModelFile("Assets/Models/BakerHouse.fbx");
 	LoadTextureFile("Assets/test2.dds");
 
 	/*GLubyte checkImage[cube_height][cube_width][4];
