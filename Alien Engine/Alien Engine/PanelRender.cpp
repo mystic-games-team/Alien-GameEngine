@@ -52,6 +52,7 @@ void PanelRender::PanelLogic()
 			App->renderer3D->length_grid = 1;
 		}
 		ImGui::ColorEdit3("Grid Color", (float*)&App->renderer3D->grid_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("Line Width", &App->renderer3D->line_grid_width, 1,30);
 		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Vertex Normals")) 

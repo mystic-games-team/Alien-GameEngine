@@ -36,4 +36,5 @@ public:
 	int length_grid = 20;
 	Color grid_color{ 1,1,1 };
 	float grid_spacing = 1.f;
+	int line_grid_width = 1;
 };

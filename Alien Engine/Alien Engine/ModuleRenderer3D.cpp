@@ -180,6 +180,7 @@ void ModuleRenderer3D::RenderGrid()
 {
 	glBegin(GL_LINES);
 	glColor3f(grid_color.r, grid_color.g, grid_color.b);
+	glLineWidth(line_grid_width);
 	for (float i = 0; i <= length_grid; i+=grid_spacing)
 	{
 		glVertex3f(i - length_grid * 0.5, 0, -length_grid * 0.5);
@@ -187,5 +188,6 @@ void ModuleRenderer3D::RenderGrid()
 		glVertex3f(-length_grid * 0.5, 0, i - length_grid * 0.5);
 		glVertex3f(length_grid * 0.5, 0, i - length_grid * 0.5);
 	}
+	glLineWidth(1);
 	glEnd();
 }
