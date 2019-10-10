@@ -45,7 +45,7 @@ void Primitive::MemCpy()
 	index = new uint[num_index * 3];
 
 	memcpy(vertex, shape->points, sizeof(float) * num_vertex * 3);
-	memcpy(index, shape->triangles, sizeof(PAR_SHAPES_T) * num_index * 3);
+	memcpy(index, shape->triangles, sizeof(PAR_SHAPES_T) * num_index);
 
 	if (shape->tcoords != nullptr) {
 		uv_cords = new float[num_vertex * 3];
