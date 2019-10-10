@@ -46,10 +46,7 @@ void Object::DrawPolygon()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	if (id_texture == -1) { // no texture, so set a color
-		glColor3f(color.r, color.g, color.b);
-	}
-	else {
+	if (id_texture != -1) {
 		// enable textures
 		glEnable(GL_TEXTURE_2D);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -57,7 +54,9 @@ void Object::DrawPolygon()
 		// set UV
 		glBindBuffer(GL_ARRAY_BUFFER, id_uv);
 		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		
 	}
+	glColor3f(color.r, color.g, color.b);
 
 	if (normals != nullptr) {
 		glEnableClientState(GL_NORMAL_ARRAY);
