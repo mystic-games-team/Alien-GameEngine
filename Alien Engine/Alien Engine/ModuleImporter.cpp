@@ -25,93 +25,10 @@ bool ModuleImporter::Start()
 	iluInit();
 	ilutInit();
 
-	//LoadModelFile("Assets/Models/BakerHouse.fbx");
-	//LoadTextureFile("Assets/Baker.dds");
+	LoadModelFile("Assets/Models/BakerHouse.fbx");
+	LoadTextureFile("Assets/Baker.dds");
 
 	return true;
-}
-
-update_status ModuleImporter::Update(float dt)
-{
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glEnable(GL_TEXTURE_2D);
-
-	//std::vector<Object3DData*>::iterator item = objects3Ddata.begin();
-	//for (; item != objects3Ddata.end(); ++item) {
-	//	std::vector<Mesh*>::iterator it = (*item)->meshes.begin();
-
-	//	for (; it != (*item)->meshes.end(); ++it) {
-	//		
-	//		glBindTexture(GL_TEXTURE_2D, test_id);
-	//		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	//		glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_uv);
-	//		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-
-	//		glEnableClientState(GL_NORMAL_ARRAY);
-	//		glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_normals);
-	//		glNormalPointer(GL_FLOAT, 0, NULL);
-
-	//		if (!App->objects->wireframe_mode) {
-	//			// draw model
-	//			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//			glEnable(GL_POLYGON_OFFSET_FILL);
-	//			glPolygonOffset(1.0f, 0.1f);
-
-	//			glColor3f(0.75f, 0.75f, 0.75f);
-
-	//			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
-	//			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
-	//			glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	//			glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
-
-	//			glDisable(GL_POLYGON_OFFSET_FILL);
-	//		}
-	//		glBindTexture(GL_TEXTURE_2D, 0);
-	//		if (App->objects->wireframe_mode || App->objects->view_mesh_mode) {
-	//			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	//			// draw model lines
-	//			glColor3f(App->objects->mesh_color.r, App->objects->mesh_color.g, App->objects->mesh_color.b);
-	//			glLineWidth(App->objects->mesh_line_width);
-
-	//			glBindBuffer(GL_ARRAY_BUFFER, (*it)->id_vertex);
-	//			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->id_index);
-	//			glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	//			glDrawElements(GL_TRIANGLES, (*it)->num_index * 3, GL_UNSIGNED_INT, NULL);
-
-	//			glLineWidth(1);
-	//		}
-	//		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	//		if (App->objects->draw_vertex_normals) { // vertex normals
-	//			glColor3f(0.0f, 1.0f, 1.0f);
-	//			glBegin(GL_LINES);
-	//			for (uint i = 0; i < (*it)->num_vertex * 3; i += 3)
-	//			{
-	//				glVertex3f((*it)->vertex[i], (*it)->vertex[i + 1], (*it)->vertex[i + 2]);
-	//				glVertex3f((*it)->vertex[i] + (*it)->normals[i] * App->objects->vertex_normal_length, (*it)->vertex[i + 1] + (*it)->normals[i + 1] * App->objects->vertex_normal_length, (*it)->vertex[i + 2] + (*it)->normals[i + 2] * App->objects->vertex_normal_length);
-	//			}
-	//			glEnd();
-	//		}
-	//		if (App->objects->draw_face_normals) { // face normals
-	//			glColor3f(1.0f, 0.0f, 1.0f);
-	//			glBegin(GL_LINES);
-	//			for (uint i = 0; i < (*it)->num_index; i += 3)
-	//			{
-	//				glVertex3f((*it)->center_point[i], (*it)->center_point[i + 1], (*it)->center_point[i + 2]);
-	//				glVertex3f((*it)->center_point[i] + (*it)->center_point_normal[i] * App->objects->face_normal_length, (*it)->center_point[i + 1] + (*it)->center_point_normal[i+ 1] * App->objects->face_normal_length, (*it)->center_point[i + 2] + (*it)->center_point_normal[i + 2] * App->objects->face_normal_length);
-	//			}
-	//			glEnd();
-
-	//		}
-	//	}
-	//}
-	//glDisableClientState(GL_VERTEX_ARRAY);
-	
-
-	return UPDATE_CONTINUE;
 }
 
 bool ModuleImporter::CleanUp()
@@ -264,8 +181,9 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 		ILuint Width, Height;
 		Width = ilGetInteger(IL_IMAGE_WIDTH);
 		Height = ilGetInteger(IL_IMAGE_HEIGHT);
-		ILubyte* Data = ilGetData();
 
+		ILubyte* Data = ilGetData();
+		
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glGenTextures(1, &test_id);
 		glBindTexture(GL_TEXTURE_2D, test_id);
