@@ -350,7 +350,7 @@
     <ResourceCompile Include="Alien Engine.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Game\alienYellow.ico" />
+    <Image Include="Game\Assets\alienYellow.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

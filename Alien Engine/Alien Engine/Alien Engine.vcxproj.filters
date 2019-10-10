@@ -693,13 +693,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Game\Assets\alienYellow.ico">
+      <Filter>Icon</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <ResourceCompile Include="Alien Engine.rc">
       <Filter>Icon</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Game\alienYellow.ico">
-      <Filter>Icon</Filter>
-    </Image>
   </ItemGroup>
 </Project>

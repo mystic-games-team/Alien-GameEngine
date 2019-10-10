@@ -53,7 +53,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "Game\\alienYellow.ico"
+IDI_ICON1               ICON                    "Game\\Assets\\alienYellow.ico"
 
 #endif    // Spanish (Spain, International Sort) resources
 /////////////////////////////////////////////////////////////////////////////
