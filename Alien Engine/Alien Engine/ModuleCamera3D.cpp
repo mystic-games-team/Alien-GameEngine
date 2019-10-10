@@ -46,8 +46,11 @@ update_status ModuleCamera3D::Update(float dt)
 	speed = camera_speed * dt;
 	zoom_speed = camera_zoom_speed * dt;
 
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
 		speed = camera_speed * 2 * dt;
+		zoom_speed = camera_zoom_speed * 2 * dt;
+
+	}
 
 	Movement();
 	Zoom();
@@ -123,11 +126,11 @@ void ModuleCamera3D::Zoom()
 {
 	if (App->input->GetMouseZ() > 0)
 	{
-		newPos -= Z * camera_zoom_speed;
+		newPos -= Z * zoom_speed;
 	}
 	else if (App->input->GetMouseZ() < 0)
 	{
-		newPos += Z * camera_zoom_speed;
+		newPos += Z * zoom_speed;
 	}
 }
 

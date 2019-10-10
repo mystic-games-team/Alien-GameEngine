@@ -32,7 +32,7 @@ public:
 	vec3 X, Y, Z, Position, Reference;
 
 	float camera_speed = 30.0f;
-	float camera_zoom_speed = 1.0f;
+	float camera_zoom_speed = 15.0f;
 
 private:
 
