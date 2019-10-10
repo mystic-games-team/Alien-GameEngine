@@ -99,7 +99,7 @@ void PanelCreateObject::PanelLogic()
 
 		if (ImGui::Button("Create", { ImGui::GetWindowWidth()-16,25 }))
 		{
-			Object* object;
+			Object* object=nullptr;
 			switch (objects_combo)
 			{
 			case 0:
