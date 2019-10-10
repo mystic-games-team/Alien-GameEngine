@@ -69,7 +69,7 @@
 			"Wireframe": false,
 			"MeshView": true,
 			"VertexNormals": true,
-			"FaceNormals": false
+			"FaceNormals": true
 		}
     }
 }
