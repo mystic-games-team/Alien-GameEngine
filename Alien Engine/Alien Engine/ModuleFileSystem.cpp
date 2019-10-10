@@ -34,7 +34,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 
 	// Make sure standard paths exist
 	const char* dirs[] = {
-		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER,
+		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER, TEXTURES_FOLDER,
 	};
 
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
@@ -434,20 +434,26 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 	case FileDropType::MODEL3D: 
 		final_path = MODELS_FOLDER + final_path;
 		break;
+	case FileDropType::TEXTURE:
+		final_path = TEXTURES_FOLDER + final_path;
+		break;
 	}
-	if (CopyFromOutsideFS(extern_path, final_path.c_str()))
-	{
-		std::string extension;
-		SplitFilePath(extern_path, nullptr, nullptr, &extension);
-		switch (type) {
-		case FileDropType::MODEL3D:
-			LOG("Start Loading Model");
-			App->importer->LoadModelFile(final_path.data());
-			break;
-		}
+	if (!App->StringCmp(extern_path, final_path.c_str())) {
+		CopyFromOutsideFS(extern_path, final_path.c_str());
+	}
+	std::string extension;
+	SplitFilePath(extern_path, nullptr, nullptr, &extension);
+	switch (type) {
+	case FileDropType::MODEL3D:
+		LOG("Start Loading Model");
+		App->importer->LoadModelFile(final_path.data());
+		break;
+	case FileDropType::TEXTURE:
+		LOG("Start Loading Model");
+		App->importer->LoadTextureFile(final_path.data());
+		break;
 	}
 }
-
 const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_path)
 {
 	
@@ -467,8 +473,10 @@ const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_
 	
 	FileDropType ext_type = FileDropType::UNKNOWN;
 
-	if (strcmp(extension.data(), "fbx"))
+	if (App->StringCmp(extension.data(), "fbx"))
 		ext_type = FileDropType::MODEL3D;
+	else if (App->StringCmp(extension.data(), "dds"))
+		ext_type = FileDropType::TEXTURE;
 	else
 		LOG("Extension unknown!");
 

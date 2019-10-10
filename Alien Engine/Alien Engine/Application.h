@@ -69,6 +69,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	bool StringCmp(const char* str1, const char* str2);
+
 	void QuitApp();
 
 	void OpenWebsite(const std::string& website);

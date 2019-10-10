@@ -15,10 +15,12 @@ struct aiFileIO;
 #define LIBRARY_FOLDER "Library/"
 #define CONFIGURATION_FOLDER "Configuration/"
 #define MODELS_FOLDER "Assets/Models/"
+#define TEXTURES_FOLDER "Assets/Textures/"
 
 
 enum class FileDropType {
 	MODEL3D,
+	TEXTURE,
 
 	UNKNOWN
 };
@@ -69,6 +71,7 @@ public:
 	const char* GetReadPaths() const;
 
 	void ManageNewDropFile(const char* extern_path);
+
 	const FileDropType& SearchExtension(const std::string& extern_path);
 
 private:
