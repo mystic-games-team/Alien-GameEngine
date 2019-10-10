@@ -24,6 +24,7 @@ struct Mesh {
 		glDeleteBuffers(num_vertex, &id_vertex);
 		glDeleteBuffers(num_index, &id_index);
 		glDeleteBuffers(num_vertex * 3, &id_uv);
+		glDeleteBuffers(num_vertex * 3, &id_normals);
 
 		delete[] index;
 		delete[] vertex;
@@ -52,6 +53,7 @@ struct Mesh {
 	uint material_index = 0; 
 
 	float* normals = nullptr;
+	uint id_normals = 0;
 
 	float* center_point_normal = nullptr;
 	float* center_point = nullptr;
