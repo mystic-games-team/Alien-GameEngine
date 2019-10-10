@@ -155,8 +155,6 @@ bool ModuleFileSystem::CopyFromOutsideFS(const char* full_path, const char* dest
 
 		LOG("File System copied file [%s] to [%s]", full_path, destination);
 	}
-	else
-		LOG("File System error while copy from [%s] to [%s]", full_path, destination);
 
 	return ret;
 }
@@ -438,9 +436,7 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 		final_path = TEXTURES_FOLDER + final_path;
 		break;
 	}
-	if (!App->StringCmp(extern_path, final_path.c_str())) {
-		CopyFromOutsideFS(extern_path, final_path.c_str());
-	}
+	CopyFromOutsideFS(extern_path, final_path.c_str());
 	std::string extension;
 	SplitFilePath(extern_path, nullptr, nullptr, &extension);
 	switch (type) {
