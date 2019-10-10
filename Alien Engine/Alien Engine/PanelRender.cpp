@@ -33,11 +33,26 @@ void PanelRender::PanelLogic()
 	}
 	if (ImGui::CollapsingHeader("Background")) 
 	{
+		ImGui::Spacing();
 		ImGui::ColorEdit3("Background Color", (float*)&App->renderer3D->background_color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
+		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Personalize Grid")) 
 	{
-
+		ImGui::Spacing();
+		ImGui::Checkbox("View Grid", &App->objects->allow_grid);
+		ImGui::InputFloat("Spacing", &App->renderer3D->grid_spacing, 0.2, 1, 2);
+		if (App->renderer3D->grid_spacing < 0.2)
+		{
+			App->renderer3D->grid_spacing = 0.2;
+		}
+		ImGui::InputInt("Grid Length", &App->renderer3D->length_grid,1,100);
+		if (App->renderer3D->length_grid < 1)
+		{
+			App->renderer3D->length_grid = 1;
+		}
+		ImGui::ColorEdit3("Grid Color", (float*)&App->renderer3D->grid_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_Float);
+		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Vertex Normals")) 
 	{

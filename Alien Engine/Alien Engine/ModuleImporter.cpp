@@ -19,7 +19,7 @@ bool ModuleImporter::Start()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-	LoadModelFile("Assets/Models/warrior.fbx");
+	LoadModelFile("Assets/Models/csdfs.fbx");
 	return true;
 }
 

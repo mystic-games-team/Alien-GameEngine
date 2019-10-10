@@ -59,6 +59,9 @@ update_status ModuleObjects::Update(float dt)
 		else
 			++iter;
 	}
+	if (allow_grid)
+		App->renderer3D->RenderGrid();
+
 	return UPDATE_CONTINUE;
 }
 

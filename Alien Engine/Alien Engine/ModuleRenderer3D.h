@@ -21,6 +21,8 @@ public:
 
 	void SetBackgroundColor(const Color & bg_color);
 
+	void RenderGrid();
+
 public:
 
 	Light lights[MAX_LIGHTS];
@@ -31,5 +33,7 @@ public:
 public:
 
 	Color background_color{ 0.f, 0.f, 0.f, 1.f };
-
+	int length_grid = 20;
+	Color grid_color{ 1,1,1 };
+	float grid_spacing = 1.f;
 };

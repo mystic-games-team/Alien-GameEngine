@@ -42,4 +42,5 @@ public:
 	Color mesh_color{ 1,1,1,255 };
 	int mesh_line_width = 1;
 
+	bool allow_grid = true;
 };
