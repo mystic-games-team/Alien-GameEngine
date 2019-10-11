@@ -16,7 +16,4 @@ private:
 
 	void PrintNode(GameObject* node);
 
-private:
-
-	GameObject* node_selected = nullptr;
 };

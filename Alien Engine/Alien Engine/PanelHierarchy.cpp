@@ -36,15 +36,8 @@ void PanelHierarchy::PrintNode(GameObject* node)
 	static ImGuiTreeNodeFlags_ flags = ImGuiTreeNodeFlags_None;
 	if (node != App->objects->base_game_object) {
 		if (!node->children.empty()) {
-
-			if (node != node_selected)
-				node->is_selected_in_hierarchy = false;
-
-			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | node->is_selected_in_hierarchy)) {
-				if (ImGui::IsItemClicked()) {
-					node_selected = node;
-					node->is_selected_in_hierarchy = true;
-				}
+			ImGui::PushID(node);
+			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth)) {
 				std::vector<GameObject*>::iterator item = node->children.begin();
 				for (; item != node->children.end(); ++item) {
 					if (*item != nullptr) {
@@ -53,18 +46,12 @@ void PanelHierarchy::PrintNode(GameObject* node)
 				}
 				ImGui::TreePop();
 			}
+			ImGui::PopID();
 		}
 		else {
-			if (node != node_selected)
-				node->is_selected_in_hierarchy = false;
-
-			ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->is_selected_in_hierarchy);
-		
-			if (ImGui::IsItemClicked()) {
-				node_selected = node;
-				node->is_selected_in_hierarchy = true;
-			}
-			
+			ImGui::PushID(node);
+			ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth);
+			ImGui::PopID();
 		}
 	}
 	else {

@@ -27,7 +27,6 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 	bool enabled = true;
-	bool is_selected_in_hierarchy = false;
 
 private:
 
