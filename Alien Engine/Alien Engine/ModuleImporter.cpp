@@ -227,7 +227,8 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	ret->AddComponent(transform);
 	ret->AddComponent(mesh);
 	ret->AddComponent(material);
-	ret->SetName(node->mName.data);
+	ret->SetName(node->mName.C_Str());
+
 
 	return ret;
 }

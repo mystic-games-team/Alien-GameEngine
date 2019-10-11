@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "Component.h"
 #include <vector>
+#include <string>
 
 class GameObject
 {
@@ -17,6 +18,7 @@ public:
 	void AddComponent(Component* component);
 	void AddChild(GameObject* child);
 	void SetName(const char* name);
+	const char* GetName();
 	Component* GetComponent(const ComponentType& type);
 
 public:
@@ -24,11 +26,11 @@ public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
-
-	
+	bool enabled = true;
+	bool is_selected_in_hierarchy = false;
 
 private:
 
-	bool enabled = true;
-	const char* name = nullptr;
+	
+	std::string name;
 };

@@ -65,21 +65,21 @@ void GameObject::Update()
 {
 	std::vector<Component*>::iterator it = components.begin();
 	for (; it != components.end(); ++it) {
-		if (*it != nullptr && (*it)->GetType() == ComponentType::MATERIAL) {
+		if (*it != nullptr && (*it)->GetType() == ComponentType::MATERIAL && (*it)->IsEnabled()) {
 			(*it)->Update();
 		}
 	}
 
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
-		if (*item != nullptr && (*item)->GetType() == ComponentType::MESH) {
+		if (*item != nullptr && (*item)->GetType() == ComponentType::MESH && (*item)->IsEnabled()) {
 			(*item)->Update();
 		}
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
-		if (*child != nullptr) {
+		if (*child != nullptr && (*child)->IsEnabled()) {
 			(*child)->Update();
 		}
 	}
@@ -109,7 +109,12 @@ void GameObject::AddChild(GameObject* child)
 
 void GameObject::SetName(const char* name)
 {
-	this->name = name;
+	this->name = std::string(name);
+}
+
+const char* GameObject::GetName()
+{
+	return name.c_str();
 }
 
 Component* GameObject::GetComponent(const ComponentType& type)

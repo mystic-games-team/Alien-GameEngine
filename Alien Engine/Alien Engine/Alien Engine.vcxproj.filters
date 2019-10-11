@@ -447,6 +447,9 @@
     <ClInclude Include="ComponentMaterial.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="PanelHierarchy.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -691,6 +694,9 @@
     </ClCompile>
     <ClCompile Include="ComponentMaterial.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelHierarchy.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
