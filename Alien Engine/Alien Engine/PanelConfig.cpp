@@ -212,6 +212,7 @@ void PanelConfig::PanelLogic()
 
 		ImGui::InputFloat("Camera Speed", &App->camera->camera_speed, 1, 5, 2);
 		ImGui::InputFloat("Camera Zoom Speed", &App->camera->camera_zoom_speed, 1, 5, 2);
+		ImGui::InputFloat("Camera Mouse Speed", &App->camera->camera_mouse_speed, 1, 5, 2);
 
 		ImGui::Spacing();
 		ImGui::Spacing();

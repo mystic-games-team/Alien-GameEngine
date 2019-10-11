@@ -14,6 +14,7 @@ Alien Engine is a Game Engine made by Víctor Segura Blanco and Oriol Capdevila 
 * Right Click + W/A/S/D: For Movement
 * Right Click + Z/X: For Going Up/Down
 * Left Alt + Left Click: Rotate
+* Left Alt + Middle Click: Move with mouse
 * F: Focus in an object
 * Mouse Wheel: Zoom In/Out
 

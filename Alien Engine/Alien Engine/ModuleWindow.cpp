@@ -68,7 +68,7 @@ bool ModuleWindow::Init()
 		{
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
-			SDL_SetWindowBrightness(window, brightness);
+			//SDL_SetWindowBrightness(window, brightness);
 		}
 	}
 	return ret;

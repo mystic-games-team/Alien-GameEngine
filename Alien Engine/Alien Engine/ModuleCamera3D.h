@@ -34,6 +34,7 @@ public:
 
 	float camera_speed = 30.0f;
 	float camera_zoom_speed = 15.0f;
+	float camera_mouse_speed = 15.0f;
 
 private:
 
