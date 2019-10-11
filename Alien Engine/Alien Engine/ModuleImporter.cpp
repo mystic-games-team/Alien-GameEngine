@@ -37,9 +37,9 @@ bool ModuleImporter::Start()
 {
 	App->objects->base_game_object = new GameObject();
 	App->objects->base_game_object->AddComponent(new ComponentTransform());
-	LoadModelFile("Assets/Models/BakerHouse.fbx");
-	LoadTextureFile("Assets/Textures/Baker.dds");
-
+	
+	//LoadTextureFile("Assets/Textures/Baker.dds");
+	//LoadModelFile("Assets/Models/BakerHouse.fbx");
 	return true;
 }
 
@@ -107,7 +107,7 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Gam
 	GameObject* next_parent = nullptr;
 	for (uint i = 0; i < node->mNumMeshes; ++i) {
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		next_parent = LoadNodeMesh(node, mesh, parent);
+		next_parent = LoadNodeMesh(scene, node, mesh, parent);
 	}
 	
 	for (uint i = 0; i < node->mNumChildren; ++i) {
@@ -115,7 +115,7 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Gam
 	}
 }
 
-GameObject* ModuleImporter::LoadNodeMesh(const aiNode* node, const aiMesh* ai_mesh, GameObject* parent)
+GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* ai_mesh, GameObject* parent)
 {
 	// get local transformations
 	ComponentTransform* transform = new ComponentTransform();
@@ -195,13 +195,21 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiNode* node, const aiMesh* ai_me
 		memcpy(mesh->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
 
 		// TODO LOAD TEXTURES & MATERIALS
-		//aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		//uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-		//aiString path;
-		//material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+		aiMaterial* material = scene->mMaterials[ai_mesh->mMaterialIndex];
+		uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+		aiString path;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+		int i = 0;
 	}
 
 	InitMeshBuffers(mesh);
+
+
+	////TEST
+	//ComponentMaterial* material = new ComponentMaterial();
+	//material->id_texture = test_id;
+
 
 	GameObject* ret = new GameObject();
 	if (parent == nullptr) { // the first nodes that ara child of the root node would not have a parent, so we put that it's parent is the fbx parent we created before		
@@ -214,6 +222,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiNode* node, const aiMesh* ai_me
 	}
 	ret->AddComponent(transform);
 	ret->AddComponent(mesh);
+	//ret->AddComponent(material);
 	ret->SetName(node->mName.data);
 
 	return ret;

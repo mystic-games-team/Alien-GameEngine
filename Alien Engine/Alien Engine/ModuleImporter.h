@@ -39,7 +39,7 @@ private:
 	void InitGLBuffers(Model3D* model3D);*/
 
 	void LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* game_object);
-	GameObject* LoadNodeMesh(const aiNode* node, const aiMesh* mesh, GameObject* game_object);
+	GameObject* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, GameObject* game_object);
 	void InitMeshBuffers(ComponentMesh* mesh);
 
 	uint test_id = 0;

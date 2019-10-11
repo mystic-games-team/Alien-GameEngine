@@ -7,6 +7,8 @@ class ComponentMaterial : public Component {
 public:
 	ComponentMaterial();
 	virtual ~ComponentMaterial();
+	
+	void Update();
 
 public:
 

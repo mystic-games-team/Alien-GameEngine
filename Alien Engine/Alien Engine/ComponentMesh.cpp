@@ -13,21 +13,11 @@ ComponentMesh::~ComponentMesh()
 void ComponentMesh::Update()
 {
 
-		glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	//if (id_texture != -1) {
-	//	// enable textures
-	//	glEnable(GL_TEXTURE_2D);
-	//	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	//	glBindTexture(GL_TEXTURE_2D, id_texture);
-	//	// set UV
-	//	glBindBuffer(GL_ARRAY_BUFFER, id_uv);
-	//	glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-	//	
-	//}
-	//glColor3f(color.r, color.g, color.b);
+	
 
-		glColor3f(1, 1, 1);
+	//glColor3f(1, 1, 1);
 
 	if (normals != nullptr) {
 		glEnableClientState(GL_NORMAL_ARRAY);

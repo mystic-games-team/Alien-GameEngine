@@ -63,11 +63,17 @@ bool GameObject::IsEnabled()
 
 void GameObject::Update()
 {
+	std::vector<Component*>::iterator it = components.begin();
+	for (; it != components.end(); ++it) {
+		if (*it != nullptr && (*it)->GetType() == ComponentType::MATERIAL) {
+			(*it)->Update();
+		}
+	}
+
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
 		if (*item != nullptr && (*item)->GetType() == ComponentType::MESH) {
-			static_cast<ComponentMesh*>(*item)->Update();
-			break;
+			(*item)->Update();
 		}
 	}
 
@@ -104,6 +110,18 @@ void GameObject::AddChild(GameObject* child)
 void GameObject::SetName(const char* name)
 {
 	this->name = name;
+}
+
+Component* GameObject::GetComponent(const ComponentType& type)
+{
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == type) {
+			return *item;
+		}
+	}
+	LOG("No component found");
+	return nullptr;
 }
 
 //void GameObject::DrawPolygon()

@@ -17,6 +17,7 @@ public:
 	void AddComponent(Component* component);
 	void AddChild(GameObject* child);
 	void SetName(const char* name);
+	Component* GetComponent(const ComponentType& type);
 
 public:
 
