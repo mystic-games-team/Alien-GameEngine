@@ -16,6 +16,7 @@ public:
 	void Update();
 	void AddComponent(Component* component);
 	void AddChild(GameObject* child);
+	void SetName(const char* name);
 
 public:
 
@@ -23,10 +24,10 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 
-	const char* name = nullptr;
+	
 
 private:
 
 	bool enabled = true;
-
+	const char* name = nullptr;
 };

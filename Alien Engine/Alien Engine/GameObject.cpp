@@ -91,6 +91,7 @@ void GameObject::AddComponent(Component* component)
 		}
 	}
 	if (!exists) {
+		component->game_object_attached = this;
 		components.push_back(component);
 	}
 }
@@ -98,6 +99,11 @@ void GameObject::AddComponent(Component* component)
 void GameObject::AddChild(GameObject* child)
 {
 	children.push_back(child);
+}
+
+void GameObject::SetName(const char* name)
+{
+	this->name = name;
 }
 
 //void GameObject::DrawPolygon()

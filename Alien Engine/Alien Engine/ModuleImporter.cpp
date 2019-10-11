@@ -86,12 +86,20 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 			data->meshes.push_back(InitMesh(mesh));
 		}
 	}*/
-	const aiNode* parent_node = scene->mRootNode;
+
+	// create the parent of the all fbx/obj...
 	parent_object = new GameObject();
 	parent_object->AddComponent(new ComponentTransform());
+	// set it's parent to the "invisible" game object
 	parent_object->parent = App->objects->base_game_object;
 	App->objects->base_game_object->AddChild(parent_object);
-	LoadSceneNode(parent_node, scene, parent_object);
+	// set parent name, we must change that
+	parent_object->SetName("FBX Parent, Change this");
+	
+	// start recursive function to pass through all nodes
+	LoadSceneNode(scene->mRootNode, scene, parent_object);
+
+	parent_object = nullptr;
 }
 
 void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* parent)
@@ -196,19 +204,17 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiNode* node, const aiMesh* ai_me
 	InitMeshBuffers(mesh);
 
 	GameObject* ret = new GameObject();
-	if (parent == nullptr) {
-		//parent_object->parent = App->objects->base_game_object;
-		ret->AddComponent(transform);
-		ret->AddComponent(mesh);
-		parent_object->AddChild(ret);
+	if (parent == nullptr) { // the first nodes that ara child of the root node would not have a parent, so we put that it's parent is the fbx parent we created before		
 		ret->parent = parent_object;
+		parent_object->AddChild(ret);
 	}
 	else {
 		ret->parent = parent;
-		ret->AddComponent(transform);
-		ret->AddComponent(mesh);
 		parent->AddChild(ret);
 	}
+	ret->AddComponent(transform);
+	ret->AddComponent(mesh);
+	ret->SetName(node->mName.data);
 
 	return ret;
 }

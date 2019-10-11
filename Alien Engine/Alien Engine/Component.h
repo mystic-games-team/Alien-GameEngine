@@ -1,5 +1,7 @@
 #pragma once
 
+class GameObject;
+
 typedef unsigned int uint;
 
 enum class ComponentType {
@@ -23,9 +25,15 @@ public:
 
 	const ComponentType& GetType() const;
 
+
+public:
+
+	GameObject* game_object_attached = nullptr;
+
 protected:
 
 	ComponentType type = ComponentType::UNKNOWN;
 	bool enabled = true;
+	
 
 };
