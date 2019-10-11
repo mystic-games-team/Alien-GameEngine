@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Objects.h"
+#include "GameObject.h"
 #include "Shapes.h"
 
 enum class PrimitiveType
@@ -16,7 +16,7 @@ enum class PrimitiveType
 	UNKONWN
 };
 
-class Primitive : public Object
+class Primitive : public GameObject
 {
 public:
 	Primitive();

@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "PanelCreateObject.h"
-#include "Objects.h"
+#include "GameObject.h"
 #include "ModuleObjects.h"
 #include "Primitive.h"
 
@@ -99,7 +99,7 @@ void PanelCreateObject::PanelLogic()
 
 		if (ImGui::Button("Create", { ImGui::GetWindowWidth()-16,25 }))
 		{
-			Object* object=nullptr;
+			GameObject* object = nullptr;
 			switch (objects_combo)
 			{
 			case 0:

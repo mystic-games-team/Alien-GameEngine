@@ -4,7 +4,7 @@
 
 #include "Rock.h"
 
-Primitive::Primitive() : Object()
+Primitive::Primitive() : GameObject()
 {
 }
 

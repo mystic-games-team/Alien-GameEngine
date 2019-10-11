@@ -369,9 +369,6 @@
     <ClInclude Include="ModuleObjects.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Objects.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>Objects\Primitives</Filter>
     </ClInclude>
@@ -431,6 +428,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -626,9 +626,6 @@
     <ClCompile Include="ModuleImporter.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Objects.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleObjects.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -663,6 +660,9 @@
       <Filter>Panels</Filter>
     </ClCompile>
     <ClCompile Include="Model3D.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>

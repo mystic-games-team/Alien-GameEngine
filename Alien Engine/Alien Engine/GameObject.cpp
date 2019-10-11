@@ -1,15 +1,15 @@
 #include "Color.h"
-#include "Objects.h"
+#include "GameObject.h"
 #include "glew/include/glew.h"
 #include "ModuleObjects.h"
 #include "Application.h"
 
-Object::Object()
+GameObject::GameObject()
 {
 
 }
 
-Object::~Object()
+GameObject::~GameObject()
 {
 
 	glDeleteBuffers(1, &id_vertex);
@@ -32,17 +32,17 @@ Object::~Object()
 	uv_cords = nullptr;
 }
 
-void Object::ChangeEnable()
+void GameObject::ChangeEnable()
 {
 	enabled = !enabled;
 }
 
-bool Object::IsEnabled()
+bool GameObject::IsEnabled()
 {
 	return enabled;
 }
 
-void Object::DrawPolygon()
+void GameObject::DrawPolygon()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -82,7 +82,7 @@ void Object::DrawPolygon()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Object::DrawMesh()
+void GameObject::DrawMesh()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -97,7 +97,7 @@ void Object::DrawMesh()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void Object::DrawVertexNormals()
+void GameObject::DrawVertexNormals()
 {
 	if (normals != nullptr) {
 		glColor3f(App->objects->vertex_n_color.r, App->objects->vertex_n_color.g, App->objects->vertex_n_color.b);
@@ -113,7 +113,7 @@ void Object::DrawVertexNormals()
 	}
 }
 
-void Object::DrawFaceNormals()
+void GameObject::DrawFaceNormals()
 {
 	if (normals != nullptr) {
 		glColor3f(App->objects->face_n_color.r, App->objects->face_n_color.g, App->objects->face_n_color.b);
@@ -129,12 +129,12 @@ void Object::DrawFaceNormals()
 	}
 }
 
-vec3 Object::GetPosition()
+vec3 GameObject::GetPosition()
 {
 	return position;
 }
 
-void Object::SetColor(Color color)
+void GameObject::SetColor(Color color)
 {
 	this->color = color;
 }

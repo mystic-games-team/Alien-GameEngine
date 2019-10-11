@@ -141,7 +141,7 @@ void ModuleImporter::InitMesh(const aiMesh* ai_mesh, const char* path)
 
 	InitGLBuffers(data);
 
-	App->objects->objects.push_back(data);
+	App->objects->game_objects.push_back(data);
 }
 
 void ModuleImporter::InitGLBuffers(Model3D* model3D)
@@ -196,8 +196,8 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 			0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 	}
 	
-	std::vector<Object*>::iterator item = App->objects->objects.begin();
-	for (; item != App->objects->objects.end(); ++item) {
+	std::vector<GameObject*>::iterator item = App->objects->game_objects.begin();
+	for (; item != App->objects->game_objects.end(); ++item) {
 		if (*item != nullptr) {
 			(*item)->id_texture = test_id;
 		}

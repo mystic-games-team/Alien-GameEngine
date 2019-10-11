@@ -1,6 +1,6 @@
 #include "Globals.h"
 #include "ModuleObjects.h"
-#include "Objects.h"
+#include "GameObject.h"
 #include "Primitive.h"
 #include "ModuleInput.h"
 #include "glew/include/glew.h"
@@ -33,8 +33,8 @@ bool ModuleObjects::Start()
 
 update_status ModuleObjects::PreUpdate(float dt)
 {
-	std::vector<Object*>::iterator iter;
-	for (iter = objects.begin(); iter != objects.end(); ++iter)
+	std::vector<GameObject*>::iterator iter;
+	for (iter = game_objects.begin(); iter != game_objects.end(); ++iter)
 	{
 		if ((*iter) != nullptr)
 		{
@@ -49,8 +49,8 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 update_status ModuleObjects::Update(float dt)
 {
-	std::vector<Object*>::iterator iter;
-	for (iter = objects.begin(); iter != objects.end(); ++iter)
+	std::vector<GameObject*>::iterator iter;
+	for (iter = game_objects.begin(); iter != game_objects.end(); ++iter)
 	{
 		if ((*iter) != nullptr)
 		{
@@ -67,8 +67,8 @@ update_status ModuleObjects::Update(float dt)
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
-	std::vector<Object*>::iterator item;
-	for (item = objects.begin(); item != objects.end(); ++item)
+	std::vector<GameObject*>::iterator item;
+	for (item = game_objects.begin(); item != game_objects.end(); ++item)
 	{
 		if ((*item) != nullptr)
 		{
@@ -99,8 +99,8 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 bool ModuleObjects::CleanUp()
 {
-	std::vector<Object*>::iterator iter;
-	for (iter=objects.begin(); iter!=objects.end(); ++iter)
+	std::vector<GameObject*>::iterator iter;
+	for (iter=game_objects.begin(); iter!=game_objects.end(); ++iter)
 	{
 		if ((*iter) != nullptr)
 		{
@@ -109,7 +109,7 @@ bool ModuleObjects::CleanUp()
 		}
 	}
 
-	objects.clear();
+	game_objects.clear();
 
 	return true;
 }
@@ -151,8 +151,8 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type)
 
 	if (ret != nullptr)
 	{
-		static_cast<Object*>(ret)->type = ObjectType::PRIMITIVE;
-		objects.push_back(ret);
+		static_cast<GameObject*>(ret)->type = GameObjectType::PRIMITIVE;
+		game_objects.push_back(ret);
 	}
 
 	return ret;
@@ -194,8 +194,8 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float
 	}
 	if (ret != nullptr)
 	{
-		static_cast<Object*>(ret)->type = ObjectType::PRIMITIVE;
-		objects.push_back(ret);
+		static_cast<GameObject*>(ret)->type = GameObjectType::PRIMITIVE;
+		game_objects.push_back(ret);
 	}
 
 	return ret;
@@ -214,8 +214,8 @@ void ModuleObjects::ChangeViewMeshMode()
 
 void ModuleObjects::DeleteAllObjects() 
 {
-	std::vector<Object*>::iterator iter;
-	for (iter = objects.begin(); iter != objects.end(); ++iter)
+	std::vector<GameObject*>::iterator iter;
+	for (iter = game_objects.begin(); iter != game_objects.end(); ++iter)
 	{
 		if ((*iter) != nullptr)
 		{
@@ -224,7 +224,7 @@ void ModuleObjects::DeleteAllObjects()
 		}
 	}
 
-	objects.clear();
+	game_objects.clear();
 }
 
 void ModuleObjects::ChangeEnableGrid()

@@ -46,6 +46,7 @@ update_status ModuleCamera3D::Update(float dt)
 	newPos = { 0,0,0 };
 	speed = camera_speed * dt;
 	zoom_speed = camera_zoom_speed * dt;
+	mouse_speed = camera_speed * dt * 0.3f;
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
 		speed = camera_speed * 2 * dt;
@@ -123,6 +124,15 @@ void ModuleCamera3D::Movement()
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 	}
+
+	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT&& App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	{
+		if(App->input->GetMouseXMotion()>5) newPos -= X * mouse_speed;
+		if(App->input->GetMouseXMotion()<-5) newPos += X * mouse_speed;
+
+		if (App->input->GetMouseYMotion() < 5) newPos -= Y * mouse_speed;
+		if (App->input->GetMouseYMotion() > -5) newPos += Y * mouse_speed;
+	}
 }
 
 void ModuleCamera3D::Zoom()
@@ -179,7 +189,7 @@ void ModuleCamera3D::Focus()
 {
 	if (focus_at == nullptr)
 	{
-		focus_at=App->objects->objects.front();
+		focus_at=App->objects->game_objects.front();
 	}
 
 	LookAt(focus_at->position);

@@ -4,7 +4,7 @@
 #include "glmath.h"
 #include "Color.h"
 
-enum class ObjectType
+enum class GameObjectType
 {
 	PRIMITIVE,
 	CAMERA,
@@ -12,11 +12,11 @@ enum class ObjectType
 	UNKONWN
 };
 
-class Object
+class GameObject
 {
 public:
-	Object();
-	virtual ~Object();
+	GameObject();
+	virtual ~GameObject();
 
 	void ChangeEnable();
 	bool IsEnabled();
@@ -35,7 +35,7 @@ protected:
 
 public:
 
-	ObjectType type = ObjectType::UNKONWN;
+	GameObjectType type = GameObjectType::UNKONWN;
 
 	vec3 position = { 0,0,0 };
 

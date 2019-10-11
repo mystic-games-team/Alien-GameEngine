@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Objects.h"
+#include "GameObject.h"
 
-class Model3D : public Object
+class Model3D : public GameObject
 {
 public:
 	Model3D();

@@ -42,6 +42,7 @@ private:
 	vec3 newPos{ 0,0,0 };
 	float speed = 0.f;
 	float zoom_speed = 0.f;
+	float mouse_speed = 0.f;
 
-	Object* focus_at = nullptr;
+	GameObject* focus_at = nullptr;
 };

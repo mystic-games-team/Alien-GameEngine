@@ -2,7 +2,7 @@
 
 #include "Module.h"
 #include "Globals.h"
-#include "Objects.h"
+#include "GameObject.h"
 #include "Primitive.h"
 #include "Color.h"
 #include <vector>
@@ -34,7 +34,7 @@ public:
 	void ChangeEnableNormalFace();
 
 public:
-	std::vector<Object*> objects;
+	std::vector<GameObject*> game_objects;
 
 	bool wireframe_mode = false;
 	bool view_mesh_mode = true;
