@@ -23,6 +23,7 @@ public:
 	ModuleImporter(bool start_enabled = true);
 	~ModuleImporter();
 
+	bool Init();
 	bool Start();
 	bool CleanUp();
 
