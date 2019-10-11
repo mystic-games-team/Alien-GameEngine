@@ -13,6 +13,7 @@
 #include "Octahedron.h"
 #include "Icosahedron.h"
 #include "Torus_Alien.h"
+#include "ComponentTransform.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {
@@ -28,37 +29,21 @@ bool ModuleObjects::Start()
 	LOG("Starting Module Objects");
 	bool ret = true;
 
+	base_game_object = new GameObject();
+	base_game_object->AddComponent(new ComponentTransform());
+
 	return ret;
 }
 
 update_status ModuleObjects::PreUpdate(float dt)
 {
-	std::vector<GameObject*>::iterator iter;
-	for (iter = game_objects.begin(); iter != game_objects.end(); ++iter)
-	{
-		if ((*iter) != nullptr)
-		{
-			
-		}
-		else
-			++iter;
-	}
 
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleObjects::Update(float dt)
 {
-	std::vector<GameObject*>::iterator iter;
-	for (iter = game_objects.begin(); iter != game_objects.end(); ++iter)
-	{
-		if ((*iter) != nullptr)
-		{
-
-		}
-		else
-			++iter;
-	}
+	
 	if (allow_grid)
 		App->renderer3D->RenderGrid();
 
@@ -67,7 +52,7 @@ update_status ModuleObjects::Update(float dt)
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
-	std::vector<GameObject*>::iterator item;
+	/*std::vector<GameObject*>::iterator item;
 	for (item = game_objects.begin(); item != game_objects.end(); ++item)
 	{
 		if ((*item) != nullptr)
@@ -93,23 +78,13 @@ update_status ModuleObjects::PostUpdate(float dt)
 		}
 
 	}
-
+	*/
 	return UPDATE_CONTINUE;
 }
 
 bool ModuleObjects::CleanUp()
 {
-	std::vector<GameObject*>::iterator iter;
-	for (iter=game_objects.begin(); iter!=game_objects.end(); ++iter)
-	{
-		if ((*iter) != nullptr)
-		{
-			delete (*iter);
-			(*iter) = nullptr;
-		}
-	}
 
-	game_objects.clear();
 
 	return true;
 }
@@ -117,7 +92,7 @@ bool ModuleObjects::CleanUp()
 Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type)
 {
 	Primitive* ret = nullptr;
-	switch (type)
+	/*switch (type)
 	{
 	case PrimitiveType::CUBE:
 		ret = new Cube();
@@ -154,14 +129,14 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type)
 		static_cast<GameObject*>(ret)->type = GameObjectType::PRIMITIVE;
 		game_objects.push_back(ret);
 	}
-
+*/
 	return ret;
 }
 
 Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint & subdivisions , const uint & seed , const uint & slices , const uint & slacks , const float & radius)
 {
 	Primitive* ret = nullptr;
-	switch (type)
+	/*switch (type)
 	{
 	case PrimitiveType::CUBE:
 		ret = new Cube(position_x, position_y, position_z);
@@ -196,7 +171,7 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float
 	{
 		static_cast<GameObject*>(ret)->type = GameObjectType::PRIMITIVE;
 		game_objects.push_back(ret);
-	}
+	}*/
 
 	return ret;
 }
@@ -214,7 +189,7 @@ void ModuleObjects::ChangeViewMeshMode()
 
 void ModuleObjects::DeleteAllObjects() 
 {
-	std::vector<GameObject*>::iterator iter;
+	/*std::vector<GameObject*>::iterator iter;
 	for (iter = game_objects.begin(); iter != game_objects.end(); ++iter)
 	{
 		if ((*iter) != nullptr)
@@ -224,7 +199,7 @@ void ModuleObjects::DeleteAllObjects()
 		}
 	}
 
-	game_objects.clear();
+	game_objects.clear();*/
 }
 
 void ModuleObjects::ChangeEnableGrid()

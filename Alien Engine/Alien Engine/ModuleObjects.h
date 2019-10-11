@@ -34,7 +34,8 @@ public:
 	void ChangeEnableNormalFace();
 
 public:
-	std::vector<GameObject*> game_objects;
+
+	GameObject* base_game_object = nullptr;
 
 	bool wireframe_mode = false;
 	bool view_mesh_mode = true;

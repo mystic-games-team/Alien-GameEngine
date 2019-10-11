@@ -1,16 +1,7 @@
 #pragma once
 
 #include "Globals.h"
-#include "glmath.h"
-#include "Color.h"
-
-enum class GameObjectType
-{
-	PRIMITIVE,
-	CAMERA,
-
-	UNKONWN
-};
+#include "Component.h"
 
 class GameObject
 {
@@ -18,49 +9,22 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
-	void ChangeEnable();
+	void Enable();
+	void Disable();
 	bool IsEnabled();
 
-	void DrawPolygon();
-	void DrawMesh();
-	void DrawVertexNormals();
-	void DrawFaceNormals();
-
-	vec3 GetPosition();
-
-	void SetColor(Color color);
-
-protected:
-	bool enabled = true;
+	void AddComponent(const Component* component);
 
 public:
 
-	GameObjectType type = GameObjectType::UNKONWN;
+	std::vector<Component*> components;
+	std::vector<GameObject*> children;
+	GameObject* parent = nullptr;
 
-	vec3 position = { 0,0,0 };
+	const char* name = nullptr;
 
-	uint id_index = 0;
-	uint id_vertex = 0;
+private:
 
-	uint num_index = 0;
-	uint* index = nullptr;
+	bool enabled = true;
 
-	uint num_vertex = 0;
-	float* vertex = nullptr;
-
-	uint material_index = 0;
-
-	float* normals = nullptr;
-	uint id_normals = 0;
-
-	float* center_point_normal = nullptr;
-	float* center_point = nullptr;
-	uint num_faces = 0;
-
-	float* uv_cords = nullptr;
-	uint id_uv = 0;
-
-	int id_texture = -1;
-
-	Color color{ 1,1,1 };
 };

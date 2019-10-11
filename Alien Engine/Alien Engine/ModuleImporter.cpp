@@ -7,6 +7,10 @@
 #include "Devil/include/ilu.h"
 #include "Devil/include/ilut.h"
 
+#include "ComponentTransform.h"
+#include "ComponentMaterial.h"
+#include "ComponentMesh.h"
+
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
 }
@@ -68,11 +72,11 @@ bool ModuleImporter::LoadModelFile(const char* path)
 void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 {
 	//data->textures.resize(scene->mNumMaterials); ////////////////
-	if (scene->HasMeshes()) {
+	/*if (scene->HasMeshes()) {
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 			InitMesh(scene->mMeshes[i], path);
 		}
-	}
+	}*/
 	// TODO: load .obj and other 3Ds that have textures
 	/*if (scene->HasTextures()) {
 		for (uint i = 0; i < scene->mNumTextures; ++i) {
@@ -80,104 +84,252 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 			data->meshes.push_back(InitMesh(mesh));
 		}
 	}*/
+	const aiNode* parent_node = scene->mRootNode;
+	parent_object = new GameObject();
+	LoadSceneNode(parent_node, scene, parent_object);
 }
 
-void ModuleImporter::InitMesh(const aiMesh* ai_mesh, const char* path)
+void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* parent)
 {
-	Model3D* data = new Model3D();
-	data->path = path;
-	data->material_index = ai_mesh->mMaterialIndex;
+	GameObject* next_parent = nullptr;
+	for (uint i = 0; i < node->mNumMeshes; ++i) {
+		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		next_parent = LoadNodeMesh(node, mesh, parent);
+	}
+	
+	for (uint i = 0; i < node->mNumChildren; ++i) {
+		LoadSceneNode(node->mChildren[i], scene, next_parent);
+	}
+}
 
-	const aiVector3D zeros(0.0f, 0.0f, 0.0f);
-	data->vertex = new float[ai_mesh->mNumVertices * 3];
-	memcpy(data->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
-	data->num_vertex = ai_mesh->mNumVertices;
+GameObject* ModuleImporter::LoadNodeMesh(const aiNode* node, const aiMesh* ai_mesh, GameObject* parent)
+{
+	// get local transformations
+	ComponentTransform* transform = new ComponentTransform();
 
+	aiVector3D translation, scaling;
+	aiQuaternion rotation;
+
+	node->mTransformation.Decompose(scaling, rotation, translation);
+
+	float3 pos(translation.x, translation.y, translation.z);
+	float3 scale(scaling.x, scaling.y, scaling.z);
+	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+
+	transform->local_position = pos;
+	transform->local_scale = scale;
+	transform->local_rotation = rot;
+
+	// get mesh data
+	ComponentMesh* mesh = new ComponentMesh();
+
+	// get vertex
+	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
+	memcpy(mesh->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
+	mesh->num_vertex = ai_mesh->mNumVertices;
+	// get index
 	if (ai_mesh->HasFaces())
 	{
-		data->num_index = ai_mesh->mNumFaces * 3;
-		data->index = new uint[data->num_index]; // assume each face is a triangle
+		mesh->num_index = ai_mesh->mNumFaces * 3;
+		mesh->index = new uint[mesh->num_index]; // assume each face is a triangle
 		for (uint i = 0; i < ai_mesh->mNumFaces; ++i)
 		{
 			if (ai_mesh->mFaces[i].mNumIndices != 3) {
 				LOG("WARNING, geometry face with != 3 indices!");
 			}
 			else {
-				memcpy(&data->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+				memcpy(&mesh->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 			}
 		}
 	}
+	// get normals
 	if (ai_mesh->HasNormals())
 	{
-		data->normals = new float[ai_mesh->mNumVertices * 3];
-		memcpy(data->normals, ai_mesh->mNormals, sizeof(float) * ai_mesh->mNumVertices * 3);
+		mesh->normals = new float[ai_mesh->mNumVertices * 3];
+		memcpy(mesh->normals, ai_mesh->mNormals, sizeof(float) * ai_mesh->mNumVertices * 3);
 
-		data->center_point_normal = new float[ai_mesh->mNumFaces * 3];
-		data->center_point = new float[ai_mesh->mNumFaces * 3];
-		data->num_faces = ai_mesh->mNumFaces;
-		for (uint i = 0; i < data->num_index; i += 3)
+		mesh->center_point_normal = new float[ai_mesh->mNumFaces * 3];
+		mesh->center_point = new float[ai_mesh->mNumFaces * 3];
+		mesh->num_faces = ai_mesh->mNumFaces;
+		for (uint i = 0; i < mesh->num_index; i += 3)
 		{
-			uint index1 = data->index[i] * 3;
-			uint index2 = data->index[i + 1] * 3;
-			uint index3 = data->index[i + 2] * 3;
+			uint index1 = mesh->index[i] * 3;
+			uint index2 = mesh->index[i + 1] * 3;
+			uint index3 = mesh->index[i + 2] * 3;
 
-			vec3 x0(data->vertex[index1], data->vertex[index1 + 1], data->vertex[index1 + 2]);
-			vec3 x1(data->vertex[index2], data->vertex[index2 + 1], data->vertex[index2 + 2]);
-			vec3 x2(data->vertex[index3], data->vertex[index3 + 1], data->vertex[index3 + 2]);
+			vec3 x0(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
+			vec3 x1(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
+			vec3 x2(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
 
 			vec3 v0 = x0 - x2;
 			vec3 v1 = x1 - x2;
 			vec3 n = cross(v0, v1);
-			
+
 			vec3 normalized = normalize(n);
 
-			data->center_point[i] = (x0.x + x1.x + x2.x) / 3;
-			data->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
-			data->center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
+			mesh->center_point[i] = (x0.x + x1.x + x2.x) / 3;
+			mesh->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
+			mesh->center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
 
-			data->center_point_normal[i] = normalized.x;
-			data->center_point_normal[i + 1] = normalized.y;
-			data->center_point_normal[i + 2] = normalized.z;
+			mesh->center_point_normal[i] = normalized.x;
+			mesh->center_point_normal[i + 1] = normalized.y;
+			mesh->center_point_normal[i + 2] = normalized.z;
 		}
 	}
+	// get UV
 	if (ai_mesh->HasTextureCoords(0)) {
-		data->uv_cords = new float[ai_mesh->mNumVertices * 3];
-		memcpy(data->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
+		mesh->uv_cords = new float[ai_mesh->mNumVertices * 3];
+		memcpy(mesh->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
+
+		// TODO LOAD TEXTURES & MATERIALS
+		//aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		//uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+		//aiString path;
+		//material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 	}
 
-	InitGLBuffers(data);
+	InitMeshBuffers(mesh);
 
-	App->objects->game_objects.push_back(data);
+	GameObject* ret = nullptr;
+	if (parent == parent_object) {
+		parent_object->parent = App->objects->base_game_object;
+		parent_object->AddComponent(transform);
+		parent_object->AddComponent(mesh);
+		ret = parent_object;
+	}
+	else {
+		ret = new GameObject();
+		ret->parent = parent;
+		ret->AddComponent(transform);
+		ret->AddComponent(mesh);
+	}
+
+	return ret;
 }
 
-void ModuleImporter::InitGLBuffers(Model3D* model3D)
+void ModuleImporter::InitMeshBuffers(ComponentMesh* mesh)
 {
 	// vertex
-	glGenBuffers(1, &model3D->id_vertex);
-	glBindBuffer(GL_ARRAY_BUFFER, model3D->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
-		&model3D->vertex[0], GL_STATIC_DRAW);
+	glGenBuffers(1, &mesh->id_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+		&mesh->vertex[0], GL_STATIC_DRAW);
 
 	// index
-	glGenBuffers(1, &model3D->id_index);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * model3D->num_index,
-		&model3D->index[0], GL_STATIC_DRAW);
+	glGenBuffers(1, &mesh->id_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_index,
+		&mesh->index[0], GL_STATIC_DRAW);
 
 	// UV
-	glGenBuffers(1, &model3D->id_uv);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_uv);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
-		&model3D->uv_cords[0], GL_STATIC_DRAW);
+	glGenBuffers(1, &mesh->id_uv);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+		&mesh->uv_cords[0], GL_STATIC_DRAW);
 
 	// normals
-	glGenBuffers(1, &model3D->id_normals);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_normals);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
-		&model3D->normals[0], GL_STATIC_DRAW);
-
-
+	glGenBuffers(1, &mesh->id_normals);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_normals);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+		&mesh->normals[0], GL_STATIC_DRAW);
 }
+
+//void ModuleImporter::InitMesh(const aiMesh* ai_mesh, const char* path)
+//{
+//	Model3D* data = new Model3D();
+//	data->path = path;
+//	data->material_index = ai_mesh->mMaterialIndex;
+//
+//	const aiVector3D zeros(0.0f, 0.0f, 0.0f);
+//	data->vertex = new float[ai_mesh->mNumVertices * 3];
+//	memcpy(data->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
+//	data->num_vertex = ai_mesh->mNumVertices;
+//
+//	if (ai_mesh->HasFaces())
+//	{
+//		data->num_index = ai_mesh->mNumFaces * 3;
+//		data->index = new uint[data->num_index]; // assume each face is a triangle
+//		for (uint i = 0; i < ai_mesh->mNumFaces; ++i)
+//		{
+//			if (ai_mesh->mFaces[i].mNumIndices != 3) {
+//				LOG("WARNING, geometry face with != 3 indices!");
+//			}
+//			else {
+//				memcpy(&data->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+//			}
+//		}
+//	}
+//	if (ai_mesh->HasNormals())
+//	{
+//		data->normals = new float[ai_mesh->mNumVertices * 3];
+//		memcpy(data->normals, ai_mesh->mNormals, sizeof(float) * ai_mesh->mNumVertices * 3);
+//
+//		data->center_point_normal = new float[ai_mesh->mNumFaces * 3];
+//		data->center_point = new float[ai_mesh->mNumFaces * 3];
+//		data->num_faces = ai_mesh->mNumFaces;
+//		for (uint i = 0; i < data->num_index; i += 3)
+//		{
+//			uint index1 = data->index[i] * 3;
+//			uint index2 = data->index[i + 1] * 3;
+//			uint index3 = data->index[i + 2] * 3;
+//
+//			vec3 x0(data->vertex[index1], data->vertex[index1 + 1], data->vertex[index1 + 2]);
+//			vec3 x1(data->vertex[index2], data->vertex[index2 + 1], data->vertex[index2 + 2]);
+//			vec3 x2(data->vertex[index3], data->vertex[index3 + 1], data->vertex[index3 + 2]);
+//
+//			vec3 v0 = x0 - x2;
+//			vec3 v1 = x1 - x2;
+//			vec3 n = cross(v0, v1);
+//			
+//			vec3 normalized = normalize(n);
+//
+//			data->center_point[i] = (x0.x + x1.x + x2.x) / 3;
+//			data->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
+//			data->center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
+//
+//			data->center_point_normal[i] = normalized.x;
+//			data->center_point_normal[i + 1] = normalized.y;
+//			data->center_point_normal[i + 2] = normalized.z;
+//		}
+//	}
+//	if (ai_mesh->HasTextureCoords(0)) {
+//		data->uv_cords = new float[ai_mesh->mNumVertices * 3];
+//		memcpy(data->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
+//	}
+//
+//	InitGLBuffers(data);
+//
+//	App->objects->game_objects.push_back(data);
+//}
+//
+//void ModuleImporter::InitGLBuffers(Model3D* model3D)
+//{
+//	// vertex
+//	glGenBuffers(1, &model3D->id_vertex);
+//	glBindBuffer(GL_ARRAY_BUFFER, model3D->id_vertex);
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
+//		&model3D->vertex[0], GL_STATIC_DRAW);
+//
+//	// index
+//	glGenBuffers(1, &model3D->id_index);
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_index);
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * model3D->num_index,
+//		&model3D->index[0], GL_STATIC_DRAW);
+//
+//	// UV
+//	glGenBuffers(1, &model3D->id_uv);
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_uv);
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
+//		&model3D->uv_cords[0], GL_STATIC_DRAW);
+//
+//	// normals
+//	glGenBuffers(1, &model3D->id_normals);
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_normals);
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
+//		&model3D->normals[0], GL_STATIC_DRAW);
+//
+//
+//}
 
 bool ModuleImporter::LoadTextureFile(const char* path)
 {
@@ -202,12 +354,12 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 			0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 	}
 	
-	std::vector<GameObject*>::iterator item = App->objects->game_objects.begin();
+	/*std::vector<GameObject*>::iterator item = App->objects->game_objects.begin();
 	for (; item != App->objects->game_objects.end(); ++item) {
 		if (*item != nullptr) {
 			(*item)->id_texture = test_id;
 		}
-	}
+	}*/
 
 	return ret;
 }
