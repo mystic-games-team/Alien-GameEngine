@@ -8,6 +8,8 @@ public:
 	ComponentMesh();
 	virtual ~ComponentMesh();
 
+	void Update();
+
 public:
 
 	// buffers id

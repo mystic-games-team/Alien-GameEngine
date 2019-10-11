@@ -16,6 +16,7 @@ public:
 	Component();	
 	virtual ~Component();
 
+	virtual void Update() {};
 	virtual void Enable();
 	virtual void Disable();
 	virtual bool IsEnabled();

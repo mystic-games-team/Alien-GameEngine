@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 #include "Component.h"
+#include <vector>
 
 class GameObject
 {
@@ -13,7 +14,7 @@ public:
 	void Disable();
 	bool IsEnabled();
 
-	void AddComponent(const Component* component);
+	void AddComponent(Component* component);
 
 public:
 

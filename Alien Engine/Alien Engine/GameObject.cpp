@@ -61,7 +61,7 @@ bool GameObject::IsEnabled()
 	return enabled;
 }
 
-void GameObject::AddComponent(const Component* component)
+void GameObject::AddComponent(Component* component)
 {
 	bool exists = false;
 	std::vector<Component*>::iterator item = components.begin();
