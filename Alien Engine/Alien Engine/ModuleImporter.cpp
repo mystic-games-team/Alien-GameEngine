@@ -15,7 +15,7 @@ ModuleImporter::~ModuleImporter()
 {
 }
 
-bool ModuleImporter::Start()
+bool ModuleImporter::Init()
 {
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
@@ -24,6 +24,12 @@ bool ModuleImporter::Start()
 	ilInit();
 	iluInit();
 	ilutInit();
+
+	return true;
+}
+
+bool ModuleImporter::Start()
+{
 
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
 	LoadTextureFile("Assets/Textures/Baker.dds");
