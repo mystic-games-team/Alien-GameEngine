@@ -10,6 +10,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
+#include "GameObject.h"
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -34,7 +35,8 @@ bool ModuleImporter::Init()
 
 bool ModuleImporter::Start()
 {
-
+	App->objects->base_game_object = new GameObject();
+	App->objects->base_game_object->AddComponent(new ComponentTransform());
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
 	LoadTextureFile("Assets/Textures/Baker.dds");
 
@@ -86,6 +88,9 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	}*/
 	const aiNode* parent_node = scene->mRootNode;
 	parent_object = new GameObject();
+	parent_object->AddComponent(new ComponentTransform());
+	parent_object->parent = App->objects->base_game_object;
+	App->objects->base_game_object->AddChild(parent_object);
 	LoadSceneNode(parent_node, scene, parent_object);
 }
 
@@ -190,18 +195,19 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiNode* node, const aiMesh* ai_me
 
 	InitMeshBuffers(mesh);
 
-	GameObject* ret = nullptr;
-	if (parent == parent_object) {
-		parent_object->parent = App->objects->base_game_object;
-		parent_object->AddComponent(transform);
-		parent_object->AddComponent(mesh);
-		ret = parent_object;
+	GameObject* ret = new GameObject();
+	if (parent == nullptr) {
+		//parent_object->parent = App->objects->base_game_object;
+		ret->AddComponent(transform);
+		ret->AddComponent(mesh);
+		parent_object->AddChild(ret);
+		ret->parent = parent_object;
 	}
 	else {
-		ret = new GameObject();
 		ret->parent = parent;
 		ret->AddComponent(transform);
 		ret->AddComponent(mesh);
+		parent->AddChild(ret);
 	}
 
 	return ret;

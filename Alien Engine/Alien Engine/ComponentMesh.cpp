@@ -3,6 +3,7 @@
 
 ComponentMesh::ComponentMesh() : Component()
 {
+	type = ComponentType::MESH;
 }
 
 ComponentMesh::~ComponentMesh()

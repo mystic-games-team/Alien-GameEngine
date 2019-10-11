@@ -61,6 +61,25 @@ bool GameObject::IsEnabled()
 	return enabled;
 }
 
+void GameObject::Update()
+{
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ComponentType::MESH) {
+			static_cast<ComponentMesh*>(*item)->Update();
+			break;
+		}
+	}
+
+	std::vector<GameObject*>::iterator child = children.begin();
+	for (; child != children.end(); ++child) {
+		if (*child != nullptr) {
+			(*child)->Update();
+		}
+	}
+
+}
+
 void GameObject::AddComponent(Component* component)
 {
 	bool exists = false;
@@ -74,6 +93,11 @@ void GameObject::AddComponent(Component* component)
 	if (!exists) {
 		components.push_back(component);
 	}
+}
+
+void GameObject::AddChild(GameObject* child)
+{
+	children.push_back(child);
 }
 
 //void GameObject::DrawPolygon()

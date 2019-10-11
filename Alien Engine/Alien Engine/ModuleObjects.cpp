@@ -29,8 +29,8 @@ bool ModuleObjects::Start()
 	LOG("Starting Module Objects");
 	bool ret = true;
 
-	base_game_object = new GameObject();
-	base_game_object->AddComponent(new ComponentTransform());
+	//base_game_object = new GameObject();
+	//base_game_object->AddComponent(new ComponentTransform());
 
 	return ret;
 }
@@ -79,6 +79,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 	}
 	*/
+	base_game_object->Update();
 	return UPDATE_CONTINUE;
 }
 

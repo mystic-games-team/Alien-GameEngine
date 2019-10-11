@@ -2,6 +2,7 @@
 
 ComponentTransform::ComponentTransform() : Component()
 {
+	type = ComponentType::TRANSFORM;
 }
 
 ComponentTransform::~ComponentTransform()

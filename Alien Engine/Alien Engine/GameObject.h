@@ -13,8 +13,9 @@ public:
 	void Enable();
 	void Disable();
 	bool IsEnabled();
-
+	void Update();
 	void AddComponent(Component* component);
+	void AddChild(GameObject* child);
 
 public:
 
