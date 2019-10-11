@@ -22,4 +22,6 @@ public:
 	Quat local_rotation = { 0,0,0,0 };
 	Quat global_rotation = { 0,0,0,0 };
 
+	// position, scale & rotation in one matrix
+	float4x4 complete_transformation = float4x4::identity;
 };

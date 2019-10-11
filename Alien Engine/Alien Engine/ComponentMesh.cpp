@@ -1,5 +1,7 @@
 #include "ComponentMesh.h"
 #include "glew/include/glew.h"
+#include "GameObject.h"
+#include "ComponentTransform.h"
 
 ComponentMesh::ComponentMesh() : Component()
 {
@@ -12,10 +14,12 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::Update()
 {
+	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+	
+	glPushMatrix();
+	glMultMatrixf(transform->complete_transformation.ptr());
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-
-	
 
 	//glColor3f(1, 1, 1);
 
@@ -42,6 +46,6 @@ void ComponentMesh::Update()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-
+	glPopMatrix();
 
 }

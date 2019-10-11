@@ -39,7 +39,7 @@ bool ModuleImporter::Start()
 	App->objects->base_game_object->AddComponent(new ComponentTransform());
 	
 	//LoadTextureFile("Assets/Textures/Baker.dds");
-	//LoadModelFile("Assets/Models/BakerHouse.fbx");
+	LoadModelFile("Assets/Models/BakerHouse.fbx");
 	return true;
 }
 
@@ -132,6 +132,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	transform->local_position = pos;
 	transform->local_scale = scale;
 	transform->local_rotation = rot;
+	transform->complete_transformation.FromTRS(pos, rot, scale);
 
 	// get mesh data
 	ComponentMesh* mesh = new ComponentMesh();
@@ -196,12 +197,15 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 
 		// TODO LOAD TEXTURES & MATERIALS
 
-		aiMaterial* material = scene->mMaterials[ai_mesh->mMaterialIndex];
-		uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-		aiString path;
-		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-		int i = 0;
 	}
+
+	ComponentMaterial* material = new ComponentMaterial();
+
+	/*aiMaterial* ai_material = scene->mMaterials[ai_mesh->mMaterialIndex];
+	uint numTextures = ai_material->GetTextureCount(aiTextureType_DIFFUSE);
+	aiString path;
+	ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &path);*/
+
 
 	InitMeshBuffers(mesh);
 
@@ -222,7 +226,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	}
 	ret->AddComponent(transform);
 	ret->AddComponent(mesh);
-	//ret->AddComponent(material);
+	ret->AddComponent(material);
 	ret->SetName(node->mName.data);
 
 	return ret;
