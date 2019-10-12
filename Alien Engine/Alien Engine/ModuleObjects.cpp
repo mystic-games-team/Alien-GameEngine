@@ -232,6 +232,10 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	view_mesh_mode = config->GetBoolean("Configuration.Renderer.MeshView");
 	draw_vertex_normals = config->GetBoolean("Configuration.Renderer.VertexNormals");
 	draw_face_normals = config->GetBoolean("Configuration.Renderer.FaceNormals");
+	face_n_width = config->GetNumber("Configuration.Renderer.FaceNormalsWidth");
+	vertex_n_width = config->GetNumber("Configuration.Renderer.VertexNormalsWidth");
+	vertex_normal_length = config->GetNumber("Configuration.Renderer.VertexNormalsLength");
+	face_normal_length = config->GetNumber("Configuration.Renderer.FaceNormalsLength");
 }
 
 void ModuleObjects::SaveConfig(JSONfilepack*& config)
@@ -240,5 +244,9 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetBoolean("Configuration.Renderer.MeshView", view_mesh_mode);
 	config->SetBoolean("Configuration.Renderer.VertexNormals", draw_vertex_normals);
 	config->SetBoolean("Configuration.Renderer.FaceNormals", draw_face_normals);
+	config->SetNumber("Configuration.Renderer.FaceNormalsWidth", face_n_width);
+	config->SetNumber("Configuration.Renderer.VertexNormalsWidth", vertex_n_width);
+	config->SetNumber("Configuration.Renderer.VertexNormalsLength", vertex_normal_length);
+	config->SetNumber("Configuration.Renderer.FaceNormalsLength", face_normal_length);
 }
 

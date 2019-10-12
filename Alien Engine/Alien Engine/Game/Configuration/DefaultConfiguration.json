@@ -89,7 +89,11 @@
 			"Wireframe": false,
 			"MeshView": true,
 			"VertexNormals": false,
-			"FaceNormals": false
+			"FaceNormals": false,
+			"VertexNormalsWidth": 1,
+			"FaceNormalsWidth": 1,
+			"VertexNormalsLength": 1,
+			"FaceNormalsLength": 1
 		}
     }
 }
