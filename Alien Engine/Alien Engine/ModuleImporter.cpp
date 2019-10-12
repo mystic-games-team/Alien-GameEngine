@@ -187,38 +187,31 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 
 	aiVector3D translation, scaling;
 	aiQuaternion rotation;
+	// local pos, rot & scale
+	node->mTransformation.Decompose(scaling, rotation, translation);
 
-	
+	int max_ = max(scaling.x, scaling.y);
+	max_ = max(max_, scaling.z);
 
 	float3 pos(translation.x, translation.y, translation.z);
-	float3 scale(scaling.x, scaling.y, scaling.z);
+	float3 scale(scaling.x/max_, scaling.y / max_, scaling.x / max_);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	transform->SetLocalPosition(pos.x, pos.y, pos.z);
 	transform->SetLocalScale(scale.x, scale.y, scale.z);
 	transform->SetLocalRotation(rot.x, rot.y, rot.z, rot.w);
+	transform->local_transformation = transform->local_transformation.FromTRS(pos, rot, scale);
 
 	GameObject* ret = new GameObject();
 	if (parent == nullptr) { // the first nodes that ara child of the root node would not have a parent, so we put that it's parent is the fbx parent we created before		
-		const aiMatrix4x4 m2 = node->mTransformation;
-		aiMatrix4x4 m;
-		m2.Scaling({ 1,1,1 }, m);
-		float4x4 matrix(m.a1, m.a2, m.a3, m.a4,
-			m.b1, m.b2, m.b3, m.b4,
-			m.c1, m.c2, m.c3, m.c4,
-			m.d1, m.d2, m.d3, m.d4);
-		transform->complete_transformation = transform->complete_transformation * matrix;
+		ComponentTransform* tr = (ComponentTransform*)parent_object->GetComponent(ComponentType::TRANSFORM);
+		transform->global_transformation = tr->global_transformation * transform->local_transformation;
 		ret->parent = parent_object;
 		parent_object->AddChild(ret);
 	}
 	else {
 		ComponentTransform* tr = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
-		const aiMatrix4x4 m = node->mTransformation;
-		float4x4 matrix(m.a1, m.a2, m.a3, m.a4,
-			m.b1, m.b2, m.b3, m.b4,
-			m.c1, m.c2, m.c3, m.c4,
-			m.d1, m.d2, m.d3, m.d4);
-		transform->complete_transformation = tr->complete_transformation * matrix;
+		transform->global_transformation = tr->global_transformation * transform->local_transformation;
 		ret->parent = parent;
 		parent->AddChild(ret);
 	}

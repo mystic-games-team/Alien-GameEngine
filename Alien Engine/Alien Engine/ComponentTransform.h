@@ -11,18 +11,28 @@ public:
 	virtual ~ComponentTransform();
 
 	void SetLocalPosition(const int& x, const int& y, const int& z);
-	const float3& GetLoaclPosition() const;
+	const float3& GetLocalPosition() const;
 
 	void SetLocalScale(const int& x, const int& y, const int& z);
-	const float3& GetLoaclScale() const;
+	const float3& GetLocalScale() const;
 
 	void SetLocalRotation(const int& x, const int& y, const int& z, const int& angle);
-	const Quat& GetLoaclRotation() const;
+	const Quat& GetLocalRotation() const;
+
+	void SetGlobalPosition(const int& x, const int& y, const int& z);
+	const float3& GetGlobalPosition() const;
+
+	void SetGlobalScale(const int& x, const int& y, const int& z);
+	const float3& GetGlobalScale() const;
+
+	void SetGlobalRotation(const int& x, const int& y, const int& z, const int& angle);
+	const Quat& GetGlobalRotation() const;
 
 
 public:
 
-	float4x4 complete_transformation = float4x4::identity;
+	float4x4 global_transformation = float4x4::identity;
+	float4x4 local_transformation = float4x4::identity;
 
 private:
 
