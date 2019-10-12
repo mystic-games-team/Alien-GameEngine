@@ -19,6 +19,8 @@ public:
 	void SetLocalRotation(const float& x, const float& y, const float& z, const float& angle);
 	const Quat& GetLocalRotation() const;
 
+	void DrawInspector();
+
 private:
 
 	void RecalculateTransform();

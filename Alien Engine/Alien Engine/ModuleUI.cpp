@@ -13,6 +13,7 @@
 #include "PanelRender.h"
 #include "SDL/include/SDL_assert.h"
 #include "ModuleObjects.h"
+#include "PanelInspector.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -76,6 +77,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		panel_create_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
 		panel_hierarchy_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelHierarchy", i);
 		panel_console_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", i);
+		panel_inspector_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelInspector", i);
 		panel_render_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelRender", i);
 		shortcut_demo_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ImGuiDemo", i);
 		shortcut_report_bug_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ReportBug", i);
@@ -95,6 +97,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelHierarchy", (uint)panel_hierarchy->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.Render", (uint)panel_render->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelInspector", (uint)panel_inspector->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", (uint)panel_console->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", (uint)panel_create_object->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.WireframeMode", (uint)shortcut_wireframe->GetScancode(i));
@@ -172,6 +175,10 @@ void ModuleUI::MainMenuBar()
 		if (ImGui::MenuItem("Console", panel_console->shortcut->GetNameScancodes()))
 		{
 			panel_console->ChangeEnable();
+		}
+		if (ImGui::MenuItem("Inspector", panel_inspector->shortcut->GetNameScancodes()))
+		{
+			panel_inspector->ChangeEnable();
 		}
 		if (ImGui::MenuItem("Hierarchy", panel_hierarchy->shortcut->GetNameScancodes()))
 		{
@@ -281,6 +288,7 @@ void ModuleUI::InitPanels()
 	panel_render = new PanelRender("Render Options", panel_render_codes[0], panel_render_codes[1], panel_render_codes[2]);
 	panel_hierarchy = new PanelHierarchy("Panel Hierarchy", panel_hierarchy_codes[0], panel_hierarchy_codes[1], panel_hierarchy_codes[2]);
 	panel_create_object = new PanelCreateObject("Create Object", panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
+	panel_inspector = new PanelInspector("Inspector", panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
@@ -288,6 +296,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_render);
 	panels.push_back(panel_hierarchy);
 	panels.push_back(panel_create_object);
+	panels.push_back(panel_inspector);
 
 }
 

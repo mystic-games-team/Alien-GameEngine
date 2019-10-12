@@ -21,6 +21,7 @@ public:
 	virtual void Enable();
 	virtual void Disable();
 	virtual bool IsEnabled();
+	virtual void DrawInspector() {}
 
 	const ComponentType& GetType() const;
 

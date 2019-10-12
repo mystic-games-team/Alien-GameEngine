@@ -1,5 +1,6 @@
 #include "ComponentTransform.h"
 #include "GameObject.h"
+#include "imgui/imgui.h"
 
 ComponentTransform::ComponentTransform(GameObject* attach, const float3& pos, const Quat& rot, const float3& scale) : Component(attach)
 {
@@ -84,9 +85,18 @@ void ComponentTransform::RecalculateTransform()
 			if (tr != nullptr) tr->RecalculateTransform();
 		}
 	}
-
-
-		
 }
+
+
+void ComponentTransform::DrawInspector()
+{
+
+	if (ImGui::InputFloat3("Position", (float*)& local_position, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
+		RecalculateTransform();
+	}
+
+
+}
+
 
 

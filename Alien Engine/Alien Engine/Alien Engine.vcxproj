@@ -247,6 +247,7 @@
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="PanelCreateObject.h" />
     <ClInclude Include="PanelHierarchy.h" />
+    <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="PanelRender.h" />
     <ClInclude Include="Parson\parson.h" />
     <ClInclude Include="PCG\pcg_extras.hpp" />
@@ -336,6 +337,7 @@
     <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PanelCreateObject.cpp" />
     <ClCompile Include="PanelHierarchy.cpp" />
+    <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PanelRender.cpp" />
     <ClCompile Include="Parson\parson.c" />
     <ClCompile Include="Primitive.cpp" />

@@ -215,7 +215,7 @@ void ModuleObjects::SetNewSelectedObject(GameObject* selected)
 	}
 }
 
-const GameObject* ModuleObjects::GetSelectedObject() const
+GameObject* ModuleObjects::GetSelectedObject()
 {
 	return game_object_selected;
 }
