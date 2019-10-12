@@ -16,7 +16,7 @@ PanelHierarchy::~PanelHierarchy()
 
 void PanelHierarchy::PanelLogic()
 {
-	ImGui::Begin(panel_name.data(), &enabled);
+	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
 
 	ImGui::Spacing();
 	ImGui::Text("GameObjects");

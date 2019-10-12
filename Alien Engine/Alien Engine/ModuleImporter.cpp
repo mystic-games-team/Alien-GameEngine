@@ -190,11 +190,12 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	// local pos, rot & scale
 	node->mTransformation.Decompose(scaling, rotation, translation);
 
+	// set the sacale in value of 1 but keeping the dimensions
 	int max_ = max(scaling.x, scaling.y);
 	max_ = max(max_, scaling.z);
 
 	float3 pos(translation.x, translation.y, translation.z);
-	float3 scale(scaling.x/max_, scaling.y / max_, scaling.x / max_);
+	float3 scale(scaling.x / max_, scaling.y / max_, scaling.x / max_);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	transform->SetLocalPosition(pos.x, pos.y, pos.z);
@@ -215,6 +216,12 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 		ret->parent = parent;
 		parent->AddChild(ret);
 	}
+
+	transform->global_transformation.Decompose(pos, rot, scale);
+	transform->SetGlobalPosition(pos.x, pos.y, pos.z);
+	transform->SetGlobalRotation(rot.x, rot.y, rot.z, rot.w);
+	transform->SetGlobalScale(scale.x, scale.y, scale.z);
+
 	ret->AddComponent(transform);
 	ret->AddComponent(mesh);
 	ret->AddComponent(material);
