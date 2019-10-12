@@ -37,7 +37,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 	{
 		if (!node->children.empty()) 
 		{
-			ImGui::PushID(node + 1);
+			ImGui::PushID(node);
 			ImGui::Checkbox("##Active", &node->enabled);
 			ImGui::PopID();
 			ImGui::SameLine();
@@ -66,7 +66,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		}
 		else 
 		{
-			ImGui::PushID(node + 1);
+			ImGui::PushID(node);
 			ImGui::Checkbox("##Active", &node->enabled);
 			ImGui::PopID();
 			ImGui::SameLine();
