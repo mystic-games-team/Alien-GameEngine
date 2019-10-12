@@ -14,33 +14,29 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr) {
+			delete* item;
+			*item = nullptr;
+		}
+	}
 
-	//glDeleteBuffers(1, &id_vertex);
-	//glDeleteBuffers(1, &id_index);
-	//glDeleteBuffers(1, &id_uv);
-	//glDeleteBuffers(1, &id_normals);
-
-	//delete[] index;
-	//delete[] vertex;
-	//delete[] normals;
-	//delete[] uv_cords;
-	//delete[] center_point_normal;
-	//delete[] center_point;
-
-	//center_point_normal = nullptr;
-	//center_point = nullptr;
-	//index = nullptr;
-	//vertex = nullptr;
-	//normals = nullptr;
-	//uv_cords = nullptr;
+	std::vector<GameObject*>::iterator child = children.begin();
+	for (; child != children.end(); ++child) {
+		if (*child != nullptr) {
+			delete* child;
+			*child = nullptr;
+		}
+	}
 }
 
 void GameObject::Enable()
 {
 	enabled = true;
-	// TODO for all sons
-	std::vector<Component*>::iterator item = components.begin();
-	for (; item != components.end(); ++item) {
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
 			(*item)->Enable();
 		}
@@ -50,10 +46,10 @@ void GameObject::Enable()
 void GameObject::Disable()
 {
 	enabled = false;
-	// TODO for all sons
-	std::vector<Component*>::iterator item = components.begin();
-	for (; item != components.end(); ++item) {
-		if (*item != nullptr && (*item)->IsEnabled()) {
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
 			(*item)->Disable();
 		}
 	}

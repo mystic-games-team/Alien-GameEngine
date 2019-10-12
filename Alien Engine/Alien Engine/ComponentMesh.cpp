@@ -11,6 +11,24 @@ ComponentMesh::ComponentMesh() : Component()
 
 ComponentMesh::~ComponentMesh()
 {
+	glDeleteBuffers(1, &id_index);
+	glDeleteBuffers(1, &id_normals);
+	glDeleteBuffers(1, &id_vertex);
+	glDeleteBuffers(1, &id_uv);
+
+	delete[] vertex;
+	delete[] index;
+	delete[] normals;
+	delete[] center_point;
+	delete[] center_point_normal;
+	delete[] uv_cords;
+
+	vertex = nullptr;
+	index = nullptr;
+	center_point = nullptr;
+	center_point_normal = nullptr;
+	normals = nullptr;
+	uv_cords = nullptr;
 }
 
 void ComponentMesh::DrawPolygon()

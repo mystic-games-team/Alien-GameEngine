@@ -10,6 +10,7 @@ ComponentMaterial::ComponentMaterial() : Component()
 
 ComponentMaterial::~ComponentMaterial()
 {
+	glDeleteBuffers(1, &id_texture);
 }
 
 void ComponentMaterial::BindTexture()

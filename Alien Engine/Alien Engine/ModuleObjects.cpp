@@ -51,15 +51,16 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 update_status ModuleObjects::Update(float dt)
 {
-	
-	if (allow_grid)
-		App->renderer3D->RenderGrid();
 
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
+
+	if (allow_grid)
+		App->renderer3D->RenderGrid();
+
 	base_game_object->Draw();
 	return UPDATE_CONTINUE;
 }
@@ -67,6 +68,8 @@ update_status ModuleObjects::PostUpdate(float dt)
 bool ModuleObjects::CleanUp()
 {
 
+	delete base_game_object;
+	base_game_object = nullptr;
 
 	return true;
 }
