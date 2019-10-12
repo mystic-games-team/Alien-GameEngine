@@ -188,13 +188,13 @@ void ModuleCamera3D::Rotation()
 
 void ModuleCamera3D::Focus()
 {
-	if (focus_at == nullptr)
+	/*if (focus_at == nullptr)
 	{
 		focus_at=App->objects->game_objects.front();
 	}
 
-	LookAt(focus_at->position);
-	// TODO ELSE
+	LookAt(focus_at->position);*/
+	//TODO ELSE
 	
 }
 

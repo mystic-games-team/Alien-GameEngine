@@ -16,6 +16,8 @@
 #include <vector>
 #include "glew/include/glew.h"
 #include "Model3D.h"
+#include "GameObject.h"
+#include "ComponentMesh.h"
 
 class ModuleImporter : public Module
 {
@@ -28,14 +30,15 @@ public:
 	bool CleanUp();
 
 	bool LoadModelFile(const char* path);
-	bool LoadTextureFile(const char* path);
+	uint LoadTextureFile(const char* path);
 
 private:
 
 	void InitScene(const aiScene* scene, const char* path);
-	void InitMesh(const aiMesh* ai_mesh, const char* path);
-	void InitGLBuffers(Model3D* model3D);
+	void LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* game_object);
+	GameObject* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, GameObject* game_object);
+	void InitMeshBuffers(ComponentMesh* mesh);
 
 	uint test_id = 0;
-
+	GameObject* parent_object = nullptr;
 };

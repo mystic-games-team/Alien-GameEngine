@@ -13,6 +13,7 @@ public:
 	ModuleObjects(bool start_enabled = true);
 	virtual ~ModuleObjects();
 
+	bool Init();
 	bool Start();
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
@@ -34,7 +35,8 @@ public:
 	void ChangeEnableNormalFace();
 
 public:
-	std::vector<GameObject*> game_objects;
+
+	GameObject* base_game_object = nullptr;
 
 	bool wireframe_mode = false;
 	bool view_mesh_mode = true;

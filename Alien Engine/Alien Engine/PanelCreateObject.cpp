@@ -136,7 +136,7 @@ void PanelCreateObject::PanelLogic()
 				break;
 			}
 
-			object->SetColor(create_color);
+			//object->SetColor(create_color);
 			create_color = { 1,1,1 };
 
 			ChangeEnable();

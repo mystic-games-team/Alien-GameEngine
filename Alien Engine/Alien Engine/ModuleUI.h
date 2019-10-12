@@ -13,6 +13,7 @@ class PanelAbout;
 class PanelConsole;
 class PanelCreateObject;
 class PanelRender;
+class PanelHierarchy;
 
 struct ShortCut;
 
@@ -55,6 +56,7 @@ private:
 	PanelConsole* panel_console = nullptr;
 	PanelCreateObject* panel_create_object = nullptr;
 	PanelRender* panel_render = nullptr;
+	PanelHierarchy* panel_hierarchy = nullptr;
 
 	// ShortCuts
 
@@ -70,6 +72,7 @@ private:
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_about_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_hierarchy_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_create_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_console_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_render_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };

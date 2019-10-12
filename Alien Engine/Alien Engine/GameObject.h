@@ -1,16 +1,9 @@
 #pragma once
 
 #include "Globals.h"
-#include "glmath.h"
-#include "Color.h"
-
-enum class GameObjectType
-{
-	PRIMITIVE,
-	CAMERA,
-
-	UNKONWN
-};
+#include "Component.h"
+#include <vector>
+#include <string>
 
 class GameObject
 {
@@ -18,49 +11,25 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
-	void ChangeEnable();
+	void Enable();
+	void Disable();
 	bool IsEnabled();
-
-	void DrawPolygon();
-	void DrawMesh();
-	void DrawVertexNormals();
-	void DrawFaceNormals();
-
-	vec3 GetPosition();
-
-	void SetColor(Color color);
-
-protected:
-	bool enabled = true;
+	void Draw();
+	void AddComponent(Component* component);
+	void AddChild(GameObject* child);
+	void SetName(const char* name);
+	const char* GetName();
+	Component* GetComponent(const ComponentType& type);
 
 public:
 
-	GameObjectType type = GameObjectType::UNKONWN;
+	std::vector<Component*> components;
+	std::vector<GameObject*> children;
+	GameObject* parent = nullptr;
+	bool enabled = true;
 
-	vec3 position = { 0,0,0 };
+private:
 
-	uint id_index = 0;
-	uint id_vertex = 0;
-
-	uint num_index = 0;
-	uint* index = nullptr;
-
-	uint num_vertex = 0;
-	float* vertex = nullptr;
-
-	uint material_index = 0;
-
-	float* normals = nullptr;
-	uint id_normals = 0;
-
-	float* center_point_normal = nullptr;
-	float* center_point = nullptr;
-	uint num_faces = 0;
-
-	float* uv_cords = nullptr;
-	uint id_uv = 0;
-
-	int id_texture = -1;
-
-	Color color{ 1,1,1 };
+	
+	std::string name;
 };
