@@ -184,6 +184,7 @@ void ModuleObjects::DeleteAllObjects()
 		else
 			++item;
 	}
+	game_object_selected = nullptr;
 }
 
 void ModuleObjects::ChangeEnableGrid()
@@ -212,6 +213,17 @@ void ModuleObjects::SetNewSelectedObject(GameObject* selected)
 		selected->clicked = true;
 		game_object_selected = selected;
 	}
+}
+
+const GameObject* ModuleObjects::GetSelectedObject() const
+{
+	return game_object_selected;
+}
+
+void ModuleObjects::DeselectObject()
+{
+	game_object_selected->clicked = false;
+	game_object_selected = nullptr;
 }
 
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 

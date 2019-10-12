@@ -14,6 +14,9 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
+	if (App->objects->GetSelectedObject() == this)
+		App->objects->DeselectObject();
+
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
 		if (*item != nullptr) {

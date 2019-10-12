@@ -35,6 +35,8 @@ public:
 	void ChangeEnableNormalFace();
 
 	void SetNewSelectedObject(GameObject* selected);
+	const GameObject* GetSelectedObject() const;
+	void DeselectObject();
 
 public:
 
