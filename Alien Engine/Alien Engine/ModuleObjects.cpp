@@ -24,13 +24,21 @@ ModuleObjects::~ModuleObjects()
 {
 }
 
+bool ModuleObjects::Init()
+{
+
+	base_game_object = new GameObject();
+	base_game_object->AddComponent(new ComponentTransform());
+
+	return true;
+}
+
 bool ModuleObjects::Start()
 {
 	LOG("Starting Module Objects");
 	bool ret = true;
 
-	//base_game_object = new GameObject();
-	//base_game_object->AddComponent(new ComponentTransform());
+
 
 	return ret;
 }

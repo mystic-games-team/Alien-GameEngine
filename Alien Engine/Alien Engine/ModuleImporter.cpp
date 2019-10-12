@@ -35,11 +35,9 @@ bool ModuleImporter::Init()
 
 bool ModuleImporter::Start()
 {
-	App->objects->base_game_object = new GameObject();
-	App->objects->base_game_object->AddComponent(new ComponentTransform());
 	
 	//LoadTextureFile("Assets/Textures/Baker.dds");
-	LoadModelFile("Assets/Models/BakerHouse.fbx");
+	//LoadModelFile("Assets/Models/BakerHouse.fbx");
 	return true;
 }
 
@@ -201,11 +199,15 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 
 	ComponentMaterial* material = new ComponentMaterial();
 
-	/*aiMaterial* ai_material = scene->mMaterials[ai_mesh->mMaterialIndex];
+	// TODO LOAD THE PATH TO SEARCH IF THIS TEXTURE EXISTS
+
+	material->material_index = ai_mesh->mMaterialIndex;
+	aiMaterial* ai_material = scene->mMaterials[material->material_index];
 	uint numTextures = ai_material->GetTextureCount(aiTextureType_DIFFUSE);
 	aiString path;
-	ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &path);*/
-
+	ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+	std::string full_path(TEXTURES_FOLDER + std::string(path.C_Str()));
+	material->id_texture = LoadTextureFile(full_path.data());
 
 	InitMeshBuffers(mesh);
 
@@ -357,9 +359,9 @@ void ModuleImporter::InitMeshBuffers(ComponentMesh* mesh)
 //
 //}
 
-bool ModuleImporter::LoadTextureFile(const char* path)
+uint ModuleImporter::LoadTextureFile(const char* path)
 {
-	bool ret = true;
+	uint ret = 0;
 
 	if (ilLoadImage(path)) {
 		ILuint Width, Height;
@@ -369,8 +371,8 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 		ILubyte* Data = ilGetData();
 		
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glGenTextures(1, &test_id);
-		glBindTexture(GL_TEXTURE_2D, test_id);
+		glGenTextures(1, &ret);
+		glBindTexture(GL_TEXTURE_2D, ret);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -378,6 +380,11 @@ bool ModuleImporter::LoadTextureFile(const char* path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height,
 			0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
+
+
+	}
+	else {
+		LOG("Error while loading image in %s", path);
 	}
 	
 	/*std::vector<GameObject*>::iterator item = App->objects->game_objects.begin();

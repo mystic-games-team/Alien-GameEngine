@@ -30,7 +30,7 @@ public:
 	bool CleanUp();
 
 	bool LoadModelFile(const char* path);
-	bool LoadTextureFile(const char* path);
+	uint LoadTextureFile(const char* path);
 
 private:
 
