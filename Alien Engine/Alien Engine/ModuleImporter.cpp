@@ -58,7 +58,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 	if (scene != nullptr) {
 		InitScene(scene, path);
-		LOG("Succesfully loaded");
+		LOG("Succesfully loaded %s", path);
 	}
 	else {
 		ret = false;
@@ -71,20 +71,6 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 {
-	//data->textures.resize(scene->mNumMaterials); ////////////////
-	/*if (scene->HasMeshes()) {
-		for (uint i = 0; i < scene->mNumMeshes; ++i) {
-			InitMesh(scene->mMeshes[i], path);
-		}
-	}*/
-	// TODO: load .obj and other 3Ds that have textures
-	/*if (scene->HasTextures()) {
-		for (uint i = 0; i < scene->mNumTextures; ++i) {
-			const aiMesh* mesh = scene->mMeshes[i];
-			data->meshes.push_back(InitMesh(mesh));
-		}
-	}*/
-
 	// create the parent of the all fbx/obj...
 	parent_object = new GameObject();
 	parent_object->AddComponent(new ComponentTransform());
@@ -93,15 +79,17 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	App->objects->base_game_object->AddChild(parent_object);
 	// set parent name, we must change that
 	parent_object->SetName("FBX Parent, Change this");
-	
+	// TODO SET THE NAME OF THE FIRST NODE
 	// start recursive function to pass through all nodes
 	LoadSceneNode(scene->mRootNode, scene, parent_object);
+	LOG("All nodes loaded");
 
 	parent_object = nullptr;
 }
 
 void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* parent)
 {
+	LOG("Loading node with name %s", node->mName.C_Str());
 	GameObject* next_parent = nullptr;
 	for (uint i = 0; i < node->mNumMeshes; ++i) {
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -109,6 +97,7 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Gam
 	}
 	
 	for (uint i = 0; i < node->mNumChildren; ++i) {
+		LOG("Loading children of node %s", node->mName.C_Str());
 		LoadSceneNode(node->mChildren[i], scene, next_parent);
 	}
 }
@@ -192,15 +181,10 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	if (ai_mesh->HasTextureCoords(0)) {
 		mesh->uv_cords = new float[ai_mesh->mNumVertices * 3];
 		memcpy(mesh->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
-
-		// TODO LOAD TEXTURES & MATERIALS
-
 	}
 
+	// set the material
 	ComponentMaterial* material = new ComponentMaterial();
-
-	// TODO LOAD THE PATH TO SEARCH IF THIS TEXTURE EXISTS
-
 	material->material_index = ai_mesh->mMaterialIndex;
 	aiMaterial* ai_material = scene->mMaterials[material->material_index];
 	uint numTextures = ai_material->GetTextureCount(aiTextureType_DIFFUSE);
@@ -210,12 +194,6 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	material->id_texture = LoadTextureFile(full_path.data());
 
 	InitMeshBuffers(mesh);
-
-
-	////TEST
-	//ComponentMaterial* material = new ComponentMaterial();
-	//material->id_texture = test_id;
-
 
 	GameObject* ret = new GameObject();
 	if (parent == nullptr) { // the first nodes that ara child of the root node would not have a parent, so we put that it's parent is the fbx parent we created before		
@@ -262,103 +240,6 @@ void ModuleImporter::InitMeshBuffers(ComponentMesh* mesh)
 		&mesh->normals[0], GL_STATIC_DRAW);
 }
 
-//void ModuleImporter::InitMesh(const aiMesh* ai_mesh, const char* path)
-//{
-//	Model3D* data = new Model3D();
-//	data->path = path;
-//	data->material_index = ai_mesh->mMaterialIndex;
-//
-//	const aiVector3D zeros(0.0f, 0.0f, 0.0f);
-//	data->vertex = new float[ai_mesh->mNumVertices * 3];
-//	memcpy(data->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
-//	data->num_vertex = ai_mesh->mNumVertices;
-//
-//	if (ai_mesh->HasFaces())
-//	{
-//		data->num_index = ai_mesh->mNumFaces * 3;
-//		data->index = new uint[data->num_index]; // assume each face is a triangle
-//		for (uint i = 0; i < ai_mesh->mNumFaces; ++i)
-//		{
-//			if (ai_mesh->mFaces[i].mNumIndices != 3) {
-//				LOG("WARNING, geometry face with != 3 indices!");
-//			}
-//			else {
-//				memcpy(&data->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
-//			}
-//		}
-//	}
-//	if (ai_mesh->HasNormals())
-//	{
-//		data->normals = new float[ai_mesh->mNumVertices * 3];
-//		memcpy(data->normals, ai_mesh->mNormals, sizeof(float) * ai_mesh->mNumVertices * 3);
-//
-//		data->center_point_normal = new float[ai_mesh->mNumFaces * 3];
-//		data->center_point = new float[ai_mesh->mNumFaces * 3];
-//		data->num_faces = ai_mesh->mNumFaces;
-//		for (uint i = 0; i < data->num_index; i += 3)
-//		{
-//			uint index1 = data->index[i] * 3;
-//			uint index2 = data->index[i + 1] * 3;
-//			uint index3 = data->index[i + 2] * 3;
-//
-//			vec3 x0(data->vertex[index1], data->vertex[index1 + 1], data->vertex[index1 + 2]);
-//			vec3 x1(data->vertex[index2], data->vertex[index2 + 1], data->vertex[index2 + 2]);
-//			vec3 x2(data->vertex[index3], data->vertex[index3 + 1], data->vertex[index3 + 2]);
-//
-//			vec3 v0 = x0 - x2;
-//			vec3 v1 = x1 - x2;
-//			vec3 n = cross(v0, v1);
-//			
-//			vec3 normalized = normalize(n);
-//
-//			data->center_point[i] = (x0.x + x1.x + x2.x) / 3;
-//			data->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
-//			data->center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
-//
-//			data->center_point_normal[i] = normalized.x;
-//			data->center_point_normal[i + 1] = normalized.y;
-//			data->center_point_normal[i + 2] = normalized.z;
-//		}
-//	}
-//	if (ai_mesh->HasTextureCoords(0)) {
-//		data->uv_cords = new float[ai_mesh->mNumVertices * 3];
-//		memcpy(data->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
-//	}
-//
-//	InitGLBuffers(data);
-//
-//	App->objects->game_objects.push_back(data);
-//}
-//
-//void ModuleImporter::InitGLBuffers(Model3D* model3D)
-//{
-//	// vertex
-//	glGenBuffers(1, &model3D->id_vertex);
-//	glBindBuffer(GL_ARRAY_BUFFER, model3D->id_vertex);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
-//		&model3D->vertex[0], GL_STATIC_DRAW);
-//
-//	// index
-//	glGenBuffers(1, &model3D->id_index);
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_index);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * model3D->num_index,
-//		&model3D->index[0], GL_STATIC_DRAW);
-//
-//	// UV
-//	glGenBuffers(1, &model3D->id_uv);
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_uv);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
-//		&model3D->uv_cords[0], GL_STATIC_DRAW);
-//
-//	// normals
-//	glGenBuffers(1, &model3D->id_normals);
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model3D->id_normals);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * model3D->num_vertex * 3,
-//		&model3D->normals[0], GL_STATIC_DRAW);
-//
-//
-//}
-
 uint ModuleImporter::LoadTextureFile(const char* path)
 {
 	uint ret = 0;
@@ -381,18 +262,12 @@ uint ModuleImporter::LoadTextureFile(const char* path)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height,
 			0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 	}
 	else {
 		LOG("Error while loading image in %s", path);
 	}
-	
-	/*std::vector<GameObject*>::iterator item = App->objects->game_objects.begin();
-	for (; item != App->objects->game_objects.end(); ++item) {
-		if (*item != nullptr) {
-			(*item)->id_texture = test_id;
-		}
-	}*/
 
 	return ret;
 }
