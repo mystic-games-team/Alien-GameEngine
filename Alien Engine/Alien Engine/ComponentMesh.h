@@ -5,7 +5,7 @@
 class ComponentMesh : public Component {
 public:
 
-	ComponentMesh();
+	ComponentMesh(GameObject* attach);
 	virtual ~ComponentMesh();
 
 	void DrawPolygon();

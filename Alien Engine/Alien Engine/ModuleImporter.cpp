@@ -73,12 +73,13 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 {
 	// create the parent of the all fbx/obj...
 	parent_object = new GameObject();
-	parent_object->AddComponent(new ComponentTransform());
-	// set parent active
-	App->objects->SetNewSelectedObject(parent_object);
 	// set it's parent to the "invisible" game object
 	parent_object->parent = App->objects->base_game_object;
 	App->objects->base_game_object->AddChild(parent_object);
+	ComponentTransform* tr = new ComponentTransform(parent_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 });
+	parent_object->AddComponent(tr);
+	// set parent active
+	App->objects->SetNewSelectedObject(parent_object);
 	// set parent name, we must change that
 	parent_object->SetName(App->file_system->GetBaseFileName(path).data());
 	// start recursive function to pass through all nodes
@@ -104,10 +105,18 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Gam
 
 GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* ai_mesh, GameObject* parent)
 {
-	// TODO function to calculate the 3 globals respect parent, put here!!
+	GameObject* ret = new GameObject();
+	if (parent == nullptr) {
+		ret->parent = parent_object;
+		parent_object->AddChild(ret);
+	}
+	else {
+		ret->parent = parent;
+		parent->AddChild(ret);
+	}
 
 	// get mesh data
-	ComponentMesh* mesh = new ComponentMesh();
+	ComponentMesh* mesh = new ComponentMesh(ret);
 
 	// get vertex
 	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
@@ -169,7 +178,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	}
 
 	// set the material
-	ComponentMaterial* material = new ComponentMaterial();
+	ComponentMaterial* material = new ComponentMaterial(ret);
 	material->material_index = ai_mesh->mMaterialIndex;
 	aiMaterial* ai_material = scene->mMaterials[material->material_index];
 	uint numTextures = ai_material->GetTextureCount(aiTextureType_DIFFUSE);
@@ -180,11 +189,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 
 	InitMeshBuffers(mesh);
 
-
-
 	// get local transformations
-	ComponentTransform* transform = new ComponentTransform();
-
 	aiVector3D translation, scaling;
 	aiQuaternion rotation;
 	// local pos, rot & scale
@@ -196,37 +201,15 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 
 	float3 pos(translation.x, translation.y, translation.z);
 	float3 scale(scaling.x / max_, scaling.y / max_, scaling.x / max_);
+	//float3 scale(scaling.x, scaling.y, scaling.x);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	transform->SetLocalPosition(pos.x, pos.y, pos.z);
-	transform->SetLocalScale(scale.x, scale.y, scale.z);
-	transform->SetLocalRotation(rot.x, rot.y, rot.z, rot.w);
-	transform->local_transformation = transform->local_transformation.FromTRS(pos, rot, scale);
-
-	GameObject* ret = new GameObject();
-	if (parent == nullptr) { // the first nodes that ara child of the root node would not have a parent, so we put that it's parent is the fbx parent we created before		
-		ComponentTransform* tr = (ComponentTransform*)parent_object->GetComponent(ComponentType::TRANSFORM);
-		transform->global_transformation = tr->global_transformation * transform->local_transformation;
-		ret->parent = parent_object;
-		parent_object->AddChild(ret);
-	}
-	else {
-		ComponentTransform* tr = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
-		transform->global_transformation = tr->global_transformation * transform->local_transformation;
-		ret->parent = parent;
-		parent->AddChild(ret);
-	}
-
-	transform->global_transformation.Decompose(pos, rot, scale);
-	transform->SetGlobalPosition(pos.x, pos.y, pos.z);
-	transform->SetGlobalRotation(rot.x, rot.y, rot.z, rot.w);
-	transform->SetGlobalScale(scale.x, scale.y, scale.z);
+	ComponentTransform* transform = new ComponentTransform(ret, pos, rot, scale);
 
 	ret->AddComponent(transform);
 	ret->AddComponent(mesh);
 	ret->AddComponent(material);
 	ret->SetName(node->mName.C_Str());
-
 
 	return ret;
 }

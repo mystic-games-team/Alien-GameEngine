@@ -105,7 +105,6 @@ void GameObject::AddComponent(Component* component)
 		}
 	}
 	if (!exists) {
-		component->game_object_attached = this;
 		components.push_back(component);
 	}
 }

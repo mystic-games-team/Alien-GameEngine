@@ -1,8 +1,20 @@
 #include "ComponentTransform.h"
 #include "GameObject.h"
 
-ComponentTransform::ComponentTransform() : Component()
+ComponentTransform::ComponentTransform(GameObject* attach, const float3& pos, const Quat& rot, const float3& scale) : Component(attach)
 {
+	local_position = pos;
+	local_rotation = rot;
+	local_scale = scale;
+	local_transformation = float4x4::FromTRS(local_position, local_rotation, local_scale);
+
+	if (game_object_attached->parent != nullptr) {
+		ComponentTransform* tr = (ComponentTransform*)game_object_attached->parent->GetComponent(ComponentType::TRANSFORM);
+		if (tr != nullptr) global_transformation = tr->global_transformation * local_transformation;
+	}
+	else
+		global_transformation = local_transformation;
+
 	type = ComponentType::TRANSFORM;
 }
 
@@ -10,13 +22,13 @@ ComponentTransform::~ComponentTransform()
 {
 }
 
-void ComponentTransform::SetLocalPosition(const int& x, const int& y, const int& z)
+void ComponentTransform::SetLocalPosition(const float& x, const float& y, const float& z)
 {
 	local_position.x = x;
 	local_position.y = y;
 	local_position.z = z;
 
-	// TODO change the global matrix & global position & children
+	RecalculateTransform();
 }
 
 const float3& ComponentTransform::GetLocalPosition() const
@@ -24,15 +36,13 @@ const float3& ComponentTransform::GetLocalPosition() const
 	return local_position;
 }
 
-void ComponentTransform::SetLocalScale(const int& x, const int& y, const int& z)
+void ComponentTransform::SetLocalScale(const float& x, const float& y, const float& z)
 {
-	float3 difference = float3(x, y, z) - local_scale;
-
 	local_scale.x = x;
 	local_scale.y = y;
 	local_scale.z = z;
 
-	// TODO change the global matrix & global size & children 
+	RecalculateTransform();
 }
 
 const float3& ComponentTransform::GetLocalScale() const
@@ -40,14 +50,14 @@ const float3& ComponentTransform::GetLocalScale() const
 	return local_scale;
 }
 
-void ComponentTransform::SetLocalRotation(const int& x, const int& y, const int& z, const int& angle)
+void ComponentTransform::SetLocalRotation(const float& x, const float& y, const float& z, const float& angle)
 {
 	local_rotation.x = x;
 	local_rotation.y = y;
 	local_rotation.z = z;
 	local_rotation.w = angle;
 
-	// TODO change the global matrix & global rotation & children 
+	RecalculateTransform();
 }
 
 const Quat& ComponentTransform::GetLocalRotation() const
@@ -55,46 +65,28 @@ const Quat& ComponentTransform::GetLocalRotation() const
 	return local_rotation;
 }
 
-void ComponentTransform::SetGlobalPosition(const int& x, const int& y, const int& z)
+void ComponentTransform::RecalculateTransform()
 {
-	global_position.x = x;
-	global_position.y = y;
-	global_position.z = z;
+	local_transformation = float4x4::FromTRS(local_position, local_rotation, local_scale);
+	
+	if (game_object_attached->parent != nullptr) {
+		ComponentTransform* tr = (ComponentTransform*)game_object_attached->parent->GetComponent(ComponentType::TRANSFORM);
+		if (tr != nullptr)
+			global_transformation = tr->global_transformation * local_transformation;
+	}
+	else
+		global_transformation = local_transformation;
 
-	// TODO change the global matrix & local pos & children 
+	std::vector<GameObject*>::iterator item = game_object_attached->children.begin();
+	for (; item != game_object_attached->children.end(); ++item) {
+		if (*item != nullptr) {
+			ComponentTransform* tr = (ComponentTransform*)(*item)->GetComponent(ComponentType::TRANSFORM);
+			if (tr != nullptr) tr->RecalculateTransform();
+		}
+	}
+
+
+		
 }
 
-const float3& ComponentTransform::GetGlobalPosition() const
-{
-	return global_position;
-}
-
-void ComponentTransform::SetGlobalScale(const int& x, const int& y, const int& z)
-{
-	global_scale.x = x;
-	global_scale.y = y;
-	global_scale.z = z;
-
-	// TODO change the global matrix & local scale & children 
-}
-
-const float3& ComponentTransform::GetGlobalScale() const
-{
-	return global_scale;
-}
-
-void ComponentTransform::SetGlobalRotation(const int& x, const int& y, const int& z, const int& angle)
-{
-	global_rotation.x = x;
-	global_rotation.y = y;
-	global_rotation.z = z;
-	global_rotation.w = angle;
-
-	// TODO change the global matrix & local angle & children 
-}
-
-const Quat& ComponentTransform::GetGlobalRotation() const
-{
-	return global_rotation;
-}
 

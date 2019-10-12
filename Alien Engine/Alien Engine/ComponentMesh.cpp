@@ -4,7 +4,7 @@
 #include "ComponentTransform.h"
 #include "Application.h"
 
-ComponentMesh::ComponentMesh() : Component()
+ComponentMesh::ComponentMesh(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::MESH;
 }

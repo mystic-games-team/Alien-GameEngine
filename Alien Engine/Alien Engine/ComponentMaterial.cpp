@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "ComponentMesh.h"
 
-ComponentMaterial::ComponentMaterial() : Component()
+ComponentMaterial::ComponentMaterial(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::MATERIAL;
 }

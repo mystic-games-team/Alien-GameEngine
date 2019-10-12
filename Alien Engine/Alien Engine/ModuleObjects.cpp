@@ -28,7 +28,7 @@ bool ModuleObjects::Init()
 {
 
 	base_game_object = new GameObject();
-	base_game_object->AddComponent(new ComponentTransform());
+	//base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
 
 	return true;
 }

@@ -42,7 +42,6 @@ public:
 
 	GameObject* base_game_object = nullptr;
 
-
 	bool wireframe_mode = false;
 	bool view_mesh_mode = true;
 	uint vertex_normal_length = 1;

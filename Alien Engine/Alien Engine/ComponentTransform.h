@@ -7,27 +7,21 @@ class ComponentTransform : public Component {
 	
 public:
 
-	ComponentTransform();
+	ComponentTransform(GameObject* attach, const float3& pos, const Quat& rot, const float3& scale);
 	virtual ~ComponentTransform();
 
-	void SetLocalPosition(const int& x, const int& y, const int& z);
+	void SetLocalPosition(const float& x, const float& y, const float& z);
 	const float3& GetLocalPosition() const;
 
-	void SetLocalScale(const int& x, const int& y, const int& z);
+	void SetLocalScale(const float& x, const float& y, const float& z);
 	const float3& GetLocalScale() const;
 
-	void SetLocalRotation(const int& x, const int& y, const int& z, const int& angle);
+	void SetLocalRotation(const float& x, const float& y, const float& z, const float& angle);
 	const Quat& GetLocalRotation() const;
 
-	void SetGlobalPosition(const int& x, const int& y, const int& z);
-	const float3& GetGlobalPosition() const;
+private:
 
-	void SetGlobalScale(const int& x, const int& y, const int& z);
-	const float3& GetGlobalScale() const;
-
-	void SetGlobalRotation(const int& x, const int& y, const int& z, const int& angle);
-	const Quat& GetGlobalRotation() const;
-
+	void RecalculateTransform();
 
 public:
 
@@ -38,14 +32,9 @@ private:
 
 	// position
 	float3 local_position = { 0,0,0 };
-	float3 global_position = { 0,0,0 };
 	// sacale
 	float3 local_scale = { 0,0,0 };
-	float3 global_scale = { 0,0,0 };
 	// rotation
 	Quat local_rotation = { 0,0,0,0 };
-	Quat global_rotation = { 0,0,0,0 };
-
-	// position, scale & rotation in one matrix
 	
 };

@@ -15,7 +15,7 @@ enum class ComponentType {
 class Component {
 public:
 
-	Component();	
+	Component(GameObject* attach);
 	virtual ~Component();
 
 	virtual void Enable();

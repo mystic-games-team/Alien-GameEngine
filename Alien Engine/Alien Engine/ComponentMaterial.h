@@ -5,7 +5,7 @@
 
 class ComponentMaterial : public Component {
 public:
-	ComponentMaterial();
+	ComponentMaterial(GameObject* attach);
 	virtual ~ComponentMaterial();
 	
 	void BindTexture();

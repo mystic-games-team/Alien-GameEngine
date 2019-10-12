@@ -1,7 +1,8 @@
 #include "Component.h"
 
-Component::Component()
+Component::Component(GameObject* attach)
 {
+	game_object_attached = attach;
 }
 
 Component::~Component()
