@@ -116,10 +116,12 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	float3 scale(scaling.x, scaling.y, scaling.z);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	transform->local_position = pos;
-	transform->local_scale = scale;
-	transform->local_rotation = rot;
+	transform->SetLocalPosition(pos.x, pos.y, pos.z);
+	transform->SetLocalScale(scale.x, scale.y, scale.z);
+	transform->SetLocalRotation(rot.x, rot.y, rot.z, rot.w);
 	transform->complete_transformation.FromTRS(pos, rot, scale);
+
+	// TODO function to calculate the 3 globals respect parent, put here!!
 
 	// get mesh data
 	ComponentMesh* mesh = new ComponentMesh();
