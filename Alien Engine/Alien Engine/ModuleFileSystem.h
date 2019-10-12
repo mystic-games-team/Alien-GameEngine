@@ -74,6 +74,8 @@ public:
 
 	const FileDropType& SearchExtension(const std::string& extern_path);
 
+	std::string GetBaseFileName(const char* file_name);
+
 private:
 
 	void CreateAssimpIO();

@@ -78,8 +78,7 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	parent_object->parent = App->objects->base_game_object;
 	App->objects->base_game_object->AddChild(parent_object);
 	// set parent name, we must change that
-	parent_object->SetName("FBX Parent, Change this");
-	// TODO SET THE NAME OF THE FIRST NODE
+	parent_object->SetName(App->file_system->GetBaseFileName(path).data());
 	// start recursive function to pass through all nodes
 	LoadSceneNode(scene->mRootNode, scene, parent_object);
 	LOG("All nodes loaded");

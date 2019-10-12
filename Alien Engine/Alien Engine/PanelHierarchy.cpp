@@ -62,5 +62,4 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			}
 		}
 	}
-	// ImGui::PushID somewhere!!!!!!!!!!!!!!!!!
 }

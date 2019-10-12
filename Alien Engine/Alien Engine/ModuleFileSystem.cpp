@@ -480,6 +480,31 @@ const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_
 	return ext_type;
 }
 
+std::string ModuleFileSystem::GetBaseFileName(const char* file_name)
+{
+	std::string name;
+	std::string hole_name(file_name);
+	bool start_copying = false;
+
+	std::string::const_reverse_iterator item = hole_name.crbegin();
+	for (; item != hole_name.crend(); ++item)
+	{
+		if (!start_copying) {
+			if (*item == '.')
+				start_copying = true;
+		}
+		else {
+			if (*item == '/') {
+				break;
+			}
+			else {
+				name = *item + name;
+			}
+		}
+	}
+	return name;
+}
+
 // -----------------------------------------------------
 // ASSIMP IO
 // -----------------------------------------------------
