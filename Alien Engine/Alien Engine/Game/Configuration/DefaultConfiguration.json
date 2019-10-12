@@ -90,6 +90,7 @@
 			"MeshView": true,
 			"VertexNormals": false,
 			"FaceNormals": false,
+			"MeshWidth": 1,
 			"VertexNormalsWidth": 1,
 			"FaceNormalsWidth": 1,
 			"VertexNormalsLength": 1,
@@ -97,7 +98,32 @@
 			"AllowGrid": true,
 			"GridWidth": 1,
 			"GridSpacing": 1,
-			"GridLength": 20
+			"GridLength": 20,
+			"GridColor": [
+				1,
+				1,
+				1
+			],
+			"BackgroundColor": [
+				0,
+				0,
+				0
+			],
+			"VertexNormalColor": [
+				1,
+				0,
+				1
+			],
+			"FaceNormalColor": [
+				0,
+				0,
+				1
+			],
+			"MeshColor": [
+				1,
+				1,
+				1
+			]
 		}
     }
 }

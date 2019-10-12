@@ -71,6 +71,7 @@ void ComponentMesh::DrawMesh()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
+	glLineWidth(App->objects->mesh_line_width);
 	glColor3f(App->objects->mesh_color.r, App->objects->mesh_color.g, App->objects->mesh_color.b);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -81,6 +82,7 @@ void ComponentMesh::DrawMesh()
 
 	glDrawElements(GL_TRIANGLES, num_index * 3, GL_UNSIGNED_INT, NULL);
 
+	glLineWidth(1);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 

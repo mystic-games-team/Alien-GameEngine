@@ -232,6 +232,7 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	view_mesh_mode = config->GetBoolean("Configuration.Renderer.MeshView");
 	draw_vertex_normals = config->GetBoolean("Configuration.Renderer.VertexNormals");
 	draw_face_normals = config->GetBoolean("Configuration.Renderer.FaceNormals");
+	mesh_line_width = config->GetNumber("Configuration.Renderer.MeshWidth");
 	face_n_width = config->GetNumber("Configuration.Renderer.FaceNormalsWidth");
 	vertex_n_width = config->GetNumber("Configuration.Renderer.VertexNormalsWidth");
 	vertex_normal_length = config->GetNumber("Configuration.Renderer.VertexNormalsLength");
@@ -240,6 +241,21 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	App->renderer3D->grid_spacing = config->GetNumber("Configuration.Renderer.GridSpacing");
 	App->renderer3D->length_grid = config->GetNumber("Configuration.Renderer.GridLength");
 	App->renderer3D->line_grid_width = config->GetNumber("Configuration.Renderer.GridWidth");
+	App->renderer3D->grid_color.r = config->GetArrayNumber("Configuration.Renderer.GridColor", 0);
+	App->renderer3D->grid_color.g = config->GetArrayNumber("Configuration.Renderer.GridColor", 1);
+	App->renderer3D->grid_color.b = config->GetArrayNumber("Configuration.Renderer.GridColor", 2);
+	App->renderer3D->background_color.r = config->GetArrayNumber("Configuration.Renderer.BackgroundColor", 0);
+	App->renderer3D->background_color.g = config->GetArrayNumber("Configuration.Renderer.BackgroundColor", 1);
+	App->renderer3D->background_color.b = config->GetArrayNumber("Configuration.Renderer.BackgroundColor", 2);
+	vertex_n_color.r = config->GetArrayNumber("Configuration.Renderer.VertexNormalColor", 0);
+	vertex_n_color.g = config->GetArrayNumber("Configuration.Renderer.VertexNormalColor", 1);
+	vertex_n_color.b = config->GetArrayNumber("Configuration.Renderer.VertexNormalColor", 2);
+	face_n_color.r = config->GetArrayNumber("Configuration.Renderer.FaceNormalColor", 0);
+	face_n_color.g = config->GetArrayNumber("Configuration.Renderer.FaceNormalColor", 1);
+	face_n_color.b = config->GetArrayNumber("Configuration.Renderer.FaceNormalColor", 2);
+	mesh_color.r = config->GetArrayNumber("Configuration.Renderer.MeshColor", 0);
+	mesh_color.g = config->GetArrayNumber("Configuration.Renderer.MeshColor", 1);
+	mesh_color.b = config->GetArrayNumber("Configuration.Renderer.MeshColor", 2);
 }
 
 void ModuleObjects::SaveConfig(JSONfilepack*& config)
@@ -248,6 +264,7 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetBoolean("Configuration.Renderer.MeshView", view_mesh_mode);
 	config->SetBoolean("Configuration.Renderer.VertexNormals", draw_vertex_normals);
 	config->SetBoolean("Configuration.Renderer.FaceNormals", draw_face_normals);
+	config->SetNumber("Configuration.Renderer.MeshWidth", mesh_line_width);
 	config->SetNumber("Configuration.Renderer.FaceNormalsWidth", face_n_width);
 	config->SetNumber("Configuration.Renderer.VertexNormalsWidth", vertex_n_width);
 	config->SetNumber("Configuration.Renderer.VertexNormalsLength", vertex_normal_length);
@@ -256,5 +273,20 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetNumber("Configuration.Renderer.GridSpacing", App->renderer3D->grid_spacing);
 	config->SetNumber("Configuration.Renderer.GridWidth", App->renderer3D->line_grid_width);
 	config->SetNumber("Configuration.Renderer.GridLength", App->renderer3D->length_grid);
+	config->SetArrayNumber("Configuration.Renderer.GridColor", App->renderer3D->grid_color.r);
+	config->SetArrayNumber("Configuration.Renderer.GridColor", App->renderer3D->grid_color.g);
+	config->SetArrayNumber("Configuration.Renderer.GridColor", App->renderer3D->grid_color.b);
+	config->SetArrayNumber("Configuration.Renderer.BackgroundColor", App->renderer3D->background_color.r);
+	config->SetArrayNumber("Configuration.Renderer.BackgroundColor", App->renderer3D->background_color.g);
+	config->SetArrayNumber("Configuration.Renderer.BackgroundColor", App->renderer3D->background_color.b);
+	config->SetArrayNumber("Configuration.Renderer.VertexNormalColor", vertex_n_color.r);
+	config->SetArrayNumber("Configuration.Renderer.VertexNormalColor", vertex_n_color.g);
+	config->SetArrayNumber("Configuration.Renderer.VertexNormalColor", vertex_n_color.b);
+	config->SetArrayNumber("Configuration.Renderer.FaceNormalColor", face_n_color.r);
+	config->SetArrayNumber("Configuration.Renderer.FaceNormalColor", face_n_color.g);
+	config->SetArrayNumber("Configuration.Renderer.FaceNormalColor", face_n_color.b);
+	config->SetArrayNumber("Configuration.Renderer.MeshColor", mesh_color.r);
+	config->SetArrayNumber("Configuration.Renderer.MeshColor", mesh_color.g);
+	config->SetArrayNumber("Configuration.Renderer.MeshColor", mesh_color.b);
 }
 
