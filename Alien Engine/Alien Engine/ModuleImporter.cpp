@@ -75,12 +75,7 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	parent_object = new GameObject();
 	parent_object->AddComponent(new ComponentTransform());
 	// set parent active
-	if (App->objects->game_object_selected != nullptr) {
-		App->objects->game_object_selected->clicked = false;
-	}
-	parent_object->clicked = true;
-	App->objects->game_object_selected = parent_object;
-	
+	App->objects->SetNewSelectedObject(parent_object);
 	// set it's parent to the "invisible" game object
 	parent_object->parent = App->objects->base_game_object;
 	App->objects->base_game_object->AddChild(parent_object);

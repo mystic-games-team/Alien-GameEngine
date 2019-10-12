@@ -34,10 +34,12 @@ public:
 	void ChangeEnableNormalVertex();
 	void ChangeEnableNormalFace();
 
+	void SetNewSelectedObject(GameObject* selected);
+
 public:
 
 	GameObject* base_game_object = nullptr;
-	GameObject* game_object_selected = nullptr;
+
 
 	bool wireframe_mode = false;
 	bool view_mesh_mode = true;
@@ -56,4 +58,8 @@ public:
 
 	int face_n_width = 1;
 	int vertex_n_width = 1;
+
+private:
+
+	GameObject* game_object_selected = nullptr;
 };

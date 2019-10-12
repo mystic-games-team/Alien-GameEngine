@@ -174,17 +174,16 @@ void ModuleObjects::ChangeViewMeshMode()
 
 void ModuleObjects::DeleteAllObjects() 
 {
-	/*std::vector<GameObject*>::iterator iter;
-	for (iter = game_objects.begin(); iter != game_objects.end(); ++iter)
-	{
-		if ((*iter) != nullptr)
-		{
-			delete (*iter);
-			(*iter) = nullptr;
+	std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+	while (item != base_game_object->children.end()) {
+		if (*item != nullptr) {
+			delete* item;
+			*item = nullptr;
+			item = base_game_object->children.erase(item);
 		}
+		else
+			++item;
 	}
-
-	game_objects.clear();*/
 }
 
 void ModuleObjects::ChangeEnableGrid()
@@ -200,6 +199,19 @@ void ModuleObjects::ChangeEnableNormalVertex()
 void ModuleObjects::ChangeEnableNormalFace()
 {
 	draw_face_normals = !draw_face_normals;
+}
+
+void ModuleObjects::SetNewSelectedObject(GameObject* selected)
+{
+	if (game_object_selected == nullptr) {
+		selected->clicked = true;
+		game_object_selected = selected;
+	}
+	else if (selected != game_object_selected) {
+		game_object_selected->clicked = false;
+		selected->clicked = true;
+		game_object_selected = selected;
+	}
 }
 
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 
