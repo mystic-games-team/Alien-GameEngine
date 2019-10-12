@@ -94,8 +94,12 @@ void ComponentTransform::DrawInspector()
 	if (ImGui::InputFloat3("Position", (float*)& local_position, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
 		RecalculateTransform();
 	}
-
-
+	if (ImGui::InputFloat3("Scale", (float*)& local_scale, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
+		RecalculateTransform();
+	}
+	if (ImGui::InputFloat4("Rotation", (float*)& local_rotation, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
+		RecalculateTransform();
+	}
 }
 
 
