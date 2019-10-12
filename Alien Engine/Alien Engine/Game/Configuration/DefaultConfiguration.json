@@ -93,7 +93,11 @@
 			"VertexNormalsWidth": 1,
 			"FaceNormalsWidth": 1,
 			"VertexNormalsLength": 1,
-			"FaceNormalsLength": 1
+			"FaceNormalsLength": 1,
+			"AllowGrid": true,
+			"GridWidth": 1,
+			"GridSpacing": 1,
+			"GridLength": 20
 		}
     }
 }

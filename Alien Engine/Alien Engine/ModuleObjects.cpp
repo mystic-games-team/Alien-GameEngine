@@ -236,6 +236,10 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	vertex_n_width = config->GetNumber("Configuration.Renderer.VertexNormalsWidth");
 	vertex_normal_length = config->GetNumber("Configuration.Renderer.VertexNormalsLength");
 	face_normal_length = config->GetNumber("Configuration.Renderer.FaceNormalsLength");
+	allow_grid = config->GetBoolean("Configuration.Renderer.AllowGrid");
+	App->renderer3D->grid_spacing = config->GetNumber("Configuration.Renderer.GridSpacing");
+	App->renderer3D->length_grid = config->GetNumber("Configuration.Renderer.GridLength");
+	App->renderer3D->line_grid_width = config->GetNumber("Configuration.Renderer.GridWidth");
 }
 
 void ModuleObjects::SaveConfig(JSONfilepack*& config)
@@ -248,5 +252,9 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetNumber("Configuration.Renderer.VertexNormalsWidth", vertex_n_width);
 	config->SetNumber("Configuration.Renderer.VertexNormalsLength", vertex_normal_length);
 	config->SetNumber("Configuration.Renderer.FaceNormalsLength", face_normal_length);
+	config->SetBoolean("Configuration.Renderer.AllowGrid", allow_grid);
+	config->SetNumber("Configuration.Renderer.GridSpacing", App->renderer3D->grid_spacing);
+	config->SetNumber("Configuration.Renderer.GridWidth", App->renderer3D->line_grid_width);
+	config->SetNumber("Configuration.Renderer.GridLength", App->renderer3D->length_grid);
 }
 
