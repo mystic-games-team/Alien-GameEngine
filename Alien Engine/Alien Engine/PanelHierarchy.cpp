@@ -33,11 +33,14 @@ void PanelHierarchy::PanelLogic()
 
 void PanelHierarchy::PrintNode(GameObject* node)
 {
-	static ImGuiTreeNodeFlags_ flags = ImGuiTreeNodeFlags_None;
 	if (node != App->objects->base_game_object) 
 	{
 		if (!node->children.empty()) 
 		{
+			ImGui::PushID(node + 1);
+			ImGui::Checkbox("##Active", &node->enabled);
+			ImGui::PopID();
+			ImGui::SameLine();
 			ImGui::PushID(node);
 			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->clicked))
 			{
@@ -63,6 +66,10 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		}
 		else 
 		{
+			ImGui::PushID(node + 1);
+			ImGui::Checkbox("##Active", &node->enabled);
+			ImGui::PopID();
+			ImGui::SameLine();
 			ImGui::PushID(node);
 			ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->clicked);
 			ImGui::PopID();
