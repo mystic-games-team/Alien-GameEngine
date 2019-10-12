@@ -21,8 +21,6 @@ public:
 	const char* GetName();
 	Component* GetComponent(const ComponentType& type);
 
-	void CheckClicked();
-
 public:
 
 	std::vector<Component*> components;

@@ -134,18 +134,4 @@ Component* GameObject::GetComponent(const ComponentType& type)
 	return nullptr;
 }
 
-void GameObject::CheckClicked()
-{
-	clicked = false;
-
-	std::vector<GameObject*>::iterator iter = children.begin();
-	for (iter; iter != children.end(); ++iter)
-	{
-		if ((*iter) != nullptr)
-		{
-			(*iter)->CheckClicked();
-		}
-	}
-}
-
 

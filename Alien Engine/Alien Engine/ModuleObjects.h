@@ -37,6 +37,7 @@ public:
 public:
 
 	GameObject* base_game_object = nullptr;
+	GameObject* game_object_selected = nullptr;
 
 	bool wireframe_mode = false;
 	bool view_mesh_mode = true;
