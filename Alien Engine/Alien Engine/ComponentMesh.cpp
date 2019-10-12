@@ -68,6 +68,11 @@ void ComponentMesh::DrawPolygon()
 
 void ComponentMesh::DrawMesh()
 {
+	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+
+	glPushMatrix();
+	glMultMatrixf(transform->complete_transformation.ptr());
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -84,11 +89,19 @@ void ComponentMesh::DrawMesh()
 
 	glLineWidth(1);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glPopMatrix();
+
 }
 
 void ComponentMesh::DrawVertexNormals()
 {
 	if (normals != nullptr) {
+		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+
+		glPushMatrix();
+		glMultMatrixf(transform->complete_transformation.ptr());
+
 		glColor3f(App->objects->vertex_n_color.r, App->objects->vertex_n_color.g, App->objects->vertex_n_color.b);
 		glLineWidth(App->objects->vertex_n_width);
 		glBegin(GL_LINES);
@@ -99,12 +112,19 @@ void ComponentMesh::DrawVertexNormals()
 		}
 		glEnd();
 		glLineWidth(1);
+
+		glPopMatrix();
 	}
 }
 
 void ComponentMesh::DrawFaceNormals()
 {
 	if (normals != nullptr) {
+		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+
+		glPushMatrix();
+		glMultMatrixf(transform->complete_transformation.ptr());
+
 		glColor3f(App->objects->face_n_color.r, App->objects->face_n_color.g, App->objects->face_n_color.b);
 		glLineWidth(App->objects->face_n_width);
 		glBegin(GL_LINES);
@@ -115,6 +135,8 @@ void ComponentMesh::DrawFaceNormals()
 		}
 		glEnd();
 		glLineWidth(1);
+
+		glPopMatrix();
 	}
 }
 
