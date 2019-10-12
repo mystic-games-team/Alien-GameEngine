@@ -36,8 +36,8 @@ bool ModuleImporter::Init()
 bool ModuleImporter::Start()
 {
 	
-	//LoadTextureFile("Assets/Textures/Baker.dds");
-	//LoadModelFile("Assets/Models/BakerHouse.fbx");
+	LoadTextureFile("Assets/Textures/Baker.dds");
+	LoadModelFile("Assets/Models/BakerHouse.fbx");
 	return true;
 }
 

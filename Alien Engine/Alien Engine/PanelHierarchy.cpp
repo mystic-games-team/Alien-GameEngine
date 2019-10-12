@@ -34,13 +34,18 @@ void PanelHierarchy::PanelLogic()
 void PanelHierarchy::PrintNode(GameObject* node)
 {
 	static ImGuiTreeNodeFlags_ flags = ImGuiTreeNodeFlags_None;
-	if (node != App->objects->base_game_object) {
-		if (!node->children.empty()) {
+	if (node != App->objects->base_game_object) 
+	{
+		if (!node->children.empty()) 
+		{
 			ImGui::PushID(node);
-			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth)) {
+			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth)) 
+			{
 				std::vector<GameObject*>::iterator item = node->children.begin();
-				for (; item != node->children.end(); ++item) {
-					if (*item != nullptr) {
+				for (; item != node->children.end(); ++item) 
+				{
+					if (*item != nullptr) 
+					{
 						PrintNode(*item);
 					}
 				}
@@ -48,16 +53,24 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			}
 			ImGui::PopID();
 		}
-		else {
+		else 
+		{
 			ImGui::PushID(node);
-			ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth);
+			if (ImGui::Selectable(node->GetName(), &node->clicked))
+			{
+				App->objects->base_game_object->CheckClicked();
+				node->clicked = !node->clicked;
+			}
 			ImGui::PopID();
 		}
 	}
-	else {
+	else 
+	{
 		std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
-		for (; item != App->objects->base_game_object->children.end(); ++item) {
-			if (*item != nullptr) {
+		for (; item != App->objects->base_game_object->children.end(); ++item) 
+		{
+			if (*item != nullptr) 
+			{
 				PrintNode(*item);
 			}
 		}

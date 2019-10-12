@@ -21,12 +21,17 @@ public:
 	const char* GetName();
 	Component* GetComponent(const ComponentType& type);
 
+	void CheckClicked();
+
 public:
 
 	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 	bool enabled = true;
+
+
+	bool clicked = false;
 
 private:
 
