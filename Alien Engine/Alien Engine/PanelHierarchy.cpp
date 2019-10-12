@@ -39,8 +39,12 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		if (!node->children.empty()) 
 		{
 			ImGui::PushID(node);
-			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth)) 
+			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | node->clicked)) 
 			{
+				if (ImGui::IsItemClicked()) {
+					App->objects->base_game_object->CheckClicked();
+					node->clicked = true;
+				}
 				std::vector<GameObject*>::iterator item = node->children.begin();
 				for (; item != node->children.end(); ++item) 
 				{
@@ -51,17 +55,23 @@ void PanelHierarchy::PrintNode(GameObject* node)
 				}
 				ImGui::TreePop();
 			}
+			else {
+				if (ImGui::IsItemClicked()) {
+					App->objects->base_game_object->CheckClicked();
+					node->clicked = true;
+				}
+			}
 			ImGui::PopID();
 		}
 		else 
 		{
 			ImGui::PushID(node);
-			if (ImGui::Selectable(node->GetName(), &node->clicked))
-			{
-				App->objects->base_game_object->CheckClicked();
-				node->clicked = !node->clicked;
-			}
+			ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->clicked);
 			ImGui::PopID();
+			if (ImGui::IsItemClicked()) {
+				App->objects->base_game_object->CheckClicked();
+				node->clicked = true;
+			}
 		}
 	}
 	else 
