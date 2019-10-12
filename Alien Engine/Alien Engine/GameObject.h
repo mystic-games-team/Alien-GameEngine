@@ -14,7 +14,7 @@ public:
 	void Enable();
 	void Disable();
 	bool IsEnabled();
-	void Update();
+	void Draw();
 	void AddComponent(Component* component);
 	void AddChild(GameObject* child);
 	void SetName(const char* name);

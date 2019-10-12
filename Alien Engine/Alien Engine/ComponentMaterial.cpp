@@ -12,9 +12,9 @@ ComponentMaterial::~ComponentMaterial()
 {
 }
 
-void ComponentMaterial::Update()
+void ComponentMaterial::BindTexture()
 {
-	if (id_texture != 0) {
+	if (id_texture > 0) {
 		// enable textures
 		ComponentMesh* mesh = (ComponentMesh*)game_object_attached->GetComponent(ComponentType::MESH);
 
@@ -25,6 +25,6 @@ void ComponentMaterial::Update()
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_uv);
 		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 		
+		glColor3f(color.r, color.g, color.b);
 	}
-	glColor3f(color.r, color.g, color.b);
 }

@@ -8,7 +8,7 @@ public:
 	ComponentMaterial();
 	virtual ~ComponentMaterial();
 	
-	void Update();
+	void BindTexture();
 
 public:
 

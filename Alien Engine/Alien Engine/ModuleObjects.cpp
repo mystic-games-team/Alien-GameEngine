@@ -60,34 +60,7 @@ update_status ModuleObjects::Update(float dt)
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
-	/*std::vector<GameObject*>::iterator item;
-	for (item = game_objects.begin(); item != game_objects.end(); ++item)
-	{
-		if ((*item) != nullptr)
-		{
-			if ((*item)->num_index == 0 || (*item)->num_vertex == 0 || !(*item)->IsEnabled())
-				continue;
-
-			if (!wireframe_mode) {
-				(*item)->DrawPolygon();
-			}
-			if (wireframe_mode || view_mesh_mode) {
-				glColor3f(mesh_color.r, mesh_color.g, mesh_color.b);
-				glLineWidth(mesh_line_width);
-				(*item)->DrawMesh();
-				glLineWidth(1);
-			}
-			if (draw_vertex_normals) {
-				(*item)->DrawVertexNormals();
-			}
-			if (draw_face_normals) {
-				(*item)->DrawFaceNormals();
-			}
-		}
-
-	}
-	*/
-	base_game_object->Update();
+	base_game_object->Draw();
 	return UPDATE_CONTINUE;
 }
 
