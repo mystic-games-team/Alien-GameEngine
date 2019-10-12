@@ -74,6 +74,9 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	// create the parent of the all fbx/obj...
 	parent_object = new GameObject();
 	parent_object->AddComponent(new ComponentTransform());
+	// set parent active
+	App->objects->base_game_object->CheckClicked();
+	parent_object->clicked = true;
 	// set it's parent to the "invisible" game object
 	parent_object->parent = App->objects->base_game_object;
 	App->objects->base_game_object->AddChild(parent_object);
@@ -82,7 +85,6 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	// start recursive function to pass through all nodes
 	LoadSceneNode(scene->mRootNode, scene, parent_object);
 	LOG("All nodes loaded");
-
 	parent_object = nullptr;
 }
 
