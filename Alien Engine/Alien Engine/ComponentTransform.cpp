@@ -29,7 +29,7 @@ void ComponentTransform::SetLocalPosition(const float& x, const float& y, const 
 	local_position.y = y;
 	local_position.z = z;
 
-	has_dirty_flag = true;
+	RecalculateTransform();
 }
 
 const float3& ComponentTransform::GetLocalPosition() const
@@ -43,7 +43,7 @@ void ComponentTransform::SetLocalScale(const float& x, const float& y, const flo
 	local_scale.y = y;
 	local_scale.z = z;
 
-	has_dirty_flag = true;
+	RecalculateTransform();
 }
 
 const float3& ComponentTransform::GetLocalScale() const
@@ -58,7 +58,7 @@ void ComponentTransform::SetLocalRotation(const float& x, const float& y, const 
 	local_rotation.z = z;
 	local_rotation.w = angle;
 
-	has_dirty_flag = true;
+	RecalculateTransform();
 }
 
 const Quat& ComponentTransform::GetLocalRotation() const
@@ -68,8 +68,6 @@ const Quat& ComponentTransform::GetLocalRotation() const
 
 void ComponentTransform::RecalculateTransform()
 {	
-	has_dirty_flag = false;
-
 	local_transformation = float4x4::FromTRS(local_position, local_rotation, local_scale);
 
 	if (game_object_attached->parent != nullptr) {
