@@ -12,12 +12,15 @@ public:
 
 	void SetLocalPosition(const float& x, const float& y, const float& z);
 	const float3& GetLocalPosition() const;
+	const float3& GetGlobalPosition() const;
 
 	void SetLocalScale(const float& x, const float& y, const float& z);
 	const float3& GetLocalScale() const;
+	const float3& GetGlobalScale() const;
 
 	void SetLocalRotation(const float& x, const float& y, const float& z, const float& angle);
 	const Quat& GetLocalRotation() const;
+	const Quat& GetGlobalRotation() const;
 
 	void DrawInspector();
 

@@ -37,6 +37,16 @@ const float3& ComponentTransform::GetLocalPosition() const
 	return local_position;
 }
 
+const float3& ComponentTransform::GetGlobalPosition() const
+{
+	float3 pos, scale;
+	Quat rot;
+
+	global_transformation.Decompose(pos, rot, scale);
+
+	return pos;
+}
+
 void ComponentTransform::SetLocalScale(const float& x, const float& y, const float& z)
 {
 	local_scale.x = x;
@@ -49,6 +59,16 @@ void ComponentTransform::SetLocalScale(const float& x, const float& y, const flo
 const float3& ComponentTransform::GetLocalScale() const
 {
 	return local_scale;
+}
+
+const float3& ComponentTransform::GetGlobalScale() const
+{
+	float3 pos, scale;
+	Quat rot;
+
+	global_transformation.Decompose(pos, rot, scale);
+
+	return scale;
 }
 
 void ComponentTransform::SetLocalRotation(const float& x, const float& y, const float& z, const float& angle)
@@ -64,6 +84,16 @@ void ComponentTransform::SetLocalRotation(const float& x, const float& y, const 
 const Quat& ComponentTransform::GetLocalRotation() const
 {
 	return local_rotation;
+}
+
+const Quat& ComponentTransform::GetGlobalRotation() const
+{
+	float3 pos, scale;
+	Quat rot;
+
+	global_transformation.Decompose(pos, rot, scale);
+
+	return rot;
 }
 
 void ComponentTransform::RecalculateTransform()
@@ -93,7 +123,6 @@ void ComponentTransform::RecalculateTransform()
 
 void ComponentTransform::DrawInspector()
 {
-
 	ImGui::Spacing();
 
 	ImGui::Text("Object");
