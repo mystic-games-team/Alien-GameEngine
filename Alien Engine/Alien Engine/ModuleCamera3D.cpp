@@ -128,11 +128,11 @@ void ModuleCamera3D::Movement()
 
 	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
-		if (App->input->GetMouseXMotion() > 4) newPos -= X * mouse_speed;
-		if (App->input->GetMouseXMotion() < -4) newPos += X * mouse_speed;
+		if (App->input->GetMouseXMotion() > -1) newPos -= X * mouse_speed;
+		if (App->input->GetMouseXMotion() < 1) newPos += X * mouse_speed;
 
-		if (App->input->GetMouseYMotion() < 5) newPos -= Y * mouse_speed;
-		if (App->input->GetMouseYMotion() > -5) newPos += Y * mouse_speed;
+		if (App->input->GetMouseYMotion() < 2) newPos -= Y * mouse_speed;
+		if (App->input->GetMouseYMotion() > -2) newPos += Y * mouse_speed;
 
 	}
 }
@@ -189,13 +189,15 @@ void ModuleCamera3D::Rotation()
 
 void ModuleCamera3D::Focus()
 {
-	if (object_selected != nullptr)
+	if (App->objects->GetSelectedObject() != nullptr)
 	{
-		ComponentTransform* tr = (ComponentTransform*)object_selected->GetComponent(ComponentType::TRANSFORM);
+		ComponentTransform* tr = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 		LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
 	}
 	else
 		LOG("No Object Selected");
+
+
 	//TODO ELSE
 	
 }
