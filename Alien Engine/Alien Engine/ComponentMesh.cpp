@@ -33,7 +33,7 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::DrawPolygon()
 {
-	if (game_object_attached->clicked) {
+	if (game_object_attached->selected) {
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 1, -1);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);

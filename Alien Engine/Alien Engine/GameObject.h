@@ -29,7 +29,7 @@ public:
 	bool enabled = true;
 
 
-	bool clicked = false;
+	bool selected = false;
 
 private:
 

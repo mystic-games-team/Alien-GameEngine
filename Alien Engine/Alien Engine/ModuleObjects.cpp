@@ -205,12 +205,12 @@ void ModuleObjects::ChangeEnableNormalFace()
 void ModuleObjects::SetNewSelectedObject(GameObject* selected)
 {
 	if (game_object_selected == nullptr) {
-		selected->clicked = true;
+		selected->selected = true;
 		game_object_selected = selected;
 	}
 	else if (selected != game_object_selected) {
-		game_object_selected->clicked = false;
-		selected->clicked = true;
+		game_object_selected->selected = false;
+		selected->selected = true;
 		game_object_selected = selected;
 	}
 }
@@ -222,7 +222,7 @@ GameObject* ModuleObjects::GetSelectedObject()
 
 void ModuleObjects::DeselectObject()
 {
-	game_object_selected->clicked = false;
+	game_object_selected->selected = false;
 	game_object_selected = nullptr;
 }
 

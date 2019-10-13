@@ -78,7 +78,7 @@ void GameObject::Draw()
 			glColor3f(1, 1, 1);
 		if (!App->objects->wireframe_mode)
 			mesh->DrawPolygon();
-		if (clicked)
+		if (selected)
 			mesh->DrawOutLine();
 		if (App->objects->wireframe_mode || App->objects->view_mesh_mode)
 			mesh->DrawMesh();

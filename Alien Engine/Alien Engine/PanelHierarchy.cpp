@@ -42,7 +42,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			ImGui::PopID();
 			ImGui::SameLine();
 			ImGui::PushID(node);
-			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->clicked))
+			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->selected))
 			{
 				if (ImGui::IsItemClicked()) {
 					App->objects->SetNewSelectedObject(node);
@@ -71,7 +71,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			ImGui::PopID();
 			ImGui::SameLine();
 			ImGui::PushID(node);
-			ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->clicked);
+			ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->selected);
 			ImGui::PopID();
 			if (ImGui::IsItemClicked()) {
 				App->objects->SetNewSelectedObject(node);
