@@ -9,6 +9,7 @@ public:
 	virtual ~ComponentMesh();
 
 	void DrawPolygon();
+	void DrawOutLine();
 	void DrawMesh();
 	void DrawVertexNormals();
 	void DrawFaceNormals();

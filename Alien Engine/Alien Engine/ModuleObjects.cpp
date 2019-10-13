@@ -202,16 +202,18 @@ void ModuleObjects::ChangeEnableNormalFace()
 	draw_face_normals = !draw_face_normals;
 }
 
-void ModuleObjects::SetNewSelectedObject(GameObject* selected)
+void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)
 {
-	if (game_object_selected == nullptr) {
-		selected->clicked = true;
-		game_object_selected = selected;
-	}
-	else if (selected != game_object_selected) {
-		game_object_selected->clicked = false;
-		selected->clicked = true;
-		game_object_selected = selected;
+	if (!object_selected->IsSelected()) {
+		if (game_object_selected == nullptr) {
+			object_selected->ChangeSelected(true);
+			game_object_selected = object_selected;
+		}
+		else if (object_selected != game_object_selected) {
+			game_object_selected->ChangeSelected(false);
+			object_selected->ChangeSelected(true);
+			game_object_selected = object_selected;
+		}
 	}
 }
 
@@ -222,7 +224,7 @@ GameObject* ModuleObjects::GetSelectedObject()
 
 void ModuleObjects::DeselectObject()
 {
-	game_object_selected->clicked = false;
+	game_object_selected->ChangeSelected(false);
 	game_object_selected = nullptr;
 }
 

@@ -33,6 +33,12 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::DrawPolygon()
 {
+	if (game_object_attached->IsSelected() || game_object_attached->IsParentSelected()) {
+		glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_ALWAYS, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	}
+
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 
 	glPushMatrix();
@@ -62,6 +68,36 @@ void ComponentMesh::DrawPolygon()
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glPopMatrix();
+
+}
+
+void ComponentMesh::DrawOutLine()
+{
+
+	glColor3f(0, 1, 1);
+	glStencilFunc(GL_NOTEQUAL, 1, -1);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	glLineWidth(8);
+	glPolygonMode(GL_FRONT, GL_LINE);
+
+	glPushMatrix();
+	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+	glMultMatrixf(transform->global_transformation.Transposed().ptr());
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+
+	glDrawElements(GL_TRIANGLES, num_index * 3, GL_UNSIGNED_INT, 0);
+
+	glDisable(GL_STENCIL_TEST);
+	glDisable(GL_POLYGON_OFFSET_FILL);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glPopMatrix();
 }
