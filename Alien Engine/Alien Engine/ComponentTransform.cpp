@@ -93,13 +93,33 @@ void ComponentTransform::RecalculateTransform()
 
 void ComponentTransform::DrawInspector()
 {
-	if (ImGui::InputFloat3("Position", (float*)& local_position, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
+
+	ImGui::Spacing();
+
+	ImGui::Text("Object");
+	ImGui::SameLine();
+
+	ImGui::Checkbox("##ObjectActive", &game_object_attached->enabled);
+	ImGui::SameLine();
+
+	static char name[30];
+	memcpy(name, game_object_attached->GetName(), 30);
+
+	if (ImGui::InputText("##ObjectName", name, 30, ImGuiInputTextFlags_AutoSelectAll)) {
+		game_object_attached->SetName(name);
+	}
+
+	ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
+
+	if (ImGui::DragFloat3("Position", (float*)& local_position)) {
 		RecalculateTransform();
 	}
-	if (ImGui::InputFloat4("Rotation", (float*)& local_rotation, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
+	if (ImGui::DragFloat3("Rotation", (float*)& local_rotation)) {
 		RecalculateTransform();
 	}
-	if (ImGui::InputFloat3("Scale", (float*)& local_scale, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
+	if (ImGui::DragFloat3("Scale", (float*)& local_scale)) {
 		RecalculateTransform();
 	}
 }
