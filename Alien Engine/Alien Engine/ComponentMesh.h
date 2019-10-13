@@ -13,6 +13,7 @@ public:
 	void DrawMesh();
 	void DrawVertexNormals();
 	void DrawFaceNormals();
+	void DrawInspector();
 
 public:
 

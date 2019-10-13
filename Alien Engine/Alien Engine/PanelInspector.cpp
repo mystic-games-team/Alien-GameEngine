@@ -18,8 +18,12 @@ void PanelInspector::PanelLogic()
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
 
 	if (App->objects->GetSelectedObject() != nullptr) {
-		ComponentTransform* tr = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
-		tr->DrawInspector();
+		std::vector<Component*>::iterator item = App->objects->GetSelectedObject()->components.begin();
+		for (; item != App->objects->GetSelectedObject()->components.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->DrawInspector();
+			}
+		}
 	}
 
 	ImGui::End();
