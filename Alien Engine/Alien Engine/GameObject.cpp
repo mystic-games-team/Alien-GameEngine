@@ -78,7 +78,7 @@ void GameObject::Draw()
 			glColor3f(1, 1, 1);
 		if (!App->objects->wireframe_mode)
 			mesh->DrawPolygon();
-		if (selected)
+		if (selected || parent_selected)
 			mesh->DrawOutLine();
 		if (App->objects->wireframe_mode || App->objects->view_mesh_mode)
 			mesh->DrawMesh();
@@ -137,5 +137,34 @@ Component* GameObject::GetComponent(const ComponentType& type)
 	LOG("No component found");
 	return nullptr;
 }
+
+bool GameObject::IsSelected()
+{
+	return selected;
+}
+
+bool GameObject::IsParentSelected()
+{
+	return parent_selected;
+}
+
+void GameObject::ChangeSelected(const bool& select)
+{
+	selected = select;
+
+	SayChildrenParentIsSelected(selected);
+}
+
+void GameObject::SayChildrenParentIsSelected(const bool& selected)
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->parent_selected = selected;
+			(*item)->SayChildrenParentIsSelected(selected);
+		}
+	}
+}
+
 
 

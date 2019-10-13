@@ -78,12 +78,12 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	App->objects->base_game_object->AddChild(parent_object);
 	ComponentTransform* tr = new ComponentTransform(parent_object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
 	parent_object->AddComponent(tr);
-	// set parent active
-	App->objects->SetNewSelectedObject(parent_object);
 	// set parent name, we must change that
 	parent_object->SetName(App->file_system->GetBaseFileName(path).data());
 	// start recursive function to pass through all nodes
 	LoadSceneNode(scene->mRootNode, scene, parent_object);
+	// set parent active
+	App->objects->SetNewSelectedObject(parent_object);
 	LOG("All nodes loaded");
 	parent_object = nullptr;
 }

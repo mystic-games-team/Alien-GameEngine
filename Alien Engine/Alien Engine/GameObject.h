@@ -20,6 +20,13 @@ public:
 	void SetName(const char* name);
 	const char* GetName();
 	Component* GetComponent(const ComponentType& type);
+	bool IsSelected();
+	bool IsParentSelected();
+	void ChangeSelected(const bool& select);
+
+private:
+
+	void SayChildrenParentIsSelected(const bool& selected);
 
 public:
 
@@ -28,11 +35,13 @@ public:
 	GameObject* parent = nullptr;
 	bool enabled = true;
 
+	
 
-	bool selected = false;
 
 private:
 
-	
+	bool parent_selected = false;
+	bool selected = false;
+
 	std::string name;
 };
