@@ -23,7 +23,8 @@ public:
 	bool IsSelected();
 	bool IsParentSelected();
 	void ChangeSelected(const bool& select);
-
+	bool HasChildren();
+		
 private:
 
 	void SayChildrenParentIsSelected(const bool& selected);

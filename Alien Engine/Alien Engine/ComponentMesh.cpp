@@ -78,7 +78,15 @@ void ComponentMesh::DrawOutLine()
 	if (!glIsEnabled(GL_STENCIL_TEST))
 		return;
 
-	glColor3f(0, 1, 1);
+	if (game_object_attached->IsParentSelected())
+	{
+		glColor3f(0, 1, 1);
+	}
+	else
+	{
+		glColor3f(1, 0.5f, 0);
+	}
+
 	glStencilFunc(GL_NOTEQUAL, 1, -1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 

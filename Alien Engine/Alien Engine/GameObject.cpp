@@ -154,6 +154,22 @@ void GameObject::ChangeSelected(const bool& select)
 	SayChildrenParentIsSelected(selected);
 }
 
+bool GameObject::HasChildren()
+{
+	bool ret = false;
+
+	if (children.empty())
+	{
+		ret = false;
+	}
+	else
+	{
+		ret = true;
+	}
+
+	return ret;
+}
+
 void GameObject::SayChildrenParentIsSelected(const bool& selected)
 {
 	std::vector<GameObject*>::iterator item = children.begin();
