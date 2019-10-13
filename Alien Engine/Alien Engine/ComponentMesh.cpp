@@ -75,6 +75,8 @@ void ComponentMesh::DrawPolygon()
 
 void ComponentMesh::DrawOutLine()
 {
+	if (!glIsEnabled(GL_STENCIL_TEST))
+		return;
 
 	glColor3f(0, 1, 1);
 	glStencilFunc(GL_NOTEQUAL, 1, -1);
@@ -98,6 +100,7 @@ void ComponentMesh::DrawOutLine()
 	glDisable(GL_STENCIL_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glLineWidth(1);
 
 	glPopMatrix();
 }
