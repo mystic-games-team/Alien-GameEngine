@@ -34,6 +34,8 @@ ComponentMesh::~ComponentMesh()
 void ComponentMesh::DrawPolygon()
 {
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+	if (transform->has_dirty_flag)
+		transform->RecalculateTransform();
 
 	glPushMatrix();
 	glMultMatrixf(transform->global_transformation.Transposed().ptr());
@@ -69,6 +71,8 @@ void ComponentMesh::DrawPolygon()
 void ComponentMesh::DrawMesh()
 {
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+	if (transform->has_dirty_flag)
+		transform->RecalculateTransform();
 
 	glPushMatrix();
 	glMultMatrixf(transform->global_transformation.Transposed().ptr());
@@ -98,6 +102,8 @@ void ComponentMesh::DrawVertexNormals()
 {
 	if (normals != nullptr) {
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+		if (transform->has_dirty_flag)
+			transform->RecalculateTransform();
 
 		glPushMatrix();
 		glMultMatrixf(transform->global_transformation.Transposed().ptr());
@@ -121,6 +127,8 @@ void ComponentMesh::DrawFaceNormals()
 {
 	if (normals != nullptr) {
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+		if (transform->has_dirty_flag)
+			transform->RecalculateTransform();
 
 		glPushMatrix();
 		glMultMatrixf(transform->global_transformation.Transposed().ptr());
