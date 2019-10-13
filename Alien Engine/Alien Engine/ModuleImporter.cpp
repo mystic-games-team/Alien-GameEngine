@@ -76,7 +76,7 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	// set it's parent to the "invisible" game object
 	parent_object->parent = App->objects->base_game_object;
 	App->objects->base_game_object->AddChild(parent_object);
-	ComponentTransform* tr = new ComponentTransform(parent_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 });
+	ComponentTransform* tr = new ComponentTransform(parent_object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
 	parent_object->AddComponent(tr);
 	// set parent active
 	App->objects->SetNewSelectedObject(parent_object);
