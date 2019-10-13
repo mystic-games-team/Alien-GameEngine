@@ -46,7 +46,6 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			{
 				if (ImGui::IsItemClicked()) {
 					App->objects->SetNewSelectedObject(node);
-					App->camera->object_selected = node;
 				}
 				std::vector<GameObject*>::iterator item = node->children.begin();
 				for (; item != node->children.end(); ++item) 
@@ -61,7 +60,6 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			else {
 				if (ImGui::IsItemClicked()) {
 					App->objects->SetNewSelectedObject(node);
-					App->camera->object_selected = node;
 				}
 			}
 			ImGui::PopID();
@@ -77,7 +75,6 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			ImGui::PopID();
 			if (ImGui::IsItemClicked()) {
 				App->objects->SetNewSelectedObject(node);
-				App->camera->object_selected = node;
 			}
 		}
 	}
