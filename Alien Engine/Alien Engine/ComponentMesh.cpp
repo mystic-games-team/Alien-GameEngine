@@ -181,6 +181,10 @@ void ComponentMesh::DrawFaceNormals()
 
 void ComponentMesh::DrawInspector()
 {
+	ImGui::PushID(this);
+	ImGui::Checkbox("##CmpActive", &enabled);
+	ImGui::PopID();
+	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 

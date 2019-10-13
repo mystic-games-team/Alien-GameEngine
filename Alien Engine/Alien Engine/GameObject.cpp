@@ -66,15 +66,14 @@ bool GameObject::IsEnabled()
 void GameObject::Draw()
 {
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 
-	if (material != nullptr) {
+	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled()) {
 		material->BindTexture();
 	}
 
-	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-
-	if (mesh != nullptr) {
-		if (material == nullptr) // set the basic color if the GameObject hasn't a material
+	if (mesh != nullptr && mesh->IsEnabled()) {
+		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
 		if (!App->objects->wireframe_mode)
 			mesh->DrawPolygon();
