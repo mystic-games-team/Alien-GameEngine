@@ -36,6 +36,7 @@ public:
 	float camera_zoom_speed = 15.0f;
 	float camera_mouse_speed = 15.0f;
 
+	GameObject* object_selected = nullptr;
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
@@ -45,5 +46,5 @@ private:
 	float zoom_speed = 0.f;
 	float mouse_speed = 0.f;
 
-	GameObject* focus_at = nullptr;
+
 };

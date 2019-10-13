@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 #include "ModuleObjects.h"
+#include "ComponentTransform.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -188,12 +189,13 @@ void ModuleCamera3D::Rotation()
 
 void ModuleCamera3D::Focus()
 {
-	/*if (focus_at == nullptr)
+	if (object_selected != nullptr)
 	{
-		focus_at=App->objects->game_objects.front();
+		ComponentTransform* tr = (ComponentTransform*)object_selected->GetComponent(ComponentType::TRANSFORM);
+		LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
 	}
-
-	LookAt(focus_at->position);*/
+	else
+		LOG("No Object Selected");
 	//TODO ELSE
 	
 }
