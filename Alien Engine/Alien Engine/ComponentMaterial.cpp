@@ -1,6 +1,7 @@
 #include "ComponentMaterial.h"
 #include "glew/include/glew.h"
 #include "GameObject.h"
+#include "imgui/imgui.h"
 #include "ComponentMesh.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* attach) : Component(attach)
@@ -28,4 +29,17 @@ void ComponentMaterial::BindTexture()
 		
 		glColor3f(color.r, color.g, color.b);
 	}
+}
+
+void ComponentMaterial::DrawInspector()
+{
+	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+	}
+
+
 }

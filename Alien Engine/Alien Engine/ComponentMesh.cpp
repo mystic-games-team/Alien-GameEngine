@@ -179,3 +179,16 @@ void ComponentMesh::DrawFaceNormals()
 	}
 }
 
+void ComponentMesh::DrawInspector()
+{
+	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+	}
+
+
+}
+

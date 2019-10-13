@@ -9,6 +9,7 @@ public:
 	virtual ~ComponentMaterial();
 	
 	void BindTexture();
+	void DrawInspector();
 
 public:
 
