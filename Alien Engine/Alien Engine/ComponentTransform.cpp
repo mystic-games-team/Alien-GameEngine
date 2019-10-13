@@ -93,7 +93,6 @@ void ComponentTransform::RecalculateTransform()
 
 void ComponentTransform::DrawInspector()
 {
-
 	if (ImGui::InputFloat3("Position", (float*)& local_position, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
 		RecalculateTransform();
 	}
