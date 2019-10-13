@@ -200,8 +200,8 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	max_ = max(max_, scaling.z);
 
 	float3 pos(translation.x, translation.y, translation.z);
-	float3 scale(scaling.x / max_, scaling.y / max_, scaling.x / max_);
-	//float3 scale(scaling.x, scaling.y, scaling.x);
+	//float3 scale(scaling.x / max_, scaling.y / max_, scaling.x / max_);
+	float3 scale(scaling.x, scaling.y, scaling.x);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	ComponentTransform* transform = new ComponentTransform(ret, pos, rot, scale);

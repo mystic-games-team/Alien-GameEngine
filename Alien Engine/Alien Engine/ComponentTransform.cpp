@@ -67,16 +67,19 @@ const Quat& ComponentTransform::GetLocalRotation() const
 }
 
 void ComponentTransform::RecalculateTransform()
-{
+{	
 	local_transformation = float4x4::FromTRS(local_position, local_rotation, local_scale);
-	
+
 	if (game_object_attached->parent != nullptr) {
 		ComponentTransform* tr = (ComponentTransform*)game_object_attached->parent->GetComponent(ComponentType::TRANSFORM);
 		if (tr != nullptr)
 			global_transformation = tr->global_transformation * local_transformation;
+		else
+			global_transformation = local_transformation;
 	}
-	else
+	else {
 		global_transformation = local_transformation;
+	}
 
 	std::vector<GameObject*>::iterator item = game_object_attached->children.begin();
 	for (; item != game_object_attached->children.end(); ++item) {
@@ -94,10 +97,10 @@ void ComponentTransform::DrawInspector()
 	if (ImGui::InputFloat3("Position", (float*)& local_position, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
 		RecalculateTransform();
 	}
-	if (ImGui::InputFloat3("Scale", (float*)& local_scale, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
+	if (ImGui::InputFloat4("Rotation", (float*)& local_rotation, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
 		RecalculateTransform();
 	}
-	if (ImGui::InputFloat4("Rotation", (float*)& local_rotation, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
+	if (ImGui::InputFloat3("Scale", (float*)& local_scale, 2, ImGuiInputTextFlags_EnterReturnsTrue)) {
 		RecalculateTransform();
 	}
 }
