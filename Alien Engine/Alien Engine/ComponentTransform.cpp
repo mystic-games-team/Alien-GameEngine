@@ -142,15 +142,71 @@ void ComponentTransform::DrawInspector()
 	ImGui::Separator();
 	ImGui::Spacing();
 
-	if (ImGui::DragFloat3("Position", (float*)& local_position)) {
-		RecalculateTransform();
+	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
+		ImGui::Spacing();
+		ImGui::Text("Position  ");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70);
+		ImGui::PushID(1);
+		if (ImGui::DragFloat("X", &local_position.x, 0.5F)) {
+			RecalculateTransform();
+		}
+		ImGui::PopID();
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70);
+		ImGui::PushID(2);
+		if (ImGui::DragFloat("Y", &local_position.y, 0.5F)) {
+			RecalculateTransform();
+		}
+		ImGui::PopID();
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70);
+		ImGui::PushID(3);
+		if (ImGui::DragFloat("Z", &local_position.z, 0.5F)) {
+			RecalculateTransform();
+		}
+		ImGui::PopID();
+		ImGui::Spacing();
+
+		ImGui::Text("Rotation  ");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70);
+		if (ImGui::DragFloat("X", &local_rotation.x, 0.5F)) {
+			RecalculateTransform();
+		}
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70);
+		if (ImGui::DragFloat("Y", &local_rotation.y, 0.5F)) {
+			RecalculateTransform();
+		}
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70);
+		if (ImGui::DragFloat("Z", &local_rotation.z, 0.5F)) {
+			RecalculateTransform();
+		}
+		ImGui::Spacing();
+
+		ImGui::Text("Scale     ");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70);
+		if (ImGui::DragFloat("X", &local_scale.x, 0.5F)) {
+			RecalculateTransform();
+		}
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70);
+		if (ImGui::DragFloat("Y", &local_scale.y, 0.5F)) {
+			RecalculateTransform();
+		}
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70);
+		if (ImGui::DragFloat("Z", &local_scale.z, 0.5F)) {
+			RecalculateTransform();
+		}
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
 	}
-	if (ImGui::DragFloat3("Rotation", (float*)& local_rotation)) {
-		RecalculateTransform();
-	}
-	if (ImGui::DragFloat3("Scale", (float*)& local_scale)) {
-		RecalculateTransform();
-	}
+	
 }
 
 
