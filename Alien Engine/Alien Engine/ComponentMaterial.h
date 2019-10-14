@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ModuleImporter.h"
 #include "Component.h"
 #include "Color.h"
 
@@ -13,7 +14,8 @@ public:
 
 public:
 
-	uint id_texture = 0;
+
+	Texture* texture = nullptr;
 	uint material_index = 0;
 	Color color{ 1,1,1 };
 

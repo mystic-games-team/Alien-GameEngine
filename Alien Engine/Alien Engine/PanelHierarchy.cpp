@@ -24,69 +24,61 @@ void PanelHierarchy::PanelLogic()
 	ImGui::Separator();
 	ImGui::Spacing();
 	if (!App->objects->base_game_object->children.empty()) {
-		PrintNode(App->objects->base_game_object);
+		std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
+		for (; item != App->objects->base_game_object->children.end(); ++item)
+		{
+			if (*item != nullptr)
+			{
+				PrintNode(*item);
+			}
+		}
 	}
-		
-
 	ImGui::End();
 }
 
 void PanelHierarchy::PrintNode(GameObject* node)
 {
-	if (node != App->objects->base_game_object) 
+
+	if (!node->children.empty()) 
 	{
-		if (!node->children.empty()) 
+		ImGui::PushID(node);
+		ImGui::Checkbox("##Active", &node->enabled);
+		ImGui::PopID();
+		ImGui::SameLine();
+		ImGui::PushID(node);
+		if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->IsSelected()))
 		{
-			ImGui::PushID(node);
-			ImGui::Checkbox("##Active", &node->enabled);
-			ImGui::PopID();
-			ImGui::SameLine();
-			ImGui::PushID(node);
-			if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->IsSelected()))
+			if (ImGui::IsItemClicked()) {
+				App->objects->SetNewSelectedObject(node);
+			}
+			std::vector<GameObject*>::iterator item = node->children.begin();
+			for (; item != node->children.end(); ++item) 
 			{
-				if (ImGui::IsItemClicked()) {
-					App->objects->SetNewSelectedObject(node);
-				}
-				std::vector<GameObject*>::iterator item = node->children.begin();
-				for (; item != node->children.end(); ++item) 
+				if (*item != nullptr) 
 				{
-					if (*item != nullptr) 
-					{
-						PrintNode(*item);
-					}
-				}
-				ImGui::TreePop();
-			}
-			else {
-				if (ImGui::IsItemClicked()) {
-					App->objects->SetNewSelectedObject(node);
+					PrintNode(*item);
 				}
 			}
-			ImGui::PopID();
+			ImGui::TreePop();
 		}
-		else 
-		{
-			ImGui::PushID(node);
-			ImGui::Checkbox("##Active", &node->enabled);
-			ImGui::PopID();
-			ImGui::SameLine();
-			ImGui::PushID(node);
-			ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->IsSelected());
-			ImGui::PopID();
+		else {
 			if (ImGui::IsItemClicked()) {
 				App->objects->SetNewSelectedObject(node);
 			}
 		}
+		ImGui::PopID();
 	}
 	else 
 	{
-		std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
-		for (; item != App->objects->base_game_object->children.end(); ++item) 
-		{
-			if (*item != nullptr) 
-			{
-				PrintNode(*item);
-			}
+		ImGui::PushID(node);
+		ImGui::Checkbox("##Active", &node->enabled);
+		ImGui::PopID();
+		ImGui::SameLine();
+		ImGui::PushID(node);
+		ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->IsSelected());
+		ImGui::PopID();
+		if (ImGui::IsItemClicked()) {
+			App->objects->SetNewSelectedObject(node);
 		}
 	}
 }

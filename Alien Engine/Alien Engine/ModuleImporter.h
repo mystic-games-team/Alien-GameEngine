@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "Module.h"
 
+
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
@@ -19,6 +20,21 @@
 #include "GameObject.h"
 #include "ComponentMesh.h"
 
+
+struct Texture {
+	
+	Texture(const char* path, const uint& id, const uint& height, const uint& width);
+		
+	std::string name;
+	std::string path;
+
+	uint id = 0;
+	uint height = 0;
+	uint width = 0;
+
+};
+
+
 class ModuleImporter : public Module
 {
 public:
@@ -30,7 +46,7 @@ public:
 	bool CleanUp();
 
 	bool LoadModelFile(const char* path);
-	uint LoadTextureFile(const char* path);
+	Texture* LoadTextureFile(const char* path);
 
 private:
 
@@ -39,6 +55,8 @@ private:
 	GameObject* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, GameObject* game_object);
 	void InitMeshBuffers(ComponentMesh* mesh);
 
-	uint test_id = 0;
+private:
+
+	std::vector<Texture*> textures;
 	GameObject* parent_object = nullptr;
 };
