@@ -171,37 +171,49 @@ void ComponentTransform::DrawInspector()
 		ImGui::Text("Rotation  ");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
+		ImGui::PushID(4);
 		if (ImGui::DragFloat("X", &local_rotation.x, 0.5F)) {
 			RecalculateTransform();
 		}
+		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
+		ImGui::PushID(5);
 		if (ImGui::DragFloat("Y", &local_rotation.y, 0.5F)) {
 			RecalculateTransform();
 		}
+		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
+		ImGui::PushID(6);
 		if (ImGui::DragFloat("Z", &local_rotation.z, 0.5F)) {
 			RecalculateTransform();
 		}
+		ImGui::PopID();
 		ImGui::Spacing();
 
 		ImGui::Text("Scale     ");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
+		ImGui::PushID(7);
 		if (ImGui::DragFloat("X", &local_scale.x, 0.5F)) {
 			RecalculateTransform();
 		}
+		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
+		ImGui::PushID(8);
 		if (ImGui::DragFloat("Y", &local_scale.y, 0.5F)) {
 			RecalculateTransform();
 		}
+		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
+		ImGui::PushID(9);
 		if (ImGui::DragFloat("Z", &local_scale.z, 0.5F)) {
 			RecalculateTransform();
 		}
+		ImGui::PopID();
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();

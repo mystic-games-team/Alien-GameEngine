@@ -198,15 +198,15 @@ void ComponentMesh::DrawInspector()
 		ImGui::Spacing();
 
 		ImGui::Checkbox("Draw Outline", &draw_outline);
+		ImGui::SliderInt("Outline Width", (int*)& outline_width, 1, 30);
 
+		ImGui::Checkbox("Active Mesh", &view_mesh);
+		ImGui::Checkbox("Active Wireframe", &wireframe);
+		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);
+		ImGui::Checkbox("Active Face Normals", &view_face_normals);
 		ImGui::Spacing();
 
-		ImGui::InputInt("Outline Width", (int*)&outline_width);
-		if (outline_width <= 1)
-		{
-			outline_width = 1;
-		}
-
+		
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
