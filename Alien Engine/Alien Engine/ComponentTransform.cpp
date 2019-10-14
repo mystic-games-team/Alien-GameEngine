@@ -178,7 +178,11 @@ void ComponentTransform::DrawInspector()
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(4);
 		if (ImGui::DragFloat("X", &euler_rotation.x, 0.5F)) {
-			local_rotation = Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z);
+			float3 aux = euler_rotation;
+			aux.x = DegToRad(euler_rotation.x);
+			aux.y = DegToRad(euler_rotation.y);
+			aux.z = DegToRad(euler_rotation.z);
+			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
 		}
 		ImGui::PopID();
@@ -186,7 +190,11 @@ void ComponentTransform::DrawInspector()
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(5);
 		if (ImGui::DragFloat("Y", &euler_rotation.y, 0.5F)) {
-			local_rotation = Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z);
+			float3 aux = euler_rotation;
+			aux.x = DegToRad(euler_rotation.x);
+			aux.y = DegToRad(euler_rotation.y);
+			aux.z = DegToRad(euler_rotation.z);
+			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
 		}
 		ImGui::PopID();
@@ -194,7 +202,11 @@ void ComponentTransform::DrawInspector()
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(6);
 		if (ImGui::DragFloat("Z", &euler_rotation.z, 0.5F)) {
-			local_rotation = Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z);
+			float3 aux = euler_rotation;
+			aux.x = DegToRad(euler_rotation.x);
+			aux.y = DegToRad(euler_rotation.y);
+			aux.z = DegToRad(euler_rotation.z);
+			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
 		}
 		ImGui::PopID();
