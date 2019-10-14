@@ -47,7 +47,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		ImGui::SameLine();
 		ImGui::PushID(node);
 		if (!node->IsEnabled())
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f, 0.5f, 0.5f, 1.f });
 		if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->IsSelected()))
 		{
 			if (!node->IsEnabled())
@@ -82,7 +82,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		ImGui::SameLine();
 		ImGui::PushID(node);
 		if (!node->IsEnabled())
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f, 0.5f, 0.5f, 1.f });
 		ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->IsSelected());
 		if (!node->IsEnabled())
 			ImGui::PopStyleColor();
