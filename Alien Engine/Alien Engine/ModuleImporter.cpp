@@ -117,7 +117,6 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 
 	// get mesh data
 	ComponentMesh* mesh = new ComponentMesh(ret);
-
 	// get vertex
 	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
 
@@ -189,7 +188,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	aiString path;
 	ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 	std::string full_path(TEXTURES_FOLDER + std::string(path.C_Str()));
-	material->id_texture = LoadTextureFile(full_path.data());
+	material->texture = LoadTextureFile(full_path.data());
 
 	InitMeshBuffers(mesh);
 
@@ -245,36 +244,55 @@ void ModuleImporter::InitMeshBuffers(ComponentMesh* mesh)
 		&mesh->normals[0], GL_STATIC_DRAW);
 }
 
-uint ModuleImporter::LoadTextureFile(const char* path)
+Texture* ModuleImporter::LoadTextureFile(const char* path)
 {
-	uint ret = 0;
+	Texture* texture = nullptr;
+
+	std::vector<Texture*>::iterator item = textures.begin();
+	for (; item != textures.end(); ++item) {
+		if (*item != nullptr && (*item)->path == path) {
+			return (*item);
+		}
+	}
 
 	if (ilLoadImage(path)) {
-		ILuint Width, Height;
-		Width = ilGetInteger(IL_IMAGE_WIDTH);
-		Height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+		ILuint width, height, texture_id;
+		width = ilGetInteger(IL_IMAGE_WIDTH);
+		height = ilGetInteger(IL_IMAGE_HEIGHT);
 
 		ILubyte* Data = ilGetData();
-		
+
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glGenTextures(1, &ret);
-		glBindTexture(GL_TEXTURE_2D, ret);
+		glGenTextures(1, &texture_id);
+		glBindTexture(GL_TEXTURE_2D, texture_id);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height,
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
 			0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
+		texture = new Texture(path, texture_id, height, width);
+		textures.push_back(texture);
 	}
 	else {
 		LOG("Error while loading image in %s", path);
+		LOG("Error: %s", ilGetString(ilGetError()));
 	}
+	return texture;
+}
 
-	return ret;
+Texture::Texture(const char* path, const uint& id, const uint& height, const uint& width)
+{
+	this->id = id;
+	this->height = height;
+	this->width = width;
+	this->path = std::string(path);
+	name = App->file_system->GetBaseFileName(path);
 }
 
 float3 ModuleImporter::GetObjectSize(const aiMesh* mesh)
@@ -298,3 +316,4 @@ float3 ModuleImporter::GetObjectSize(const aiMesh* mesh)
 
 	return { max_x_vertex - min_x_vertex , max_y_vertex - min_y_vertex,max_z_vertex - min_z_vertex };
 }
+

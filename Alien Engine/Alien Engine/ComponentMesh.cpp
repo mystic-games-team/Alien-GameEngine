@@ -46,21 +46,27 @@ void ComponentMesh::DrawPolygon()
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(1.0f, 0.1f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+
+	if (uv_cords != nullptr) {
+		glBindBuffer(GL_ARRAY_BUFFER, id_uv);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+	}
+
 	if (normals != nullptr) {
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
 		glNormalPointer(GL_FLOAT, 0, 0);
 	}
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glEnable(GL_POLYGON_OFFSET_FILL);
-	glPolygonOffset(1.0f, 0.1f);
-
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
-
 	glDrawElements(GL_TRIANGLES, num_index * 3, GL_UNSIGNED_INT, 0);
+
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_POLYGON_OFFSET_FILL);
