@@ -6,7 +6,7 @@ PanelHierarchy::PanelHierarchy(const std::string& panel_name, const SDL_Scancode
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
 	enabled = true;
-	shortcut = App->shortcut_manager->AddShortCut("Panel Hierarchy", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
+	shortcut = App->shortcut_manager->AddShortCut("Hierarchy", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
 }
 
 

@@ -178,6 +178,8 @@ void PanelConfig::PanelLogic()
 		for (; item != shortcuts.end(); ++item) {
 			if (*item != nullptr) {
 				ImGui::Spacing();
+				ImGui::Spacing();
+				ImGui::Spacing();
 				ImGui::Text((*item)->GetNameOrder());
 				ImGui::NextColumn();
 				ImGui::Spacing();
