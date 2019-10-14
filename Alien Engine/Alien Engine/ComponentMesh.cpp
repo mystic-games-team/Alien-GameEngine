@@ -78,11 +78,19 @@ void ComponentMesh::DrawOutLine()
 	if (!glIsEnabled(GL_STENCIL_TEST))
 		return;
 
-	glColor3f(0, 1, 1);
+	if (game_object_attached->IsParentSelected())
+	{
+		glColor3f(0, 1, 1);
+	}
+	else
+	{
+		glColor3f(1, 0.5f, 0);
+	}
+
 	glStencilFunc(GL_NOTEQUAL, 1, -1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	glLineWidth(8);
+	glLineWidth(outline_width);
 	glPolygonMode(GL_FRONT, GL_LINE);
 
 	glPushMatrix();
@@ -186,12 +194,23 @@ void ComponentMesh::DrawInspector()
 	ImGui::PopID();
 	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
+		
+		ImGui::Spacing();
+
+		ImGui::Checkbox("Draw Outline", &draw_outline);
+		ImGui::InputInt("Outline Width", (int*)& outline_width);
+		if (outline_width <= 1)
+		{
+			outline_width = 1;
+		}
 
 		ImGui::Checkbox("Active Mesh", &view_mesh);
 		ImGui::Checkbox("Active Wireframe", &wireframe);
 		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);
 		ImGui::Checkbox("Active Face Normals", &view_face_normals);
+		ImGui::Spacing();
 
+		
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
@@ -199,4 +218,3 @@ void ComponentMesh::DrawInspector()
 
 
 }
-

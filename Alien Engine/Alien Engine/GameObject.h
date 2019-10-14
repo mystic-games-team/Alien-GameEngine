@@ -33,6 +33,8 @@ public:
 	void ChangeVertexNormalsView(const bool& wireframe);
 	void ChangeFaceNormalsView(const bool& wireframe);
 
+	bool HasChildren();
+		
 private:
 
 	void SayChildrenParentIsSelected(const bool& selected);
