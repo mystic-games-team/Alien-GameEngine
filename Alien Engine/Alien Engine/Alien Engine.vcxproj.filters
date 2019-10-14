@@ -43,9 +43,6 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{9245c810-9473-4611-ab0d-41e5a8a7f915}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Objects\Primitives">
-      <UniqueIdentifier>{12e1da08-d32f-4856-9317-6696bafc288a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Tools\Devil">
       <UniqueIdentifier>{49d97f8c-ec3e-4b52-b93d-a16156a59750}</UniqueIdentifier>
     </Filter>
@@ -372,38 +369,11 @@
     <ClInclude Include="ModuleObjects.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Objects\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitive.h">
-      <Filter>Objects\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere_Alien.h">
-      <Filter>Objects\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Rock.h">
-      <Filter>Objects\Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Dodecahedron.h">
-      <Filter>Objects\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Octahedron.h">
-      <Filter>Objects\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Icosahedron.h">
-      <Filter>Objects\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Torus_Alien.h">
-      <Filter>Objects\Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="PanelRender.h">
       <Filter>Panels</Filter>
-    </ClInclude>
-    <ClInclude Include="Model3D.h">
-      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Devil\include\config.h">
       <Filter>Tools\Devil</Filter>
@@ -650,38 +620,11 @@
     <ClCompile Include="ModuleObjects.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>Objects\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitive.cpp">
-      <Filter>Objects\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Sphere_Alien.cpp">
-      <Filter>Objects\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Rock.cpp">
-      <Filter>Objects\Primitives</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Dodecahedron.cpp">
-      <Filter>Objects\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Octahedron.cpp">
-      <Filter>Objects\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Icosahedron.cpp">
-      <Filter>Objects\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Torus_Alien.cpp">
-      <Filter>Objects\Primitives</Filter>
-    </ClCompile>
     <ClCompile Include="PanelRender.cpp">
       <Filter>Panels</Filter>
-    </ClCompile>
-    <ClCompile Include="Model3D.cpp">
-      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Objects</Filter>

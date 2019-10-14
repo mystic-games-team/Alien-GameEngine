@@ -16,7 +16,6 @@
 
 #include <vector>
 #include "glew/include/glew.h"
-#include "Model3D.h"
 #include "GameObject.h"
 #include "ComponentMesh.h"
 #include "Shapes.h"

@@ -2,7 +2,6 @@
 #include "PanelCreateObject.h"
 #include "GameObject.h"
 #include "ModuleObjects.h"
-#include "Primitive.h"
 #include "Shapes.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
@@ -118,29 +117,35 @@ void PanelCreateObject::PanelLogic()
 				x = y = z = 0;
 				break;
 			case 1:
-				object=App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN, x, y, z,subdivions);
+				par_mesh = par_shapes_create_subdivided_sphere(subdivions);
+				object->SetName("Sphere");
 				x = y = z = 0;
 				subdivions = 5;
 				break;
 			case 2:
-				object=App->objects->CreatePrimitive(PrimitiveType::ROCK, x, y, z,subdivions,seed);
+				par_mesh = par_shapes_create_rock(seed, subdivions);
+				object->SetName("Rock");
 				x = y = z = seed = 0;
 				subdivions = 5;
 				break;
 			case 3:
-				object = App->objects->CreatePrimitive(PrimitiveType::DODECAHEDRON, x, y, z);
+				par_mesh = par_shapes_create_dodecahedron();
+				object->SetName("Dodecahedron");
 				x = y = z = 0;
 				break;
 			case 4:
-				object = App->objects->CreatePrimitive(PrimitiveType::ICOSAHEDRON, x, y, z);
+				par_mesh = par_shapes_create_icosahedron();
+				object->SetName("Icosahedron");
 				x = y = z = 0;
 				break;
 			case 5:
-				object = App->objects->CreatePrimitive(PrimitiveType::OCTAHEDRON, x, y, z);
+				par_mesh = par_shapes_create_octahedron();
+				object->SetName("Octahedron");
 				x = y = z = 0;
 				break;
 			case 6:
-				object = App->objects->CreatePrimitive(PrimitiveType::TORUS, x, y, z,NULL,NULL,slices,stacks,radius);
+				par_mesh = par_shapes_create_torus(slices, stacks, radius);
+				object->SetName("Torus");
 				x = y = z = 0;
 				slices = stacks = 5;
 				radius = 0.5f;
@@ -152,7 +157,8 @@ void PanelCreateObject::PanelLogic()
 			object->AddComponent(transform);
 			object->AddComponent(mesh);
 			object->AddComponent(material);
-			
+			par_shapes_free_mesh(par_mesh);
+
 			create_color = { 1,1,1 };
 			ChangeEnable();
 		}

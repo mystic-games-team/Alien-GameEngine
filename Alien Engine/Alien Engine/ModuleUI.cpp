@@ -129,11 +129,6 @@ void ModuleUI::Draw() {
 	MainMenuBar();
 	UpdatePanels();
 
-	if (App->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN) {
-		for (int i = 0;i<10;++i)
-			App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN);
-
-	}
 	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 		App->objects->DeleteAllObjects();
 	}
@@ -194,33 +189,33 @@ void ModuleUI::MainMenuBar()
 	{
 		if (ImGui::MenuItem("Cube"))
 		{
-			App->objects->CreatePrimitive(PrimitiveType::CUBE);
+			App->objects->CreateBasePrimitive(PrimitiveType::CUBE);
 		}
 		if (ImGui::MenuItem("Sphere"))
 		{
-			App->objects->CreatePrimitive(PrimitiveType::SPHERE_ALIEN);
+			App->objects->CreateBasePrimitive(PrimitiveType::SPHERE_ALIEN);
 		}
 		if (ImGui::MenuItem("Rock"))
 		{
-			App->objects->CreatePrimitive(PrimitiveType::ROCK);
+			App->objects->CreateBasePrimitive(PrimitiveType::ROCK);
 		}
 		if (ImGui::BeginMenu("Other"))
 		{
 			if (ImGui::MenuItem("Dodecahedron"))
 			{
-				App->objects->CreatePrimitive(PrimitiveType::DODECAHEDRON);
+				App->objects->CreateBasePrimitive(PrimitiveType::DODECAHEDRON);
 			}
 			if (ImGui::MenuItem("Octahedron"))
 			{
-				App->objects->CreatePrimitive(PrimitiveType::OCTAHEDRON);
+				App->objects->CreateBasePrimitive(PrimitiveType::OCTAHEDRON);
 			}
 			if (ImGui::MenuItem("Icosahedron"))
 			{
-				App->objects->CreatePrimitive(PrimitiveType::ICOSAHEDRON);
+				App->objects->CreateBasePrimitive(PrimitiveType::ICOSAHEDRON);
 			}
 			if (ImGui::MenuItem("Torus"))
 			{
-				App->objects->CreatePrimitive(PrimitiveType::TORUS);
+				App->objects->CreateBasePrimitive(PrimitiveType::TORUS);
 			}
 			ImGui::EndMenu();
 		}

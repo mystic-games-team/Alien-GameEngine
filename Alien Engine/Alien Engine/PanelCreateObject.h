@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Panel.h"
-#include "Primitive.h"
 
 class PanelCreateObject : public Panel {
 

@@ -136,7 +136,6 @@
     <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ComponentTransform.h" />
-    <ClInclude Include="Cube.h" />
     <ClInclude Include="Devil\include\config.h" />
     <ClInclude Include="Devil\include\devil_internal_exports.h" />
     <ClInclude Include="Devil\include\il.h" />
@@ -145,7 +144,6 @@
     <ClInclude Include="Devil\include\ilut_config.h" />
     <ClInclude Include="Devil\include\ilu_region.h" />
     <ClInclude Include="Devil\include\il_wrap.h" />
-    <ClInclude Include="Dodecahedron.h" />
     <ClInclude Include="glew\include\eglew.h" />
     <ClInclude Include="glew\include\glew.h" />
     <ClInclude Include="glew\include\glxew.h" />
@@ -154,7 +152,6 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="gpudetect\DeviceId.h" />
     <ClInclude Include="gpudetect\dxgi1_4.h" />
-    <ClInclude Include="Icosahedron.h" />
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h" />
     <ClInclude Include="imgui\examples\imgui_impl_sdl.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -228,7 +225,6 @@
     <ClInclude Include="MathGeoLib\include\Time\Clock.h" />
     <ClInclude Include="mmgr\mmgr.h" />
     <ClInclude Include="mmgr\nommgr.h" />
-    <ClInclude Include="Model3D.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleFileSystem.h" />
@@ -240,7 +236,6 @@
     <ClInclude Include="ModuleUI.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Octahedron.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PanelConfig.h" />
@@ -253,15 +248,11 @@
     <ClInclude Include="PCG\pcg_extras.hpp" />
     <ClInclude Include="PCG\pcg_random.hpp" />
     <ClInclude Include="PCG\pcg_uint128.hpp" />
-    <ClInclude Include="Primitive.h" />
     <ClInclude Include="RandomHelper.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Rock.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
-    <ClInclude Include="Sphere_Alien.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Torus_Alien.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -270,11 +261,8 @@
     <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
-    <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="Dodecahedron.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="gpudetect\DeviceId.cpp" />
-    <ClCompile Include="Icosahedron.cpp" />
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\examples\imgui_impl_sdl.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -319,7 +307,6 @@
     <ClCompile Include="MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="MathGeoLib\include\Time\Clock.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
-    <ClCompile Include="Model3D.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImporter.cpp" />
@@ -330,7 +317,6 @@
     <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Octahedron.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfig.cpp" />
@@ -340,13 +326,9 @@
     <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PanelRender.cpp" />
     <ClCompile Include="Parson\parson.c" />
-    <ClCompile Include="Primitive.cpp" />
-    <ClCompile Include="Rock.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
-    <ClCompile Include="Sphere_Alien.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Torus_Alien.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Game\Configuration\CustomConfiguration.json" />

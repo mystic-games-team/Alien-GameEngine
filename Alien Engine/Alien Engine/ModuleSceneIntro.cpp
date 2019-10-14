@@ -7,7 +7,6 @@
 #include "glew/include/glew.h"
 #include "Shapes.h"
 #include "ModuleObjects.h"
-#include "Primitive.h"
 
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
 {

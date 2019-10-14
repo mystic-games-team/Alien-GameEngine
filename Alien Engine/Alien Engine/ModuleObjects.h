@@ -3,9 +3,21 @@
 #include "Module.h"
 #include "Globals.h"
 #include "GameObject.h"
-#include "Primitive.h"
 #include "Color.h"
 #include <vector>
+
+enum class PrimitiveType
+{
+	CUBE,
+	SPHERE_ALIEN,
+	ROCK,
+	DODECAHEDRON,
+	OCTAHEDRON,
+	TORUS,
+	ICOSAHEDRON,
+
+	UNKONWN
+};
 
 class ModuleObjects : public Module
 {
@@ -22,8 +34,7 @@ public:
 	void LoadConfig(JSONfilepack*& config);
 	void SaveConfig(JSONfilepack*& config);
 
-	Primitive* CreatePrimitive(const PrimitiveType& type);
-	Primitive* CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint& subdivisions = 5, const uint & seed = 0, const uint & slices = 5, const uint & slacks = 5, const float& radius = 0.5);
+	void CreateBasePrimitive(PrimitiveType type);
 
 	void ChangeWireframeMode();
 	void ChangeViewMeshMode();
