@@ -205,7 +205,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	// local pos, rot & scale
 	node->mTransformation.Decompose(scaling, rotation, translation);
 
-	// set the sacale in value of 1 but keeping the dimensions
+	// set the scale in value of 1 but keeping the dimensions
 	int max_ = max(scaling.x, scaling.y);
 	max_ = max(max_, scaling.z);
 
