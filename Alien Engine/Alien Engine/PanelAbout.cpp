@@ -74,7 +74,7 @@ void PanelAbout::PanelLogic()
 		if (ImGui::IsItemClicked()) {
 			App->OpenWebsite("https://www.opengl.org/?");
 		}
-		ImGui::BulletText("Devil %s", ILU_VERSION_S);
+		ImGui::BulletText("Devil %s", ilGetString(IL_VERSION));
 		if (ImGui::IsItemHovered()) {
 			is_hovering = true;
 		}

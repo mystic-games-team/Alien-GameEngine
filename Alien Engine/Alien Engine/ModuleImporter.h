@@ -62,9 +62,6 @@ private:
 	float max_x_vertex=0;
 	float max_y_vertex = 0;
 	float max_z_vertex = 0;
-
-	ILuint width = 0;
-	ILuint height = 0;
 	
 private:
 
