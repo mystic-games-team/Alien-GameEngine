@@ -193,6 +193,7 @@ void ModuleCamera3D::Focus()
 	{
 		ComponentTransform* tr = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 		LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
+		Scaling(App->objects->GetSelectedObject());
 	}
 	else
 	{
@@ -203,11 +204,25 @@ void ModuleCamera3D::Focus()
 				looking_at=(*iter);
 				ComponentTransform* tr = (ComponentTransform*)(*iter)->GetComponent(ComponentType::TRANSFORM);
 				LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
+				Scaling((*iter));
 			}
 		}
 	}
-	
 }
+
+void ModuleCamera3D::Scaling(GameObject* scale_over)
+{
+	do
+	{
+		Position.z -= 3;
+	} while ((scale_over->size.x >= App->window->width)&&(scale_over->size.y>=App->window->height));
+
+
+	LOG("%f, %f", scale_over->size.x, scale_over->size.y);
+
+	CalculateViewMatrix();
+}
+
 
 // -----------------------------------------------------------------
 float* ModuleCamera3D::GetViewMatrix()
@@ -221,3 +236,4 @@ void ModuleCamera3D::CalculateViewMatrix()
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
 }
+

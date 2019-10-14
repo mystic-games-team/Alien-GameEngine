@@ -21,6 +21,7 @@ public:
 	void Rotation();
 	void Focus();
 	void Zoom();
+	void Scaling(GameObject* scale_over);
 
 	float* GetViewMatrix();
 
@@ -34,7 +35,8 @@ public:
 
 	float camera_speed = 30.0f;
 	float camera_zoom_speed = 15.0f;
-	float camera_mouse_speed = 15.0f;
+	float camera_mouse_speed = 10.0f;
+
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
@@ -45,6 +47,5 @@ private:
 	float mouse_speed = 0.f;
 
 	GameObject* looking_at = nullptr;
-
 
 };
