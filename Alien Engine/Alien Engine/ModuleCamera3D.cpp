@@ -193,7 +193,7 @@ void ModuleCamera3D::Focus()
 	{
 		ComponentTransform* tr = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 		LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
-		Scaling(App->objects->GetSelectedObject());
+		/*Scaling(App->objects->GetSelectedObject());*/
 	}
 	else
 	{
@@ -204,7 +204,7 @@ void ModuleCamera3D::Focus()
 				looking_at=(*iter);
 				ComponentTransform* tr = (ComponentTransform*)(*iter)->GetComponent(ComponentType::TRANSFORM);
 				LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
-				Scaling((*iter));
+				/*Scaling((*iter));*/
 			}
 		}
 	}
