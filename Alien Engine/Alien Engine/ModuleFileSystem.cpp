@@ -473,6 +473,8 @@ const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_
 		ext_type = FileDropType::MODEL3D;
 	else if (App->StringCmp(extension.data(), "dds"))
 		ext_type = FileDropType::TEXTURE;
+	else if (App->StringCmp(extension.data(), "png"))
+		ext_type = FileDropType::TEXTURE;
 	else
 		LOG("Extension unknown!");
 
