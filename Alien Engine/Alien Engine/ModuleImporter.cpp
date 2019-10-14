@@ -257,7 +257,7 @@ Texture* ModuleImporter::LoadTextureFile(const char* path)
 
 	if (ilLoadImage(path)) {
 
-		ILuint width, height, texture_id;
+		ILuint texture_id;
 		width = ilGetInteger(IL_IMAGE_WIDTH);
 		height = ilGetInteger(IL_IMAGE_HEIGHT);
 
@@ -316,4 +316,5 @@ float3 ModuleImporter::GetObjectSize(const aiMesh* mesh)
 
 	return { max_x_vertex - min_x_vertex , max_y_vertex - min_y_vertex,max_z_vertex - min_z_vertex };
 }
+
 
