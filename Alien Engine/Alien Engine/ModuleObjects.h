@@ -60,6 +60,12 @@ public:
 	int face_n_width = 1;
 	int vertex_n_width = 1;
 
+	bool outline = false;
+	uint parent_line_width = 1;
+	uint no_child_line_width = 1;
+	Color parent_outline_color{ 1,1,1 };
+	Color no_child_outline_color{ 1,1,1 };
+
 private:
 
 	GameObject* game_object_selected = nullptr;

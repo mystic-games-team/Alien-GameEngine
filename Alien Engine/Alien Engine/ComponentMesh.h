@@ -39,8 +39,4 @@ public:
 	bool wireframe = false;
 	bool view_vertex_normals = false;
 	bool view_face_normals = false;
-
-	bool draw_outline = true;
-	uint outline_width = 8;
-
 };

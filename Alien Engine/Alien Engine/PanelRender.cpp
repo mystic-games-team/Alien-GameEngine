@@ -69,5 +69,12 @@ void PanelRender::PanelLogic()
 		ImGui::SliderInt("Face Line Length", (int*)&App->objects->face_normal_length, 1, 10);
 		ImGui::SliderInt("Face Line Width", &App->objects->face_n_width, 1, 30);
 	}
+	if (ImGui::CollapsingHeader("Outline")) {
+		ImGui::Checkbox("Active Outline", &App->objects->outline);
+		ImGui::ColorEdit3("Parent Color", (float*)& App->objects->parent_outline_color, ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("Parent Line Width", (int*)&App->objects->parent_line_width, 1, 30);
+		ImGui::ColorEdit3("No children Color", (float*)& App->objects->no_child_outline_color, ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("No children Line Width", (int*)&App->objects->no_child_line_width, 1, 30);
+	}
 	ImGui::End();
 }

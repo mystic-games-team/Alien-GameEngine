@@ -80,17 +80,19 @@ void ComponentMesh::DrawOutLine()
 
 	if (game_object_attached->IsParentSelected())
 	{
-		glColor3f(0, 1, 1);
+		glColor3f(App->objects->parent_outline_color.r, App->objects->parent_outline_color.g, App->objects->parent_outline_color.b);
+		glLineWidth(App->objects->parent_line_width);
 	}
 	else
 	{
-		glColor3f(1, 0.5f, 0);
+		glColor3f(App->objects->no_child_outline_color.r, App->objects->no_child_outline_color.g, App->objects->no_child_outline_color.b);
+		glLineWidth(App->objects->no_child_line_width);
 	}
 
 	glStencilFunc(GL_NOTEQUAL, 1, -1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	glLineWidth(outline_width);
+
 	glPolygonMode(GL_FRONT, GL_LINE);
 
 	glPushMatrix();
@@ -196,10 +198,6 @@ void ComponentMesh::DrawInspector()
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
 		
 		ImGui::Spacing();
-
-		ImGui::Checkbox("Draw Outline", &draw_outline);
-		ImGui::SliderInt("Outline Width", (int*)& outline_width, 1, 30);
-
 		ImGui::Checkbox("Active Mesh", &view_mesh);
 		ImGui::Checkbox("Active Wireframe", &wireframe);
 		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);

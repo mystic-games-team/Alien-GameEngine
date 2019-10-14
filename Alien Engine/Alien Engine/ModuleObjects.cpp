@@ -265,6 +265,15 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	mesh_color.r = config->GetArrayNumber("Configuration.Renderer.MeshColor", 0);
 	mesh_color.g = config->GetArrayNumber("Configuration.Renderer.MeshColor", 1);
 	mesh_color.b = config->GetArrayNumber("Configuration.Renderer.MeshColor", 2);
+	parent_outline_color.r = config->GetArrayNumber("Configuration.Renderer.ParentOutlineColor", 0);
+	parent_outline_color.g = config->GetArrayNumber("Configuration.Renderer.ParentOutlineColor", 1);
+	parent_outline_color.b = config->GetArrayNumber("Configuration.Renderer.ParentOutlineColor", 2);
+	no_child_outline_color.r = config->GetArrayNumber("Configuration.Renderer.NoChildOutlineColor", 0);
+	no_child_outline_color.g = config->GetArrayNumber("Configuration.Renderer.NoChildOutlineColor", 1);
+	no_child_outline_color.b = config->GetArrayNumber("Configuration.Renderer.NoChildOutlineColor", 2);
+	outline = config->GetBoolean("Configuration.Renderer.Outline");
+	parent_line_width = config->GetNumber("Configuration.Renderer.ParentLineWidth");
+	no_child_line_width = config->GetNumber("Configuration.Renderer.NoChildLineWidth");
 }
 
 void ModuleObjects::SaveConfig(JSONfilepack*& config)
@@ -297,5 +306,14 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetArrayNumber("Configuration.Renderer.MeshColor", mesh_color.r);
 	config->SetArrayNumber("Configuration.Renderer.MeshColor", mesh_color.g);
 	config->SetArrayNumber("Configuration.Renderer.MeshColor", mesh_color.b);
+	config->SetArrayNumber("Configuration.Renderer.ParentOutlineColor", parent_outline_color.r);
+	config->SetArrayNumber("Configuration.Renderer.ParentOutlineColor", parent_outline_color.g);
+	config->SetArrayNumber("Configuration.Renderer.ParentOutlineColor", parent_outline_color.b);
+	config->SetArrayNumber("Configuration.Renderer.NoChildOutlineColor", no_child_outline_color.r);
+	config->SetArrayNumber("Configuration.Renderer.NoChildOutlineColor", no_child_outline_color.g);
+	config->SetArrayNumber("Configuration.Renderer.NoChildOutlineColor", no_child_outline_color.b);
+	config->SetBoolean("Configuration.Renderer.Outline", outline);
+	config->SetNumber("Configuration.Renderer.ParentLineWidth", parent_line_width);
+	config->SetNumber("Configuration.Renderer.NoChildLineWidth", no_child_line_width);
 }
 

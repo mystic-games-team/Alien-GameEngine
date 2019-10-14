@@ -79,7 +79,7 @@ void GameObject::Draw()
 			glColor3f(1, 1, 1);
 		if (!mesh->wireframe)
 			mesh->DrawPolygon();
-		if ((selected || parent_selected)&&mesh->draw_outline)
+		if ((selected || parent_selected) && App->objects->outline)
 			mesh->DrawOutLine();
 		if (mesh->view_mesh || mesh->wireframe)
 			mesh->DrawMesh();
