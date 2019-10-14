@@ -75,12 +75,10 @@ void Application::LoadDefaultConfig()
 
 void Application::SaveCustomConfig()
 {
-	if (!FileExists("Configuration/CustomConfiguration.json")) {
-		config = CreateJSONFile("Configuration/CustomConfiguration.json");
-	}
+	remove("Configuration/CustomConfiguration.json");
+	config = CreateJSONFile("Configuration/CustomConfiguration.json");
 	if (config != nullptr)
 		SaveConfig();
-		
 }
 
 bool Application::LoadConfig()
