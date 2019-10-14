@@ -195,10 +195,17 @@ void ModuleCamera3D::Focus()
 		LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
 	}
 	else
-		LOG("No Object Selected");
-
-
-	//TODO ELSE
+	{
+		for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
+		{
+			if (iter == App->objects->base_game_object->children.begin() || (*iter) != looking_at)
+			{
+				looking_at=(*iter);
+				ComponentTransform* tr = (ComponentTransform*)(*iter)->GetComponent(ComponentType::TRANSFORM);
+				LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
+			}
+		}
+	}
 	
 }
 
