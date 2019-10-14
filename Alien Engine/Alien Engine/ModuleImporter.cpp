@@ -44,6 +44,15 @@ bool ModuleImporter::CleanUp()
 {
 	aiDetachAllLogStreams();
 
+	std::vector<Texture*>::iterator item = textures.begin();
+	for (; item != textures.end(); ++item) {
+		if (*item != nullptr) {
+			delete* item;
+			*item = nullptr;
+		}
+	}
+	textures.clear();
+
 	return true;
 }
 

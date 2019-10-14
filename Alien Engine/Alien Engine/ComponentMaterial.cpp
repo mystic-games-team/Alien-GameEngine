@@ -41,7 +41,6 @@ void ComponentMaterial::DrawInspector()
 
 		ImGui::Spacing();
 		ImGui::ColorEdit3("Material Color", &color, ImGuiColorEditFlags_Float);
-		ImGui::SliderFloat("Object Alpha", &color.a, 0, 1);
 		ImGui::Spacing();
 
 		ImGui::Separator();
