@@ -46,8 +46,7 @@ public:
 	GameObject* parent = nullptr;
 	bool enabled = true;
 
-	
-
+	float3 size{ 0,0,0 };
 
 private:
 
