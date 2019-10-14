@@ -68,16 +68,18 @@ void GameObject::Draw()
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 
-	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled()) {
+	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled()) 
+	{
 		material->BindTexture();
 	}
 
-	if (mesh != nullptr && mesh->IsEnabled()) {
+	if (mesh != nullptr && mesh->IsEnabled()) 
+	{
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
 		if (!App->objects->wireframe_mode)
 			mesh->DrawPolygon();
-		if (selected || parent_selected)
+		if ((selected || parent_selected)&&mesh->draw_outline)
 			mesh->DrawOutLine();
 		if (App->objects->wireframe_mode || App->objects->view_mesh_mode)
 			mesh->DrawMesh();
@@ -100,12 +102,14 @@ void GameObject::AddComponent(Component* component)
 	bool exists = false;
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
-		if (*item != nullptr && (*item)->GetType() == component->GetType()) {
+		if (*item != nullptr && (*item)->GetType() == component->GetType()) 
+		{
 			exists = true;
 			break;
 		}
 	}
-	if (!exists) {
+	if (!exists) 
+	{
 		components.push_back(component);
 	}
 }

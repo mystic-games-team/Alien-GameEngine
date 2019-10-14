@@ -34,4 +34,8 @@ public:
 	float* center_point_normal = nullptr;
 	float* center_point = nullptr;
 
+public:
+
+	uint outline_width = 8;
+	bool draw_outline = true;
 };

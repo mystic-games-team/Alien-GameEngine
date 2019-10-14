@@ -90,7 +90,7 @@ void ComponentMesh::DrawOutLine()
 	glStencilFunc(GL_NOTEQUAL, 1, -1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	glLineWidth(8);
+	glLineWidth(outline_width);
 	glPolygonMode(GL_FRONT, GL_LINE);
 
 	glPushMatrix();
@@ -194,7 +194,18 @@ void ComponentMesh::DrawInspector()
 	ImGui::PopID();
 	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
+		
+		ImGui::Spacing();
 
+		ImGui::Checkbox("Draw Outline", &draw_outline);
+
+		ImGui::Spacing();
+
+		ImGui::InputInt("Outline Width", (int*)&outline_width);
+		if (outline_width <= 1)
+		{
+			outline_width = 1;
+		}
 
 		ImGui::Spacing();
 		ImGui::Separator();
@@ -203,4 +214,3 @@ void ComponentMesh::DrawInspector()
 
 
 }
-
