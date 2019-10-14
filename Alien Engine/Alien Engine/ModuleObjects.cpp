@@ -1,19 +1,13 @@
 #include "Globals.h"
 #include "ModuleObjects.h"
 #include "GameObject.h"
-#include "Primitive.h"
 #include "ModuleInput.h"
 #include "glew/include/glew.h"
 #include "Application.h"
 
-#include "Cube.h"
-#include "Sphere_Alien.h"
-#include "Rock.h"
-#include "Dodecahedron.h"
-#include "Octahedron.h"
-#include "Icosahedron.h"
-#include "Torus_Alien.h"
 #include "ComponentTransform.h"
+#include "ComponentMaterial.h"
+#include "ComponentMesh.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {
@@ -72,93 +66,6 @@ bool ModuleObjects::CleanUp()
 	base_game_object = nullptr;
 
 	return true;
-}
-
-Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type)
-{
-	Primitive* ret = nullptr;
-	/*switch (type)
-	{
-	case PrimitiveType::CUBE:
-		ret = new Cube();
-		ret->type = PrimitiveType::CUBE;
-		break;
-	case PrimitiveType::SPHERE_ALIEN:
-		ret = new Sphere_Alien();
-		ret->type = PrimitiveType::SPHERE_ALIEN;
-		break;
-	case PrimitiveType::ROCK:
-		ret = new Rock();
-		ret->type = PrimitiveType::ROCK;
-		break;
-	case PrimitiveType::DODECAHEDRON:
-		ret = new Dodecahedron();
-		ret->type = PrimitiveType::DODECAHEDRON;
-		break;
-	case PrimitiveType::OCTAHEDRON:
-		ret = new Octahedron();
-		ret->type = PrimitiveType::OCTAHEDRON;
-		break;
-	case PrimitiveType::ICOSAHEDRON:
-		ret = new Icosahedron();
-		ret->type = PrimitiveType::ICOSAHEDRON;
-		break;
-	case PrimitiveType::TORUS:
-		ret = new Torus_Alien();
-		ret->type = PrimitiveType::TORUS;
-		break;
-	}
-
-	if (ret != nullptr)
-	{
-		static_cast<GameObject*>(ret)->type = GameObjectType::PRIMITIVE;
-		game_objects.push_back(ret);
-	}
-*/
-	return ret;
-}
-
-Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float& position_x, const float& position_y, const float& position_z, const uint & subdivisions , const uint & seed , const uint & slices , const uint & slacks , const float & radius)
-{
-	Primitive* ret = nullptr;
-	/*switch (type)
-	{
-	case PrimitiveType::CUBE:
-		ret = new Cube(position_x, position_y, position_z);
-		ret->type = PrimitiveType::CUBE;
-		break;
-	case PrimitiveType::SPHERE_ALIEN:
-		ret = new Sphere_Alien(position_x, position_y, position_z, subdivisions);
-		ret->type = PrimitiveType::SPHERE_ALIEN;
-		break;
-	case PrimitiveType::ROCK:
-		ret = new Rock(position_x, position_y, position_z, seed, subdivisions);
-		ret->type = PrimitiveType::ROCK;
-		break;
-	case PrimitiveType::DODECAHEDRON:
-		ret = new Dodecahedron(position_x, position_y, position_z);
-		ret->type = PrimitiveType::DODECAHEDRON;
-		break;
-	case PrimitiveType::OCTAHEDRON:
-		ret = new Octahedron(position_x, position_y, position_z);
-		ret->type = PrimitiveType::OCTAHEDRON;
-		break;
-	case PrimitiveType::ICOSAHEDRON:
-		ret = new Icosahedron(position_x, position_y, position_z);
-		ret->type = PrimitiveType::ICOSAHEDRON;
-		break;
-	case PrimitiveType::TORUS:
-		ret = new Torus_Alien(position_x, position_y, position_z, slices, slacks, radius);
-		ret->type = PrimitiveType::TORUS;
-		break;
-	}
-	if (ret != nullptr)
-	{
-		static_cast<GameObject*>(ret)->type = GameObjectType::PRIMITIVE;
-		game_objects.push_back(ret);
-	}*/
-
-	return ret;
 }
 
 void ModuleObjects::ChangeWireframeMode()
@@ -315,5 +222,54 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetBoolean("Configuration.Renderer.Outline", outline);
 	config->SetNumber("Configuration.Renderer.ParentLineWidth", parent_line_width);
 	config->SetNumber("Configuration.Renderer.NoChildLineWidth", no_child_line_width);
+}
+
+void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
+{
+	GameObject* object = new GameObject();
+	object->parent = App->objects->base_game_object;
+	App->objects->base_game_object->AddChild(object);
+	ComponentTransform* transform = new ComponentTransform(object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
+	ComponentMesh* mesh = new ComponentMesh(object);
+	ComponentMaterial* material = new ComponentMaterial(object);
+	par_shapes_mesh* par_mesh = nullptr;
+	
+	switch (type) {
+	case PrimitiveType::CUBE:
+		par_mesh = par_shapes_create_cube();
+		object->SetName("Cube");
+		break;
+	case PrimitiveType::DODECAHEDRON:
+		par_mesh = par_shapes_create_dodecahedron();
+		object->SetName("Dodecahedron");
+		break;
+	case PrimitiveType::ICOSAHEDRON:
+		par_mesh = par_shapes_create_icosahedron();
+		object->SetName("Icosahedron");
+		break;
+	case PrimitiveType::OCTAHEDRON:
+		par_mesh = par_shapes_create_octahedron();
+		object->SetName("Octahedron");
+		break;
+	case PrimitiveType::ROCK:
+		par_mesh = par_shapes_create_rock(5, 3);
+		object->SetName("Rock");
+		break;
+	case PrimitiveType::SPHERE_ALIEN:
+		par_mesh = par_shapes_create_subdivided_sphere(3);
+		object->SetName("Sphere");
+		break;
+	case PrimitiveType::TORUS:
+		par_mesh = par_shapes_create_torus(3, 10, 0.5F);
+		object->SetName("Torus");
+		break;
+	default:
+		break;
+	}
+	App->importer->LoadParShapesMesh(par_mesh, mesh);
+	object->AddComponent(transform);
+	object->AddComponent(mesh);
+	object->AddComponent(material);
+	par_shapes_free_mesh(par_mesh);
 }
 

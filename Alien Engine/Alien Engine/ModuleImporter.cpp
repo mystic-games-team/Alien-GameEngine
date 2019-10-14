@@ -1,7 +1,6 @@
 #include "ModuleImporter.h"
 #include "Application.h"
 #include "ModuleObjects.h"
-#include "Model3D.h"
 
 #include "Devil/include/il.h"
 #include "Devil/include/ilu.h"
@@ -121,7 +120,6 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
 
 	ret->size = GetObjectSize(ai_mesh);
-	LOG("House Size: %f, %f, %f", ret->size.x, ret->size.y, ret->size.z);
 
 	memcpy(mesh->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
 	mesh->num_vertex = ai_mesh->mNumVertices;
@@ -341,33 +339,7 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 		}
 	}
 
-	// vertex
-	glGenBuffers(1, &mesh->id_vertex);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
-		&mesh->vertex[0], GL_STATIC_DRAW);
-
-	// index
-	glGenBuffers(1, &mesh->id_index);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_index,
-		&mesh->index[0], GL_STATIC_DRAW);
-
-	if (mesh->uv_cords != nullptr) {
-		// UV
-		glGenBuffers(1, &mesh->id_uv);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
-			&mesh->uv_cords[0], GL_STATIC_DRAW);
-	}
-
-	if (mesh->normals != nullptr) {
-		// normals
-		glGenBuffers(1, &mesh->id_normals);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_normals);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
-			&mesh->normals[0], GL_STATIC_DRAW);
-	}
+	InitMeshBuffers(mesh);
 }
 
 Texture::Texture(const char* path, const uint& id, const uint& height, const uint& width)
