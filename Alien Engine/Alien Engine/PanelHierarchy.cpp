@@ -46,8 +46,12 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::PushID(node);
+		if (!node->IsEnabled())
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
 		if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->IsSelected()))
 		{
+			if (!node->IsEnabled())
+				ImGui::PopStyleColor();
 			if (ImGui::IsItemClicked()) {
 				App->objects->SetNewSelectedObject(node);
 			}
@@ -62,6 +66,8 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			ImGui::TreePop();
 		}
 		else {
+			if (!node->IsEnabled())
+				ImGui::PopStyleColor();
 			if (ImGui::IsItemClicked()) {
 				App->objects->SetNewSelectedObject(node);
 			}
@@ -75,7 +81,11 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::PushID(node);
+		if (!node->IsEnabled())
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
 		ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->IsSelected());
+		if (!node->IsEnabled())
+			ImGui::PopStyleColor();
 		ImGui::PopID();
 		if (ImGui::IsItemClicked()) {
 			App->objects->SetNewSelectedObject(node);
