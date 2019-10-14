@@ -70,8 +70,12 @@ private:
 	GameObject* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, GameObject* game_object);
 	void InitMeshBuffers(ComponentMesh* mesh);
 
-private:
+
+public:
 
 	std::vector<Texture*> textures;
+
+private:
+
 	GameObject* parent_object = nullptr;
 };

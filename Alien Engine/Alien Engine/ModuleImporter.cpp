@@ -274,7 +274,6 @@ Texture* ModuleImporter::LoadTextureFile(const char* path)
 	ilutRenderer(ILUT_OPENGL);  
 
 	if (ilLoadImage(path)) {
-
 		iluFlipImage();
 		texture = new Texture(path, ilutGLBindTexImage(), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_WIDTH));
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
