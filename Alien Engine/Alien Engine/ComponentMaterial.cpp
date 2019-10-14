@@ -73,12 +73,31 @@ void ComponentMaterial::DrawInspector()
 		}
 
 		if (change_texture_menu) {
+			/*_________________________________________________________________*/
+			static Texture* tex = nullptr;
+			static bool first = true;
+			if (first) { // SAD need to think what to do here, this sucks :D SAD
+				if (texture == nullptr && !App->importer->textures.empty())
+					tex = App->importer->textures.front();
+				else tex = texture;
+				first = false;
+			}
+			/*_________________________________________________________________*/
 
 			ImGui::OpenPopup("Textures Loaded");
-			ImGui::SetNextWindowSize({ 500,350 });
+			ImGui::SetNextWindowSize({ 522,530 });
 			if (ImGui::BeginPopupModal("Textures Loaded", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
-				if (ImGui::BeginChild("", { 470,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
-				
+				ImGui::Spacing();
+				ImGui::NewLine();
+				ImGui::SameLine(190);
+				ImGui::Text("Texture Selected");
+				ImGui::Text("");
+				ImGui::SameLine(170);
+				if (tex != nullptr)
+					ImGui::Image((ImTextureID)tex->id, { 150,150 });
+				ImGui::Spacing();
+				if (ImGui::BeginChild("", { 492,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
+
 					ImGui::Columns(3, 0, false);
 					ImGui::SetColumnWidth(0, 156);
 					ImGui::SetColumnWidth(1, 156);
@@ -87,8 +106,12 @@ void ComponentMaterial::DrawInspector()
 					std::vector<Texture*>::iterator item = App->importer->textures.begin();
 					for (; item != App->importer->textures.end(); ++item) {
 						if (*item != nullptr) {
-							ImGui::Image((ImTextureID)(*item)->id, { 156,156 });
+							ImGui::ImageButton((ImTextureID)(*item)->id, { 140,140 });
+							if (ImGui::IsItemClicked()) {
+								tex = (*item);
+							}
 							ImGui::NextColumn();
+
 						}
 					}
 
@@ -96,11 +119,12 @@ void ComponentMaterial::DrawInspector()
 				}
 				ImGui::Spacing();
 				ImGui::Text("");
-				ImGui::SameLine(355);
+				ImGui::SameLine(377);
 				if (ImGui::Button("Apply", { 120,20 })) {
+					texture = tex;
 					change_texture_menu = false;
 				}
-				ImGui::SameLine(215);
+				ImGui::SameLine(237);
 				if (ImGui::Button("Cancel", { 120,20 })) {
 					change_texture_menu = false;
 				}
