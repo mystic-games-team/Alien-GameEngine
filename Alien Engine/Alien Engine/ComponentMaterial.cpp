@@ -39,6 +39,14 @@ void ComponentMaterial::DrawInspector()
 		ImGui::Separator();
 		ImGui::Spacing();
 
+		ImGui::Spacing();
+		ImGui::ColorEdit3("Material Color", &color, ImGuiColorEditFlags_Float);
+		ImGui::SliderFloat("Object Alpha", &color.a, 0, 1);
+		ImGui::Spacing();
+
+		ImGui::Separator();
+		ImGui::Spacing();
+
 		if (texture != nullptr)
 		{
 			ImGui::Spacing();
@@ -56,8 +64,5 @@ void ComponentMaterial::DrawInspector()
 			ImGui::Separator();
 			ImGui::Spacing();
 		}
-
-		ImGui::Spacing();
-		ImGui::ColorEdit3("Material Color", &color, ImGuiColorEditFlags_Float);
 	}
 }

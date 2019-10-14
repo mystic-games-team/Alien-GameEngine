@@ -17,6 +17,6 @@ public:
 
 	Texture* texture = nullptr;
 	uint material_index = 0;
-	Color color{ 1,1,1 };
+	Color color{ 1,1,1,1 };
 
 };
