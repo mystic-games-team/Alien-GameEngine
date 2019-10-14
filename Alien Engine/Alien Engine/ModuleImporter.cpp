@@ -121,6 +121,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
 
 	ret->size = GetObjectSize(ai_mesh);
+	LOG("House Size: %f, %f, %f", ret->size.x, ret->size.y, ret->size.z);
 
 	memcpy(mesh->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
 	mesh->num_vertex = ai_mesh->mNumVertices;

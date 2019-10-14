@@ -138,7 +138,6 @@ Component* GameObject::GetComponent(const ComponentType& type)
 			return *item;
 		}
 	}
-	LOG("No component found");
 	return nullptr;
 }
 
