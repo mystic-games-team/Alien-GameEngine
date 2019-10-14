@@ -17,13 +17,11 @@ void ComponentMaterial::BindTexture()
 {
 	if (texture != nullptr && texture->id > 0) {
 		// enable textures
-
 		glEnable(GL_TEXTURE_2D);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
-		
-		glColor3f(color.r, color.g, color.b);
 	}
+	glColor3f(color.r, color.g, color.b);
 }
 
 void ComponentMaterial::DrawInspector()
