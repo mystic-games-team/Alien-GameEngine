@@ -32,8 +32,10 @@ void ComponentMaterial::DrawInspector()
 	ImGui::Checkbox("##CmpActive", &enabled);
 	ImGui::PopID();
 	ImGui::SameLine();
-	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
-
+	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) 
+	{
+		ImGui::Spacing();
+		ImGui::Text("Texture Information");
 
 		ImGui::Spacing();
 		ImGui::Separator();

@@ -119,6 +119,9 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	ComponentMesh* mesh = new ComponentMesh(ret);
 	// get vertex
 	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
+
+	ret->size = GetObjectSize(ai_mesh);
+
 	memcpy(mesh->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
 	mesh->num_vertex = ai_mesh->mNumVertices;
 	// get index
@@ -279,7 +282,6 @@ Texture* ModuleImporter::LoadTextureFile(const char* path)
 		LOG("Error while loading image in %s", path);
 		LOG("Error: %s", ilGetString(ilGetError()));
 	}
-
 	return texture;
 }
 
@@ -291,3 +293,26 @@ Texture::Texture(const char* path, const uint& id, const uint& height, const uin
 	this->path = std::string(path);
 	name = App->file_system->GetBaseFileName(path);
 }
+
+float3 ModuleImporter::GetObjectSize(const aiMesh* mesh)
+{
+	for (uint i = 0; i < mesh->mNumVertices; ++i)
+	{
+		if (mesh->mVertices[i].x <= min_x_vertex)
+			min_x_vertex = mesh->mVertices[i].x;
+		if (mesh->mVertices[i].y <= min_y_vertex)
+			min_y_vertex = mesh->mVertices[i].y;
+		if (mesh->mVertices[i].z <= min_z_vertex)
+			max_z_vertex = mesh->mVertices[i].z;
+
+		if (mesh->mVertices[i].x >= max_x_vertex)
+			min_x_vertex = mesh->mVertices[i].x;
+		if (mesh->mVertices[i].y >= max_y_vertex)
+			max_y_vertex = mesh->mVertices[i].y;
+		if (mesh->mVertices[i].z >= max_z_vertex)
+			max_z_vertex = mesh->mVertices[i].z;
+	}
+
+	return { max_x_vertex - min_x_vertex , max_y_vertex - min_y_vertex,max_z_vertex - min_z_vertex };
+}
+

@@ -48,6 +48,18 @@ public:
 	bool LoadModelFile(const char* path);
 	Texture* LoadTextureFile(const char* path);
 
+	float3 GetObjectSize(const aiMesh* mesh);
+
+private:
+
+	float min_x_vertex = 0;
+	float min_y_vertex = 0;
+	float min_z_vertex = 0;
+
+	float max_x_vertex=0;
+	float max_y_vertex = 0;
+	float max_z_vertex = 0;
+
 private:
 
 	void InitScene(const aiScene* scene, const char* path);
