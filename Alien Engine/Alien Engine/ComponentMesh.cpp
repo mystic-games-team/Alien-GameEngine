@@ -195,9 +195,23 @@ void ComponentMesh::DrawInspector()
 	ImGui::Checkbox("##CmpActive", &enabled);
 	ImGui::PopID();
 	ImGui::SameLine();
-	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
-		
+	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
+	{
 		ImGui::Spacing();
+
+		ImGui::Text("Geometry Information");
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		ImGui::Text("Vertex count:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", num_vertex);
+		ImGui::Text("Triangles count:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", num_faces);
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+		
 		ImGui::Checkbox("Active Mesh", &view_mesh);
 		ImGui::Checkbox("Active Wireframe", &wireframe);
 		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);
