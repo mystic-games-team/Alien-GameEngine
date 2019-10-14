@@ -163,13 +163,16 @@ Primitive* ModuleObjects::CreatePrimitive(const PrimitiveType& type, const float
 
 void ModuleObjects::ChangeWireframeMode()
 {
-	view_mesh_mode = true;
 	wireframe_mode = !wireframe_mode;
+
+	base_game_object->ChangeWireframe(wireframe_mode);
 }
 
 void ModuleObjects::ChangeViewMeshMode()
 {
 	view_mesh_mode = !view_mesh_mode;
+
+	base_game_object->ChangeMeshView(view_mesh_mode);
 }
 
 void ModuleObjects::DeleteAllObjects() 
@@ -195,11 +198,15 @@ void ModuleObjects::ChangeEnableGrid()
 void ModuleObjects::ChangeEnableNormalVertex()
 {
 	draw_vertex_normals = !draw_vertex_normals;
+
+	base_game_object->ChangeVertexNormalsView(draw_vertex_normals);
 }
 
 void ModuleObjects::ChangeEnableNormalFace()
 {
 	draw_face_normals = !draw_face_normals;
+
+	base_game_object->ChangeFaceNormalsView(draw_face_normals);
 }
 
 void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)

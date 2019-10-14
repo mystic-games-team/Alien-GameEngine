@@ -14,15 +14,24 @@ public:
 	void Enable();
 	void Disable();
 	bool IsEnabled();
+
 	void Draw();
+
 	void AddComponent(Component* component);
+	Component* GetComponent(const ComponentType& type);
 	void AddChild(GameObject* child);
+
 	void SetName(const char* name);
 	const char* GetName();
-	Component* GetComponent(const ComponentType& type);
+
 	bool IsSelected();
 	bool IsParentSelected();
 	void ChangeSelected(const bool& select);
+
+	void ChangeWireframe(const bool& wireframe);
+	void ChangeMeshView(const bool& wireframe);
+	void ChangeVertexNormalsView(const bool& wireframe);
+	void ChangeFaceNormalsView(const bool& wireframe);
 
 private:
 

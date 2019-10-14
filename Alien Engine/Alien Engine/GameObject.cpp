@@ -75,15 +75,15 @@ void GameObject::Draw()
 	if (mesh != nullptr && mesh->IsEnabled()) {
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
-		if (!App->objects->wireframe_mode)
+		if (!mesh->wireframe)
 			mesh->DrawPolygon();
 		if (selected || parent_selected)
 			mesh->DrawOutLine();
-		if (App->objects->wireframe_mode || App->objects->view_mesh_mode)
+		if (mesh->view_mesh || mesh->wireframe)
 			mesh->DrawMesh();
-		if (App->objects->draw_vertex_normals)
+		if (mesh->view_vertex_normals)
 			mesh->DrawVertexNormals();
-		if (App->objects->draw_face_normals)
+		if (mesh->view_face_normals)
 			mesh->DrawFaceNormals();
 	}
 
@@ -152,6 +152,66 @@ void GameObject::ChangeSelected(const bool& select)
 	selected = select;
 
 	SayChildrenParentIsSelected(selected);
+}
+
+void GameObject::ChangeWireframe(const bool& wireframe)
+{
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+	if (mesh != nullptr)
+		mesh->wireframe = wireframe;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->ChangeWireframe(wireframe);
+		}
+	}
+}
+
+void GameObject::ChangeMeshView(const bool& mesh_view)
+{
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+	if (mesh != nullptr)
+		mesh->view_mesh = mesh_view;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->ChangeMeshView(mesh_view);
+		}
+	}
+}
+
+void GameObject::ChangeVertexNormalsView(const bool& normals)
+{
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+	if (mesh != nullptr)
+		mesh->view_vertex_normals = normals;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->ChangeVertexNormalsView(normals);
+		}
+	}
+}
+
+void GameObject::ChangeFaceNormalsView(const bool& normals)
+{
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+	if (mesh != nullptr)
+		mesh->view_face_normals = normals;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->ChangeFaceNormalsView(normals);
+		}
+	}
 }
 
 void GameObject::SayChildrenParentIsSelected(const bool& selected)

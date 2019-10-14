@@ -187,6 +187,10 @@ void ComponentMesh::DrawInspector()
 	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
 
+		ImGui::Checkbox("Active Mesh", &view_mesh);
+		ImGui::Checkbox("Active Wireframe", &wireframe);
+		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);
+		ImGui::Checkbox("Active Face Normals", &view_face_normals);
 
 		ImGui::Spacing();
 		ImGui::Separator();

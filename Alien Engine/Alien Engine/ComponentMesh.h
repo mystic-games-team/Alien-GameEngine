@@ -34,4 +34,8 @@ public:
 	float* center_point_normal = nullptr;
 	float* center_point = nullptr;
 
+	bool view_mesh = true;
+	bool wireframe = false;
+	bool view_vertex_normals = false;
+	bool view_face_normals = false;
 };
