@@ -4,6 +4,7 @@
 #include "Component.h"
 #include <vector>
 #include <string>
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class GameObject
 {
