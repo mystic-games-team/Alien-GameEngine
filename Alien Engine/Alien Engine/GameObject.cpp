@@ -108,6 +108,7 @@ void GameObject::AddComponent(Component* component)
 			break;
 		}
 	}
+
 	if (!exists) 
 	{
 		components.push_back(component);

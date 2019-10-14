@@ -44,5 +44,7 @@ private:
 	float zoom_speed = 0.f;
 	float mouse_speed = 0.f;
 
+	GameObject* looking_at = nullptr;
+
 
 };
