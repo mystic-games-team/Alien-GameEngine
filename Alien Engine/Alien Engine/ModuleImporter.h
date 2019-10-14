@@ -20,6 +20,9 @@
 #include "ComponentMesh.h"
 #include "Shapes.h"
 
+#include "Devil/include/il.h"
+#include "Devil/include/ilu.h"
+#include "Devil/include/ilut.h"
 
 struct Texture {
 	
@@ -60,6 +63,9 @@ private:
 	float max_y_vertex = 0;
 	float max_z_vertex = 0;
 
+	ILuint width = 0;
+	ILuint height = 0;
+	
 private:
 
 	void InitScene(const aiScene* scene, const char* path);

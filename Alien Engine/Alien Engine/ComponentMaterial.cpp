@@ -33,12 +33,31 @@ void ComponentMaterial::DrawInspector()
 	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) 
 	{
 		ImGui::Spacing();
-		ImGui::Text("Texture Information");
+		ImGui::Text("Material Information");
 
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
+
+		if (texture != nullptr)
+		{
+			ImGui::Spacing();
+			ImGui::Text("Texture Information");
+
+			ImGui::Spacing();
+			ImGui::Spacing();
+
+			ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->width);
+			ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->height);
+			ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", texture->path);
+
+			ImGui::Image((ImTextureID)texture->id, { ImGui::GetWindowWidth() ,ImGui::GetWindowWidth() });
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+		}
+
+		ImGui::Spacing();
+		ImGui::ColorEdit3("Material Color", &color, ImGuiColorEditFlags_Float);
 	}
-
-
 }
