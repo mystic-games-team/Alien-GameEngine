@@ -12,6 +12,7 @@ ComponentTransform::ComponentTransform(GameObject* attach, const float3& pos, co
 	if (game_object_attached->parent != nullptr) {
 		ComponentTransform* tr = (ComponentTransform*)game_object_attached->parent->GetComponent(ComponentType::TRANSFORM);
 		if (tr != nullptr) global_transformation = tr->global_transformation * local_transformation;
+		else global_transformation = local_transformation;
 	}
 	else
 		global_transformation = local_transformation;
