@@ -203,8 +203,8 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	max_ = max(max_, scaling.z);
 
 	float3 pos(translation.x, translation.y, translation.z);
-	float3 scale(scaling.x / max_, scaling.y / max_, scaling.x / max_);
-	//float3 scale(scaling.x, scaling.y, scaling.x);
+	//float3 scale(scaling.x / max_, scaling.y / max_, scaling.x / max_);
+	float3 scale(scaling.x, scaling.y, scaling.x);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	ComponentTransform* transform = new ComponentTransform(ret, pos, rot, scale);
@@ -231,17 +231,22 @@ void ModuleImporter::InitMeshBuffers(ComponentMesh* mesh)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_index,
 		&mesh->index[0], GL_STATIC_DRAW);
 
-	// UV
-	glGenBuffers(1, &mesh->id_uv);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
-		&mesh->uv_cords[0], GL_STATIC_DRAW);
+	if (mesh->uv_cords != nullptr) {
+		// UV
+		glGenBuffers(1, &mesh->id_uv);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+			&mesh->uv_cords[0], GL_STATIC_DRAW);
+	}
 
-	// normals
-	glGenBuffers(1, &mesh->id_normals);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_normals);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
-		&mesh->normals[0], GL_STATIC_DRAW);
+	if (mesh->normals != nullptr) {
+		// normals
+		glGenBuffers(1, &mesh->id_normals);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_normals);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+			&mesh->normals[0], GL_STATIC_DRAW);
+	}
+	
 }
 
 Texture* ModuleImporter::LoadTextureFile(const char* path)
@@ -284,6 +289,85 @@ Texture* ModuleImporter::LoadTextureFile(const char* path)
 		LOG("Error: %s", ilGetString(ilGetError()));
 	}
 	return texture;
+}
+
+void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
+{
+	mesh->num_vertex = shape->npoints;
+	mesh->num_index = shape->ntriangles * 3;
+
+	mesh->vertex = new float[mesh->num_vertex * 3];
+	mesh->index = new uint[mesh->num_index * 3];
+
+	memcpy(mesh->vertex, shape->points, sizeof(float) * mesh->num_vertex * 3);
+	memcpy(mesh->index, shape->triangles, sizeof(PAR_SHAPES_T) * mesh->num_index);
+
+	if (shape->tcoords != nullptr) {
+		mesh->uv_cords = new float[mesh->num_vertex * 3];
+		memcpy(mesh->uv_cords, shape->tcoords, sizeof(float) * mesh->num_vertex * 3);
+	}
+
+	if (shape->normals != nullptr) {
+		mesh->normals = new float[mesh->num_vertex * 3];
+
+		memcpy(mesh->normals, shape->normals, sizeof(float) * mesh->num_vertex * 3);
+
+		mesh->center_point_normal = new float[shape->ntriangles * 3];
+		mesh->center_point = new float[shape->ntriangles * 3];
+		mesh->num_faces = shape->ntriangles;
+		for (uint i = 0; i < mesh->num_index; i += 3)
+		{
+			uint index1 = mesh->index[i] * 3;
+			uint index2 = mesh->index[i + 1] * 3;
+			uint index3 = mesh->index[i + 2] * 3;
+
+			vec3 x0(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
+			vec3 x1(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
+			vec3 x2(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
+
+			vec3 v0 = x0 - x2;
+			vec3 v1 = x1 - x2;
+			vec3 n = cross(v0, v1);
+
+			vec3 normalized = normalize(n);
+
+			mesh->center_point[i] = (x0.x + x1.x + x2.x) / 3;
+			mesh->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
+			mesh->center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
+
+			mesh->center_point_normal[i] = normalized.x;
+			mesh->center_point_normal[i + 1] = normalized.y;
+			mesh->center_point_normal[i + 2] = normalized.z;
+		}
+	}
+
+	// vertex
+	glGenBuffers(1, &mesh->id_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+		&mesh->vertex[0], GL_STATIC_DRAW);
+
+	// index
+	glGenBuffers(1, &mesh->id_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_index,
+		&mesh->index[0], GL_STATIC_DRAW);
+
+	if (mesh->uv_cords != nullptr) {
+		// UV
+		glGenBuffers(1, &mesh->id_uv);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+			&mesh->uv_cords[0], GL_STATIC_DRAW);
+	}
+
+	if (mesh->normals != nullptr) {
+		// normals
+		glGenBuffers(1, &mesh->id_normals);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_normals);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
+			&mesh->normals[0], GL_STATIC_DRAW);
+	}
 }
 
 Texture::Texture(const char* path, const uint& id, const uint& height, const uint& width)

@@ -3,6 +3,10 @@
 #include "GameObject.h"
 #include "ModuleObjects.h"
 #include "Primitive.h"
+#include "Shapes.h"
+#include "ComponentMaterial.h"
+#include "ComponentMesh.h"
+#include "ComponentTransform.h"
 
 PanelCreateObject::PanelCreateObject(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra) :
 	Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -99,11 +103,18 @@ void PanelCreateObject::PanelLogic()
 
 		if (ImGui::Button("Create", { ImGui::GetWindowWidth()-16,25 }))
 		{
-			GameObject* object = nullptr;
+			GameObject* object = new GameObject();
+			object->parent = App->objects->base_game_object;
+			App->objects->base_game_object->AddChild(object);
+			ComponentTransform* transform = new ComponentTransform(object, { x,y,z }, { 0,0,0,0 }, { 1,1,1 });
+			ComponentMesh* mesh = new ComponentMesh(object);
+			ComponentMaterial* material = new ComponentMaterial(object);
+			par_shapes_mesh* par_mesh = nullptr;
 			switch (objects_combo)
 			{
 			case 0:
-				object=App->objects->CreatePrimitive(PrimitiveType::CUBE, x,y,z);
+				par_mesh = par_shapes_create_cube();
+				object->SetName("Cube");
 				x = y = z = 0;
 				break;
 			case 1:
@@ -136,9 +147,13 @@ void PanelCreateObject::PanelLogic()
 				break;
 			}
 
-			//object->SetColor(create_color);
+			App->importer->LoadParShapesMesh(par_mesh, mesh);
+			material->color = create_color;
+			object->AddComponent(transform);
+			object->AddComponent(mesh);
+			object->AddComponent(material);
+			
 			create_color = { 1,1,1 };
-
 			ChangeEnable();
 		}
 

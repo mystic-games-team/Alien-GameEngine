@@ -19,6 +19,7 @@
 #include "Model3D.h"
 #include "GameObject.h"
 #include "ComponentMesh.h"
+#include "Shapes.h"
 
 #include "Devil/include/il.h"
 #include "Devil/include/ilu.h"
@@ -50,7 +51,7 @@ public:
 
 	bool LoadModelFile(const char* path);
 	Texture* LoadTextureFile(const char* path);
-
+	void LoadParShapesMesh(par_shapes_mesh* p_mesh, ComponentMesh* mesh);
 	float3 GetObjectSize(const aiMesh* mesh);
 
 private:
