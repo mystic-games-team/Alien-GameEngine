@@ -7,6 +7,10 @@ ComponentTransform::ComponentTransform(GameObject* attach, const float3& pos, co
 	local_position = pos;
 	local_rotation = rot;
 	local_scale = scale;
+	euler_rotation = local_rotation.ToEulerXYZ();
+	euler_rotation.x = RadToDeg(euler_rotation.x);
+	euler_rotation.y = RadToDeg(euler_rotation.y);
+	euler_rotation.z = RadToDeg(euler_rotation.z);
 	local_transformation = float4x4::FromTRS(local_position, local_rotation, local_scale);
 
 	if (game_object_attached->parent != nullptr) {
@@ -173,21 +177,24 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(4);
-		if (ImGui::DragFloat("X", &local_rotation.x, 0.5F)) {
+		if (ImGui::DragFloat("X", &euler_rotation.x, 0.5F)) {
+			local_rotation = Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z);
 			RecalculateTransform();
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(5);
-		if (ImGui::DragFloat("Y", &local_rotation.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &euler_rotation.y, 0.5F)) {
+			local_rotation = Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z);
 			RecalculateTransform();
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(6);
-		if (ImGui::DragFloat("Z", &local_rotation.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &euler_rotation.z, 0.5F)) {
+			local_rotation = Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z);
 			RecalculateTransform();
 		}
 		ImGui::PopID();

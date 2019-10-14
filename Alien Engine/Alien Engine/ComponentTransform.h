@@ -42,4 +42,6 @@ private:
 	// rotation
 	Quat local_rotation = { 0,0,0,0 };
 	
+	float3 euler_rotation = { 0,0,0 };
+
 };
