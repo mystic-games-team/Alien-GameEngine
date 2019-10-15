@@ -21,6 +21,8 @@ public:
 
 	void OnResize(int width, int height);
 
+	void CreateRenderTexture();
+
 	void SetBackgroundColor(const Color & bg_color);
 
 	void RenderGrid();

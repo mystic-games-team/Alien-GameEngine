@@ -58,7 +58,22 @@ void ComponentTransform::SetLocalScale(const float& x, const float& y, const flo
 	local_scale.y = y;
 	local_scale.z = z;
 
+	LookScale();
+
 	RecalculateTransform();
+}
+
+void ComponentTransform::LookScale()
+{
+	bool aux_scale = is_scale_negative;
+
+	if (local_scale.x < 0 || local_scale.y < 0 || local_scale.z < 0) {
+		is_scale_negative = true;
+	}
+	else is_scale_negative = false;
+
+	if (aux_scale != is_scale_negative)
+		game_object_attached->ScaleNegative(is_scale_negative);
 }
 
 const float3& ComponentTransform::GetLocalScale() const
@@ -218,6 +233,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(7);
 		if (ImGui::DragFloat("X", &local_scale.x, 0.5F)) {
+			LookScale();
 			RecalculateTransform();
 		}
 		ImGui::PopID();
@@ -225,6 +241,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(8);
 		if (ImGui::DragFloat("Y", &local_scale.y, 0.5F)) {
+			LookScale();
 			RecalculateTransform();
 		}
 		ImGui::PopID();
@@ -232,6 +249,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(9);
 		if (ImGui::DragFloat("Z", &local_scale.z, 0.5F)) {
+			LookScale();
 			RecalculateTransform();
 		}
 		ImGui::PopID();
@@ -240,6 +258,16 @@ void ComponentTransform::DrawInspector()
 		ImGui::Spacing();
 	}
 	
+}
+
+void ComponentTransform::SetScaleNegative(const bool& negative)
+{
+	is_scale_negative = negative;
+}
+
+bool ComponentTransform::IsScaleNegative()
+{
+	return is_scale_negative;
 }
 
 

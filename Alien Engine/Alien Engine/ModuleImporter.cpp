@@ -28,6 +28,7 @@ bool ModuleImporter::Init()
 	ilInit();
 	iluInit();
 	ilutInit();
+	LOG("Initing Devil");
 
 	return true;
 }
