@@ -113,7 +113,9 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
+
 	OnResize(App->window->width, App->window->height);
+
 
 	return ret;
 }
@@ -143,20 +145,10 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-
-
-	
-
-	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {
-		Texture* tex = new Texture("fsd", render_texture, App->window->height, App->window->width);
-		App->importer->textures.push_back(tex);
-	}
-	
-
-	
 	App->ui->Draw(); // last draw UI!!!
 
 	SDL_GL_SwapWindow(App->window->window);
+
 
 	return UPDATE_CONTINUE;
 }
@@ -202,6 +194,15 @@ void ModuleRenderer3D::OnResize(int width, int height)
 		LOG("Error creating screen buffer");
 	}
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	if (tex == nullptr) {
+		tex = new Texture("fsd", render_texture, App->window->height, App->window->width);
+		App->importer->textures.push_back(tex);
+	}
+	else {
+		tex->width = App->window->width;
+		tex->height = App->window->height;
+	}
 }
 
 void ModuleRenderer3D::SetBackgroundColor(const Color & bg_color)
@@ -223,51 +224,4 @@ void ModuleRenderer3D::RenderGrid()
 	}
 	glEnd();
 	glLineWidth(1);
-}
-
-Texture* ModuleRenderer3D::GetSceneTexture()
-{
-	// The framebuffer
-	GLuint Framebuffer = 0;
-	glGenFramebuffers(1, &Framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, Framebuffer);
-
-	// The texture we're going to render
-	GLuint renderertexture = 0;
-	glGenTextures(1, &renderertexture);
-	glBindTexture(GL_TEXTURE_2D, renderertexture);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, App->window->width, App->window->height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-
-	// Filters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderertexture, 0);
-
-	GLuint depthtexture = 0;
-	glGenRenderbuffers(1, &depthtexture);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthtexture);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->width, App->window->height);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthtexture);
-
-	GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-	glDrawBuffers(1, DrawBuffers);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		return nullptr;
-
-	glBindFramebuffer(GL_FRAMEBUFFER, Framebuffer);
-	glViewport(0, 0, App->window->width, App->window->height);
-
-	Texture* scene_texture = nullptr;
-
-	scene_texture = new Texture("",renderertexture,App->window->height,App->window->width);
-	App->importer->textures.push_back(scene_texture);
-	
-	return scene_texture;
 }
