@@ -15,7 +15,8 @@ void PanelConsole::PanelLogic()
 {
 
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_HorizontalScrollbar);
-	
+	if (ImGui::IsWindowHovered())
+		App->camera->is_scene_hovered = false;
 	ImGui::TextUnformatted(App->log_string.begin());
 
 	if (scroll_x) {

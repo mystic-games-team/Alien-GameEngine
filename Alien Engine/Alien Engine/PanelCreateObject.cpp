@@ -35,6 +35,8 @@ void PanelCreateObject::PanelLogic()
 	ImGui::SetNextWindowContentWidth(300);
 	if (ImGui::BeginPopupModal(panel_name.c_str(), &enabled, ImGuiWindowFlags_NoResize| ImGuiWindowFlags_AlwaysAutoResize))
 	{
+		if (ImGui::IsWindowHovered())
+			App->camera->is_scene_hovered = false;
 		LOG("%f", ImGui::GetWindowWidth());
 		ImGui::Spacing();
 		ImGui::Spacing();

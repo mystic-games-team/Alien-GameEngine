@@ -20,7 +20,8 @@ PanelConfig::~PanelConfig()
 void PanelConfig::PanelLogic()
 {
 	ImGui::Begin("Configuration", &enabled, ImGuiWindowFlags_NoCollapse);
-
+	if (ImGui::IsWindowHovered())
+		App->camera->is_scene_hovered = false;
 	if (ImGui::CollapsingHeader("Application"))
 	{
 		ImGui::Spacing();

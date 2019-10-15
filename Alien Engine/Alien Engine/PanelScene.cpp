@@ -17,7 +17,8 @@ void PanelScene::PanelLogic()
 {
 	ImGui::SetNextWindowSize({ 800,600 });
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoScrollbar|ImGuiDockNodeFlags_NoResize|ImGuiWindowFlags_NoResize);
-
+	App->camera->is_scene_hovered = ImGui::IsWindowHovered();
+	App->camera->is_scene_focused = ImGui::IsWindowFocused();
 	ImGui::Image((ImTextureID)App->renderer3D->tex->id, { ImGui::GetWindowWidth(),ImGui::GetWindowHeight() }, { 0,1 }, { 1,0 });
 
 	ImGui::End();

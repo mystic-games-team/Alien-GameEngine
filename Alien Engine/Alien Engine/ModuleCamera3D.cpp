@@ -53,14 +53,19 @@ update_status ModuleCamera3D::Update(float dt)
 		speed = camera_speed * 2 * dt;
 		zoom_speed = camera_zoom_speed * 2 * dt;
 	}
-
-	Movement();
-	Zoom();
+	if (is_scene_hovered) {
+		Movement();
+		Zoom();
+		
+	}
+	if (is_scene_focused) {
+		Rotation();
+	}
 
 	Position += newPos;
 	Reference += newPos;
 
-	Rotation();
+	
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		Focus();

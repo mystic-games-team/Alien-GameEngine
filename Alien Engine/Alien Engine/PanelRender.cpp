@@ -14,9 +14,8 @@ PanelRender::~PanelRender()
 void PanelRender::PanelLogic()
 {
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
-
-	
-
+	if (ImGui::IsWindowHovered())
+		App->camera->is_scene_hovered = false;
 	if (ImGui::CollapsingHeader("Mesh Settings")) 
 	{
 		ImGui::Spacing();

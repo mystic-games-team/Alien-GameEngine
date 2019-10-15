@@ -31,6 +31,9 @@ private:
 
 public:
 	
+	bool is_scene_hovered = false;
+	bool is_scene_focused = false;
+
 	vec3 X, Y, Z, Position, Reference;
 
 	float camera_speed = 30.0f;
