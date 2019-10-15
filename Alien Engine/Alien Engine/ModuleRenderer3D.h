@@ -4,6 +4,8 @@
 #include "glmath.h"
 #include "Light.h"
 #include "glew/include/glew.h"
+#include "ModuleImporter.h"
+
 #define MAX_LIGHTS 8
 
 class ModuleRenderer3D : public Module
@@ -22,6 +24,8 @@ public:
 	void SetBackgroundColor(const Color & bg_color);
 
 	void RenderGrid();
+
+	Texture* GetSceneTexture();
 
 public:
 
