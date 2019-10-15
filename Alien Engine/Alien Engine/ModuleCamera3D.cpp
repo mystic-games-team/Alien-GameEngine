@@ -35,6 +35,8 @@ bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
 
+	SDL_FreeCursor(cursor);
+
 	return true;
 }
 
@@ -47,19 +49,21 @@ update_status ModuleCamera3D::Update(float dt)
 	zoom_speed = camera_zoom_speed * dt;
 	mouse_speed = camera_mouse_speed * dt;
 
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) 
+	{
 		speed = camera_speed * 2 * dt;
 		zoom_speed = camera_zoom_speed * 2 * dt;
 	}
-	if (is_scene_hovered) {
+	if (is_scene_hovered) 
+	{
 		Zoom();
-	}
-	if (is_scene_hovered || is_scene_focused) {
-		Movement();
-	}
-	if (is_scene_focused) {
 		Rotation();
 	}
+	if (is_scene_hovered || is_scene_focused) 
+	{
+		Movement();
+	}
+
 
 
 	SetCenterOffset();
@@ -133,11 +137,19 @@ void ModuleCamera3D::Movement()
 
 	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
+		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
+		SDL_SetCursor(cursor);
+
 		if (App->input->GetMouseXMotion() > -1) newPos -= X * mouse_speed;
 		if (App->input->GetMouseXMotion() < 1) newPos += X * mouse_speed;
 
-		if (App->input->GetMouseYMotion() < 1) newPos -= Y * mouse_speed ;
-		if (App->input->GetMouseYMotion() > -1) newPos += Y * mouse_speed;
+		if (App->input->GetMouseYMotion() < 1) newPos -= Y * mouse_speed*0.5f ;
+		if (App->input->GetMouseYMotion() > -1) newPos += Y * mouse_speed*0.5f;
+		
+		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_UP)
+		{
+			SDL_FreeCursor(cursor);
+		}
 
 	}
 }
@@ -147,6 +159,7 @@ void ModuleCamera3D::Zoom()
 	if (App->input->GetMouseZ() > 0)
 	{
 		newPos -= Z * zoom_speed;
+
 	}
 	else if (App->input->GetMouseZ() < 0)
 	{
@@ -164,6 +177,9 @@ void ModuleCamera3D::Rotation()
 		float Sensitivity = 0.25f;
 
 		Position -= Reference;
+
+		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
+		SDL_SetCursor(cursor);
 
 		if (dx != 0)
 		{
@@ -189,6 +205,11 @@ void ModuleCamera3D::Rotation()
 		}
 
 		Position = Reference + Z * length(Position);
+
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+		{
+			SDL_FreeCursor(cursor);
+		}
 	}
 }
 

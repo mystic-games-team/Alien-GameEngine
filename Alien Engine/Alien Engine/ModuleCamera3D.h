@@ -59,4 +59,5 @@ private:
 
 	GameObject* looking_at = nullptr;
 
+	SDL_Cursor* cursor = nullptr;
 };

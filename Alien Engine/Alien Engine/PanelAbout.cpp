@@ -97,6 +97,7 @@ void PanelAbout::PanelLogic()
 		}
 		ImGui::EndPopup();
 	}
+
 	if (is_hovering) {
 		SDL_Cursor* cursor;
 		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
