@@ -55,13 +55,11 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 	if (is_scene_hovered) {
 		Zoom();
-		
 	}
 	if (is_scene_hovered || is_scene_focused) {
 		Movement();
 	}
 	if (is_scene_focused) {
-		
 		Rotation();
 	}
 
@@ -147,15 +145,13 @@ void ModuleCamera3D::Movement()
 
 void ModuleCamera3D::Zoom()
 {
-	if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
-		if (App->input->GetMouseZ() > 0)
-		{
-			newPos -= Z * zoom_speed;
-		}
-		else if (App->input->GetMouseZ() < 0)
-		{
-			newPos += Z * zoom_speed;
-		}
+	if (App->input->GetMouseZ() > 0)
+	{
+		newPos -= Z * zoom_speed;
+	}
+	else if (App->input->GetMouseZ() < 0)
+	{
+		newPos += Z * zoom_speed;
 	}
 }
 
