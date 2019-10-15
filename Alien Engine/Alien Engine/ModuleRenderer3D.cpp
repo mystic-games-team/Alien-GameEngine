@@ -176,12 +176,22 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	CreateRenderTexture();
+}
+
+void ModuleRenderer3D::CreateRenderTexture()
+{
+	if (tex != nullptr) {
+		delete tex;
+		tex = nullptr;
+	}
+
 	glGenFramebuffers(1, &frame_buffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer);
 
 	glGenTextures(1, &render_texture);
 	glBindTexture(GL_TEXTURE_2D, render_texture);
-	
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, App->window->width, App->window->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -201,14 +211,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	}
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	if (tex == nullptr) 
-	{
-		tex = new Texture("fsd", render_texture, App->window->width, App->window->height);
-	}
-	else {
-		tex->width = App->window->width;
-		tex->height = App->window->height;
-	}
+	tex = new Texture("RenderTexture", render_texture, App->window->width, App->window->height);
+
 }
 
 void ModuleRenderer3D::SetBackgroundColor(const Color & bg_color)
