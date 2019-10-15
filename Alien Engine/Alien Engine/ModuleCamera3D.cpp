@@ -54,11 +54,14 @@ update_status ModuleCamera3D::Update(float dt)
 		zoom_speed = camera_zoom_speed * 2 * dt;
 	}
 	if (is_scene_hovered) {
-		Movement();
 		Zoom();
 		
 	}
+	if (is_scene_hovered || is_scene_focused) {
+		Movement();
+	}
 	if (is_scene_focused) {
+		
 		Rotation();
 	}
 
