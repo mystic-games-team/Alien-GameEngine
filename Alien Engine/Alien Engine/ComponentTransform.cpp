@@ -69,7 +69,6 @@ void ComponentTransform::LookScale()
 
 	if (local_scale.x < 0 || local_scale.y < 0 || local_scale.z < 0) {
 		is_scale_negative = true;
-
 	}
 	else is_scale_negative = false;
 
