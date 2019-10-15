@@ -181,7 +181,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glGenTextures(1, &render_texture);
 	glBindTexture(GL_TEXTURE_2D, render_texture);
-
+	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, App->window->width, App->window->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -202,12 +202,12 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 	if (tex == nullptr) {
-		tex = new Texture("fsd", render_texture, App->window->height, App->window->width);
+		tex = new Texture("fsd", render_texture, App->window->width, -App->window->height);
 		App->importer->textures.push_back(tex);
 	}
 	else {
 		tex->width = App->window->width;
-		tex->height = App->window->height;
+		tex->height = -App->window->height;
 	}
 }
 

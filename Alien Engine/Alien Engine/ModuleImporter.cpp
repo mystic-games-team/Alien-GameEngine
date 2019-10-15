@@ -275,7 +275,7 @@ Texture* ModuleImporter::LoadTextureFile(const char* path)
 
 	if (ilLoadImage(path)) {
 		iluFlipImage();
-		texture = new Texture(path, ilutGLBindTexImage(), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_WIDTH));
+		texture = new Texture(path, ilutGLBindTexImage(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -349,7 +349,7 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 	InitMeshBuffers(mesh);
 }
 
-Texture::Texture(const char* path, const uint& id, const uint& height, const uint& width)
+Texture::Texture(const char* path, const uint& id, const uint & width, const int & height)
 {
 	this->id = id;
 	this->height = height;
