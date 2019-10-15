@@ -206,10 +206,6 @@ void ModuleRenderer3D::CreateRenderTexture()
 	glBindRenderbuffer(GL_RENDERBUFFER, stencil_buffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, App->window->width, App->window->height);
 
-
-
-	
-
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencil_buffer);

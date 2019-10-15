@@ -35,12 +35,8 @@ void ComponentMesh::DrawPolygon()
 {
 	if (game_object_attached->IsSelected() || game_object_attached->IsParentSelected()) {
 		glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_ALWAYS, 1, -1);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-		glStencilMask(0xFF);
-		glClear(GL_STENCIL_BUFFER_BIT);
-
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 	}
 
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
@@ -103,8 +99,9 @@ void ComponentMesh::DrawOutLine()
 		glLineWidth(App->objects->no_child_line_width);
 	}
 
-	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-	glStencilMask(0x00);
+	glStencilFunc(GL_NOTEQUAL, 1, -1);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
 
 	glPolygonMode(GL_FRONT, GL_LINE);
 
