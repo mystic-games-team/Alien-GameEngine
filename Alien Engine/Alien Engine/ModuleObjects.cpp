@@ -263,7 +263,8 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 		object->SetName("Rock");
 		break;
 	case PrimitiveType::SPHERE_ALIEN:
-		par_mesh = par_shapes_create_subdivided_sphere(3);
+		par_mesh = par_shapes_create_subdivided_sphere(4);
+		transform->SetLocalScale(1.5F, 1.2F, 1.5F);
 		object->SetName("Sphere");
 		break;
 	case PrimitiveType::TORUS:
