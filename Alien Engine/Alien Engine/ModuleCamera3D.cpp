@@ -65,8 +65,8 @@ update_status ModuleCamera3D::Update(float dt)
 
 	Position += newPos;
 	Reference += newPos;
-
 	
+	SetCenterOffset();
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		Focus();
@@ -234,6 +234,16 @@ void ModuleCamera3D::Scaling(GameObject* scale_over)
 float* ModuleCamera3D::GetViewMatrix()
 {
 	return &ViewMatrix;
+}
+
+void ModuleCamera3D::SetCenterOffset()
+{
+	if (last_width != center_offset)
+	{
+		Position.x += center_offset / 1000;
+	}
+
+	last_width = center_offset;
 }
 
 // -----------------------------------------------------------------
