@@ -6,6 +6,7 @@ PanelScene::PanelScene(const std::string& panel_name, const SDL_Scancode& key1_d
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
 	shortcut = App->shortcut_manager->AddShortCut("Panel Scene", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
+	enabled = true;
 }
 
 PanelScene::~PanelScene()
@@ -16,7 +17,7 @@ void PanelScene::PanelLogic()
 {
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoScrollbar);
 
-	//ImGui::Image((ImTextureID)App->renderer3D->GetSceneTexture()->id, { ImGui::GetWindowWidth(),ImGui::GetWindowHeight() });
+	ImGui::Image((ImTextureID)App->renderer3D->tex->id, { ImGui::GetWindowWidth(),ImGui::GetWindowHeight() });
 
 	ImGui::End();
 }
