@@ -25,7 +25,6 @@ public:
 
 	void RenderGrid();
 
-	Texture* GetSceneTexture();
 
 public:
 	uint frame_buffer = 0;
@@ -34,7 +33,7 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
-
+	Texture* tex = nullptr;
 public:
 
 	Color background_color{ 0.f, 0.f, 0.f, 1.f };
