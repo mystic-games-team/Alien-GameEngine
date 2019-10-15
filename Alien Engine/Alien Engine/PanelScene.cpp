@@ -17,7 +17,7 @@ void PanelScene::PanelLogic()
 {
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoScrollbar);
 
-	ImGui::Image((ImTextureID)App->renderer3D->tex->id, { ImGui::GetWindowWidth(),ImGui::GetWindowHeight() });
+	ImGui::Image((ImTextureID)App->renderer3D->tex->id, { ImGui::GetWindowWidth(),ImGui::GetWindowHeight() }, { 0,1 }, { 1,0 });
 
 	ImGui::End();
 }

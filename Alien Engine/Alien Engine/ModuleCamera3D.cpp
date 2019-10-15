@@ -131,8 +131,8 @@ void ModuleCamera3D::Movement()
 		if (App->input->GetMouseXMotion() > -1) newPos -= X * mouse_speed;
 		if (App->input->GetMouseXMotion() < 1) newPos += X * mouse_speed;
 
-		if (App->input->GetMouseYMotion() < 2) newPos -= Y * mouse_speed;
-		if (App->input->GetMouseYMotion() > -2) newPos += Y * mouse_speed;
+		if (App->input->GetMouseYMotion() < 1) newPos -= Y * mouse_speed ;
+		if (App->input->GetMouseYMotion() > -1) newPos += Y * mouse_speed;
 
 	}
 }

@@ -201,13 +201,13 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	}
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	if (tex == nullptr) {
-		tex = new Texture("fsd", render_texture, App->window->width, -App->window->height);
-		App->importer->textures.push_back(tex);
+	if (tex == nullptr) 
+	{
+		tex = new Texture("fsd", render_texture, App->window->width, App->window->height);
 	}
 	else {
 		tex->width = App->window->width;
-		tex->height = -App->window->height;
+		tex->height = App->window->height;
 	}
 }
 
