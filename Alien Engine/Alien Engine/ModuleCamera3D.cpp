@@ -139,13 +139,15 @@ void ModuleCamera3D::Movement()
 
 void ModuleCamera3D::Zoom()
 {
-	if (App->input->GetMouseZ() > 0)
-	{
-		newPos -= Z * zoom_speed;
-	}
-	else if (App->input->GetMouseZ() < 0)
-	{
-		newPos += Z * zoom_speed;
+	if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
+		if (App->input->GetMouseZ() > 0)
+		{
+			newPos -= Z * zoom_speed;
+		}
+		else if (App->input->GetMouseZ() < 0)
+		{
+			newPos += Z * zoom_speed;
+		}
 	}
 }
 
