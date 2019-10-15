@@ -46,6 +46,8 @@ private:
 public:
 	void FramerateRegister(float frames, float ms);
 
+	void BackgroundDockspace();
+
 private:
 	bool show_demo_wndow = false;
 
