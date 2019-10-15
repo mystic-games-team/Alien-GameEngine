@@ -142,6 +142,14 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 
+	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {
+		Texture* tex = new Texture("fsd", render_texture, App->window->height, App->window->width);
+		App->importer->textures.push_back(tex);
+	}
+	
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	
 	App->ui->Draw(); // last draw UI!!!
 
 	SDL_GL_SwapWindow(App->window->window);
@@ -170,6 +178,25 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	glGenFramebuffers(1, &frame_buffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer);
+
+	glGenTextures(1, &render_texture);
+	glBindTexture(GL_TEXTURE_2D, render_texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, App->window->width, App->window->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
+
+	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		LOG("Error creating screen buffer");
+	}
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
 void ModuleRenderer3D::SetBackgroundColor(const Color & bg_color)

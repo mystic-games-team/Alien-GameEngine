@@ -33,6 +33,8 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::DrawPolygon()
 {
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
+
 	if (game_object_attached->IsSelected() || game_object_attached->IsParentSelected()) {
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 1, -1);
@@ -83,7 +85,7 @@ void ComponentMesh::DrawOutLine()
 {
 	if (!glIsEnabled(GL_STENCIL_TEST))
 		return;
-
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
 	if (game_object_attached->IsParentSelected())
 	{
 		glColor3f(App->objects->parent_outline_color.r, App->objects->parent_outline_color.g, App->objects->parent_outline_color.b);
@@ -123,6 +125,7 @@ void ComponentMesh::DrawOutLine()
 
 void ComponentMesh::DrawMesh()
 {
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 
 	glPushMatrix();
@@ -152,6 +155,7 @@ void ComponentMesh::DrawMesh()
 void ComponentMesh::DrawVertexNormals()
 {
 	if (normals != nullptr) {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 
 		glPushMatrix();
@@ -175,6 +179,7 @@ void ComponentMesh::DrawVertexNormals()
 void ComponentMesh::DrawFaceNormals()
 {
 	if (normals != nullptr) {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 
 		glPushMatrix();

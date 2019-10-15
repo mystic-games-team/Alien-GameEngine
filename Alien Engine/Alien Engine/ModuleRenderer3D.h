@@ -24,7 +24,8 @@ public:
 	void RenderGrid();
 
 public:
-
+	uint frame_buffer = 0;
+	uint render_texture = 0;
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
