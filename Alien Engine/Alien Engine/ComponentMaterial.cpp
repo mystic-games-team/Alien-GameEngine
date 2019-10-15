@@ -53,14 +53,19 @@ void ComponentMaterial::DrawInspector()
 			if (ImGui::Button("Change Texture", { 120,20 })) {
 				change_texture_menu = true;
 			}
-
+			ImGui::SameLine(140, 15);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.5F,0,0,1 });
+			if (ImGui::Button("Delete", { 60,20 })) {
+				texture = nullptr;
+				ImGui::PopStyleColor();
+				return;
+			}
+			ImGui::PopStyleColor();
 			ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->width);
 			ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->height);
 			ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", texture->path);
 
 			ImGui::Image((ImTextureID)texture->id, { ImGui::GetWindowWidth() ,ImGui::GetWindowWidth() });
-			ImGui::Spacing();
-			ImGui::Separator();
 			ImGui::Spacing();
 		}
 		else {
@@ -83,7 +88,7 @@ void ComponentMaterial::DrawInspector()
 			/*_________________________________________________________________*/
 
 			ImGui::OpenPopup("Textures Loaded");
-			ImGui::SetNextWindowSize({ 522,530 });
+			ImGui::SetNextWindowSize({ 522,570 });
 			if (ImGui::BeginPopupModal("Textures Loaded", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
 				ImGui::Spacing();
 				ImGui::NewLine();
@@ -91,8 +96,17 @@ void ComponentMaterial::DrawInspector()
 				ImGui::Text("Texture Selected");
 				ImGui::Text("");
 				ImGui::SameLine(170);
-				if (tex != nullptr)
+				if (tex != nullptr) {
 					ImGui::Image((ImTextureID)tex->id, { 150,150 });
+					ImGui::Spacing();
+					ImGui::Text("");
+					ImGui::SameLine(150);
+					ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", tex->width);
+					ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", tex->height);
+					ImGui::Text("");
+					ImGui::SameLine(112);
+					ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", tex->path);
+				}
 				ImGui::Spacing();
 				if (ImGui::BeginChild("", { 492,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
 
@@ -129,6 +143,7 @@ void ComponentMaterial::DrawInspector()
 				ImGui::EndPopup();
 			}
 		}
-
+		ImGui::Spacing();
+		ImGui::Separator();
 	}
 }

@@ -445,8 +445,8 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 		App->importer->LoadModelFile(final_path.data());
 		break;
 	case FileDropType::TEXTURE:
-		LOG("Start Loading Model");
-		App->importer->LoadTextureFile(final_path.data());
+		LOG("Start Loading Texture");
+		App->importer->LoadTextureFile(final_path.data(), true);
 		break;
 	}
 }
