@@ -133,7 +133,8 @@ void ComponentTransform::DrawInspector()
 	ImGui::Text("Object");
 	ImGui::SameLine();
 
-	ImGui::Checkbox("##ObjectActive", &game_object_attached->enabled);
+	if (ImGui::Checkbox("##ObjectActive", &game_object_attached->enabled))
+		game_object_attached->SayChildrenParentIsEnabled(game_object_attached->enabled);
 	ImGui::SameLine();
 
 	static char name[30];

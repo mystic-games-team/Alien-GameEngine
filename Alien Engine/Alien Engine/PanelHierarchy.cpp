@@ -43,15 +43,17 @@ void PanelHierarchy::PrintNode(GameObject* node)
 	if (!node->children.empty()) 
 	{
 		ImGui::PushID(node);
-		ImGui::Checkbox("##Active", &node->enabled);
+		if (ImGui::Checkbox("##Active", &node->enabled)) {
+			node->SayChildrenParentIsEnabled(node->enabled);
+		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::PushID(node);
-		if (!node->IsEnabled())
+		if (!node->IsEnabled() || !node->IsParentEnabled())
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f, 0.5f, 0.5f, 1.f });
 		if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->IsSelected()))
 		{
-			if (!node->IsEnabled())
+			if (!node->IsEnabled() || !node->IsParentEnabled())
 				ImGui::PopStyleColor();
 			if (ImGui::IsItemClicked()) {
 				App->objects->SetNewSelectedObject(node);
@@ -67,7 +69,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			ImGui::TreePop();
 		}
 		else {
-			if (!node->IsEnabled())
+			if (!node->IsEnabled() || !node->IsParentEnabled())
 				ImGui::PopStyleColor();
 			if (ImGui::IsItemClicked()) {
 				App->objects->SetNewSelectedObject(node);
@@ -78,14 +80,16 @@ void PanelHierarchy::PrintNode(GameObject* node)
 	else 
 	{
 		ImGui::PushID(node);
-		ImGui::Checkbox("##Active", &node->enabled);
+		if (ImGui::Checkbox("##Active", &node->enabled)) {
+			node->SayChildrenParentIsEnabled(node->enabled);
+		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::PushID(node);
-		if (!node->IsEnabled())
+		if (!node->IsEnabled() || !node->IsParentEnabled())
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f, 0.5f, 0.5f, 1.f });
 		ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->IsSelected());
-		if (!node->IsEnabled())
+		if (!node->IsEnabled() || !node->IsParentEnabled())
 			ImGui::PopStyleColor();
 		ImGui::PopID();
 		if (ImGui::IsItemClicked()) {

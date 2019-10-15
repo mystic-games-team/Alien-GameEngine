@@ -29,6 +29,9 @@ public:
 	bool IsParentSelected();
 	void ChangeSelected(const bool& select);
 
+	void SayChildrenParentIsEnabled(const bool& enabled);
+	bool IsParentEnabled();
+
 	void ChangeWireframe(const bool& wireframe);
 	void ChangeMeshView(const bool& wireframe);
 	void ChangeVertexNormalsView(const bool& wireframe);
@@ -54,6 +57,7 @@ private:
 
 	bool parent_selected = false;
 	bool selected = false;
+	bool parent_enabled = true;
 
 	std::string name;
 };

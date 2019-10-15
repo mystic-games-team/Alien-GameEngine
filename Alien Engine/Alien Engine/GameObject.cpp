@@ -223,6 +223,22 @@ bool GameObject::HasChildren()
 	return !children.empty();
 }
 
+void GameObject::SayChildrenParentIsEnabled(const bool& enabled)
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->parent_enabled = enabled;
+			(*item)->SayChildrenParentIsEnabled(enabled);
+		}
+	}
+}
+
+bool GameObject::IsParentEnabled()
+{
+	return parent_enabled;
+}
+
 void GameObject::SayChildrenParentIsSelected(const bool& selected)
 {
 	std::vector<GameObject*>::iterator item = children.begin();
