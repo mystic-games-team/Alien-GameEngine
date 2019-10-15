@@ -49,7 +49,8 @@ public:
 	bool CleanUp();
 
 	bool LoadModelFile(const char* path);
-	Texture* LoadTextureFile(const char* path);
+	Texture* LoadTextureFile(const char* path, bool has_been_dropped = false);
+	void ApplyTextureToSelectedObject(Texture* texture);
 	void LoadParShapesMesh(par_shapes_mesh* p_mesh, ComponentMesh* mesh);
 	float3 GetObjectSize(const aiMesh* mesh);
 

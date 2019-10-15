@@ -35,6 +35,7 @@ public:
 	void ChangeFaceNormalsView(const bool& wireframe);
 
 	bool HasChildren();
+	
 		
 private:
 

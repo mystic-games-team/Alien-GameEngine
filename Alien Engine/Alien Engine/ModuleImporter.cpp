@@ -35,7 +35,7 @@ bool ModuleImporter::Init()
 bool ModuleImporter::Start()
 {
 	
-	LoadTextureFile("Assets/Textures/Baker.dds");
+	LoadTextureFile("Assets/Textures/Checkers.png");
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
 	return true;
 }
@@ -79,27 +79,36 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 {
-	// create the parent of the all fbx/obj...
-	parent_object = new GameObject();
-	// set it's parent to the "invisible" game object
-	parent_object->parent = App->objects->base_game_object;
-	App->objects->base_game_object->AddChild(parent_object);
-	ComponentTransform* tr = new ComponentTransform(parent_object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
-	parent_object->AddComponent(tr);
-	// set parent name, we must change that
-	parent_object->SetName(App->file_system->GetBaseFileName(path).data());
-	// start recursive function to pass through all nodes
-	LoadSceneNode(scene->mRootNode, scene, parent_object);
-	// set parent active
-	App->objects->SetNewSelectedObject(parent_object);
-	LOG("All nodes loaded");
-	parent_object = nullptr;
+	if (scene->mRootNode->mNumChildren > 1) { // if there is more than one children we create an empty game object that is going ot be the parent of every child
+		// create the parent of the all fbx/obj...
+		parent_object = new GameObject();
+		// set it's parent to the "invisible" game object
+		parent_object->parent = App->objects->base_game_object;
+		App->objects->base_game_object->AddChild(parent_object);
+		ComponentTransform* tr = new ComponentTransform(parent_object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
+		parent_object->AddComponent(tr);
+		// set parent name, we must change that
+		parent_object->SetName(App->file_system->GetBaseFileName(path).data());
+		// start recursive function to pass through all nodes
+		LoadSceneNode(scene->mRootNode, scene, parent_object);
+		// set parent active
+		App->objects->SetNewSelectedObject(parent_object);
+		LOG("All nodes loaded");
+		parent_object = nullptr;
+	}
+	else { // if there is just one child, we dont need an empty game object. So the parent of this child is de base_game_object
+		LoadSceneNode(scene->mRootNode, scene, App->objects->base_game_object);
+	}
+	
 }
 
 void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* parent)
 {
 	LOG("Loading node with name %s", node->mName.C_Str());
 	GameObject* next_parent = nullptr;
+	if (parent == App->objects->base_game_object)
+		next_parent = App->objects->base_game_object;
+
 	for (uint i = 0; i < node->mNumMeshes; ++i) {
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		next_parent = LoadNodeMesh(scene, node, mesh, parent);
@@ -256,13 +265,16 @@ void ModuleImporter::InitMeshBuffers(ComponentMesh* mesh)
 	
 }
 
-Texture* ModuleImporter::LoadTextureFile(const char* path)
+Texture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped)
 {
 	Texture* texture = nullptr;
 
 	std::vector<Texture*>::iterator item = textures.begin();
 	for (; item != textures.end(); ++item) {
 		if (*item != nullptr && (*item)->path == path) {
+			if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+				ApplyTextureToSelectedObject(*item);
+			}
 			return (*item);
 		}
 	}
@@ -285,6 +297,10 @@ Texture* ModuleImporter::LoadTextureFile(const char* path)
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		textures.push_back(texture);
+
+		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+			ApplyTextureToSelectedObject(texture);
+		}
 	}
 	else {
 		LOG("Error while loading image in %s", path);
@@ -294,6 +310,17 @@ Texture* ModuleImporter::LoadTextureFile(const char* path)
 	ilDeleteImages(1, &new_image_id);
 
 	return texture;
+}
+
+void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
+{
+	GameObject* selected = App->objects->GetSelectedObject();
+	ComponentMaterial* material = (ComponentMaterial*)selected->GetComponent(ComponentType::MATERIAL);
+	if (material == nullptr) {
+		material = new ComponentMaterial(selected);
+		selected->AddComponent(material);
+	}
+	material->texture = texture;
 }
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
