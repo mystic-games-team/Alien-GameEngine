@@ -20,10 +20,14 @@ void PanelRender::PanelLogic()
 	if (ImGui::CollapsingHeader("Mesh Settings")) 
 	{
 		ImGui::Spacing();
-		ImGui::Checkbox(" View Mesh", &App->objects->view_mesh_mode);
+		if (ImGui::Checkbox(" View Mesh", &App->objects->view_mesh_mode)) {
+			App->objects->view_mesh_mode = !App->objects->view_mesh_mode;
+			App->objects->ChangeViewMeshMode();
+		}
 		ImGui::SameLine();
 		if (ImGui::Checkbox(" Wireframe Mode", &App->objects->wireframe_mode)) {
-			App->objects->view_mesh_mode = true;
+			App->objects->wireframe_mode = !App->objects->wireframe_mode;
+			App->objects->ChangeWireframeMode();
 		}
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(50);
@@ -57,14 +61,20 @@ void PanelRender::PanelLogic()
 	}
 	if (ImGui::CollapsingHeader("Vertex Normals")) 
 	{
-		ImGui::Checkbox("Show Vertex Normals", &App->objects->draw_vertex_normals);
+		if (ImGui::Checkbox("Show Vertex Normals", &App->objects->draw_vertex_normals)) {
+			App->objects->draw_vertex_normals = !App->objects->draw_vertex_normals;
+			App->objects->ChangeEnableNormalVertex();
+		}
 		ImGui::ColorEdit3("Normals Color", (float*)&App->objects->vertex_n_color,  ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("Vertex Line Length", (int*)&App->objects->vertex_normal_length, 1, 10);
 		ImGui::SliderInt("Vertex Line Width", &App->objects->vertex_n_width, 1, 30);
 	}
 	if (ImGui::CollapsingHeader("Face Normals")) 
 	{
-		ImGui::Checkbox("Show Face Normals", &App->objects->draw_face_normals);
+		if (ImGui::Checkbox("Show Face Normals", &App->objects->draw_face_normals)) {
+			App->objects->draw_face_normals = !App->objects->draw_face_normals;
+			App->objects->ChangeEnableNormalFace();
+		}
 		ImGui::ColorEdit3("Face Normals Color", (float*)&App->objects->face_n_color, ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("Face Line Length", (int*)&App->objects->face_normal_length, 1, 10);
 		ImGui::SliderInt("Face Line Width", &App->objects->face_n_width, 1, 30);

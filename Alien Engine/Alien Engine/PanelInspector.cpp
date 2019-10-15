@@ -15,7 +15,8 @@ PanelInspector::~PanelInspector()
 
 void PanelInspector::PanelLogic()
 {
-	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
+
+	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 	if (App->objects->GetSelectedObject() != nullptr) {
 		std::vector<Component*>::iterator item = App->objects->GetSelectedObject()->components.begin();
