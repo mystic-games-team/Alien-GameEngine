@@ -135,7 +135,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
-
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -143,17 +143,15 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-	{
-		GetSceneTexture();
-	}
+
+
+	
 
 	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {
 		Texture* tex = new Texture("fsd", render_texture, App->window->height, App->window->width);
 		App->importer->textures.push_back(tex);
 	}
 	
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 	
 	App->ui->Draw(); // last draw UI!!!
