@@ -33,7 +33,6 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::DrawPolygon()
 {
-
 	if (game_object_attached->IsSelected() || game_object_attached->IsParentSelected()) {
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 1, -1);
@@ -41,6 +40,9 @@ void ComponentMesh::DrawPolygon()
 	}
 
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+
+	if (transform->IsScaleNegative())
+		glFrontFace(GL_CW);
 
 	glPushMatrix();
 	glMultMatrixf(transform->global_transformation.Transposed().ptr());
@@ -68,6 +70,8 @@ void ComponentMesh::DrawPolygon()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glDrawElements(GL_TRIANGLES, num_index * 3, GL_UNSIGNED_INT, 0);
 
+	if (transform->IsScaleNegative())
+		glFrontFace(GL_CCW);
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_POLYGON_OFFSET_FILL);

@@ -32,6 +32,8 @@ public:
 	void SayChildrenParentIsEnabled(const bool& enabled);
 	bool IsParentEnabled();
 
+	void ScaleNegative(const bool& is_negative);
+
 	void ChangeWireframe(const bool& wireframe);
 	void ChangeMeshView(const bool& wireframe);
 	void ChangeVertexNormalsView(const bool& wireframe);

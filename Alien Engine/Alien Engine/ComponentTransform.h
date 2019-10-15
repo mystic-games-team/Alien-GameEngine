@@ -15,6 +15,7 @@ public:
 	const float3& GetGlobalPosition() const;
 
 	void SetLocalScale(const float& x, const float& y, const float& z);
+	
 	const float3& GetLocalScale() const;
 	const float3& GetGlobalScale() const;
 
@@ -24,15 +25,19 @@ public:
 
 	void DrawInspector();
 
+	void SetScaleNegative(const bool& negative);
+	bool IsScaleNegative();
+
 private:
 
+	void LookScale();
 	void RecalculateTransform();
 
 public:
 
 	float4x4 global_transformation = float4x4::identity;
 	float4x4 local_transformation = float4x4::identity;
-
+	
 private:
 
 	// position
@@ -44,4 +49,6 @@ private:
 	
 	float3 euler_rotation = { 0,0,0 };
 
+	// to know if flip poly or not
+	bool is_scale_negative = false;
 };

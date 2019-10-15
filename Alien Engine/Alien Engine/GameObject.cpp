@@ -239,6 +239,19 @@ bool GameObject::IsParentEnabled()
 	return parent_enabled;
 }
 
+void GameObject::ScaleNegative(const bool& is_negative)
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			ComponentTransform* tr = (ComponentTransform*)(*item)->GetComponent(ComponentType::TRANSFORM);
+			if (tr != nullptr)
+				tr->SetScaleNegative(is_negative);
+			(*item)->ScaleNegative(is_negative);
+		}
+	}
+}
+
 void GameObject::SayChildrenParentIsSelected(const bool& selected)
 {
 	std::vector<GameObject*>::iterator item = children.begin();
