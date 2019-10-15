@@ -110,8 +110,8 @@
 			"GridSpacing": 1,
 			"GridLength": 20,
 			"Outline": true,
-			"ParentLineWidth": 8,
-			"NoChildLineWidth": 8,
+			"ParentLineWidth": 12,
+			"NoChildLineWidth": 12,
 			"ParentOutlineColor": [
 				0,
 				1,
