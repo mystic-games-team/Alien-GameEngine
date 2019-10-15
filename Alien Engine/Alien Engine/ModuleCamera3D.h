@@ -42,7 +42,8 @@ public:
 	float camera_zoom_speed = 15.0f;
 	float camera_mouse_speed = 10.0f;
 
-	uint center_offset = 0;
+	int center_offset_w = 0;
+	int center_offset_h = 0;
 
 private:
 
@@ -53,7 +54,8 @@ private:
 	float zoom_speed = 0.f;
 	float mouse_speed = 0.f;
 
-	uint last_width = 0;
+	int last_width = 0;
+	int last_heigth = 0;
 
 	GameObject* looking_at = nullptr;
 

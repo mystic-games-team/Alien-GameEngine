@@ -41,10 +41,8 @@ bool ModuleCamera3D::CleanUp()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
-	// Implement a debug camera with keys and mouse
-	// Now we can make this movememnt frame rate independant!
-
 	newPos = { 0,0,0 };
+
 	speed = camera_speed * dt;
 	zoom_speed = camera_zoom_speed * dt;
 	mouse_speed = camera_mouse_speed * dt;
@@ -63,10 +61,11 @@ update_status ModuleCamera3D::Update(float dt)
 		Rotation();
 	}
 
+
+	SetCenterOffset();
+
 	Position += newPos;
 	Reference += newPos;
-	
-	SetCenterOffset();
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		Focus();
@@ -238,12 +237,21 @@ float* ModuleCamera3D::GetViewMatrix()
 
 void ModuleCamera3D::SetCenterOffset()
 {
-	if (last_width != center_offset)
+	if (last_width != center_offset_w)
 	{
-		Position.x += center_offset / 1000;
+		// You skip the frist frame
+		if (last_width != 0)
+		{
+			// Camera should look at the center of the object (or mantain its position)
+			if ((last_width - center_offset_w) > 0)
+				newPos -= X * mouse_speed * 0.4f;
+
+			if ((last_width - center_offset_w) < 0)
+				newPos += X * mouse_speed * 0.4f;
+		}
 	}
 
-	last_width = center_offset;
+	last_width = center_offset_w;
 }
 
 // -----------------------------------------------------------------
