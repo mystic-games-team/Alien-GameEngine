@@ -14,6 +14,7 @@
 #include "SDL/include/SDL_assert.h"
 #include "ModuleObjects.h"
 #include "PanelInspector.h"
+#include "PanelScene.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -34,6 +35,7 @@ bool ModuleUI::Start()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 
 	ChangeStyle(App->window->style);
 
@@ -127,6 +129,7 @@ void ModuleUI::Draw() {
 		ImGui::ShowDemoWindow(&show_demo_wndow);
 
 	MainMenuBar();
+	BackgroundDockspace();
 	UpdatePanels();
 
 	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
@@ -170,6 +173,10 @@ void ModuleUI::MainMenuBar()
 		if (ImGui::MenuItem("Console", panel_console->shortcut->GetNameScancodes()))
 		{
 			panel_console->ChangeEnable();
+		}
+		if (ImGui::MenuItem("Scene", panel_console->shortcut->GetNameScancodes()))
+		{
+			panel_scene->ChangeEnable();
 		}
 		if (ImGui::MenuItem("Inspector", panel_inspector->shortcut->GetNameScancodes()))
 		{
@@ -284,7 +291,7 @@ void ModuleUI::InitPanels()
 	panel_hierarchy = new PanelHierarchy("Panel Hierarchy", panel_hierarchy_codes[0], panel_hierarchy_codes[1], panel_hierarchy_codes[2]);
 	panel_create_object = new PanelCreateObject("Create Object", panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
 	panel_inspector = new PanelInspector("Inspector", panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
-
+	panel_scene = new PanelScene("Scene", panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
 	panels.push_back(panel_console);
@@ -292,6 +299,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_hierarchy);
 	panels.push_back(panel_create_object);
 	panels.push_back(panel_inspector);
+	panels.push_back(panel_scene);
 
 }
 
@@ -338,5 +346,37 @@ void ModuleUI::FramerateRegister(float frames, float ms)
 		panel_config->FramerateInfo(frames,ms);
 }
 
+void ModuleUI::BackgroundDockspace()
+{
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+	// Seeting Docking to fit the window and preferences
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+	/*if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+		window_flags |= ImGuiWindowFlags_NoBackground;*/
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::Begin("DockSpace BackGround", (bool*)0, window_flags);
+	ImGui::PopStyleVar(3);
+
+	// DockSpace
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("Dockspace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+
+	ImGui::End();
+}
 

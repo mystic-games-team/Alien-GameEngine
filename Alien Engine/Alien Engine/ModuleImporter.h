@@ -26,7 +26,7 @@
 
 struct Texture {
 	
-	Texture(const char* path, const uint& id, const uint& height, const uint& width);
+	Texture(const char* path, const uint& id, const uint & width, const int & height);
 		
 	std::string name;
 	std::string path;

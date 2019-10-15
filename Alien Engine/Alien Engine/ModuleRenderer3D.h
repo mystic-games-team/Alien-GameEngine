@@ -4,6 +4,8 @@
 #include "glmath.h"
 #include "Light.h"
 #include "glew/include/glew.h"
+#include "ModuleImporter.h"
+
 #define MAX_LIGHTS 8
 
 class ModuleRenderer3D : public Module
@@ -23,13 +25,16 @@ public:
 
 	void RenderGrid();
 
-public:
 
+public:
+	uint frame_buffer = 0;
+	uint render_texture = 0;
+	uint depthrenderbuffer = 0;
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
-
+	Texture* tex = nullptr;
 public:
 
 	Color background_color{ 0.f, 0.f, 0.f, 1.f };

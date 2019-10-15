@@ -33,6 +33,7 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::DrawPolygon()
 {
+
 	if (game_object_attached->IsSelected() || game_object_attached->IsParentSelected()) {
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 1, -1);
@@ -83,7 +84,6 @@ void ComponentMesh::DrawOutLine()
 {
 	if (!glIsEnabled(GL_STENCIL_TEST))
 		return;
-
 	if (game_object_attached->IsParentSelected())
 	{
 		glColor3f(App->objects->parent_outline_color.r, App->objects->parent_outline_color.g, App->objects->parent_outline_color.b);

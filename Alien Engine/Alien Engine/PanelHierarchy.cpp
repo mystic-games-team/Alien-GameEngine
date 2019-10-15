@@ -17,7 +17,8 @@ PanelHierarchy::~PanelHierarchy()
 void PanelHierarchy::PanelLogic()
 {
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
-
+	if (ImGui::IsWindowHovered())
+		App->camera->is_scene_hovered = false;
 	ImGui::Spacing();
 	ImGui::Text("GameObjects");
 	ImGui::Spacing();

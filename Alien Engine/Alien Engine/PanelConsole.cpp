@@ -4,6 +4,7 @@ PanelConsole::PanelConsole(const std::string& panel_name, const SDL_Scancode& ke
 	Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
 	shortcut = App->shortcut_manager->AddShortCut("Panel Console", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
+	enabled = true;
 }
 
 PanelConsole::~PanelConsole()
@@ -14,7 +15,8 @@ void PanelConsole::PanelLogic()
 {
 
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_HorizontalScrollbar);
-	
+	if (ImGui::IsWindowHovered())
+		App->camera->is_scene_hovered = false;
 	ImGui::TextUnformatted(App->log_string.begin());
 
 	if (scroll_x) {

@@ -423,6 +423,9 @@
     <ClInclude Include="PanelInspector.h">
       <Filter>Panels</Filter>
     </ClInclude>
+    <ClInclude Include="PanelScene.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -645,6 +648,9 @@
       <Filter>Panels</Filter>
     </ClCompile>
     <ClCompile Include="PanelInspector.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelScene.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>

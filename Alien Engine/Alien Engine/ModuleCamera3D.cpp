@@ -53,14 +53,20 @@ update_status ModuleCamera3D::Update(float dt)
 		speed = camera_speed * 2 * dt;
 		zoom_speed = camera_zoom_speed * 2 * dt;
 	}
-
-	Movement();
-	Zoom();
+	if (is_scene_hovered) {
+		Zoom();
+	}
+	if (is_scene_hovered || is_scene_focused) {
+		Movement();
+	}
+	if (is_scene_focused) {
+		Rotation();
+	}
 
 	Position += newPos;
 	Reference += newPos;
 
-	Rotation();
+	
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		Focus();
@@ -131,23 +137,21 @@ void ModuleCamera3D::Movement()
 		if (App->input->GetMouseXMotion() > -1) newPos -= X * mouse_speed;
 		if (App->input->GetMouseXMotion() < 1) newPos += X * mouse_speed;
 
-		if (App->input->GetMouseYMotion() < 2) newPos -= Y * mouse_speed;
-		if (App->input->GetMouseYMotion() > -2) newPos += Y * mouse_speed;
+		if (App->input->GetMouseYMotion() < 1) newPos -= Y * mouse_speed ;
+		if (App->input->GetMouseYMotion() > -1) newPos += Y * mouse_speed;
 
 	}
 }
 
 void ModuleCamera3D::Zoom()
 {
-	if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
-		if (App->input->GetMouseZ() > 0)
-		{
-			newPos -= Z * zoom_speed;
-		}
-		else if (App->input->GetMouseZ() < 0)
-		{
-			newPos += Z * zoom_speed;
-		}
+	if (App->input->GetMouseZ() > 0)
+	{
+		newPos -= Z * zoom_speed;
+	}
+	else if (App->input->GetMouseZ() < 0)
+	{
+		newPos += Z * zoom_speed;
 	}
 }
 
