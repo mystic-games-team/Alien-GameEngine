@@ -16,7 +16,7 @@ PanelScene::~PanelScene()
 void PanelScene::PanelLogic()
 {
 	ImGui::SetNextWindowSize({ 800,600 });
-	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoScrollbar|ImGuiDockNodeFlags_NoResize|ImGuiWindowFlags_NoResize);
+	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoScrollbar|ImGuiDockNodeFlags_NoResize|ImGuiWindowFlags_NoResize| ImGuiWindowFlags_NoScrollWithMouse);
 	App->camera->is_scene_hovered = ImGui::IsWindowHovered();
 	App->camera->is_scene_focused = ImGui::IsWindowFocused();
 	ImGui::Text("");
