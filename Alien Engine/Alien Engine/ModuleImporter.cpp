@@ -256,13 +256,16 @@ void ModuleImporter::InitMeshBuffers(ComponentMesh* mesh)
 	
 }
 
-Texture* ModuleImporter::LoadTextureFile(const char* path)
+Texture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped)
 {
 	Texture* texture = nullptr;
 
 	std::vector<Texture*>::iterator item = textures.begin();
 	for (; item != textures.end(); ++item) {
 		if (*item != nullptr && (*item)->path == path) {
+			if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+				ApplyTextureToSelectedObject(*item);
+			}
 			return (*item);
 		}
 	}
@@ -285,6 +288,10 @@ Texture* ModuleImporter::LoadTextureFile(const char* path)
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		textures.push_back(texture);
+
+		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+			ApplyTextureToSelectedObject(texture);
+		}
 	}
 	else {
 		LOG("Error while loading image in %s", path);
@@ -294,6 +301,17 @@ Texture* ModuleImporter::LoadTextureFile(const char* path)
 	ilDeleteImages(1, &new_image_id);
 
 	return texture;
+}
+
+void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
+{
+	GameObject* selected = App->objects->GetSelectedObject();
+	ComponentMaterial* material = (ComponentMaterial*)selected->GetComponent(ComponentType::MATERIAL);
+	if (material == nullptr) {
+		material = new ComponentMaterial(selected);
+		selected->AddComponent(material);
+	}
+	material->texture = texture;
 }
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
