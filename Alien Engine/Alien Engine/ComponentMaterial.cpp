@@ -53,8 +53,6 @@ void ComponentMaterial::DrawInspector()
 			if (ImGui::Button("Change Texture", { 120,20 })) {
 				change_texture_menu = true;
 			}
-			ImGui::Spacing();
-			ImGui::Spacing();
 
 			ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->width);
 			ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->height);
