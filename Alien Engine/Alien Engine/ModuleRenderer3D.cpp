@@ -113,7 +113,9 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
+
 	OnResize(App->window->width, App->window->height);
+	Texture* tex = new Texture("fsd", render_texture, App->window->height, App->window->width);
 
 	return ret;
 }
@@ -147,11 +149,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		GetSceneTexture();
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {
-		Texture* tex = new Texture("fsd", render_texture, App->window->height, App->window->width);
-		App->importer->textures.push_back(tex);
-	}
 	
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
@@ -159,6 +156,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	App->ui->Draw(); // last draw UI!!!
 
 	SDL_GL_SwapWindow(App->window->window);
+
 
 	return UPDATE_CONTINUE;
 }
@@ -245,7 +243,6 @@ Texture* ModuleRenderer3D::GetSceneTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderertexture, 0);
 
@@ -271,5 +268,7 @@ Texture* ModuleRenderer3D::GetSceneTexture()
 	scene_texture = new Texture("",renderertexture,App->window->height,App->window->width);
 	App->importer->textures.push_back(scene_texture);
 	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	return scene_texture;
 }

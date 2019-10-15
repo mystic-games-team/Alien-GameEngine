@@ -14,6 +14,7 @@
 #include "SDL/include/SDL_assert.h"
 #include "ModuleObjects.h"
 #include "PanelInspector.h"
+#include "PanelScene.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -173,6 +174,10 @@ void ModuleUI::MainMenuBar()
 		{
 			panel_console->ChangeEnable();
 		}
+		if (ImGui::MenuItem("Scene", panel_console->shortcut->GetNameScancodes()))
+		{
+			panel_scene->ChangeEnable();
+		}
 		if (ImGui::MenuItem("Inspector", panel_inspector->shortcut->GetNameScancodes()))
 		{
 			panel_inspector->ChangeEnable();
@@ -286,7 +291,7 @@ void ModuleUI::InitPanels()
 	panel_hierarchy = new PanelHierarchy("Panel Hierarchy", panel_hierarchy_codes[0], panel_hierarchy_codes[1], panel_hierarchy_codes[2]);
 	panel_create_object = new PanelCreateObject("Create Object", panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
 	panel_inspector = new PanelInspector("Inspector", panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
-
+	panel_scene = new PanelScene("Scene", panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
 	panels.push_back(panel_console);
@@ -294,6 +299,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_hierarchy);
 	panels.push_back(panel_create_object);
 	panels.push_back(panel_inspector);
+	panels.push_back(panel_scene);
 
 }
 
