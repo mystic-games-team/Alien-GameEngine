@@ -321,7 +321,7 @@ void ModuleUI::MainMenuBar()
 			panel_layout->ChangeEnable();
 		}
 		if (ImGui::MenuItem("Save Current Layout")) {
-			Layout* layout = new Layout("Oriol's layout");
+			Layout* layout = new Layout("Random layout");
 			layouts.push_back(layout);
 			layout->active = true;
 			active_layout->active = false;
@@ -488,16 +488,13 @@ void ModuleUI::LoadActiveLayout()
 	std::vector<Layout*>::iterator item = layouts.begin();
 	for (; item != layouts.end(); ++item) {
 		if (*item != nullptr && (*item)->active) {
-
 			std::vector<Panel*>::iterator panel = panels.begin();
 			for (; panel != panels.end(); ++panel) {
 				if (*panel != nullptr) {
 					(*panel)->SetEnable((*item)->panels_enabled[panel - panels.begin()]);
 				}
 			}
-
 			ImGui::LoadIniSettingsFromDisk((*item)->path.data());
-
 			break;
 		}
 	}
