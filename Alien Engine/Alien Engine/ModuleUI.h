@@ -24,7 +24,7 @@ struct Layout {
 
 	Layout() {}
 	Layout(const char* name);
-	~Layout() {}
+	~Layout();
 
 	std::string name;
 	std::string path;
@@ -65,7 +65,7 @@ private:
 
 	void LoadActiveLayout();
 	void LoadLayouts();
-	
+	void SaveAllLayouts();
 	void SaveLayoutsActive();
 
 public:
@@ -120,11 +120,13 @@ private:
 	SDL_Scancode shortcut_view_normal_face_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 
 	
+	
 
 public:
 	PanelConfig* panel_config = nullptr;
 	uint number_of_layouts = 0;
 	std::vector<Layout*> layouts;
 	Layout* active_layout = nullptr;
+	bool need_to_save_layouts = false;
 };
 
