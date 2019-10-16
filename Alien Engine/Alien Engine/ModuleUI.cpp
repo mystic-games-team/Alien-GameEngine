@@ -77,6 +77,15 @@ bool ModuleUI::CleanUp()
 	}
 	panels.clear();
 
+	std::vector<Layout*>::iterator it = layouts.begin();
+	for (; it != layouts.end(); ++it) {
+		if ((*it) != nullptr) {
+			delete* it;
+			*it = nullptr;
+		}
+	}
+	layouts.clear();
+
 	return true;
 }
 
@@ -190,6 +199,7 @@ void ModuleUI::SaveLayoutsActive()
 		if (*item != nullptr) {
 			std::string json_path("Layouts.Layout" + std::to_string((item - layouts.begin()) + 1));
 			json_layout->SetBoolean(json_path + std::string(".Active"), (*item)->active);
+			json_layout->SetString(json_path + std::string(".Name"), (*item)->name.data());
 		}
 	}
 
@@ -319,14 +329,11 @@ void ModuleUI::MainMenuBar()
 	if (ImGui::BeginMenu("Layout")) {
 		if (ImGui::MenuItem("Edit Layouts", panel_layout->shortcut->GetNameScancodes())) {
 			panel_layout->ChangeEnable();
+			static_cast<PanelLayout*>(panel_layout)->is_editor_panel = true;
 		}
 		if (ImGui::MenuItem("Save Current Layout")) {
-			Layout* layout = new Layout("Oriol's layout");
-			layouts.push_back(layout);
-			layout->active = true;
-			active_layout->active = false;
-			active_layout = layout;
-			SaveNewLayout(layout);
+			panel_layout->ChangeEnable();
+			static_cast<PanelLayout*>(panel_layout)->is_editor_panel = false;
 		}
 		if (ImGui::BeginMenu("Set Layout"))
 		{
@@ -423,6 +430,20 @@ void ModuleUI::ChangeEnableDemo()
 	show_demo_wndow = !show_demo_wndow;
 }
 
+void ModuleUI::DeleteLayout(Layout* layout)
+{
+	std::vector<Layout*>::iterator item = layouts.begin();
+	while (item != layouts.end()) {
+		if (*item != nullptr && *item == layout) {
+			delete* item;
+			*item = nullptr;
+			layouts.erase(item);
+			break;
+		}
+		++item;
+	}
+}
+
 void ModuleUI::InitPanels()
 {
 	panel_about = new PanelAbout("About Alien Engine", panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
@@ -488,16 +509,13 @@ void ModuleUI::LoadActiveLayout()
 	std::vector<Layout*>::iterator item = layouts.begin();
 	for (; item != layouts.end(); ++item) {
 		if (*item != nullptr && (*item)->active) {
-
 			std::vector<Panel*>::iterator panel = panels.begin();
 			for (; panel != panels.end(); ++panel) {
 				if (*panel != nullptr) {
 					(*panel)->SetEnable((*item)->panels_enabled[panel - panels.begin()]);
 				}
 			}
-
 			ImGui::LoadIniSettingsFromDisk((*item)->path.data());
-
 			break;
 		}
 	}
