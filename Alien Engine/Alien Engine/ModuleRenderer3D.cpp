@@ -187,7 +187,7 @@ void ModuleRenderer3D::CreateRenderTexture()
 	}
 
 	glGenFramebuffers(1, &frame_buffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer);
 
 	glGenTextures(1, &render_texture);
 	glBindTexture(GL_TEXTURE_2D, render_texture);
@@ -206,15 +206,14 @@ void ModuleRenderer3D::CreateRenderTexture()
 	glBindRenderbuffer(GL_RENDERBUFFER, stencil_buffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, App->window->width, App->window->height);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencil_buffer);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		LOG("Error creating screen buffer");
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
+	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
+	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencil_buffer);
+	
+	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		LOG("Error creating frame buffer");
 	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 	tex = new Texture("RenderTexture", render_texture, App->window->width, App->window->height);
 
