@@ -56,7 +56,7 @@ public:
 	void ChangeStyle(const int& style_number);
 	void ChangeEnableDemo();
 	void DeleteLayout(Layout* layout);
-
+	void SaveNewLayout(Layout* layout);
 private:
 	void InitPanels();
 	void UpdatePanels();
@@ -65,7 +65,7 @@ private:
 
 	void LoadActiveLayout();
 	void LoadLayouts();
-	void SaveNewLayout(Layout* layout);
+	
 	void SaveLayoutsActive();
 
 public:
@@ -77,7 +77,7 @@ private:
 	bool show_demo_wndow = false;
 
 	
-	Layout* active_layout = nullptr;
+	
 	// Panels
 
 	std::vector<Panel*> panels;
@@ -125,5 +125,6 @@ public:
 	PanelConfig* panel_config = nullptr;
 	uint number_of_layouts = 0;
 	std::vector<Layout*> layouts;
+	Layout* active_layout = nullptr;
 };
 

@@ -199,6 +199,7 @@ void ModuleUI::SaveLayoutsActive()
 		if (*item != nullptr) {
 			std::string json_path("Layouts.Layout" + std::to_string((item - layouts.begin()) + 1));
 			json_layout->SetBoolean(json_path + std::string(".Active"), (*item)->active);
+			json_layout->SetString(json_path + std::string(".Name"), (*item)->name.data());
 		}
 	}
 
@@ -328,14 +329,11 @@ void ModuleUI::MainMenuBar()
 	if (ImGui::BeginMenu("Layout")) {
 		if (ImGui::MenuItem("Edit Layouts", panel_layout->shortcut->GetNameScancodes())) {
 			panel_layout->ChangeEnable();
+			static_cast<PanelLayout*>(panel_layout)->is_editor_panel = true;
 		}
 		if (ImGui::MenuItem("Save Current Layout")) {
-			Layout* layout = new Layout("Random layout");
-			layouts.push_back(layout);
-			layout->active = true;
-			active_layout->active = false;
-			active_layout = layout;
-			SaveNewLayout(layout);
+			panel_layout->ChangeEnable();
+			static_cast<PanelLayout*>(panel_layout)->is_editor_panel = false;
 		}
 		if (ImGui::BeginMenu("Set Layout"))
 		{
