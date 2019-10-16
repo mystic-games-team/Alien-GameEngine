@@ -62,7 +62,7 @@ bool ModuleUI::CleanUp()
 {
 	LOG("Unloading UI scene");
 
-	SaveLayouts();
+	SaveLayoutsActive();
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -124,37 +124,6 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowNormalFace", (uint)shortcut_view_normal_face->GetScancode(i));
 	}
 }
-
-void ModuleUI::SaveLayouts()
-{
-	JSONfilepack* json_layout = App->GetJSONLayout();
-	json_layout->StartSave();
-
-	json_layout->SetNumber("Layouts.Number", number_of_layouts);
-
-	std::vector<Layout*>::iterator item = layouts.begin();
-	for (; item != layouts.end(); ++item) {
-		if (*item != nullptr) {
-			std::string json_path("Layouts.Layout" + std::to_string((item - layouts.begin()) + 1));
-			json_layout->SetNumber(json_path + std::string(".Number"), (*item)->number);
-			json_layout->SetBoolean(json_path + std::string(".Active"), (*item)->active);
-			json_layout->SetString(json_path + std::string(".Name"), (*item)->name);
-			json_layout->SetString(json_path + std::string(".Path"), (*item)->path);
-
-			std::vector<Panel*>::iterator panel = panels.begin();
-			for (; panel != panels.end(); ++panel) {
-				if (*panel != nullptr) {
-					bool enabled = (*panel)->IsEnabled();
-					json_layout->SetBoolean(json_path + std::string(".") + (*panel)->GetPanelName(), enabled);
-				}
-			}
-
-		}
-	}
-
-	json_layout->FinishSave();
-}
-
 void ModuleUI::LoadLayouts()
 {
 	JSONfilepack* json_layout = App->GetJSONLayout();
@@ -181,6 +150,50 @@ void ModuleUI::LoadLayouts()
 
 		layouts.push_back(layout);
 	}
+}
+
+void ModuleUI::SaveNewLayout(Layout* layout)
+{
+	JSONfilepack* json_layout = App->GetJSONLayout();
+	json_layout->StartSave();
+
+	json_layout->SetNumber("Layouts.Number", number_of_layouts);
+
+	std::string json_path("Layouts.Layout" + std::to_string(number_of_layouts));
+	json_layout->SetNumber(json_path + std::string(".Number"), layout->number);
+	json_layout->SetBoolean(json_path + std::string(".Active"), layout->active);
+	json_layout->SetString(json_path + std::string(".Name"), layout->name);
+	json_layout->SetString(json_path + std::string(".Path"), layout->path);
+	layout->panels_enabled.clear();
+	std::vector<Panel*>::iterator panel = panels.begin();
+	for (; panel != panels.end(); ++panel) {
+		if (*panel != nullptr) {
+			bool enabled = (*panel)->IsEnabled();
+			json_layout->SetBoolean(json_path + std::string(".") + (*panel)->GetPanelName(), enabled);
+			layout->panels_enabled.push_back(enabled);
+		}
+	}
+
+	json_layout->FinishSave();
+
+}
+
+void ModuleUI::SaveLayoutsActive()
+{
+	// just save the active attribut to know in the next session which layout was active
+
+	JSONfilepack* json_layout = App->GetJSONLayout();
+	json_layout->StartSave();
+
+	std::vector<Layout*>::iterator item = layouts.begin();
+	for (; item != layouts.end(); ++item) {
+		if (*item != nullptr) {
+			std::string json_path("Layouts.Layout" + std::to_string((item - layouts.begin()) + 1));
+			json_layout->SetBoolean(json_path + std::string(".Active"), (*item)->active);
+		}
+	}
+
+	json_layout->FinishSave();
 }
 
 update_status ModuleUI::PreUpdate(float dt)
@@ -308,7 +321,12 @@ void ModuleUI::MainMenuBar()
 			panel_layout->ChangeEnable();
 		}
 		if (ImGui::MenuItem("Save Current Layout")) {
-
+			Layout* layout = new Layout("Oriol's layout");
+			layouts.push_back(layout);
+			layout->active = true;
+			active_layout->active = false;
+			active_layout = layout;
+			SaveNewLayout(layout);
 		}
 		if (ImGui::BeginMenu("Set Layout"))
 		{
@@ -531,4 +549,6 @@ Layout::Layout(const char* name)
 	number = App->ui->number_of_layouts += 1;
 	
 	path = std::string(CONFIGURATION_LAYOUTS_FOLDER) + name + std::to_string(number) + std::string(".ini");
+
+	ImGui::SaveIniSettingsToDisk(path.data());
 }

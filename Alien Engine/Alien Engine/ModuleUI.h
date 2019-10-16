@@ -62,8 +62,9 @@ private:
 	Panel*& GetPanelByName(const std::string& panel_name);
 	void InitShortCuts();
 	void LoadActiveLayout();
-	void SaveLayouts();
 	void LoadLayouts();
+	void SaveNewLayout(Layout* layout);
+	void SaveLayoutsActive();
 
 public:
 	void FramerateRegister(float frames, float ms);

@@ -1,15 +1,30 @@
 {
     "Layouts": {
-        "Number": 1,
+        "Number": 2,
         "Layout1": {
             "Name": "Default",
             "Path": "Configuration\/Layouts\/default.ini",
-            "Active": true,
+            "Active": false,
             "Number": 1,
             "About Alien Engine": false,
             "Configuration": true,
             "Console": true,
             "Render Options": false,
+            "Panel Hierarchy": true,
+            "Create Object": false,
+            "Inspector": true,
+            "Scene": true,
+            "Layout Editor": false
+        },
+        "Layout2": {
+            "Number": 2,
+            "Active": true,
+            "Name": "Oriol's layout",
+            "Path": "Configuration\/Layouts\/Oriol's layout3.ini",
+            "About Alien Engine": false,
+            "Configuration": false,
+            "Console": false,
+            "Render Options": true,
             "Panel Hierarchy": true,
             "Create Object": false,
             "Inspector": true,
