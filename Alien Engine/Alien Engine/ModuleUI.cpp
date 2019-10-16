@@ -77,6 +77,15 @@ bool ModuleUI::CleanUp()
 	}
 	panels.clear();
 
+	std::vector<Layout*>::iterator it = layouts.begin();
+	for (; it != layouts.end(); ++it) {
+		if ((*it) != nullptr) {
+			delete* it;
+			*it = nullptr;
+		}
+	}
+	layouts.clear();
+
 	return true;
 }
 
@@ -421,6 +430,20 @@ void ModuleUI::ChangeStyle(const int& style_number)
 void ModuleUI::ChangeEnableDemo()
 {
 	show_demo_wndow = !show_demo_wndow;
+}
+
+void ModuleUI::DeleteLayout(Layout* layout)
+{
+	std::vector<Layout*>::iterator item = layouts.begin();
+	while (item != layouts.end()) {
+		if (*item != nullptr && *item == layout) {
+			delete* item;
+			*item = nullptr;
+			layouts.erase(item);
+			break;
+		}
+		++item;
+	}
 }
 
 void ModuleUI::InitPanels()
