@@ -13,7 +13,8 @@
             "Panel Hierarchy": true,
             "Create Object": false,
             "Inspector": true,
-            "Scene": true
+            "Scene": true,
+            "Layout Editor": false
         }
     }
 }

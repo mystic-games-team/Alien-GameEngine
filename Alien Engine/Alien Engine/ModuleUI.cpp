@@ -13,6 +13,7 @@
 #include "PanelRender.h"
 #include "SDL/include/SDL_assert.h"
 #include "ModuleObjects.h"
+#include "PanelLayout.h"
 #include "PanelInspector.h"
 #include "PanelScene.h"
 
@@ -88,6 +89,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		panel_hierarchy_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelHierarchy", i);
 		panel_console_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", i);
 		panel_inspector_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelInspector", i);
+		panel_layout_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelLayout", i);
 		panel_render_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelRender", i);
 		panel_scene_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelScene", i);
 		shortcut_demo_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ImGuiDemo", i);
@@ -112,6 +114,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", (uint)panel_console->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", (uint)panel_create_object->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelScene", (uint)panel_scene->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelLayout", (uint)panel_layout->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.WireframeMode", (uint)shortcut_wireframe->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.ViewMesh", (uint)shortcut_view_mesh->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.ReportBug", (uint)shortcut_report_bug->GetScancode(i));
@@ -165,6 +168,9 @@ void ModuleUI::LoadLayouts()
 		layout->name = json_layout->GetString(json_path + std::string(".Name"));
 		layout->path = json_layout->GetString(json_path + std::string(".Path"));
 		layout->active = json_layout->GetBoolean(json_path + std::string(".Active"));
+
+		if (layout->active)
+			active_layout = layout;
 
 		std::vector<Panel*>::iterator panel = panels.begin();
 		for (; panel != panels.end(); ++panel) {
@@ -298,20 +304,30 @@ void ModuleUI::MainMenuBar()
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Layout")) {
+		if (ImGui::MenuItem("Edit Layouts", panel_layout->shortcut->GetNameScancodes())) {
+			panel_layout->ChangeEnable();
+		}
+		if (ImGui::MenuItem("Save Current Layout")) {
 
-		std::vector<Layout*>::iterator item = layouts.begin();
-		for (; item != layouts.end(); ++item) {
-			if (*item != nullptr) {
-				if (ImGui::MenuItem((*item)->name.data())) {
-					ResetImGui();
-					(*item)->active = true;
-					LoadActiveLayout();
-					ImGui::NewFrame();
-					return;
+		}
+		if (ImGui::BeginMenu("Set Layout"))
+		{
+			std::vector<Layout*>::iterator item = layouts.begin();
+			for (; item != layouts.end(); ++item) {
+				if (*item != nullptr) {
+					if (ImGui::MenuItem((*item)->name.data())) {
+						ResetImGui();
+						active_layout->active = false;
+						active_layout = *item;
+						(*item)->active = true;
+						LoadActiveLayout();
+						ImGui::NewFrame();
+						return;
+					}
 				}
 			}
+			ImGui::EndMenu();
 		}
-
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Help"))
@@ -399,6 +415,7 @@ void ModuleUI::InitPanels()
 	panel_create_object = new PanelCreateObject("Create Object", panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
 	panel_inspector = new PanelInspector("Inspector", panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
 	panel_scene = new PanelScene("Scene", panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
+	panel_layout = new PanelLayout("Layout Editor", panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
@@ -408,6 +425,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_create_object);
 	panels.push_back(panel_inspector);
 	panels.push_back(panel_scene);
+	panels.push_back(panel_layout);
 }
 
 void ModuleUI::UpdatePanels()

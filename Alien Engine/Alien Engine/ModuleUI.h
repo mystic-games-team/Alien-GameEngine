@@ -16,6 +16,7 @@ class PanelRender;
 class PanelHierarchy;
 class PanelInspector;
 class PanelScene;
+class PanelLayout;
 
 struct ShortCut;
 
@@ -73,7 +74,7 @@ private:
 	bool show_demo_wndow = false;
 
 	std::vector<Layout*> layouts;
-
+	Layout* active_layout = nullptr;
 	// Panels
 
 	std::vector<Panel*> panels;
@@ -85,7 +86,7 @@ private:
 	PanelHierarchy* panel_hierarchy = nullptr;
 	PanelInspector* panel_inspector = nullptr;
 	PanelScene* panel_scene = nullptr;
-
+	PanelLayout* panel_layout = nullptr;
 	// ShortCuts
 
 	ShortCut* shortcut_demo = nullptr;
@@ -99,6 +100,7 @@ private:
 
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_layout_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_about_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_hierarchy_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_create_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
