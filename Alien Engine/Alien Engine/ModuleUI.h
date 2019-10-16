@@ -19,6 +19,22 @@ class PanelScene;
 
 struct ShortCut;
 
+struct Layout {
+
+	Layout() {}
+	Layout(const char* name);
+	~Layout() {}
+
+	std::string name;
+	std::string path;
+
+	bool active = false;
+	std::vector<bool> panels_enabled;
+
+	uint number = 0;
+};
+
+
 class ModuleUI : public Module
 {
 public:
@@ -43,6 +59,9 @@ private:
 	void UpdatePanels();
 	Panel*& GetPanelByName(const std::string& panel_name);
 	void InitShortCuts();
+	void LoadActiveLayout();
+	void SaveLayouts();
+	void LoadLayouts();
 
 public:
 	void FramerateRegister(float frames, float ms);
@@ -51,6 +70,8 @@ public:
 
 private:
 	bool show_demo_wndow = false;
+
+	std::vector<Layout*> layouts;
 
 	// Panels
 
@@ -92,9 +113,10 @@ private:
 	SDL_Scancode shortcut_view_normal_vertex_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_view_normal_face_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 
+	
 
 public:
 	PanelConfig* panel_config = nullptr;
-
+	uint number_of_layouts = 0;
 };
 

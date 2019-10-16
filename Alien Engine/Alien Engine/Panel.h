@@ -20,7 +20,8 @@ public:
 	const std::string& GetName();
 	void ChangeEnable();
 	bool IsEnabled();
-
+	void SetEnable(const bool& enabled);
+	const std::string GetPanelName() const;
 private:
 
 	virtual void OnPanelDesactive() {};

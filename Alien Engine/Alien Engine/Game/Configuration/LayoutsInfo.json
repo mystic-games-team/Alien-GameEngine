@@ -1,0 +1,19 @@
+{
+    "Layouts": {
+        "Number": 1,
+        "Layout1": {
+            "Name": "Default",
+            "Path": "Configuration\/Layouts\/default.ini",
+            "Active": true,
+            "Number": 1,
+            "About Alien Engine": false,
+            "Configuration": false,
+            "Console": true,
+            "Render Options": false,
+            "Panel Hierarchy": true,
+            "Create Object": false,
+            "Inspector": true,
+            "Scene": true
+        }
+    }
+}

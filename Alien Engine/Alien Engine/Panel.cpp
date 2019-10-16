@@ -29,6 +29,19 @@ bool Panel::IsEnabled()
 	return enabled;
 }
 
+void Panel::SetEnable(const bool& enabled)
+{
+	this->enabled = enabled;
+
+	if (!this->enabled)
+		OnPanelDesactive();
+}
+
+const std::string Panel::GetPanelName() const
+{
+	return panel_name;
+}
+
 
 
 

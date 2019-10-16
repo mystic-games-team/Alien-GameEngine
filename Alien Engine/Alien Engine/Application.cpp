@@ -81,6 +81,11 @@ void Application::SaveCustomConfig()
 		SaveConfig();
 }
 
+JSONfilepack* Application::GetJSONLayout()
+{
+	return layout;
+}
+
 bool Application::LoadConfig()
 {
 	bool ret = true;
@@ -144,6 +149,8 @@ bool Application::Init()
 
 	if (config != nullptr)
 		LoadConfig();
+
+	layout = LoadJSONFile("Configuration/LayoutsInfo.json");
 
 	shortcut_manager = new ShortCutManager();
 

@@ -39,6 +39,7 @@ public:
 
 private:
 	JSONfilepack* config = nullptr;
+	JSONfilepack* layout = nullptr;
 
 	std::list<JSONfilepack*> json_files;
 
@@ -62,6 +63,8 @@ public:
 
 	void LoadDefaultConfig();
 	void SaveCustomConfig();
+
+	JSONfilepack* GetJSONLayout();
 
 	bool FileExists(const std::string& name);
 

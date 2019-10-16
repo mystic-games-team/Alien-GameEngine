@@ -36,6 +36,8 @@ bool ModuleUI::Start()
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	io.IniFilename = NULL;
+	io.WantSaveIniSettings = false;
 
 	ChangeStyle(App->window->style);
 
@@ -46,7 +48,10 @@ bool ModuleUI::Start()
 
 	InitPanels();
 	InitShortCuts();
-	
+
+	LoadLayouts();
+	LoadActiveLayout();
+
 	return ret;
 }
 
@@ -55,6 +60,9 @@ bool ModuleUI::Start()
 bool ModuleUI::CleanUp()
 {
 	LOG("Unloading UI scene");
+
+	SaveLayouts();
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
@@ -111,6 +119,61 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowGrid", (uint)shortcut_view_grid->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowNormalVertex", (uint)shortcut_view_normal_vertex->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowNormalFace", (uint)shortcut_view_normal_face->GetScancode(i));
+	}
+}
+
+void ModuleUI::SaveLayouts()
+{
+	JSONfilepack* json_layout = App->GetJSONLayout();
+	json_layout->StartSave();
+
+	json_layout->SetNumber("Layouts.Number", number_of_layouts);
+
+	std::vector<Layout*>::iterator item = layouts.begin();
+	for (; item != layouts.end(); ++item) {
+		if (*item != nullptr) {
+			std::string json_path("Layouts.Layout" + std::to_string((item - layouts.begin()) + 1));
+			json_layout->SetNumber(json_path + std::string(".Number"), (*item)->number);
+			json_layout->SetBoolean(json_path + std::string(".Active"), (*item)->active);
+			json_layout->SetString(json_path + std::string(".Name"), (*item)->name);
+			json_layout->SetString(json_path + std::string(".Path"), (*item)->path);
+
+			std::vector<Panel*>::iterator panel = panels.begin();
+			for (; panel != panels.end(); ++panel) {
+				if (*panel != nullptr) {
+					bool enabled = (*panel)->IsEnabled();
+					json_layout->SetBoolean(json_path + std::string(".") + (*panel)->GetPanelName(), enabled);
+				}
+			}
+
+		}
+	}
+
+	json_layout->FinishSave();
+}
+
+void ModuleUI::LoadLayouts()
+{
+	JSONfilepack* json_layout = App->GetJSONLayout();
+	
+	number_of_layouts = json_layout->GetNumber("Layouts.Number");
+
+	for (uint i = 1; i <= number_of_layouts; ++i) {
+		Layout* layout = new Layout();
+		layout->number = i;
+		std::string json_path("Layouts.Layout" + std::to_string(i));
+		layout->name = json_layout->GetString(json_path + std::string(".Name"));
+		layout->path = json_layout->GetString(json_path + std::string(".Path"));
+		layout->active = json_layout->GetBoolean(json_path + std::string(".Active"));
+
+		std::vector<Panel*>::iterator panel = panels.begin();
+		for (; panel != panels.end(); ++panel) {
+			if (*panel != nullptr) {
+				layout->panels_enabled.push_back(json_layout->GetBoolean(json_path + std::string(".") + (*panel)->GetPanelName()));
+			}
+		}
+
+		layouts.push_back(layout);
 	}
 }
 
@@ -234,6 +297,45 @@ void ModuleUI::MainMenuBar()
 		}
 		ImGui::EndMenu();
 	}
+	if (ImGui::BeginMenu("Layout")) {
+
+		std::vector<Layout*>::iterator item = layouts.begin();
+		for (; item != layouts.end(); ++item) {
+			if (*item != nullptr) {
+				if (ImGui::MenuItem((*item)->name.data())) {
+
+					ImGui_ImplOpenGL3_Shutdown();
+					ImGui_ImplSDL2_Shutdown();
+					ImGui::DestroyContext();
+					//
+					// Setup Dear ImGui context
+					IMGUI_CHECKVERSION();
+					ImGui::CreateContext();
+					ImGuiIO& io = ImGui::GetIO(); (void)io;
+					io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+					io.IniFilename = NULL;
+					io.WantSaveIniSettings = false;
+
+					ChangeStyle(App->window->style);
+
+
+					// Setup Platform/Renderer bindings
+					ImGui_ImplOpenGL3_Init();
+					ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
+
+
+
+					ImGui::LoadIniSettingsFromDisk((*item)->path.data());
+					ImGui_ImplOpenGL3_NewFrame();
+					ImGui_ImplSDL2_NewFrame(App->window->window);
+					ImGui::NewFrame();
+					return;
+				}
+			}
+		}
+
+		ImGui::EndMenu();
+	}
 	if (ImGui::BeginMenu("Help"))
 	{
 		if (ImGui::MenuItem("About", panel_about->shortcut->GetNameScancodes()))
@@ -255,6 +357,7 @@ void ModuleUI::MainMenuBar()
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
+
 }
 
 void ModuleUI::ReportBug()
@@ -342,6 +445,26 @@ void ModuleUI::InitShortCuts()
 	App->shortcut_manager->OrderShortCuts();
 }
 
+void ModuleUI::LoadActiveLayout()
+{
+	std::vector<Layout*>::iterator item = layouts.begin();
+	for (; item != layouts.end(); ++item) {
+		if (*item != nullptr && (*item)->active) {
+
+			std::vector<Panel*>::iterator panel = panels.begin();
+			for (; panel != panels.end(); ++panel) {
+				if (*panel != nullptr) {
+					(*panel)->SetEnable((*item)->panels_enabled[panel - panels.begin()]);
+				}
+			}
+
+			ImGui::LoadIniSettingsFromDisk((*item)->path.data());
+
+			break;
+		}
+	}
+}
+
 void ModuleUI::FramerateRegister(float frames, float ms)
 {
 	if (panel_config->IsEnabled())
@@ -382,3 +505,10 @@ void ModuleUI::BackgroundDockspace()
 	ImGui::End();
 }
 
+Layout::Layout(const char* name)
+{
+	this->name = std::string(name);
+	number = App->ui->number_of_layouts += 1;
+	
+	path = std::string(CONFIGURATION_LAYOUTS_FOLDER) + name + std::to_string(number) + std::string(".ini");
+}
