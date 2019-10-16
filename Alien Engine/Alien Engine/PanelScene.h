@@ -10,5 +10,11 @@ public:
 	virtual ~PanelScene();
 
 	void PanelLogic();
+
+private:
+	float width = 960;
+	float height = 540;
+
+	float lastHeight = 540;
 };
 

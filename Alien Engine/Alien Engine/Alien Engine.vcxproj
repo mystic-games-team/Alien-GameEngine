@@ -335,7 +335,6 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Game\Configuration\CustomConfiguration.json" />
     <None Include="Game\Configuration\DefaultConfiguration.json" />
     <None Include="Game\Configuration\LayoutsInfo.json" />
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />

@@ -4,7 +4,7 @@
         "Layout1": {
             "Name": "Default",
             "Path": "Configuration\/Layouts\/default.ini",
-            "Active": false,
+            "Active": true,
             "Number": 1,
             "About Alien Engine": false,
             "Configuration": true,
@@ -18,7 +18,7 @@
         },
         "Layout2": {
             "Number": 2,
-            "Active": true,
+            "Active": false,
             "Name": "Oriol's layout",
             "Path": "Configuration\/Layouts\/Oriol's layout3.ini",
             "About Alien Engine": false,

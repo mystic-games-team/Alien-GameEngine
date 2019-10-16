@@ -682,9 +682,6 @@
     <None Include="Game\Configuration\DefaultConfiguration.json">
       <Filter>JSON</Filter>
     </None>
-    <None Include="Game\Configuration\CustomConfiguration.json">
-      <Filter>JSON</Filter>
-    </None>
     <None Include="Game\Configuration\LayoutsInfo.json">
       <Filter>JSON</Filter>
     </None>

@@ -11,94 +11,10 @@
             "Height": 650,
             "Brightness": 1,
             "Fullscreen": false,
-            "Fulldesktop": true,
+            "Fulldesktop": false,
             "Resizable": true,
             "Borderless": false,
             "StyleType": 1
-        },
-        "UI": {
-            "ShortCuts": {
-                "PanelConfig": [
-                    18,
-                    224,
-                    228
-                ],
-                "PanelAbout": [
-                    4,
-                    224,
-                    228
-                ],
-				"PanelLayout": [
-                    15,
-                    224,
-                    228
-                ],
-                "PanelConsole": [
-                    23,
-                    224,
-                    228
-                ],
-                "PanelInspector": [
-                    16,
-                    224,
-                    228
-                ],
-                "PanelCreate": [
-                    19,
-                    224,
-                    228
-                ],
-                "WireframeMode": [
-                    61,
-                    0,
-                    0
-                ],
-                "ViewMesh": [
-                    60,
-                    0,
-                    0
-                ],
-                "ReportBug": [
-                    58,
-                    226,
-                    230
-                ],
-                "PanelRender": [
-                    21,
-                    224,
-                    228
-                ],
-                "PanelHierarchy": [
-                    24,
-                    224,
-                    228
-                ],
-                "PanelScene": [
-                    22,
-                    224,
-                    228
-                ],
-                "ImGuiDemo": [
-                    7,
-                    224,
-                    228
-                ],
-                "ShowGrid": [
-                    62,
-                    0,
-                    0
-                ],
-                "ShowNormalVertex": [
-                    63,
-                    0,
-                    0
-                ],
-                "ShowNormalFace": [
-                    64,
-                    0,
-                    0
-                ]
-            }
         },
         "Renderer": {
             "Wireframe": false,
@@ -106,27 +22,14 @@
             "VertexNormals": false,
             "FaceNormals": false,
             "MeshWidth": 1,
-            "VertexNormalsWidth": 1,
             "FaceNormalsWidth": 1,
+            "VertexNormalsWidth": 1,
             "VertexNormalsLength": 1,
             "FaceNormalsLength": 1,
             "AllowGrid": true,
-            "GridWidth": 1,
             "GridSpacing": 1,
+            "GridWidth": 1,
             "GridLength": 20,
-            "Outline": true,
-            "ParentLineWidth": 12,
-            "NoChildLineWidth": 12,
-            "ParentOutlineColor": [
-                0,
-                1,
-                1
-            ],
-            "NoChildOutlineColor": [
-                1,
-                0.5,
-                0
-            ],
             "GridColor": [
                 1,
                 1,
@@ -151,7 +54,104 @@
                 1,
                 1,
                 1
-            ]
+            ],
+            "ParentOutlineColor": [
+                0,
+                1,
+                1
+            ],
+            "NoChildOutlineColor": [
+                1,
+                0.5,
+                0
+            ],
+            "Outline": true,
+            "ParentLineWidth": 12,
+            "NoChildLineWidth": 12
+        },
+        "UI": {
+            "ShortCuts": {
+                "PanelConfig": [
+                    18,
+                    224,
+                    228
+                ],
+                "PanelAbout": [
+                    4,
+                    224,
+                    228
+                ],
+                "PanelHierarchy": [
+                    24,
+                    224,
+                    228
+                ],
+                "PanelRender": [
+                    21,
+                    224,
+                    228
+                ],
+                "PanelInspector": [
+                    16,
+                    224,
+                    228
+                ],
+                "PanelConsole": [
+                    23,
+                    224,
+                    228
+                ],
+                "PanelCreate": [
+                    19,
+                    224,
+                    228
+                ],
+                "PanelScene": [
+                    22,
+                    224,
+                    228
+                ],
+                "PanelLayout": [
+                    15,
+                    224,
+                    228
+                ],
+                "WireframeMode": [
+                    61,
+                    0,
+                    0
+                ],
+                "ViewMesh": [
+                    60,
+                    0,
+                    0
+                ],
+                "ReportBug": [
+                    58,
+                    226,
+                    230
+                ],
+                "ImGuiDemo": [
+                    7,
+                    224,
+                    228
+                ],
+                "ShowGrid": [
+                    62,
+                    0,
+                    0
+                ],
+                "ShowNormalVertex": [
+                    63,
+                    0,
+                    0
+                ],
+                "ShowNormalFace": [
+                    64,
+                    0,
+                    0
+                ]
+            }
         }
     }
 }
