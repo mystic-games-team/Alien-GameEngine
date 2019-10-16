@@ -303,31 +303,9 @@ void ModuleUI::MainMenuBar()
 		for (; item != layouts.end(); ++item) {
 			if (*item != nullptr) {
 				if (ImGui::MenuItem((*item)->name.data())) {
-
-					ImGui_ImplOpenGL3_Shutdown();
-					ImGui_ImplSDL2_Shutdown();
-					ImGui::DestroyContext();
-					//
-					// Setup Dear ImGui context
-					IMGUI_CHECKVERSION();
-					ImGui::CreateContext();
-					ImGuiIO& io = ImGui::GetIO(); (void)io;
-					io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-					io.IniFilename = NULL;
-					io.WantSaveIniSettings = false;
-
-					ChangeStyle(App->window->style);
-
-
-					// Setup Platform/Renderer bindings
-					ImGui_ImplOpenGL3_Init();
-					ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
-
-
-
-					ImGui::LoadIniSettingsFromDisk((*item)->path.data());
-					ImGui_ImplOpenGL3_NewFrame();
-					ImGui_ImplSDL2_NewFrame(App->window->window);
+					ResetImGui();
+					(*item)->active = true;
+					LoadActiveLayout();
 					ImGui::NewFrame();
 					return;
 				}
@@ -358,6 +336,30 @@ void ModuleUI::MainMenuBar()
 	}
 	ImGui::EndMainMenuBar();
 
+}
+
+void ModuleUI::ResetImGui()
+{
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+	//
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	io.IniFilename = NULL;
+	io.WantSaveIniSettings = false;
+
+	ChangeStyle(App->window->style);
+
+	ImGui_ImplOpenGL3_Init();
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
+
+
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame(App->window->window);
 }
 
 void ModuleUI::ReportBug()

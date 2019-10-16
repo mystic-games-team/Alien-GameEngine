@@ -7,7 +7,7 @@
             "Active": true,
             "Number": 1,
             "About Alien Engine": false,
-            "Configuration": false,
+            "Configuration": true,
             "Console": true,
             "Render Options": false,
             "Panel Hierarchy": true,

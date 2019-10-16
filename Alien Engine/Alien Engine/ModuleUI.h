@@ -50,6 +50,7 @@ public:
 
 	void Draw();
 	void MainMenuBar();
+	void ResetImGui();
 	void ReportBug();
 	void ChangeStyle(const int& style_number);
 	void ChangeEnableDemo();
