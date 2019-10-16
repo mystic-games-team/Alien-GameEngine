@@ -15,4 +15,5 @@ public:
 private:
 
 	void PrintNode(GameObject* node);
+	//void RightClickMenu(GameObject* clicked);
 };
