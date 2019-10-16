@@ -34,12 +34,12 @@ void PanelHierarchy::PanelLogic()
 			}
 		}
 	}
+
 	ImGui::End();
 }
 
 void PanelHierarchy::PrintNode(GameObject* node)
 {
-
 	if (!node->children.empty()) 
 	{
 		ImGui::PushID(node);
@@ -53,6 +53,28 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f, 0.5f, 0.5f, 1.f });
 		if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->IsSelected()))
 		{
+			if (ImGui::IsItemHovered())
+			{
+				if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN)
+				{
+					ImGui::BeginPopupContextWindow();
+					if (ImGui::MenuItem("Move Up"))
+					{
+
+					}
+
+					if (ImGui::MenuItem("Move Down"))
+					{
+
+					}
+
+					if (ImGui::MenuItem("Destroy"))
+					{
+
+					}
+					ImGui::EndPopup();
+				}
+			}
 			if (!node->IsEnabled() || !node->IsParentEnabled())
 				ImGui::PopStyleColor();
 			if (ImGui::IsItemClicked()) {
@@ -89,11 +111,65 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		if (!node->IsEnabled() || !node->IsParentEnabled())
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f, 0.5f, 0.5f, 1.f });
 		ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->IsSelected());
+		if (ImGui::IsItemHovered())
+		{
+			if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN)
+			{
+				ImGui::BeginPopupContextWindow();
+				if (ImGui::MenuItem("Move Up"))
+				{
+
+				}
+
+				if (ImGui::MenuItem("Move Down"))
+				{
+
+				}
+
+				if (ImGui::MenuItem("Destroy"))
+				{
+
+				}
+				ImGui::EndPopup();
+			}
+		}
 		if (!node->IsEnabled() || !node->IsParentEnabled())
 			ImGui::PopStyleColor();
 		ImGui::PopID();
 		if (ImGui::IsItemClicked()) {
 			App->objects->SetNewSelectedObject(node);
 		}
+		
 	}
 }
+//
+//void PanelHierarchy::RightClickMenu(GameObject* clicked)
+//{
+//	if (ImGui::BeginPopupContextWindow())
+//	{
+//		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup))
+//		{
+//			if (ImGui::MenuItem("Move Up"))
+//			{
+//
+//			}
+//
+//			if (ImGui::MenuItem("Move Down"))
+//			{
+//
+//			}
+//
+//			if (ImGui::MenuItem("Destroy"))
+//			{
+//
+//			}
+//		}
+//
+//		if (ImGui::MenuItem("Create Empty Child"))
+//		{
+//
+//		}
+//
+//		ImGui::EndPopup();
+//	}
+//}
