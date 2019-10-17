@@ -236,20 +236,6 @@ void ModuleCamera3D::Focus()
 	}
 }
 
-void ModuleCamera3D::Scaling(GameObject* scale_over)
-{
-	do
-	{
-		Position.z -= 3;
-	} while ((scale_over->size.x >= App->window->width)&&(scale_over->size.y>=App->window->height));
-
-
-	LOG("%f, %f", scale_over->size.x, scale_over->size.y);
-
-	CalculateViewMatrix();
-}
-
-
 // -----------------------------------------------------------------
 float* ModuleCamera3D::GetViewMatrix()
 {

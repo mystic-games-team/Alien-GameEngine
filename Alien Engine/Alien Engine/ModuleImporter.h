@@ -48,29 +48,21 @@ public:
 	bool Start();
 	bool CleanUp();
 
+	// models
 	bool LoadModelFile(const char* path);
+	void LoadParShapesMesh(par_shapes_mesh* p_mesh, ComponentMesh* mesh);
+
+	// textures
 	Texture* LoadTextureFile(const char* path, bool has_been_dropped = false);
 	void ApplyTextureToSelectedObject(Texture* texture);
-	void LoadParShapesMesh(par_shapes_mesh* p_mesh, ComponentMesh* mesh);
-	float3 GetObjectSize(const aiMesh* mesh);
-
-private:
-
-	float min_x_vertex = 0;
-	float min_y_vertex = 0;
-	float min_z_vertex = 0;
-
-	float max_x_vertex=0;
-	float max_y_vertex = 0;
-	float max_z_vertex = 0;
 	
 private:
 
+	// mesh
 	void InitScene(const aiScene* scene, const char* path);
 	void LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* game_object);
 	GameObject* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, GameObject* game_object);
 	void InitMeshBuffers(ComponentMesh* mesh);
-
 
 public:
 
