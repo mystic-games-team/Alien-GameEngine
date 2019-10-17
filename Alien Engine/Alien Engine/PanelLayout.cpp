@@ -94,7 +94,7 @@ void PanelLayout::PanelSaveNewLayout()
 			layout->active = true;
 			App->ui->active_layout->active = false;
 			App->ui->active_layout = layout;
-			App->ui->SaveNewLayout(layout);
+			App->ui->SaveLayout(layout);
 			new_layout_name = "New Layout";
 		}
 		ImGui::EndPopup();

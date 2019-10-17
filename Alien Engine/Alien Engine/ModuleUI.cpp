@@ -198,7 +198,7 @@ void ModuleUI::SaveAllLayouts()
 	json_layout->FinishSave();
 }
 
-void ModuleUI::SaveNewLayout(Layout* layout)
+void ModuleUI::SaveLayout(Layout* layout, bool is_new)
 {
 	JSONfilepack* json_layout = App->GetJSONLayout();
 	json_layout->StartSave();
@@ -222,11 +222,13 @@ void ModuleUI::SaveNewLayout(Layout* layout)
 
 	json_layout->FinishSave();
 
+	if (!is_new)
+		ImGui::SaveIniSettingsToDisk(layout->path.data());
 }
 
 void ModuleUI::SaveLayoutsActive()
 {
-	// just save the active attribut to know in the next session which layout was active
+	// just save the active attribut & name to know in the next session which layout was active
 
 	JSONfilepack* json_layout = App->GetJSONLayout();
 	json_layout->StartSave();
@@ -364,11 +366,14 @@ void ModuleUI::MainMenuBar()
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Layout")) {
+		if (ImGui::MenuItem("Save Actual Layout", active_layout->name.data())) {
+			SaveLayout(active_layout, false);
+		}
 		if (ImGui::MenuItem("Edit Layouts", panel_layout->shortcut->GetNameScancodes())) {
 			panel_layout->ChangeEnable();
 			static_cast<PanelLayout*>(panel_layout)->is_editor_panel = true;
 		}
-		if (ImGui::MenuItem("Save Current Layout")) {
+		if (ImGui::MenuItem("Save Actual Distribution", "Create New Layout")) {
 			panel_layout->ChangeEnable();
 			static_cast<PanelLayout*>(panel_layout)->is_editor_panel = false;
 		}

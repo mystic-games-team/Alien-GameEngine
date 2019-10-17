@@ -11,7 +11,7 @@
             "Height": 650,
             "Brightness": 1,
             "Fullscreen": false,
-            "Fulldesktop": true,
+            "Fulldesktop": false,
             "Resizable": true,
             "Borderless": false,
             "StyleType": 1

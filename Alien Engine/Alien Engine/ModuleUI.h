@@ -48,25 +48,25 @@ public:
 	void LoadConfig(JSONfilepack*& config);
 	void SaveConfig(JSONfilepack*& config);
 
-
 	void Draw();
 	void MainMenuBar();
 	void ResetImGui();
 	void ReportBug();
 	void ChangeStyle(const int& style_number);
 	void ChangeEnableDemo();
-	void DeleteLayout(Layout* layout);
-	void SaveNewLayout(Layout* layout);
+	void DeleteLayout(Layout* layout); // delete x layout
+	void SaveLayout(Layout* layout, bool is_new = true); // save an x new layout
+	
 private:
 	void InitPanels();
 	void UpdatePanels();
 	Panel*& GetPanelByName(const std::string& panel_name);
 	void InitShortCuts();
 
-	void LoadActiveLayout();
-	void LoadLayouts();
-	void SaveAllLayouts();
-	void SaveLayoutsActive();
+	void LoadActiveLayout(); // charge the active layout
+	void LoadLayouts(); // read all layouts with json
+	void SaveAllLayouts(); // save all layout info again to json
+	void SaveLayoutsActive(); // when closing, save which layout was active
 
 public:
 	void FramerateRegister(float frames, float ms);
