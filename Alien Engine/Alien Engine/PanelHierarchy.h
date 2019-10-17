@@ -15,5 +15,11 @@ public:
 private:
 
 	void PrintNode(GameObject* node);
-	//void RightClickMenu(GameObject* clicked);
+	void RightClickMenu();
+
+private:
+
+	GameObject* object_hovered = nullptr;
+	GameObject* object_menu = nullptr;
+	bool in_menu = false;
 };
