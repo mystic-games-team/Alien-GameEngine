@@ -34,7 +34,7 @@ bool ModuleObjects::Start()
 	bool ret = true;
 
 	GameObject* light_test = new GameObject();
-	light_test->SetName("light");
+	light_test->SetName("Light");
 	light_test->parent=base_game_object;
 	base_game_object->AddChild(light_test);
 	light_test->AddComponent(new ComponentTransform(light_test, { 0,0,2.5f }, { 0,0,0,0 }, { 1,1,1 }));

@@ -12,8 +12,6 @@ public:
 
 	void DrawInspector();
 
-public:
-
 private:
 	
 	bool light_active = true;

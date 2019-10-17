@@ -90,7 +90,7 @@ void GameObject::Draw()
 			mesh->DrawFaceNormals();
 	}
 
-	if (light != nullptr) 
+	if (light != nullptr && light->IsEnabled()) 
 	{
 		light->LightLogic();
 	}
