@@ -24,11 +24,11 @@
             "About Alien Engine": false,
             "Configuration": true,
             "Console": true,
-            "Render Options": true,
+            "Render Options": false,
             "Panel Hierarchy": false,
             "Create Object": false,
             "Inspector": true,
-            "Scene": true,
+            "Scene": false,
             "Layout Editor": false
         },
         "Layout3": {

@@ -203,9 +203,14 @@ void ModuleUI::SaveLayout(Layout* layout, bool is_new)
 	JSONfilepack* json_layout = App->GetJSONLayout();
 	json_layout->StartSave();
 
-	json_layout->SetNumber("Layouts.Number", number_of_layouts);
+	std::string json_path;
+	if (is_new) {
+		json_layout->SetNumber("Layouts.Number", number_of_layouts);
+		json_path = ("Layouts.Layout" + std::to_string(number_of_layouts));
+	}
+	else
+		json_path = ("Layouts.Layout" + std::to_string(layout->number));
 
-	std::string json_path("Layouts.Layout" + std::to_string(number_of_layouts));
 	json_layout->SetNumber(json_path + std::string(".Number"), layout->number);
 	json_layout->SetBoolean(json_path + std::string(".Active"), layout->active);
 	json_layout->SetString(json_path + std::string(".Name"), layout->name);
