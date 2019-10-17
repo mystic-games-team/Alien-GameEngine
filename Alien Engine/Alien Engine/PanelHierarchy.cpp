@@ -122,22 +122,22 @@ void PanelHierarchy::RightClickMenu()
 
 			if (ImGui::MenuItem("Move One Up"))
 			{
-				
+				App->objects->MoveUp(object_menu, false);
 			}
 
 			if (ImGui::MenuItem("Move On Top"))
 			{
-
+				App->objects->MoveUp(object_menu, true);
 			}
 
 			if (ImGui::MenuItem("Move One Down"))
 			{
-
+				App->objects->MoveDown(object_menu, false);
 			}
 
 			if (ImGui::MenuItem("Move On Bottom"))
 			{
-
+				App->objects->MoveDown(object_menu, true);
 			}
 
 			if (ImGui::MenuItem("Create Empty Child"))

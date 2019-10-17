@@ -52,6 +52,9 @@ public:
 	// if parent is nullptr, parent will be the invisible game object
 	void CreateEmptyGameObject(GameObject* parent);
 
+	void MoveDown(GameObject* object, bool bottom);
+	void MoveUp(GameObject* object, bool top);
+
 public:
 
 	GameObject* base_game_object = nullptr;

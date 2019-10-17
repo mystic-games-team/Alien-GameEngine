@@ -174,6 +174,56 @@ void ModuleObjects::CreateEmptyGameObject(GameObject* parent)
 	SetNewSelectedObject(object);
 }
 
+void ModuleObjects::MoveDown(GameObject* object, bool bottom)
+{
+	GameObject* parent = object->parent;
+
+	if (object == parent->children.back())
+		return;
+
+	if (bottom) {
+		parent->children.erase(std::find(parent->children.begin(), parent->children.end(), object));
+		parent->AddChild(object);
+	}
+	else {
+		std::vector<GameObject*>::iterator item = parent->children.begin();
+		for (; item != parent->children.end(); ++item) {
+			if (*item != nullptr) {
+				if (*item == object) {
+					item = parent->children.erase(item);
+					parent->children.insert(++item, object);
+					break;
+				}
+			}
+		}
+	}
+}
+
+void ModuleObjects::MoveUp(GameObject* object, bool top)
+{
+	GameObject* parent = object->parent;
+
+	if (object == parent->children.front())
+		return;
+
+	if (top) {
+		parent->children.erase(std::find(parent->children.begin(), parent->children.end(), object));
+		parent->children.insert(parent->children.begin(), object);
+	}
+	else {
+		std::vector<GameObject*>::iterator item = parent->children.begin();
+		for (; item != parent->children.end(); ++item) {
+			if (*item != nullptr) {
+				if (*item == object) {
+					item = parent->children.erase(item);
+					parent->children.insert(--item, object);
+					break;
+				}
+			}
+		}
+	}
+}
+
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 
 {
 	wireframe_mode = config->GetBoolean("Configuration.Renderer.Wireframe");
