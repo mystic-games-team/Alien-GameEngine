@@ -30,18 +30,21 @@ void PanelLayout::ChangePanel()
 void PanelLayout::PanelLayoutEditor()
 {
 	ImGui::OpenPopup(panel_name.c_str());
-	ImGui::SetNextWindowSize({ 355, 200 });
+	ImGui::SetNextWindowSize({ 270, 200 });
 	if (ImGui::BeginPopupModal(panel_name.c_str(), &enabled, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
-		ImGui::BeginChild("", { 345,0 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::BeginChild("", { 260,0 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 
+		ImGui::Text("");
+		ImGui::SameLine(23);
+		ImGui::Text("Layout Name");
+		ImGui::Spacing();
 		std::vector<Layout*>::iterator item = App->ui->layouts.begin();
 		for (; item != App->ui->layouts.end(); ++item) {
 			if (*item != nullptr) {
-
-				ImGui::Text("Layout Name");
-				ImGui::SameLine();
-
+				
+				ImGui::Text("");
+				ImGui::SameLine(5);
 				ImGui::SetNextItemWidth(120);
 				static char name[20];
 				memcpy(name, (*item)->name.data(), 20);
@@ -50,7 +53,7 @@ void PanelLayout::PanelLayoutEditor()
 					(*item)->name = std::string(name);
 				}
 				ImGui::PopID();
-				ImGui::SameLine();
+				ImGui::SameLine(142);
 
 				ImGui::PushID(item - App->ui->layouts.begin());
 				if (ImGui::Button("Remove Layout")) {
@@ -97,7 +100,6 @@ void PanelLayout::PanelSaveNewLayout()
 			App->ui->SaveNewLayout(layout);
 			new_layout_name = "New Layout";
 		}
-
 		ImGui::EndPopup();
 	}
 }
