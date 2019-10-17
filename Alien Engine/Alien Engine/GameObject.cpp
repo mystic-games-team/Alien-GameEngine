@@ -34,30 +34,6 @@ GameObject::~GameObject()
 	}
 }
 
-void GameObject::Enable()
-{
-	enabled = true;
-
-	std::vector<GameObject*>::iterator item = children.begin();
-	for (; item != children.end(); ++item) {
-		if (*item != nullptr) {
-			(*item)->Enable();
-		}
-	}
-}
-
-void GameObject::Disable()
-{
-	enabled = false;
-
-	std::vector<GameObject*>::iterator item = children.begin();
-	for (; item != children.end(); ++item) {
-		if (*item != nullptr) {
-			(*item)->Disable();
-		}
-	}
-}
-
 bool GameObject::IsEnabled()
 {
 	return enabled;
@@ -237,6 +213,11 @@ void GameObject::ToDelete()
 
 void GameObject::SayChildrenParentIsEnabled(const bool& enabled)
 {
+	if (enabled)
+		OnEnable();
+	else
+		OnDisable();
+
 	std::vector<GameObject*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
@@ -249,6 +230,40 @@ void GameObject::SayChildrenParentIsEnabled(const bool& enabled)
 bool GameObject::IsParentEnabled()
 {
 	return parent_enabled;
+}
+
+void GameObject::OnEnable()
+{
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->OnEnable();
+		}
+	}
+
+	std::vector<GameObject*>::iterator it = children.begin();
+	for (; it != children.end(); ++it) {
+		if (*it != nullptr) {
+			(*it)->OnEnable();
+		}
+	}
+}
+
+void GameObject::OnDisable()
+{
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->OnDisable();
+		}
+	}
+
+	std::vector<GameObject*>::iterator it = children.begin();
+	for (; it != children.end(); ++it) {
+		if (*it != nullptr) {
+			(*it)->OnDisable();
+		}
+	}
 }
 
 void GameObject::ScaleNegative(const bool& is_negative)

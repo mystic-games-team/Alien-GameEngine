@@ -11,6 +11,7 @@ public:
 	void LightLogic();
 
 	void DrawInspector();
+	void OnDisable();
 
 private:
 	

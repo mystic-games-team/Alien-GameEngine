@@ -12,8 +12,9 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
-	void Enable();
-	void Disable();
+	// OnEnable/Disable
+	void OnEnable();
+	void OnDisable();
 	bool IsEnabled();
 
 	// here we call Component Mesh, Material & light

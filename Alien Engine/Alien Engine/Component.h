@@ -19,8 +19,9 @@ public:
 	Component(GameObject* attach);
 	virtual ~Component();
 
-	virtual void Enable();
-	virtual void Disable();
+	virtual void OnEnable() {}
+	virtual void OnDisable() {}
+
 	virtual bool IsEnabled();
 	virtual void DrawInspector() {}
 
