@@ -37,23 +37,19 @@ void ComponentLight::DrawInspector()
 
 	ImGui::Spacing();
 
-	ImGui::Text("Light Settings");
+	if (ImGui::CollapsingHeader("Light Settings", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::Spacing();
+		ImGui::Spacing();
 
-	ImGui::Spacing();
-	ImGui::Spacing();
+		ImGui::Checkbox("Active Light", &light_active);
 
-	ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
 
-	ImGui::Spacing();
-	ImGui::Spacing();
+		ImGui::ColorEdit3("Ambient Light", &ambient, ImGuiColorEditFlags_Float);
+		ImGui::ColorEdit3("Diffuse Light", &diffuse, ImGuiColorEditFlags_Float);
 
-	ImGui::Checkbox("Active Light", &light_active);
-
-	ImGui::Spacing();
-	ImGui::Spacing();
-
-	ImGui::ColorEdit3("Ambient Light", &ambient, ImGuiColorEditFlags_Float);
-	ImGui::ColorEdit3("Diffuse Light", &diffuse, ImGuiColorEditFlags_Float);
-
-	ImGui::PopID();
+		ImGui::PopID();
+	}
 }
