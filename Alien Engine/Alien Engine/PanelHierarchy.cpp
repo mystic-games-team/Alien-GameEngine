@@ -119,6 +119,7 @@ void PanelHierarchy::RightClickMenu()
 			}
 		}
 		if (object_menu != nullptr) {
+
 			if (ImGui::MenuItem("Move One Up"))
 			{
 				
@@ -153,7 +154,7 @@ void PanelHierarchy::RightClickMenu()
 		{
 			App->objects->CreateEmptyGameObject(nullptr);
 		}
-		// We should put create cube, sphere bla bla...
+		// We should create cube, sphere bla bla...
 		ImGui::EndPopup();
 	}
 	else if (in_menu) {

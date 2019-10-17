@@ -161,14 +161,16 @@ void ModuleObjects::CreateEmptyGameObject(GameObject* parent)
 	if (parent != nullptr) {
 		object->parent = parent;
 		parent->AddChild(object);
+		object->SetName("Empty Child");
 	}
 	else {
 		object->parent = base_game_object;
 		base_game_object->AddChild(object);
+		object->SetName("Empty GameObject");
 	}
 
 	object->AddComponent(new ComponentTransform(object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
-	object->SetName("Empty GameObject");
+	
 	SetNewSelectedObject(object);
 }
 
