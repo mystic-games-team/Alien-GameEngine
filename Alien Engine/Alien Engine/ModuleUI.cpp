@@ -112,7 +112,28 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		shortcut_view_normal_vertex_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ShowNormalVertex", i);
 		shortcut_view_normal_face_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ShowNormalFace", i);
 	}
+	if (panel_about != nullptr) {
+		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
+		panel_config->shortcut->SetShortcutKeys(panel_config_codes[0], panel_config_codes[1], panel_config_codes[2]);
+		panel_console->shortcut->SetShortcutKeys(panel_console_codes[0], panel_console_codes[1], panel_console_codes[2]);
+		panel_render->shortcut->SetShortcutKeys(panel_render_codes[0], panel_render_codes[1], panel_render_codes[2]);
+		panel_hierarchy->shortcut->SetShortcutKeys(panel_hierarchy_codes[0], panel_hierarchy_codes[1], panel_hierarchy_codes[2]);
+		panel_create_object->shortcut->SetShortcutKeys(panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
+		panel_inspector->shortcut->SetShortcutKeys(panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
+		panel_scene->shortcut->SetShortcutKeys(panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
+		panel_layout->shortcut->SetShortcutKeys(panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
 
+		shortcut_demo->SetShortcutKeys(shortcut_demo_codes[0], shortcut_demo_codes[1], shortcut_demo_codes[2]);
+		shortcut_report_bug->SetShortcutKeys(shortcut_report_bug_codes[0], shortcut_report_bug_codes[1], shortcut_report_bug_codes[2]);
+		shortcut_view_mesh->SetShortcutKeys(shortcut_view_mesh_codes[0], shortcut_view_mesh_codes[1], shortcut_view_mesh_codes[2]);
+		shortcut_wireframe->SetShortcutKeys(shortcut_wireframe_codes[0], shortcut_wireframe_codes[1], shortcut_wireframe_codes[2]);
+		shortcut_view_grid->SetShortcutKeys(shortcut_view_grid_codes[0], shortcut_view_grid_codes[1], shortcut_view_grid_codes[2]);
+		shortcut_view_normal_vertex->SetShortcutKeys(shortcut_view_normal_vertex_codes[0], shortcut_view_normal_vertex_codes[1], shortcut_view_normal_vertex_codes[2]);
+		shortcut_view_normal_face->SetShortcutKeys(shortcut_view_normal_face_codes[0], shortcut_view_normal_face_codes[1], shortcut_view_normal_face_codes[2]);
+
+		// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
+		App->shortcut_manager->OrderShortCuts();
+	}
 }
 
 void ModuleUI::SaveConfig(JSONfilepack*& config)
