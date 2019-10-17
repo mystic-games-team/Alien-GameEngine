@@ -1,8 +1,8 @@
 {
     "Layouts": {
-        "Number": 3,
+        "Number": 2,
         "Layout1": {
-            "Number": 2,
+            "Number": 1,
             "Active": false,
             "Name": "Default",
             "Path": "Configuration\/Layouts\/Default2.ini",
@@ -18,21 +18,6 @@
         },
         "Layout2": {
             "Number": 2,
-            "Active": false,
-            "Name": "Victor's",
-            "Path": "Configuration\/Layouts\/Victor's Layout2.ini",
-            "About Alien Engine": false,
-            "Configuration": true,
-            "Console": true,
-            "Render Options": false,
-            "Panel Hierarchy": false,
-            "Create Object": false,
-            "Inspector": true,
-            "Scene": false,
-            "Layout Editor": false
-        },
-        "Layout3": {
-            "Number": 3,
             "Active": true,
             "Name": "Oriol's Layout",
             "Path": "Configuration\/Layouts\/Oriol's Layout3.ini",

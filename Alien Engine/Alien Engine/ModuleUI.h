@@ -56,14 +56,14 @@ public:
 	void ChangeEnableDemo();
 	void DeleteLayout(Layout* layout); // delete x layout
 	void SaveLayout(Layout* layout, bool is_new = true); // save an x new layout
-	
+	void LoadActiveLayout(); // charge the active layout
 private:
 	void InitPanels();
 	void UpdatePanels();
 	Panel*& GetPanelByName(const std::string& panel_name);
 	void InitShortCuts();
 
-	void LoadActiveLayout(); // charge the active layout
+
 	void LoadLayouts(); // read all layouts with json
 	void SaveAllLayouts(); // save all layout info again to json
 	void SaveLayoutsActive(); // when closing, save which layout was active

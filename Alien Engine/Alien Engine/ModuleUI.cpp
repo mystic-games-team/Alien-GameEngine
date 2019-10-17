@@ -179,7 +179,7 @@ void ModuleUI::SaveAllLayouts()
 	for (; item != layouts.end(); ++item) {
 		if (*item != nullptr) {
 			std::string json_path("Layouts.Layout" + std::to_string((item - layouts.begin()) + 1));
-			json_layout->SetNumber(json_path + std::string(".Number"), (*item)->number);
+			json_layout->SetNumber(json_path + std::string(".Number"), (item - layouts.begin()) + 1);
 			json_layout->SetBoolean(json_path + std::string(".Active"), (*item)->active);
 			json_layout->SetString(json_path + std::string(".Name"), (*item)->name);
 			json_layout->SetString(json_path + std::string(".Path"), (*item)->path);
@@ -269,10 +269,6 @@ void ModuleUI::Draw() {
 	MainMenuBar();
 	BackgroundDockspace();
 	UpdatePanels();
-
-	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-		App->objects->DeleteAllObjects();
-	}
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

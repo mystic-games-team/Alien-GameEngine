@@ -57,10 +57,16 @@ void PanelLayout::PanelLayoutEditor()
 
 				ImGui::PushID(item - App->ui->layouts.begin());
 				if (ImGui::Button("Remove Layout")) {
-					App->ui->DeleteLayout(*item);
 					ImGui::PopID();
 					ImGui::EndChild();
 					ImGui::EndPopup();
+					if ((*item) == App->ui->active_layout) {
+						App->ui->ResetImGui();
+						App->ui->DeleteLayout(*item);
+						App->ui->LoadActiveLayout();
+						ImGui::NewFrame();
+					}
+					
 					return;
 				}
 				ImGui::PopID();
