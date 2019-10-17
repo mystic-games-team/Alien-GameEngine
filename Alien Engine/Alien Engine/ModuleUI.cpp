@@ -167,8 +167,8 @@ void ModuleUI::LoadLayouts()
 void ModuleUI::SaveAllLayouts()
 {
 	JSONfilepack* json_layout = App->GetJSONLayout();
+	App->DeleteJSONfile(json_layout); 
 	App->file_system->Remove("Configuration/LayoutsInfo.json");
-	delete json_layout;
 	json_layout = App->CreateJSONFile("Configuration/LayoutsInfo.json");
 	
 	json_layout->StartSave();
@@ -469,9 +469,18 @@ void ModuleUI::ChangeEnableDemo()
 
 void ModuleUI::DeleteLayout(Layout* layout)
 {
+
+	if (layout == active_layout) {
+		layout->active = false;
+		active_layout = layouts.front();
+		active_layout->active = true;
+	}
 	std::vector<Layout*>::iterator item = layouts.begin();
 	while (item != layouts.end()) {
 		if (*item != nullptr && *item == layout) {
+			App->file_system->Remove((*item)->path.data());
+			need_to_save_layouts = true;
+			number_of_layouts--;
 			delete* item;
 			*item = nullptr;
 			layouts.erase(item);
@@ -610,6 +619,5 @@ Layout::Layout(const char* name)
 
 Layout::~Layout()
 {
-	App->file_system->Remove(path.data());
-	App->ui->need_to_save_layouts = true;
+	
 }

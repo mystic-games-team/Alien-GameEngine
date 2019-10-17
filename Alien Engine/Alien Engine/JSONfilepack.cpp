@@ -7,7 +7,8 @@ JSONfilepack::JSONfilepack(const std::string& path, JSON_Object*& object, JSON_V
 
 JSONfilepack::~JSONfilepack()
 {
-	json_value_free(value);
+	if (value != nullptr)
+		json_value_free(value);
 }
 
 void JSONfilepack::StartSave()

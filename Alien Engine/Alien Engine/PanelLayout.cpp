@@ -55,6 +55,10 @@ void PanelLayout::PanelLayoutEditor()
 				ImGui::PushID(item - App->ui->layouts.begin());
 				if (ImGui::Button("Remove Layout")) {
 					App->ui->DeleteLayout(*item);
+					ImGui::PopID();
+					ImGui::EndChild();
+					ImGui::EndPopup();
+					return;
 				}
 				ImGui::PopID();
 			}
@@ -84,6 +88,7 @@ void PanelLayout::PanelSaveNewLayout()
 		ImGui::NewLine();
 		ImGui::SameLine(80);
 		if (ImGui::Button("Create")) {
+			ChangeEnable();
 			Layout* layout = new Layout(new_layout_name.data());
 			App->ui->layouts.push_back(layout);
 			layout->active = true;
@@ -91,7 +96,6 @@ void PanelLayout::PanelSaveNewLayout()
 			App->ui->active_layout = layout;
 			App->ui->SaveNewLayout(layout);
 			new_layout_name = "New Layout";
-			ChangeEnable();
 		}
 
 		ImGui::EndPopup();

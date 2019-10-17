@@ -80,6 +80,7 @@ public:
 
 	JSONfilepack* LoadJSONFile(const std::string& path);
 	JSONfilepack* CreateJSONFile(const std::string& path);
+	void DeleteJSONfile(JSONfilepack* json_pack);
 
 private:
 

@@ -243,6 +243,19 @@ JSONfilepack* Application::CreateJSONFile(const std::string& path)
 	}
 }
 
+void Application::DeleteJSONfile(JSONfilepack* json_pack)
+{
+	std::list<JSONfilepack*>::iterator item = json_files.begin();
+	for (; item != json_files.end(); ++item) {
+		if (*item != nullptr && *item == json_pack) {
+			delete* item;
+			*item = nullptr;
+			json_files.remove(*item);
+			break;
+		}
+	}
+}
+
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
