@@ -75,16 +75,13 @@ void PanelLayout::PanelLayoutEditor()
 void PanelLayout::PanelSaveNewLayout()
 {
 	ImGui::OpenPopup(panel_name.c_str());
-	ImGui::SetNextWindowSize({ 205, 85 });
+	ImGui::SetNextWindowSize({ 218, 85 });
 	if (ImGui::BeginPopupModal(panel_name.c_str(), &enabled, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
-		ImGui::Text("Layout Name");
-		ImGui::SameLine();
-
 		ImGui::SetNextItemWidth(120);
 		static char name[20];
 		memcpy(name, new_layout_name.data(), 20);
-		if (ImGui::InputText("##Layout Name", name, 20, ImGuiInputTextFlags_AutoSelectAll)) {
+		if (ImGui::InputText("Layout Name", name, 20, ImGuiInputTextFlags_AutoSelectAll)) {
 			new_layout_name = std::string(name);
 		}
 		ImGui::Spacing();
