@@ -8,6 +8,7 @@ enum class ComponentType {
 	TRANSFORM,
 	MESH,
 	MATERIAL,
+	LIGHT,
 
 	UNKNOWN
 };

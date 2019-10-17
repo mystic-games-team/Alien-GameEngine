@@ -5,7 +5,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
-
+#include "ComponentLight.h"
 
 GameObject::GameObject()
 {
@@ -67,6 +67,7 @@ void GameObject::Draw()
 {
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
 
 	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled()) 
 	{
@@ -87,6 +88,11 @@ void GameObject::Draw()
 			mesh->DrawVertexNormals();
 		if (mesh->view_face_normals)
 			mesh->DrawFaceNormals();
+	}
+
+	if (light != nullptr) 
+	{
+		light->LightLogic();
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();

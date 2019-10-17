@@ -8,6 +8,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
+#include "ComponentLight.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {
@@ -32,7 +33,12 @@ bool ModuleObjects::Start()
 	LOG("Starting Module Objects");
 	bool ret = true;
 
-
+	GameObject* light_test = new GameObject();
+	light_test->SetName("light");
+	light_test->parent=base_game_object;
+	base_game_object->AddChild(light_test);
+	light_test->AddComponent(new ComponentTransform(light_test, { 0,0,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
+	light_test->AddComponent(new ComponentLight(light_test));
 
 	return ret;
 }

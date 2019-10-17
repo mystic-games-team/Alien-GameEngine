@@ -108,9 +108,6 @@
     <ClInclude Include="Color.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="glmath.h">
       <Filter>Tools</Filter>
     </ClInclude>
@@ -429,6 +426,9 @@
     <ClInclude Include="PanelLayout.h">
       <Filter>Panels</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentLight.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -474,9 +474,6 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="glmath.cpp">
@@ -658,6 +655,9 @@
     </ClCompile>
     <ClCompile Include="PanelLayout.cpp">
       <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentLight.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

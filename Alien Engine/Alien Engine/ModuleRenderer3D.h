@@ -2,7 +2,6 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
-#include "Light.h"
 #include "glew/include/glew.h"
 #include "ModuleImporter.h"
 
@@ -33,7 +32,6 @@ public:
 	uint render_texture = 0;
 	uint depthrenderbuffer = 0;
 	uint stencil_buffer = 0;
-	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
