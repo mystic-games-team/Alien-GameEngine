@@ -141,7 +141,7 @@ void PanelHierarchy::RightClickMenu()
 
 			if (ImGui::MenuItem("Create Empty Child"))
 			{
-
+				App->objects->CreateEmptyGameObject(object_menu);
 			}
 			if (ImGui::MenuItem("Destroy"))
 			{
@@ -151,7 +151,7 @@ void PanelHierarchy::RightClickMenu()
 		}
 		if (ImGui::MenuItem("Crete Empty GameObject"))
 		{
-
+			App->objects->CreateEmptyGameObject(nullptr);
 		}
 		// We should put create cube, sphere bla bla...
 		ImGui::EndPopup();

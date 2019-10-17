@@ -154,6 +154,24 @@ void ModuleObjects::DeselectObject()
 	game_object_selected = nullptr;
 }
 
+void ModuleObjects::CreateEmptyGameObject(GameObject* parent)
+{
+	GameObject* object = new GameObject();
+
+	if (parent != nullptr) {
+		object->parent = parent;
+		parent->AddChild(object);
+	}
+	else {
+		object->parent = base_game_object;
+		base_game_object->AddChild(object);
+	}
+
+	object->AddComponent(new ComponentTransform(object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
+	object->SetName("Empty GameObject");
+	SetNewSelectedObject(object);
+}
+
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 
 {
 	wireframe_mode = config->GetBoolean("Configuration.Renderer.Wireframe");

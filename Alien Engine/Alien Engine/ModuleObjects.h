@@ -49,6 +49,9 @@ public:
 	GameObject* GetSelectedObject();
 	void DeselectObject();
 
+	// if parent is nullptr, parent will be the invisible game object
+	void CreateEmptyGameObject(GameObject* parent);
+
 public:
 
 	GameObject* base_game_object = nullptr;
