@@ -150,8 +150,10 @@ void ModuleUI::LoadLayouts()
 		layout->path = json_layout->GetString(json_path + std::string(".Path"));
 		layout->active = json_layout->GetBoolean(json_path + std::string(".Active"));
 
-		if (layout->active)
+		if (layout->active && active_layout == nullptr)
 			active_layout = layout;
+		else if (layout->active)
+			layout->active = false;
 
 		std::vector<Panel*>::iterator panel = panels.begin();
 		for (; panel != panels.end(); ++panel) {
