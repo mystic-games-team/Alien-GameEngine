@@ -326,6 +326,9 @@ void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
 {
+	par_shapes_unweld(shape, true);
+	par_shapes_compute_normals(shape);
+
 	mesh->num_vertex = shape->npoints;
 	mesh->num_index = shape->ntriangles * 3;
 
@@ -335,6 +338,7 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 	memcpy(mesh->vertex, shape->points, sizeof(float) * mesh->num_vertex * 3);
 	memcpy(mesh->index, shape->triangles, sizeof(PAR_SHAPES_T) * mesh->num_index);
 
+	
 	if (shape->tcoords != nullptr) {
 		mesh->uv_cords = new float[mesh->num_vertex * 3];
 		memcpy(mesh->uv_cords, shape->tcoords, sizeof(float) * mesh->num_vertex * 3);
