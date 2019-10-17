@@ -153,7 +153,6 @@ void PanelHierarchy::RightClickMenu()
 		{
 
 		}
-		// We should put create cube, sphere bla bla...
 		ImGui::EndPopup();
 	}
 	else if (in_menu) {
