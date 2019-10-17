@@ -15,6 +15,7 @@ enum class PrimitiveType
 	OCTAHEDRON,
 	TORUS,
 	ICOSAHEDRON,
+	KLEIN_BOTTLE,
 
 	UNKONWN
 };

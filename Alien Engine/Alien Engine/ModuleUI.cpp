@@ -328,6 +328,10 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("Create"))
 	{
+		if (ImGui::MenuItem("Crete Empty GameObject"))
+		{
+			App->objects->CreateEmptyGameObject(nullptr);
+		}
 		if (ImGui::MenuItem("Cube"))
 		{
 			App->objects->CreateBasePrimitive(PrimitiveType::CUBE);
@@ -339,6 +343,10 @@ void ModuleUI::MainMenuBar()
 		if (ImGui::MenuItem("Rock"))
 		{
 			App->objects->CreateBasePrimitive(PrimitiveType::ROCK);
+		}
+		if (ImGui::MenuItem("Torus"))
+		{
+			App->objects->CreateBasePrimitive(PrimitiveType::TORUS);
 		}
 		if (ImGui::BeginMenu("Other"))
 		{
@@ -354,9 +362,9 @@ void ModuleUI::MainMenuBar()
 			{
 				App->objects->CreateBasePrimitive(PrimitiveType::ICOSAHEDRON);
 			}
-			if (ImGui::MenuItem("Torus"))
+			if (ImGui::MenuItem("Klein Bottle"))
 			{
-				App->objects->CreateBasePrimitive(PrimitiveType::TORUS);
+				App->objects->CreateBasePrimitive(PrimitiveType::KLEIN_BOTTLE);
 			}
 			ImGui::EndMenu();
 		}

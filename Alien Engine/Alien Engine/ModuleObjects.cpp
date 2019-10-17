@@ -346,6 +346,10 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 		par_mesh = par_shapes_create_torus(3, 10, 0.5F);
 		object->SetName("Torus");
 		break;
+	case PrimitiveType::KLEIN_BOTTLE:
+		par_mesh = par_shapes_create_klein_bottle(10, 10);
+		object->SetName("Klein Bottle");
+		break;
 	default:
 		break;
 	}

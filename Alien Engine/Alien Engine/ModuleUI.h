@@ -84,7 +84,7 @@ private:
 
 	PanelAbout* panel_about = nullptr;
 	PanelConsole* panel_console = nullptr;
-	PanelCreateObject* panel_create_object = nullptr;
+	
 	PanelRender* panel_render = nullptr;
 	PanelHierarchy* panel_hierarchy = nullptr;
 	PanelInspector* panel_inspector = nullptr;
@@ -99,8 +99,6 @@ private:
 	ShortCut* shortcut_view_grid = nullptr;
 	ShortCut* shortcut_view_normal_vertex = nullptr;
 	ShortCut* shortcut_view_normal_face = nullptr;
-
-
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_layout_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -119,14 +117,13 @@ private:
 	SDL_Scancode shortcut_view_normal_vertex_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_view_normal_face_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 
-	
-	
-
 public:
+
 	PanelConfig* panel_config = nullptr;
 	uint number_of_layouts = 0;
 	std::vector<Layout*> layouts;
 	Layout* active_layout = nullptr;
 	bool need_to_save_layouts = false;
+	PanelCreateObject* panel_create_object = nullptr;
 };
 
