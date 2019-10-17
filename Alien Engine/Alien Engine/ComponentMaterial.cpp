@@ -17,13 +17,15 @@ ComponentMaterial::~ComponentMaterial()
 
 void ComponentMaterial::BindTexture()
 {
+
 	if (texture != nullptr && texture->id > 0) {
 		// enable textures
 		glEnable(GL_TEXTURE_2D);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 	}
-	glColor3f(color.r, color.g, color.b);
+	glColor4f(color.r, color.g, color.b, color.a);
+	
 }
 
 void ComponentMaterial::DrawInspector()
@@ -38,6 +40,7 @@ void ComponentMaterial::DrawInspector()
 
 		ImGui::Spacing();
 		ImGui::ColorEdit3("Material Color", &color, ImGuiColorEditFlags_Float);
+		ImGui::SliderFloat("Alpha", &color.a, 0.0F, 1.0F);
 		ImGui::Spacing();
 
 		ImGui::Separator();
