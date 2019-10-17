@@ -43,6 +43,9 @@ void PanelLayout::PanelLayoutEditor()
 		for (; item != App->ui->layouts.end(); ++item) {
 			if (*item != nullptr) {
 				
+				if ((*item)->name == "Default")
+					continue;
+
 				ImGui::Text("");
 				ImGui::SameLine(5);
 				ImGui::SetNextItemWidth(120);

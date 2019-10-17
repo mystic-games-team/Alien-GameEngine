@@ -1,6 +1,6 @@
 {
     "Layouts": {
-        "Number": 2,
+        "Number": 3,
         "Layout1": {
             "Number": 1,
             "Active": false,
@@ -25,6 +25,21 @@
             "Configuration": true,
             "Console": true,
             "Render Options": true,
+            "Panel Hierarchy": true,
+            "Create Object": false,
+            "Inspector": true,
+            "Scene": true,
+            "Layout Editor": false
+        },
+        "Layout3": {
+            "Number": 3,
+            "Active": false,
+            "Name": "Victor's Layout",
+            "Path": "Configuration\/Layouts\/Victor's Layout3.ini",
+            "About Alien Engine": false,
+            "Configuration": false,
+            "Console": true,
+            "Render Options": false,
             "Panel Hierarchy": true,
             "Create Object": false,
             "Inspector": true,
