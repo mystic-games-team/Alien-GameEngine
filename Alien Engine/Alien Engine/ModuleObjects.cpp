@@ -40,6 +40,11 @@ bool ModuleObjects::Start()
 update_status ModuleObjects::PreUpdate(float dt)
 {
 
+	if (need_to_delete_objects) {
+		need_to_delete_objects = false;
+		base_game_object->SearchToDelete();
+	}
+
 	return UPDATE_CONTINUE;
 }
 

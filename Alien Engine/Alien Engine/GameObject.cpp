@@ -223,6 +223,12 @@ bool GameObject::HasChildren()
 	return !children.empty();
 }
 
+void GameObject::ToDelete()
+{
+	to_delete = true;
+	App->objects->need_to_delete_objects = true;
+}
+
 void GameObject::SayChildrenParentIsEnabled(const bool& enabled)
 {
 	std::vector<GameObject*>::iterator item = children.begin();
@@ -259,6 +265,23 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 		if (*item != nullptr) {
 			(*item)->parent_selected = selected;
 			(*item)->SayChildrenParentIsSelected(selected);
+		}
+	}
+}
+
+void GameObject::SearchToDelete()
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	while (item != children.end()) {
+
+		if ((*item)->to_delete) {
+			delete* item;
+			*item = nullptr;
+			item = children.erase(item);
+		}
+		else {
+			(*item)->SearchToDelete();
+			++item;
 		}
 	}
 }

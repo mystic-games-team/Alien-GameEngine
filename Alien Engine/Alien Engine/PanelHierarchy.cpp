@@ -121,7 +121,7 @@ void PanelHierarchy::RightClickMenu()
 		if (object_menu != nullptr) {
 			if (ImGui::MenuItem("Move Up"))
 			{
-
+				
 			}
 
 			if (ImGui::MenuItem("Move Down"))
@@ -131,7 +131,7 @@ void PanelHierarchy::RightClickMenu()
 
 			if (ImGui::MenuItem("Destroy"))
 			{
-
+				object_menu->ToDelete();
 			}
 		}
 		else {

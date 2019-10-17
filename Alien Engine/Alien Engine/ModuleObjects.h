@@ -77,6 +77,8 @@ public:
 	Color parent_outline_color{ 1,1,1 };
 	Color no_child_outline_color{ 1,1,1 };
 
+	bool need_to_delete_objects = false;
+
 private:
 
 	GameObject* game_object_selected = nullptr;

@@ -40,8 +40,8 @@ public:
 	void ChangeFaceNormalsView(const bool& wireframe);
 
 	bool HasChildren();
-	
-		
+	void ToDelete();
+	void SearchToDelete();
 private:
 
 	void SayChildrenParentIsSelected(const bool& selected);
@@ -57,6 +57,7 @@ public:
 
 private:
 
+	bool to_delete = false;
 	bool parent_selected = false;
 	bool selected = false;
 	bool parent_enabled = true;
