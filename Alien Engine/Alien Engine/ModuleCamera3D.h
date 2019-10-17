@@ -21,7 +21,6 @@ public:
 	void Rotation();
 	void Focus();
 	void Zoom();
-	void Scaling(GameObject* scale_over);
 
 	float* GetViewMatrix();
 

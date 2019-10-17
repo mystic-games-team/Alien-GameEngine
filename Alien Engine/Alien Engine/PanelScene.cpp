@@ -15,8 +15,12 @@ PanelScene::~PanelScene()
 
 void PanelScene::PanelLogic()
 {
-	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_NoScrollWithMouse);
-
+	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
+		ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove);
+	}
+	else
+		ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	
 	App->camera->is_scene_hovered = ImGui::IsWindowHovered();
 	App->camera->is_scene_focused = ImGui::IsWindowFocused();
 

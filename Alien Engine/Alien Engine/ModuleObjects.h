@@ -15,6 +15,7 @@ enum class PrimitiveType
 	OCTAHEDRON,
 	TORUS,
 	ICOSAHEDRON,
+	KLEIN_BOTTLE,
 
 	UNKONWN
 };
@@ -31,20 +32,26 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+
+	// config
 	void LoadConfig(JSONfilepack*& config);
 	void SaveConfig(JSONfilepack*& config);
 
+	// primitives
 	void CreateBasePrimitive(PrimitiveType type);
 
+	// poly options
 	void ChangeWireframeMode();
 	void ChangeViewMeshMode();
+	void ChangeEnableNormalVertex();
+	void ChangeEnableNormalFace();
+	
+	// enable/disable grid
+	void ChangeEnableGrid();
 
 	void DeleteAllObjects();
 
-	void ChangeEnableGrid();
-	void ChangeEnableNormalVertex();
-	void ChangeEnableNormalFace();
-
+	// select/disselect objects
 	void SetNewSelectedObject(GameObject* selected);
 	GameObject* GetSelectedObject();
 	void DeselectObject();
@@ -52,37 +59,46 @@ public:
 	// if parent is nullptr, parent will be the invisible game object
 	void CreateEmptyGameObject(GameObject* parent);
 
+	// right click menu, move
 	void MoveDown(GameObject* object, bool bottom);
 	void MoveUp(GameObject* object, bool top);
 
 public:
 
+	// root
 	GameObject* base_game_object = nullptr;
 
+	// wireframe
 	bool wireframe_mode = false;
+
+	// mesh
 	bool view_mesh_mode = true;
-	uint vertex_normal_length = 1;
-	uint face_normal_length = 1;
-	bool draw_vertex_normals = false;
-	bool draw_face_normals = false;
-
-	Color mesh_color{ 1,1,1,255 };
 	int mesh_line_width = 1;
+	Color mesh_color{ 1,1,1,255 };
 
-	bool allow_grid = true;
-
+	// vertex normals
+	bool draw_vertex_normals = false;
+	uint vertex_normal_length = 1;
 	Color vertex_n_color{ 0,1,1, };
-	Color face_n_color{ 1,0,1, };
-
-	int face_n_width = 1;
 	int vertex_n_width = 1;
 
+	// face normals
+	bool draw_face_normals = false;
+	uint face_normal_length = 1;
+	Color face_n_color{ 1,0,1, };
+	int face_n_width = 1;
+
+	// grid
+	bool allow_grid = true;
+
+	// outline
 	bool outline = false;
 	uint parent_line_width = 1;
 	uint no_child_line_width = 1;
 	Color parent_outline_color{ 1,1,1 };
 	Color no_child_outline_color{ 1,1,1 };
 
+	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;
 
 private:

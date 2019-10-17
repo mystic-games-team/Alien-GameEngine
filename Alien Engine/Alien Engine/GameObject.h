@@ -16,34 +16,45 @@ public:
 	void Disable();
 	bool IsEnabled();
 
+	// here we call Component Mesh, Material & light
 	void Draw();
 
+	// components
 	void AddComponent(Component* component);
 	Component* GetComponent(const ComponentType& type);
-	void AddChild(GameObject* child);
 
+	// children
+	void AddChild(GameObject* child);
+	bool HasChildren();
+
+	// GameObject name
 	void SetName(const char* name);
 	const char* GetName();
 
+	// selected object
 	bool IsSelected();
 	bool IsParentSelected();
 	void ChangeSelected(const bool& select);
 
+	// enabling
 	void SayChildrenParentIsEnabled(const bool& enabled);
 	bool IsParentEnabled();
 
+	// flip poly if scale negative
 	void ScaleNegative(const bool& is_negative);
 
+	// render poly options
 	void ChangeWireframe(const bool& wireframe);
 	void ChangeMeshView(const bool& wireframe);
 	void ChangeVertexNormalsView(const bool& wireframe);
 	void ChangeFaceNormalsView(const bool& wireframe);
 
-	bool HasChildren();
+	// deleting 
 	void ToDelete();
 	void SearchToDelete();
 private:
 
+	// parent selected
 	void SayChildrenParentIsSelected(const bool& selected);
 
 public:
@@ -52,8 +63,6 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 	bool enabled = true;
-
-	float3 size{ 0,0,0 };
 
 private:
 

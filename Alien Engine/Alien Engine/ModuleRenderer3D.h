@@ -28,17 +28,26 @@ public:
 
 
 public:
+
+	// buffers to draw scene
 	uint frame_buffer = 0;
 	uint render_texture = 0;
 	uint depthrenderbuffer = 0;
 	uint stencil_buffer = 0;
+
+	// scene texture
+	Texture* tex = nullptr;
+
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
-	Texture* tex = nullptr;
+	
 public:
 
+	// background
 	Color background_color{ 0.f, 0.f, 0.f, 1.f };
+
+	// grid
 	int length_grid = 20;
 	Color grid_color{ 1,1,1 };
 	float grid_spacing = 1.f;

@@ -26,7 +26,6 @@ public:
 
 	const ComponentType& GetType() const;
 
-
 public:
 
 	GameObject* game_object_attached = nullptr;

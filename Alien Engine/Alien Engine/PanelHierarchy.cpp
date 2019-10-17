@@ -1,6 +1,7 @@
 #include "PanelHierarchy.h"
 #include "ModuleObjects.h"
 #include "GameObject.h"
+#include "PanelCreateObject.h"
 
 PanelHierarchy::PanelHierarchy(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -154,7 +155,46 @@ void PanelHierarchy::RightClickMenu()
 		{
 			App->objects->CreateEmptyGameObject(nullptr);
 		}
-		// We should create cube, sphere bla bla...
+		if (ImGui::MenuItem("Cube"))
+		{
+			App->objects->CreateBasePrimitive(PrimitiveType::CUBE);
+		}
+		if (ImGui::MenuItem("Sphere"))
+		{
+			App->objects->CreateBasePrimitive(PrimitiveType::SPHERE_ALIEN);
+		}
+		if (ImGui::MenuItem("Rock"))
+		{
+			App->objects->CreateBasePrimitive(PrimitiveType::ROCK);
+		}
+		if (ImGui::MenuItem("Torus"))
+		{
+			App->objects->CreateBasePrimitive(PrimitiveType::TORUS);
+		}
+		if (ImGui::BeginMenu("Other"))
+		{
+			if (ImGui::MenuItem("Dodecahedron"))
+			{
+				App->objects->CreateBasePrimitive(PrimitiveType::DODECAHEDRON);
+			}
+			if (ImGui::MenuItem("Octahedron"))
+			{
+				App->objects->CreateBasePrimitive(PrimitiveType::OCTAHEDRON);
+			}
+			if (ImGui::MenuItem("Icosahedron"))
+			{
+				App->objects->CreateBasePrimitive(PrimitiveType::ICOSAHEDRON);
+			}
+			if (ImGui::MenuItem("Klein Bottle"))
+			{
+				App->objects->CreateBasePrimitive(PrimitiveType::KLEIN_BOTTLE);
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::MenuItem("Create..."))
+		{
+			App->ui->panel_create_object->ChangeEnable();
+		}
 		ImGui::EndPopup();
 	}
 	else if (in_menu) {

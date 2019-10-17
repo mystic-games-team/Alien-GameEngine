@@ -45,53 +45,71 @@ public:
 	bool Start();
 	update_status PreUpdate(float dt);
 	bool CleanUp();
+
+	// config
 	void LoadConfig(JSONfilepack*& config);
 	void SaveConfig(JSONfilepack*& config);
 
-	void Draw();
+	// draw UI
 	void MainMenuBar();
+	void Draw();
+
+	// reset imgui
 	void ResetImGui();
+
+	// callers
 	void ReportBug();
-	void ChangeStyle(const int& style_number);
 	void ChangeEnableDemo();
+
+	// style
+	void ChangeStyle(const int& style_number);
+
+	// layout settings
 	void DeleteLayout(Layout* layout); // delete x layout
-	void SaveLayout(Layout* layout, bool is_new = true); // save an x new layout
+	void SaveLayout(Layout* layout, bool is_new = true); // save x layout
 	void LoadActiveLayout(); // charge the active layout
+
 private:
+
+	// panels
 	void InitPanels();
 	void UpdatePanels();
 	Panel*& GetPanelByName(const std::string& panel_name);
+
+	// shortcuts
 	void InitShortCuts();
 
-
+	// more layouts 
 	void LoadLayouts(); // read all layouts with json
 	void SaveAllLayouts(); // save all layout info again to json
 	void SaveLayoutsActive(); // when closing, save which layout was active
 
 public:
+
+	// framerate
 	void FramerateRegister(float frames, float ms);
 
+	// big window to dock everything
 	void BackgroundDockspace();
 
 private:
+
+	// demo
 	bool show_demo_wndow = false;
 
 	
-	
 	// Panels
-
 	std::vector<Panel*> panels;
 
 	PanelAbout* panel_about = nullptr;
 	PanelConsole* panel_console = nullptr;
-	PanelCreateObject* panel_create_object = nullptr;
 	PanelRender* panel_render = nullptr;
 	PanelHierarchy* panel_hierarchy = nullptr;
 	PanelInspector* panel_inspector = nullptr;
 	PanelScene* panel_scene = nullptr;
 	PanelLayout* panel_layout = nullptr;
-	// ShortCuts
 
+	// ShortCuts
 	ShortCut* shortcut_demo = nullptr;
 	ShortCut* shortcut_report_bug = nullptr;
 	ShortCut* shortcut_wireframe = nullptr;
@@ -99,8 +117,6 @@ private:
 	ShortCut* shortcut_view_grid = nullptr;
 	ShortCut* shortcut_view_normal_vertex = nullptr;
 	ShortCut* shortcut_view_normal_face = nullptr;
-
-
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_layout_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -119,14 +135,17 @@ private:
 	SDL_Scancode shortcut_view_normal_vertex_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_view_normal_face_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 
-	
-	
-
 public:
+
+	// public panels
 	PanelConfig* panel_config = nullptr;
-	uint number_of_layouts = 0;
+	PanelCreateObject* panel_create_object = nullptr;
+
+	// layouts
 	std::vector<Layout*> layouts;
 	Layout* active_layout = nullptr;
 	bool need_to_save_layouts = false;
+	uint number_of_layouts = 0;
+	
 };
 
