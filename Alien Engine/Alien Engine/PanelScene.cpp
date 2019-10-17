@@ -15,13 +15,41 @@ PanelScene::~PanelScene()
 
 void PanelScene::PanelLogic()
 {
-	ImGui::SetNextWindowSize({ 800,600 });
-	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoScrollbar|ImGuiDockNodeFlags_NoResize|ImGuiWindowFlags_NoResize| ImGuiWindowFlags_NoScrollWithMouse);
+	ImGui::SetNextWindowSize({ 960,540 });
+	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_NoScrollWithMouse);
+
 	App->camera->is_scene_hovered = ImGui::IsWindowHovered();
 	App->camera->is_scene_focused = ImGui::IsWindowFocused();
-	ImGui::Spacing();
-	ImGui::SameLine(ImGui::GetWindowWidth() - 800);
-	App->camera->center_offset_w = ImGui::GetWindowWidth() * 0.5f;
-	ImGui::Image((ImTextureID)App->renderer3D->tex->id, { 800,600 }, { 0,1 }, { 1,0 });
+
+	if (height > ImGui::GetWindowHeight())
+	{
+		height = ImGui::GetWindowHeight();
+		width = (height * 16) / 9;
+	}
+	else if ((width > ImGui::GetWindowWidth()) || (width > ImGui::GetWindowWidth() && height > ImGui::GetWindowHeight()))
+	{
+		width = ImGui::GetWindowWidth();
+		height = (width * 9) / 16;
+	}
+	else if((width < ImGui::GetWindowWidth() && height < ImGui::GetWindowHeight()))
+	{
+		if ((ImGui::GetWindowHeight()-lastHeight)!=0)
+		{
+			height = ImGui::GetWindowHeight();
+			width = (height * 16) / 9;
+		}
+		else
+		{
+			width = ImGui::GetWindowWidth();
+			height = (width * 9) / 16;
+		}
+	}
+
+	ImGui::SetCursorPosX((ImGui::GetWindowWidth() - width) * 0.5f);
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() - height) * 0.5f);
+	
+	ImGui::Image((ImTextureID)App->renderer3D->tex->id, { width,height }, { 0,1 }, { 1,0 });
+
+	lastHeight = ImGui::GetWindowHeight();
 	ImGui::End();
 }
