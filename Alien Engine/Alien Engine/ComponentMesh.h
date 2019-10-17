@@ -35,7 +35,7 @@ public:
 	float* center_point = nullptr;
 
 
-	bool view_mesh = true;
+	bool view_mesh = false;
 	bool wireframe = false;
 	bool view_vertex_normals = false;
 	bool view_face_normals = false;

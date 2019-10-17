@@ -145,9 +145,8 @@ void PanelConfig::PanelLogic()
 	}
 	if (ImGui::CollapsingHeader("Style")) {
 		ImGui::Spacing();
-		ImGui::Text("Select the style");
 		ImGui::Spacing();
-		if (ImGui::Combo("", &App->window->style, "Classic\0Dark\0Light\0"))
+		if (ImGui::Combo("Select Style", &App->window->style, "Classic\0Dark\0Light\0"))
 		{
 			switch (App->window->style)
 			{

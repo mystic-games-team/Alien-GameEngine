@@ -33,7 +33,6 @@ public:
 	uint frame_buffer = 0;
 	uint render_texture = 0;
 	uint depthrenderbuffer = 0;
-	uint stencil_buffer = 0;
 
 	// scene texture
 	Texture* tex = nullptr;

@@ -102,7 +102,7 @@
         },
         "Renderer": {
             "Wireframe": false,
-            "MeshView": true,
+            "MeshView": false,
             "VertexNormals": false,
             "FaceNormals": false,
             "MeshWidth": 1,
