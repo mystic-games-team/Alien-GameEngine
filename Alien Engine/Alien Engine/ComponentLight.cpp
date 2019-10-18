@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "imgui/imgui.h"
 #include "ComponentTransform.h"
+#include "Application.h"
 
 ComponentLight::ComponentLight(GameObject* attach) : Component(attach)
 {
@@ -11,6 +12,7 @@ ComponentLight::ComponentLight(GameObject* attach) : Component(attach)
 
 ComponentLight::~ComponentLight()
 {
+	glDisable(light_id);
 }
 
 void ComponentLight::LightLogic()
@@ -26,16 +28,13 @@ void ComponentLight::LightLogic()
 
 void ComponentLight::DrawInspector()
 {
-	if (not_destroy)
-	{
-		ImGui::PushID(this);
-		if (ImGui::Checkbox("##CmpActive", &enabled)) {
+	ImGui::PushID(this);
+	if (ImGui::Checkbox("##CmpActive", &enabled)) {
 			if (!enabled)
 				glDisable(light_id);
-		}
-		ImGui::PopID();
-		ImGui::SameLine();
 	}
+	ImGui::PopID();
+	ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader("Light Settings", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -46,6 +45,11 @@ void ComponentLight::DrawInspector()
 
 		ImGui::Spacing();
 		ImGui::Separator();
+	}
+
+	if (!not_destroy)
+	{
+		App->objects->need_to_delete_objects = true;
 	}
 }
 

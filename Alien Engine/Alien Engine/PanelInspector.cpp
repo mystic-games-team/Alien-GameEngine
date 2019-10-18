@@ -96,7 +96,8 @@ void PanelInspector::PanelLogic()
 			break;
 
 		}
-	}
 
+		component = 0;
+	}
 	ImGui::End();
 }

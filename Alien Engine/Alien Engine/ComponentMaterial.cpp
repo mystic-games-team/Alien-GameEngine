@@ -13,6 +13,7 @@ ComponentMaterial::ComponentMaterial(GameObject* attach) : Component(attach)
 
 ComponentMaterial::~ComponentMaterial()
 {
+	glDisable(GL_TEXTURE_2D);
 }
 
 void ComponentMaterial::BindTexture()
@@ -30,13 +31,11 @@ void ComponentMaterial::BindTexture()
 
 void ComponentMaterial::DrawInspector()
 {
-	if (not_destroy)
-	{
-		ImGui::PushID(this);
-		ImGui::Checkbox("##CmpActive", &enabled);
-		ImGui::PopID();
-		ImGui::SameLine();
-	}
+	ImGui::PushID(this);
+	ImGui::Checkbox("##CmpActive", &enabled);
+	ImGui::PopID();
+	ImGui::SameLine();
+
 	if (ImGui::CollapsingHeader("Material", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Spacing();
@@ -152,4 +151,10 @@ void ComponentMaterial::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 	}
+
+	if (!not_destroy)
+	{
+		App->objects->need_to_delete_objects = true;
+	}
+
 }

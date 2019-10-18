@@ -48,11 +48,6 @@ void GameObject::Draw()
 	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled()) 
 	{
 		material->BindTexture();
-		if (!material->not_destroy)
-		{
-			material->OnDisable();
-			DestroyComponent(material);
-		}
 	}
 
 	if (mesh != nullptr && mesh->IsEnabled()) 
@@ -69,23 +64,11 @@ void GameObject::Draw()
 			mesh->DrawVertexNormals();
 		if (mesh->view_face_normals)
 			mesh->DrawFaceNormals();
-
-		if (!mesh->not_destroy)
-		{
-			mesh->OnDisable();
-			DestroyComponent(mesh);
-		}
 	}
 
 	if (light != nullptr && light->IsEnabled()) 
 	{
 		light->LightLogic();
-
-		if (!light->not_destroy)
-		{
-			light->OnDisable();
-			DestroyComponent(light);
-		}
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();
@@ -101,34 +84,18 @@ void GameObject::AddComponent(Component* component)
 	bool exists = false;
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
-		if (*item != nullptr && (*item)->GetType() == component->GetType()) 
+		if (*item != nullptr && (*item)->GetType() == component->GetType())
 		{
 			exists = true;
 			break;
 		}
 	}
 
-	if (!exists) 
+	if (!exists)
 	{
 		components.push_back(component);
 	}
 }
-
-void GameObject::DestroyComponent(Component* component)
-{
-	std::vector<Component*>::iterator item = components.begin();
-	for (; item != components.end(); ++item) 
-	{
-		if ((*item) != nullptr && (*item) == component)
-		{
-			delete* item;
-			*item = nullptr;
-			item=components.erase(item);
-			break;
-		}
-	}
-}
-
 
 bool GameObject::CheckComponent(ComponentType component)
 {
@@ -351,6 +318,22 @@ void GameObject::SearchToDelete()
 			item = children.erase(item);
 		}
 		else {
+
+			std::vector<Component*>::iterator item_com = (*item)->components.begin();
+			while (item_com != (*item)->components.end())
+			{
+				if ((*item_com) != nullptr && (*item_com)->not_destroy != true)
+				{
+					delete* item_com;
+					*item_com = nullptr;
+					item_com = (*item)->components.erase(item_com);
+					
+				}
+				else
+				{
+					++item_com;
+				}
+			}
 			(*item)->SearchToDelete();
 			++item;
 		}

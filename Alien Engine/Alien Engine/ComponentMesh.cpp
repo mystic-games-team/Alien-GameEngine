@@ -201,13 +201,11 @@ void ComponentMesh::DrawFaceNormals()
 
 void ComponentMesh::DrawInspector()
 {
-	if (not_destroy)
-	{
-		ImGui::PushID(this);
-		ImGui::Checkbox("##CmpActive", &enabled);
-		ImGui::PopID();
-		ImGui::SameLine();
-	}
+
+	ImGui::PushID(this);
+	ImGui::Checkbox("##CmpActive", &enabled);
+	ImGui::PopID();
+	ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader("Mesh", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -240,5 +238,9 @@ void ComponentMesh::DrawInspector()
 		ImGui::Spacing();
 	}
 
+	if (!not_destroy)
+	{
+		App->objects->need_to_delete_objects = true;
+	}
 
 }
