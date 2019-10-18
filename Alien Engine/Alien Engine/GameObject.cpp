@@ -103,12 +103,11 @@ bool GameObject::CheckComponent(ComponentType component)
 
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
-		if (*item != nullptr && (*item)->GetType()==component)
+		if (*item != nullptr && (*item)->GetType() == component)
 		{
 			exists = true;
+			break;
 		}
-		else
-			exists = false;
 	}
 
 	return exists;
