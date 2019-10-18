@@ -152,9 +152,4 @@ void ComponentMaterial::DrawInspector()
 		ImGui::Separator();
 	}
 
-	if (!not_destroy)
-	{
-		App->objects->need_to_delete_objects = true;
-	}
-
 }

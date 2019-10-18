@@ -31,6 +31,10 @@ void PanelInspector::PanelLogic()
 			if (*item != nullptr)
 			{
 				(*item)->DrawInspector();
+				if (!(*item)->not_destroy) {
+					delete_panel = &(*item)->not_destroy;
+					*delete_panel = !(*delete_panel);
+				}
 			}
 		}
 	}
@@ -100,4 +104,27 @@ void PanelInspector::PanelLogic()
 		component = 0;
 	}
 	ImGui::End();
+
+	if (delete_panel != nullptr && *delete_panel) {
+		ImGui::OpenPopup("Do you want to delete it?");
+		ImGui::SetNextWindowSize({ 200,60 });
+		if (ImGui::BeginPopupModal("Do you want to delete it?", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::Spacing();
+			ImGui::NewLine();
+			ImGui::SameLine(40);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.5F,0,0,1 });
+			if (ImGui::Button("Delete")) {
+				*delete_panel = !(*delete_panel);
+				delete_panel = nullptr;
+				App->objects->need_to_delete_objects = true;
+			}
+			ImGui::PopStyleColor();
+			ImGui::SameLine(100);
+			if (ImGui::Button("Cancele")) {
+				delete_panel = nullptr;
+			}
+			ImGui::EndPopup();
+		}
+	}
 }

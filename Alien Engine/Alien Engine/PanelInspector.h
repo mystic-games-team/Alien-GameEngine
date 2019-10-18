@@ -13,4 +13,5 @@ public:
 private:
 
 	int component = 0;
+	bool* delete_panel = nullptr;
 };

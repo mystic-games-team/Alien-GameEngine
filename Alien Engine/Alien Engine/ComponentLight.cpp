@@ -46,11 +46,6 @@ void ComponentLight::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 	}
-
-	if (!not_destroy)
-	{
-		App->objects->need_to_delete_objects = true;
-	}
 }
 
 void ComponentLight::OnDisable()
