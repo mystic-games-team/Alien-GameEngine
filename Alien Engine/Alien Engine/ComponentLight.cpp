@@ -26,14 +26,18 @@ void ComponentLight::LightLogic()
 
 void ComponentLight::DrawInspector()
 {
-	ImGui::PushID(this);
-	if (ImGui::Checkbox("##CmpActive", &enabled)) {
-		if (!enabled)
-			glDisable(light_id);
+	if (not_destroy)
+	{
+		ImGui::PushID(this);
+		if (ImGui::Checkbox("##CmpActive", &enabled)) {
+			if (!enabled)
+				glDisable(light_id);
+		}
+		ImGui::PopID();
+		ImGui::SameLine();
 	}
-	ImGui::PopID();
-	ImGui::SameLine();
-	if (ImGui::CollapsingHeader("Light Settings", ImGuiTreeNodeFlags_DefaultOpen))
+
+	if (ImGui::CollapsingHeader("Light Settings", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Spacing();
 

@@ -14,6 +14,11 @@ bool Component::IsEnabled()
 	return enabled;
 }
 
+void Component::OnDisable()
+{
+	enabled = false;
+}
+
 const ComponentType& Component::GetType() const
 {
 	return type;

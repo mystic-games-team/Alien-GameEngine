@@ -30,11 +30,14 @@ void ComponentMaterial::BindTexture()
 
 void ComponentMaterial::DrawInspector()
 {
-	ImGui::PushID(this);
-	ImGui::Checkbox("##CmpActive", &enabled);
-	ImGui::PopID();
-	ImGui::SameLine();
-	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) 
+	if (not_destroy)
+	{
+		ImGui::PushID(this);
+		ImGui::Checkbox("##CmpActive", &enabled);
+		ImGui::PopID();
+		ImGui::SameLine();
+	}
+	if (ImGui::CollapsingHeader("Material", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Spacing();
 

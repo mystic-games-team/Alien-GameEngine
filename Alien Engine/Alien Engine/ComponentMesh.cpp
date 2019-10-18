@@ -201,11 +201,15 @@ void ComponentMesh::DrawFaceNormals()
 
 void ComponentMesh::DrawInspector()
 {
-	ImGui::PushID(this);
-	ImGui::Checkbox("##CmpActive", &enabled);
-	ImGui::PopID();
-	ImGui::SameLine();
-	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
+	if (not_destroy)
+	{
+		ImGui::PushID(this);
+		ImGui::Checkbox("##CmpActive", &enabled);
+		ImGui::PopID();
+		ImGui::SameLine();
+	}
+
+	if (ImGui::CollapsingHeader("Mesh", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Spacing();
 
