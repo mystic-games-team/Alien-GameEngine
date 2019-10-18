@@ -48,6 +48,7 @@ void PanelInspector::PanelLogic()
 
 		case 0:
 			LOG("Select a Component!");
+			break;
 
 		case 1:
 
