@@ -124,6 +124,7 @@ void GameObject::DestroyComponent(Component* component)
 			delete* item;
 			*item = nullptr;
 			item=components.erase(item);
+			break;
 		}
 	}
 }
