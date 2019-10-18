@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "ComponentTransform.h"
 #include "Application.h"
+#include "ComponentMaterial.h"
 
 ComponentMesh::ComponentMesh(GameObject* attach) : Component(attach)
 {
@@ -29,6 +30,11 @@ ComponentMesh::~ComponentMesh()
 	center_point_normal = nullptr;
 	normals = nullptr;
 	uv_cords = nullptr;
+
+	if (game_object_attached->CheckComponent(ComponentType::MATERIAL))
+	{
+		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
+	}
 }
 
 void ComponentMesh::DrawPolygon()
