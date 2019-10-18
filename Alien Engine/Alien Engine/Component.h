@@ -20,7 +20,7 @@ public:
 	virtual ~Component();
 
 	virtual void OnEnable() {}
-	virtual void OnDisable();
+	virtual void OnDisable() {}
 
 	virtual bool IsEnabled();
 	virtual void DrawInspector() {}
