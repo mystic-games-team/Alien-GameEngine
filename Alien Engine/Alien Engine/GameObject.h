@@ -22,6 +22,8 @@ public:
 
 	// components
 	void AddComponent(Component* component);
+	bool CheckComponent(ComponentType component);
+
 	Component* GetComponent(const ComponentType& type);
 
 	// children

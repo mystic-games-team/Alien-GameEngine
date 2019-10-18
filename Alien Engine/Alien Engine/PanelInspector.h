@@ -10,4 +10,7 @@ public:
 	virtual ~PanelInspector();
 	void PanelLogic();
 
+private:
+
+	int component = 0;
 };

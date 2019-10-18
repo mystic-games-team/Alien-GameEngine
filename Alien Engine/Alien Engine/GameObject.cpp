@@ -97,6 +97,23 @@ void GameObject::AddComponent(Component* component)
 	}
 }
 
+bool GameObject::CheckComponent(ComponentType component)
+{
+	bool exists = false;
+
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType()==component)
+		{
+			exists = true;
+		}
+		else
+			exists = false;
+	}
+
+	return exists;
+}
+
 void GameObject::AddChild(GameObject* child)
 {
 	children.push_back(child);
