@@ -4,10 +4,10 @@ Alien Engine is a Game Engine made by Víctor Segura Blanco and Oriol Capdevila 
 
 ## Github Links
 
-* Engine Repository: https://github.com/VictorSegura99/Alien-GameEngine
-* Engine Releases: https://github.com/VictorSegura99/Alien-GameEngine/releases
-* Víctor Segura Blanco: https://github.com/VictorSegura99
-* Oriol Capdevila Salinas: https://github.com/OriolCS2
+* [Alien Engine Repository](https://github.com/VictorSegura99/Alien-GameEngine)
+* [Alien Engine Releases](https://github.com/VictorSegura99/Alien-GameEngine/releases)
+* [Víctor Segura Blanco Github](https://github.com/VictorSegura99)
+* [Oriol Capdevila Salinas Github](https://github.com/OriolCS2)
 
 ## Controls
 
