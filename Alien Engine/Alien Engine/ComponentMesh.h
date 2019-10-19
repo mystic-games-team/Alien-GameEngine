@@ -15,6 +15,9 @@ public:
 	void DrawFaceNormals();
 	void DrawInspector();
 
+	void Reset();
+	void SetComponent(Component* component);
+
 public:
 
 	// buffers id

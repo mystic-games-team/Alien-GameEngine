@@ -157,3 +157,21 @@ void ComponentMaterial::DrawInspector()
 		RightClickMenu("Material");
 
 }
+
+void ComponentMaterial::Reset()
+{
+	color = { 1,1,1,1 };
+	texture = nullptr;
+}
+
+void ComponentMaterial::SetComponent(Component* component)
+{
+	if (component->GetType() == type) {
+
+		ComponentMaterial* material = (ComponentMaterial*)component;
+
+		texture = material->texture;
+		material_index = material->material_index;
+		color = material->color;
+	}
+}

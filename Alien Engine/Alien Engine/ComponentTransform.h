@@ -7,6 +7,7 @@ class ComponentTransform : public Component {
 	
 public:
 
+	ComponentTransform(GameObject* attach);
 	ComponentTransform(GameObject* attach, const float3& pos, const Quat& rot, const float3& scale);
 	virtual ~ComponentTransform();
 
@@ -27,6 +28,9 @@ public:
 
 	void SetScaleNegative(const bool& negative);
 	bool IsScaleNegative();
+
+	void Reset();
+	void SetComponent(Component* component);
 
 private:
 

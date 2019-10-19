@@ -67,6 +67,7 @@ public:
 
 	// root
 	GameObject* base_game_object = nullptr;
+	Component* component_in_copy = nullptr;
 
 	// wireframe
 	bool wireframe_mode = false;

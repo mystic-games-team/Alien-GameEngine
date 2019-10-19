@@ -31,7 +31,8 @@ ComponentMesh::~ComponentMesh()
 	normals = nullptr;
 	uv_cords = nullptr;
 
-	if (game_object_attached->CheckComponent(ComponentType::MATERIAL))
+
+	if (game_object_attached != nullptr && game_object_attached->CheckComponent(ComponentType::MATERIAL))
 	{
 		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
 	}
@@ -247,4 +248,97 @@ void ComponentMesh::DrawInspector()
 	}
 	else
 		RightClickMenu("Mesh");
+}
+
+void ComponentMesh::Reset()
+{
+	view_mesh = false;
+	wireframe = false;
+	view_vertex_normals = false;
+	view_face_normals = false;
+}
+
+void ComponentMesh::SetComponent(Component* component)
+{
+	if (component->GetType() == type) {
+
+		glDeleteBuffers(1, &id_index);
+		glDeleteBuffers(1, &id_normals);
+		glDeleteBuffers(1, &id_vertex);
+		glDeleteBuffers(1, &id_uv);
+
+		delete[] vertex;
+		delete[] index;
+		delete[] normals;
+		delete[] center_point;
+		delete[] center_point_normal;
+		delete[] uv_cords;
+
+		vertex = nullptr;
+		index = nullptr;
+		center_point = nullptr;
+		center_point_normal = nullptr;
+		normals = nullptr;
+		uv_cords = nullptr;
+
+		ComponentMesh* mesh = (ComponentMesh*)component;
+
+		num_index = mesh->num_index;
+		num_vertex = mesh->num_vertex;
+		num_faces = mesh->num_faces;
+		
+		if (mesh->index != nullptr) {
+			index = new uint[num_index];
+			memcpy(index, mesh->index, sizeof(uint) * num_index);
+		}
+		if (mesh->vertex != nullptr) {
+			vertex = new float[num_vertex * 3];
+			memcpy(vertex, mesh->vertex, sizeof(float) * num_vertex * 3);
+		}
+		if (mesh->normals != nullptr) {
+			normals = new float[num_vertex * 3];
+			center_point = new float[num_faces * 3];
+			center_point_normal = new float[num_faces * 3];
+			memcpy(normals, mesh->normals, sizeof(float) * num_vertex * 3);
+			memcpy(center_point, mesh->center_point, sizeof(float) * num_faces * 3);
+			memcpy(center_point_normal, mesh->center_point_normal, sizeof(float) * num_faces * 3);
+		}
+		if (mesh->uv_cords != nullptr) {
+			uv_cords = new float[num_vertex * 3];
+			memcpy(uv_cords, mesh->uv_cords, sizeof(float) * num_vertex * 3);
+		}
+
+
+		glGenBuffers(1, &id_vertex);
+		glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertex * 3,
+			&mesh->vertex[0], GL_STATIC_DRAW);
+
+		// index
+		glGenBuffers(1, &id_index);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_index,
+			&index[0], GL_STATIC_DRAW);
+
+		if (uv_cords != nullptr) {
+			// UV
+			glGenBuffers(1, &id_uv);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_uv);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_vertex * 3,
+				&uv_cords[0], GL_STATIC_DRAW);
+		}
+
+		if (normals != nullptr) {
+			// normals
+			glGenBuffers(1, &id_normals);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_normals);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_vertex * 3,
+				&normals[0], GL_STATIC_DRAW);
+		}
+
+		view_mesh = mesh->view_mesh;
+		wireframe = mesh->wireframe;
+		view_vertex_normals = mesh->view_vertex_normals;
+		view_face_normals = mesh->view_face_normals;
+	}
 }

@@ -58,3 +58,21 @@ void ComponentLight::OnDisable()
 {
 	glDisable(light_id);
 }
+
+void ComponentLight::Reset()
+{
+	ambient = { 1,1,1 };
+	diffuse = { 1,1,1 };
+}
+
+void ComponentLight::SetComponent(Component* component)
+{
+	if (component->GetType() == type) {
+
+		ComponentLight* light = (ComponentLight*)component;
+
+		light_id = light->light_id;
+		diffuse = light->diffuse;
+		ambient = light->ambient;
+	}
+}

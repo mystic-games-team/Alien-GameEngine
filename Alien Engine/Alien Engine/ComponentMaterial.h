@@ -12,6 +12,9 @@ public:
 	void BindTexture();
 	void DrawInspector();
 
+	void Reset();
+	void SetComponent(Component* component);
+
 public:
 
 	Texture* texture = nullptr;

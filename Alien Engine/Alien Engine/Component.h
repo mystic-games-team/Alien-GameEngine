@@ -5,7 +5,7 @@ class GameObject;
 typedef unsigned int uint;
 
 enum class ComponentType {
-	TRANSFORM,
+	TRANSFORM = 0,
 	MESH,
 	MATERIAL,
 	LIGHT,
@@ -24,6 +24,9 @@ public:
 
 	virtual bool IsEnabled();
 	virtual void DrawInspector() {}
+
+	virtual void Reset() {}
+	virtual void SetComponent(Component* component) {}
 
 	const ComponentType& GetType() const;
 

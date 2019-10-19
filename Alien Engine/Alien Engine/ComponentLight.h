@@ -13,9 +13,10 @@ public:
 	void DrawInspector();
 	void OnDisable();
 
+	void Reset();
+	void SetComponent(Component* component);
+
 private:
-	
-	bool light_active = true;
 
 	Color ambient{1,1,1};
 	Color diffuse{1,1,1};

@@ -2,6 +2,11 @@
 #include "GameObject.h"
 #include "imgui/imgui.h"
 
+ComponentTransform::ComponentTransform(GameObject* attach) : Component(attach)
+{
+	type = ComponentType::TRANSFORM;
+}
+
 ComponentTransform::ComponentTransform(GameObject* attach, const float3& pos, const Quat& rot, const float3& scale) : Component(attach)
 {
 	local_position = pos;
@@ -98,6 +103,11 @@ void ComponentTransform::SetLocalRotation(const float& x, const float& y, const 
 	local_rotation.z = z;
 	local_rotation.w = angle;
 
+	euler_rotation = local_rotation.ToEulerXYZ();
+	euler_rotation.x = RadToDeg(euler_rotation.x);
+	euler_rotation.y = RadToDeg(euler_rotation.y);
+	euler_rotation.z = RadToDeg(euler_rotation.z);
+
 	RecalculateTransform();
 }
 
@@ -119,6 +129,9 @@ const Quat& ComponentTransform::GetGlobalRotation() const
 void ComponentTransform::RecalculateTransform()
 {	
 	local_transformation = float4x4::FromTRS(local_position, local_rotation, local_scale);
+
+	if (game_object_attached == nullptr)
+		return;
 
 	if (game_object_attached->parent != nullptr) {
 		ComponentTransform* tr = (ComponentTransform*)game_object_attached->parent->GetComponent(ComponentType::TRANSFORM);
@@ -275,6 +288,38 @@ void ComponentTransform::SetScaleNegative(const bool& negative)
 bool ComponentTransform::IsScaleNegative()
 {
 	return is_scale_negative;
+}
+
+void ComponentTransform::Reset()
+{
+	local_scale = { 1,1,1 };
+	local_position = { 0,0,0 };
+	local_rotation = { 0,0,0,0 };
+	
+	euler_rotation = local_rotation.ToEulerXYZ();
+	euler_rotation.x = RadToDeg(euler_rotation.x);
+	euler_rotation.y = RadToDeg(euler_rotation.y);
+	euler_rotation.z = RadToDeg(euler_rotation.z);
+
+	is_scale_negative = false;
+
+	RecalculateTransform();
+}
+
+void ComponentTransform::SetComponent(Component* component)
+{
+	if (component->GetType() == type) {
+
+		ComponentTransform* transform = (ComponentTransform*)component;
+
+		local_position = transform->local_position;
+		local_scale = transform->local_scale;
+		local_rotation = transform->local_rotation;
+		euler_rotation = transform->euler_rotation;
+
+		LookScale();
+		RecalculateTransform();
+	}
 }
 
 
