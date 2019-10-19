@@ -60,8 +60,11 @@ public:
 	void CreateEmptyGameObject(GameObject* parent);
 
 	// right click menu, move
-	void MoveDown(GameObject* object, bool bottom);
-	void MoveUp(GameObject* object, bool top);
+	void MoveObjectDown(GameObject* object, bool bottom);
+	void MoveObjectUp(GameObject* object, bool top);
+	void MoveComponentDown(GameObject* object, Component* component, bool bottom);
+	void MoveComponentUp(GameObject* object, Component* component, bool top);
+	
 
 public:
 

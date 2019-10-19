@@ -78,9 +78,34 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 				enabled = false;
 				OnDisable();
 			}
+
+			ImGui::Separator();
+
+			bool is_on_top = false;
+			bool is_on_bottom = false;
+
+			if (game_object_attached->components.at(1) == this)
+				is_on_top = true;
+			if (game_object_attached->components.back() == this)
+				is_on_bottom = true;
+
+			if (ImGui::MenuItem("Move One Up", nullptr, nullptr, !is_on_top)) {
+				App->objects->MoveComponentUp(game_object_attached, this, false);
+			}
+
+			if (ImGui::MenuItem("Move On Top", nullptr, nullptr, !is_on_top)) {
+				App->objects->MoveComponentUp(game_object_attached, this, true);
+			}
+
+			if (ImGui::MenuItem("Move One Down", nullptr, nullptr, !is_on_bottom)) {
+				App->objects->MoveComponentDown(game_object_attached, this, false);
+			}
+
+			if (ImGui::MenuItem("Move On Bottom", nullptr, nullptr, !is_on_bottom)) {
+				App->objects->MoveComponentDown(game_object_attached, this, true);
+			}
 		}
 		
-
 		ImGui::EndPopup();
 	}
 }

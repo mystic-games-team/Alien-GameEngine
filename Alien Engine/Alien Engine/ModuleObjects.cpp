@@ -180,7 +180,7 @@ void ModuleObjects::CreateEmptyGameObject(GameObject* parent)
 	SetNewSelectedObject(object);
 }
 
-void ModuleObjects::MoveDown(GameObject* object, bool bottom)
+void ModuleObjects::MoveObjectDown(GameObject* object, bool bottom)
 {
 	GameObject* parent = object->parent;
 
@@ -205,7 +205,7 @@ void ModuleObjects::MoveDown(GameObject* object, bool bottom)
 	}
 }
 
-void ModuleObjects::MoveUp(GameObject* object, bool top)
+void ModuleObjects::MoveObjectUp(GameObject* object, bool top)
 {
 	GameObject* parent = object->parent;
 
@@ -223,6 +223,52 @@ void ModuleObjects::MoveUp(GameObject* object, bool top)
 				if (*item == object) {
 					item = parent->children.erase(item);
 					parent->children.insert(--item, object);
+					break;
+				}
+			}
+		}
+	}
+}
+
+void ModuleObjects::MoveComponentDown(GameObject* object, Component* component, bool bottom)
+{
+	if (component == object->components.back())
+		return;
+
+	if (bottom) {
+		object->components.erase(std::find(object->components.begin(), object->components.end(), component));
+		object->components.push_back(component);
+	}
+	else {
+		std::vector<Component*>::iterator item = object->components.begin();
+		for (; item != object->components.end(); ++item) {
+			if (*item != nullptr) {
+				if (*item == component) {
+					item = object->components.erase(item);
+					object->components.insert(++item, component);
+					break;
+				}
+			}
+		}
+	}
+}
+
+void ModuleObjects::MoveComponentUp(GameObject* object, Component* component, bool top)
+{
+	if (component == object->components.at(1))
+		return;
+
+	if (top) {
+		object->components.erase(std::find(object->components.begin(), object->components.end(), component));
+		object->components.insert(object->components.begin() + 1, component);
+	}
+	else {
+		std::vector<Component*>::iterator item = object->components.begin();
+		for (; item != object->components.end(); ++item) {
+			if (*item != nullptr) {
+				if (*item == component) {
+					item = object->components.erase(item);
+					object->components.insert(--item, component);
 					break;
 				}
 			}
