@@ -121,25 +121,35 @@ void PanelHierarchy::RightClickMenu()
 		}
 		if (object_menu != nullptr) {
 
-			if (ImGui::MenuItem("Move One Up"))
+			bool is_on_top = false;
+			bool is_on_bottom = false;
+
+			if (object_menu->parent->children.front() == object_menu)
+				is_on_top = true;
+			if (object_menu->parent->children.back() == object_menu)
+				is_on_bottom = true;
+
+			if (ImGui::MenuItem("Move One Up", nullptr, nullptr, !is_on_top))
 			{
 				App->objects->MoveObjectUp(object_menu, false);
 			}
 
-			if (ImGui::MenuItem("Move On Top"))
+			if (ImGui::MenuItem("Move On Top", nullptr, nullptr, !is_on_top))
 			{
 				App->objects->MoveObjectUp(object_menu, true);
 			}
 
-			if (ImGui::MenuItem("Move One Down"))
+			if (ImGui::MenuItem("Move One Down", nullptr, nullptr, !is_on_bottom))
 			{
 				App->objects->MoveObjectDown(object_menu, false);
 			}
 
-			if (ImGui::MenuItem("Move On Bottom"))
+			if (ImGui::MenuItem("Move On Bottom", nullptr, nullptr, !is_on_bottom))
 			{
 				App->objects->MoveObjectDown(object_menu, true);
 			}
+
+			ImGui::Separator();
 
 			if (ImGui::MenuItem("Create Empty Child"))
 			{
