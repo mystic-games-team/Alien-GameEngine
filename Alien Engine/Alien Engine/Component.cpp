@@ -66,6 +66,21 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 		if (ImGui::MenuItem("Paste Component", nullptr, nullptr, can_paste))
 			SetComponent(App->objects->component_in_copy);
 
+		if (type != ComponentType::TRANSFORM) {
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Enable Component", nullptr, nullptr, !enabled)) {
+				enabled = true;
+				OnEnable();
+			}
+
+			if (ImGui::MenuItem("Disable Component", nullptr, nullptr, enabled)) {
+				enabled = false;
+				OnDisable();
+			}
+		}
+		
+
 		ImGui::EndPopup();
 	}
 }
