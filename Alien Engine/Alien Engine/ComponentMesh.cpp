@@ -215,6 +215,8 @@ void ComponentMesh::DrawInspector()
 
 	if (ImGui::CollapsingHeader("Mesh", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		RightClickMenu("Mesh");
+
 		ImGui::Spacing();
 
 		ImGui::Text("Geometry Information");
@@ -243,5 +245,6 @@ void ComponentMesh::DrawInspector()
 		ImGui::Separator();
 		ImGui::Spacing();
 	}
-
+	else
+		RightClickMenu("Mesh");
 }

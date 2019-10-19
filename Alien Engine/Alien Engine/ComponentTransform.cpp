@@ -164,6 +164,9 @@ void ComponentTransform::DrawInspector()
 	ImGui::Spacing();
 
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+		RightClickMenu("Transform");
+
 		ImGui::Spacing();
 		ImGui::Text("Position  ");
 		ImGui::SameLine();
@@ -256,8 +259,12 @@ void ComponentTransform::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
+
+		
 	}
-	
+	else 
+		RightClickMenu("Transform"); 
+
 }
 
 void ComponentTransform::SetScaleNegative(const bool& negative)

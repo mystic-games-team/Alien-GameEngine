@@ -18,7 +18,7 @@ ComponentLight::~ComponentLight()
 void ComponentLight::LightLogic()
 {
 	ComponentTransform* transform=(ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
-	float pos[] = { transform->GetGlobalPosition().x, transform->GetGlobalPosition().y, transform->GetGlobalPosition().z, 1.0f };
+	float pos[] = { transform->GetGlobalPosition().x, transform->GetGlobalPosition().y, transform->GetGlobalPosition().z, 1.F };
 	light_id = GL_LIGHT0;
 	glEnable(light_id);
 	glLightfv(light_id, GL_POSITION, pos);
@@ -30,14 +30,18 @@ void ComponentLight::DrawInspector()
 {
 	ImGui::PushID(this);
 	if (ImGui::Checkbox("##CmpActive", &enabled)) {
-			if (!enabled)
-				glDisable(light_id);
+		if (!enabled)
+			OnDisable();
+		else
+			OnEnable();
 	}
 	ImGui::PopID();
 	ImGui::SameLine();
 
-	if (ImGui::CollapsingHeader("Light Settings", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader("Light", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		RightClickMenu("Light");
+
 		ImGui::Spacing();
 
 		ImGui::ColorEdit3("Ambient Light", &ambient, ImGuiColorEditFlags_Float);
@@ -46,6 +50,8 @@ void ComponentLight::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 	}
+	else
+		RightClickMenu("Light");
 }
 
 void ComponentLight::OnDisable()

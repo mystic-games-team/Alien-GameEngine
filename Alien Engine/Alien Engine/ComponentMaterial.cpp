@@ -38,6 +38,8 @@ void ComponentMaterial::DrawInspector()
 
 	if (ImGui::CollapsingHeader("Material", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		RightClickMenu("Material");
+
 		ImGui::Spacing();
 
 		ImGui::Spacing();
@@ -151,5 +153,7 @@ void ComponentMaterial::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 	}
+	else
+		RightClickMenu("Material");
 
 }

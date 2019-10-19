@@ -34,6 +34,10 @@ public:
 
 protected:
 
+	void RightClickMenu(const char* collapsing_header_name);
+
+protected:
+
 	ComponentType type = ComponentType::UNKNOWN;
 	bool enabled = true;
 	

@@ -145,7 +145,7 @@ void PanelHierarchy::RightClickMenu()
 			{
 				App->objects->CreateEmptyGameObject(object_menu);
 			}
-			if (ImGui::MenuItem("Destroy"))
+			if (ImGui::MenuItem("Remove Object"))
 			{
 				object_menu->ToDelete();
 			}

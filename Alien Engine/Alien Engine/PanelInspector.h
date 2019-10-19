@@ -10,6 +10,10 @@ public:
 	virtual ~PanelInspector();
 	void PanelLogic();
 
+	void DeleteComponentPopup();
+
+	void ButtonAddComponent();
+
 private:
 
 	int component = 0;
