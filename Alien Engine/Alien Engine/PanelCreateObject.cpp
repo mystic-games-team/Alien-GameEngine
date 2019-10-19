@@ -120,7 +120,6 @@ void PanelCreateObject::PanelLogic()
 			case 1:
 				par_mesh = par_shapes_create_subdivided_sphere(subdivions);
 				object->SetName("Sphere");
-				transform->SetLocalScale(1.5F, 1.2F, 1.5F);
 				x = y = z = 0;
 				subdivions = 5;
 				break;
