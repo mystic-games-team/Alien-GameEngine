@@ -58,6 +58,8 @@ update_status ModuleObjects::PreUpdate(float dt)
 				(*item)->SetNewParent(next_parents[item - objects_to_change_parent.begin()]);
 			}
 		}
+		objects_to_change_parent.clear();
+		next_parents.clear();
 	}
 
 	return UPDATE_CONTINUE;

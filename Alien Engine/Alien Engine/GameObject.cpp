@@ -224,10 +224,12 @@ bool GameObject::HasChildren()
 
 void GameObject::SetNewParent(GameObject* new_parent)
 {
-	if (new_parent != nullptr) {
+	if (new_parent != nullptr && !Exists(new_parent)) {
 		parent->children.erase(std::find(parent->children.begin(), parent->children.end(), this));
 		parent = new_parent;
-		parent->children.insert(parent->children.begin(), this);
+		parent->AddChild(this);
+
+		// TODO: recalculate transformations
 	}
 }
 
@@ -330,6 +332,25 @@ GameObject* GameObject::GetGameObjectByID(const int& id)
 				break;
 		}
 	}
+	return ret;
+}
+
+bool GameObject::Exists(GameObject* object)
+{
+	bool ret = false;
+
+	if (this == object)
+		return true;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			ret = (*item)->Exists(object);
+			if (ret)
+				break;
+		}
+	}
+
 	return ret;
 }
 

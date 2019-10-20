@@ -62,6 +62,9 @@ public:
 	// id's
 	GameObject* GetGameObjectByID(const int& id);
 
+	// search and return true if exists in its children or children of children bla bla
+	bool Exists(GameObject* object);
+
 private:
 
 	// parent selected

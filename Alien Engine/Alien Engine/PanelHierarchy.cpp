@@ -25,6 +25,7 @@ void PanelHierarchy::PanelLogic()
 	ImGui::Spacing();
 	ImGui::Separator();
 	ImGui::Spacing();
+
 	if (!App->objects->base_game_object->children.empty()) {
 		object_hovered = nullptr;
 		std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
@@ -37,7 +38,10 @@ void PanelHierarchy::PanelLogic()
 		}
 	}
 	RightClickMenu();
+	
 	ImGui::End();
+
+	
 }
 
 void PanelHierarchy::PrintNode(GameObject* node)
