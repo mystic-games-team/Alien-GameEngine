@@ -50,6 +50,15 @@ update_status ModuleObjects::PreUpdate(float dt)
 		need_to_delete_objects = false;
 		base_game_object->SearchToDelete();
 	}
+	if (need_to_change_parents) {
+		need_to_change_parents = false;
+		std::vector<GameObject*>::iterator item = objects_to_change_parent.begin();
+		for (; item != objects_to_change_parent.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->SetNewParent(next_parents[item - objects_to_change_parent.begin()]);
+			}
+		}
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -279,6 +288,15 @@ void ModuleObjects::MoveComponentUp(GameObject* object, Component* component, bo
 GameObject* ModuleObjects::GetGameObjectByID(const int& id)
 {
 	return base_game_object->GetGameObjectByID(id);
+}
+
+void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_parent)
+{
+	if (object != nullptr && next_parent != nullptr) {
+		objects_to_change_parent.push_back(object);
+		next_parents.push_back(next_parent);
+		need_to_change_parents = true;
+	}
 }
 
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 

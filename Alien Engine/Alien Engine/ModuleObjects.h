@@ -68,6 +68,9 @@ public:
 	// get object
 	GameObject* GetGameObjectByID(const int& id);
 
+	//reparent object in the next preupdate
+	void ReparentGameObject(GameObject* object, GameObject* next_parent);
+
 public:
 
 	// root
@@ -106,8 +109,14 @@ public:
 
 	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;
+	
 
 private:
 
 	GameObject* game_object_selected = nullptr;
+
+	// if true, objects with to_change_parent = true will change parent
+	bool need_to_change_parents = false;
+	std::vector<GameObject*> objects_to_change_parent;
+	std::vector<GameObject*> next_parents;
 };

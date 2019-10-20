@@ -222,10 +222,13 @@ bool GameObject::HasChildren()
 	return !children.empty();
 }
 
-void GameObject::ChangeParent(GameObject* new_parent)
+void GameObject::SetNewParent(GameObject* new_parent)
 {
-	parent = new_parent;
-	parent->AddChild(this);
+	if (new_parent != nullptr) {
+		parent->children.erase(std::find(parent->children.begin(), parent->children.end(), this));
+		parent = new_parent;
+		parent->children.insert(parent->children.begin(), this);
+	}
 }
 
 void GameObject::ToDelete()
@@ -363,10 +366,6 @@ void GameObject::SearchToDelete()
 	}
 }
 
-const int GameObject::GetID() const
-{
-	return id;
-}
 
 
 

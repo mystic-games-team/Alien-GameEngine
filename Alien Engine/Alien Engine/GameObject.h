@@ -29,7 +29,9 @@ public:
 	// children
 	void AddChild(GameObject* child);
 	bool HasChildren();
-	void ChangeParent(GameObject* new_parent);
+
+	// parent
+	void SetNewParent(GameObject* new_parent);
 
 	// GameObject name
 	void SetName(const char* name);
@@ -58,14 +60,12 @@ public:
 	void SearchToDelete();
 
 	// id's
-	const int GetID() const;
 	GameObject* GetGameObjectByID(const int& id);
 
 private:
 
 	// parent selected
 	void SayChildrenParentIsSelected(const bool& selected);
-
 
 public:
 
@@ -74,11 +74,10 @@ public:
 	GameObject* parent = nullptr;
 	bool enabled = true;
 	int id = 0;
+
 private:
 
-	
-
-	bool to_delete = false;
+	bool to_delete = false; 
 	bool parent_selected = false;
 	bool selected = false;
 	bool parent_enabled = true;
