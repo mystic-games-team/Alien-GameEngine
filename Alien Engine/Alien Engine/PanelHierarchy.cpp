@@ -42,71 +42,40 @@ void PanelHierarchy::PanelLogic()
 
 void PanelHierarchy::PrintNode(GameObject* node)
 {
-	if (!node->children.empty()) 
-	{
-		ImGui::PushID(node);
-		if (ImGui::Checkbox("##Active", &node->enabled)) {
-			node->SayChildrenParentIsEnabled(node->enabled);
-		}
-		ImGui::PopID();
-		ImGui::SameLine();
-		ImGui::PushID(node);
-		if (!node->IsEnabled() || !node->IsParentEnabled())
-			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f, 0.5f, 0.5f, 1.f });
-		if (ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | node->IsSelected()))
+	// active checkbox
+	ImGui::PushID(node);
+	if (ImGui::Checkbox("##Active", &node->enabled)) {
+		node->SayChildrenParentIsEnabled(node->enabled);
+	}
+	ImGui::PopID();
+
+	ImGui::SameLine();
+
+	ImGui::PushID(node);
+	
+	bool is_tree_open = ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | 
+		ImGuiTreeNodeFlags_OpenOnDoubleClick | (node->IsSelected() ? ImGuiTreeNodeFlags_Selected : 0) | 
+		(node->children.empty() ? ImGuiTreeNodeFlags_Leaf : 0), (!node->IsEnabled() || !node->IsParentEnabled()));
+
+	if (ImGui::IsItemClicked()) {
+		App->objects->SetNewSelectedObject(node);
+	}
+	if (ImGui::IsItemHovered()) {
+		object_hovered = node;
+	}
+
+	if (is_tree_open) {
+		std::vector<GameObject*>::iterator item = node->children.begin();
+		for (; item != node->children.end(); ++item)
 		{
-			if (!node->IsEnabled() || !node->IsParentEnabled())
-				ImGui::PopStyleColor();
-			if (ImGui::IsItemClicked()) {
-				App->objects->SetNewSelectedObject(node);
-			}
-			if (ImGui::IsItemHovered()) {
-				object_hovered = node;
-			}
-			std::vector<GameObject*>::iterator item = node->children.begin();
-			for (; item != node->children.end(); ++item) 
+			if (*item != nullptr)
 			{
-				if (*item != nullptr) 
-				{
-					PrintNode(*item);
-				}
-			}
-			ImGui::TreePop();
-		}
-		else {
-			if (!node->IsEnabled() || !node->IsParentEnabled())
-				ImGui::PopStyleColor();
-			if (ImGui::IsItemClicked()) {
-				App->objects->SetNewSelectedObject(node);
-			}
-			if (ImGui::IsItemHovered()) {
-				object_hovered = node;
+				PrintNode(*item);
 			}
 		}
-		ImGui::PopID();
+		ImGui::TreePop();
 	}
-	else 
-	{
-		ImGui::PushID(node);
-		if (ImGui::Checkbox("##Active", &node->enabled)) {
-			node->SayChildrenParentIsEnabled(node->enabled);
-		}
-		ImGui::PopID();
-		ImGui::SameLine();
-		ImGui::PushID(node);
-		if (!node->IsEnabled() || !node->IsParentEnabled())
-			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f, 0.5f, 0.5f, 1.f });
-		ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanAvailWidth | node->IsSelected());
-		if (!node->IsEnabled() || !node->IsParentEnabled())
-			ImGui::PopStyleColor();
-		ImGui::PopID();
-		if (ImGui::IsItemClicked()) {
-			App->objects->SetNewSelectedObject(node);
-		}
-		if (ImGui::IsItemHovered()) {
-			object_hovered = node;
-		}
-	}
+	ImGui::PopID();
 }
 void PanelHierarchy::RightClickMenu()
 {

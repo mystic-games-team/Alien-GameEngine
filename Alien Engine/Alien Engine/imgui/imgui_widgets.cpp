@@ -5115,6 +5115,23 @@ bool ImGui::TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags)
     return TreeNodeBehavior(window->GetID(label), flags, label, NULL);
 }
 
+bool ImGui::TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags, bool enabled)
+{
+    ImGuiWindow* window = GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
+
+    if (enabled)
+       PushStyleColor(ImGuiCol_Text, { 0.5f, 0.5f, 0.5f, 1.f });
+
+    bool ret = TreeNodeBehavior(window->GetID(label), flags, label, NULL);
+
+    if (enabled)
+        PopStyleColor();
+
+    return ret;
+}
+
 bool ImGui::TreeNodeEx(const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, ...)
 {
     va_list args;
