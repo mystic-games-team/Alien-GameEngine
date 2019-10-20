@@ -64,6 +64,24 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		object_hovered = node;
 	}
 
+	if (ImGui::BeginDragDropTarget()) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("node", ImGuiDragDropFlags_SourceNoDisableHover);
+		if (payload != nullptr) {
+			 // posar if amb el type
+			GameObject* dropped = static_cast<GameObject*>(payload->Data);
+			//memcpy(dropped, payload->Data, sizeof(GameObject*));
+			//dropped->parent->children.erase(std::find(dropped->parent->children.begin(), dropped->parent->children.end(), dropped));
+			dropped->parent = node;
+			node->AddChild(dropped);
+		}
+		ImGui::EndDragDropTarget();
+	}
+	
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
+		ImGui::SetDragDropPayload("node", node, sizeof(GameObject), ImGuiCond_Once);
+		ImGui::EndDragDropSource();
+	}
+
 	if (is_tree_open) {
 		std::vector<GameObject*>::iterator item = node->children.begin();
 		for (; item != node->children.end(); ++item)
