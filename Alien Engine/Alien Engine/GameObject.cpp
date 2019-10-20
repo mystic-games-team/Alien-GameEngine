@@ -313,18 +313,21 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 	}
 }
 
-void GameObject::GetGameObjectByID(const int& id)
+GameObject* GameObject::GetGameObjectByID(const int& id)
 {
+	GameObject* ret = nullptr;
 	if (id == this->id) {
-		App->objects->id_object = this;
-		return;
+		return this;
 	}
 	std::vector<GameObject*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
-			(*item)->GetGameObjectByID(id);
+			ret = (*item)->GetGameObjectByID(id);
+			if (ret != nullptr)
+				break;
 		}
 	}
+	return ret;
 }
 
 void GameObject::SearchToDelete()

@@ -57,9 +57,10 @@ public:
 	void ToDelete();
 	void SearchToDelete();
 
+	// id's
 	const int GetID() const;
+	GameObject* GetGameObjectByID(const int& id);
 
-	void GetGameObjectByID(const int& id);
 private:
 
 	// parent selected

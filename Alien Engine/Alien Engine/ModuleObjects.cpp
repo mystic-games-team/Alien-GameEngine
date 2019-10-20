@@ -278,9 +278,7 @@ void ModuleObjects::MoveComponentUp(GameObject* object, Component* component, bo
 
 GameObject* ModuleObjects::GetGameObjectByID(const int& id)
 {
-	base_game_object->GetGameObjectByID(id);
-
-	return id_object;
+	return base_game_object->GetGameObjectByID(id);
 }
 
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 

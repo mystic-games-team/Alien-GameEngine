@@ -65,6 +65,7 @@ public:
 	void MoveComponentDown(GameObject* object, Component* component, bool bottom);
 	void MoveComponentUp(GameObject* object, Component* component, bool top);
 	
+	// get object
 	GameObject* GetGameObjectByID(const int& id);
 
 public:
@@ -72,7 +73,6 @@ public:
 	// root
 	GameObject* base_game_object = nullptr;
 	Component* component_in_copy = nullptr;
-	GameObject* id_object = nullptr;
 
 	// wireframe
 	bool wireframe_mode = false;
