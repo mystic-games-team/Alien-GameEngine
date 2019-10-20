@@ -276,6 +276,13 @@ void ModuleObjects::MoveComponentUp(GameObject* object, Component* component, bo
 	}
 }
 
+GameObject* ModuleObjects::GetGameObjectByID(const int& id)
+{
+	base_game_object->GetGameObjectByID(id);
+
+	return id_object;
+}
+
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 
 {
 	wireframe_mode = config->GetBoolean("Configuration.Renderer.Wireframe");

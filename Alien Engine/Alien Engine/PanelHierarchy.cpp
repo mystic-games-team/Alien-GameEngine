@@ -68,17 +68,20 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("node", ImGuiDragDropFlags_SourceNoDisableHover);
 		if (payload != nullptr) {
 			 // posar if amb el type
-			GameObject* dropped = static_cast<GameObject*>(payload->Data);
-			//memcpy(dropped, payload->Data, sizeof(GameObject*));
-			//dropped->parent->children.erase(std::find(dropped->parent->children.begin(), dropped->parent->children.end(), dropped));
-			dropped->parent = node;
-			node->AddChild(dropped);
+			int id = *(const int*)payload->Data;
+			GameObject* obj = App->objects->GetGameObjectByID(id);
+			if (obj != nullptr) {
+				obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
+				obj->parent = node;
+				node->AddChild(obj);
+			}
 		}
 		ImGui::EndDragDropTarget();
 	}
 	
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
-		ImGui::SetDragDropPayload("node", node, sizeof(GameObject), ImGuiCond_Once);
+		ImGui::SetDragDropPayload("node", &node->id, sizeof(int), ImGuiCond_Once);
+		ImGui::Text(node->GetName());
 		ImGui::EndDragDropSource();
 	}
 

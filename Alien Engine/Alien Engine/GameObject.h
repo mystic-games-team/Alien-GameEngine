@@ -29,6 +29,7 @@ public:
 	// children
 	void AddChild(GameObject* child);
 	bool HasChildren();
+	void ChangeParent(GameObject* new_parent);
 
 	// GameObject name
 	void SetName(const char* name);
@@ -55,10 +56,15 @@ public:
 	// deleting 
 	void ToDelete();
 	void SearchToDelete();
+
+	const int GetID() const;
+
+	void GetGameObjectByID(const int& id);
 private:
 
 	// parent selected
 	void SayChildrenParentIsSelected(const bool& selected);
+
 
 public:
 
@@ -66,8 +72,10 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 	bool enabled = true;
-
+	int id = 0;
 private:
+
+	
 
 	bool to_delete = false;
 	bool parent_selected = false;

@@ -6,10 +6,11 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
+#include "RandomHelper.h"
 
 GameObject::GameObject()
 {
-
+	id = GetRandomIntBetweenTwo(INT_MIN, INT_MAX);
 }
 
 GameObject::~GameObject()
@@ -221,6 +222,12 @@ bool GameObject::HasChildren()
 	return !children.empty();
 }
 
+void GameObject::ChangeParent(GameObject* new_parent)
+{
+	parent = new_parent;
+	parent->AddChild(this);
+}
+
 void GameObject::ToDelete()
 {
 	to_delete = true;
@@ -306,6 +313,20 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 	}
 }
 
+void GameObject::GetGameObjectByID(const int& id)
+{
+	if (id == this->id) {
+		App->objects->id_object = this;
+		return;
+	}
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->GetGameObjectByID(id);
+		}
+	}
+}
+
 void GameObject::SearchToDelete()
 {
 	std::vector<GameObject*>::iterator item = children.begin();
@@ -337,6 +358,11 @@ void GameObject::SearchToDelete()
 			++item;
 		}
 	}
+}
+
+const int GameObject::GetID() const
+{
+	return id;
 }
 
 
