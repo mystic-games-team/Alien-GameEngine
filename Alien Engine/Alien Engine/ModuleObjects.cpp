@@ -56,6 +56,7 @@ update_status ModuleObjects::PreUpdate(float dt)
 		for (; item != objects_to_change_parent.end(); ++item) {
 			if (*item != nullptr) {
 				(*item)->SetNewParent(next_parents[item - objects_to_change_parent.begin()]);
+				SetNewSelectedObject((*item));
 			}
 		}
 		objects_to_change_parent.clear();
@@ -433,6 +434,7 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 	object->AddComponent(transform);
 	object->AddComponent(mesh);
 	object->AddComponent(material);
+	SetNewSelectedObject(object);
 	par_shapes_free_mesh(par_mesh);
 }
 

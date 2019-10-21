@@ -158,6 +158,7 @@ void PanelCreateObject::PanelLogic()
 			object->AddComponent(transform);
 			object->AddComponent(mesh);
 			object->AddComponent(material);
+			App->objects->SetNewSelectedObject(object);
 			par_shapes_free_mesh(par_mesh);
 
 			create_color = { 1,1,1 };
