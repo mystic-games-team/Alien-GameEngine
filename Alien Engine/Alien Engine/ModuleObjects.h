@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Color.h"
 #include <vector>
+#include <map>
 
 enum class PrimitiveType
 {
@@ -65,6 +66,11 @@ public:
 	void MoveComponentDown(GameObject* object, Component* component, bool bottom);
 	void MoveComponentUp(GameObject* object, Component* component, bool top);
 	
+	// get object
+	GameObject* GetGameObjectByID(const int& id);
+
+	//reparent object in the next preupdate
+	void ReparentGameObject(GameObject* object, GameObject* next_parent);
 
 public:
 
@@ -104,8 +110,11 @@ public:
 
 	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;
+	
 
 private:
 
 	GameObject* game_object_selected = nullptr;
+
+	std::map<GameObject*, GameObject*> to_reparent;
 };

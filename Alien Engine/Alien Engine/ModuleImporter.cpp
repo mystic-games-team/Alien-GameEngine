@@ -82,10 +82,7 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 {
 	if (scene->mRootNode->mNumChildren > 1) { // if there is more than one children we create an empty game object that is going ot be the parent of every child
 		// create the parent of the all fbx/obj...
-		parent_object = new GameObject();
-		// set it's parent to the "invisible" game object
-		parent_object->parent = App->objects->base_game_object;
-		App->objects->base_game_object->AddChild(parent_object);
+		parent_object = new GameObject(App->objects->base_game_object);
 		ComponentTransform* tr = new ComponentTransform(parent_object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
 		parent_object->AddComponent(tr);
 		// set parent name, we must change that
@@ -123,14 +120,12 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Gam
 
 GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* ai_mesh, GameObject* parent)
 {
-	GameObject* ret = new GameObject();
+	GameObject* ret = nullptr;
 	if (parent == nullptr) {
-		ret->parent = parent_object;
-		parent_object->AddChild(ret);
+		ret = new GameObject(parent_object);
 	}
 	else {
-		ret->parent = parent;
-		parent->AddChild(ret);
+		ret = new GameObject(parent);
 	}
 
 	// get mesh data

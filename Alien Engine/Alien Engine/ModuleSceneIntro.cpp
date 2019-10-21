@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 
-#include "RandomHelper.h"
 #include "Parson/parson.h"
 #include "glew/include/glew.h"
 #include "Shapes.h"

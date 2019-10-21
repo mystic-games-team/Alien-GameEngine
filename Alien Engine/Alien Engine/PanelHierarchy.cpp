@@ -2,6 +2,7 @@
 #include "ModuleObjects.h"
 #include "GameObject.h"
 #include "PanelCreateObject.h"
+#include "imgui/imgui_internal.h"
 
 PanelHierarchy::PanelHierarchy(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -18,13 +19,16 @@ PanelHierarchy::~PanelHierarchy()
 void PanelHierarchy::PanelLogic()
 {
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
-	if (ImGui::IsWindowHovered())
+
+	if (ImGui::IsWindowHovered()) {
 		App->camera->is_scene_hovered = false;
+	}
 	ImGui::Spacing();
 	ImGui::Text("GameObjects");
 	ImGui::Spacing();
 	ImGui::Separator();
 	ImGui::Spacing();
+
 	if (!App->objects->base_game_object->children.empty()) {
 		object_hovered = nullptr;
 		std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
@@ -37,7 +41,29 @@ void PanelHierarchy::PanelLogic()
 		}
 	}
 	RightClickMenu();
+	
+	// drop a node in the window, parent is base_game_object
+	ImVec2 min_space = ImGui::GetWindowContentRegionMin();
+	ImVec2 max_space = ImGui::GetWindowContentRegionMax();
+	
+	min_space.x += ImGui::GetWindowPos().x;
+	min_space.y += ImGui::GetWindowPos().y;
+	max_space.x += ImGui::GetWindowPos().x;
+	max_space.y += ImGui::GetWindowPos().y;
+
+	if (ImGui::BeginDragDropTargetCustom({ min_space.x,min_space.y, max_space.x,max_space.y }, ImGui::GetID(panel_name.data()))) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("node", ImGuiDragDropFlags_SourceNoDisableHover | ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
+		if (payload != nullptr && payload->IsDataType("node")) {
+			GameObject* obj = *(GameObject**)payload->Data;
+			if (obj != nullptr) {
+				App->objects->ReparentGameObject(obj, App->objects->base_game_object);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
 	ImGui::End();
+	
 }
 
 void PanelHierarchy::PrintNode(GameObject* node)
@@ -62,6 +88,23 @@ void PanelHierarchy::PrintNode(GameObject* node)
 	}
 	if (ImGui::IsItemHovered()) {
 		object_hovered = node;
+	}
+
+	if (ImGui::BeginDragDropTarget()) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("node", ImGuiDragDropFlags_SourceNoDisableHover);
+		if (payload != nullptr && payload->IsDataType("node")) {
+			GameObject* obj = *(GameObject**)payload->Data;
+			if (obj != nullptr) {
+				App->objects->ReparentGameObject(obj, node);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+	
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
+		ImGui::SetDragDropPayload("node", &node, sizeof(GameObject), ImGuiCond_Once);
+		ImGui::Text(node->GetName());
+		ImGui::EndDragDropSource();
 	}
 
 	if (is_tree_open) {

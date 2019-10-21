@@ -9,7 +9,7 @@
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(GameObject* parent);
 	virtual ~GameObject();
 
 	// OnEnable/Disable
@@ -22,13 +22,15 @@ public:
 
 	// components
 	void AddComponent(Component* component);
-	bool CheckComponent(ComponentType component);
-
+	bool HasComponent(ComponentType component);
 	Component* GetComponent(const ComponentType& type);
 
 	// children
 	void AddChild(GameObject* child);
 	bool HasChildren();
+
+	// parent
+	void SetNewParent(GameObject* new_parent);
 
 	// GameObject name
 	void SetName(const char* name);
@@ -55,6 +57,13 @@ public:
 	// deleting 
 	void ToDelete();
 	void SearchToDelete();
+
+	// id's
+	GameObject* GetGameObjectByID(const int& id);
+
+	// search and return true if exists in its children or children of children bla bla
+	bool Exists(GameObject* object);
+
 private:
 
 	// parent selected
@@ -66,13 +75,14 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 	bool enabled = true;
+	int id = 0;
 
 private:
 
-	bool to_delete = false;
+	bool to_delete = false; 
 	bool parent_selected = false;
 	bool selected = false;
 	bool parent_enabled = true;
 
-	std::string name;
+	std::string name = "UnNamed";
 };

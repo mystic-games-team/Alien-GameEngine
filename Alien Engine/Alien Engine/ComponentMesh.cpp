@@ -32,7 +32,7 @@ ComponentMesh::~ComponentMesh()
 	uv_cords = nullptr;
 
 
-	if (game_object_attached != nullptr && game_object_attached->CheckComponent(ComponentType::MATERIAL))
+	if (game_object_attached != nullptr && game_object_attached->HasComponent(ComponentType::MATERIAL))
 	{
 		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
 	}

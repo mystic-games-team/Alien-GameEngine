@@ -6,10 +6,16 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
+#include "RandomHelper.h"
 
-GameObject::GameObject()
+GameObject::GameObject(GameObject* parent)
 {
+	id = GetRandomIntBetweenTwo(INT_MIN, INT_MAX);
 
+	if (parent != nullptr) {
+		this->parent = parent;
+		parent->AddChild(this);
+	}
 }
 
 GameObject::~GameObject()
@@ -97,7 +103,7 @@ void GameObject::AddComponent(Component* component)
 	}
 }
 
-bool GameObject::CheckComponent(ComponentType component)
+bool GameObject::HasComponent(ComponentType component)
 {
 	bool exists = false;
 
@@ -221,6 +227,44 @@ bool GameObject::HasChildren()
 	return !children.empty();
 }
 
+void GameObject::SetNewParent(GameObject* new_parent)
+{
+	if (new_parent != nullptr && !Exists(new_parent)) {
+		GameObject* last_parent = parent;
+		parent->children.erase(std::find(parent->children.begin(), parent->children.end(), this));
+		parent = new_parent;
+		parent->AddChild(this);
+
+		// TODO: recalculate transformations
+
+		ComponentTransform* parent_transform = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
+		ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+
+		if (parent_transform != nullptr) {
+			// transform global del pare - transform global del obj daqui i el que doni es suma a la local i gg
+
+
+			//float3 pos = { parent_transform->GetGlobalPosition().x + transform->GetLocalPosition().x - transform->GetGlobalPosition().x,
+			//parent_transform->GetGlobalPosition().y + transform->GetLocalPosition().y - transform->GetGlobalPosition().y,
+			//parent_transform->GetGlobalPosition().z + transform->GetLocalPosition().z - transform->GetGlobalPosition().z };
+
+			//transform->SetLocalPosition(transform->GetLocalPosition().x + pos.x,
+			//transform->GetLocalPosition().y + pos.y,
+			//transform->GetLocalPosition().z + pos.z);
+
+			//transform->global_transformation = parent_transform->global_transformation * transform->local_transformation;
+		}
+		else {
+			ComponentTransform* last_parent_transform = (ComponentTransform*)last_parent->GetComponent(ComponentType::TRANSFORM);
+			if (last_parent_transform != nullptr) {
+				transform->global_transformation = last_parent_transform->global_transformation + transform->local_transformation;
+				transform->local_transformation = transform->global_transformation;
+			}
+		}
+
+	}
+}
+
 void GameObject::ToDelete()
 {
 	to_delete = true;
@@ -306,6 +350,42 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 	}
 }
 
+GameObject* GameObject::GetGameObjectByID(const int& id)
+{
+	GameObject* ret = nullptr;
+	if (id == this->id) {
+		return this;
+	}
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			ret = (*item)->GetGameObjectByID(id);
+			if (ret != nullptr)
+				break;
+		}
+	}
+	return ret;
+}
+
+bool GameObject::Exists(GameObject* object)
+{
+	bool ret = false;
+
+	if (this == object)
+		return true;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			ret = (*item)->Exists(object);
+			if (ret)
+				break;
+		}
+	}
+
+	return ret;
+}
+
 void GameObject::SearchToDelete()
 {
 	std::vector<GameObject*>::iterator item = children.begin();
@@ -338,6 +418,7 @@ void GameObject::SearchToDelete()
 		}
 	}
 }
+
 
 
 

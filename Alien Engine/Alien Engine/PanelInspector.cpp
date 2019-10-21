@@ -37,15 +37,8 @@ void PanelInspector::PanelLogic()
 				}
 			}
 		}
+		ButtonAddComponent();
 	}
-
-	ImGui::Spacing();
-
-	ImGui::Combo("##choose component", &component, "Select Component\0Mesh\0Material\0Light\0");
-
-	ImGui::SameLine();
-
-	ButtonAddComponent();
 
 	ImGui::End();
 
@@ -80,6 +73,12 @@ void PanelInspector::DeleteComponentPopup()
 
 void PanelInspector::ButtonAddComponent()
 {
+	ImGui::Spacing();
+
+	ImGui::Combo("##choose component", &component, "Select Component\0Mesh\0Material\0Light\0");
+
+	ImGui::SameLine();
+
 	if (ImGui::Button("Add Component"))
 	{
 		switch (component)
@@ -91,7 +90,7 @@ void PanelInspector::ButtonAddComponent()
 
 		case 1:
 
-			if (!App->objects->GetSelectedObject()->CheckComponent(ComponentType::MESH))
+			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
 			{
 				ComponentMesh* mesh = new ComponentMesh(App->objects->GetSelectedObject());
 				App->objects->GetSelectedObject()->AddComponent(mesh);
@@ -104,14 +103,14 @@ void PanelInspector::ButtonAddComponent()
 
 		case 2:
 
-			if ((!App->objects->GetSelectedObject()->CheckComponent(ComponentType::MATERIAL)) &&
-				App->objects->GetSelectedObject()->CheckComponent(ComponentType::MESH))
+			if ((!App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL)) &&
+				App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
 			{
 				ComponentMaterial* material = new ComponentMaterial(App->objects->GetSelectedObject());
 				App->objects->GetSelectedObject()->AddComponent(material);
 			}
 
-			else if (App->objects->GetSelectedObject()->CheckComponent(ComponentType::MATERIAL))
+			else if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
 			{
 				LOG("The selected object already has this component!");
 			}
@@ -123,7 +122,7 @@ void PanelInspector::ButtonAddComponent()
 
 		case 3:
 
-			if (!App->objects->GetSelectedObject()->CheckComponent(ComponentType::LIGHT))
+			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::LIGHT))
 			{
 				ComponentLight* light = new ComponentLight(App->objects->GetSelectedObject());
 				App->objects->GetSelectedObject()->AddComponent(light);
