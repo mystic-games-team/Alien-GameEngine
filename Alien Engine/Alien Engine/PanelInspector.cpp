@@ -37,15 +37,8 @@ void PanelInspector::PanelLogic()
 				}
 			}
 		}
+		ButtonAddComponent();
 	}
-
-	ImGui::Spacing();
-
-	ImGui::Combo("##choose component", &component, "Select Component\0Mesh\0Material\0Light\0");
-
-	ImGui::SameLine();
-
-	ButtonAddComponent();
 
 	ImGui::End();
 
@@ -80,6 +73,12 @@ void PanelInspector::DeleteComponentPopup()
 
 void PanelInspector::ButtonAddComponent()
 {
+	ImGui::Spacing();
+
+	ImGui::Combo("##choose component", &component, "Select Component\0Mesh\0Material\0Light\0");
+
+	ImGui::SameLine();
+
 	if (ImGui::Button("Add Component"))
 	{
 		switch (component)
