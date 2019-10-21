@@ -90,7 +90,7 @@ void PanelInspector::ButtonAddComponent()
 
 		case 1:
 
-			if (!App->objects->GetSelectedObject()->CheckComponent(ComponentType::MESH))
+			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
 			{
 				ComponentMesh* mesh = new ComponentMesh(App->objects->GetSelectedObject());
 				App->objects->GetSelectedObject()->AddComponent(mesh);
@@ -103,14 +103,14 @@ void PanelInspector::ButtonAddComponent()
 
 		case 2:
 
-			if ((!App->objects->GetSelectedObject()->CheckComponent(ComponentType::MATERIAL)) &&
-				App->objects->GetSelectedObject()->CheckComponent(ComponentType::MESH))
+			if ((!App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL)) &&
+				App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
 			{
 				ComponentMaterial* material = new ComponentMaterial(App->objects->GetSelectedObject());
 				App->objects->GetSelectedObject()->AddComponent(material);
 			}
 
-			else if (App->objects->GetSelectedObject()->CheckComponent(ComponentType::MATERIAL))
+			else if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
 			{
 				LOG("The selected object already has this component!");
 			}
@@ -122,7 +122,7 @@ void PanelInspector::ButtonAddComponent()
 
 		case 3:
 
-			if (!App->objects->GetSelectedObject()->CheckComponent(ComponentType::LIGHT))
+			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::LIGHT))
 			{
 				ComponentLight* light = new ComponentLight(App->objects->GetSelectedObject());
 				App->objects->GetSelectedObject()->AddComponent(light);

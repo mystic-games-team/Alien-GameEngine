@@ -8,9 +8,14 @@
 #include "ComponentLight.h"
 #include "RandomHelper.h"
 
-GameObject::GameObject()
+GameObject::GameObject(GameObject* parent)
 {
 	id = GetRandomIntBetweenTwo(INT_MIN, INT_MAX);
+
+	if (parent != nullptr) {
+		this->parent = parent;
+		parent->AddChild(this);
+	}
 }
 
 GameObject::~GameObject()
@@ -98,7 +103,7 @@ void GameObject::AddComponent(Component* component)
 	}
 }
 
-bool GameObject::CheckComponent(ComponentType component)
+bool GameObject::HasComponent(ComponentType component)
 {
 	bool exists = false;
 

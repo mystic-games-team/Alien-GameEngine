@@ -9,7 +9,7 @@
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(GameObject* parent);
 	virtual ~GameObject();
 
 	// OnEnable/Disable
@@ -22,8 +22,7 @@ public:
 
 	// components
 	void AddComponent(Component* component);
-	bool CheckComponent(ComponentType component);
-
+	bool HasComponent(ComponentType component);
 	Component* GetComponent(const ComponentType& type);
 
 	// children
@@ -85,5 +84,5 @@ private:
 	bool selected = false;
 	bool parent_enabled = true;
 
-	std::string name;
+	std::string name = "UnNamed";
 };

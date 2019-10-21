@@ -22,7 +22,7 @@ ModuleObjects::~ModuleObjects()
 bool ModuleObjects::Init()
 {
 
-	base_game_object = new GameObject();
+	base_game_object = new GameObject(nullptr);
 	//base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
 
 	return true;
@@ -33,10 +33,8 @@ bool ModuleObjects::Start()
 	LOG("Starting Module Objects");
 	bool ret = true;
 
-	GameObject* light_test = new GameObject();
+	GameObject* light_test = new GameObject(base_game_object);
 	light_test->SetName("Light");
-	light_test->parent=base_game_object;
-	base_game_object->AddChild(light_test);
 	light_test->AddComponent(new ComponentTransform(light_test, { 0,0,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
 	light_test->AddComponent(new ComponentLight(light_test));
 
@@ -50,6 +48,7 @@ update_status ModuleObjects::PreUpdate(float dt)
 		need_to_delete_objects = false;
 		base_game_object->SearchToDelete();
 	}
+
 	// change parent
 	if (!to_reparent.empty()) {
 		std::map<GameObject*, GameObject*>::iterator item = to_reparent.begin();
@@ -172,16 +171,14 @@ void ModuleObjects::DeselectObject()
 
 void ModuleObjects::CreateEmptyGameObject(GameObject* parent)
 {
-	GameObject* object = new GameObject();
+	GameObject* object = nullptr;
 
 	if (parent != nullptr) {
-		object->parent = parent;
-		parent->AddChild(object);
+		object = new GameObject(parent);
 		object->SetName("Empty Child");
 	}
 	else {
-		object->parent = base_game_object;
-		base_game_object->AddChild(object);
+		object = new GameObject(base_game_object);
 		object->SetName("Empty GameObject");
 	}
 
@@ -382,9 +379,7 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 
 void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 {
-	GameObject* object = new GameObject();
-	object->parent = App->objects->base_game_object;
-	App->objects->base_game_object->AddChild(object);
+	GameObject* object = new GameObject(App->objects->base_game_object);
 	ComponentTransform* transform = new ComponentTransform(object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
 	ComponentMesh* mesh = new ComponentMesh(object);
 	ComponentMaterial* material = new ComponentMaterial(object);
