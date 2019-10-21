@@ -52,7 +52,7 @@ void PanelHierarchy::PanelLogic()
 	max_space.y += ImGui::GetWindowPos().y;
 
 	if (ImGui::BeginDragDropTargetCustom({ min_space.x,min_space.y, max_space.x,max_space.y }, ImGui::GetID(panel_name.data()))) {
-		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("node", ImGuiDragDropFlags_SourceNoDisableHover);
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("node", ImGuiDragDropFlags_SourceNoDisableHover | ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
 		if (payload != nullptr && payload->IsDataType("node")) {
 			int id = *(int*)payload->Data;
 			GameObject* obj = App->objects->GetGameObjectByID(id);
