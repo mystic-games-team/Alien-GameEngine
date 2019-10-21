@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Color.h"
 #include <vector>
+#include <map>
 
 enum class PrimitiveType
 {
@@ -115,8 +116,5 @@ private:
 
 	GameObject* game_object_selected = nullptr;
 
-	// if true, objects with to_change_parent = true will change parent
-	bool need_to_change_parents = false;
-	std::vector<GameObject*> objects_to_change_parent;
-	std::vector<GameObject*> next_parents;
+	std::map<GameObject*, GameObject*> to_reparent;
 };
