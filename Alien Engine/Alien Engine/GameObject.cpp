@@ -225,11 +225,38 @@ bool GameObject::HasChildren()
 void GameObject::SetNewParent(GameObject* new_parent)
 {
 	if (new_parent != nullptr && !Exists(new_parent)) {
+		GameObject* last_parent = parent;
 		parent->children.erase(std::find(parent->children.begin(), parent->children.end(), this));
 		parent = new_parent;
 		parent->AddChild(this);
 
 		// TODO: recalculate transformations
+
+		ComponentTransform* parent_transform = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
+		ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+
+		if (parent_transform != nullptr) {
+			// transform global del pare - transform global del obj daqui i el que doni es suma a la local i gg
+
+
+			//float3 pos = { parent_transform->GetGlobalPosition().x + transform->GetLocalPosition().x - transform->GetGlobalPosition().x,
+			//parent_transform->GetGlobalPosition().y + transform->GetLocalPosition().y - transform->GetGlobalPosition().y,
+			//parent_transform->GetGlobalPosition().z + transform->GetLocalPosition().z - transform->GetGlobalPosition().z };
+
+			//transform->SetLocalPosition(transform->GetLocalPosition().x + pos.x,
+			//transform->GetLocalPosition().y + pos.y,
+			//transform->GetLocalPosition().z + pos.z);
+
+			//transform->global_transformation = parent_transform->global_transformation * transform->local_transformation;
+		}
+		else {
+			ComponentTransform* last_parent_transform = (ComponentTransform*)last_parent->GetComponent(ComponentType::TRANSFORM);
+			if (last_parent_transform != nullptr) {
+				transform->global_transformation = last_parent_transform->global_transformation + transform->local_transformation;
+				transform->local_transformation = transform->global_transformation;
+			}
+		}
+
 	}
 }
 
