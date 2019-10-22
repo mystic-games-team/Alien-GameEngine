@@ -132,7 +132,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	ComponentMesh* mesh = new ComponentMesh(ret);
 	// get vertex
 	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
-
+	
 	memcpy(mesh->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
 	mesh->num_vertex = ai_mesh->mNumVertices;
 	// get index
@@ -189,6 +189,15 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 		mesh->uv_cords = new float[ai_mesh->mNumVertices * 3];
 		memcpy(mesh->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
 	}
+
+	// aabb
+	mesh->aabb_min.x = ai_mesh->mAABB.mMin.x;
+	mesh->aabb_min.y = ai_mesh->mAABB.mMin.y;
+	mesh->aabb_min.z = ai_mesh->mAABB.mMin.z;
+
+	mesh->aabb_max.x = ai_mesh->mAABB.mMax.x;
+	mesh->aabb_max.y = ai_mesh->mAABB.mMax.y;
+	mesh->aabb_max.z = ai_mesh->mAABB.mMax.z;
 
 	// set the material
 	ComponentMaterial* material = new ComponentMaterial(ret);

@@ -2,8 +2,8 @@
 #include "Application.h"
 #include "ModuleFileSystem.h"
 #include "PhysFS/include/physfs.h"
-#include "Assimp/include/cfileio.h"
-#include "Assimp/include/types.h"
+#include "Assimp/include/assimp/cfileio.h"
+#include "Assimp/include/assimp/types.h"
 
 #pragma comment( lib, "PhysFS/libx86/physfs.lib" )
 
