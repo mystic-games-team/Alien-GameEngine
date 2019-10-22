@@ -23,6 +23,12 @@ void PanelHierarchy::PanelLogic()
 	if (ImGui::IsWindowHovered()) {
 		App->camera->is_scene_hovered = false;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr && ImGui::IsWindowFocused())
+	{
+		App->objects->GetSelectedObject()->ToDelete();
+	}
+
 	ImGui::Spacing();
 	ImGui::Text("GameObjects");
 	ImGui::Spacing();
