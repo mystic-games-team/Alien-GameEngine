@@ -137,7 +137,7 @@ void ModuleCamera3D::Movement()
 
 	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
-		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
+		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 		SDL_SetCursor(cursor);
 
 		if (App->input->GetMouseXMotion() > -1) newPos -= X * mouse_speed;
@@ -145,12 +145,6 @@ void ModuleCamera3D::Movement()
 
 		if (App->input->GetMouseYMotion() < 1) newPos -= Y * mouse_speed*0.5f ;
 		if (App->input->GetMouseYMotion() > -1) newPos += Y * mouse_speed*0.5f;
-		
-		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_UP)
-		{
-			SDL_FreeCursor(cursor);
-		}
-
 	}
 }
 
@@ -205,11 +199,6 @@ void ModuleCamera3D::Rotation()
 		}
 
 		Position = Reference + Z * length(Position);
-
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-		{
-			SDL_FreeCursor(cursor);
-		}
 	}
 }
 
