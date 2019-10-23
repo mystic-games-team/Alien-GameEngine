@@ -319,12 +319,14 @@ void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
 {
 	GameObject* selected = App->objects->GetSelectedObject();
 	ComponentMaterial* material = (ComponentMaterial*)selected->GetComponent(ComponentType::MATERIAL);
-	if (material == nullptr) {
-		material = new ComponentMaterial(selected);
-		selected->AddComponent(material);
+	if (selected->HasComponent(ComponentType::MESH)) {
+		if (material == nullptr) {
+			material = new ComponentMaterial(selected);
+			selected->AddComponent(material);
+		}
+		material->texture = texture;
 	}
-	material->texture = texture;
-}
+}	
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
 {
@@ -390,6 +392,8 @@ Texture::Texture(const char* path, const uint& id, const uint & width, const int
 	this->width = width;
 	this->path = std::string(path);
 	name = App->file_system->GetBaseFileName(path);
+
+	int i = 0;
 }
 
 

@@ -424,11 +424,11 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 	LOG("File Dropped with path %s", extern_path);
 
 	std::string final_path;
-	SplitFilePath(extern_path, nullptr, &final_path);
+	SplitFilePath(extern_path, nullptr, &final_path); // get base file name
 
-	FileDropType type = SearchExtension(std::string(extern_path));
+	FileDropType type = SearchExtension(std::string(extern_path)); // get extension type
 
-	switch (type) {
+	switch (type) { // add location
 	case FileDropType::MODEL3D: 
 		final_path = MODELS_FOLDER + final_path;
 		break;
@@ -436,10 +436,10 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 		final_path = TEXTURES_FOLDER + final_path;
 		break;
 	}
-	CopyFromOutsideFS(extern_path, final_path.c_str());
-	std::string extension;
-	SplitFilePath(extern_path, nullptr, nullptr, &extension);
-	switch (type) {
+
+	CopyFromOutsideFS(extern_path, final_path.c_str()); // copy file if doesnt exist
+
+	switch (type) { // call the loader
 	case FileDropType::MODEL3D:
 		LOG("Start Loading Model");
 		App->importer->LoadModelFile(final_path.data());
@@ -454,18 +454,7 @@ const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_
 {
 	
 	std::string extension;
-
-	std::string::const_reverse_iterator item = extern_path.crbegin();
-	for (; item != extern_path.crend(); ++item)
-	{
-		if (*item == '.')
-			break;
-		else {
-			std::string lower;
-			lower =(*item);
-			extension = lower + extension;
-		}
-	}
+	SplitFilePath(extern_path.data(), nullptr, nullptr, &extension);
 	
 	FileDropType ext_type = FileDropType::UNKNOWN;
 
