@@ -381,13 +381,16 @@ void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 	// mesh path
 	item = path_meshes_file.begin();
 	for (; item != path_meshes_file.end(); ++item) {
-		const char* name = (*item).data();
-		memcpy(cursor, name, file_size = sizeof(name));
+		const char* name = (*item).data(); 
+		file_size = sizeof(name);
+		uint number = file_size;
+		memcpy(cursor, &number, sizeof(uint));
+		cursor += sizeof(uint);
+		memcpy(cursor, name, file_size);
 		cursor += file_size;
 	}
 	std::string output;
 	App->file_system->SaveUnique(output, model_file_buffer, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
-	int i = 0;
 }
 
 
