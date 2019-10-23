@@ -35,6 +35,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 	// Make sure standard paths exist
 	const char* dirs[] = {
 		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER, TEXTURES_FOLDER,
+		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER
 	};
 
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
@@ -364,9 +365,9 @@ uint ModuleFileSystem::Save(const char* file, const void* buffer, unsigned int s
 bool ModuleFileSystem::SaveUnique(string& name, const void* buffer, uint size, const char* path, const char* prefix, const char* extension)
 {
 	char result[250];
-	SDL_assert(1 == 0); // look next line
-	//sprintf_s(result, 250, "%s%s_%llu.%s", path, prefix, App->resources->GenerateNewUID(), extension);
-	NormalizePath(result);
+
+	sprintf_s(result, 250, "%s%s%s", path, prefix, extension);
+	//NormalizePath(result);
 	if (Save(result, buffer, size) > 0)
 	{
 		name = result;

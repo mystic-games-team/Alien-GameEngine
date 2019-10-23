@@ -58,6 +58,11 @@ public:
 	void ApplyTextureToSelectedObject(Texture* texture);
 	
 private:
+	
+	// models
+	void CreateModelMetaData(const char* path, const aiScene* scene);
+
+
 
 	// mesh
 	void InitScene(const aiScene* scene, const char* path);

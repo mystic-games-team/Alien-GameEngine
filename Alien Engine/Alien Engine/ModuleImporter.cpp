@@ -11,6 +11,7 @@
 #include "ComponentMesh.h"
 #include "GameObject.h"
 
+
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
 }
@@ -62,19 +63,43 @@ bool ModuleImporter::LoadModelFile(const char* path)
 	bool ret = true;
 
 	LOG("Loading %s", path);
-	const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
-		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality);
 
-	if (scene != nullptr) {
-		InitScene(scene, path);
-		LOG("Succesfully loaded %s", path);
+	// check if this file has been already created as a .alien
+	if (!App->file_system->Exists((std::string(LIBRARY_MODELS_FOLDER) + App->file_system->GetBaseFileName(path) + std::string(".alienModel")).data())) {
+		
+		const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
+			aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality);
+
+		if (scene != nullptr) {
+			CreateModelMetaData(path, scene);
+		}
+		else {
+			ret = false;
+			LOG("Error loading model %s", path);
+			LOG("Error type: %s", aiGetErrorString());
+		}
+
+		aiReleaseImport(scene);
+
+		/*if (scene != nullptr) {
+			InitScene(scene, path);
+			LOG("Succesfully loaded %s", path);
+		}
+		else {
+			ret = false;
+			LOG("Error loading model %s", path);
+			LOG("Error type: %s", aiGetErrorString());
+		}
+		aiReleaseImport(scene);*/
+
 	}
 	else {
-		ret = false;
-		LOG("Error loading model %s", path);
-		LOG("Error type: %s", aiGetErrorString());
+		// Load the .alienModel directly!!
 	}
-	aiReleaseImport(scene);
+
+
+	
+	
 	return ret;
 }
 
@@ -326,7 +351,45 @@ void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
 		}
 		material->texture = texture;
 	}
-}	
+}
+void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
+{
+	std::vector<std::string> path_meshes_file;
+
+	// criadr que faci load del root funcio recursiva
+	// pasar com a & el vector
+
+	uint file_size = sizeof(uint);
+
+	std::vector<std::string>::iterator item = path_meshes_file.begin();
+	for (; item != path_meshes_file.end(); ++item) {
+		file_size += sizeof((*item).data());
+	}
+
+	char* model_file_buffer = new char[file_size];
+
+	char* cursor = model_file_buffer;
+
+	uint size = file_size;
+
+	// number mesh data
+	uint num_mesh = path_meshes_file.size();
+	memcpy(cursor, &num_mesh, file_size = sizeof(uint));
+
+	cursor += file_size;
+
+	// mesh path
+	item = path_meshes_file.begin();
+	for (; item != path_meshes_file.end(); ++item) {
+		const char* name = (*item).data();
+		memcpy(cursor, name, file_size = sizeof(name));
+		cursor += file_size;
+	}
+	std::string output;
+	App->file_system->SaveUnique(output, model_file_buffer, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
+	int i = 0;
+}
+
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
 {
@@ -392,8 +455,6 @@ Texture::Texture(const char* path, const uint& id, const uint & width, const int
 	this->width = width;
 	this->path = std::string(path);
 	name = App->file_system->GetBaseFileName(path);
-
-	int i = 0;
 }
 
 

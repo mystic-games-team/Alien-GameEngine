@@ -13,6 +13,9 @@ struct aiFileIO;
 
 #define ASSETS_FOLDER "Assets/"
 #define LIBRARY_FOLDER "Library/"
+#define LIBRARY_MODELS_FOLDER "Library/Models/"
+#define LIBRARY_MESHES_FOLDER "Library/Meshes/"
+#define LIBRARY_TEXTURES_FOLDER "Library/Textures/"
 #define CONFIGURATION_FOLDER "Configuration/"
 #define CONFIGURATION_LAYOUTS_FOLDER "Configuration/Layouts/"
 #define MODELS_FOLDER "Assets/Models/"
