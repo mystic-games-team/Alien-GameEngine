@@ -95,6 +95,7 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 	}
 	else { // if there is just one child, we dont need an empty game object. So the parent of this child is de base_game_object
 		LoadSceneNode(scene->mRootNode, scene, App->objects->base_game_object);
+		App->objects->SetNewSelectedObject(App->objects->base_game_object->children.back());
 	}
 	
 }
