@@ -33,7 +33,7 @@ protected:
 
 	ResourceType type = ResourceType::RESOURCE_NONE;
 
-	std::string path;
+	const char* path;
 	std::string name;
 
 };

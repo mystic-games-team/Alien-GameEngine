@@ -18,6 +18,7 @@
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
+	name = "Importer";
 }
 
 ModuleImporter::~ModuleImporter()
@@ -245,7 +246,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	ret->pos = pos;
 	ret->scale = scale;
 	ret->rot = rot;
-	ret->name = ai_mesh->mName.C_Str();
+	ret->name = std::string(node->mName.C_Str());
 
 	return ret;
 }

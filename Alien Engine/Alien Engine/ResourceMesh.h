@@ -15,7 +15,7 @@ public:
 	ResourceMesh();
 	virtual ~ResourceMesh();
 
-	char* CreateMetaData();
+	const char* CreateMetaData();
 
 public:
 
