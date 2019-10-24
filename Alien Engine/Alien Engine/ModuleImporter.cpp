@@ -111,6 +111,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 {
 	model = new ResourceModel();
 	model->name = App->file_system->GetBaseFileName(path);
+	model->path = path;
 
 	// start recursive function to all nodes
 	LoadSceneNode(scene->mRootNode, scene, nullptr);

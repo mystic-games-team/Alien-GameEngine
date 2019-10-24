@@ -9,6 +9,8 @@ ResourceMesh::~ResourceMesh()
 {
 }
 
-void ResourceMesh::CreateMetaData()
+char* ResourceMesh::CreateMetaData()
 {
+
+	return nullptr;
 }
