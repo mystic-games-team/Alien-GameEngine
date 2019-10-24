@@ -52,12 +52,14 @@ void PanelCreateObject::PanelLogic()
 		ImGui::Spacing();
 
 		ImGui::Text("Position");
+		ImGui::Spacing();
+		ImGui::Spacing();
 		ImGui::Columns(3,0,false);
-		ImGui::Text("   X:");  ImGui::SameLine(0, 0); ImGui::PushItemWidth(40); ImGui::InputFloat("##x", &x, 0, 0, 2);
+		ImGui::InputFloat("X", &x, 0, 0, 2);
 		ImGui::NextColumn();
-		ImGui::Text("Y:"); ImGui::SameLine(0,0); ImGui::PushItemWidth(40); ImGui::InputFloat("##y", &y, 0, 0, 2);
+		ImGui::InputFloat("Y", &y, 0, 0, 2);
 		ImGui::NextColumn();
-		ImGui::Text("Z:"); ImGui::SameLine(0,0); ImGui::PushItemWidth(40); ImGui::InputFloat("##z", &z, 0, 0, 2);
+		ImGui::InputFloat("Z", &z, 0, 0, 2);
 		ImGui::NextColumn();
 		ImGui::Columns(1);
 
