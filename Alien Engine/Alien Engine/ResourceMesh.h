@@ -10,6 +10,7 @@ public:
 	ResourceMesh();
 	virtual ~ResourceMesh();
 
+	void CreateMetaData();
 
 public:
 

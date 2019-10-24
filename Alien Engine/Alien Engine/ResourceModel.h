@@ -12,9 +12,10 @@ public:
 	ResourceModel();
 	virtual ~ResourceModel();
 
+	void CreateMetaData();
 
 public:
 
-	std::vector<ResourceMesh*> meshes;
+	std::vector<ResourceMesh*> meshes_attached;
 
 };

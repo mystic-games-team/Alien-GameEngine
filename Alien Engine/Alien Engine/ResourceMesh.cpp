@@ -7,3 +7,7 @@ ResourceMesh::ResourceMesh() : Resource()
 ResourceMesh::~ResourceMesh()
 {
 }
+
+void ResourceMesh::CreateMetaData()
+{
+}

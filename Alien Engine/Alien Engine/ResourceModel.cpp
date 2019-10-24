@@ -7,3 +7,7 @@ ResourceModel::ResourceModel() : Resource()
 ResourceModel::~ResourceModel()
 {
 }
+
+void ResourceModel::CreateMetaData()
+{
+}

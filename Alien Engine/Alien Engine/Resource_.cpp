@@ -17,3 +17,8 @@ const char* const Resource::GetName() const
 {
 	return name.data();
 }
+
+const ResourceType Resource::GetType() const
+{
+	return type;
+}
