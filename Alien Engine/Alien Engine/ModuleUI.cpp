@@ -302,18 +302,6 @@ void ModuleUI::MainMenuBar()
 	ImGui::BeginMainMenuBar();
 	if (ImGui::BeginMenu("File"))
 	{
-		if (ImGui::BeginMenu("New")) 
-		{
-				if (ImGui::MenuItem("haha"))
-				{
-					LOG("haha");
-				}
-				ImGui::EndMenu();
-		}
-		if (ImGui::MenuItem("Open")) 
-		{
-
-		}
 		if (ImGui::MenuItem("Close", "Alt + F4"))
 		{
 			App->QuitApp();

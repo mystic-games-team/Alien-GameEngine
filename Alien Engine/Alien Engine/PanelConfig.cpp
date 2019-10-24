@@ -159,7 +159,7 @@ void PanelConfig::PanelLogic()
 	}
 	if (ImGui::CollapsingHeader("ShortCuts")) {
 		ImGui::Spacing();
-		ImGui::BeginChild("", { 440,0 },true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::BeginChild("##ShortCutChild", { 440,0 },true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 		ImGui::Columns(4, 0, false);
 		ImGui::SetColumnWidth(0,110);
 		ImGui::SetColumnWidth(1, 100);

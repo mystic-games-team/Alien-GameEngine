@@ -287,7 +287,7 @@ void ComponentTransform::SetScaleNegative(const bool& negative)
 
 bool ComponentTransform::IsScaleNegative()
 {
-	return is_scale_negative;
+	return false;
 }
 
 void ComponentTransform::Reset()
