@@ -72,59 +72,6 @@ void GameObject::Draw()
 			mesh->DrawFaceNormals();
 	}
 
-
-	if (mesh != nullptr) {
-
-		float height = abs(mesh->aabb_max.y - mesh->aabb_min.y);
-		float width = abs(mesh->aabb_max.x - mesh->aabb_min.x);
-		float prof = abs(mesh->aabb_max.z - mesh->aabb_min.z);
-
-		glColor3f(1,0,0);
-		glBegin(GL_LINES);
-
-	
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_min.y, mesh->aabb_min.z);
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_min.y, mesh->aabb_min.z);
-
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_min.y, mesh->aabb_min.z);
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_min.y, mesh->aabb_max.z);
-
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_min.y, mesh->aabb_min.z);
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_max.y, mesh->aabb_min.z);
-
-		//
-
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_min.y, mesh->aabb_min.z);
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_max.y, mesh->aabb_min.z);
-
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_min.y, mesh->aabb_min.z);
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_min.y, mesh->aabb_max.z);
-
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_max.y, mesh->aabb_min.z);
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_max.y, mesh->aabb_max.z);
-		
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_max.y, mesh->aabb_min.z);
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_max.y, mesh->aabb_min.z);
-
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_max.y, mesh->aabb_min.z);
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_max.y, mesh->aabb_max.z);
-
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_min.y, mesh->aabb_max.z);
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_max.y, mesh->aabb_max.z);
-
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_min.y, mesh->aabb_max.z);
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_min.y, mesh->aabb_max.z);
-
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_min.y, mesh->aabb_max.z);
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_max.y, mesh->aabb_max.z);
-
-		glVertex3f(mesh->aabb_min.x, mesh->aabb_max.y, mesh->aabb_max.z);
-		glVertex3f(mesh->aabb_max.x, mesh->aabb_max.y, mesh->aabb_max.z);
-
-		glEnd();
-	}
-
-
 	if (light != nullptr && light->IsEnabled()) 
 	{
 		light->LightLogic();
