@@ -10,7 +10,6 @@
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 #include "GameObject.h"
-#include <map>
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -357,46 +356,87 @@ void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
 }
 void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 {
-	std::vector<std::string> path_meshes_file;
+	//std::vector<std::string> path_meshes_file;
 
-	// create the .alienMesh and fill the vector with the path of each one
-	for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
-		CreateNodeMetaData(scene->mRootNode->mChildren[i], path_meshes_file);
-	}
+	//// create the .alienMesh and fill the vector with the path of each one
+	//for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
+	//	CreateNodeMetaData(scene->mRootNode->mChildren[i], path_meshes_file);
+	//}
 
-	uint file_size = sizeof(uint);
+	//uint file_size = sizeof(uint);
 
-	std::vector<std::string>::iterator item = path_meshes_file.begin();
-	for (; item != path_meshes_file.end(); ++item) {
-		file_size += sizeof((*item).data());
-	}
+	//std::vector<std::string>::iterator item = path_meshes_file.begin();
+	//for (; item != path_meshes_file.end(); ++item) {
+	//	file_size += sizeof((*item).data());
+	//}
 
-	char* model_file_buffer = new char[file_size];
-	char* cursor = model_file_buffer;
+	//char* model_file_buffer = new char[file_size];
+	//char* cursor = model_file_buffer;
 
-	uint local_size = 0;
+	//uint local_size = 0;
 
-	// number mesh data
-	uint num_mesh = path_meshes_file.size();
-	memcpy(cursor, &num_mesh, local_size = sizeof(uint));
+	//// number mesh data
+	//uint num_mesh = path_meshes_file.size();
+	//memcpy(cursor, &num_mesh, local_size = sizeof(uint));
 
-	cursor += local_size;
+	//cursor += local_size;
 
-	// mesh path
-	item = path_meshes_file.begin();
-	for (; item != path_meshes_file.end(); ++item) {
-		const char* name = (*item).data(); 
-		local_size = sizeof(name);
-		uint number = local_size;
-		memcpy(cursor, &number, sizeof(uint));
-		cursor += sizeof(uint);
-		memcpy(cursor, name, local_size);
-		cursor += local_size;
-	}
+	//// mesh path
+	//item = path_meshes_file.begin();
+	//for (; item != path_meshes_file.end(); ++item) {
+	//	const char* name = (*item).data(); 
+	//	local_size = sizeof(name);
+	//	uint number = local_size;
+	//	memcpy(cursor, &number, sizeof(uint));
+	//	cursor += sizeof(uint);
+	//	memcpy(cursor, name, local_size);
+	//	cursor += local_size;
+	//}
 
-	// create the .alien that has info about fbx
+	//// create the .alien that has info about fbx
+	//std::string output;
+	//App->file_system->SaveUnique(output, model_file_buffer, file_size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
+
+
+	uint ranges[1] = { 1 };
+
+	uint size = sizeof(ranges) + sizeof(char) * 5;
+	char* data = new char[size]; // Allocate
+	char* cursor = data;
+
+	uint bytes = sizeof(ranges); // First store ranges
+
+	memcpy(cursor, ranges, bytes);
+	cursor += bytes;
+
+	char test_char[5] = "test";
+	bytes = sizeof(test_char);
+	memcpy(cursor, test_char, bytes);
+
+	//cursor += bytes; // Store indices
+	//bytes = sizeof(uint) * mesh.num_indices;
+	//memcpy(cursor, mesh.indices, bytes);
+
 	std::string output;
-	App->file_system->SaveUnique(output, model_file_buffer, file_size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
+	App->file_system->SaveUnique(output, data, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
+
+
+	char* read_cursor = data;
+
+
+
+	uint read_ranges[1];
+	uint read_bytes = sizeof(read_ranges);
+	memcpy(read_ranges, read_cursor, read_bytes);
+	uint num1 = read_ranges[0];
+	
+	read_cursor += read_bytes;
+	
+	char read_test[5];
+	read_bytes = sizeof(read_test);
+	memcpy(read_test, read_cursor, read_bytes);
+
+	int i = 0;
 }
 
 void ModuleImporter::CreateNodeMetaData(const aiNode* node, std::vector<std::string>& file_path)
