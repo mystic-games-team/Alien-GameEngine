@@ -14,8 +14,12 @@ public:
 	ResourceModel();
 	virtual ~ResourceModel();
 
+	// meta data
 	void CreateMetaData();
 	bool ReadMetaData(char* path);
+
+	// create GameObjects
+	void ConvertToGameObjects();
 
 public:
 

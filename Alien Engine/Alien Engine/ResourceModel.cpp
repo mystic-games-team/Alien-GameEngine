@@ -93,3 +93,13 @@ bool ResourceModel::ReadMetaData(char* path)
 
 	return ret;
 }
+
+void ResourceModel::ConvertToGameObjects()
+{
+	//if (meshes_attached.size() > 1) { // needs an empty gameobject
+	//	GameObject* parent = App->objects->CreateEmptyGameObject(nullptr);
+	//}
+	//else { 
+
+	//}
+}

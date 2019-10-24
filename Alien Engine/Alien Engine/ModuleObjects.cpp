@@ -169,7 +169,7 @@ void ModuleObjects::DeselectObject()
 	game_object_selected = nullptr;
 }
 
-void ModuleObjects::CreateEmptyGameObject(GameObject* parent)
+GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent)
 {
 	GameObject* object = nullptr;
 
@@ -185,6 +185,8 @@ void ModuleObjects::CreateEmptyGameObject(GameObject* parent)
 	object->AddComponent(new ComponentTransform(object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
 	
 	SetNewSelectedObject(object);
+
+	return object;
 }
 
 void ModuleObjects::MoveObjectDown(GameObject* object, bool bottom)

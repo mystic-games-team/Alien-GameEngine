@@ -134,6 +134,8 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Res
 
 ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* ai_mesh, ResourceMesh* parent)
 {
+	// TODO: resource mesh should do this??
+
 	ResourceMesh* ret = new ResourceMesh();
 	if (parent != nullptr)
 		ret->parent_name = parent->name;
@@ -241,6 +243,9 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 
 void ModuleImporter::InitMeshBuffers(ResourceMesh* mesh)
 {
+	// TODO: resource mesh should do this
+
+
 	// vertex
 	glGenBuffers(1, &mesh->id_vertex);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);

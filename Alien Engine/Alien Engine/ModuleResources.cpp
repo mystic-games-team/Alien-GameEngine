@@ -1,6 +1,8 @@
 #include "ModuleResources.h"
 #include "SDL/include/SDL_assert.h"
 #include "Resource_.h"
+#include "ResourceMesh.h"
+#include "ResourceModel.h"
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 {
@@ -13,6 +15,9 @@ ModuleResources::~ModuleResources()
 
 bool ModuleResources::Start()
 {
+
+	resource_models.back()->ConvertToGameObjects();
+
 	return true;
 }
 
@@ -47,3 +52,4 @@ void ModuleResources::AddResource(Resource* resource)
 	}
 
 }
+

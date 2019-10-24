@@ -20,7 +20,7 @@ public:
 	Resource();
 	virtual ~Resource();
 
-	// path
+	// meta data path
 	const char* const GetPath() const;
 
 	// name
