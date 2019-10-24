@@ -399,8 +399,8 @@ void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 
 
 	uint ranges[1] = { 1 };
-
-	uint size = sizeof(ranges) + sizeof(char) * 5;
+	char* test_char[2];
+	uint size = sizeof(ranges) + sizeof(test_char);
 	char* data = new char[size]; // Allocate
 	char* cursor = data;
 
@@ -409,7 +409,8 @@ void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 	memcpy(cursor, ranges, bytes);
 	cursor += bytes;
 
-	char test_char[5] = "test";
+	test_char[0] = { "test" };
+	test_char[1] = { "test2" };
 	bytes = sizeof(test_char);
 	memcpy(cursor, test_char, bytes);
 
@@ -432,7 +433,7 @@ void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 	
 	read_cursor += read_bytes;
 	
-	char read_test[5];
+	char* read_test[2];
 	read_bytes = sizeof(read_test);
 	memcpy(read_test, read_cursor, read_bytes);
 
