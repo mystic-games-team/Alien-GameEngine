@@ -24,11 +24,15 @@ Alien Engine is a Game Engine made by Víctor Segura Blanco and Oriol Capdevila 
 * Left Ctrl / Rigth Ctrl + O: Panel Config
 * Left Ctrl / Rigth Ctrl + T: Panel Console
 * Left Ctrl / Rigth Ctrl + R: Panel Render
+* Left Ctrl / Rigth Ctrl + S: Panel Scene
 * Left Ctrl / Rigth Ctrl + U: Panel Hierarchy
 * Left Ctrl / Rigth Ctrl + P: Panel Create Object
 * Left Ctrl / Rigth Ctrl + M: Panel Inspector
 * Left Ctrl / Rigth Ctrl + D: Panel ImGui Demo
+* Left Ctrl / Rigth Ctrl + L: Edit Layouts
+
 * Left Alt / Rigth Alt + F1: Report Bug
+
 * F3: Mesh View
 * F4: Wireframe Mode
 * F5: View Grid
@@ -38,6 +42,17 @@ Alien Engine is a Game Engine made by Víctor Segura Blanco and Oriol Capdevila 
 ## Innovations
 
 ### Assigment 1
+
+* Layouts: Personalized layouts that you can create, remove or edit, and save separately
+* Shortcuts System: can be customized in Panel Config
+* Outline: similar to Unity, parent and children different colors
+* Scene inside a ImGui Window
+* Docking
+* Component Light
+* Everything customazible at Panel Render
+* Component Material Opacity and Loaded Textures Selectors
+* Hierarchy System Done and Drag and Drop in Hierarchy Panel
+
 
 ## License
 
