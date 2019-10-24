@@ -64,8 +64,6 @@ update_status ModuleCamera3D::Update(float dt)
 		Movement();
 	}
 
-
-
 	SetCenterOffset();
 
 	Position += newPos;
@@ -145,6 +143,11 @@ void ModuleCamera3D::Movement()
 
 		if (App->input->GetMouseYMotion() < 1) newPos -= Y * mouse_speed*0.5f ;
 		if (App->input->GetMouseYMotion() > -1) newPos += Y * mouse_speed*0.5f;
+
+		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_UP)
+		{
+			SDL_FreeCursor(cursor);
+		}
 	}
 }
 
@@ -153,12 +156,12 @@ void ModuleCamera3D::Zoom()
 	if (App->input->GetMouseZ() > 0)
 	{
 		newPos -= Z * zoom_speed;
-
 	}
 	else if (App->input->GetMouseZ() < 0)
 	{
 		newPos += Z * zoom_speed;
 	}
+	Reference -= newPos;
 }
 
 void ModuleCamera3D::Rotation()
@@ -199,6 +202,11 @@ void ModuleCamera3D::Rotation()
 		}
 
 		Position = Reference + Z * length(Position);
+
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+		{
+			SDL_FreeCursor(cursor);
+		}
 	}
 }
 
