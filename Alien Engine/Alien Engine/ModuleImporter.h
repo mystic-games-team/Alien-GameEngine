@@ -61,7 +61,8 @@ private:
 	
 	// models
 	void CreateModelMetaData(const char* path, const aiScene* scene); // create the .alien 
-	void CreateNodeMetaData(const aiNode* node, char** cursor); // create the .alienMesh 
+	void CreateNodeMetaData(const aiScene* scene, const aiNode* node, char** cursor); // look what node has and call diferent creation functions
+	char* CreateMeshMetaData(const aiNode* node, const aiMesh* ai_mesh);
 
 	void ReadModelMetaData(const char* path);
 	void ReadMeshMetaData(const char* path);

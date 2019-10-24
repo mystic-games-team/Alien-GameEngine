@@ -354,6 +354,7 @@ void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
 		material->texture = texture;
 	}
 }
+
 void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 {
 	uint num_meshes = scene->mNumMeshes;
@@ -373,7 +374,7 @@ void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 
 	for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
 		if (scene->mRootNode->mChildren[i] != nullptr) {
-			CreateNodeMetaData(scene->mRootNode->mChildren[i], &cursor);
+			CreateNodeMetaData(scene, scene->mRootNode->mChildren[i], &cursor);
 		}
 	}
 	
@@ -385,31 +386,34 @@ void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 	RELEASE_ARRAY(data); 
 }
 
-void ModuleImporter::CreateNodeMetaData(const aiNode* node, char** cursor)
+void ModuleImporter::CreateNodeMetaData(const aiScene* scene, const aiNode* node, char** cursor)
 {
-
-
 	for (uint i = 0; i < node->mNumMeshes; ++i) {
-
-
-		// copy the path to the .alien file
-		char* node_path[1] = { "EL PATH DEL .alienMesh" };
-		memcpy(*cursor, node_path, sizeof(node_path));
-		*cursor += sizeof(node_path);
+		const aiMesh* ai_mesh = scene->mMeshes[node->mMeshes[i]];
+		if (ai_mesh != nullptr) {
+			// copy the path to the .alien file
+			char* node_path[1] = { CreateMeshMetaData(node, ai_mesh) };
+			memcpy(*cursor, node_path, sizeof(node_path));
+			*cursor += sizeof(node_path);
+		}
 	}
 
-
-	
-	
-
-
-	if (node->mNumChildren > 0) { // has children, so call again the function with them
+	// if it has children, call again the function with them
+	if (node->mNumChildren > 0) { 
 		for (uint i = 0; i < node->mNumChildren; ++i) {
 			if (node->mChildren[i] != nullptr) {
-				CreateNodeMetaData(node->mChildren[i], cursor);
+				CreateNodeMetaData(scene, node->mChildren[i], cursor);
 			}
 		}
 	}
+}
+
+char* ModuleImporter::CreateMeshMetaData(const aiNode* node, const aiMesh* ai_mesh)
+{
+
+	// per saber la jerarquia fer que cada mesh es guardi el seu node name i el parent node name
+
+	return nullptr;
 }
 
 void ModuleImporter::ReadModelMetaData(const char* path)
@@ -436,11 +440,16 @@ void ModuleImporter::ReadModelMetaData(const char* path)
 			// read the mesh meta data
 			ReadMeshMetaData(name[0]);
 		}
+		RELEASE_ARRAY(data);
 	}
 }
 
 void ModuleImporter::ReadMeshMetaData(const char* path)
 {
+
+
+
+
 }
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
