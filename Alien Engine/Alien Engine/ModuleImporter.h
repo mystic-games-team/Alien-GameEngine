@@ -60,10 +60,11 @@ public:
 private:
 	
 	// models
-	void CreateModelMetaData(const char* path, const aiScene* scene);
-	void CreateNodeMetaData(const aiNode* node, std::vector<std::string> &file_path);
+	void CreateModelMetaData(const char* path, const aiScene* scene); // create the .alien 
+	void CreateNodeMetaData(const aiNode* node, char** cursor); // create the .alienMesh 
 
 	void ReadModelMetaData(const char* path);
+	void ReadMeshMetaData(const char* path);
 
 	// mesh
 	void InitScene(const aiScene* scene, const char* path);
