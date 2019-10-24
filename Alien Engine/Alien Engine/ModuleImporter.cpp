@@ -39,7 +39,7 @@ bool ModuleImporter::Start()
 	LoadTextureFile("Assets/Textures/Checkers.png");
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
 
-	ReadModelMetaData("Library/Models/BakerHouse.alien");
+	//ReadModelMetaData("Library/Models/BakerHouse.alien");
 
 	return true;
 }
@@ -381,13 +381,14 @@ void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 	// Create the file
 	std::string output;
 	App->file_system->SaveUnique(output, data, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
-	LOG("Created file %s", output.data());
+	LOG("Created alien file %s", output.data());
 
 	RELEASE_ARRAY(data); 
 }
 
-void ModuleImporter::CreateNodeMetaData(const aiScene* scene, const aiNode* node, char** cursor)
+void ModuleImporter::CreateNodeMetaData(const aiScene* scene, aiNode* node, char** cursor)
 {
+	// create the .alienMesh
 	for (uint i = 0; i < node->mNumMeshes; ++i) {
 		const aiMesh* ai_mesh = scene->mMeshes[node->mMeshes[i]];
 		if (ai_mesh != nullptr) {
@@ -395,6 +396,7 @@ void ModuleImporter::CreateNodeMetaData(const aiScene* scene, const aiNode* node
 			char* node_path[1] = { CreateMeshMetaData(node, ai_mesh) };
 			memcpy(*cursor, node_path, sizeof(node_path));
 			*cursor += sizeof(node_path);
+			LOG("Created alienMesh file %s", node_path[0]);
 		}
 	}
 
@@ -408,10 +410,30 @@ void ModuleImporter::CreateNodeMetaData(const aiScene* scene, const aiNode* node
 	}
 }
 
-char* ModuleImporter::CreateMeshMetaData(const aiNode* node, const aiMesh* ai_mesh)
+char* ModuleImporter::CreateMeshMetaData(aiNode* node, const aiMesh* ai_mesh)
 {
 
 	// per saber la jerarquia fer que cada mesh es guardi el seu node name i el parent node name
+
+	//char* parent_name = nullptr;
+	//if (node->mParent != nullptr)
+	//	parent_name = node->mParent->mName.data;
+	//else
+	//	parent_name = "null";
+
+	//char* node_names[2] = { parent_name, node->mName.data };
+	//
+	//uint ranges[2] = { ai_mesh->mNumVertices, ai_mesh->mNu };
+	//uint size = sizeof(ranges) + sizeof(uint) * mesh.num_indices + sizeof(float) * mesh.num_vertices * 3;
+	//char* data = new char[size]; // Allocate
+	//char* cursor = data;
+	//uint bytes = sizeof(ranges); // First store ranges
+	//memcpy(cursor, ranges, bytes);
+	//cursor += bytes; // Store indices
+	//bytes = sizeof(uint) * mesh.num_indices;
+	//memcpy(cursor, mesh.indices, bytes);
+
+
 
 	return nullptr;
 }
