@@ -35,7 +35,6 @@ bool ModuleImporter::Init()
 
 bool ModuleImporter::Start()
 {
-	
 	LoadTextureFile("Assets/Textures/Checkers.png");
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
 	return true;
