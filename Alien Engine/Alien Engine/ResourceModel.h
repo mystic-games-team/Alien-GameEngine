@@ -15,7 +15,7 @@ public:
 	virtual ~ResourceModel();
 
 	void CreateMetaData();
-	void ReadMetaData();
+	bool ReadMetaData(char* path);
 
 public:
 

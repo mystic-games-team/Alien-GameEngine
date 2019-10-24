@@ -29,8 +29,8 @@ public:
 	// type
 	const ResourceType GetType() const;
 
-	virtual void CreateMetaData() {}
-	virtual void ReadMetaData() {}
+	virtual void CreateMetaData() {} // when someting is dropped
+	virtual bool ReadMetaData(char* path) { return true; } // when engine is being inicialized read all meta data
 
 protected:
 

@@ -45,8 +45,6 @@ bool ModuleImporter::Start()
 	LoadTextureFile("Assets/Textures/Checkers.png");
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
 
-	//ReadModelMetaData("Library/Models/BakerHouse.alien");
-	model->ReadMetaData();
 	return true;
 }
 
@@ -72,7 +70,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 	LOG("Loading %s", path);
 
-	// check if this file has been already created as a .alien
+	// check if this file has been already created as a .alien TODO: this isnt working :)
 	if (!App->file_system->Exists((std::string(LIBRARY_MODELS_FOLDER) + App->file_system->GetBaseFileName(path) + std::string(".alienModel")).data())) {
 		
 		const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
@@ -91,7 +89,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 	}
 	else {
-		// Load the .alienModel directly!!
+		// Load the .alienModel directly!! TODO:
 	}
 	
 	return ret;
@@ -112,7 +110,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 	// TODO: fer que es faci pushback nomes si tot ha sortit be
 
 	App->resources->AddResource(model);
-	//model = nullptr;
+	model = nullptr;
 }
 
 
@@ -333,42 +331,7 @@ void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
 	}
 }
 
-void ModuleImporter::ReadModelMetaData(const char* path)
-{
 
-	// get the file buffer
-	char* data = nullptr;
-	App->file_system->Load(path, &data);
-
-	if (data != nullptr) {
-		uint num_meshes = 0;
-
-		uint bytes = sizeof(num_meshes);
-		memcpy(&num_meshes, data, bytes);
-		data += bytes;
-
-		for (uint i = 0; i < num_meshes; ++i) {
-
-			// get the name of the nodes path
-			char* name[1];
-			bytes = sizeof(name);
-			memcpy(name, data, bytes);
-			data += bytes;
-
-			// read the mesh meta data
-			ReadMeshMetaData(name[0]);
-		}
-		RELEASE_ARRAY(data);
-	}
-}
-
-void ModuleImporter::ReadMeshMetaData(const char* path)
-{
-
-
-
-
-}
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
 {

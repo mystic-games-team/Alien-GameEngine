@@ -47,14 +47,49 @@ void ResourceModel::CreateMetaData()
 	delete[] data;
 }
 
-void ResourceModel::ReadMetaData()
+bool ResourceModel::ReadMetaData(char* path)
 {
+	bool ret = true;
+
 	char* data = nullptr;
-	App->file_system->Load(path.data(), &data);
+	App->file_system->Load(path, &data);
 
 	if (data != nullptr) {
+
+		this->path = std::string(path);
+		// TODO: original path get
+
+		uint num_meshes = 0;
 		
+		uint bytes = sizeof(num_meshes);
+		memcpy(&num_meshes, data, bytes);
+		data += bytes;
+
+		for (uint i = 0; i < num_meshes; ++i) {
+
+			// get the name of the nodes path
+			char* mesh_path[1];
+			bytes = sizeof(mesh_path);
+			memcpy(mesh_path, data, bytes);
+			data += bytes;
+
+			// read the mesh meta data
+			ResourceMesh* r_mesh = new ResourceMesh();
+			if (r_mesh->ReadMetaData(mesh_path[0])) {
+				meshes_attached.push_back(r_mesh);
+			}
+			else {
+				LOG("Error loading %s", mesh_path[0]);
+				delete r_mesh;
+			}
+		}
+		App->resources->AddResource(this);
+		delete[] data;
+	}
+	else {
+		ret = false;
+		LOG("Error loading %s", path);
 	}
 
-	delete[] data;
+	return ret;
 }

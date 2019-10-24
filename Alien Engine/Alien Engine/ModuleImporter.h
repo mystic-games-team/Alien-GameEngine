@@ -53,20 +53,17 @@ public:
 	bool CleanUp();
 
 	// models
-	bool LoadModelFile(const char* path);
+	bool LoadModelFile(const char* path); // when dropped
 	void LoadParShapesMesh(par_shapes_mesh* p_mesh, ComponentMesh* mesh);
 
 	// textures
-	Texture* LoadTextureFile(const char* path, bool has_been_dropped = false);
+	Texture* LoadTextureFile(const char* path, bool has_been_dropped = false); // when dropped
 	void ApplyTextureToSelectedObject(Texture* texture);
 	
 private:
 	
 	// models
 	void InitScene(const char* path, const aiScene* scene);
-
-	void ReadModelMetaData(const char* path);
-	void ReadMeshMetaData(const char* path);
 
 	// mesh
 	void LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent);

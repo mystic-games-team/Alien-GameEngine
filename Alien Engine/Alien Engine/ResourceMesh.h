@@ -16,7 +16,7 @@ public:
 	virtual ~ResourceMesh();
 
 	void CreateMetaData();
-	void ReadMetaData();
+	bool ReadMetaData(char* path);
 
 public:
 
@@ -50,6 +50,8 @@ private:
 
 	std::string parent_name;
 
-	// transforms...
+	// transforms... TODO
+
+	// TODO: think how to organize this...
 
 };
