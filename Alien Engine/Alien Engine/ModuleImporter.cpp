@@ -10,7 +10,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 #include "GameObject.h"
-
+#include <map>
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -39,6 +39,9 @@ bool ModuleImporter::Start()
 	
 	LoadTextureFile("Assets/Textures/Checkers.png");
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
+
+	ReadModelMetaData("BakerHouse.alien");
+
 	return true;
 }
 
@@ -54,7 +57,7 @@ bool ModuleImporter::CleanUp()
 		}
 	}
 	textures.clear();
-
+	
 	return true;
 }
 
@@ -356,8 +359,10 @@ void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 {
 	std::vector<std::string> path_meshes_file;
 
-	// criadr que faci load del root funcio recursiva
-	// pasar com a & el vector
+	// create the .alienMesh and fill the vector with the path of each one
+	for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
+		CreateNodeMetaData(scene->mRootNode->mChildren[i], path_meshes_file);
+	}
 
 	uint file_size = sizeof(uint);
 
@@ -367,32 +372,55 @@ void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 	}
 
 	char* model_file_buffer = new char[file_size];
-
 	char* cursor = model_file_buffer;
 
-	uint size = file_size;
+	uint local_size = 0;
 
 	// number mesh data
 	uint num_mesh = path_meshes_file.size();
-	memcpy(cursor, &num_mesh, file_size = sizeof(uint));
+	memcpy(cursor, &num_mesh, local_size = sizeof(uint));
 
-	cursor += file_size;
+	cursor += local_size;
 
 	// mesh path
 	item = path_meshes_file.begin();
 	for (; item != path_meshes_file.end(); ++item) {
 		const char* name = (*item).data(); 
-		file_size = sizeof(name);
-		uint number = file_size;
+		local_size = sizeof(name);
+		uint number = local_size;
 		memcpy(cursor, &number, sizeof(uint));
 		cursor += sizeof(uint);
-		memcpy(cursor, name, file_size);
-		cursor += file_size;
+		memcpy(cursor, name, local_size);
+		cursor += local_size;
 	}
+
+	// create the .alien that has info about fbx
 	std::string output;
-	App->file_system->SaveUnique(output, model_file_buffer, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
+	App->file_system->SaveUnique(output, model_file_buffer, file_size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
 }
 
+void ModuleImporter::CreateNodeMetaData(const aiNode* node, std::vector<std::string>& file_path)
+{
+
+	file_path.push_back("test");
+
+
+	if (node->mNumChildren < 1) { // no children
+		
+	}
+	else { // has children, so call again the function with them
+		
+	}
+
+}
+
+void ModuleImporter::ReadModelMetaData(const char* path)
+{
+
+	
+
+
+}
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
 {

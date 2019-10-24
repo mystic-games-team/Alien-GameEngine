@@ -61,8 +61,9 @@ private:
 	
 	// models
 	void CreateModelMetaData(const char* path, const aiScene* scene);
+	void CreateNodeMetaData(const aiNode* node, std::vector<std::string> &file_path);
 
-
+	void ReadModelMetaData(const char* path);
 
 	// mesh
 	void InitScene(const aiScene* scene, const char* path);
