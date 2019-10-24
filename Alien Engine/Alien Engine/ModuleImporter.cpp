@@ -105,7 +105,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 	LoadSceneNode(scene->mRootNode, scene, nullptr);
 
 	// create the meta data files like .alien
-	model->CreateMetaData();
+	model->CreateMetaData(); // TODO: CreateMetaData of: transformations & texture path
 
 	// TODO: fer que es faci pushback nomes si tot ha sortit be
 
