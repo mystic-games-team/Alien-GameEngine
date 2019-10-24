@@ -46,7 +46,7 @@ bool ModuleImporter::Start()
 	LoadModelFile("Assets/Models/BakerHouse.fbx");
 
 	//ReadModelMetaData("Library/Models/BakerHouse.alien");
-
+	model->ReadMetaData();
 	return true;
 }
 
@@ -78,17 +78,6 @@ bool ModuleImporter::LoadModelFile(const char* path)
 		const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
 			aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality);
 
-		//if (scene != nullptr) {
-		//	CreateModelMetaData(path, scene);
-		//}
-		//else {
-		//	ret = false;
-		//	LOG("Error loading model %s", path);
-		//	LOG("Error type: %s", aiGetErrorString());
-		//}
-
-		//aiReleaseImport(scene);
-
 		if (scene != nullptr) {
 			InitScene(path, scene);
 			LOG("Succesfully loaded %s", path);
@@ -112,7 +101,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 {
 	model = new ResourceModel();
 	model->name = App->file_system->GetBaseFileName(path);
-	model->path = path;
+	model->path = std::string(path);
 
 	// start recursive function to all nodes
 	LoadSceneNode(scene->mRootNode, scene, nullptr);
@@ -123,7 +112,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 	// TODO: fer que es faci pushback nomes si tot ha sortit be
 
 	App->resources->AddResource(model);
-	model = nullptr;
+	//model = nullptr;
 }
 
 
@@ -135,6 +124,7 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Res
 	for (uint i = 0; i < node->mNumMeshes; ++i) {
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		next_parent = LoadNodeMesh(scene, node, mesh, parent);
+		App->resources->AddResource(next_parent);
 		model->meshes_attached.push_back(next_parent);
 	}
 	
@@ -342,91 +332,10 @@ void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
 		material->texture = texture;
 	}
 }
-void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
-{
-	uint num_meshes = scene->mNumMeshes;
-
-	// file size
-	uint size = sizeof(num_meshes) + sizeof(char*) * num_meshes;
-
-	char* data = new char[size]; // Allocate
-	char* cursor = data;
-
-	// save the number of meshes
-	uint bytes = sizeof(num_meshes); 
-
-	memcpy(cursor, &num_meshes, bytes);
-	cursor += bytes;
-
-
-	for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
-		if (scene->mRootNode->mChildren[i] != nullptr) {
-			CreateNodeMetaData(scene, scene->mRootNode->mChildren[i], &cursor);
-		}
-	}
-	
-	// Create the file
-	std::string output;
-	App->file_system->SaveUnique(output, data, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
-	LOG("Created alien file %s", output.data());
-
-	RELEASE_ARRAY(data); 
-}
-
-void ModuleImporter::CreateNodeMetaData(const aiScene* scene, aiNode* node, char** cursor)
-{
-	// create the .alienMesh
-	for (uint i = 0; i < node->mNumMeshes; ++i) {
-		const aiMesh* ai_mesh = scene->mMeshes[node->mMeshes[i]];
-		if (ai_mesh != nullptr) {
-			// copy the path to the .alien file
-			char* node_path[1] = { CreateMeshMetaData(node, ai_mesh) };
-			memcpy(*cursor, node_path, sizeof(node_path));
-			*cursor += sizeof(node_path);
-			LOG("Created alienMesh file %s", node_path[0]);
-		}
-	}
-
-	// if it has children, call again the function with them
-	if (node->mNumChildren > 0) { 
-		for (uint i = 0; i < node->mNumChildren; ++i) {
-			if (node->mChildren[i] != nullptr) {
-				CreateNodeMetaData(scene, node->mChildren[i], cursor);
-			}
-		}
-	}
-}
-
-char* ModuleImporter::CreateMeshMetaData(aiNode* node, const aiMesh* ai_mesh)
-{
-
-	// per saber la jerarquia fer que cada mesh es guardi el seu node name i el parent node name
-
-	//char* parent_name = nullptr;
-	//if (node->mParent != nullptr)
-	//	parent_name = node->mParent->mName.data;
-	//else
-	//	parent_name = "null";
-
-	//char* node_names[2] = { parent_name, node->mName.data };
-	//
-	//uint ranges[2] = { ai_mesh->mNumVertices, ai_mesh->mNu };
-	//uint size = sizeof(ranges) + sizeof(uint) * mesh.num_indices + sizeof(float) * mesh.num_vertices * 3;
-	//char* data = new char[size]; // Allocate
-	//char* cursor = data;
-	//uint bytes = sizeof(ranges); // First store ranges
-	//memcpy(cursor, ranges, bytes);
-	//cursor += bytes; // Store indices
-	//bytes = sizeof(uint) * mesh.num_indices;
-	//memcpy(cursor, mesh.indices, bytes);
-
-
-
-	return nullptr;
-}
 
 void ModuleImporter::ReadModelMetaData(const char* path)
 {
+
 	// get the file buffer
 	char* data = nullptr;
 	App->file_system->Load(path, &data);

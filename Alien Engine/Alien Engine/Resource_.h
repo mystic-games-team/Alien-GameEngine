@@ -29,11 +29,14 @@ public:
 	// type
 	const ResourceType GetType() const;
 
+	virtual void CreateMetaData() {}
+	virtual void ReadMetaData() {}
+
 protected:
 
 	ResourceType type = ResourceType::RESOURCE_NONE;
 
-	const char* path;
+	std::string path;
 	std::string name;
 
 };

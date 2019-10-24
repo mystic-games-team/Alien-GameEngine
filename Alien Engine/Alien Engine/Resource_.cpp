@@ -10,7 +10,7 @@ Resource::~Resource()
 
 const char* const Resource::GetPath() const
 {
-	return path;
+	return path.data();
 }
 
 const char* const Resource::GetName() const

@@ -15,9 +15,12 @@ public:
 	virtual ~ResourceModel();
 
 	void CreateMetaData();
+	void ReadMetaData();
 
 public:
 
 	std::vector<ResourceMesh*> meshes_attached;
+
+	std::string original_path;
 
 };

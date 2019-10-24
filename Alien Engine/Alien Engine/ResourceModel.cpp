@@ -32,17 +32,29 @@ void ResourceModel::CreateMetaData()
 	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 	for (; item != meshes_attached.end(); ++item) {
 		if ((*item) != nullptr) {
-			const char* mesh_path[1] = { (*item)->CreateMetaData() };
+			(*item)->CreateMetaData();
+			const char* mesh_path[1] = { (*item)->GetPath() };
 			memcpy(cursor, mesh_path, sizeof(mesh_path));
 			cursor += sizeof(mesh_path);
 			LOG("Created alienMesh file %s", mesh_path[0]);
 		}
 	}
-
+	original_path = path;
 	// Create the file
-	std::string output;
-	App->file_system->SaveUnique(output, data, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path).data(), ".alien");
-	LOG("Created alien file %s", output.data());
+	App->file_system->SaveUnique(path, data, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path.data()).data(), ".alien");
+	LOG("Created alien file %s", path.data());
+
+	delete[] data;
+}
+
+void ResourceModel::ReadMetaData()
+{
+	char* data = nullptr;
+	App->file_system->Load(path.data(), &data);
+
+	if (data != nullptr) {
+		
+	}
 
 	delete[] data;
 }

@@ -11,7 +11,7 @@ ResourceMesh::~ResourceMesh()
 {
 }
 
-const char* ResourceMesh::CreateMetaData()
+void ResourceMesh::CreateMetaData()
 {
 	if (parent_name.empty()) {
 		parent_name.assign("null");
@@ -22,11 +22,10 @@ const char* ResourceMesh::CreateMetaData()
 	uint ranges[2] = { num_vertex, num_index };
 	uint size = sizeof(ranges) + sizeof(float) * num_vertex * 3 + sizeof(uint) * num_index;
 
-	char* data = new char[size]; // Allocate
+	char* data = new char[size]; 
 	char* cursor = data;
 
-
-	uint bytes = sizeof(ranges); // First store ranges
+	uint bytes = sizeof(ranges); 
 	memcpy(cursor, ranges, bytes);
 
 	cursor += bytes; 
@@ -42,5 +41,9 @@ const char* ResourceMesh::CreateMetaData()
 
 	path = output.data();
 
-	return path;
+	delete[] data;
+}
+
+void ResourceMesh::ReadMetaData()
+{
 }
