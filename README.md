@@ -53,6 +53,20 @@ Alien Engine is a Game Engine made by Víctor Segura Blanco and Oriol Capdevila 
 * Component Material Opacity and Loaded Textures Selectors
 * Hierarchy System Done and Drag and Drop in Hierarchy Panel
 
+## Panels
+
+* Panel Configuration: Options to change name, max fps and see information about hardware and framerate. Also there you can 
+customize shortcuts, windows style, the window size and mouse inputs. 
+* Panel Console: Here you can see errors and information about what you load.
+* Panel Scene: Simple panel with just the scene inside.
+* Panel Inspector: Shows the components information of the selected object.
+* Panel Hierarchy: Shows the hierarcchy of the all game objects that are in the scene, here you
+can change parents.
+* Panel Render: Here you can customize mesh, background, grid, normal of vertex and faces, outline... changing the color, the line width, length...
+* Panel Create Object: Panel with options to select and create the primitive object you want.
+* Panel Layout: Two types of panels, one to create a new layout and the other with info about all layouts (here you
+can remove or rename layouts).
+* Panel About: Base info about creators of this software and libraries used.
 
 ## License
 
