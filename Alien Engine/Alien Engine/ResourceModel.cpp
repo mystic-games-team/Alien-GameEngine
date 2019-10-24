@@ -2,6 +2,7 @@
 
 ResourceModel::ResourceModel() : Resource()
 {
+	type = ResourceType::RESOURCE_MODEL;
 }
 
 ResourceModel::~ResourceModel()

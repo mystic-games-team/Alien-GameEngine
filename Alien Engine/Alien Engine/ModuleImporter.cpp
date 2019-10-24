@@ -11,6 +11,11 @@
 #include "ComponentMesh.h"
 #include "GameObject.h"
 
+#include "ModuleResources.h"
+#include "ResourceMesh.h"
+#include "ResourceModel.h"
+
+
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
 }
@@ -72,19 +77,19 @@ bool ModuleImporter::LoadModelFile(const char* path)
 		const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
 			aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality);
 
+		//if (scene != nullptr) {
+		//	CreateModelMetaData(path, scene);
+		//}
+		//else {
+		//	ret = false;
+		//	LOG("Error loading model %s", path);
+		//	LOG("Error type: %s", aiGetErrorString());
+		//}
+
+		//aiReleaseImport(scene);
+
 		if (scene != nullptr) {
-			CreateModelMetaData(path, scene);
-		}
-		else {
-			ret = false;
-			LOG("Error loading model %s", path);
-			LOG("Error type: %s", aiGetErrorString());
-		}
-
-		aiReleaseImport(scene);
-
-		/*if (scene != nullptr) {
-			InitScene(scene, path);
+			InitScene(path, scene);
 			LOG("Succesfully loaded %s", path);
 		}
 		else {
@@ -92,51 +97,43 @@ bool ModuleImporter::LoadModelFile(const char* path)
 			LOG("Error loading model %s", path);
 			LOG("Error type: %s", aiGetErrorString());
 		}
-		aiReleaseImport(scene);*/
+		aiReleaseImport(scene);
 
 	}
 	else {
 		// Load the .alienModel directly!!
 	}
-
-
-	
 	
 	return ret;
 }
 
-void ModuleImporter::InitScene(const aiScene* scene, const char* path)
+void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 {
-	if (scene->mRootNode->mNumChildren > 1) { // if there is more than one children we create an empty game object that is going ot be the parent of every child
-		// create the parent of the all fbx/obj...
-		parent_object = new GameObject(App->objects->base_game_object);
-		ComponentTransform* tr = new ComponentTransform(parent_object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
-		parent_object->AddComponent(tr);
-		// set parent name, we must change that
-		parent_object->SetName(App->file_system->GetBaseFileName(path).data());
-		// start recursive function to pass through all nodes
-		LoadSceneNode(scene->mRootNode, scene, parent_object);
-		// set parent active
-		App->objects->SetNewSelectedObject(parent_object);
-		LOG("All nodes loaded");
-		parent_object = nullptr;
-	}
-	else { // if there is just one child, we dont need an empty game object. So the parent of this child is de base_game_object
-		LoadSceneNode(scene->mRootNode, scene, App->objects->base_game_object);
-	}
-	
+	model = new ResourceModel();
+	model->name = App->file_system->GetBaseFileName(path);
+
+	// start recursive function to all nodes
+	LoadSceneNode(scene->mRootNode, scene, nullptr);
+
+	// create the meta data files like .alien
+	model->CreateMetaData();
+
+	// TODO: fer que es faci pushback nomes si tot ha sortit be
+
+	App->resources->AddResource(model);
+	model = nullptr;
 }
 
-void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* parent)
+
+void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent)
 {
 	LOG("Loading node with name %s", node->mName.C_Str());
-	GameObject* next_parent = nullptr;
-	if (parent == App->objects->base_game_object)
-		next_parent = App->objects->base_game_object;
+	ResourceMesh* next_parent = nullptr;
 
 	for (uint i = 0; i < node->mNumMeshes; ++i) {
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		next_parent = LoadNodeMesh(scene, node, mesh, parent);
+		model->meshes_attached.push_back(next_parent);
 	}
 	
 	for (uint i = 0; i < node->mNumChildren; ++i) {
@@ -145,56 +142,50 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Gam
 	}
 }
 
-GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* ai_mesh, GameObject* parent)
+ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* ai_mesh, ResourceMesh* parent)
 {
-	GameObject* ret = nullptr;
-	if (parent == nullptr) {
-		ret = new GameObject(parent_object);
-	}
-	else {
-		ret = new GameObject(parent);
-	}
+	ResourceMesh* ret = new ResourceMesh();
+	if (parent != nullptr)
+		ret->parent_name = parent->name;
 
-	// get mesh data
-	ComponentMesh* mesh = new ComponentMesh(ret);
 	// get vertex
-	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
+	ret->vertex = new float[ai_mesh->mNumVertices * 3];
 	
-	memcpy(mesh->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
-	mesh->num_vertex = ai_mesh->mNumVertices;
+	memcpy(ret->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
+	ret->num_vertex = ai_mesh->mNumVertices;
 	// get index
 	if (ai_mesh->HasFaces())
 	{
-		mesh->num_index = ai_mesh->mNumFaces * 3;
-		mesh->index = new uint[mesh->num_index]; // assume each face is a triangle
+		ret->num_index = ai_mesh->mNumFaces * 3;
+		ret->index = new uint[ret->num_index]; // assume each face is a triangle
 		for (uint i = 0; i < ai_mesh->mNumFaces; ++i)
 		{
 			if (ai_mesh->mFaces[i].mNumIndices != 3) {
 				LOG("WARNING, geometry face with != 3 indices!");
 			}
 			else {
-				memcpy(&mesh->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+				memcpy(&ret->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 			}
 		}
 	}
 	// get normals
 	if (ai_mesh->HasNormals())
 	{
-		mesh->normals = new float[ai_mesh->mNumVertices * 3];
-		memcpy(mesh->normals, ai_mesh->mNormals, sizeof(float) * ai_mesh->mNumVertices * 3);
+		ret->normals = new float[ai_mesh->mNumVertices * 3];
+		memcpy(ret->normals, ai_mesh->mNormals, sizeof(float) * ai_mesh->mNumVertices * 3);
 
-		mesh->center_point_normal = new float[ai_mesh->mNumFaces * 3];
-		mesh->center_point = new float[ai_mesh->mNumFaces * 3];
-		mesh->num_faces = ai_mesh->mNumFaces;
-		for (uint i = 0; i < mesh->num_index; i += 3)
+		ret->center_point_normal = new float[ai_mesh->mNumFaces * 3];
+		ret->center_point = new float[ai_mesh->mNumFaces * 3];
+		ret->num_faces = ai_mesh->mNumFaces;
+		for (uint i = 0; i < ret->num_index; i += 3)
 		{
-			uint index1 = mesh->index[i] * 3;
-			uint index2 = mesh->index[i + 1] * 3;
-			uint index3 = mesh->index[i + 2] * 3;
+			uint index1 = ret->index[i] * 3;
+			uint index2 = ret->index[i + 1] * 3;
+			uint index3 = ret->index[i + 2] * 3;
 
-			vec3 x0(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
-			vec3 x1(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
-			vec3 x2(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
+			vec3 x0(ret->vertex[index1], ret->vertex[index1 + 1], ret->vertex[index1 + 2]);
+			vec3 x1(ret->vertex[index2], ret->vertex[index2 + 1], ret->vertex[index2 + 2]);
+			vec3 x2(ret->vertex[index3], ret->vertex[index3 + 1], ret->vertex[index3 + 2]);
 
 			vec3 v0 = x0 - x2;
 			vec3 v1 = x1 - x2;
@@ -202,41 +193,38 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 
 			vec3 normalized = normalize(n);
 
-			mesh->center_point[i] = (x0.x + x1.x + x2.x) / 3;
-			mesh->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
-			mesh->center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
+			ret->center_point[i] = (x0.x + x1.x + x2.x) / 3;
+			ret->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
+			ret->center_point[i + 2] = (x0.z + x1.z + x2.z) / 3;
 
-			mesh->center_point_normal[i] = normalized.x;
-			mesh->center_point_normal[i + 1] = normalized.y;
-			mesh->center_point_normal[i + 2] = normalized.z;
+			ret->center_point_normal[i] = normalized.x;
+			ret->center_point_normal[i + 1] = normalized.y;
+			ret->center_point_normal[i + 2] = normalized.z;
 		}
 	}
 	// get UV
 	if (ai_mesh->HasTextureCoords(0)) {
-		mesh->uv_cords = new float[ai_mesh->mNumVertices * 3];
-		memcpy(mesh->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
+		ret->uv_cords = new float[ai_mesh->mNumVertices * 3];
+		memcpy(ret->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
 	}
 
 	// aabb
-	mesh->aabb_min.x = ai_mesh->mAABB.mMin.x;
-	mesh->aabb_min.y = ai_mesh->mAABB.mMin.y;
-	mesh->aabb_min.z = ai_mesh->mAABB.mMin.z;
+	ret->aabb_min.x = ai_mesh->mAABB.mMin.x;
+	ret->aabb_min.y = ai_mesh->mAABB.mMin.y;
+	ret->aabb_min.z = ai_mesh->mAABB.mMin.z;
 
-	mesh->aabb_max.x = ai_mesh->mAABB.mMax.x;
-	mesh->aabb_max.y = ai_mesh->mAABB.mMax.y;
-	mesh->aabb_max.z = ai_mesh->mAABB.mMax.z;
+	ret->aabb_max.x = ai_mesh->mAABB.mMax.x;
+	ret->aabb_max.y = ai_mesh->mAABB.mMax.y;
+	ret->aabb_max.z = ai_mesh->mAABB.mMax.z;
 
 	// set the material
-	ComponentMaterial* material = new ComponentMaterial(ret);
-	material->material_index = ai_mesh->mMaterialIndex;
-	aiMaterial* ai_material = scene->mMaterials[material->material_index];
-	uint numTextures = ai_material->GetTextureCount(aiTextureType_DIFFUSE);
+	aiMaterial* ai_material = scene->mMaterials[ai_mesh->mMaterialIndex];
 	aiString path;
 	ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 	std::string full_path(TEXTURES_FOLDER + std::string(path.C_Str()));
-	material->texture = LoadTextureFile(full_path.data());
+	ret->texture = LoadTextureFile(full_path.data());
 
-	InitMeshBuffers(mesh);
+	InitMeshBuffers(ret);
 
 	// get local transformations
 	aiVector3D translation, scaling;
@@ -249,21 +237,19 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	max_ = max(max_, scaling.z);
 
 	float3 pos(translation.x, translation.y, translation.z);
-	float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
-	//float3 scale(scaling.x, scaling.y, scaling.z);
+	//float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
+	float3 scale(scaling.x, scaling.y, scaling.z);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	ComponentTransform* transform = new ComponentTransform(ret, pos, rot, scale);
-
-	ret->AddComponent(transform);
-	ret->AddComponent(mesh);
-	ret->AddComponent(material);
-	ret->SetName(node->mName.C_Str());
+	ret->pos = pos;
+	ret->scale = scale;
+	ret->rot = rot;
+	ret->name = ai_mesh->mName.C_Str();
 
 	return ret;
 }
 
-void ModuleImporter::InitMeshBuffers(ComponentMesh* mesh)
+void ModuleImporter::InitMeshBuffers(ResourceMesh* mesh)
 {
 	// vertex
 	glGenBuffers(1, &mesh->id_vertex);
@@ -354,7 +340,6 @@ void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
 		material->texture = texture;
 	}
 }
-
 void ModuleImporter::CreateModelMetaData(const char* path, const aiScene* scene)
 {
 	uint num_meshes = scene->mNumMeshes;
@@ -528,7 +513,7 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 		}
 	}
 
-	InitMeshBuffers(mesh);
+	//InitMeshBuffers(mesh);
 }
 
 Texture::Texture(const char* path, const uint& id, const uint & width, const int & height)

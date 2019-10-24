@@ -25,6 +25,9 @@
 #include "Devil/include/ilu.h"
 #include "Devil/include/ilut.h"
 
+class ResourceModel;
+class ResourceMesh;
+
 struct Texture {
 	
 	Texture(const char* path, const uint& id, const uint & width, const int & height);
@@ -60,6 +63,7 @@ public:
 private:
 	
 	// models
+	void InitScene(const char* path, const aiScene* scene);
 	void CreateModelMetaData(const char* path, const aiScene* scene); // create the .alien 
 	void CreateNodeMetaData(const aiScene* scene, aiNode* node, char** cursor); // look what node has and call diferent creation functions
 	char* CreateMeshMetaData(aiNode* node, const aiMesh* ai_mesh);
@@ -68,10 +72,9 @@ private:
 	void ReadMeshMetaData(const char* path);
 
 	// mesh
-	void InitScene(const aiScene* scene, const char* path);
-	void LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* game_object);
-	GameObject* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, GameObject* game_object);
-	void InitMeshBuffers(ComponentMesh* mesh);
+	void LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent);
+	ResourceMesh* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, ResourceMesh* parent);
+	void InitMeshBuffers(ResourceMesh* mesh);
 
 public:
 
@@ -79,5 +82,5 @@ public:
 
 private:
 
-	GameObject* parent_object = nullptr;
+	ResourceModel* model = nullptr;
 };

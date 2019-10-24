@@ -2,6 +2,7 @@
 
 ResourceMesh::ResourceMesh() : Resource()
 {
+	type = ResourceType::RESOURCE_MESH;
 }
 
 ResourceMesh::~ResourceMesh()

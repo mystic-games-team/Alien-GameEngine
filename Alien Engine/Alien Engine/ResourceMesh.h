@@ -2,8 +2,13 @@
 
 #include "Resource_.h"
 #include "MathGeoLib/include/Math/float3.h"
+#include "MathGeoLib/include/Math/Quat.h"
+
+struct Texture;
 
 class ResourceMesh : public Resource {
+
+	friend class ModuleImporter;
 
 public:
 
@@ -33,5 +38,17 @@ public:
 
 	float3 aabb_min = { 0,0,0 };
 	float3 aabb_max = { 0,0,0 };
+
+	Texture* texture = nullptr;
+
+	float3 pos = { 0,0,0 };
+	float3 scale = { 0,0,0 };
+	Quat rot = { 0,0,0,0 };
+
+private:
+
+	std::string parent_name;
+
+	// transforms...
 
 };

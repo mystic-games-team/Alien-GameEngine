@@ -7,6 +7,8 @@ class ResourceMesh;
 
 class ResourceModel : public Resource {
 
+	friend class ModuleImporter;
+
 public:
 
 	ResourceModel();
