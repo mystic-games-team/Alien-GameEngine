@@ -19,46 +19,86 @@ void ResourceMesh::CreateMetaData()
 		parent_name.assign("null");
 	}
 
-	// char
-	char save_char[MAX_META_DATA_CHAR];
-	
-	// header
-	uint ranges[2] = { num_vertex, num_index };
-	uint size = sizeof(ranges) + sizeof(char[MAX_META_DATA_CHAR]) * 2 +sizeof(float) * num_vertex * 3 + sizeof(uint) * num_index;
+	uint ranges[3] = { num_vertex,num_index,num_faces };
 
-	char* data = new char[size]; 
+	/////////////////////// num del zie ////////////////// chars in that size //////////////////
+	/* size = 2 uints (size parent name & name) + parent name & name string size + ranges + vertex num 
+	+ index num + normals num + uv_cords + center point + center face point*/ 
+	uint size = sizeof(uint) * 2 + parent_name.size() + name.size() + sizeof(ranges) + (sizeof(float) * num_vertex * 3) 
+		+ (sizeof(uint) * num_index) + (sizeof(float) * num_vertex * 3) + (sizeof(float) * num_vertex * 3)
+		+ (sizeof(float) * num_faces * 3) + +(sizeof(float) * num_faces * 3);
+
+	char* data = new char[size];
 	char* cursor = data;
 
-	uint bytes = sizeof(ranges); 
+	uint bytes = 0;
+
+	// save parent name size
+	uint parent_size = parent_name.size();
+	bytes = sizeof(uint);
+	memcpy(cursor, &parent_size, bytes);
+	cursor += bytes;
+
+	// save name size
+	uint name_size = name.size();
+	memcpy(cursor, &name_size, bytes);
+	cursor += bytes;
+
+	// save parent name
+	bytes = parent_name.size();
+	memcpy(cursor, parent_name.data(), bytes);
+	cursor += bytes;
+
+	// save name
+	bytes = name.size();
+	memcpy(cursor, name.data(), bytes);
+	cursor += bytes;
+
+	// save ranges
+	bytes = sizeof(ranges);
 	memcpy(cursor, ranges, bytes);
 	cursor += bytes;
 
-	// parent name
-	sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", parent_name.data());
-	bytes = sizeof(save_char);
-	memcpy(cursor, save_char, bytes);
-	cursor += bytes;
-
-	// name
-	sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", name.data());
-	bytes = sizeof(save_char);
-	memcpy(cursor, save_char, bytes);
-	cursor += bytes;
-
-	// vertex
-	bytes = sizeof(float) * num_vertex * 3;
+	// save vertex
+	bytes = sizeof(float) * num_vertex;
 	memcpy(cursor, vertex, bytes);
 	cursor += bytes;
 
-	// index
+	// save index
 	bytes = sizeof(uint) * num_index;
 	memcpy(cursor, index, bytes);
+	cursor += bytes;
 
-	// save
-	std::string output;
-	App->file_system->SaveUnique(output, data, size, LIBRARY_MESHES_FOLDER, name.data(), ".alienMesh");
+	// save normals
+	if (normals != nullptr) {
+		bytes = sizeof(float) * num_vertex * 3;
+		memcpy(cursor, normals, bytes);
+		cursor += bytes;
+	}
 
-	path = output.data();
+	// save uv
+	if (uv_cords != nullptr) {
+		bytes = sizeof(float) * num_vertex * 3;
+		memcpy(cursor, uv_cords, bytes);
+		cursor += bytes;
+	}
+
+	// center point
+	if (center_point != nullptr) {
+		bytes = sizeof(float) * num_faces * 3;
+		memcpy(cursor, center_point, bytes);
+		cursor += bytes;
+	}
+
+	// center point normal
+	if (center_point_normal != nullptr) {
+		bytes = sizeof(float) * num_faces * 3;
+		memcpy(cursor, center_point_normal, bytes);
+		cursor += bytes;
+	}
+
+	// save file
+	App->file_system->SaveUnique(path, data, size, LIBRARY_MESHES_FOLDER, name.data(), ".alienMesh");
 
 	delete[] data;
 }
@@ -70,53 +110,90 @@ bool ResourceMesh::ReadMetaData(char* path)
 	char* data = nullptr;
 	App->file_system->Load(path, &data);
 
-	if (data != nullptr) {
-		this->path = std::string(path);
+	if (data != nullptr)
+	{
+		this->path = path;
 
 		char* cursor = data;
 
-		uint ranges[2];
-		uint bytes = sizeof(ranges);
+		// get parent name size
+		uint parent_name_size = 0;
+		uint bytes = sizeof(uint);
+		memcpy(&parent_name_size, cursor, bytes);
+		cursor += bytes;
 
-		// header
+		// get name size
+		uint name_size = 0;
+		memcpy(&name_size, cursor, bytes);
+		cursor += bytes;
+
+		// get parent name
+		char* parent_name_ = new char[parent_name_size + 1];
+		bytes = sizeof(char) * parent_name_size;
+		memcpy(parent_name_, cursor, bytes);
+		parent_name_[parent_name_size] = '\0';
+		cursor += bytes;
+		parent_name = std::string(parent_name_);
+		delete[] parent_name_;
+
+		// get name
+		char* name_ = new char[name_size + 1];
+		bytes = sizeof(char) * name_size;
+		memcpy(name_, cursor, bytes);
+		name_[name_size] = '\0';
+		cursor += bytes;
+		name = std::string(name_);
+		delete[] name_;
+
+		// get ranges 0: vertex 1: index 2: faces
+		uint ranges[3];
+		bytes = sizeof(ranges);
 		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+
 		num_vertex = ranges[0];
 		num_index = ranges[1];
-		cursor += bytes;
+		num_faces = ranges[2];
 
-		// char
-		char load_char[MAX_META_DATA_CHAR];
-
-		// parent name
-		bytes = sizeof(load_char);
-		memcpy(load_char, cursor, bytes);
-		cursor += bytes;
-		parent_name = std::string(load_char);
-
-		// name
-		bytes = sizeof(load_char);
-		memcpy(load_char, cursor, bytes);
-		cursor += bytes;
-		name = std::string(load_char);
-
-		// Load vertex
+		// get vertex
 		bytes = sizeof(float) * num_vertex * 3;
 		vertex = new float[num_vertex * 3];
 		memcpy(vertex, cursor, bytes);
-
-		// Load index
 		cursor += bytes;
+
+		// get index
 		bytes = sizeof(uint) * num_index;
 		index = new uint[num_index];
 		memcpy(index, cursor, bytes);
-	
-		App->resources->AddResource(this);
+		cursor += bytes;
+
+		// get normals
+		bytes = sizeof(float) * num_vertex * 3;
+		normals = new float[num_vertex * 3];
+		memcpy(normals, cursor, bytes);
+		cursor += bytes;
+
+		// get uv cords
+		bytes = sizeof(float) * num_vertex * 3;
+		uv_cords = new float[num_vertex * 3];
+		memcpy(uv_cords, cursor, bytes);
+		cursor += bytes;
+
+		// get center point
+		bytes = sizeof(float) * num_faces * 3;
+		center_point = new float[num_faces * 3];
+		memcpy(center_point, cursor, bytes);
+		cursor += bytes;
+
+		// get center normal
+		bytes = sizeof(float) * num_faces * 3;
+		center_point_normal = new float[num_faces * 3];
+		memcpy(center_point_normal, cursor, bytes);
+		// TODO: know if has normals & uv cords... now if it doesnt have GG
 		delete[] data;
 	}
-	else {
+	else
 		ret = false;
-		LOG("Error loading %s", path);
-	}
 
 	return ret;
 }

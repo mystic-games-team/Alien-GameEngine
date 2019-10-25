@@ -53,7 +53,7 @@ public:
 private:
 
 	std::string parent_name;
-	uint family_number;
+	uint family_number = 0;
 
 
 	// transforms... TODO
