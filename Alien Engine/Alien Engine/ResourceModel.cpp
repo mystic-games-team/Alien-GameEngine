@@ -132,6 +132,9 @@ void ResourceModel::ConvertToGameObjects()
 {
 	// TODO: save & load the family number
 
+	if (meshes_attached.empty())
+		return;
+
 	std::sort(meshes_attached.begin(), meshes_attached.end(), ResourceModel::SortByFamilyNumber);
 
 	if (meshes_attached.size() > 1) { // needs an empty gameobject

@@ -189,7 +189,7 @@ bool ResourceMesh::ReadMetaData(char* path)
 		bytes = sizeof(float) * num_faces * 3;
 		center_point_normal = new float[num_faces * 3];
 		memcpy(center_point_normal, cursor, bytes);
-		// TODO: know if has normals & uv cords... now if it doesnt have GG
+		// TODO: know if it has normals & uv cords... now if it doesnt have GG
 		delete[] data;
 	}
 	else
