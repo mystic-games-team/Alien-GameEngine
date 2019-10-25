@@ -15,10 +15,10 @@ ModuleResources::~ModuleResources()
 
 bool ModuleResources::Start()
 {
-	/*ResourceModel* model = new ResourceModel();
+	ResourceModel* model = new ResourceModel();
 	model->ReadMetaData("Library/Models/BakerHouse.alien");
 	resource_models.push_back(model);
-	resource_models.back()->ConvertToGameObjects();*/
+	resource_models.back()->ConvertToGameObjects();
 
 	return true;
 }

@@ -147,13 +147,13 @@ void ResourceModel::ConvertToGameObjects()
 		std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 		for (; item != meshes_attached.end(); ++item) {
 			if (*item != nullptr) {
-				(*item)->ConvertToGameObject(objects_created);
+				(*item)->ConvertToGameObject(&objects_created);
 			}
 		}
 		objects_created.clear();
 	}
 	else { 
-		//meshes_attached.back()->ConvertToGameObject(std::vector<GameObject*>());
+		meshes_attached.back()->ConvertToGameObject(nullptr);
 	}
 }
 

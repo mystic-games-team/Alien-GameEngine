@@ -19,25 +19,38 @@ void ResourceMesh::CreateMetaData()
 		parent_name.assign("null");
 	}
 
-	const char* node_names[2] = { parent_name.data(), name.data() };
+	// char
+	char save_char[MAX_META_DATA_CHAR];
 	
 	// header
 	uint ranges[2] = { num_vertex, num_index };
-	uint size = sizeof(ranges) + sizeof(float) * num_vertex * 3 + sizeof(uint) * num_index;
+	uint size = sizeof(ranges) + sizeof(char[MAX_META_DATA_CHAR]) * 2 +sizeof(float) * num_vertex * 3 + sizeof(uint) * num_index;
 
 	char* data = new char[size]; 
 	char* cursor = data;
 
 	uint bytes = sizeof(ranges); 
 	memcpy(cursor, ranges, bytes);
+	cursor += bytes;
+
+	// parent name
+	sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", parent_name.data());
+	bytes = sizeof(save_char);
+	memcpy(cursor, save_char, bytes);
+	cursor += bytes;
+
+	// name
+	sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", name.data());
+	bytes = sizeof(save_char);
+	memcpy(cursor, save_char, bytes);
+	cursor += bytes;
 
 	// vertex
-	cursor += bytes; 
 	bytes = sizeof(float) * num_vertex * 3;
 	memcpy(cursor, vertex, bytes);
+	cursor += bytes;
 
 	// index
-	cursor += bytes;
 	bytes = sizeof(uint) * num_index;
 	memcpy(cursor, index, bytes);
 
@@ -60,24 +73,42 @@ bool ResourceMesh::ReadMetaData(char* path)
 	if (data != nullptr) {
 		this->path = std::string(path);
 
+		char* cursor = data;
+
 		uint ranges[2];
 		uint bytes = sizeof(ranges);
 
-		memcpy(ranges, data, bytes);
+		// header
+		memcpy(ranges, cursor, bytes);
 		num_vertex = ranges[0];
 		num_index = ranges[1];
+		cursor += bytes;
+
+		// char
+		char load_char[MAX_META_DATA_CHAR];
+
+		// parent name
+		bytes = sizeof(load_char);
+		memcpy(load_char, cursor, bytes);
+		cursor += bytes;
+		parent_name = std::string(load_char);
+
+		// name
+		bytes = sizeof(load_char);
+		memcpy(load_char, cursor, bytes);
+		cursor += bytes;
+		name = std::string(load_char);
 
 		// Load vertex
-		data += bytes;
 		bytes = sizeof(float) * num_vertex * 3;
 		vertex = new float[num_vertex * 3];
-		memcpy(vertex, data, bytes);
+		memcpy(vertex, cursor, bytes);
 
 		// Load index
-		data += bytes;
+		cursor += bytes;
 		bytes = sizeof(uint) * num_index;
 		index = new uint[num_index];
-		memcpy(index, data, bytes);
+		memcpy(index, cursor, bytes);
 	
 		App->resources->AddResource(this);
 		delete[] data;
@@ -90,13 +121,13 @@ bool ResourceMesh::ReadMetaData(char* path)
 	return ret;
 }
 
-void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>& objects_created)
+void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created)
 {
 	// get the parent
 	GameObject* obj = nullptr;
-	if (!App->StringCmp(parent_name.data(), "null")) {
-		std::vector<GameObject*>::iterator item = objects_created.begin();
-		for (; item != objects_created.end(); ++item) {
+	if (!App->StringCmp(parent_name.data(), "null") && objects_created != nullptr) {
+		std::vector<GameObject*>::iterator item = objects_created->begin();
+		for (; item != objects_created->end(); ++item) {
 			if (*item != nullptr && App->StringCmp((*item)->GetName(), name.data())) {
 				obj = new GameObject((*item));
 				break;
@@ -104,8 +135,11 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>& objects_created
 		}
 	}
 	else {
-		obj = new GameObject(App->objects->base_game_object);
+		obj = new GameObject(App->objects->base_game_object->children.back());
 	}
+	objects_created->push_back(obj);
+	obj->SetName(name.data());
+
 
 	obj->AddComponent(new ComponentTransform(obj, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
 
