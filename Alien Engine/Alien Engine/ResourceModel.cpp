@@ -117,6 +117,7 @@ void ResourceModel::ConvertToGameObjects()
 				(*item)->ConvertToGameObject(objects_created);
 			}
 		}
+		objects_created.clear();
 	}
 	else { 
 		meshes_attached.back()->ConvertToGameObject(std::vector<GameObject*>());
