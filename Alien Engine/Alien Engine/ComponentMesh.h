@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "MathGeoLib/include/Math/float3.h"
+#include "MathGeoLib/include/Geometry/AABB.h"
 
 class ComponentMesh : public Component {
 public:
@@ -18,6 +19,13 @@ public:
 
 	void Reset();
 	void SetComponent(Component* component);
+
+public:
+
+	void GenerateAABB();
+	void DrawAABB();
+	AABB aabb;
+
 
 public:
 

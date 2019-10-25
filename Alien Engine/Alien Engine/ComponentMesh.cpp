@@ -4,6 +4,7 @@
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ComponentMaterial.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 ComponentMesh::ComponentMesh(GameObject* attach) : Component(attach)
 {
@@ -341,4 +342,16 @@ void ComponentMesh::SetComponent(Component* component)
 		view_vertex_normals = mesh->view_vertex_normals;
 		view_face_normals = mesh->view_face_normals;
 	}
+}
+
+void ComponentMesh::GenerateAABB()
+{
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertex, num_vertex);
+}
+
+void ComponentMesh::DrawAABB()
+{
+	glColor3f(App->objects->vertex_n_color.r, App->objects->vertex_n_color.g, App->objects->vertex_n_color.b);
+	
 }
