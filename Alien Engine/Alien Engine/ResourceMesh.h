@@ -3,12 +3,14 @@
 #include "Resource_.h"
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/Quat.h"
+#include "GameObject.h"
 
 struct Texture;
 
 class ResourceMesh : public Resource {
 
 	friend class ModuleImporter;
+	friend class ResourceModel;
 
 public:
 
@@ -17,6 +19,8 @@ public:
 
 	void CreateMetaData();
 	bool ReadMetaData(char* path);
+
+	void ConvertToGameObject(GameObject* parent);
 
 public:
 
@@ -49,6 +53,8 @@ public:
 private:
 
 	std::string parent_name;
+	uint family_number;
+
 
 	// transforms... TODO
 

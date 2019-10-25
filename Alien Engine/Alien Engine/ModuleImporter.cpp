@@ -74,7 +74,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 	if (!App->file_system->Exists((std::string(LIBRARY_MODELS_FOLDER) + App->file_system->GetBaseFileName(path) + std::string(".alienModel")).data())) {
 		
 		const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
-			aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality);
+			aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
 
 		if (scene != nullptr) {
 			InitScene(path, scene);
@@ -102,7 +102,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 	model->path = std::string(path);
 
 	// start recursive function to all nodes
-	LoadSceneNode(scene->mRootNode, scene, nullptr);
+	LoadSceneNode(scene->mRootNode, scene, nullptr, 1);
 
 	// create the meta data files like .alien
 	model->CreateMetaData(); // TODO: CreateMetaData of: transformations & texture path
@@ -114,7 +114,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 }
 
 
-void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent)
+void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent, uint family_number)
 {
 	LOG("Loading node with name %s", node->mName.C_Str());
 	ResourceMesh* next_parent = nullptr;
@@ -122,13 +122,17 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Res
 	for (uint i = 0; i < node->mNumMeshes; ++i) {
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		next_parent = LoadNodeMesh(scene, node, mesh, parent);
+		next_parent->family_number = family_number;
 		App->resources->AddResource(next_parent);
 		model->meshes_attached.push_back(next_parent);
 	}
 	
 	for (uint i = 0; i < node->mNumChildren; ++i) {
 		LOG("Loading children of node %s", node->mName.C_Str());
-		LoadSceneNode(node->mChildren[i], scene, next_parent);
+		uint fam_num = 1;
+		if (next_parent != nullptr)
+			fam_num = next_parent->family_number + 1;
+		LoadSceneNode(node->mChildren[i], scene, next_parent, fam_num);
 	}
 }
 

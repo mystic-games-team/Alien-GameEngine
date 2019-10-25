@@ -66,7 +66,7 @@ private:
 	void InitScene(const char* path, const aiScene* scene);
 
 	// mesh
-	void LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent);
+	void LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent, uint family_number);
 	ResourceMesh* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, ResourceMesh* parent);
 	void InitMeshBuffers(ResourceMesh* mesh);
 

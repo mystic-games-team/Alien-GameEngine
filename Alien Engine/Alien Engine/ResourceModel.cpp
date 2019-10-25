@@ -3,6 +3,7 @@
 #include "ResourceMesh.h"
 #include "ModuleFileSystem.h"
 #include "Application.h"
+#include <algorithm>
 
 ResourceModel::ResourceModel() : Resource()
 {
@@ -96,10 +97,22 @@ bool ResourceModel::ReadMetaData(char* path)
 
 void ResourceModel::ConvertToGameObjects()
 {
-	//if (meshes_attached.size() > 1) { // needs an empty gameobject
-	//	GameObject* parent = App->objects->CreateEmptyGameObject(nullptr);
-	//}
-	//else { 
+	// TODO: save & load the family number
 
-	//}
+	std::sort(meshes_attached.begin(), meshes_attached.end(), ResourceModel::SortByFamilyNumber);
+
+	if (meshes_attached.size() > 1) { // needs an empty gameobject
+		GameObject* parent = App->objects->CreateEmptyGameObject(nullptr);
+
+
+
+	}
+	else { 
+
+	}
+}
+
+bool ResourceModel::SortByFamilyNumber(const ResourceMesh* mesh1, const ResourceMesh* mesh2)
+{
+	return mesh1->family_number < mesh2->family_number;
 }

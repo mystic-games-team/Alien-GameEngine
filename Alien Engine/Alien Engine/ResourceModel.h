@@ -21,6 +21,12 @@ public:
 	// create GameObjects
 	void ConvertToGameObjects();
 
+
+private:
+
+	// sort
+	static bool SortByFamilyNumber(const ResourceMesh* mesh1, const ResourceMesh* mesh2);
+
 public:
 
 	std::vector<ResourceMesh*> meshes_attached;

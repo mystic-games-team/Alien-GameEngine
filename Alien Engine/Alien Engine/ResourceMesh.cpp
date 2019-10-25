@@ -87,3 +87,7 @@ bool ResourceMesh::ReadMetaData(char* path)
 
 	return ret;
 }
+
+void ResourceMesh::ConvertToGameObject(GameObject* parent)
+{
+}
