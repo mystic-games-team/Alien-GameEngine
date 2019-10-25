@@ -2,6 +2,8 @@
 
 #include <string>
 
+#define MAX_META_DATA_CHAR 200
+
 typedef unsigned int uint;
 
 enum class ResourceType {

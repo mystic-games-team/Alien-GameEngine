@@ -18,8 +18,8 @@ void ResourceModel::CreateMetaData()
 {
 	uint num_meshes = meshes_attached.size();
 
-	// file size
-	uint size = sizeof(num_meshes) + sizeof(char*) * num_meshes;
+	// file size: num meshes + name + path fbx + path for every mesh
+	uint size = sizeof(num_meshes) + sizeof(char[MAX_META_DATA_CHAR]) + sizeof(char[MAX_META_DATA_CHAR]) + sizeof(char[MAX_META_DATA_CHAR]) * num_meshes;
 
 	char* data = new char[size]; // Allocate
 	char* cursor = data;
@@ -27,17 +27,35 @@ void ResourceModel::CreateMetaData()
 	// save the number of meshes
 	uint bytes = sizeof(num_meshes);
 
+	// num meshes
 	memcpy(cursor, &num_meshes, bytes);
+	cursor += bytes;
+
+	// char
+	char save_char[MAX_META_DATA_CHAR];
+
+	// name
+	sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", name.data());
+	bytes = sizeof(save_char);
+	memcpy(cursor, save_char, bytes);
+	cursor += bytes;
+
+	// fbx path
+	sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", path.data());
+	bytes = sizeof(save_char);
+	memcpy(cursor, save_char, bytes);
 	cursor += bytes;
 
 	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 	for (; item != meshes_attached.end(); ++item) {
 		if ((*item) != nullptr) {
 			(*item)->CreateMetaData();
-			const char* mesh_path[1] = { (*item)->GetPath() };
-			memcpy(cursor, mesh_path, sizeof(mesh_path));
-			cursor += sizeof(mesh_path);
-			LOG("Created alienMesh file %s", mesh_path[0]);
+
+			sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", (*item)->GetPath());
+			memcpy(cursor, save_char, sizeof(save_char));
+			cursor += sizeof(save_char);
+
+			LOG("Created alienMesh file %s", (*item)->GetPath());
 		}
 	}
 	original_path = path;
@@ -56,31 +74,31 @@ bool ResourceModel::ReadMetaData(char* path)
 	App->file_system->Load(path, &data);
 
 	if (data != nullptr) {
-
+		char* cursor = data;
 		this->path = std::string(path);
 		// TODO: original path get
 
 		uint num_meshes = 0;
 		
 		uint bytes = sizeof(num_meshes);
-		memcpy(&num_meshes, data, bytes);
-		data += bytes;
+		memcpy(&num_meshes, cursor, bytes);
+		cursor += bytes;
 
 		for (uint i = 0; i < num_meshes; ++i) {
 
 			// get the name of the nodes path
-			char* mesh_path[1];
+			char mesh_path[MAX_META_DATA_CHAR];
 			bytes = sizeof(mesh_path);
-			memcpy(mesh_path, data, bytes);
-			data += bytes;
+			memcpy(mesh_path, cursor, bytes);
+			cursor += bytes;
 
 			// read the mesh meta data
 			ResourceMesh* r_mesh = new ResourceMesh();
-			if (r_mesh->ReadMetaData(mesh_path[0])) {
+			if (r_mesh->ReadMetaData(mesh_path)) {
 				meshes_attached.push_back(r_mesh);
 			}
 			else {
-				LOG("Error loading %s", mesh_path[0]);
+				LOG("Error loading %s", mesh_path);
 				delete r_mesh;
 			}
 		}
@@ -120,7 +138,7 @@ void ResourceModel::ConvertToGameObjects()
 		objects_created.clear();
 	}
 	else { 
-		meshes_attached.back()->ConvertToGameObject(std::vector<GameObject*>());
+		//meshes_attached.back()->ConvertToGameObject(std::vector<GameObject*>());
 	}
 }
 

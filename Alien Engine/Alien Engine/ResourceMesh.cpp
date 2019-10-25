@@ -1,6 +1,8 @@
 #include "ResourceMesh.h"
 #include "Application.h"
 #include "ModuleFileSystem.h"
+#include "ComponentMaterial.h"
+#include "ComponentTransform.h"
 
 ResourceMesh::ResourceMesh() : Resource()
 {
@@ -76,7 +78,7 @@ bool ResourceMesh::ReadMetaData(char* path)
 		bytes = sizeof(uint) * num_index;
 		index = new uint[num_index];
 		memcpy(index, data, bytes);
-		
+	
 		App->resources->AddResource(this);
 		delete[] data;
 	}
@@ -90,7 +92,47 @@ bool ResourceMesh::ReadMetaData(char* path)
 
 void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>& objects_created)
 {
-	//GameObject* ret = new GameObject(parent);
+	// get the parent
+	GameObject* obj = nullptr;
+	if (!App->StringCmp(parent_name.data(), "null")) {
+		std::vector<GameObject*>::iterator item = objects_created.begin();
+		for (; item != objects_created.end(); ++item) {
+			if (*item != nullptr && App->StringCmp((*item)->GetName(), name.data())) {
+				obj = new GameObject((*item));
+				break;
+			}
+		}
+	}
+	else {
+		obj = new GameObject(App->objects->base_game_object);
+	}
 
+	obj->AddComponent(new ComponentTransform(obj, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
+
+	ComponentMesh* mesh = new ComponentMesh(obj);
+
+	mesh->num_faces = num_faces;
+	mesh->num_index = num_index;
+	mesh->num_vertex = num_vertex;
+
+	mesh->id_index = id_index;
+	mesh->id_uv = id_uv;
+	mesh->id_normals = id_normals;
+	mesh->id_vertex = id_vertex;
+
+	mesh->vertex = vertex;
+	mesh->normals = normals;
+	mesh->uv_cords = uv_cords;
+	mesh->center_point = center_point;
+	mesh->center_point_normal = center_point_normal;
+	mesh->index = index;
+
+	obj->AddComponent(mesh);
+
+	ComponentMaterial* material = new ComponentMaterial(obj);
+
+	material->texture = texture;
+
+	obj->AddComponent(material);
 
 }

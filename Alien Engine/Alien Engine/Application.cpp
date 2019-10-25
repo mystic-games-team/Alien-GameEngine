@@ -312,7 +312,7 @@ bool Application::CleanUp()
 bool Application::StringCmp(const char* str1, const char* str2)
 {
 	for (uint i = 0; i < strlen(str1); ++i) {
-		if (tolower(str1[i]) == tolower(str2[i]))
+		if (std::tolower(str1[i]) == std::tolower(str2[i]))
 			continue;
 		else
 			return false;

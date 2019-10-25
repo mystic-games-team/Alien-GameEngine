@@ -20,7 +20,7 @@ public:
 	void SetComponent(Component* component);
 
 public:
-
+	// TODO: mesh init should be now a copy of resource mesh
 	// buffers id
 	uint id_index = 0;
 	uint id_vertex = 0;
