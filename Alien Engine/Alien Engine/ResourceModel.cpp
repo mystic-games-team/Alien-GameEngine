@@ -80,25 +80,40 @@ bool ResourceModel::ReadMetaData(char* path)
 
 		uint num_meshes = 0;
 		
+		// num meshes
 		uint bytes = sizeof(num_meshes);
 		memcpy(&num_meshes, cursor, bytes);
 		cursor += bytes;
 
+		// char
+		char load_char[MAX_META_DATA_CHAR];
+
+		// name
+		bytes = sizeof(load_char);
+		memcpy(load_char, cursor, bytes);
+		cursor += bytes;
+		name = std::string(load_char);
+
+		// fbx path
+		bytes = sizeof(load_char);
+		memcpy(load_char, cursor, bytes);
+		cursor += bytes;
+		original_path = std::string(load_char);
+
 		for (uint i = 0; i < num_meshes; ++i) {
 
 			// get the name of the nodes path
-			char mesh_path[MAX_META_DATA_CHAR];
-			bytes = sizeof(mesh_path);
-			memcpy(mesh_path, cursor, bytes);
+			bytes = sizeof(load_char);
+			memcpy(load_char, cursor, bytes);
 			cursor += bytes;
 
 			// read the mesh meta data
 			ResourceMesh* r_mesh = new ResourceMesh();
-			if (r_mesh->ReadMetaData(mesh_path)) {
+			if (r_mesh->ReadMetaData(load_char)) {
 				meshes_attached.push_back(r_mesh);
 			}
 			else {
-				LOG("Error loading %s", mesh_path);
+				LOG("Error loading %s", load_char);
 				delete r_mesh;
 			}
 		}
