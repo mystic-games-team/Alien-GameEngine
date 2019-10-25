@@ -102,13 +102,24 @@ void ResourceModel::ConvertToGameObjects()
 	std::sort(meshes_attached.begin(), meshes_attached.end(), ResourceModel::SortByFamilyNumber);
 
 	if (meshes_attached.size() > 1) { // needs an empty gameobject
+		
+		// create the parent
 		GameObject* parent = App->objects->CreateEmptyGameObject(nullptr);
+		parent->SetName(name.data());
 
+		// vector to find the parents
+		std::vector<GameObject*> objects_created;
+		objects_created.push_back(parent);
 
-
+		std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
+		for (; item != meshes_attached.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->ConvertToGameObject(objects_created);
+			}
+		}
 	}
 	else { 
-
+		meshes_attached.back()->ConvertToGameObject(std::vector<GameObject*>());
 	}
 }
 

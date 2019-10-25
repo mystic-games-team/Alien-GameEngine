@@ -88,6 +88,9 @@ bool ResourceMesh::ReadMetaData(char* path)
 	return ret;
 }
 
-void ResourceMesh::ConvertToGameObject(GameObject* parent)
+void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>& objects_created)
 {
+	//GameObject* ret = new GameObject(parent);
+
+
 }
