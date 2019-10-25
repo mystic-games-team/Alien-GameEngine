@@ -132,7 +132,7 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	ComponentMesh* mesh = new ComponentMesh(ret);
 	// get vertex
 	mesh->vertex = new float[ai_mesh->mNumVertices * 3];
-	
+
 	memcpy(mesh->vertex, ai_mesh->mVertices, sizeof(float) * ai_mesh->mNumVertices * 3);
 	mesh->num_vertex = ai_mesh->mNumVertices;
 	// get index
@@ -191,6 +191,9 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	}
 
 	// aabb
+
+	mesh->aabb.SetNegativeInfinity();
+
 	mesh->aabb_min.x = ai_mesh->mAABB.mMin.x;
 	mesh->aabb_min.y = ai_mesh->mAABB.mMin.y;
 	mesh->aabb_min.z = ai_mesh->mAABB.mMin.z;
@@ -333,6 +336,8 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 
 	mesh->num_vertex = shape->npoints;
 	mesh->num_index = shape->ntriangles * 3;
+
+	mesh->GenerateAABB();
 
 	mesh->vertex = new float[mesh->num_vertex * 3];
 	mesh->index = new uint[mesh->num_index * 3];

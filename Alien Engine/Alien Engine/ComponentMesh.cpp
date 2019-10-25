@@ -349,9 +349,3 @@ void ComponentMesh::GenerateAABB()
 	aabb.SetNegativeInfinity();
 	aabb.Enclose((float3*)vertex, num_vertex);
 }
-
-void ComponentMesh::DrawAABB()
-{
-	glColor3f(App->objects->vertex_n_color.r, App->objects->vertex_n_color.g, App->objects->vertex_n_color.b);
-	
-}

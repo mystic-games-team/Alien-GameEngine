@@ -20,10 +20,7 @@ public:
 	void Reset();
 	void SetComponent(Component* component);
 
-public:
-
 	void GenerateAABB();
-	void DrawAABB();
 	AABB aabb;
 
 

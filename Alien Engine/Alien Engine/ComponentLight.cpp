@@ -22,6 +22,8 @@ void ComponentLight::LightLogic()
 	light_id = GL_LIGHT0;
 	glEnable(light_id);
 	glLightfv(light_id, GL_POSITION, pos);
+
+	// Init
 	glLightfv(light_id, GL_AMBIENT, &ambient);
 	glLightfv(light_id, GL_DIFFUSE, &diffuse);
 }
@@ -61,8 +63,8 @@ void ComponentLight::OnDisable()
 
 void ComponentLight::Reset()
 {
-	ambient = { 1,1,1 };
-	diffuse = { 1,1,1 };
+	ambient = { 0.25f, 0.25f, 0.25f, 1.0f };
+	diffuse = { 0.75f, 0.75f, 0.75f, 1.0f };
 }
 
 void ComponentLight::SetComponent(Component* component)

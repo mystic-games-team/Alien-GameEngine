@@ -18,8 +18,8 @@ public:
 
 private:
 
-	Color ambient{1,1,1};
-	Color diffuse{1,1,1};
+	Color ambient{ 0.5f, 0.5f, 0.5f, 1.0f };
+	Color diffuse{ 0.75f, 0.75f, 0.75f, 1.0f };
 
 	uint light_id=0;
 };
