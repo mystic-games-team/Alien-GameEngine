@@ -64,13 +64,15 @@ update_status ModuleCamera3D::Update(float dt)
 		Movement();
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		Focus();
+
 	SetCenterOffset();
 
 	Position += newPos;
 	Reference += newPos;
 
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
-		Focus();
+	
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
@@ -216,7 +218,6 @@ void ModuleCamera3D::Focus()
 	{
 		ComponentTransform* tr = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 		LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
-		/*Scaling(App->objects->GetSelectedObject());*/
 	}
 	else
 	{
@@ -227,7 +228,6 @@ void ModuleCamera3D::Focus()
 				looking_at=(*iter);
 				ComponentTransform* tr = (ComponentTransform*)(*iter)->GetComponent(ComponentType::TRANSFORM);
 				LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
-				/*Scaling((*iter));*/
 			}
 		}
 	}
@@ -237,25 +237,6 @@ void ModuleCamera3D::Focus()
 float* ModuleCamera3D::GetViewMatrix()
 {
 	return &ViewMatrix;
-}
-
-void ModuleCamera3D::SetCenterOffset()
-{
-	if (last_width != center_offset_w)
-	{
-		// You skip the frist frame
-		if (last_width != 0)
-		{
-			// Camera should look at the center of the object (or mantain its position)
-			if ((last_width - center_offset_w) > 0)
-				newPos -= X * mouse_speed * 0.4f;
-
-			if ((last_width - center_offset_w) < 0)
-				newPos += X * mouse_speed * 0.4f;
-		}
-	}
-
-	last_width = center_offset_w;
 }
 
 // -----------------------------------------------------------------

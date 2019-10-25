@@ -24,8 +24,6 @@ public:
 
 	float* GetViewMatrix();
 
-	void SetCenterOffset();
-
 private:
 
 	void CalculateViewMatrix();
@@ -40,9 +38,6 @@ public:
 	float camera_speed = 30.0f;
 	float camera_zoom_speed = 15.0f;
 	float camera_mouse_speed = 10.0f;
-
-	int center_offset_w = 0;
-	int center_offset_h = 0;
 
 private:
 
