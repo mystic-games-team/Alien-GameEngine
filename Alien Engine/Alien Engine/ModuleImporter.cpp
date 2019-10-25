@@ -62,7 +62,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 	LOG("Loading %s", path);
 	const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
-		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality);
+		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
 
 	if (scene != nullptr) {
 		InitScene(scene, path);
@@ -192,16 +192,8 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 
 	// aabb
 
-	mesh->aabb.SetNegativeInfinity();
-
-	mesh->aabb_min.x = ai_mesh->mAABB.mMin.x;
-	mesh->aabb_min.y = ai_mesh->mAABB.mMin.y;
-	mesh->aabb_min.z = ai_mesh->mAABB.mMin.z;
-
-	mesh->aabb_max.x = ai_mesh->mAABB.mMax.x;
-	mesh->aabb_max.y = ai_mesh->mAABB.mMax.y;
-	mesh->aabb_max.z = ai_mesh->mAABB.mMax.z;
-
+	mesh->GenerateAABB();
+	
 	// set the material
 	ComponentMaterial* material = new ComponentMaterial(ret);
 	material->material_index = ai_mesh->mMaterialIndex;

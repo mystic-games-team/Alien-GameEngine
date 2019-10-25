@@ -67,8 +67,6 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		Focus();
 
-	SetCenterOffset();
-
 	Position += newPos;
 	Reference += newPos;
 
