@@ -21,7 +21,9 @@ public:
 	void SetComponent(Component* component);
 
 	AABB GenerateAABB();
-	void SetGlobalBoundingBoxes();
+	AABB GetOBB();
+	AABB GetGlobalAABB();
+
 
 	AABB local_aabb;
 	AABB obb; 

@@ -352,14 +352,21 @@ AABB ComponentMesh::GenerateAABB()
 	return local_aabb;
 }
 
-void ComponentMesh::SetGlobalBoundingBoxes()
+AABB ComponentMesh::GetOBB()
 {
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	obb = GenerateAABB();
 	obb.Translate(transform->GetGlobalPosition());
-	obb.Scale(obb.CenterPoint(), transform->GetGlobalScale());
+	obb.Scale(obb.CenterPoint(),transform->GetGlobalScale());
 	obb.Transform(transform->GetGlobalRotation());
-	
+
+	return obb;
+}
+
+AABB ComponentMesh::GetGlobalAABB()
+{
 	global_aabb.SetNegativeInfinity();
-	global_aabb.Enclose(obb);
+	global_aabb.Enclose(GetOBB());
+	
+	return global_aabb;
 }

@@ -395,8 +395,7 @@ AABB GameObject::GetBB()
 
 	if (mesh != nullptr)
 	{
-		mesh->SetGlobalBoundingBoxes();
-		return mesh->global_aabb;
+		return mesh->GetGlobalAABB();
 	}
 
 	else
@@ -419,8 +418,8 @@ AABB GameObject::GetBB()
 		else
 		{
 			AABB aabb_null;
-			aabb_null.maxPoint = transform->GetGlobalPosition();
-			aabb_null.minPoint = transform->GetGlobalPosition();
+			aabb_null.maxPoint.Max(transform->GetGlobalPosition());
+			aabb_null.minPoint.Min(transform->GetGlobalPosition());
 
 			return aabb_null;
 		}
