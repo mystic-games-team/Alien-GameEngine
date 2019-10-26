@@ -715,7 +715,6 @@ FileNode::FileNode(std::string name, bool is_file, FileNode* parent)
 	App->file_system->GetPreviousNames(previous_names, parent);
 	path = previous_names;
 
-
 	// set icon
 	if (is_file) {
 		std::string extension;
