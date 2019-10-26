@@ -389,6 +389,25 @@ bool GameObject::Exists(GameObject* object)
 	return ret;
 }
 
+AABB GameObject::GetBB(uint type)
+{
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+	if (mesh != nullptr)
+	{
+		return mesh->local_aabb;
+	}
+
+	else
+	{
+		AABB aabb_null;
+		ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+		aabb_null.maxPoint = transform->GetGlobalPosition();
+		aabb_null.minPoint = transform->GetGlobalPosition();
+	}
+
+}
+
 void GameObject::SearchToDelete()
 {
 	std::vector<GameObject*>::iterator item = children.begin();

@@ -214,8 +214,30 @@ void ModuleCamera3D::Focus()
 {
 	if (App->objects->GetSelectedObject() != nullptr)
 	{
-		ComponentTransform* tr = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
-		LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
+		AABB bounding_box = App->objects->GetSelectedObject()->GetBB();
+
+		if (bounding_box.Diagonal().Length() != 0)
+		{
+			float offset = bounding_box.Diagonal().Length() * 0.7;
+			vec3 offset_v = Z * offset;
+			Reference.x = bounding_box.CenterPoint().x;
+			Reference.y = bounding_box.CenterPoint().y;
+			Reference.z = bounding_box.CenterPoint().z;
+			Position = Reference + offset_v;
+		}
+		else
+		{
+			float offset = 5.F;
+			vec3 offset_v = Z * offset;
+			
+			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
+
+			Reference.x = transform->GetGlobalPosition().x;
+			Reference.y = transform->GetGlobalPosition().y;
+			Reference.z = transform->GetGlobalPosition().z;
+			
+			Position = Reference + offset_v;
+		}
 	}
 	else
 	{

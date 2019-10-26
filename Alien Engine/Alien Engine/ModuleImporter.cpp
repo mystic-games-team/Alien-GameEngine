@@ -329,14 +329,13 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 	mesh->num_vertex = shape->npoints;
 	mesh->num_index = shape->ntriangles * 3;
 
-	mesh->GenerateAABB();
-
 	mesh->vertex = new float[mesh->num_vertex * 3];
 	mesh->index = new uint[mesh->num_index * 3];
 
 	memcpy(mesh->vertex, shape->points, sizeof(float) * mesh->num_vertex * 3);
 	memcpy(mesh->index, shape->triangles, sizeof(PAR_SHAPES_T) * mesh->num_index);
 
+	mesh->GenerateAABB();
 	
 	if (shape->tcoords != nullptr) {
 		mesh->uv_cords = new float[mesh->num_vertex * 3];

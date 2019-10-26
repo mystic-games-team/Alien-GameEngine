@@ -64,6 +64,11 @@ public:
 	// search and return true if exists in its children or children of children bla bla
 	bool Exists(GameObject* object);
 
+	// Bounding Boxes
+	AABB GetBB(uint type=1); // 0 = Local Bounding Box, 1 = Global Bounding Box
+
+	/*void GenerateBB(GameObject* object, AABB* aabb);*/
+
 private:
 
 	// parent selected

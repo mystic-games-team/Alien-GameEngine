@@ -346,6 +346,9 @@ void ComponentMesh::SetComponent(Component* component)
 
 void ComponentMesh::GenerateAABB()
 {
-	aabb.SetNegativeInfinity();
-	aabb.Enclose((float3*)vertex, num_vertex);
+	local_aabb.SetNegativeInfinity();
+	local_aabb.Enclose((float3*)vertex, num_vertex);
+
+	global_aabb.maxPoint.Max(local_aabb.maxPoint);
+	global_aabb.minPoint.Min(local_aabb.minPoint);
 }

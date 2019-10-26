@@ -21,7 +21,8 @@ public:
 	void SetComponent(Component* component);
 
 	void GenerateAABB();
-	AABB aabb;
+	AABB local_aabb;
+	AABB global_aabb;
 
 
 public:
