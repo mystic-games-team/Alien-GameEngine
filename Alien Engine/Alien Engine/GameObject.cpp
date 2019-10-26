@@ -392,35 +392,39 @@ bool GameObject::Exists(GameObject* object)
 AABB GameObject::GetBB()
 {
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 
-	if (mesh != nullptr)
+	if (HasChildren())
 	{
-		return mesh->GetGlobalAABB();
+		AABB parent_aabb;
+		if (mesh != nullptr)
+		{
+			parent_aabb = mesh->GetGlobalAABB();
+		}
+		else
+		{
+			parent_aabb.SetNegativeInfinity();
+		}
+
+		for (std::vector<GameObject*>::iterator iter = children.begin(); iter != children.end(); ++iter)
+		{
+			AABB child_aabb = (*iter)->GetBB();
+			parent_aabb.maxPoint = parent_aabb.maxPoint.Max(child_aabb.maxPoint);
+			parent_aabb.minPoint = parent_aabb.minPoint.Min(child_aabb.minPoint);
+		}
+
+		return parent_aabb;
 	}
 
 	else
 	{
-		ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
-
-		if (HasChildren())
+		if (mesh != nullptr)
 		{
-			AABB parent_aabb;
-			parent_aabb.SetNegativeInfinity();
-
-			for (std::vector<GameObject*>::iterator iter = children.begin(); iter != children.end(); ++iter)
-			{
-				AABB child_aabb = (*iter)->GetBB();
-				parent_aabb.maxPoint = parent_aabb.maxPoint.Max(child_aabb.maxPoint);
-				parent_aabb.minPoint = parent_aabb.minPoint.Min(child_aabb.minPoint);
-			}
-
-			return parent_aabb;
+			return mesh->GetGlobalAABB();
 		}
-
 		else
 		{
 			AABB aabb_null;
-			aabb_null.SetNegativeInfinity();
 
 			aabb_null.maxPoint.Max(transform->GetGlobalPosition());
 			aabb_null.minPoint.Min(transform->GetGlobalPosition());
@@ -428,7 +432,6 @@ AABB GameObject::GetBB()
 			return aabb_null;
 		}
 	}
-
 }
 
 void GameObject::SearchToDelete()

@@ -10,6 +10,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 #include "GameObject.h"
+#include "ModuleCamera3D.h"
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -98,6 +99,8 @@ void ModuleImporter::InitScene(const aiScene* scene, const char* path)
 		App->objects->SetNewSelectedObject(App->objects->base_game_object->children.back());
 	}
 	
+	App->camera->Focus();
+
 }
 
 void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* parent)
