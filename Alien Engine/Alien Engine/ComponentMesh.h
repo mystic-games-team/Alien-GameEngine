@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
+#include "MathGeoLib/include/Geometry/OBB.h"
 
 class ComponentMesh : public Component {
 public:
@@ -21,12 +22,11 @@ public:
 	void SetComponent(Component* component);
 
 	AABB GenerateAABB();
-	AABB GetOBB();
 	AABB GetGlobalAABB();
 
 
 	AABB local_aabb;
-	AABB obb; 
+	OBB obb; 
 	AABB global_aabb;
 
 
