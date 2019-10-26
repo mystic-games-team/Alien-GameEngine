@@ -111,7 +111,7 @@ void PanelProject::SeeFiles()
 	
 	if (ImGui::BeginChild("##ProjectChild")) {
 
-		ImGui::SetWindowFontScale(1);
+		ImGui::SetWindowFontScale(0.9F);
 
 		ImGui::Columns(int(colum_width[1] / 78), "##ColumnIcons", false);
 
@@ -137,9 +137,9 @@ void PanelProject::SeeFiles()
 			}
 
 			ImGui::NewLine();
-			ImGui::SameLine(5);
+			ImGui::SameLine();
 			
-			if (current_active_folder->children[i]->name.length() > 4) {
+			if (current_active_folder->children[i]->name.length() > 40) {
 				char new_char[5];
 				memcpy(new_char, current_active_folder->children[i]->name.data(), 4);
 				new_char[4] = '\0';
