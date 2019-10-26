@@ -11,6 +11,7 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	assets = new FileNode();
 	assets->is_file = false;
 	assets->name = "Assets";
+	current_node = assets;
 	App->file_system->DiscoverEverythig(assets);
 }
 PanelProject::~PanelProject()
@@ -36,7 +37,9 @@ void PanelProject::PanelLogic()
 	ImGui::NextColumn();
 	//colum_width[1] = ImGui::GetWindowWidth();
 
-	ImGui::Text("dsfs");
+	if (current_node != nullptr) {
+		SeeFiles();
+	}
 
 	ImGui::End();
 
@@ -45,18 +48,46 @@ void PanelProject::PanelLogic()
 void PanelProject::PrintDirectoryNodes(FileNode * node)
 {
 	if (!node->is_file) {
+		ImGuiTreeNodeFlags_ node_flags = ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_Leaf;
+
+		// look if is lead or not
+		for (uint i = 0; i < node->children.size(); ++i) {
+			if (node->children[i] != nullptr && !node->children[i]->is_file) {
+				node_flags = ImGuiTreeNodeFlags_None;
+				break;
+			}
+		}
+
 		bool is_open = ImGui::TreeNodeEx(node->name.data(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
-			| ImGuiTreeNodeFlags_SpanAvailWidth);
+			| ImGuiTreeNodeFlags_SpanAvailWidth | node_flags | (current_node == node ? ImGuiTreeNodeFlags_Selected : 0));
+
+
+		if (ImGui::IsItemClicked()) {
+			current_node = node;
+		}
 
 		if (is_open) {
 			for (uint i = 0; i < node->children.size(); ++i) {
-				if (!node->children[i]->is_file) {
+				if (node->children[i] != nullptr && !node->children[i]->is_file) {
 					PrintDirectoryNodes(node->children[i]);
 				}
 			}
 			ImGui::TreePop();
 		}
 	}
+}
+
+void PanelProject::SeeFiles()
+{
+	if (ImGui::BeginChild("##ProjectChild")) {
+
+		ImGui::Text(std::string(current_node->path + current_node->name).data());
+		ImGui::Separator();
+
+		ImGui::EndChild();
+	}
+
+
 }
 
 void PanelProject::DeleteNodes(FileNode* node)

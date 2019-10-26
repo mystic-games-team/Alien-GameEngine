@@ -16,10 +16,11 @@ public:
 private:
 
 	void PrintDirectoryNodes(FileNode* node);
+	void SeeFiles();
 	void DeleteNodes(FileNode* node);
 
 	int colum_width[2];
 
-
-	FileNode* assets;
+	FileNode* assets = nullptr;
+	FileNode* current_node = nullptr;
 };
