@@ -22,5 +22,6 @@ private:
 	int colum_width[2];
 
 	FileNode* assets = nullptr;
-	FileNode* current_node = nullptr;
+	FileNode* current_active_folder = nullptr;
+	FileNode* current_active_file = nullptr;
 };

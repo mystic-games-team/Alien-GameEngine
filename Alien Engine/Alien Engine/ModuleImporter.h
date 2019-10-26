@@ -35,6 +35,7 @@ struct Texture {
 	std::string name;
 	std::string path;
 
+	bool is_custom = true;
 	uint id = 0;
 	uint height = 0;
 	uint width = 0;
@@ -78,3 +79,5 @@ private:
 
 	ResourceModel* model = nullptr;
 };
+
+

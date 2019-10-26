@@ -32,9 +32,13 @@ struct FileNode {
 
 	std::string name;
 	std::string path;
+
 	bool is_file = true;
+
 	FileNode* parent = nullptr;
 	std::vector<FileNode*> children;
+
+	Texture* icon = nullptr;
 };
 
 enum class FileDropType {

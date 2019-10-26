@@ -7,9 +7,19 @@ class Resource;
 class ResourceModel;
 class ResourceMesh;
 
+struct Texture;
+
+struct Icons {
+
+	Texture* jpg_file = nullptr;
+
+};
+
+
 class ModuleResources : public Module
 {
 public:
+
 	ModuleResources(bool start_enabled = true);
 	~ModuleResources();
 
@@ -18,6 +28,10 @@ public:
 	bool CleanUp();
 
 	void AddResource(Resource* resource);
+	
+public:
+
+	Icons icons;
 
 private:
 
@@ -25,3 +39,5 @@ private:
 	std::vector<ResourceMesh*> resource_meshes;
 
 };
+
+

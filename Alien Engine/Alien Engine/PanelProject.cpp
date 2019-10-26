@@ -1,4 +1,5 @@
 #include "PanelProject.h"
+#include "ModuleResources.h"
 #include "ModuleFileSystem.h"
 
 PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -11,7 +12,7 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	assets = new FileNode();
 	assets->is_file = false;
 	assets->name = "Assets";
-	current_node = assets;
+	current_active_folder = assets;
 	App->file_system->DiscoverEverythig(assets);
 }
 PanelProject::~PanelProject()
@@ -25,19 +26,14 @@ void PanelProject::PanelLogic()
 	ImGui::Begin("Project", &enabled, ImGuiWindowFlags_NoCollapse);
 
 	ImGui::Columns(2,"##ProjectColums", true);
-	//ImGui::SetColumnWidth(0, colum_width[0]);
-	//ImGui::SetColumnWidth(1, colum_width[1]);
-	ImGui::GetColumnWidth();
-	// Colum 1: Move with the folders
-	//colum_width[0] = ImGui::GetWindowWidth();
 
+	colum_width[0] = ImGui::GetColumnWidth();
 	PrintDirectoryNodes(assets);
 
-	// Column 2: Files in x folder
 	ImGui::NextColumn();
-	//colum_width[1] = ImGui::GetWindowWidth();
+	colum_width[1] = ImGui::GetColumnWidth();
 
-	if (current_node != nullptr) {
+	if (current_active_folder != nullptr) {
 		SeeFiles();
 	}
 
@@ -59,11 +55,12 @@ void PanelProject::PrintDirectoryNodes(FileNode * node)
 		}
 
 		bool is_open = ImGui::TreeNodeEx(node->name.data(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
-			| ImGuiTreeNodeFlags_SpanAvailWidth | node_flags | (current_node == node ? ImGuiTreeNodeFlags_Selected : 0));
+			| ImGuiTreeNodeFlags_SpanAvailWidth | node_flags | (current_active_folder == node ? ImGuiTreeNodeFlags_Selected : 0));
 
 
 		if (ImGui::IsItemClicked()) {
-			current_node = node;
+			current_active_folder = node;
+			current_active_file = nullptr;
 		}
 
 		if (is_open) {
@@ -79,11 +76,44 @@ void PanelProject::PrintDirectoryNodes(FileNode * node)
 
 void PanelProject::SeeFiles()
 {
-	if (ImGui::BeginChild("##ProjectChild")) {
+	if (ImGui::BeginChild("##ProjectChildName", { 0,20 })) {
 
-		ImGui::Text(std::string(current_node->path + current_node->name).data());
+		ImGui::Text(std::string(current_active_folder->path + current_active_folder->name).data());
 		ImGui::Separator();
 
+		ImGui::EndChild();
+	}
+	
+	if (ImGui::BeginChild("##ProjectChild")) {
+
+		ImGui::SetWindowFontScale(1);
+
+		ImGui::Spacing();
+
+		ImGui::Columns(int(colum_width[1] / 75), "##ColumnIcons", false);
+
+		for (uint i = 0; i < current_active_folder->children.size(); ++i) {
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0,0,0,0 });
+			ImGui::ImageButton((ImTextureID)current_active_folder->icon->id, { 50,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
+			ImGui::PopStyleColor();
+
+			ImGui::NewLine();
+			ImGui::SameLine(5);
+			
+			if (current_active_folder->children[i]->name.length() > 4) {
+				char new_char[5];
+				memcpy(new_char, current_active_folder->children[i]->name.data(), 4);
+				new_char[4] = '\0';
+				std::string name(std::string(new_char) + std::string("..."));
+				ImGui::Text(name.data());
+			}
+			else
+				ImGui::Text(current_active_folder->children[i]->name.data());
+			ImGui::Spacing();
+			ImGui::Spacing();
+
+			ImGui::NextColumn();
+		}
 		ImGui::EndChild();
 	}
 

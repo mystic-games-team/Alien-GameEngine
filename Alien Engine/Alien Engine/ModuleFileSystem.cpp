@@ -136,6 +136,7 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file
 
 void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 {
+	node->icon = App->resources->icons.jpg_file;
 	if (!node->is_file) {
 		std::vector<std::string>files;
 		std::vector<std::string>directories;
@@ -144,11 +145,11 @@ void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 		GetPreviousNames(previous_names, node);
 		node->path = previous_names;
 		DiscoverFiles(std::string(previous_names + "/" + node->name + "/").data(), files, directories);
-		for (uint i = 0; i < files.size(); ++i) {
-			node->children.push_back(new FileNode(files[i], true, node));
-		}
 		for (uint i = 0; i < directories.size(); ++i) {
 			node->children.push_back(new FileNode(directories[i], false, node));
+		}
+		for (uint i = 0; i < files.size(); ++i) {
+			node->children.push_back(new FileNode(files[i], true, node));
 		}
 	}
 

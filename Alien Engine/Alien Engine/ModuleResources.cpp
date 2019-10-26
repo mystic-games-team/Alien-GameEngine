@@ -3,6 +3,8 @@
 #include "Resource_.h"
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
+#include "ModuleImporter.h"
+#include "Application.h"
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 {
@@ -19,6 +21,9 @@ bool ModuleResources::Start()
 	model->ReadMetaData("Library/Models/BakerHouse.alien");
 	resource_models.push_back(model);
 	resource_models.back()->ConvertToGameObjects();
+
+	icons.jpg_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/jpg_icon.png");
+	icons.jpg_file->is_custom = false;
 
 	return true;
 }
