@@ -139,10 +139,10 @@ void PanelProject::SeeFiles()
 			ImGui::NewLine();
 			ImGui::SameLine();
 			
-			if (current_active_folder->children[i]->name.length() > 40) {
-				char new_char[5];
-				memcpy(new_char, current_active_folder->children[i]->name.data(), 4);
-				new_char[4] = '\0';
+			if (current_active_folder->children[i]->name.length() > 7) {
+				char new_char[8];
+				memcpy(new_char, current_active_folder->children[i]->name.data(), 7);
+				new_char[7] = '\0';
 				std::string name(std::string(new_char) + std::string("..."));
 				ImGui::Text(name.data());
 			}
