@@ -40,6 +40,9 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::DrawPolygon()
 {
+	if (id_index <= 0)
+		return;
+
 	if (game_object_attached->IsSelected() || game_object_attached->IsParentSelected()) {
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 1, -1);
@@ -93,6 +96,10 @@ void ComponentMesh::DrawPolygon()
 
 void ComponentMesh::DrawOutLine()
 {
+	if (id_index <= 0)
+		return;
+
+
 	if (!glIsEnabled(GL_STENCIL_TEST))
 		return;
 	if (game_object_attached->IsParentSelected())
@@ -134,6 +141,9 @@ void ComponentMesh::DrawOutLine()
 
 void ComponentMesh::DrawMesh()
 {
+	if (id_index <= 0)
+		return;
+
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 
 	glPushMatrix();
@@ -162,6 +172,9 @@ void ComponentMesh::DrawMesh()
 
 void ComponentMesh::DrawVertexNormals()
 {
+	if (id_index <= 0)
+		return;
+
 	if (normals != nullptr) {
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 
@@ -185,6 +198,9 @@ void ComponentMesh::DrawVertexNormals()
 
 void ComponentMesh::DrawFaceNormals()
 {
+	if (id_index <= 0)
+		return;
+
 	if (normals != nullptr) {
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 
