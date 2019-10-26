@@ -30,6 +30,9 @@ update_status ModuleResources::Update(float dt)
 
 bool ModuleResources::CleanUp()
 {
+
+	// TODO: clean up resources
+
 	return true;
 }
 

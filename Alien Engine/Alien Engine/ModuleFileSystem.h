@@ -31,9 +31,10 @@ struct FileNode {
 	}
 
 	std::string name;
+	std::string path;
 	bool is_file = true;
 	FileNode* parent = nullptr;
-	std::vector<FileNode> children;
+	std::vector<FileNode*> children;
 };
 
 enum class FileDropType {
@@ -64,7 +65,7 @@ public:
 	bool IsDirectory(const char* file) const;
 	void CreateDirectory(const char* directory);
 	void DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list) const;
-	void DiscoverEverythig(FileNode& node);
+	void DiscoverEverythig(FileNode* node);
 	bool CopyFromOutsideFS(const char* full_path, const char* destination);
 	bool Copy(const char* source, const char* destination);
 	void SplitFilePath(const char* full_path, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
@@ -99,7 +100,7 @@ private:
 
 	void CreateAssimpIO();
 	void CreateBassIO();
-	void GetPreviousNames(std::string& previous, FileNode & node);
+	void GetPreviousNames(std::string& previous, FileNode * node);
 
 private:
 

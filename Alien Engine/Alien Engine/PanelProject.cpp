@@ -8,12 +8,14 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	//colum_width[0] = 100;
 	//colum_width[1] = 300;
 
-	assets.is_file = false;
-	assets.name = "Assets";
+	assets = new FileNode();
+	assets->is_file = false;
+	assets->name = "Assets";
 	App->file_system->DiscoverEverythig(assets);
 }
 PanelProject::~PanelProject()
 {
+	DeleteNodes(assets);
 }
 
 void PanelProject::PanelLogic()
@@ -40,19 +42,30 @@ void PanelProject::PanelLogic()
 
 }
 
-void PanelProject::PrintDirectoryNodes(FileNode & node)
+void PanelProject::PrintDirectoryNodes(FileNode * node)
 {
-	if (!node.is_file) {
-		bool is_open = ImGui::TreeNodeEx(node.name.data(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
+	if (!node->is_file) {
+		bool is_open = ImGui::TreeNodeEx(node->name.data(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
 			| ImGuiTreeNodeFlags_SpanAvailWidth);
 
 		if (is_open) {
-			for (uint i = 0; i < node.children.size(); ++i) {
-				if (!node.children[i].is_file) {
-					PrintDirectoryNodes(node.children[i]);
+			for (uint i = 0; i < node->children.size(); ++i) {
+				if (!node->children[i]->is_file) {
+					PrintDirectoryNodes(node->children[i]);
 				}
 			}
 			ImGui::TreePop();
 		}
 	}
+}
+
+void PanelProject::DeleteNodes(FileNode* node)
+{
+	if (!node->children.empty()) {
+		for (uint i = 0; i < node->children.size(); ++i) {
+			if (node->children[i] != nullptr)
+				DeleteNodes(node->children[i]);
+		}
+	}
+	delete node;
 }

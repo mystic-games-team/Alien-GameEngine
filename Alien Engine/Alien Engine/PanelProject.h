@@ -15,11 +15,11 @@ public:
 
 private:
 
-	void PrintDirectoryNodes(FileNode& node);
-
+	void PrintDirectoryNodes(FileNode* node);
+	void DeleteNodes(FileNode* node);
 
 	int colum_width[2];
 
 
-	FileNode assets;
+	FileNode* assets;
 };
