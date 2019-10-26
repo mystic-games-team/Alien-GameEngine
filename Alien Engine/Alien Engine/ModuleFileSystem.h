@@ -30,7 +30,6 @@ struct FileNode {
 	std::string path;
 
 	bool is_file = true;
-	bool tree_open = false;
 
 	FileNode* parent = nullptr;
 	std::vector<FileNode*> children;
