@@ -33,9 +33,16 @@ void PanelProject::PanelLogic()
 
 	ImGui::Columns(2,"##ProjectColums", true);
 
+	static bool first = true;
+	if (first) {
+		ImGui::SetColumnWidth(0, 160);
+		first = false;
+	}
+
+
 	colum_width[0] = ImGui::GetColumnWidth();
 	PrintDirectoryNodes(assets);
-
+	
 	ImGui::NextColumn();
 	colum_width[1] = ImGui::GetColumnWidth();
 
@@ -83,9 +90,20 @@ void PanelProject::PrintDirectoryNodes(FileNode * node)
 
 void PanelProject::SeeFiles()
 {
-	if (ImGui::BeginChild("##ProjectChildName", { 0,20 })) {
-
+	if (ImGui::BeginChild("##ProjectChildName", { 0,20 },false,ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
+		ImGui::NewLine();
+		ImGui::SameLine(0, -2.F);
+		if (ImGui::Button("Go Back", { 0,18 })) {
+			if (current_active_folder->parent != nullptr) {
+				current_active_folder = current_active_folder->parent;
+				current_active_file = nullptr;
+			}
+		}
+		ImGui::SameLine(0, -2.F);
+		ImGui::Text("|");
+		ImGui::SameLine(0, -29.F);
 		ImGui::Text(std::string(current_active_folder->path + current_active_folder->name).data());
+
 		ImGui::Separator();
 
 		ImGui::EndChild();
@@ -94,8 +112,6 @@ void PanelProject::SeeFiles()
 	if (ImGui::BeginChild("##ProjectChild")) {
 
 		ImGui::SetWindowFontScale(1);
-
-		ImGui::Spacing();
 
 		ImGui::Columns(int(colum_width[1] / 78), "##ColumnIcons", false);
 
@@ -132,7 +148,6 @@ void PanelProject::SeeFiles()
 			}
 			else
 				ImGui::Text(current_active_folder->children[i]->name.data());
-			ImGui::Spacing();
 			ImGui::Spacing();
 
 			ImGui::NextColumn();
