@@ -405,7 +405,8 @@ AABB GameObject::GetBB()
 		if (HasChildren())
 		{
 			AABB parent_aabb;
-			
+			parent_aabb.SetNegativeInfinity();
+
 			for (std::vector<GameObject*>::iterator iter = children.begin(); iter != children.end(); ++iter)
 			{
 				AABB child_aabb = (*iter)->GetBB();
@@ -415,9 +416,12 @@ AABB GameObject::GetBB()
 
 			return parent_aabb;
 		}
+
 		else
 		{
 			AABB aabb_null;
+			aabb_null.SetNegativeInfinity();
+
 			aabb_null.maxPoint.Max(transform->GetGlobalPosition());
 			aabb_null.minPoint.Min(transform->GetGlobalPosition());
 

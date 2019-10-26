@@ -359,7 +359,7 @@ AABB ComponentMesh::GetGlobalAABB()
 	obb.Transform(transform->global_transformation);
 
 	global_aabb.SetNegativeInfinity();
-	global_aabb.Enclose(GetOBB());
+	global_aabb.Enclose(obb);
 	
 	return global_aabb;
 }
