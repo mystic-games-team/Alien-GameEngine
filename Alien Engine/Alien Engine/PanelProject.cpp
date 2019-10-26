@@ -11,8 +11,6 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	assets.is_file = false;
 	assets.name = "Assets";
 	App->file_system->DiscoverEverythig(assets);
-
-	int i = 0;
 }
 PanelProject::~PanelProject()
 {
@@ -30,7 +28,7 @@ void PanelProject::PanelLogic()
 	// Colum 1: Move with the folders
 	//colum_width[0] = ImGui::GetWindowWidth();
 
-
+	PrintDirectoryNodes(assets);
 
 	// Column 2: Files in x folder
 	ImGui::NextColumn();
@@ -44,5 +42,17 @@ void PanelProject::PanelLogic()
 
 void PanelProject::PrintDirectoryNodes(FileNode & node)
 {
-	
+	if (!node.is_file) {
+		bool is_open = ImGui::TreeNodeEx(node.name.data(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
+			| ImGuiTreeNodeFlags_SpanAvailWidth);
+
+		if (is_open) {
+			for (uint i = 0; i < node.children.size(); ++i) {
+				if (!node.children[i].is_file) {
+					PrintDirectoryNodes(node.children[i]);
+				}
+			}
+			ImGui::TreePop();
+		}
+	}
 }

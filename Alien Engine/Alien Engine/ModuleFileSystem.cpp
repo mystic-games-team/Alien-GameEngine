@@ -136,8 +136,6 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file
 
 void ModuleFileSystem::DiscoverEverythig(FileNode& node)
 {
-	FileNode ret;
-
 	if (!node.is_file) {
 		std::vector<std::string>files;
 		std::vector<std::string>directories;
