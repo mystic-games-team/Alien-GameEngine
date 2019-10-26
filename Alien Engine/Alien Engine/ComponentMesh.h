@@ -24,7 +24,7 @@ public:
 	void SetGlobalBoundingBoxes();
 
 	AABB local_aabb;
-	AABB obb;
+	AABB obb; 
 	AABB global_aabb;
 
 

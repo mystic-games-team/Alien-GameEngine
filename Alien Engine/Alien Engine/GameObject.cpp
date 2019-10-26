@@ -395,7 +395,8 @@ AABB GameObject::GetBB()
 
 	if (mesh != nullptr)
 	{
-		return mesh->local_aabb;
+		mesh->SetGlobalBoundingBoxes();
+		return mesh->global_aabb;
 	}
 
 	else
@@ -405,14 +406,14 @@ AABB GameObject::GetBB()
 		if (HasChildren())
 		{
 			AABB parent_aabb;
-
+			
 			for (std::vector<GameObject*>::iterator iter = children.begin(); iter != children.end(); ++iter)
 			{
-				parent_aabb.maxPoint = parent_aabb.maxPoint.Max((*iter)->GetBB().maxPoint);
-				parent_aabb.minPoint = parent_aabb.minPoint.Min((*iter)->GetBB().minPoint);
+				AABB child_aabb = (*iter)->GetBB();
+				parent_aabb.maxPoint = parent_aabb.maxPoint.Max(child_aabb.maxPoint);
+				parent_aabb.minPoint = parent_aabb.minPoint.Min(child_aabb.minPoint);
 			}
 
-			parent_aabb.Translate(transform->GetGlobalPosition());
 			return parent_aabb;
 		}
 		else
