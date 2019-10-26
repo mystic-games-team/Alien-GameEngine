@@ -98,7 +98,7 @@ void PanelProject::SeeFiles()
 
 		ImGui::Spacing();
 
-		ImGui::Columns(int(colum_width[1] / 75), "##ColumnIcons", false);
+		ImGui::Columns(int(colum_width[1] / 78), "##ColumnIcons", false);
 
 		for (uint i = 0; i < current_active_folder->children.size(); ++i) {
 
@@ -108,7 +108,7 @@ void PanelProject::SeeFiles()
 				color = { 0.07F,0.64F,0.73F,1 };
 
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, color);
-			ImGui::ImageButton((ImTextureID)current_active_folder->children[i]->icon->id, { 50,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
+			ImGui::ImageButton((ImTextureID)current_active_folder->children[i]->icon->id, { 53,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
 			ImGui::PopStyleColor();
 
 			// set the file clicked
