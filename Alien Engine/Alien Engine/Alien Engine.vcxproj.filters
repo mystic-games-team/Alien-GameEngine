@@ -444,6 +444,9 @@
     <ClInclude Include="ResourceMesh.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="PanelProject.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -685,6 +688,9 @@
     </ClCompile>
     <ClCompile Include="ResourceMesh.cpp">
       <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelProject.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -172,7 +172,7 @@ bool ResourceMesh::ReadMetaData(char* path)
 		normals = new float[num_vertex * 3];
 		memcpy(normals, cursor, bytes);
 		cursor += bytes;
-
+		
 		// get uv cords
 		bytes = sizeof(float) * num_vertex * 3;
 		uv_cords = new float[num_vertex * 3];
@@ -225,7 +225,7 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 	mesh->num_faces = num_faces;
 	mesh->num_index = num_index;
 	mesh->num_vertex = num_vertex;
-
+	// TODO: set the buffer if is not setted
 	mesh->id_index = id_index;
 	mesh->id_uv = id_uv;
 	mesh->id_normals = id_normals;

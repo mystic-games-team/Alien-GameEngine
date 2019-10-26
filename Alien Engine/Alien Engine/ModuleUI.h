@@ -17,6 +17,7 @@ class PanelHierarchy;
 class PanelInspector;
 class PanelScene;
 class PanelLayout;
+class PanelProject;
 
 struct ShortCut;
 
@@ -108,6 +109,7 @@ private:
 	PanelInspector* panel_inspector = nullptr;
 	PanelScene* panel_scene = nullptr;
 	PanelLayout* panel_layout = nullptr;
+	PanelProject* panel_project = nullptr;
 
 	// ShortCuts
 	ShortCut* shortcut_demo = nullptr;
@@ -119,6 +121,7 @@ private:
 	ShortCut* shortcut_view_normal_face = nullptr;
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_project_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_layout_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_about_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_hierarchy_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };

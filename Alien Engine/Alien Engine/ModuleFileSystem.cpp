@@ -117,6 +117,7 @@ void ModuleFileSystem::CreateDirectory(const char* directory)
 
 void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file_list, vector<string>& dir_list) const
 {
+
 	char** rc = PHYSFS_enumerateFiles(directory);
 	char** i;
 
@@ -131,6 +132,34 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file
 	}
 
 	PHYSFS_freeList(rc);
+}
+
+void ModuleFileSystem::DiscoverEverythig(FileNode& node)
+{
+	FileNode ret;
+
+	if (!node.is_file) {
+		std::vector<std::string>files;
+		std::vector<std::string>directories;
+
+		std::string previous_names;
+		GetPreviousNames(previous_names, node);
+
+		DiscoverFiles(std::string(previous_names + "/" + node.name + "/").data(), files, directories);
+		for (uint i = 0; i < files.size(); ++i) {
+			node.children.push_back(FileNode(files[i], true, &node));
+		}
+		for (uint i = 0; i < directories.size(); ++i) {
+			node.children.push_back(FileNode(directories[i], false, &node));
+		}
+	}
+
+	if (!node.children.empty()) {
+		for (uint i = 0; i < node.children.size(); ++i) {
+			if (!node.children[i].is_file)
+				DiscoverEverythig(node.children[i]);
+		}
+	}
 }
 
 bool ModuleFileSystem::CopyFromOutsideFS(const char* full_path, const char* destination)
@@ -661,6 +690,14 @@ void ModuleFileSystem::CreateBassIO()
 	BassIO->length = BassLength;
 	BassIO->read = BassRead;
 	BassIO->seek = BassSeek;
+}
+
+void ModuleFileSystem::GetPreviousNames(std::string& previous, FileNode & node)
+{
+	if (node.parent != nullptr) {
+		previous = node.parent->name + "/" + previous;
+		GetPreviousNames(previous, *node.parent);
+	}
 }
 
 BASS_FILEPROCS* ModuleFileSystem::GetBassIO()

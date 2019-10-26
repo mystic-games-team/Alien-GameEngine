@@ -15,6 +15,7 @@
 #include "ModuleObjects.h"
 #include "PanelLayout.h"
 #include "PanelInspector.h"
+#include "PanelProject.h"
 #include "PanelScene.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
@@ -98,7 +99,8 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		panel_config_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", i);
 		panel_about_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", i);
 		panel_create_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
-		panel_hierarchy_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelHierarchy", i);
+		panel_project_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
+		panel_hierarchy_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelProject", i);
 		panel_console_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", i);
 		panel_inspector_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelInspector", i);
 		panel_layout_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelLayout", i);
@@ -115,6 +117,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	if (panel_about != nullptr) {
 		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
 		panel_config->shortcut->SetShortcutKeys(panel_config_codes[0], panel_config_codes[1], panel_config_codes[2]);
+		panel_project->shortcut->SetShortcutKeys(panel_project_codes[0], panel_project_codes[1], panel_project_codes[2]);
 		panel_console->shortcut->SetShortcutKeys(panel_console_codes[0], panel_console_codes[1], panel_console_codes[2]);
 		panel_render->shortcut->SetShortcutKeys(panel_render_codes[0], panel_render_codes[1], panel_render_codes[2]);
 		panel_hierarchy->shortcut->SetShortcutKeys(panel_hierarchy_codes[0], panel_hierarchy_codes[1], panel_hierarchy_codes[2]);
@@ -122,7 +125,6 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		panel_inspector->shortcut->SetShortcutKeys(panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
 		panel_scene->shortcut->SetShortcutKeys(panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
 		panel_layout->shortcut->SetShortcutKeys(panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
-
 		shortcut_demo->SetShortcutKeys(shortcut_demo_codes[0], shortcut_demo_codes[1], shortcut_demo_codes[2]);
 		shortcut_report_bug->SetShortcutKeys(shortcut_report_bug_codes[0], shortcut_report_bug_codes[1], shortcut_report_bug_codes[2]);
 		shortcut_view_mesh->SetShortcutKeys(shortcut_view_mesh_codes[0], shortcut_view_mesh_codes[1], shortcut_view_mesh_codes[2]);
@@ -140,6 +142,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 {
 	for (uint i = 0; i < 3; ++i) {
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_config->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelProject", (uint)panel_project->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelHierarchy", (uint)panel_hierarchy->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelRender", (uint)panel_render->shortcut->GetScancode(i));
@@ -343,6 +346,10 @@ void ModuleUI::MainMenuBar()
 		{
 			panel_hierarchy->ChangeEnable();
 		}
+		if (ImGui::MenuItem("Panel Project", panel_project->shortcut->GetNameScancodes()))
+		{
+			panel_project->ChangeEnable();
+		}
 		if (ImGui::MenuItem("Render Options", panel_render->shortcut->GetNameScancodes()))
 		{
 			panel_render->ChangeEnable();
@@ -530,6 +537,7 @@ void ModuleUI::DeleteLayout(Layout* layout)
 void ModuleUI::InitPanels()
 {
 	panel_about = new PanelAbout("About Alien Engine", panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
+	panel_project = new PanelProject("Panel Project", panel_project_codes[0], panel_project_codes[1], panel_project_codes[2]);
 	panel_config = new PanelConfig("Configuration", panel_config_codes[0], panel_config_codes[1], panel_config_codes[2]);
 	panel_console = new PanelConsole("Console", panel_console_codes[0], panel_console_codes[1], panel_console_codes[2]);
 	panel_render = new PanelRender("Render Options", panel_render_codes[0], panel_render_codes[1], panel_render_codes[2]);
@@ -542,6 +550,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
 	panels.push_back(panel_console);
+	panels.push_back(panel_project);
 	panels.push_back(panel_render);
 	panels.push_back(panel_hierarchy);
 	panels.push_back(panel_create_object);

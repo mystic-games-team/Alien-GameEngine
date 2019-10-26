@@ -245,6 +245,7 @@
     <ClInclude Include="PanelHierarchy.h" />
     <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="PanelLayout.h" />
+    <ClInclude Include="PanelProject.h" />
     <ClInclude Include="PanelRender.h" />
     <ClInclude Include="PanelScene.h" />
     <ClInclude Include="Parson\parson.h" />
@@ -332,6 +333,7 @@
     <ClCompile Include="PanelHierarchy.cpp" />
     <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PanelLayout.cpp" />
+    <ClCompile Include="PanelProject.cpp" />
     <ClCompile Include="PanelRender.cpp" />
     <ClCompile Include="PanelScene.cpp" />
     <ClCompile Include="Parson\parson.c" />
