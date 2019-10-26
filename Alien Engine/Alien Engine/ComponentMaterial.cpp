@@ -19,7 +19,7 @@ ComponentMaterial::~ComponentMaterial()
 void ComponentMaterial::BindTexture()
 {
 
-	if (texture != nullptr && texture->id > 0) {
+	if (texture != nullptr && texture->id > 0 && texture_activated) {
 		// enable textures
 		glEnable(GL_TEXTURE_2D);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -60,6 +60,7 @@ void ComponentMaterial::DrawInspector()
 			if (ImGui::Button("Change Texture", { 120,20 })) {
 				change_texture_menu = true;
 			}
+
 			ImGui::SameLine(140, 15);
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.5F,0,0,1 });
 			if (ImGui::Button("Delete", { 60,20 })) {
@@ -67,7 +68,11 @@ void ComponentMaterial::DrawInspector()
 				ImGui::PopStyleColor();
 				return;
 			}
+
 			ImGui::PopStyleColor();
+
+			ImGui::Checkbox("Texture Active", &texture_activated);
+
 			ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->width);
 			ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->height);
 			ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", texture->path);

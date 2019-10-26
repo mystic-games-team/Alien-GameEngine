@@ -24,5 +24,5 @@ public:
 private:
 
 	bool change_texture_menu = false;
-
+	bool texture_activated = true;
 };
