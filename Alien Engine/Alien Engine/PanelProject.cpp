@@ -23,6 +23,12 @@ PanelProject::~PanelProject()
 void PanelProject::PanelLogic()
 {
 
+	if (change_folder) {
+		current_active_folder = current_active_file;
+		current_active_file = nullptr;
+		change_folder = false;
+	}
+
 	ImGui::Begin("Project", &enabled, ImGuiWindowFlags_NoCollapse);
 
 	ImGui::Columns(2,"##ProjectColums", true);
@@ -93,9 +99,25 @@ void PanelProject::SeeFiles()
 		ImGui::Columns(int(colum_width[1] / 75), "##ColumnIcons", false);
 
 		for (uint i = 0; i < current_active_folder->children.size(); ++i) {
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0,0,0,0 });
+
+			ImVec4 color(0, 0, 0, 0);
+
+			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i])
+				color = { 0.07F,0.64F,0.73F,1 };
+
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, color);
 			ImGui::ImageButton((ImTextureID)current_active_folder->icon->id, { 50,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
 			ImGui::PopStyleColor();
+
+			// set the file clicked
+			if (ImGui::IsItemClicked()) {
+				current_active_file = current_active_folder->children[i];
+			}
+
+			// go in to a folder
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && current_active_file != nullptr && !current_active_file->is_file) {
+				change_folder = true;
+			}
 
 			ImGui::NewLine();
 			ImGui::SameLine(5);
