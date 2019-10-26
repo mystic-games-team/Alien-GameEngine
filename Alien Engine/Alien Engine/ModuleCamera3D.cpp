@@ -229,28 +229,28 @@ void ModuleCamera3D::Focus()
 		{
 			float offset = 5.F;
 			vec3 offset_v = Z * offset;
-			
+
 			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 
 			Reference.x = transform->GetGlobalPosition().x;
 			Reference.y = transform->GetGlobalPosition().y;
 			Reference.z = transform->GetGlobalPosition().z;
-			
+
 			Position = Reference + offset_v;
 		}
 	}
-	else
-	{
-		for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
-		{
-			if (iter == App->objects->base_game_object->children.begin() || (*iter) != looking_at)
-			{
-				looking_at=(*iter);
-				ComponentTransform* tr = (ComponentTransform*)(*iter)->GetComponent(ComponentType::TRANSFORM);
-				LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
-			}
-		}
-	}
+	//else
+	//{
+	//	for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
+	//	{
+	//		if (iter == App->objects->base_game_object->children.begin() || (*iter) != looking_at)
+	//		{
+	//			looking_at=(*iter);
+	//			ComponentTransform* tr = (ComponentTransform*)(*iter)->GetComponent(ComponentType::TRANSFORM);
+	//			LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
+	//		}
+	//	}
+	//}
 }
 
 // -----------------------------------------------------------------

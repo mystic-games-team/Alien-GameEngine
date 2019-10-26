@@ -389,7 +389,7 @@ bool GameObject::Exists(GameObject* object)
 	return ret;
 }
 
-AABB GameObject::GetBB(uint type)
+AABB GameObject::GetBB()
 {
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 
@@ -400,10 +400,29 @@ AABB GameObject::GetBB(uint type)
 
 	else
 	{
-		AABB aabb_null;
 		ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
-		aabb_null.maxPoint = transform->GetGlobalPosition();
-		aabb_null.minPoint = transform->GetGlobalPosition();
+
+		if (HasChildren())
+		{
+			AABB parent_aabb;
+
+			for (std::vector<GameObject*>::iterator iter = children.begin(); iter != children.end(); ++iter)
+			{
+				parent_aabb.maxPoint = parent_aabb.maxPoint.Max((*iter)->GetBB().maxPoint);
+				parent_aabb.minPoint = parent_aabb.minPoint.Min((*iter)->GetBB().minPoint);
+			}
+
+			parent_aabb.Translate(transform->GetGlobalPosition());
+			return parent_aabb;
+		}
+		else
+		{
+			AABB aabb_null;
+			aabb_null.maxPoint = transform->GetGlobalPosition();
+			aabb_null.minPoint = transform->GetGlobalPosition();
+
+			return aabb_null;
+		}
 	}
 
 }

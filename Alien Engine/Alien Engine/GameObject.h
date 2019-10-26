@@ -65,9 +65,7 @@ public:
 	bool Exists(GameObject* object);
 
 	// Bounding Boxes
-	AABB GetBB(uint type=1); // 0 = Local Bounding Box, 1 = Global Bounding Box
-
-	/*void GenerateBB(GameObject* object, AABB* aabb);*/
+	AABB GetBB(); // 0 = Local Bounding Box, 1 = Global Bounding Box
 
 private:
 

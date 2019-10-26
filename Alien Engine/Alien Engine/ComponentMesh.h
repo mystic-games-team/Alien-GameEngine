@@ -20,8 +20,11 @@ public:
 	void Reset();
 	void SetComponent(Component* component);
 
-	void GenerateAABB();
+	AABB GenerateAABB();
+	void SetGlobalBoundingBoxes();
+
 	AABB local_aabb;
+	AABB obb;
 	AABB global_aabb;
 
 

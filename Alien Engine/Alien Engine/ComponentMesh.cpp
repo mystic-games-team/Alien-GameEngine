@@ -344,11 +344,22 @@ void ComponentMesh::SetComponent(Component* component)
 	}
 }
 
-void ComponentMesh::GenerateAABB()
+AABB ComponentMesh::GenerateAABB()
 {
 	local_aabb.SetNegativeInfinity();
 	local_aabb.Enclose((float3*)vertex, num_vertex);
 
-	global_aabb.maxPoint.Max(local_aabb.maxPoint);
-	global_aabb.minPoint.Min(local_aabb.minPoint);
+	return local_aabb;
+}
+
+void ComponentMesh::SetGlobalBoundingBoxes()
+{
+	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+	obb = GenerateAABB();
+	obb.Translate(transform->GetGlobalPosition());
+	obb.Scale(obb.CenterPoint(), transform->GetGlobalScale());
+	obb.Transform(transform->GetGlobalRotation());
+	
+	global_aabb.SetNegativeInfinity();
+	global_aabb.Enclose(obb);
 }
