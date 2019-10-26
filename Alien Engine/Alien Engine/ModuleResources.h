@@ -12,6 +12,10 @@ struct Texture;
 struct Icons {
 
 	Texture* jpg_file = nullptr;
+	Texture* png_file = nullptr;
+	Texture* dds_file = nullptr;
+	Texture* folder = nullptr;
+	Texture* model = nullptr;
 
 };
 

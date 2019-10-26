@@ -24,11 +24,7 @@ struct aiFileIO;
 struct FileNode {
 
 	FileNode(){}
-	FileNode(std::string name, bool is_file, FileNode* parent) {
-		this->name = name;
-		this->is_file = is_file;
-		this->parent = parent;
-	}
+	FileNode(std::string name, bool is_file, FileNode* parent);
 
 	std::string name;
 	std::string path;
@@ -99,12 +95,12 @@ public:
 	const FileDropType& SearchExtension(const std::string& extern_path);
 
 	std::string GetBaseFileName(const char* file_name);
-
+	void GetPreviousNames(std::string& previous, FileNode* node);
 private:
 
 	void CreateAssimpIO();
 	void CreateBassIO();
-	void GetPreviousNames(std::string& previous, FileNode * node);
+
 
 private:
 

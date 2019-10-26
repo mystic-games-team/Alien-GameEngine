@@ -136,14 +136,14 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file
 
 void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 {
-	node->icon = App->resources->icons.jpg_file;
+	std::string previous_names;
+	GetPreviousNames(previous_names, node);
+	node->path = previous_names;
+
 	if (!node->is_file) {
 		std::vector<std::string>files;
 		std::vector<std::string>directories;
 
-		std::string previous_names;
-		GetPreviousNames(previous_names, node);
-		node->path = previous_names;
 		DiscoverFiles(std::string(previous_names + "/" + node->name + "/").data(), files, directories);
 		for (uint i = 0; i < directories.size(); ++i) {
 			node->children.push_back(new FileNode(directories[i], false, node));
@@ -159,6 +159,7 @@ void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 				DiscoverEverythig(node->children[i]);
 		}
 	}
+
 }
 
 bool ModuleFileSystem::CopyFromOutsideFS(const char* full_path, const char* destination)
@@ -702,4 +703,41 @@ void ModuleFileSystem::GetPreviousNames(std::string& previous, FileNode * node)
 BASS_FILEPROCS* ModuleFileSystem::GetBassIO()
 {
 	return BassIO;
+}
+
+FileNode::FileNode(std::string name, bool is_file, FileNode* parent)
+{
+	this->name = name;
+	this->is_file = is_file;
+	this->parent = parent;
+
+	std::string previous_names;
+	App->file_system->GetPreviousNames(previous_names, parent);
+	path = previous_names;
+
+
+	// set icon
+	if (is_file) {
+		std::string extension;
+		App->file_system->SplitFilePath(std::string(path + name).data(), nullptr, nullptr, &extension);
+
+		if (App->StringCmp(extension.data(), "jpg")) {
+			icon = App->resources->icons.jpg_file;
+		}
+		else if (App->StringCmp(extension.data(), "dds")) {
+			icon = App->resources->icons.dds_file;
+		}
+		else if (App->StringCmp(extension.data(), "png")) {
+			icon = App->resources->icons.png_file;
+		}
+		else if (App->StringCmp(extension.data(), "fbx")) {
+			icon = App->resources->icons.model;
+		}
+		else {
+			// TODO: fer un icon que sigui unknown
+			icon = App->resources->icons.model;
+		}
+	}
+	else
+		icon = App->resources->icons.folder;
 }

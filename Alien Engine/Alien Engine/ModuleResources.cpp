@@ -22,8 +22,21 @@ bool ModuleResources::Start()
 	resource_models.push_back(model);
 	resource_models.back()->ConvertToGameObjects();
 
-	icons.jpg_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/jpg_icon.png");
+	// Load Icons
+	icons.jpg_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_jpg.png");
 	icons.jpg_file->is_custom = false;
+
+	icons.png_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_png.png");
+	icons.png_file->is_custom = false;
+
+	icons.dds_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_dds.png");
+	icons.dds_file->is_custom = false;
+
+	icons.folder = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_folder.png");
+	icons.folder->is_custom = false;
+	
+	icons.model = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_model.png");
+	icons.model->is_custom = false;
 
 	return true;
 }
