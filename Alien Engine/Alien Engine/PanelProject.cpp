@@ -127,11 +127,11 @@ void PanelProject::SeeFiles()
 			ImGui::ImageButton((ImTextureID)current_active_folder->children[i]->icon->id, { 53,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
 			ImGui::PopStyleColor();
 
-			if (current_active_folder->children[i]->is_file) {
+			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && current_active_file->is_file) {
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
 					std::string drag_id;
 
-					switch (current_active_folder->children[i]->type) {
+					switch (current_active_file->type) {
 					case ResourceType::RESOURCE_MODEL:
 						drag_id = DROP_ID_MODEL;
 						break;
@@ -140,9 +140,9 @@ void PanelProject::SeeFiles()
 						break;
 					}
 
-					ImGui::SetDragDropPayload(drag_id.data(), &current_active_folder->children[i], sizeof(FileNode), ImGuiCond_Once);
-					ImGui::Image((ImTextureID)current_active_folder->children[i]->icon->id, { 53,70 });
-					ImGui::Text(current_active_folder->children[i]->name.data());
+					ImGui::SetDragDropPayload(drag_id.data(), &current_active_file, sizeof(FileNode), ImGuiCond_Once);
+					ImGui::Image((ImTextureID)current_active_file->icon->id, { 53,70 });
+					ImGui::Text(current_active_file->name.data());
 					ImGui::EndDragDropSource();
 				}
 			}
