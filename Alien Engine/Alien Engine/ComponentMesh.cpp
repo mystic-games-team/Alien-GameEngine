@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "ComponentMaterial.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "Color.h"
 
 ComponentMesh::ComponentMesh(GameObject* attach) : Component(attach)
 {
@@ -234,12 +235,10 @@ void ComponentMesh::DrawInspector()
 		ImGui::Separator();
 		ImGui::Spacing();
 		
-		ImGui::Checkbox("Active Mesh          ", &view_mesh);
-		ImGui::SameLine();
-		ImGui::Checkbox("Active Wireframe", &wireframe);
-		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);
-		ImGui::SameLine();
-		ImGui::Checkbox("Active Face Normals", &view_face_normals);
+		ImGui::Checkbox("Active Mesh          ", &view_mesh); ImGui::SameLine(); ImGui::Checkbox("Active Wireframe", &wireframe);
+		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);	ImGui::SameLine();ImGui::Checkbox("Active Face Normals", &view_face_normals);
+		ImGui::Spacing();
+		ImGui::Checkbox("Draw AABB", &draw_AABB);
 		ImGui::Spacing();
 
 		
@@ -251,12 +250,106 @@ void ComponentMesh::DrawInspector()
 		RightClickMenu("Mesh");
 }
 
+void ComponentMesh::DrawGlobalAABB()
+{
+	glColor3f(App->objects->global_AABB_color.r, App->objects->global_AABB_color.g, App->objects->global_AABB_color.b);
+	glLineWidth(App->objects->AABB_line_width);
+	glBegin(GL_LINES);
+
+	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+
+	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+
+	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+
+
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+
+	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+
+	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+
+	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+
+	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+
+	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+
+	glLineWidth(1);
+	glEnd();
+}
+
+//void ComponentMesh::DrawOBB()
+//{
+//	glColor3f(OBB_color.r, OBB_color.g, OBB_color.b);
+//	glBegin(GL_LINES);
+//	
+//	glVertex3f(obb.minPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+//
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+//
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+//
+//
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+//
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+//
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+//
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+//
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+//
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+//
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+//
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+//
+//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
+//
+//	glEnd();
+//}
+
 void ComponentMesh::Reset()
 {
 	view_mesh = false;
 	wireframe = false;
 	view_vertex_normals = false;
 	view_face_normals = false;
+	draw_AABB = true;
+	draw_OBB = true;
 }
 
 void ComponentMesh::SetComponent(Component* component)

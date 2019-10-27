@@ -70,8 +70,10 @@ void GameObject::Draw()
 			mesh->DrawVertexNormals();
 		if (mesh->view_face_normals)
 			mesh->DrawFaceNormals();
-		
-			
+		if (mesh->draw_AABB)
+			mesh->DrawGlobalAABB();
+		//if (mesh->draw_OBB)
+		//	mesh->DrawOBB();
 
 	}
 
@@ -221,6 +223,21 @@ void GameObject::ChangeFaceNormalsView(const bool& normals)
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
 			(*item)->ChangeFaceNormalsView(normals);
+		}
+	}
+}
+
+void GameObject::ChangeAABB(const bool& AABB_view)
+{
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+	if (mesh != nullptr)
+		mesh->draw_AABB = AABB_view;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->ChangeAABB(AABB_view);
 		}
 	}
 }

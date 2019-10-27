@@ -192,10 +192,6 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 		mesh->uv_cords = new float[ai_mesh->mNumVertices * 3];
 		memcpy(mesh->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
 	}
-
-	// aabb
-
-	mesh->GenerateAABB();
 	
 	// set the material
 	ComponentMaterial* material = new ComponentMaterial(ret);
@@ -230,6 +226,10 @@ GameObject* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* no
 	ret->AddComponent(mesh);
 	ret->AddComponent(material);
 	ret->SetName(node->mName.C_Str());
+
+	// aabb
+
+	mesh->GetGlobalAABB();
 
 	return ret;
 }
@@ -337,8 +337,6 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 
 	memcpy(mesh->vertex, shape->points, sizeof(float) * mesh->num_vertex * 3);
 	memcpy(mesh->index, shape->triangles, sizeof(PAR_SHAPES_T) * mesh->num_index);
-
-	mesh->GenerateAABB();
 	
 	if (shape->tcoords != nullptr) {
 		mesh->uv_cords = new float[mesh->num_vertex * 3];
