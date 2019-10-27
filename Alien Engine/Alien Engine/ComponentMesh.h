@@ -57,8 +57,6 @@ public:
 	bool draw_AABB = true;
 	bool draw_OBB = true;
 
-	Color OBB_color{ 0,1,0 };
-
 private:
 
 	AABB local_aabb;

@@ -140,6 +140,11 @@ void ModuleObjects::ChangeEnableAABB()
 	base_game_object->ChangeAABB(draw_all_AABB);
 }
 
+void ModuleObjects::ChangeEnableOBB()
+{
+	base_game_object->ChangeOBB(draw_all_OBB);
+}
+
 void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)
 {
 	if (!object_selected->IsSelected()) {

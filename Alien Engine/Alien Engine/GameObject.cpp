@@ -71,10 +71,9 @@ void GameObject::Draw()
 		if (mesh->view_face_normals)
 			mesh->DrawFaceNormals();
 		if (mesh->draw_AABB)
-		{
 			mesh->DrawGlobalAABB();
+		if(mesh->draw_OBB)
 			mesh->DrawOBB();
-		}
 	}
 
 	if (light != nullptr && light->IsEnabled()) 
@@ -238,6 +237,21 @@ void GameObject::ChangeAABB(const bool& AABB_view)
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
 			(*item)->ChangeAABB(AABB_view);
+		}
+	}
+}
+
+void GameObject::ChangeOBB(const bool& OBB_view)
+{
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+	if (mesh != nullptr)
+		mesh->draw_OBB = OBB_view;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->ChangeOBB(OBB_view);
 		}
 	}
 }
