@@ -71,7 +71,10 @@ void GameObject::Draw()
 		if (mesh->view_face_normals)
 			mesh->DrawFaceNormals();
 		if (mesh->draw_AABB)
+		{
 			mesh->DrawGlobalAABB();
+			mesh->DrawOBB();
+		}
 	}
 
 	if (light != nullptr && light->IsEnabled()) 

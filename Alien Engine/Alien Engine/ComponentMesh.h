@@ -19,7 +19,7 @@ public:
 	void DrawFaceNormals();
 	void DrawInspector();
 	void DrawGlobalAABB();
-	//void DrawOBB();
+	void DrawOBB();
 
 	void Reset();
 	void SetComponent(Component* component);
@@ -64,4 +64,6 @@ private:
 	AABB local_aabb;
 	OBB obb;
 	AABB global_aabb;
+
+	uint obb_id=0;
 };
