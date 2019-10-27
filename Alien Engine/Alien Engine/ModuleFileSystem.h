@@ -13,11 +13,29 @@ struct aiFileIO;
 
 #define ASSETS_FOLDER "Assets/"
 #define LIBRARY_FOLDER "Library/"
+#define LIBRARY_MODELS_FOLDER "Library/Models/"
+#define LIBRARY_MESHES_FOLDER "Library/Meshes/"
+#define LIBRARY_TEXTURES_FOLDER "Library/Textures/"
 #define CONFIGURATION_FOLDER "Configuration/"
 #define CONFIGURATION_LAYOUTS_FOLDER "Configuration/Layouts/"
 #define MODELS_FOLDER "Assets/Models/"
 #define TEXTURES_FOLDER "Assets/Textures/"
 
+struct FileNode {
+
+	FileNode(){}
+	FileNode(std::string name, bool is_file, FileNode* parent);
+
+	std::string name;
+	std::string path;
+
+	bool is_file = true;
+
+	FileNode* parent = nullptr;
+	std::vector<FileNode*> children;
+
+	Texture* icon = nullptr;
+};
 
 enum class FileDropType {
 	MODEL3D,
@@ -47,6 +65,7 @@ public:
 	bool IsDirectory(const char* file) const;
 	void CreateDirectory(const char* directory);
 	void DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list) const;
+	void DiscoverEverythig(FileNode* node);
 	bool CopyFromOutsideFS(const char* full_path, const char* destination);
 	bool Copy(const char* source, const char* destination);
 	void SplitFilePath(const char* full_path, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
@@ -76,11 +95,12 @@ public:
 	const FileDropType& SearchExtension(const std::string& extern_path);
 
 	std::string GetBaseFileName(const char* file_name);
-
+	void GetPreviousNames(std::string& previous, FileNode* node);
 private:
 
 	void CreateAssimpIO();
 	void CreateBassIO();
+
 
 private:
 

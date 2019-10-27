@@ -59,7 +59,7 @@ public:
 	void DeselectObject();
 
 	// if parent is nullptr, parent will be the invisible game object
-	void CreateEmptyGameObject(GameObject* parent);
+	GameObject* CreateEmptyGameObject(GameObject* parent);
 
 	// right click menu, move
 	void MoveObjectDown(GameObject* object, bool bottom);

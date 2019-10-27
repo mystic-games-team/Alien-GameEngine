@@ -16,6 +16,7 @@
 #include "ShortCutManager.h"
 #include "ModuleImporter.h"
 #include "ModuleFileSystem.h"
+#include "ModuleResources.h"
 
 class Application
 {
@@ -30,6 +31,7 @@ public:
 	ShortCutManager* shortcut_manager = nullptr;
 	ModuleObjects* objects = nullptr;
 	ModuleFileSystem* file_system = nullptr;
+	ModuleResources* resources = nullptr;
 
 	bool fps_cap = true;
 	uint16_t framerate_cap;

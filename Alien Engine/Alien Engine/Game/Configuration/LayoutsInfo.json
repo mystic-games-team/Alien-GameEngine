@@ -14,7 +14,8 @@
             "Create Object": false,
             "Inspector": true,
             "Scene": true,
-            "Layout Editor": false
+            "Layout Editor": false,
+            "Panel Project": true
         },
         "Layout2": {
             "Number": 2,
@@ -29,7 +30,8 @@
             "Create Object": false,
             "Inspector": true,
             "Scene": true,
-            "Layout Editor": false
+            "Layout Editor": false,
+            "Panel Project": true
         },
         "Layout3": {
             "Number": 3,
@@ -44,7 +46,8 @@
             "Create Object": false,
             "Inspector": true,
             "Scene": true,
-            "Layout Editor": false
+            "Layout Editor": false,
+            "Panel Project": true
         }
     }
 }

@@ -232,6 +232,7 @@
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleObjects.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
+    <ClInclude Include="ModuleResources.h" />
     <ClInclude Include="ModuleSceneIntro.h" />
     <ClInclude Include="ModuleUI.h" />
     <ClInclude Include="ModuleWindow.h" />
@@ -244,6 +245,7 @@
     <ClInclude Include="PanelHierarchy.h" />
     <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="PanelLayout.h" />
+    <ClInclude Include="PanelProject.h" />
     <ClInclude Include="PanelRender.h" />
     <ClInclude Include="PanelScene.h" />
     <ClInclude Include="Parson\parson.h" />
@@ -252,6 +254,9 @@
     <ClInclude Include="PCG\pcg_uint128.hpp" />
     <ClInclude Include="RandomHelper.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ResourceMesh.h" />
+    <ClInclude Include="ResourceModel.h" />
+    <ClInclude Include="Resource_.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
     <ClInclude Include="Timer.h" />
@@ -315,6 +320,7 @@
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModuleObjects.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
+    <ClCompile Include="ModuleResources.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
@@ -327,9 +333,13 @@
     <ClCompile Include="PanelHierarchy.cpp" />
     <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PanelLayout.cpp" />
+    <ClCompile Include="PanelProject.cpp" />
     <ClCompile Include="PanelRender.cpp" />
     <ClCompile Include="PanelScene.cpp" />
     <ClCompile Include="Parson\parson.c" />
+    <ClCompile Include="ResourceMesh.cpp" />
+    <ClCompile Include="ResourceModel.cpp" />
+    <ClCompile Include="Resource_.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
     <ClCompile Include="Timer.cpp" />

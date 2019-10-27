@@ -35,6 +35,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 	// Make sure standard paths exist
 	const char* dirs[] = {
 		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER, TEXTURES_FOLDER,
+		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER
 	};
 
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
@@ -116,6 +117,7 @@ void ModuleFileSystem::CreateDirectory(const char* directory)
 
 void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file_list, vector<string>& dir_list) const
 {
+
 	char** rc = PHYSFS_enumerateFiles(directory);
 	char** i;
 
@@ -130,6 +132,34 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file
 	}
 
 	PHYSFS_freeList(rc);
+}
+
+void ModuleFileSystem::DiscoverEverythig(FileNode* node)
+{
+	std::string previous_names;
+	GetPreviousNames(previous_names, node);
+	node->path = previous_names;
+
+	if (!node->is_file) {
+		std::vector<std::string>files;
+		std::vector<std::string>directories;
+
+		DiscoverFiles(std::string(previous_names + "/" + node->name + "/").data(), files, directories);
+		for (uint i = 0; i < directories.size(); ++i) {
+			node->children.push_back(new FileNode(directories[i], false, node));
+		}
+		for (uint i = 0; i < files.size(); ++i) {
+			node->children.push_back(new FileNode(files[i], true, node));
+		}
+	}
+
+	if (!node->children.empty()) {
+		for (uint i = 0; i < node->children.size(); ++i) {
+			if (!node->children[i]->is_file)
+				DiscoverEverythig(node->children[i]);
+		}
+	}
+
 }
 
 bool ModuleFileSystem::CopyFromOutsideFS(const char* full_path, const char* destination)
@@ -364,9 +394,9 @@ uint ModuleFileSystem::Save(const char* file, const void* buffer, unsigned int s
 bool ModuleFileSystem::SaveUnique(string& name, const void* buffer, uint size, const char* path, const char* prefix, const char* extension)
 {
 	char result[250];
-	SDL_assert(1 == 0); // look next line
-	//sprintf_s(result, 250, "%s%s_%llu.%s", path, prefix, App->resources->GenerateNewUID(), extension);
-	NormalizePath(result);
+
+	sprintf_s(result, 250, "%s%s%s", path, prefix, extension);
+	//NormalizePath(result);
 	if (Save(result, buffer, size) > 0)
 	{
 		name = result;
@@ -424,11 +454,11 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 	LOG("File Dropped with path %s", extern_path);
 
 	std::string final_path;
-	SplitFilePath(extern_path, nullptr, &final_path);
+	SplitFilePath(extern_path, nullptr, &final_path); // get base file name
 
-	FileDropType type = SearchExtension(std::string(extern_path));
+	FileDropType type = SearchExtension(std::string(extern_path)); // get extension type
 
-	switch (type) {
+	switch (type) { // add location
 	case FileDropType::MODEL3D: 
 		final_path = MODELS_FOLDER + final_path;
 		break;
@@ -436,10 +466,10 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 		final_path = TEXTURES_FOLDER + final_path;
 		break;
 	}
-	CopyFromOutsideFS(extern_path, final_path.c_str());
-	std::string extension;
-	SplitFilePath(extern_path, nullptr, nullptr, &extension);
-	switch (type) {
+
+	CopyFromOutsideFS(extern_path, final_path.c_str()); // copy file if doesnt exist
+
+	switch (type) { // call the loader
 	case FileDropType::MODEL3D:
 		LOG("Start Loading Model");
 		App->importer->LoadModelFile(final_path.data());
@@ -454,18 +484,7 @@ const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_
 {
 	
 	std::string extension;
-
-	std::string::const_reverse_iterator item = extern_path.crbegin();
-	for (; item != extern_path.crend(); ++item)
-	{
-		if (*item == '.')
-			break;
-		else {
-			std::string lower;
-			lower =(*item);
-			extension = lower + extension;
-		}
-	}
+	SplitFilePath(extern_path.data(), nullptr, nullptr, &extension);
 	
 	FileDropType ext_type = FileDropType::UNKNOWN;
 
@@ -673,7 +692,51 @@ void ModuleFileSystem::CreateBassIO()
 	BassIO->seek = BassSeek;
 }
 
+void ModuleFileSystem::GetPreviousNames(std::string& previous, FileNode * node)
+{
+	if (node->parent != nullptr) {
+		previous = node->parent->name + "/" + previous;
+		GetPreviousNames(previous, node->parent);
+	}
+}
+
 BASS_FILEPROCS* ModuleFileSystem::GetBassIO()
 {
 	return BassIO;
+}
+
+FileNode::FileNode(std::string name, bool is_file, FileNode* parent)
+{
+	this->name = name;
+	this->is_file = is_file;
+	this->parent = parent;
+
+	std::string previous_names;
+	App->file_system->GetPreviousNames(previous_names, parent);
+	path = previous_names;
+
+	// set icon
+	if (is_file) {
+		std::string extension;
+		App->file_system->SplitFilePath(std::string(path + name).data(), nullptr, nullptr, &extension);
+
+		if (App->StringCmp(extension.data(), "jpg")) {
+			icon = App->resources->icons.jpg_file;
+		}
+		else if (App->StringCmp(extension.data(), "dds")) {
+			icon = App->resources->icons.dds_file;
+		}
+		else if (App->StringCmp(extension.data(), "png")) {
+			icon = App->resources->icons.png_file;
+		}
+		else if (App->StringCmp(extension.data(), "fbx")) {
+			icon = App->resources->icons.model;
+		}
+		else {
+			// TODO: fer un icon que sigui unknown
+			icon = App->resources->icons.model;
+		}
+	}
+	else
+		icon = App->resources->icons.folder;
 }

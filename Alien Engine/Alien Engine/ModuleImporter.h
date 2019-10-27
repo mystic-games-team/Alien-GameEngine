@@ -25,6 +25,9 @@
 #include "Devil/include/ilu.h"
 #include "Devil/include/ilut.h"
 
+class ResourceModel;
+class ResourceMesh;
+
 struct Texture {
 	
 	Texture(const char* path, const uint& id, const uint & width, const int & height);
@@ -32,6 +35,7 @@ struct Texture {
 	std::string name;
 	std::string path;
 
+	bool is_custom = true;
 	uint id = 0;
 	uint height = 0;
 	uint width = 0;
@@ -50,20 +54,22 @@ public:
 	bool CleanUp();
 
 	// models
-	bool LoadModelFile(const char* path);
+	bool LoadModelFile(const char* path); // when dropped
 	void LoadParShapesMesh(par_shapes_mesh* p_mesh, ComponentMesh* mesh);
 
 	// textures
-	Texture* LoadTextureFile(const char* path, bool has_been_dropped = false);
+	Texture* LoadTextureFile(const char* path, bool has_been_dropped = false); // when dropped
 	void ApplyTextureToSelectedObject(Texture* texture);
-	
+	void InitMeshBuffers(ResourceMesh* mesh);
 private:
+	
+	// models
+	void InitScene(const char* path, const aiScene* scene);
 
 	// mesh
-	void InitScene(const aiScene* scene, const char* path);
-	void LoadSceneNode(const aiNode* node, const aiScene* scene, GameObject* game_object);
-	GameObject* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, GameObject* game_object);
-	void InitMeshBuffers(ComponentMesh* mesh);
+	void LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent, uint family_number);
+	ResourceMesh* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, ResourceMesh* parent);
+
 
 public:
 
@@ -71,5 +77,7 @@ public:
 
 private:
 
-	GameObject* parent_object = nullptr;
+	ResourceModel* model = nullptr;
 };
+
+

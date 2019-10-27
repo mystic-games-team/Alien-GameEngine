@@ -52,6 +52,9 @@
     <Filter Include="Components">
       <UniqueIdentifier>{cf2b783e-9e6f-48fa-b156-80e83fd60441}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{5f0a952e-f176-41f1-b8e3-f9623d43fa25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -429,6 +432,21 @@
     <ClInclude Include="ComponentLight.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleResources.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource_.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceModel.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMesh.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelProject.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -658,6 +676,21 @@
     </ClCompile>
     <ClCompile Include="ComponentLight.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleResources.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource_.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceModel.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMesh.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelProject.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

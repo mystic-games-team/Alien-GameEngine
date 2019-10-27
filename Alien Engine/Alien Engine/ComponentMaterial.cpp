@@ -129,7 +129,7 @@ void ComponentMaterial::DrawInspector()
 					
 					std::vector<Texture*>::iterator item = App->importer->textures.begin();
 					for (; item != App->importer->textures.end(); ++item) {
-						if (*item != nullptr) {
+						if (*item != nullptr && (*item)->is_custom) {
 							ImGui::ImageButton((ImTextureID)(*item)->id, { 140,140 });
 							if (ImGui::IsItemClicked()) {
 								tex = (*item);
