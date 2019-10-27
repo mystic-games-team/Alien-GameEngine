@@ -44,7 +44,7 @@ public:
 public:
 
 	// background
-	Color background_color{ 0.f, 0.f, 0.f, 1.f };
+	Color background_color{ 0.05f, 0.05f, 0.05f, 1.f };
 
 	// grid
 	int length_grid = 20;

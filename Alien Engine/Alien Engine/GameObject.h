@@ -53,6 +53,7 @@ public:
 	void ChangeMeshView(const bool& wireframe);
 	void ChangeVertexNormalsView(const bool& wireframe);
 	void ChangeFaceNormalsView(const bool& wireframe);
+	void ChangeAABB(const bool& AABB_view);
 
 	// deleting 
 	void ToDelete();

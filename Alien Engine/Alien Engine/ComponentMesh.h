@@ -4,6 +4,7 @@
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MathGeoLib/include/Geometry/OBB.h"
+#include "Color.h"
 
 class ComponentMesh : public Component {
 public:
@@ -17,7 +18,8 @@ public:
 	void DrawVertexNormals();
 	void DrawFaceNormals();
 	void DrawInspector();
-	void DrawAABB();
+	void DrawGlobalAABB();
+	//void DrawOBB();
 
 	void Reset();
 	void SetComponent(Component* component);
@@ -51,6 +53,11 @@ public:
 	bool wireframe = false;
 	bool view_vertex_normals = false;
 	bool view_face_normals = false;
+
+	bool draw_AABB = true;
+	bool draw_OBB = true;
+
+	Color OBB_color{ 0,1,0 };
 
 private:
 

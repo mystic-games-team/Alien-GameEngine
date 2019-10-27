@@ -46,6 +46,7 @@ public:
 	void ChangeViewMeshMode();
 	void ChangeEnableNormalVertex();
 	void ChangeEnableNormalFace();
+	void ChangeEnableAABB();
 	
 	// enable/disable grid
 	void ChangeEnableGrid();
@@ -107,6 +108,11 @@ public:
 	uint no_child_line_width = 1;
 	Color parent_outline_color{ 1,1,1 };
 	Color no_child_outline_color{ 1,1,1 };
+
+	// Bounding Boxes
+	bool draw_all_AABB = true;
+	Color global_AABB_color{ 1,1,1 };
+	uint AABB_line_width = 1;
 
 	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;

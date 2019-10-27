@@ -20,12 +20,10 @@ void PanelRender::PanelLogic()
 	{
 		ImGui::Spacing();
 		if (ImGui::Checkbox(" View Mesh", &App->objects->view_mesh_mode)) {
-			App->objects->view_mesh_mode = !App->objects->view_mesh_mode;
 			App->objects->ChangeViewMeshMode();
 		}
 		ImGui::SameLine();
 		if (ImGui::Checkbox(" Wireframe Mode", &App->objects->wireframe_mode)) {
-			App->objects->wireframe_mode = !App->objects->wireframe_mode;
 			App->objects->ChangeWireframeMode();
 		}
 		ImGui::SameLine();
@@ -33,6 +31,16 @@ void PanelRender::PanelLogic()
 		ImGui::SliderInt("Mesh Line Width", &App->objects->mesh_line_width, 1, 30);
 		ImGui::Spacing();
 		ImGui::ColorEdit3("Mesh Color", (float*)& App->objects->mesh_color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
+	}
+	if (ImGui::CollapsingHeader("Bounding Box Options"))
+	{
+		ImGui::Spacing();
+		if (ImGui::Checkbox("View AABB", &App->objects->draw_all_AABB))
+		{
+			App->objects->ChangeEnableAABB();
+		}
+		ImGui::ColorEdit3("AABB Color", &App->objects->global_AABB_color, ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("Line Width", (int*)&App->objects->AABB_line_width, 1, 30);
 	}
 	if (ImGui::CollapsingHeader("Background")) 
 	{
@@ -61,7 +69,6 @@ void PanelRender::PanelLogic()
 	if (ImGui::CollapsingHeader("Vertex Normals")) 
 	{
 		if (ImGui::Checkbox("Show Vertex Normals", &App->objects->draw_vertex_normals)) {
-			App->objects->draw_vertex_normals = !App->objects->draw_vertex_normals;
 			App->objects->ChangeEnableNormalVertex();
 		}
 		ImGui::ColorEdit3("Normals Color", (float*)&App->objects->vertex_n_color,  ImGuiColorEditFlags_Float);
@@ -71,7 +78,6 @@ void PanelRender::PanelLogic()
 	if (ImGui::CollapsingHeader("Face Normals")) 
 	{
 		if (ImGui::Checkbox("Show Face Normals", &App->objects->draw_face_normals)) {
-			App->objects->draw_face_normals = !App->objects->draw_face_normals;
 			App->objects->ChangeEnableNormalFace();
 		}
 		ImGui::ColorEdit3("Face Normals Color", (float*)&App->objects->face_n_color, ImGuiColorEditFlags_Float);
