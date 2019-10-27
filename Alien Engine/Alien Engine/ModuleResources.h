@@ -39,7 +39,7 @@ public:
 	void AddResource(Resource* resource);
 
 	// meta path
-	void CreateNewModelInstanceOf(const char* path);
+	bool CreateNewModelInstanceOf(const char* path);
 
 private:
 

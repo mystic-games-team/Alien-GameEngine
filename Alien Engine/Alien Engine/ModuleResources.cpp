@@ -78,17 +78,20 @@ void ModuleResources::AddResource(Resource* resource)
 
 }
 
-void ModuleResources::CreateNewModelInstanceOf(const char* path)
+bool ModuleResources::CreateNewModelInstanceOf(const char* path)
 {
+	bool ret = false;
 	std::vector<ResourceModel*>::iterator item = resource_models.begin();
 	for (; item != resource_models.end(); ++item) {
 		if (*item != nullptr) {
 			if (App->StringCmp((*item)->GetLibraryPath(), path)) {
 				(*item)->ConvertToGameObjects();
+				ret = true;
 				break;
 			}
 		}
 	}
+	return ret;
 }
 
 void ModuleResources::ReadAllMetaData()
