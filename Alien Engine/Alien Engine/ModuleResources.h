@@ -3,6 +3,12 @@
 #include "Globals.h"
 #include "ModuleObjects.h"
 
+#define DROP_ID_HIERARCHY_NODES "node"
+#define DROP_ID_MODEL "model"
+#define DROP_ID_MESH "mesh"
+#define DROP_ID_TEXTURE "texture"
+
+
 class Resource;
 class ResourceModel;
 class ResourceMesh;
