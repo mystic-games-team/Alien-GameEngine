@@ -158,7 +158,7 @@ void ResourceModel::ConvertToGameObjects()
 		App->objects->SetNewSelectedObject(parent);
 	}
 	else { 
-		meshes_attached.back()->ConvertToGameObject(nullptr);
+		meshes_attached.at(0)->ConvertToGameObject(nullptr);
 		App->objects->SetNewSelectedObject(App->objects->base_game_object->children.back());
 	}
 	App->camera->Focus();

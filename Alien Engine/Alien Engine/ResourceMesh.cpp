@@ -35,6 +35,7 @@ void ResourceMesh::CreateMetaData()
 		// names
 		meta->SetString("Mesh.ParentName", parent_name.data());
 		meta->SetString("Mesh.Name", name.data());
+		meta->SetNumber("Mesh.FamilyNumber", family_number);
 
 		// texture path
 		meta->SetBoolean("Mesh.HasTexture", (texture != nullptr) ? true : false);
@@ -129,6 +130,8 @@ bool ResourceMesh::ReadMetaData(const char* path)
 		// names
 		parent_name = meta->GetString("Mesh.ParentName");
 		name = meta->GetString("Mesh.Name");
+
+		family_number = meta->GetNumber("Mesh.FamilyNumber");
 
 		// texture path
 		bool has_texture = meta->GetBoolean("Mesh.HasTexture");
@@ -229,11 +232,11 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 				break;
 			}
 		}
+		objects_created->push_back(obj);
 	}
 	else {
-		obj = new GameObject(App->objects->base_game_object->children.back());
+		obj = new GameObject(App->objects->base_game_object);
 	}
-	objects_created->push_back(obj);
 	obj->SetName(name.data());
 
 

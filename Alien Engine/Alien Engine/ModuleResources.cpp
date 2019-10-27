@@ -18,7 +18,6 @@ ModuleResources::~ModuleResources()
 
 bool ModuleResources::Start()
 {
-
 	ReadAllMetaData();
 
 	// Load Icons
@@ -61,15 +60,15 @@ void ModuleResources::AddResource(Resource* resource)
 		switch (resource->GetType())
 		{
 		case ResourceType::RESOURCE_MODEL:
-			if (std::find(resource_models.begin(), resource_models.end(), resource) == resource_models.begin())
+			if (std::find(resource_models.begin(), resource_models.end(), resource) == resource_models.end())
 				resource_models.push_back((ResourceModel*)resource);
 			break;
 		case ResourceType::RESOURCE_MESH:
-			if (std::find(resource_meshes.begin(), resource_meshes.end(), resource) == resource_meshes.begin())
+			if (std::find(resource_meshes.begin(), resource_meshes.end(), resource) == resource_meshes.end())
 				resource_meshes.push_back((ResourceMesh*)resource);
 			break;
 		case ResourceType::RESOURCE_TEXTURE:
-			if (std::find(resource_textures.begin(), resource_textures.end(), resource) == resource_textures.begin())
+			if (std::find(resource_textures.begin(), resource_textures.end(), resource) == resource_textures.end())
 				resource_textures.push_back((ResourceTexture*)resource);
 			break;
 		default:
