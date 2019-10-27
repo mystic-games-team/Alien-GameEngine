@@ -19,181 +19,198 @@ void ResourceMesh::CreateMetaData()
 		parent_name.assign("null");
 	}
 
-	uint ranges[3] = { num_vertex,num_index,num_faces };
+	path = std::string(LIBRARY_MESHES_FOLDER + name + ".alienMesh");
 
-	/////////////////////// num del zie ////////////////// chars in that size //////////////////
-	/* size = 2 uints (size parent name & name) + parent name & name string size + ranges + vertex num 
-	+ index num + normals num + uv_cords + center point + center face point*/ 
-	uint size = sizeof(uint) * 2 + parent_name.size() + name.size() + sizeof(ranges) + (sizeof(float) * num_vertex * 3) 
-		+ (sizeof(uint) * num_index) + (sizeof(float) * num_vertex * 3) + (sizeof(float) * num_vertex * 3)
-		+ (sizeof(float) * num_faces * 3) + +(sizeof(float) * num_faces * 3);
+	JSON_Value* value = json_value_init_object();
+	JSON_Object* object = json_value_get_object(value);
+	json_serialize_to_file_pretty(value, path.data());
 
-	char* data = new char[size];
-	char* cursor = data;
+	if (value != nullptr && object != nullptr) {
 
-	uint bytes = 0;
+		JSONfilepack* meta = new JSONfilepack(path, object, value);
 
-	// save parent name size
-	uint parent_size = parent_name.size();
-	bytes = sizeof(uint);
-	memcpy(cursor, &parent_size, bytes);
-	cursor += bytes;
+		meta->StartSave();
 
-	// save name size
-	uint name_size = name.size();
-	memcpy(cursor, &name_size, bytes);
-	cursor += bytes;
+		// names
+		meta->SetString("Mesh.ParentName", parent_name.data());
+		meta->SetString("Mesh.Name", name.data());
 
-	// save parent name
-	bytes = parent_name.size();
-	memcpy(cursor, parent_name.data(), bytes);
-	cursor += bytes;
+		// texture path
+		meta->SetBoolean("Mesh.HasTexture", (texture != nullptr) ? true : false);
 
-	// save name
-	bytes = name.size();
-	memcpy(cursor, name.data(), bytes);
-	cursor += bytes;
+		if (texture != nullptr)
+			meta->SetString("Mesh.Texture", texture->path);
 
-	// save ranges
-	bytes = sizeof(ranges);
-	memcpy(cursor, ranges, bytes);
-	cursor += bytes;
+		// transformations
+		// pos
+		meta->SetArrayNumber("Mesh.Position", pos.x);
+		meta->SetArrayNumber("Mesh.Position", pos.y);
+		meta->SetArrayNumber("Mesh.Position", pos.z);
 
-	// save vertex
-	bytes = sizeof(float) * num_vertex;
-	memcpy(cursor, vertex, bytes);
-	cursor += bytes;
+		// scale
+		meta->SetArrayNumber("Mesh.Scale", scale.x);
+		meta->SetArrayNumber("Mesh.Scale", scale.y);
+		meta->SetArrayNumber("Mesh.Scale", scale.z);
 
-	// save index
-	bytes = sizeof(uint) * num_index;
-	memcpy(cursor, index, bytes);
-	cursor += bytes;
+		// rot
+		meta->SetArrayNumber("Mesh.Rotation", rot.x);
+		meta->SetArrayNumber("Mesh.Rotation", rot.y);
+		meta->SetArrayNumber("Mesh.Rotation", rot.z);
+		meta->SetArrayNumber("Mesh.Rotation", rot.w);
 
-	// save normals
-	if (normals != nullptr) {
-		bytes = sizeof(float) * num_vertex * 3;
-		memcpy(cursor, normals, bytes);
-		cursor += bytes;
+		// ranges
+		meta->SetNumber("Mesh.NumVertex", num_vertex);
+		meta->SetNumber("Mesh.NumIndex", num_index);
+		meta->SetNumber("Mesh.NumFaces", num_faces);
+
+		// vertex
+		for (uint i = 0; i < num_vertex * 3; ++i) {
+			meta->SetArrayNumber("Mesh.Vertex", vertex[i]);
+		}
+
+		// index
+		for (uint i = 0; i < num_index; ++i) {
+			meta->SetArrayNumber("Mesh.Index", index[i]);
+		}
+
+		// set a bolean to know if it has normals
+		meta->SetBoolean("Mesh.HasNormals", (normals != nullptr ? true : false));
+
+		// normals
+		if (normals != nullptr) {
+			// normals
+			for (uint i = 0; i < num_vertex * 3; ++i) {
+				meta->SetArrayNumber("Mesh.Normals", normals[i]);
+			}
+			// center point
+			for (uint i = 0; i < num_faces * 3; ++i) {
+				meta->SetArrayNumber("Mesh.CenterPoint", center_point[i]);
+			}
+			// center point normals
+			for (uint i = 0; i < num_faces * 3; ++i) {
+				meta->SetArrayNumber("Mesh.CenterPointNormals", center_point_normal[i]);
+			}
+		}
+
+		// set a bolean to know if it has uv
+		meta->SetBoolean("Mesh.HasUV", (uv_cords != nullptr ? true : false));
+
+		// uv
+		if (uv_cords != nullptr) {
+			for (uint i = 0; i < num_vertex * 3; ++i) {
+				meta->SetArrayNumber("Mesh.UV", uv_cords[i]);
+			}
+		}
+
+
+		meta->FinishSave();
+
+		delete meta;
 	}
-
-	// save uv
-	if (uv_cords != nullptr) {
-		bytes = sizeof(float) * num_vertex * 3;
-		memcpy(cursor, uv_cords, bytes);
-		cursor += bytes;
+	else {
+		LOG("Error creating meta with path %s", path.data());
 	}
-
-	// center point
-	if (center_point != nullptr) {
-		bytes = sizeof(float) * num_faces * 3;
-		memcpy(cursor, center_point, bytes);
-		cursor += bytes;
-	}
-
-	// center point normal
-	if (center_point_normal != nullptr) {
-		bytes = sizeof(float) * num_faces * 3;
-		memcpy(cursor, center_point_normal, bytes);
-		cursor += bytes;
-	}
-
-	// save file
-	App->file_system->SaveUnique(path, data, size, LIBRARY_MESHES_FOLDER, name.data(), ".alienMesh");
-
-	delete[] data;
 }
 
 bool ResourceMesh::ReadMetaData(char* path)
 {	
 	bool ret = true;
 
-	char* data = nullptr;
-	App->file_system->Load(path, &data);
+	JSON_Value* value = json_parse_file(path);
+	JSON_Object* object = json_value_get_object(value);
 
-	if (data != nullptr)
+	if (value != nullptr && object != nullptr)
 	{
-		this->path = path;
+		JSONfilepack* meta = new JSONfilepack(path, object, value);
 
-		char* cursor = data;
+		// names
+		parent_name = meta->GetString("Mesh.ParentName");
+		name = meta->GetString("Mesh.Name");
 
-		// get parent name size
-		uint parent_name_size = 0;
-		uint bytes = sizeof(uint);
-		memcpy(&parent_name_size, cursor, bytes);
-		cursor += bytes;
+		// texture path
 
-		// get name size
-		uint name_size = 0;
-		memcpy(&name_size, cursor, bytes);
-		cursor += bytes;
 
-		// get parent name
-		char* parent_name_ = new char[parent_name_size + 1];
-		bytes = sizeof(char) * parent_name_size;
-		memcpy(parent_name_, cursor, bytes);
-		parent_name_[parent_name_size] = '\0';
-		cursor += bytes;
-		parent_name = std::string(parent_name_);
-		delete[] parent_name_;
 
-		// get name
-		char* name_ = new char[name_size + 1];
-		bytes = sizeof(char) * name_size;
-		memcpy(name_, cursor, bytes);
-		name_[name_size] = '\0';
-		cursor += bytes;
-		name = std::string(name_);
-		delete[] name_;
+		bool has_texture = meta->GetBoolean("Mesh.HasTexture");
 
-		// get ranges 0: vertex 1: index 2: faces
-		uint ranges[3];
-		bytes = sizeof(ranges);
-		memcpy(ranges, cursor, bytes);
-		cursor += bytes;
+		if (has_texture) {
+			texture = App->importer->LoadTextureFile(meta->GetString("Mesh.Texture"));
+		}
+			
 
-		num_vertex = ranges[0];
-		num_index = ranges[1];
-		num_faces = ranges[2];
+		// transformations
+		// pos
+		pos.x = meta->GetArrayNumber("Mesh.Position", 0);
+		pos.y = meta->GetArrayNumber("Mesh.Position", 1);
+		pos.z = meta->GetArrayNumber("Mesh.Position", 2);
 
-		// get vertex
-		bytes = sizeof(float) * num_vertex * 3;
+		// scale
+		scale.x = meta->GetArrayNumber("Mesh.Scale", 0);
+		scale.y = meta->GetArrayNumber("Mesh.Scale", 1);
+		scale.z = meta->GetArrayNumber("Mesh.Scale", 2);
+
+		// rot
+		rot.x = meta->GetArrayNumber("Mesh.Rotation", 0);
+		rot.y = meta->GetArrayNumber("Mesh.Rotation", 1);
+		rot.z = meta->GetArrayNumber("Mesh.Rotation", 2);
+		rot.w = meta->GetArrayNumber("Mesh.Rotation", 3);
+
+		// ranges
+		num_vertex = meta->GetNumber("Mesh.NumVertex");
+		num_index = meta->GetNumber("Mesh.NumIndex");
+		num_faces = meta->GetNumber("Mesh.NumFaces");
+
+		// vertex
 		vertex = new float[num_vertex * 3];
-		memcpy(vertex, cursor, bytes);
-		cursor += bytes;
+		for (uint i = 0; i < num_vertex * 3; ++i) {
+			vertex[i] = meta->GetArrayNumber("Mesh.Vertex", i);
+		}
 
-		// get index
-		bytes = sizeof(uint) * num_index;
+		// index
 		index = new uint[num_index];
-		memcpy(index, cursor, bytes);
-		cursor += bytes;
+		for (uint i = 0; i < num_index; ++i) {
+			index[i] = meta->GetArrayNumber("Mesh.Index", i);
+		}
 
-		// get normals
-		bytes = sizeof(float) * num_vertex * 3;
-		normals = new float[num_vertex * 3];
-		memcpy(normals, cursor, bytes);
-		cursor += bytes;
-		
-		// get uv cords
-		bytes = sizeof(float) * num_vertex * 3;
-		uv_cords = new float[num_vertex * 3];
-		memcpy(uv_cords, cursor, bytes);
-		cursor += bytes;
+		// normals
+		bool has_normals = meta->GetBoolean("Mesh.HasNormals");
 
-		// get center point
-		bytes = sizeof(float) * num_faces * 3;
-		center_point = new float[num_faces * 3];
-		memcpy(center_point, cursor, bytes);
-		cursor += bytes;
+		if (has_normals) {
+			// normals
+			normals = new float[num_vertex * 3];
+			for (uint i = 0; i < num_vertex * 3; ++i) {
+				normals[i] = meta->GetArrayNumber("Mesh.Normals", i);
+			}
 
-		// get center normal
-		bytes = sizeof(float) * num_faces * 3;
-		center_point_normal = new float[num_faces * 3];
-		memcpy(center_point_normal, cursor, bytes);
-		// TODO: know if it has normals & uv cords... now if it doesnt have GG
-		delete[] data;
+			// center point
+			center_point = new float[num_faces * 3];
+			for (uint i = 0; i < num_faces * 3; ++i) {
+				center_point[i] = meta->GetArrayNumber("Mesh.CenterPoint", i);
+			}
+
+			// center point normal
+			center_point_normal = new float[num_faces * 3];
+			for (uint i = 0; i < num_faces * 3; ++i) {
+				center_point_normal[i] = meta->GetArrayNumber("Mesh.CenterPointNormals", i);
+			}
+		}
+
+		// uv
+		bool has_uv = meta->GetBoolean("Mesh.HasUV");
+
+		if (has_uv) {
+			uv_cords = new float[num_vertex * 3];
+			for (uint i = 0; i < num_vertex * 3; ++i) {
+				uv_cords[i] = meta->GetArrayNumber("Mesh.UV", i);
+			}
+		}
+		App->importer->InitMeshBuffers(this);
+		delete meta;
 	}
-	else
+	else {
+		LOG("Error loading %s", path);
 		ret = false;
+	}
 
 	return ret;
 }
@@ -218,7 +235,7 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 	obj->SetName(name.data());
 
 
-	obj->AddComponent(new ComponentTransform(obj, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
+	obj->AddComponent(new ComponentTransform(obj, pos, rot, scale));
 
 	ComponentMesh* mesh = new ComponentMesh(obj);
 

@@ -60,7 +60,7 @@ public:
 	// textures
 	Texture* LoadTextureFile(const char* path, bool has_been_dropped = false); // when dropped
 	void ApplyTextureToSelectedObject(Texture* texture);
-	
+	void InitMeshBuffers(ResourceMesh* mesh);
 private:
 	
 	// models
@@ -69,7 +69,7 @@ private:
 	// mesh
 	void LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent, uint family_number);
 	ResourceMesh* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, ResourceMesh* parent);
-	void InitMeshBuffers(ResourceMesh* mesh);
+
 
 public:
 
