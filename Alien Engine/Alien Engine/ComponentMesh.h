@@ -17,18 +17,16 @@ public:
 	void DrawVertexNormals();
 	void DrawFaceNormals();
 	void DrawInspector();
+	void DrawAABB();
 
 	void Reset();
 	void SetComponent(Component* component);
 
-	AABB GenerateAABB();
 	AABB GetGlobalAABB();
 
+private:
 
-	AABB local_aabb;
-	OBB obb; 
-	AABB global_aabb;
-
+	AABB GenerateAABB();
 
 public:
 
@@ -53,4 +51,10 @@ public:
 	bool wireframe = false;
 	bool view_vertex_normals = false;
 	bool view_face_normals = false;
+
+private:
+
+	AABB local_aabb;
+	OBB obb;
+	AABB global_aabb;
 };

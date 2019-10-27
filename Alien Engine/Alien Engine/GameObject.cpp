@@ -70,8 +70,8 @@ void GameObject::Draw()
 			mesh->DrawVertexNormals();
 		if (mesh->view_face_normals)
 			mesh->DrawFaceNormals();
-		
 			
+		mesh->DrawAABB();
 
 	}
 

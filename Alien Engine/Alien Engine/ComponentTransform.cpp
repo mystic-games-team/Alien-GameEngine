@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "imgui/imgui.h"
 
+#include "ComponentMesh.h"
+
 ComponentTransform::ComponentTransform(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::TRANSFORM;
@@ -150,6 +152,12 @@ void ComponentTransform::RecalculateTransform()
 			ComponentTransform* tr = (ComponentTransform*)(*item)->GetComponent(ComponentType::TRANSFORM);
 			if (tr != nullptr) tr->RecalculateTransform();
 		}
+	}
+
+	ComponentMesh* mesh = (ComponentMesh*)game_object_attached->GetComponent(ComponentType::MESH);
+	if (mesh != nullptr)
+	{
+		mesh->GetGlobalAABB();
 	}
 }
 
