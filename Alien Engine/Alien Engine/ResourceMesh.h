@@ -20,7 +20,7 @@ public:
 private:
 
 	void CreateMetaData();
-	bool ReadMetaData(char* path);
+	bool ReadMetaData(const char* path);
 
 	void ConvertToGameObject(std::vector<GameObject*>* objects_created);
 

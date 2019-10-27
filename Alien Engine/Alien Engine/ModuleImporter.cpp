@@ -44,7 +44,7 @@ bool ModuleImporter::Init()
 bool ModuleImporter::Start()
 {
 	LoadTextureFile("Assets/Textures/Checkers.png");
-	//LoadModelFile("Assets/Models/BakerHouse.fbx");
+	LoadModelFile("Assets/Models/BakerHouse.fbx");
 
 	return true;
 }
@@ -62,8 +62,10 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 	LOG("Loading %s", path);
 
-	// check if this file has been already created as a .alien TODO: this isnt working :)
-	if (!App->file_system->Exists((std::string(LIBRARY_MODELS_FOLDER) + App->file_system->GetBaseFileName(path) + std::string(".alienModel")).data())) {
+	std::string meta_path = std::string((LIBRARY_MODELS_FOLDER) + App->file_system->GetBaseFileName(path) + std::string(".alien")).data();
+
+	// if this file has been already imported just load the .alien
+	if (!App->file_system->Exists(meta_path.data())) {
 		
 		const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
 			aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
@@ -81,7 +83,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 	}
 	else {
-		// Load the .alienModel directly!! TODO:
+		App->resources->CreateNewModelInstanceOf(meta_path.data());
 	}
 	
 	return ret;

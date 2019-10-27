@@ -113,7 +113,7 @@ void ResourceMesh::CreateMetaData()
 	}
 }
 
-bool ResourceMesh::ReadMetaData(char* path)
+bool ResourceMesh::ReadMetaData(const char* path)
 {	
 	bool ret = true;
 
@@ -205,6 +205,7 @@ bool ResourceMesh::ReadMetaData(char* path)
 		}
 
 		InitBuffers();
+		App->resources->AddResource(this);
 
 		delete meta;
 	}

@@ -38,6 +38,13 @@ public:
 
 	void AddResource(Resource* resource);
 
+	// meta path
+	void CreateNewModelInstanceOf(const char* path);
+
+private:
+
+	void ReadAllMetaData();
+
 public:
 
 	Icons icons;

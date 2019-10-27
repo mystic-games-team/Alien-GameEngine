@@ -18,10 +18,8 @@ ModuleResources::~ModuleResources()
 
 bool ModuleResources::Start()
 {
-	ResourceModel* model = new ResourceModel();
-	model->ReadMetaData("Library/Models/BakerHouse.alien");
-	resource_models.push_back(model);
-	resource_models.back()->ConvertToGameObjects();
+
+	ReadAllMetaData();
 
 	// Load Icons
 	icons.jpg_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_jpg.png");
@@ -79,6 +77,34 @@ void ModuleResources::AddResource(Resource* resource)
 		}
 	}
 
+}
+
+void ModuleResources::CreateNewModelInstanceOf(const char* path)
+{
+	std::vector<ResourceModel*>::iterator item = resource_models.begin();
+	for (; item != resource_models.end(); ++item) {
+		if (*item != nullptr) {
+			if (App->StringCmp((*item)->GetLibraryPath(), path)) {
+				(*item)->ConvertToGameObjects();
+				break;
+			}
+		}
+	}
+}
+
+void ModuleResources::ReadAllMetaData()
+{
+	std::vector<std::string> files;
+	std::vector<std::string> directories;
+
+	App->file_system->DiscoverFiles(LIBRARY_MODELS_FOLDER, files, directories);
+
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceModel* model = new ResourceModel();
+		model->ReadMetaData(std::string(LIBRARY_MODELS_FOLDER + files[i]).data());
+	}
+
+	// TODO: Textures
 }
 
 

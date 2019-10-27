@@ -24,8 +24,8 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(file_system);
-	AddModule(importer);
 	AddModule(resources);
+	AddModule(importer);
 	// Scenes
 	AddModule(scene_intro);
 	AddModule(objects);

@@ -16,7 +16,7 @@ public:
 
 	// meta data
 	void CreateMetaData();
-	bool ReadMetaData(char* path);
+	bool ReadMetaData(const char* path);
 
 	// create GameObjects
 	void ConvertToGameObjects();

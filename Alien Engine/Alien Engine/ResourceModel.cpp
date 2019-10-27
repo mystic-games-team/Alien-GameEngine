@@ -65,7 +65,7 @@ void ResourceModel::CreateMetaData()
 	delete[] data;
 }
 
-bool ResourceModel::ReadMetaData(char* path)
+bool ResourceModel::ReadMetaData(const char* path)
 {
 	bool ret = true;
 	// TODO: change to json
