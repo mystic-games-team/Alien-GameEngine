@@ -91,8 +91,8 @@ void ComponentMaterial::DrawInspector()
 			static ResourceTexture* tex = nullptr;
 			static bool first = true;
 			if (first) { // SAD need to think what to do here, this sucks :D SAD
-				if (texture == nullptr && !App->resources->GetTextures().empty())
-					tex = App->resources->GetTextures().front(); // checkers
+				if (texture == nullptr && !App->resources->resource_textures.empty())
+					tex = App->resources->resource_textures.front(); // checkers
 				else tex = texture;
 				first = false;
 			}
@@ -119,15 +119,15 @@ void ComponentMaterial::DrawInspector()
 					ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", tex->GetAssetsPath());
 				}
 				ImGui::Spacing();
-				if (ImGui::BeginChild("", { 492,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
+				if (ImGui::BeginChild("##TexturesSelectorChild", { 492,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
 
 					ImGui::Columns(3, 0, false);
 					ImGui::SetColumnWidth(0, 156);
 					ImGui::SetColumnWidth(1, 156);
 					ImGui::SetColumnWidth(2, 156);
 					
-					std::vector<ResourceTexture*>::const_iterator item = App->resources->GetTextures().cbegin();
-					for (; item != App->resources->GetTextures().cend(); ++item) {
+					std::vector<ResourceTexture*>::iterator item = App->resources->resource_textures.begin();
+					for (; item != App->resources->resource_textures.end(); ++item) {
 						if (*item != nullptr && (*item)->is_custom) {
 							ImGui::ImageButton((ImTextureID)(*item)->id, { 140,140 });
 							if (ImGui::IsItemClicked()) {

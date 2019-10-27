@@ -6,6 +6,8 @@ ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& w
 	this->id = id;
 	this->width = width;
 	this->height = height;
+
+	type = ResourceType::RESOURCE_TEXTURE;
 }
 
 ResourceTexture::~ResourceTexture()

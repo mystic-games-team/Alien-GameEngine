@@ -315,6 +315,7 @@ void ComponentMesh::SetComponent(Component* component)
 		wireframe = tmp->wireframe;
 		view_vertex_normals = tmp->view_vertex_normals;
 		view_face_normals = tmp->view_face_normals;
+
 	}
 }
 

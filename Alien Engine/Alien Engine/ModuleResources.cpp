@@ -81,8 +81,4 @@ void ModuleResources::AddResource(Resource* resource)
 
 }
 
-const std::vector<ResourceTexture*> ModuleResources::GetTextures() const
-{
-	return resource_textures;
-}
 

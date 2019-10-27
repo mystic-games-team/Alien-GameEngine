@@ -17,12 +17,12 @@ public:
 	ResourceMesh();
 	virtual ~ResourceMesh();
 
+private:
+
 	void CreateMetaData();
 	bool ReadMetaData(char* path);
 
 	void ConvertToGameObject(std::vector<GameObject*>* objects_created);
-
-private:
 
 	void InitBuffers();
 

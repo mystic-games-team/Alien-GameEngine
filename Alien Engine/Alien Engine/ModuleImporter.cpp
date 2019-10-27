@@ -232,8 +232,8 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 {
 	ResourceTexture* texture = nullptr;
 
-	std::vector<ResourceTexture*>::const_iterator item = App->resources->GetTextures().cbegin();
-	for (; item != App->resources->GetTextures().cend(); ++item) {
+	std::vector<ResourceTexture*>::iterator item = App->resources->resource_textures.begin();
+	for (; item != App->resources->resource_textures.end(); ++item) {
 		if (*item != nullptr && (*item)->GetAssetsPath() == path) {
 			if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
 				ApplyTextureToSelectedObject(*item);

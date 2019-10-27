@@ -37,14 +37,10 @@ public:
 	bool CleanUp();
 
 	void AddResource(Resource* resource);
-	
-	const std::vector<ResourceTexture*> GetTextures() const;
 
 public:
 
 	Icons icons;
-
-private:
 
 	std::vector<ResourceModel*> resource_models;
 	std::vector<ResourceMesh*> resource_meshes;

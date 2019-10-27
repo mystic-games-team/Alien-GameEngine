@@ -21,7 +21,6 @@ public:
 	void DrawFaceNormals();
 	void DrawInspector();
 	void DrawGlobalAABB();
-	//void DrawOBB();
 
 	void Reset();
 	void SetComponent(Component* component);
@@ -43,8 +42,6 @@ public:
 
 	bool draw_AABB = true;
 	bool draw_OBB = true;
-
-	Color OBB_color{ 0,1,0 };
 
 private:
 
