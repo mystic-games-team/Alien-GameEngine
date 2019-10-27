@@ -47,6 +47,7 @@ public:
 	void ChangeEnableNormalVertex();
 	void ChangeEnableNormalFace();
 	void ChangeEnableAABB();
+	void ChangeEnableOBB();
 	
 	// enable/disable grid
 	void ChangeEnableGrid();
@@ -111,8 +112,11 @@ public:
 
 	// Bounding Boxes
 	bool draw_all_AABB = true;
+	bool draw_all_OBB = true;
 	Color global_AABB_color{ 1,1,1 };
+	Color global_OBB_color{ 0,1,0 };
 	uint AABB_line_width = 1;
+	uint OBB_line_width = 1;
 
 	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;

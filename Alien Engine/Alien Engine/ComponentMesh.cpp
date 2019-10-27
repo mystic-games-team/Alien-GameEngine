@@ -234,7 +234,8 @@ void ComponentMesh::DrawInspector()
 		
 		ImGui::Checkbox("Active Mesh          ", &view_mesh); ImGui::SameLine(); ImGui::Checkbox("Active Wireframe", &wireframe);
 		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);	ImGui::SameLine();ImGui::Checkbox("Active Face Normals", &view_face_normals);
-		ImGui::Checkbox("Draw AABB", &draw_AABB);
+
+		ImGui::Checkbox("Draw AABB            ", &draw_AABB); ImGui::SameLine(); ImGui::Checkbox("Draw OBB", &draw_OBB);
 		ImGui::Spacing();
 
 		
@@ -289,6 +290,55 @@ void ComponentMesh::DrawGlobalAABB()
 	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
 	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
 	
+	glLineWidth(1);
+	glEnd();
+}
+
+void ComponentMesh::DrawOBB()
+{
+	glColor3f(App->objects->global_OBB_color.r, App->objects->global_OBB_color.g, App->objects->global_OBB_color.b);
+	glLineWidth(App->objects->OBB_line_width);
+	float3* obb_points=nullptr;
+	obb.GetCornerPoints(obb_points);
+
+	glBegin(GL_LINES);
+
+	glVertex3f(obb.CornerPoint(0).x, obb.CornerPoint(0).y, obb.CornerPoint(0).z);
+	glVertex3f(obb.CornerPoint(1).x, obb.CornerPoint(1).y, obb.CornerPoint(1).z);
+
+	glVertex3f(obb.CornerPoint(0).x, obb.CornerPoint(0).y, obb.CornerPoint(0).z);
+	glVertex3f(obb.CornerPoint(4).x, obb.CornerPoint(4).y, obb.CornerPoint(4).z);
+
+	glVertex3f(obb.CornerPoint(0).x, obb.CornerPoint(0).y, obb.CornerPoint(0).z);
+	glVertex3f(obb.CornerPoint(2).x, obb.CornerPoint(2).y, obb.CornerPoint(2).z);
+
+	glVertex3f(obb.CornerPoint(2).x, obb.CornerPoint(2).y, obb.CornerPoint(2).z);
+	glVertex3f(obb.CornerPoint(3).x, obb.CornerPoint(3).y, obb.CornerPoint(3).z);
+
+	glVertex3f(obb.CornerPoint(1).x, obb.CornerPoint(1).y, obb.CornerPoint(1).z);
+	glVertex3f(obb.CornerPoint(5).x, obb.CornerPoint(5).y, obb.CornerPoint(5).z);
+
+	glVertex3f(obb.CornerPoint(1).x, obb.CornerPoint(1).y, obb.CornerPoint(1).z);
+	glVertex3f(obb.CornerPoint(3).x, obb.CornerPoint(3).y, obb.CornerPoint(3).z);
+
+	glVertex3f(obb.CornerPoint(4).x, obb.CornerPoint(4).y, obb.CornerPoint(4).z);
+	glVertex3f(obb.CornerPoint(5).x, obb.CornerPoint(5).y, obb.CornerPoint(5).z);
+
+	glVertex3f(obb.CornerPoint(4).x, obb.CornerPoint(4).y, obb.CornerPoint(4).z);
+	glVertex3f(obb.CornerPoint(6).x, obb.CornerPoint(6).y, obb.CornerPoint(6).z);
+
+	glVertex3f(obb.CornerPoint(2).x, obb.CornerPoint(2).y, obb.CornerPoint(2).z);
+	glVertex3f(obb.CornerPoint(6).x, obb.CornerPoint(6).y, obb.CornerPoint(6).z);
+
+	glVertex3f(obb.CornerPoint(5).x, obb.CornerPoint(5).y, obb.CornerPoint(5).z);
+	glVertex3f(obb.CornerPoint(7).x, obb.CornerPoint(7).y, obb.CornerPoint(7).z);
+
+	glVertex3f(obb.CornerPoint(6).x, obb.CornerPoint(6).y, obb.CornerPoint(6).z);
+	glVertex3f(obb.CornerPoint(7).x, obb.CornerPoint(7).y, obb.CornerPoint(7).z);
+
+	glVertex3f(obb.CornerPoint(3).x, obb.CornerPoint(3).y, obb.CornerPoint(3).z);
+	glVertex3f(obb.CornerPoint(7).x, obb.CornerPoint(7).y, obb.CornerPoint(7).z);
+
 	glLineWidth(1);
 	glEnd();
 }

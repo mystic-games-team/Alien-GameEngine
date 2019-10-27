@@ -40,7 +40,15 @@ void PanelRender::PanelLogic()
 			App->objects->ChangeEnableAABB();
 		}
 		ImGui::ColorEdit3("AABB Color", &App->objects->global_AABB_color, ImGuiColorEditFlags_Float);
-		ImGui::SliderInt("Line Width", (int*)&App->objects->AABB_line_width, 1, 30);
+		ImGui::SliderInt("AABB Line Width", (int*)&App->objects->AABB_line_width, 1, 30);
+
+		ImGui::Spacing();
+		if (ImGui::Checkbox("View OBB", &App->objects->draw_all_OBB))
+		{
+			App->objects->ChangeEnableOBB();
+		}
+		ImGui::ColorEdit3("OBB Color", &App->objects->global_OBB_color, ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("OBB Line Width", (int*)&App->objects->OBB_line_width, 1, 30);
 	}
 	if (ImGui::CollapsingHeader("Background")) 
 	{
