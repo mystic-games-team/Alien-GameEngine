@@ -253,7 +253,6 @@ void ComponentMesh::DrawInspector()
 		
 		ImGui::Checkbox("Active Mesh          ", &view_mesh); ImGui::SameLine(); ImGui::Checkbox("Active Wireframe", &wireframe);
 		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);	ImGui::SameLine();ImGui::Checkbox("Active Face Normals", &view_face_normals);
-		ImGui::Spacing();
 		ImGui::Checkbox("Draw AABB", &draw_AABB);
 		ImGui::Spacing();
 

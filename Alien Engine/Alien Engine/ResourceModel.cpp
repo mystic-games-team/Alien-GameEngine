@@ -15,7 +15,7 @@ ResourceModel::~ResourceModel()
 }
 
 void ResourceModel::CreateMetaData()
-{
+{// TODO: change to json
 	uint num_meshes = meshes_attached.size();
 
 	// file size: num meshes + name + path fbx + path for every mesh
@@ -69,7 +69,7 @@ void ResourceModel::CreateMetaData()
 bool ResourceModel::ReadMetaData(char* path)
 {
 	bool ret = true;
-
+	// TODO: change to json
 	char* data = nullptr;
 	App->file_system->Load(path, &data);
 
@@ -162,7 +162,6 @@ void ResourceModel::ConvertToGameObjects()
 		meshes_attached.back()->ConvertToGameObject(nullptr);
 		App->objects->SetNewSelectedObject(App->objects->base_game_object->children.back());
 	}
-
 	App->camera->Focus();
 }
 

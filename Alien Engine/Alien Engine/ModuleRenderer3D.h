@@ -35,7 +35,7 @@ public:
 	uint depthrenderbuffer = 0;
 
 	// scene texture
-	Texture* tex = nullptr;
+	ResourceTexture* tex = nullptr;
 
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;

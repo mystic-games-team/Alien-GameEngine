@@ -5,7 +5,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "ModuleUI.h"
-
+#include "ResourceTexture.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -197,7 +197,7 @@ void ModuleRenderer3D::CreateRenderTexture()
 	}
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	tex = new Texture("RenderTexture", render_texture, App->window->width, App->window->height);
+	tex = new ResourceTexture("RenderTexture", render_texture, App->window->width, App->window->height);
 }
 
 void ModuleRenderer3D::SetBackgroundColor(const Color & bg_color)

@@ -5,6 +5,7 @@
 #include "ResourceModel.h"
 #include "ModuleImporter.h"
 #include "Application.h"
+#include "ResourceTexture.h"
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 {
@@ -56,23 +57,32 @@ bool ModuleResources::CleanUp()
 
 void ModuleResources::AddResource(Resource* resource)
 {
-	SDL_assert((uint)ResourceType::RESOURECE_MAX == 2); // add new type
-
-	// TODO: Look if it exists before
+	SDL_assert((uint)ResourceType::RESOURECE_MAX == 3); // add new type
 
 	if (resource != nullptr) {
 		switch (resource->GetType())
 		{
 		case ResourceType::RESOURCE_MODEL:
-			resource_models.push_back((ResourceModel*)resource);
+			if (std::find(resource_models.begin(), resource_models.end(), resource) == resource_models.begin())
+				resource_models.push_back((ResourceModel*)resource);
 			break;
 		case ResourceType::RESOURCE_MESH:
-			resource_meshes.push_back((ResourceMesh*)resource);
+			if (std::find(resource_meshes.begin(), resource_meshes.end(), resource) == resource_meshes.begin())
+				resource_meshes.push_back((ResourceMesh*)resource);
+			break;
+		case ResourceType::RESOURCE_TEXTURE:
+			if (std::find(resource_textures.begin(), resource_textures.end(), resource) == resource_textures.begin())
+				resource_textures.push_back((ResourceTexture*)resource);
 			break;
 		default:
 			break;
 		}
 	}
 
+}
+
+const std::vector<ResourceTexture*> ModuleResources::GetTextures() const
+{
+	return resource_textures;
 }
 

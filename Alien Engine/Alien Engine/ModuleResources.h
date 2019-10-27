@@ -12,16 +12,15 @@
 class Resource;
 class ResourceModel;
 class ResourceMesh;
-
-struct Texture;
+class ResourceTexture;
 
 struct Icons {
 
-	Texture* jpg_file = nullptr;
-	Texture* png_file = nullptr;
-	Texture* dds_file = nullptr;
-	Texture* folder = nullptr;
-	Texture* model = nullptr;
+	ResourceTexture* jpg_file = nullptr;
+	ResourceTexture* png_file = nullptr;
+	ResourceTexture* dds_file = nullptr;
+	ResourceTexture* folder = nullptr;
+	ResourceTexture* model = nullptr;
 
 };
 
@@ -39,6 +38,8 @@ public:
 
 	void AddResource(Resource* resource);
 	
+	const std::vector<ResourceTexture*> GetTextures() const;
+
 public:
 
 	Icons icons;
@@ -47,6 +48,7 @@ private:
 
 	std::vector<ResourceModel*> resource_models;
 	std::vector<ResourceMesh*> resource_meshes;
+	std::vector<ResourceTexture*> resource_textures;
 
 };
 

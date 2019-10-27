@@ -3,6 +3,7 @@
 #include "ModuleFileSystem.h"
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
+#include "ResourceTexture.h"
 
 ResourceMesh::ResourceMesh() : Resource()
 {
@@ -39,7 +40,7 @@ void ResourceMesh::CreateMetaData()
 		meta->SetBoolean("Mesh.HasTexture", (texture != nullptr) ? true : false);
 
 		if (texture != nullptr)
-			meta->SetString("Mesh.Texture", texture->path);
+			meta->SetString("Mesh.Texture", texture->GetPath());
 
 		// transformations
 		// pos

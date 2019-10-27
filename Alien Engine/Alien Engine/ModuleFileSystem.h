@@ -21,6 +21,8 @@ struct aiFileIO;
 #define MODELS_FOLDER "Assets/Models/"
 #define TEXTURES_FOLDER "Assets/Textures/"
 
+class ResourceTexture;
+
 struct FileNode {
 
 	FileNode(){}
@@ -34,7 +36,7 @@ struct FileNode {
 	FileNode* parent = nullptr;
 	std::vector<FileNode*> children;
 
-	Texture* icon = nullptr;
+	ResourceTexture* icon = nullptr;
 };
 
 enum class FileDropType {

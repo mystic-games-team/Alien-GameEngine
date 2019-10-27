@@ -27,21 +27,7 @@
 
 class ResourceModel;
 class ResourceMesh;
-
-struct Texture {
-	
-	Texture(const char* path, const uint& id, const uint & width, const int & height);
-		
-	std::string name;
-	std::string path;
-
-	bool is_custom = true;
-	uint id = 0;
-	uint height = 0;
-	uint width = 0;
-
-};
-
+class ResourceTexture;
 
 class ModuleImporter : public Module
 {
@@ -58,8 +44,8 @@ public:
 	void LoadParShapesMesh(par_shapes_mesh* p_mesh, ComponentMesh* mesh);
 
 	// textures
-	Texture* LoadTextureFile(const char* path, bool has_been_dropped = false); // when dropped
-	void ApplyTextureToSelectedObject(Texture* texture);
+	ResourceTexture* LoadTextureFile(const char* path, bool has_been_dropped = false); // when dropped
+	void ApplyTextureToSelectedObject(ResourceTexture* texture);
 	void InitMeshBuffers(ResourceMesh* mesh);
 private:
 	
@@ -69,11 +55,6 @@ private:
 	// mesh
 	void LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent, uint family_number);
 	ResourceMesh* LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* mesh, ResourceMesh* parent);
-
-
-public:
-
-	std::vector<Texture*> textures;
 
 private:
 

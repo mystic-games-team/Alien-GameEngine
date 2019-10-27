@@ -15,6 +15,7 @@
 #include "ModuleResources.h"
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
+#include "ResourceTexture.h"
 
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
@@ -51,15 +52,6 @@ bool ModuleImporter::Start()
 bool ModuleImporter::CleanUp()
 {
 	aiDetachAllLogStreams();
-
-	std::vector<Texture*>::iterator item = textures.begin();
-	for (; item != textures.end(); ++item) {
-		if (*item != nullptr) {
-			delete* item;
-			*item = nullptr;
-		}
-	}
-	textures.clear();
 	
 	return true;
 }
@@ -271,13 +263,13 @@ void ModuleImporter::InitMeshBuffers(ResourceMesh* mesh)
 	
 }
 
-Texture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped)
+ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped)
 {
-	Texture* texture = nullptr;
+	ResourceTexture* texture = nullptr;
 
-	std::vector<Texture*>::iterator item = textures.begin();
-	for (; item != textures.end(); ++item) {
-		if (*item != nullptr && (*item)->path == path) {
+	std::vector<ResourceTexture*>::const_iterator item = App->resources->GetTextures().cbegin();
+	for (; item != App->resources->GetTextures().cend(); ++item) {
+		if (*item != nullptr && (*item)->GetPath() == path) {
 			if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
 				ApplyTextureToSelectedObject(*item);
 			}
@@ -294,7 +286,7 @@ Texture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped
 
 	if (ilLoadImage(path)) {
 		iluFlipImage();
-		texture = new Texture(path, ilutGLBindTexImage(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
+		texture = new ResourceTexture(path, ilutGLBindTexImage(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -303,7 +295,8 @@ Texture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
-		textures.push_back(texture);
+		
+		App->resources->AddResource(texture);
 
 		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
 			ApplyTextureToSelectedObject(texture);
@@ -321,7 +314,7 @@ Texture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped
 	return texture;
 }
 
-void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
+void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 {
 	GameObject* selected = App->objects->GetSelectedObject();
 	ComponentMaterial* material = (ComponentMaterial*)selected->GetComponent(ComponentType::MATERIAL);
@@ -391,13 +384,5 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 	//InitMeshBuffers(mesh);
 }
 
-Texture::Texture(const char* path, const uint& id, const uint & width, const int & height)
-{
-	this->id = id;
-	this->height = height;
-	this->width = width;
-	this->path = std::string(path);
-	name = App->file_system->GetBaseFileName(path);
-}
 
 

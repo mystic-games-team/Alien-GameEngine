@@ -4,7 +4,7 @@
 #include "imgui/imgui.h"
 #include "ComponentMesh.h"
 #include "Application.h"
-#include "ModuleImporter.h"
+#include "ResourceTexture.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* attach) : Component(attach)
 {
@@ -75,7 +75,7 @@ void ComponentMaterial::DrawInspector()
 
 			ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->width);
 			ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->height);
-			ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", texture->path);
+			ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", texture->GetPath());
 
 			ImGui::Image((ImTextureID)texture->id, { ImGui::GetWindowWidth() ,ImGui::GetWindowWidth() });
 			ImGui::Spacing();
@@ -89,11 +89,11 @@ void ComponentMaterial::DrawInspector()
 
 		if (change_texture_menu) {
 			/*_________________________________________________________________*/
-			static Texture* tex = nullptr;
+			static ResourceTexture* tex = nullptr;
 			static bool first = true;
 			if (first) { // SAD need to think what to do here, this sucks :D SAD
-				if (texture == nullptr && !App->importer->textures.empty())
-					tex = App->importer->textures.front();
+				if (texture == nullptr && !App->resources->GetTextures().empty())
+					tex = App->resources->GetTextures().front(); // checkers
 				else tex = texture;
 				first = false;
 			}
@@ -117,7 +117,7 @@ void ComponentMaterial::DrawInspector()
 					ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", tex->height);
 					ImGui::Text("");
 					ImGui::SameLine(112);
-					ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", tex->path);
+					ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", tex->GetPath());
 				}
 				ImGui::Spacing();
 				if (ImGui::BeginChild("", { 492,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
@@ -127,8 +127,8 @@ void ComponentMaterial::DrawInspector()
 					ImGui::SetColumnWidth(1, 156);
 					ImGui::SetColumnWidth(2, 156);
 					
-					std::vector<Texture*>::iterator item = App->importer->textures.begin();
-					for (; item != App->importer->textures.end(); ++item) {
+					std::vector<ResourceTexture*>::const_iterator item = App->resources->GetTextures().cbegin();
+					for (; item != App->resources->GetTextures().cend(); ++item) {
 						if (*item != nullptr && (*item)->is_custom) {
 							ImGui::ImageButton((ImTextureID)(*item)->id, { 140,140 });
 							if (ImGui::IsItemClicked()) {
