@@ -101,6 +101,7 @@ public:
 	const FileDropType& SearchExtension(const std::string& extern_path);
 
 	std::string GetBaseFileName(const char* file_name);
+	std::string GetCurrentFolder(std::string& path);
 	void GetPreviousNames(std::string& previous, FileNode* node);
 private:
 

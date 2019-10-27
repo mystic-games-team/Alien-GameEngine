@@ -89,7 +89,7 @@ void PanelScene::PanelLogic()
 		if (payload != nullptr && payload->IsDataType(DROP_ID_MODEL)) {
 			FileNode* node = *(FileNode**)payload->Data;
 			if (node != nullptr) {
-				std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetBaseFileName(node->name.data()) + ".alien";
+				std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(node->path) + App->file_system->GetBaseFileName(node->name.data()) + ".alien";
 				App->resources->CreateNewModelInstanceOf(meta_path.data());
 			}
 		}

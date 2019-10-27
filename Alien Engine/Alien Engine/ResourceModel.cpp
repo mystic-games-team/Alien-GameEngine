@@ -59,7 +59,7 @@ void ResourceModel::CreateMetaData()
 		}
 	}
 	// Create the file
-	App->file_system->SaveUnique(meta_data_path, data, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path.data()).data(), ".alien");
+	App->file_system->SaveUnique(meta_data_path, data, size, LIBRARY_MODELS_FOLDER, std::string(App->file_system->GetCurrentFolder(path) + App->file_system->GetBaseFileName(path.data())).data(), ".alien");
 	LOG("Created alien file %s", meta_data_path.data());
 
 	delete[] data;

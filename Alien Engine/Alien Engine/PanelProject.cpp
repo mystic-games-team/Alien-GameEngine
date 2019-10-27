@@ -103,7 +103,7 @@ void PanelProject::SeeFiles()
 		ImGui::SameLine(0, -2.F);
 		ImGui::Text("|");
 		ImGui::SameLine(0, -29.F);
-		ImGui::Text(std::string(current_active_folder->path + current_active_folder->name).data());
+		ImGui::Text(current_active_folder->path.data());
 
 		ImGui::Separator();
 

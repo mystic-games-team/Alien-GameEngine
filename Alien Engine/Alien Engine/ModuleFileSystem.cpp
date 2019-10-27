@@ -145,7 +145,7 @@ void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 		std::vector<std::string>files;
 		std::vector<std::string>directories;
 
-		DiscoverFiles(std::string(previous_names + "/" + node->name + "/").data(), files, directories);
+		DiscoverFiles(std::string(previous_names + "/").data(), files, directories);
 		for (uint i = 0; i < directories.size(); ++i) {
 			node->children.push_back(new FileNode(directories[i], false, node));
 		}
@@ -529,6 +529,30 @@ std::string ModuleFileSystem::GetBaseFileName(const char* file_name)
 	return name;
 }
 
+std::string ModuleFileSystem::GetCurrentFolder(std::string &path)
+{
+	bool start_copying = false;
+	std::string folder_name;
+	std::string::reverse_iterator item = path.rbegin();
+	for (; item != path.rend(); ++item)
+	{
+		if (!start_copying) {
+			if (*item == '/')
+				start_copying = true;
+		}
+		else {
+			if (*item == '/') {
+				break;
+			}
+			else {
+				folder_name = *item + folder_name;
+			}
+		}
+	}
+
+	return folder_name;
+}
+
 // -----------------------------------------------------
 // ASSIMP IO
 // -----------------------------------------------------
@@ -695,8 +719,8 @@ void ModuleFileSystem::CreateBassIO()
 
 void ModuleFileSystem::GetPreviousNames(std::string& previous, FileNode * node)
 {
+	previous = node->name + "/" + previous;
 	if (node->parent != nullptr) {
-		previous = node->parent->name + "/" + previous;
 		GetPreviousNames(previous, node->parent);
 	}
 }
