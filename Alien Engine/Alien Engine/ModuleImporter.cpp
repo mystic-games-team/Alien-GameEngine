@@ -276,6 +276,7 @@ Texture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped
 			if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
 				ApplyTextureToSelectedObject(*item);
 			}
+			LOG("This texture was already loaded");
 			return (*item);
 		}
 	}
@@ -302,6 +303,8 @@ Texture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped
 		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
 			ApplyTextureToSelectedObject(texture);
 		}
+
+		LOG("Texture successfully loaded: %s", path);
 	}
 	else {
 		LOG("Error while loading image in %s", path);
@@ -316,7 +319,16 @@ Texture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped
 void ModuleImporter::ApplyTextureToSelectedObject(Texture* texture)
 {
 	GameObject* selected = App->objects->GetSelectedObject();
+	ComponentMesh* mesh = (ComponentMesh*)selected->GetComponent(ComponentType::MESH);
+
+	if (mesh == nullptr)
+	{
+		LOG("This object doesn't have a mesh.");
+		return;
+	}
+
 	ComponentMaterial* material = (ComponentMaterial*)selected->GetComponent(ComponentType::MATERIAL);
+
 	if (material == nullptr) {
 		material = new ComponentMaterial(selected);
 		selected->AddComponent(material);
