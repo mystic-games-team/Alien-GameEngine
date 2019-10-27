@@ -22,6 +22,10 @@ public:
 
 	void ConvertToGameObject(std::vector<GameObject*>* objects_created);
 
+private:
+
+	void InitBuffers();
+
 public:
 
 	// buffers id

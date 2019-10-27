@@ -46,7 +46,7 @@ public:
 	// textures
 	ResourceTexture* LoadTextureFile(const char* path, bool has_been_dropped = false); // when dropped
 	void ApplyTextureToSelectedObject(ResourceTexture* texture);
-	void InitMeshBuffers(ResourceMesh* mesh);
+
 private:
 	
 	// models

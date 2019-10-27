@@ -196,14 +196,14 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 		memcpy(ret->uv_cords, (float*)ai_mesh->mTextureCoords[0], sizeof(float) * ai_mesh->mNumVertices * 3);
 	}
 
+	ret->InitBuffers();
+
 	// set the material
 	aiMaterial* ai_material = scene->mMaterials[ai_mesh->mMaterialIndex];
 	aiString path;
 	ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 	std::string full_path(TEXTURES_FOLDER + std::string(path.C_Str()));
 	ret->texture = LoadTextureFile(full_path.data());
-
-	InitMeshBuffers(ret);
 
 	// get local transformations
 	aiVector3D translation, scaling;
@@ -226,41 +226,6 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	ret->name = std::string(node->mName.C_Str());
 
 	return ret;
-}
-
-void ModuleImporter::InitMeshBuffers(ResourceMesh* mesh)
-{
-	// TODO: resource mesh should do this
-
-
-	// vertex
-	glGenBuffers(1, &mesh->id_vertex);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
-		&mesh->vertex[0], GL_STATIC_DRAW);
-
-	// index
-	glGenBuffers(1, &mesh->id_index);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_index,
-		&mesh->index[0], GL_STATIC_DRAW);
-
-	if (mesh->uv_cords != nullptr) {
-		// UV
-		glGenBuffers(1, &mesh->id_uv);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_uv);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
-			&mesh->uv_cords[0], GL_STATIC_DRAW);
-	}
-
-	if (mesh->normals != nullptr) {
-		// normals
-		glGenBuffers(1, &mesh->id_normals);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_normals);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 3,
-			&mesh->normals[0], GL_STATIC_DRAW);
-	}
-	
 }
 
 ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped)

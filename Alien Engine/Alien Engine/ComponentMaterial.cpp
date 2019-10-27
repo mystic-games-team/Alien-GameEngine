@@ -13,7 +13,6 @@ ComponentMaterial::ComponentMaterial(GameObject* attach) : Component(attach)
 
 ComponentMaterial::~ComponentMaterial()
 {
-	glDisable(GL_TEXTURE_2D);
 }
 
 void ComponentMaterial::BindTexture()
