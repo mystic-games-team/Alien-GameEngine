@@ -239,22 +239,8 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 	obj->AddComponent(new ComponentTransform(obj, pos, rot, scale));
 
 	ComponentMesh* mesh = new ComponentMesh(obj);
-
-	mesh->num_faces = num_faces;
-	mesh->num_index = num_index;
-	mesh->num_vertex = num_vertex;
-	// TODO: set the buffer if is not setted
-	mesh->id_index = id_index;
-	mesh->id_uv = id_uv;
-	mesh->id_normals = id_normals;
-	mesh->id_vertex = id_vertex;
-
-	mesh->vertex = vertex;
-	mesh->normals = normals;
-	mesh->uv_cords = uv_cords;
-	mesh->center_point = center_point;
-	mesh->center_point_normal = center_point_normal;
-	mesh->index = index;
+		
+	mesh->mesh = this;
 
 	obj->AddComponent(mesh);
 

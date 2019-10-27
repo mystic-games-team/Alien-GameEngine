@@ -45,22 +45,15 @@ public:
 	float* center_point_normal = nullptr;
 	float* center_point = nullptr;
 
-	float3 aabb_min = { 0,0,0 };
-	float3 aabb_max = { 0,0,0 };
+private:
+
+	std::string parent_name;
+	uint family_number = 0;
 
 	ResourceTexture* texture = nullptr;
 
 	float3 pos = { 0,0,0 };
 	float3 scale = { 0,0,0 };
 	Quat rot = { 0,0,0,0 };
-
-private:
-
-	std::string parent_name;
-	uint family_number = 0;
-
-	// transforms... TODO
-
-	// TODO: think how to organize this...
 
 };

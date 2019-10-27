@@ -6,6 +6,7 @@
 #include "ComponentMaterial.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "Color.h"
+#include "ResourceMesh.h"
 
 ComponentMesh::ComponentMesh(GameObject* attach) : Component(attach)
 {
@@ -14,26 +15,6 @@ ComponentMesh::ComponentMesh(GameObject* attach) : Component(attach)
 
 ComponentMesh::~ComponentMesh()
 {
-	glDeleteBuffers(1, &id_index);
-	glDeleteBuffers(1, &id_normals);
-	glDeleteBuffers(1, &id_vertex);
-	glDeleteBuffers(1, &id_uv);
-
-	delete[] vertex;
-	delete[] index;
-	delete[] normals;
-	delete[] center_point;
-	delete[] center_point_normal;
-	delete[] uv_cords;
-
-	vertex = nullptr;
-	index = nullptr;
-	center_point = nullptr;
-	center_point_normal = nullptr;
-	normals = nullptr;
-	uv_cords = nullptr;
-
-
 	if (game_object_attached != nullptr && game_object_attached->HasComponent(ComponentType::MATERIAL))
 	{
 		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
@@ -42,7 +23,7 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::DrawPolygon()
 {
-	if (id_index <= 0)
+	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
 
 	if (game_object_attached->IsSelected() || game_object_attached->IsParentSelected()) {
@@ -65,22 +46,22 @@ void ComponentMesh::DrawPolygon()
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(1.0f, 0.1f);
 
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 
-	if (uv_cords != nullptr) {
-		glBindBuffer(GL_ARRAY_BUFFER, id_uv);
+	if (mesh->uv_cords != nullptr) {
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_uv);
 		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 	}
 
-	if (normals != nullptr) {
+	if (mesh->normals != nullptr) {
 		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
 		glNormalPointer(GL_FLOAT, 0, 0);
 	}
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	glDrawElements(GL_TRIANGLES, num_index * 3, GL_UNSIGNED_INT, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, 0);
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CCW);
@@ -98,7 +79,7 @@ void ComponentMesh::DrawPolygon()
 
 void ComponentMesh::DrawOutLine()
 {
-	if (id_index <= 0)
+	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
 
 
@@ -127,11 +108,11 @@ void ComponentMesh::DrawOutLine()
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 
-	glDrawElements(GL_TRIANGLES, num_index * 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, 0);
 
 	glDisable(GL_STENCIL_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -143,7 +124,7 @@ void ComponentMesh::DrawOutLine()
 
 void ComponentMesh::DrawMesh()
 {
-	if (id_index <= 0)
+	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
 
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
@@ -159,11 +140,11 @@ void ComponentMesh::DrawMesh()
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glDrawElements(GL_TRIANGLES, num_index * 3, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, NULL);
 
 	glLineWidth(1);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -174,10 +155,10 @@ void ComponentMesh::DrawMesh()
 
 void ComponentMesh::DrawVertexNormals()
 {
-	if (id_index <= 0)
+	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
 
-	if (normals != nullptr) {
+	if (mesh->normals != nullptr) {
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 
 		glPushMatrix();
@@ -186,10 +167,10 @@ void ComponentMesh::DrawVertexNormals()
 		glColor3f(App->objects->vertex_n_color.r, App->objects->vertex_n_color.g, App->objects->vertex_n_color.b);
 		glLineWidth(App->objects->vertex_n_width);
 		glBegin(GL_LINES);
-		for (uint i = 0; i < num_vertex * 3; i += 3)
+		for (uint i = 0; i < mesh->num_vertex * 3; i += 3)
 		{
-			glVertex3f(vertex[i], vertex[i + 1], vertex[i + 2]);
-			glVertex3f(vertex[i] + normals[i] * App->objects->vertex_normal_length, vertex[i + 1] + normals[i + 1] * App->objects->vertex_normal_length, vertex[i + 2] + normals[i + 2] * App->objects->vertex_normal_length);
+			glVertex3f(mesh->vertex[i], mesh->vertex[i + 1], mesh->vertex[i + 2]);
+			glVertex3f(mesh->vertex[i] + mesh->normals[i] * App->objects->vertex_normal_length, mesh->vertex[i + 1] + mesh->normals[i + 1] * App->objects->vertex_normal_length, mesh->vertex[i + 2] + mesh->normals[i + 2] * App->objects->vertex_normal_length);
 		}
 		glEnd();
 		glLineWidth(1);
@@ -200,10 +181,10 @@ void ComponentMesh::DrawVertexNormals()
 
 void ComponentMesh::DrawFaceNormals()
 {
-	if (id_index <= 0)
+	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
 
-	if (normals != nullptr) {
+	if (mesh->normals != nullptr) {
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 
 		glPushMatrix();
@@ -212,10 +193,10 @@ void ComponentMesh::DrawFaceNormals()
 		glColor3f(App->objects->face_n_color.r, App->objects->face_n_color.g, App->objects->face_n_color.b);
 		glLineWidth(App->objects->face_n_width);
 		glBegin(GL_LINES);
-		for (uint i = 0; i < num_index; i += 3)
+		for (uint i = 0; i < mesh->num_index; i += 3)
 		{
-			glVertex3f(center_point[i], center_point[i + 1], center_point[i + 2]);
-			glVertex3f(center_point[i] + center_point_normal[i] * App->objects->face_normal_length, center_point[i + 1] + center_point_normal[i+ 1] * App->objects->face_normal_length, center_point[i + 2] + center_point_normal[i + 2] * App->objects->face_normal_length);
+			glVertex3f(mesh->center_point[i], mesh->center_point[i + 1], mesh->center_point[i + 2]);
+			glVertex3f(mesh->center_point[i] + mesh->center_point_normal[i] * App->objects->face_normal_length, mesh->center_point[i + 1] + mesh->center_point_normal[i+ 1] * App->objects->face_normal_length, mesh->center_point[i + 2] + mesh->center_point_normal[i + 2] * App->objects->face_normal_length);
 		}
 		glEnd();
 		glLineWidth(1);
@@ -244,8 +225,8 @@ void ComponentMesh::DrawInspector()
 		ImGui::Separator();
 		ImGui::Spacing();
 
-		ImGui::Text("Vertex count:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", num_vertex);
-		ImGui::Text("Triangles count:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", num_faces);
+		ImGui::Text("Vertex count:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", (mesh != nullptr ? mesh->num_vertex : 0));
+		ImGui::Text("Triangles count:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", (mesh != nullptr ? mesh->num_faces : 0));
 
 		ImGui::Spacing();
 		ImGui::Separator();
@@ -312,51 +293,6 @@ void ComponentMesh::DrawGlobalAABB()
 	glEnd();
 }
 
-//void ComponentMesh::DrawOBB()
-//{
-//	glColor3f(OBB_color.r, OBB_color.g, OBB_color.b);
-//	glBegin(GL_LINES);
-//	
-//	glVertex3f(obb.minPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
-//
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
-//
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
-//
-//
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
-//
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.minPoint.z);
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
-//
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
-//
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
-//
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.minPoint.z);
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
-//
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
-//
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
-//
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.minPoint.y, global_aabb.maxPoint.z);
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
-//
-//	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
-//	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
-//
-//	glEnd();
-//}
-
 void ComponentMesh::Reset()
 {
 	view_mesh = false;
@@ -371,91 +307,21 @@ void ComponentMesh::SetComponent(Component* component)
 {
 	if (component->GetType() == type) {
 
-		glDeleteBuffers(1, &id_index);
-		glDeleteBuffers(1, &id_normals);
-		glDeleteBuffers(1, &id_vertex);
-		glDeleteBuffers(1, &id_uv);
+		ComponentMesh* tmp = (ComponentMesh*)component;
 
-		delete[] vertex;
-		delete[] index;
-		delete[] normals;
-		delete[] center_point;
-		delete[] center_point_normal;
-		delete[] uv_cords;
+		mesh = tmp->mesh;
 
-		vertex = nullptr;
-		index = nullptr;
-		center_point = nullptr;
-		center_point_normal = nullptr;
-		normals = nullptr;
-		uv_cords = nullptr;
-
-		ComponentMesh* mesh = (ComponentMesh*)component;
-
-		num_index = mesh->num_index;
-		num_vertex = mesh->num_vertex;
-		num_faces = mesh->num_faces;
-		
-		if (mesh->index != nullptr) {
-			index = new uint[num_index];
-			memcpy(index, mesh->index, sizeof(uint) * num_index);
-		}
-		if (mesh->vertex != nullptr) {
-			vertex = new float[num_vertex * 3];
-			memcpy(vertex, mesh->vertex, sizeof(float) * num_vertex * 3);
-		}
-		if (mesh->normals != nullptr) {
-			normals = new float[num_vertex * 3];
-			center_point = new float[num_faces * 3];
-			center_point_normal = new float[num_faces * 3];
-			memcpy(normals, mesh->normals, sizeof(float) * num_vertex * 3);
-			memcpy(center_point, mesh->center_point, sizeof(float) * num_faces * 3);
-			memcpy(center_point_normal, mesh->center_point_normal, sizeof(float) * num_faces * 3);
-		}
-		if (mesh->uv_cords != nullptr) {
-			uv_cords = new float[num_vertex * 3];
-			memcpy(uv_cords, mesh->uv_cords, sizeof(float) * num_vertex * 3);
-		}
-
-
-		glGenBuffers(1, &id_vertex);
-		glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertex * 3,
-			&mesh->vertex[0], GL_STATIC_DRAW);
-
-		// index
-		glGenBuffers(1, &id_index);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_index,
-			&index[0], GL_STATIC_DRAW);
-
-		if (uv_cords != nullptr) {
-			// UV
-			glGenBuffers(1, &id_uv);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_uv);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_vertex * 3,
-				&uv_cords[0], GL_STATIC_DRAW);
-		}
-
-		if (normals != nullptr) {
-			// normals
-			glGenBuffers(1, &id_normals);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_normals);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_vertex * 3,
-				&normals[0], GL_STATIC_DRAW);
-		}
-
-		view_mesh = mesh->view_mesh;
-		wireframe = mesh->wireframe;
-		view_vertex_normals = mesh->view_vertex_normals;
-		view_face_normals = mesh->view_face_normals;
+		view_mesh = tmp->view_mesh;
+		wireframe = tmp->wireframe;
+		view_vertex_normals = tmp->view_vertex_normals;
+		view_face_normals = tmp->view_face_normals;
 	}
 }
 
 AABB ComponentMesh::GenerateAABB()
 {
 	local_aabb.SetNegativeInfinity();
-	local_aabb.Enclose((float3*)vertex, num_vertex);
+	local_aabb.Enclose((float3*)mesh->vertex, mesh->num_vertex);
 
 	return local_aabb;
 }
