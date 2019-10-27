@@ -127,6 +127,27 @@ void PanelProject::SeeFiles()
 			ImGui::ImageButton((ImTextureID)current_active_folder->children[i]->icon->id, { 53,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
 			ImGui::PopStyleColor();
 
+			if (current_active_folder->children[i]->is_file) {
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
+					std::string drag_id;
+
+					switch (current_active_folder->children[i]->type) {
+					case ResourceType::RESOURCE_MODEL:
+						drag_id = DROP_ID_MODEL;
+						break;
+					case ResourceType::RESOURCE_TEXTURE:
+						drag_id = DROP_ID_TEXTURE;
+						break;
+					}
+
+					ImGui::SetDragDropPayload(drag_id.data(), &current_active_folder->children[i], sizeof(FileNode), ImGuiCond_Once);
+					ImGui::Image((ImTextureID)current_active_folder->children[i]->icon->id, { 53,70 });
+					ImGui::Text(current_active_folder->children[i]->name.data());
+					ImGui::EndDragDropSource();
+				}
+			}
+
+
 			// set the file clicked
 			if (ImGui::IsItemClicked()) {
 				current_active_file = current_active_folder->children[i];

@@ -4,6 +4,7 @@
 #include "PhysFS/include/physfs.h"
 #include "Assimp/include/assimp/cfileio.h"
 #include "Assimp/include/assimp/types.h"
+#include "Resource_.h"
 
 #pragma comment( lib, "PhysFS/libx86/physfs.lib" )
 
@@ -722,15 +723,19 @@ FileNode::FileNode(std::string name, bool is_file, FileNode* parent)
 
 		if (App->StringCmp(extension.data(), "jpg")) {
 			icon = App->resources->icons.jpg_file;
+			type = ResourceType::RESOURCE_TEXTURE;
 		}
 		else if (App->StringCmp(extension.data(), "dds")) {
 			icon = App->resources->icons.dds_file;
+			type = ResourceType::RESOURCE_TEXTURE;
 		}
 		else if (App->StringCmp(extension.data(), "png")) {
 			icon = App->resources->icons.png_file;
+			type = ResourceType::RESOURCE_TEXTURE;
 		}
 		else if (App->StringCmp(extension.data(), "fbx")) {
 			icon = App->resources->icons.model;
+			type = ResourceType::RESOURCE_MODEL;
 		}
 		else {
 			// TODO: fer un icon que sigui unknown
