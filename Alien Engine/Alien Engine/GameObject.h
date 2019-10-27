@@ -54,6 +54,7 @@ public:
 	void ChangeVertexNormalsView(const bool& wireframe);
 	void ChangeFaceNormalsView(const bool& wireframe);
 	void ChangeAABB(const bool& AABB_view);
+	void ChangeOBB(const bool& OBB_view);
 
 	// deleting 
 	void ToDelete();
