@@ -203,8 +203,6 @@ bool ResourceMesh::ReadMetaData(char* path)
 			vertex[i] = meta->GetArrayNumber("Mesh.Vertex", i);
 		}
 
-		vertex = (float*)meta->GetArray("Mesh.Vertex");
-
 		delete meta;
 	}
 	else {
