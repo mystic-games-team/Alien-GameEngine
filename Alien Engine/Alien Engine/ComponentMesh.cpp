@@ -308,7 +308,7 @@ void ComponentMesh::DrawGlobalAABB()
 
 	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
 	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
-
+	
 	glLineWidth(1);
 	glEnd();
 }

@@ -154,10 +154,16 @@ void ResourceModel::ConvertToGameObjects()
 			}
 		}
 		objects_created.clear();
+
+		// set it selected
+		App->objects->SetNewSelectedObject(parent);
 	}
 	else { 
 		meshes_attached.back()->ConvertToGameObject(nullptr);
+		App->objects->SetNewSelectedObject(App->objects->base_game_object->children.back());
 	}
+
+	App->camera->Focus();
 }
 
 bool ResourceModel::SortByFamilyNumber(const ResourceMesh* mesh1, const ResourceMesh* mesh2)
