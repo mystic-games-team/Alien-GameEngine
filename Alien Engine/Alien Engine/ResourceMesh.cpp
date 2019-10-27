@@ -20,15 +20,15 @@ void ResourceMesh::CreateMetaData()
 		parent_name.assign("null");
 	}
 
-	path = std::string(LIBRARY_MESHES_FOLDER + name + ".alienMesh");
+	meta_data_path = std::string(LIBRARY_MESHES_FOLDER + name + ".alienMesh");
 
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* object = json_value_get_object(value);
-	json_serialize_to_file_pretty(value, path.data());
+	json_serialize_to_file_pretty(value, meta_data_path.data());
 
 	if (value != nullptr && object != nullptr) {
 
-		JSONfilepack* meta = new JSONfilepack(path, object, value);
+		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
 
 		meta->StartSave();
 
@@ -40,7 +40,7 @@ void ResourceMesh::CreateMetaData()
 		meta->SetBoolean("Mesh.HasTexture", (texture != nullptr) ? true : false);
 
 		if (texture != nullptr)
-			meta->SetString("Mesh.Texture", texture->GetPath());
+			meta->SetString("Mesh.Texture", texture->GetAssetsPath());
 
 		// transformations
 		// pos
@@ -109,7 +109,7 @@ void ResourceMesh::CreateMetaData()
 		delete meta;
 	}
 	else {
-		LOG("Error creating meta with path %s", path.data());
+		LOG("Error creating meta with path %s", meta_data_path.data());
 	}
 }
 
@@ -124,20 +124,18 @@ bool ResourceMesh::ReadMetaData(char* path)
 	{
 		JSONfilepack* meta = new JSONfilepack(path, object, value);
 
+		meta_data_path = std::string(meta_data_path);
+
 		// names
 		parent_name = meta->GetString("Mesh.ParentName");
 		name = meta->GetString("Mesh.Name");
 
 		// texture path
-
-
-
 		bool has_texture = meta->GetBoolean("Mesh.HasTexture");
 
 		if (has_texture) {
 			texture = App->importer->LoadTextureFile(meta->GetString("Mesh.Texture"));
 		}
-			
 
 		// transformations
 		// pos

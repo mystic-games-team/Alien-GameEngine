@@ -51,17 +51,16 @@ void ResourceModel::CreateMetaData()
 		if ((*item) != nullptr) {
 			(*item)->CreateMetaData();
 
-			sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", (*item)->GetPath());
+			sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", (*item)->GetLibraryPath());
 			memcpy(cursor, save_char, sizeof(save_char));
 			cursor += sizeof(save_char);
 
-			LOG("Created alienMesh file %s", (*item)->GetPath());
+			LOG("Created alienMesh file %s", (*item)->GetLibraryPath());
 		}
 	}
-	original_path = path;
 	// Create the file
-	App->file_system->SaveUnique(path, data, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path.data()).data(), ".alien");
-	LOG("Created alien file %s", path.data());
+	App->file_system->SaveUnique(meta_data_path, data, size, LIBRARY_MODELS_FOLDER, App->file_system->GetBaseFileName(path.data()).data(), ".alien");
+	LOG("Created alien file %s", meta_data_path.data());
 
 	delete[] data;
 }
@@ -75,8 +74,8 @@ bool ResourceModel::ReadMetaData(char* path)
 
 	if (data != nullptr) {
 		char* cursor = data;
-		this->path = std::string(path);
-		// TODO: original path get
+		
+		meta_data_path = path;
 
 		uint num_meshes = 0;
 		
@@ -98,7 +97,7 @@ bool ResourceModel::ReadMetaData(char* path)
 		bytes = sizeof(load_char);
 		memcpy(load_char, cursor, bytes);
 		cursor += bytes;
-		original_path = std::string(load_char);
+		this->path = std::string(load_char);
 
 		for (uint i = 0; i < num_meshes; ++i) {
 

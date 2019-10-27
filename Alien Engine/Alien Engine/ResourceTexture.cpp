@@ -11,3 +11,4 @@ ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& w
 ResourceTexture::~ResourceTexture()
 {
 }
+

@@ -8,9 +8,14 @@ Resource::~Resource()
 {
 }
 
-const char* const Resource::GetPath() const
+const char* const Resource::GetAssetsPath() const
 {
 	return path.data();
+}
+
+const char* const Resource::GetLibraryPath() const
+{
+	return meta_data_path.data();
 }
 
 const char* const Resource::GetName() const

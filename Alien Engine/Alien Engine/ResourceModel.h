@@ -21,7 +21,6 @@ public:
 	// create GameObjects
 	void ConvertToGameObjects();
 
-
 private:
 
 	// sort
@@ -30,7 +29,5 @@ private:
 public:
 
 	std::vector<ResourceMesh*> meshes_attached;
-
-	std::string original_path;
 
 };

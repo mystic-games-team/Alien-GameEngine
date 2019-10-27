@@ -24,7 +24,8 @@ public:
 	virtual ~Resource();
 
 	// meta data path
-	const char* const GetPath() const;
+	const char* const GetAssetsPath() const;
+	const char* const GetLibraryPath() const;
 
 	// name
 	const char* const GetName() const;
@@ -40,6 +41,7 @@ protected:
 	ResourceType type = ResourceType::RESOURCE_NONE;
 
 	std::string path;
+	std::string meta_data_path;
 	std::string name;
 
 };
