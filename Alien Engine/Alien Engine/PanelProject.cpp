@@ -107,9 +107,9 @@ void PanelProject::SeeFiles()
 
 		ImGui::Separator();
 
-		ImGui::EndChild();
+		
 	}
-	
+	ImGui::EndChild();
 	if (ImGui::BeginChild("##ProjectChild")) {
 
 		ImGui::SetWindowFontScale(0.9F);
@@ -174,9 +174,9 @@ void PanelProject::SeeFiles()
 
 			ImGui::NextColumn();
 		}
-		ImGui::EndChild();
+		
 	}
-
+	ImGui::EndChild();
 
 }
 
