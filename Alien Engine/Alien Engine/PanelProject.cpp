@@ -7,8 +7,6 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
 	shortcut = App->shortcut_manager->AddShortCut("Panel Project", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
-	//colum_width[0] = 100;
-	//colum_width[1] = 300;
 
 	assets = new FileNode();
 	assets->is_file = false;
@@ -20,6 +18,8 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	go_back_folder.is_file = false;
 	go_back_folder.icon = App->resources->icons.folder;
 
+
+	//std::rename("Assets/Models/BakerHouse.fbx", "Assets/BakerHouse.fbx");
 }
 PanelProject::~PanelProject()
 {
@@ -55,6 +55,7 @@ void PanelProject::PanelLogic()
 	if (current_active_folder != nullptr) {
 		SeeFiles();
 	}
+
 
 	ImGui::End();
 
@@ -103,6 +104,8 @@ void PanelProject::SeeFiles()
 	ImGui::EndChild();
 	if (ImGui::BeginChild("##ProjectChild")) {
 
+		bool pop_up_item = false;
+
 		ImGui::SetWindowFontScale(0.9F);
 
 		ImGui::Columns(int(colum_width[1] / 78), "##ColumnIcons", false);
@@ -133,6 +136,8 @@ void PanelProject::SeeFiles()
 			ImGui::SameLine();
 
 			ImGui::Text(go_back_folder.name.data());
+
+			ImGui::NextColumn();
 		}
 
 
@@ -146,6 +151,25 @@ void PanelProject::SeeFiles()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, color);
 			ImGui::ImageButton((ImTextureID)current_active_folder->children[i]->icon->id, { 53,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
 			ImGui::PopStyleColor();
+
+			// set the file clicked
+			if (ImGui::IsItemClicked() || (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1))) {
+				current_active_file = current_active_folder->children[i];
+			}
+
+			// right click in file/folder
+			if (current_active_file == current_active_folder->children[i] && ImGui::BeginPopupContextItem()) {
+				pop_up_item = true;
+				if (ImGui::MenuItem("Delete")) {
+					// TODO: delete
+
+				}
+				if (ImGui::MenuItem("Rename")) {
+					// TODO: rename
+
+				}
+				ImGui::EndPopup();
+			}
 
 			// drag
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && current_active_file->is_file) {
@@ -168,11 +192,6 @@ void PanelProject::SeeFiles()
 				}
 			}
 
-
-			// set the file clicked
-			if (ImGui::IsItemClicked()) {
-				current_active_file = current_active_folder->children[i];
-			}
 
 			// go into a folder
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && current_active_file != nullptr && !current_active_file->is_file) {
@@ -197,6 +216,15 @@ void PanelProject::SeeFiles()
 			ImGui::NextColumn();
 		}
 		
+
+		// right click in window
+		if (!pop_up_item && ImGui::BeginPopupContextWindow()) {
+			if (ImGui::MenuItem("Create New Folder")) {
+				// TODO: new folder
+
+			}
+			ImGui::EndPopup();
+		}
 	}
 	ImGui::EndChild();
 
