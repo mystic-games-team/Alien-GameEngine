@@ -168,6 +168,23 @@ void PanelProject::SeeFiles()
 					// TODO: rename
 
 				}
+				if (ImGui::MenuItem("Copy Path")) {
+					// TODO: rename
+
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Copy")) {
+					// TODO: copy
+
+				}
+				if (ImGui::MenuItem("Paste")) {
+					// TODO: paste
+
+				}
+				if (ImGui::MenuItem("Cut")) {
+					// TODO: cut
+
+				}
 				ImGui::EndPopup();
 			}
 
@@ -221,6 +238,15 @@ void PanelProject::SeeFiles()
 		if (!pop_up_item && ImGui::BeginPopupContextWindow()) {
 			if (ImGui::MenuItem("Create New Folder")) {
 				// TODO: new folder
+
+			}
+			if (ImGui::MenuItem("Show In Explorer")) {
+				// TODO: open explorer
+
+			}
+			ImGui::Separator();
+			if (ImGui::MenuItem("Refresh")) {
+				// TODO: refresh
 
 			}
 			ImGui::EndPopup();
