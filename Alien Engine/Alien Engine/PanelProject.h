@@ -24,7 +24,7 @@ private:
 	FileNode* assets = nullptr;
 	FileNode* current_active_folder = nullptr;
 	FileNode* current_active_file = nullptr;
-
+	FileNode go_back_folder;
 
 	bool change_folder = false;
 };

@@ -15,6 +15,11 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	assets->name = "Assets";
 	current_active_folder = assets;
 	App->file_system->DiscoverEverythig(assets);
+
+	go_back_folder.name = "Go Back";
+	go_back_folder.is_file = false;
+	go_back_folder.icon = App->resources->icons.folder;
+
 }
 PanelProject::~PanelProject()
 {
@@ -92,22 +97,8 @@ void PanelProject::PrintDirectoryNodes(FileNode * node)
 void PanelProject::SeeFiles()
 {
 	if (ImGui::BeginChild("##ProjectChildName", { 0,20 },false,ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
-		ImGui::NewLine();
-		ImGui::SameLine(0, -2.F);
-		if (ImGui::Button("Go Back", { 0,18 })) {
-			if (current_active_folder->parent != nullptr) {
-				current_active_folder = current_active_folder->parent;
-				current_active_file = nullptr;
-			}
-		}
-		ImGui::SameLine(0, -2.F);
-		ImGui::Text("|");
-		ImGui::SameLine(0, -29.F);
 		ImGui::Text(current_active_folder->path.data());
-
 		ImGui::Separator();
-
-		
 	}
 	ImGui::EndChild();
 	if (ImGui::BeginChild("##ProjectChild")) {
@@ -116,10 +107,39 @@ void PanelProject::SeeFiles()
 
 		ImGui::Columns(int(colum_width[1] / 78), "##ColumnIcons", false);
 
+		ImVec4 color(0, 0, 0, 0);
+
+		// put a folder to go back
+		if (current_active_folder != assets) {
+
+			if (current_active_file == &go_back_folder) {
+				color = { 0.07F,0.64F,0.73F,1 };
+			}
+
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, color);
+			ImGui::ImageButton((ImTextureID)go_back_folder.icon->id, { 53,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
+			ImGui::PopStyleColor();
+
+			if (ImGui::IsItemClicked()) {
+				current_active_file = &go_back_folder;
+			}
+			
+			// go back a folder
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
+				current_active_folder = current_active_folder->parent;
+			}
+
+			ImGui::NewLine();
+			ImGui::SameLine();
+
+			ImGui::Text(go_back_folder.name.data());
+		}
+
+
 		for (uint i = 0; i < current_active_folder->children.size(); ++i) {
 
-			ImVec4 color(0, 0, 0, 0);
-
+			
+			color = { 0, 0, 0, 0 };
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i])
 				color = { 0.07F,0.64F,0.73F,1 };
 
@@ -127,6 +147,7 @@ void PanelProject::SeeFiles()
 			ImGui::ImageButton((ImTextureID)current_active_folder->children[i]->icon->id, { 53,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
 			ImGui::PopStyleColor();
 
+			// drag
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && current_active_file->is_file) {
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
 					std::string drag_id;
@@ -153,7 +174,7 @@ void PanelProject::SeeFiles()
 				current_active_file = current_active_folder->children[i];
 			}
 
-			// go in to a folder
+			// go into a folder
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && current_active_file != nullptr && !current_active_file->is_file) {
 				change_folder = true;
 			}
@@ -161,6 +182,7 @@ void PanelProject::SeeFiles()
 			ImGui::NewLine();
 			ImGui::SameLine();
 			
+			// make the name smaller
 			if (current_active_folder->children[i]->name.length() > 7) {
 				char new_char[8];
 				memcpy(new_char, current_active_folder->children[i]->name.data(), 7);
