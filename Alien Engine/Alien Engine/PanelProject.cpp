@@ -10,6 +10,7 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 
 	assets = new FileNode();
 	assets->is_file = false;
+	assets->is_base_file = true;
 	assets->name = "Assets";
 	current_active_folder = assets;
 	App->file_system->DiscoverEverythig(assets);
@@ -158,31 +159,21 @@ void PanelProject::SeeFiles()
 			}
 
 			// right click in file/folder
-			if (current_active_file == current_active_folder->children[i] && ImGui::BeginPopupContextItem()) {
+			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && ImGui::BeginPopupContextItem()) {
 				pop_up_item = true;
-				if (ImGui::MenuItem("Delete")) {
-					// TODO: delete
 
-				}
-				if (ImGui::MenuItem("Rename")) {
-					// TODO: rename
+				if (!current_active_file->is_base_file) { // so can not be modified
+					if (ImGui::MenuItem("Delete")) {
+						// TODO: delete
+						// Delete selected asset? You can not undo this action
+					}
+					if (ImGui::MenuItem("Rename")) {
+						// TODO: rename
 
+					}
 				}
 				if (ImGui::MenuItem("Copy Path")) {
 					// TODO: rename
-
-				}
-				ImGui::Separator();
-				if (ImGui::MenuItem("Copy")) {
-					// TODO: copy
-
-				}
-				if (ImGui::MenuItem("Paste")) {
-					// TODO: paste
-
-				}
-				if (ImGui::MenuItem("Cut")) {
-					// TODO: cut
 
 				}
 				ImGui::EndPopup();

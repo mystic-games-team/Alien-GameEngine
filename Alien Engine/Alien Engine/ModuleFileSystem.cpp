@@ -36,7 +36,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 	// Make sure standard paths exist
 	const char* dirs[] = {
 		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER, TEXTURES_FOLDER,
-		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER
+		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER, SCRIPTS_FOLDER
 	};
 
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
@@ -140,6 +140,9 @@ void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 	std::string previous_names;
 	GetPreviousNames(previous_names, node);
 	node->path = previous_names;
+
+	if (App->StringCmp(node->path.data(), MODELS_FOLDER) || App->StringCmp(node->path.data(), TEXTURES_FOLDER) || App->StringCmp(node->path.data(), SCRIPTS_FOLDER))
+		node->is_base_file = true;
 
 	if (!node->is_file) {
 		std::vector<std::string>files;

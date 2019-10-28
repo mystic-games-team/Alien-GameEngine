@@ -20,6 +20,7 @@ struct aiFileIO;
 #define CONFIGURATION_LAYOUTS_FOLDER "Configuration/Layouts/"
 #define MODELS_FOLDER "Assets/Models/"
 #define TEXTURES_FOLDER "Assets/Textures/"
+#define SCRIPTS_FOLDER "Assets/Scripts/"
 
 #include "Resource_.h"
 
@@ -34,6 +35,7 @@ struct FileNode {
 	std::string path;
 
 	bool is_file = true;
+	bool is_base_file = false;
 
 	FileNode* parent = nullptr;
 	std::vector<FileNode*> children;
