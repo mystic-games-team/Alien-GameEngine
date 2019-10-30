@@ -229,11 +229,14 @@ void PanelProject::SeeFiles()
 		if (!pop_up_item && ImGui::BeginPopupContextWindow()) {
 			if (ImGui::MenuItem("Create New Folder")) {
 				// TODO: new folder
-
+				
 			}
 			if (ImGui::MenuItem("Show In Explorer")) {
 				// TODO: open explorer
-
+				char name[500];
+				GetCurrentDirectoryA(500, name);
+				std::string current(name + std::string("/") + current_active_folder->path);
+				ShellExecute(NULL, "open", current.data(), NULL, NULL, SW_SHOWDEFAULT);
 			}
 			ImGui::Separator();
 			if (ImGui::MenuItem("Refresh")) {

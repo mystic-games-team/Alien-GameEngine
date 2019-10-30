@@ -44,7 +44,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 		if (PHYSFS_exists(dirs[i]) == 0)
 			PHYSFS_mkdir(dirs[i]);
 	}
-
+	
 	// Generate IO interfaces
 	CreateAssimpIO();
 	CreateBassIO();
