@@ -131,6 +131,8 @@ void PanelProject::SeeFiles()
 			// go back a folder
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
 				current_active_folder = current_active_folder->parent;
+				ImGui::EndChild();
+				return;
 			}
 
 			ImGui::NewLine();
