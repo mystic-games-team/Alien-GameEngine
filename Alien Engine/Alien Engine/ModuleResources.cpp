@@ -18,23 +18,22 @@ ModuleResources::~ModuleResources()
 
 bool ModuleResources::Start()
 {
-	ReadAllMetaData();
-
 	// Load Icons
-	icons.jpg_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_jpg.png");
-	icons.jpg_file->is_custom = false;
+	icons.jpg_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_jpg.png", false, false);
+	icons.png_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_png.png", false, false);
+	icons.dds_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_dds.png", false, false);
+	icons.folder = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_folder.png", false, false);
+	icons.model = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_model.png", false, false);
 
-	icons.png_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_png.png");
-	icons.png_file->is_custom = false;
+	assets = new FileNode();
+	assets->is_file = false;
+	assets->is_base_file = true;
+	assets->name = "Assets";
 
-	icons.dds_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_dds.png");
-	icons.dds_file->is_custom = false;
+	App->file_system->DiscoverEverythig(assets);
+	// TODO: look if all meta data has its fbx or texture if not remove meta data
 
-	icons.folder = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_folder.png");
-	icons.folder->is_custom = false;
-	
-	icons.model = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_model.png");
-	icons.model->is_custom = false;
+	ReadAllMetaData();
 
 	return true;
 }
@@ -92,6 +91,42 @@ bool ModuleResources::CreateNewModelInstanceOf(const char* path)
 		}
 	}
 	return ret;
+}
+
+void ModuleResources::AddNewFileNode(const std::string& path, bool is_file)
+{
+	std::string folder = App->file_system->GetCurrentHolePathFolder(path);
+
+	FileNode* parent = GetFileNodeByPath(folder, assets);
+
+	std::string name_file = App->file_system->GetBaseFileNameWithExtension(path.data());
+
+	bool exists = false;
+	for (uint i = 0; i < parent->children.size(); ++i) {
+		if (parent->children[i] != nullptr && App->StringCmp(parent->children[i]->name.data(), name_file.data())) {
+			exists = true;
+			break;
+		}
+	}
+	if (!exists)
+		parent->children.push_back(new FileNode(name_file, is_file, parent));
+}
+
+FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)
+{
+	FileNode* to_search = nullptr;
+	if (App->StringCmp(node->path.data(), path.data())) {
+		return node;
+	}
+
+	for (uint i = 0; i < node->children.size(); ++i) {
+		if (node->children[i] != nullptr) {
+			to_search = GetFileNodeByPath(path, node->children[i]);
+			if (to_search != nullptr)
+				break;
+		}
+	}
+	return to_search;
 }
 
 void ModuleResources::ReadAllMetaData()

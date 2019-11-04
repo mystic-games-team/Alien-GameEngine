@@ -80,7 +80,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 			LOG("Error type: %s", aiGetErrorString());
 		}
 		aiReleaseImport(scene);
-
+		App->resources->AddNewFileNode(path, true);
 	}
 	else {
 		App->resources->CreateNewModelInstanceOf(meta_path.data());
@@ -230,7 +230,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	return ret;
 }
 
-ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped)
+ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been_dropped, bool is_custom)
 {
 	ResourceTexture* texture = nullptr;
 
@@ -254,6 +254,7 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 	if (ilLoadImage(path)) {
 		iluFlipImage();
 		texture = new ResourceTexture(path, ilutGLBindTexImage(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
+		texture->is_custom = is_custom;
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -265,9 +266,14 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		
 		App->resources->AddResource(texture);
 
+
+
 		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
 			ApplyTextureToSelectedObject(texture);
 		}
+
+		if (is_custom)
+			App->resources->AddNewFileNode(path, true);
 
 		LOG("Texture successfully loaded: %s", path);
 	}

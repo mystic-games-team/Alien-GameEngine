@@ -8,6 +8,7 @@
 #define DROP_ID_MESH "mesh"
 #define DROP_ID_TEXTURE "texture"
 
+struct FileNode;
 
 class Resource;
 class ResourceModel;
@@ -41,8 +42,12 @@ public:
 	// meta path
 	bool CreateNewModelInstanceOf(const char* path);
 
-private:
+	void AddNewFileNode(const std::string& path, bool is_file);
 
+	
+
+private:
+	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
 	void ReadAllMetaData();
 
 public:
@@ -53,6 +58,7 @@ public:
 	std::vector<ResourceMesh*> resource_meshes;
 	std::vector<ResourceTexture*> resource_textures;
 
+	FileNode* assets = nullptr;
 };
 
 

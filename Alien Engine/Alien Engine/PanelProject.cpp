@@ -8,12 +8,8 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 {
 	shortcut = App->shortcut_manager->AddShortCut("Panel Project", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
 
-	assets = new FileNode();
-	assets->is_file = false;
-	assets->is_base_file = true;
-	assets->name = "Assets";
+	assets = App->resources->assets;
 	current_active_folder = assets;
-	App->file_system->DiscoverEverythig(assets);
 
 	go_back_folder.name = "Go Back";
 	go_back_folder.is_file = false;

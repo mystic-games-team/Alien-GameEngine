@@ -44,7 +44,7 @@ public:
 	void LoadParShapesMesh(par_shapes_mesh* p_mesh, ComponentMesh* mesh);
 
 	// textures
-	ResourceTexture* LoadTextureFile(const char* path, bool has_been_dropped = false); // when dropped
+	ResourceTexture* LoadTextureFile(const char* path, bool has_been_dropped = false, bool is_custom = true); // when dropped
 	void ApplyTextureToSelectedObject(ResourceTexture* texture);
 
 private:

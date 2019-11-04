@@ -74,6 +74,7 @@ public:
 	void CreateDirectory(const char* directory);
 	void DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list) const;
 	void DiscoverEverythig(FileNode* node);
+	void DiscoverFolders(FileNode* node);
 	bool CopyFromOutsideFS(const char* full_path, const char* destination);
 	bool Copy(const char* source, const char* destination);
 	void SplitFilePath(const char* full_path, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
@@ -103,7 +104,9 @@ public:
 	const FileDropType& SearchExtension(const std::string& extern_path);
 
 	std::string GetBaseFileName(const char* file_name);
-	std::string GetCurrentFolder(std::string& path);
+	std::string GetBaseFileNameWithExtension(const char* file_name);
+	std::string GetCurrentFolder(const std::string & path);
+	std::string GetCurrentHolePathFolder(const std::string& path);
 	void GetPreviousNames(std::string& previous, FileNode* node);
 private:
 

@@ -166,6 +166,35 @@ void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 
 }
 
+void ModuleFileSystem::DiscoverFolders(FileNode* node)
+{
+
+	std::string previous_names;
+	GetPreviousNames(previous_names, node);
+	node->path = previous_names;
+
+	if (App->StringCmp(node->path.data(), MODELS_FOLDER) || App->StringCmp(node->path.data(), TEXTURES_FOLDER) || App->StringCmp(node->path.data(), SCRIPTS_FOLDER))
+		node->is_base_file = true;
+
+	if (!node->is_file) {
+		std::vector<std::string>files;
+		std::vector<std::string>directories;
+
+		DiscoverFiles(std::string(previous_names + "/").data(), files, directories);
+		for (uint i = 0; i < directories.size(); ++i) {
+			node->children.push_back(new FileNode(directories[i], false, node));
+		}
+	}
+
+	if (!node->children.empty()) {
+		for (uint i = 0; i < node->children.size(); ++i) {
+			if (!node->children[i]->is_file)
+				DiscoverFolders(node->children[i]);
+		}
+	}
+
+}
+
 bool ModuleFileSystem::CopyFromOutsideFS(const char* full_path, const char* destination)
 {
 	// Only place we acces non virtual filesystem
@@ -532,12 +561,30 @@ std::string ModuleFileSystem::GetBaseFileName(const char* file_name)
 	return name;
 }
 
-std::string ModuleFileSystem::GetCurrentFolder(std::string &path)
+std::string ModuleFileSystem::GetBaseFileNameWithExtension(const char* file_name)
+{
+	std::string name;
+	std::string hole_name(file_name);
+
+	std::string::const_reverse_iterator item = hole_name.crbegin();
+	for (; item != hole_name.crend(); ++item)
+	{
+		if (*item == '/') {
+			break;
+		}
+		else {
+			name = *item + name;
+		}
+	}
+	return name;
+}
+
+std::string ModuleFileSystem::GetCurrentFolder(const std::string & path)
 {
 	bool start_copying = false;
 	std::string folder_name;
-	std::string::reverse_iterator item = path.rbegin();
-	for (; item != path.rend(); ++item)
+	std::string::const_reverse_iterator item = path.crbegin();
+	for (; item != path.crend(); ++item)
 	{
 		if (!start_copying) {
 			if (*item == '/')
@@ -550,6 +597,27 @@ std::string ModuleFileSystem::GetCurrentFolder(std::string &path)
 			else {
 				folder_name = *item + folder_name;
 			}
+		}
+	}
+
+	return folder_name;
+}
+
+std::string ModuleFileSystem::GetCurrentHolePathFolder(const std::string& path)
+{
+	bool start_copying = false;
+	std::string folder_name;
+	std::string::const_reverse_iterator item = path.crbegin();
+	for (; item != path.crend(); ++item)
+	{
+		if (!start_copying) {
+			if (*item == '/') {
+				folder_name = *item + folder_name;
+				start_copying = true;
+			}	
+		}
+		else {
+			folder_name = *item + folder_name;
 		}
 	}
 
