@@ -114,7 +114,9 @@ void ResourceModel::ChangeFileMetaName(const char* new_name)
 			}
 		}
 
-		path = copy + new_name + ".fbx";
+		std::string extension;
+		App->file_system->SplitFilePath(path.data(), nullptr, nullptr, &extension);
+		path = copy + new_name + "." + extension;
 
 
 		meta->SetString("Model.Name", new_name);
