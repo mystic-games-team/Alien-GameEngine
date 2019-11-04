@@ -166,8 +166,7 @@ void PanelProject::SeeFiles()
 						// Delete selected asset? You can not undo this action
 					}
 					if (ImGui::MenuItem("Rename")) {
-						// TODO: rename
-
+						current_active_folder->children[i]->changing_name = true;
 					}
 				}
 				if (ImGui::MenuItem("Copy Path")) {
@@ -210,16 +209,50 @@ void PanelProject::SeeFiles()
 			ImGui::NewLine();
 			ImGui::SameLine();
 			
-			// make the name smaller
-			if (current_active_folder->children[i]->name.length() > 7) {
-				char new_char[8];
-				memcpy(new_char, current_active_folder->children[i]->name.data(), 7);
-				new_char[7] = '\0';
-				std::string name(std::string(new_char) + std::string("..."));
-				ImGui::Text(name.data());
+			if (current_active_folder->children[i]->changing_name) {
+				char name[100];
+
+				if (current_active_folder->children[i]->is_file)
+					strcpy_s(name, 100, App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()).data());
+				else
+					strcpy_s(name, 100, current_active_folder->children[i]->name.data());
+
+				if (ImGui::InputText("##nodechangename", name, 100, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue)) {
+					current_active_folder->children[i]->changing_name = false;
+					
+					std::string name_before_rename = name;
+
+					if (current_active_folder->children[i]->is_file) {
+						std::string extension;
+						App->file_system->SplitFilePath(current_active_folder->children[i]->name.data(), nullptr, nullptr, &extension);
+						name_before_rename += std::string(".") + extension;
+					}
+
+					if (rename(std::string(current_active_folder->path + std::string("/") + current_active_folder->children[i]->name).data(), std::string(current_active_folder->path + std::string("/") + name_before_rename).data()) == 0) {
+						current_active_folder->children[i]->name = name_before_rename;
+						LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
+					}
+					else {
+						LOG("Failing while renaming %s to %s because this name already exists", current_active_folder->children[i]->name.data(), name);
+					}
+				}
+
+				if (!ImGui::IsItemClicked() && ImGui::IsMouseClicked(0)) {
+					current_active_folder->children[i]->changing_name = false;
+				}
 			}
-			else
-				ImGui::Text(current_active_folder->children[i]->name.data());
+			else {	// make the name smaller
+				if (current_active_folder->children[i]->name.length() > 7) {
+					char new_char[8];
+					memcpy(new_char, current_active_folder->children[i]->name.data(), 7);
+					new_char[7] = '\0';
+					std::string name(std::string(new_char) + std::string("..."));
+					ImGui::Text(name.data());
+				}
+				else
+					ImGui::Text(current_active_folder->children[i]->name.data());
+			}
+
 			ImGui::Spacing();
 
 			ImGui::NextColumn();
@@ -240,6 +273,7 @@ void PanelProject::SeeFiles()
 					}
 				}
 				FileNode* folder = new FileNode(folder_name.data(), false, current_active_folder);
+				folder->changing_name = true;
 				current_active_folder->children.push_back(folder);
 				App->file_system->CreateDirectoryA(std::string(folder->path + folder->name).data());
 			}
