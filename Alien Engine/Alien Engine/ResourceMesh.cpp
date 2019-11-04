@@ -125,7 +125,7 @@ bool ResourceMesh::ReadMetaData(const char* path)
 	{
 		JSONfilepack* meta = new JSONfilepack(path, object, value);
 
-		meta_data_path = std::string(meta_data_path);
+		meta_data_path = std::string(path); 
 
 		// names
 		parent_name = meta->GetString("Mesh.ParentName");

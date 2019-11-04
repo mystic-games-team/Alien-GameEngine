@@ -15,113 +15,72 @@ ResourceModel::~ResourceModel()
 }
 
 void ResourceModel::CreateMetaData()
-{// TODO: change to json
-	uint num_meshes = meshes_attached.size();
+{	
+	meta_data_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(App->file_system->GetCurrentFolder(path) + App->file_system->GetBaseFileName(path.data())).data() + ".alien";
 
-	// file size: num meshes + name + path fbx + path for every mesh
-	uint size = sizeof(num_meshes) + sizeof(char[MAX_META_DATA_CHAR]) + sizeof(char[MAX_META_DATA_CHAR]) + sizeof(char[MAX_META_DATA_CHAR]) * num_meshes;
+	JSON_Value* value = json_value_init_object();
+	JSON_Object* object = json_value_get_object(value);
+	json_serialize_to_file_pretty(value, meta_data_path.data());
+	
+	if (value != nullptr && object != nullptr) {
 
-	char* data = new char[size]; // Allocate
-	char* cursor = data;
+		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
 
-	// save the number of meshes
-	uint bytes = sizeof(num_meshes);
+		meta->StartSave();
 
-	// num meshes
-	memcpy(cursor, &num_meshes, bytes);
-	cursor += bytes;
+		meta->SetNumber("Model.NumMeshes", meshes_attached.size());
 
-	// char
-	char save_char[MAX_META_DATA_CHAR];
+		meta->SetString("Model.Name", name);
+		meta->SetString("Model.Path", path);
 
-	// name
-	sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", name.data());
-	bytes = sizeof(save_char);
-	memcpy(cursor, save_char, bytes);
-	cursor += bytes;
+		std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
+		for (; item != meshes_attached.end(); ++item) {
+			if ((*item) != nullptr) {
+				(*item)->CreateMetaData();
 
-	// fbx path
-	sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", path.data());
-	bytes = sizeof(save_char);
-	memcpy(cursor, save_char, bytes);
-	cursor += bytes;
+				meta->SetArrayString("Model.PathMeshes", (*item)->GetLibraryPath());
 
-	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
-	for (; item != meshes_attached.end(); ++item) {
-		if ((*item) != nullptr) {
-			(*item)->CreateMetaData();
-
-			sprintf_s(save_char, MAX_META_DATA_CHAR, "%s", (*item)->GetLibraryPath());
-			memcpy(cursor, save_char, sizeof(save_char));
-			cursor += sizeof(save_char);
-
-			LOG("Created alienMesh file %s", (*item)->GetLibraryPath());
+				LOG("Created alienMesh file %s", (*item)->GetLibraryPath());
+			}
 		}
-	}
-	// Create the file
-	App->file_system->SaveUnique(meta_data_path, data, size, LIBRARY_MODELS_FOLDER, std::string(App->file_system->GetCurrentFolder(path) + App->file_system->GetBaseFileName(path.data())).data(), ".alien");
-	LOG("Created alien file %s", meta_data_path.data());
+		// Create the file
+		LOG("Created alien file %s", meta_data_path.data());
 
-	delete[] data;
+		meta->FinishSave();
+	}
 }
 
 bool ResourceModel::ReadMetaData(const char* path)
 {
 	bool ret = true;
-	// TODO: change to json
-	char* data = nullptr;
-	App->file_system->Load(path, &data);
 
-	if (data != nullptr) {
-		char* cursor = data;
-		
-		meta_data_path = path;
+	JSON_Value* value = json_parse_file(path);
+	JSON_Object* object = json_value_get_object(value);
 
-		uint num_meshes = 0;
-		
-		// num meshes
-		uint bytes = sizeof(num_meshes);
-		memcpy(&num_meshes, cursor, bytes);
-		cursor += bytes;
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* meta = new JSONfilepack(path, object, value);
 
-		// char
-		char load_char[MAX_META_DATA_CHAR];
+		meta_data_path = std::string(path);
 
-		// name
-		bytes = sizeof(load_char);
-		memcpy(load_char, cursor, bytes);
-		cursor += bytes;
-		name = std::string(load_char);
+		int num_meshes = meta->GetNumber("Model.NumMeshes");
 
-		// fbx path
-		bytes = sizeof(load_char);
-		memcpy(load_char, cursor, bytes);
-		cursor += bytes;
-		this->path = std::string(load_char);
+		name = meta->GetString("Model.Name");
+		this->path = meta->GetString("Model.Path");
 
 		for (uint i = 0; i < num_meshes; ++i) {
-
-			// get the name of the nodes path
-			bytes = sizeof(load_char);
-			memcpy(load_char, cursor, bytes);
-			cursor += bytes;
-
-			// read the mesh meta data
+			std::string mesh_path = meta->GetArrayString("Model.PathMeshes", i);
 			ResourceMesh* r_mesh = new ResourceMesh();
-			if (r_mesh->ReadMetaData(load_char)) {
+			if (r_mesh->ReadMetaData(mesh_path.data())) {
 				meshes_attached.push_back(r_mesh);
 			}
 			else {
-				LOG("Error loading %s", load_char);
+				LOG("Error loading %s", mesh_path.data());
 				delete r_mesh;
 			}
 		}
+
 		App->resources->AddResource(this);
-		delete[] data;
-	}
-	else {
-		ret = false;
-		LOG("Error loading %s", path);
 	}
 
 	return ret;

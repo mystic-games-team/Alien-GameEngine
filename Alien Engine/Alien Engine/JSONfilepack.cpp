@@ -63,6 +63,24 @@ double JSONfilepack::GetArrayNumber(const std::string& name, const uint& index)
 	return json_array_get_number(arr, index);
 }
 
+void JSONfilepack::SetArrayString(const std::string& name, const std::string& string_parameter)
+{
+	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
+	if (arr == nullptr) {
+		JSON_Value* new_val = json_value_init_array();
+		arr = json_value_get_array(new_val);
+
+		json_object_dotset_value(save_object, name.data(), new_val);
+	}
+	json_array_append_string(arr, string_parameter.data());
+}
+
+const char* JSONfilepack::GetArrayString(const std::string& name, const uint& index)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+	return json_array_get_string(arr, index);
+}
+
 void JSONfilepack::SetString(const std::string& name, const std::string& string_parameter)
 {
 	json_object_dotset_string(save_object, name.data(), string_parameter.data());

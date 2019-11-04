@@ -218,8 +218,8 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	max_ = max(max_, scaling.z);
 
 	float3 pos(translation.x, translation.y, translation.z);
-	//float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
-	float3 scale(scaling.x, scaling.y, scaling.z);
+	float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
+	//float3 scale(scaling.x, scaling.y, scaling.z);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	ret->pos = pos;

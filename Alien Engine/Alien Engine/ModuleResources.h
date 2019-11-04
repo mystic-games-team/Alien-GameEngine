@@ -45,7 +45,7 @@ public:
 
 	void AddNewFileNode(const std::string& path, bool is_file);
 
-	
+	void SetNewMetaName(std::string new_name, std::string meta_user_path);
 
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);

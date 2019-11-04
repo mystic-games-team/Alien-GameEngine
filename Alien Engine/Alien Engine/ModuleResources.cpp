@@ -112,6 +112,10 @@ void ModuleResources::AddNewFileNode(const std::string& path, bool is_file)
 		parent->children.push_back(new FileNode(name_file, is_file, parent));
 }
 
+void ModuleResources::SetNewMetaName(std::string new_name, std::string meta_user_path)
+{
+}
+
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)
 {
 	FileNode* to_search = nullptr;

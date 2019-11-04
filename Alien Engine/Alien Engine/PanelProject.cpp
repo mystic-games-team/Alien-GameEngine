@@ -227,7 +227,7 @@ void PanelProject::SeeFiles()
 						App->file_system->SplitFilePath(current_active_folder->children[i]->name.data(), nullptr, nullptr, &extension);
 						name_before_rename += std::string(".") + extension;
 					}
-
+					// TODO: if file name is changed, set this new name to meta data need change!!!!!
 					if (rename(std::string(current_active_folder->path + std::string("/") + current_active_folder->children[i]->name).data(), std::string(current_active_folder->path + std::string("/") + name_before_rename).data()) == 0) {
 						current_active_folder->children[i]->name = name_before_rename;
 						LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());

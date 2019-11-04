@@ -24,6 +24,9 @@ public:
 	void SetArrayNumber(const std::string& name, const double& number);
 	double GetArrayNumber(const std::string& name, const uint& index);
 
+	void SetArrayString(const std::string& name, const std::string& string_parameter);
+	const char* GetArrayString(const std::string& name, const uint& index);
+
 	void SetString(const std::string& name, const std::string& string_parameter);
 	const char* GetString(const std::string& name);
 
