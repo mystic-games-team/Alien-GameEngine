@@ -7,6 +7,7 @@
 #define DROP_ID_MODEL "model"
 #define DROP_ID_MESH "mesh"
 #define DROP_ID_TEXTURE "texture"
+#define DROP_ID_FOLDER "folder"
 
 struct FileNode;
 

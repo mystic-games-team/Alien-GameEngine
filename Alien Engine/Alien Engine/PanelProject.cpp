@@ -171,23 +171,26 @@ void PanelProject::SeeFiles()
 					}
 				}
 				if (ImGui::MenuItem("Copy Path")) {
-					// TODO: rename
+					// TODO: copy path
 
 				}
 				ImGui::EndPopup();
 			}
 
 			// drag
-			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && current_active_file->is_file) {
+			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && !current_active_file->is_base_file) {
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
 					std::string drag_id;
 
 					switch (current_active_file->type) {
-					case ResourceType::RESOURCE_MODEL:
+					case FileDropType::MODEL3D:
 						drag_id = DROP_ID_MODEL;
 						break;
-					case ResourceType::RESOURCE_TEXTURE:
+					case FileDropType::TEXTURE:
 						drag_id = DROP_ID_TEXTURE;
+						break;
+					case FileDropType::FOLDER:
+						drag_id = DROP_ID_FOLDER;
 						break;
 					}
 
@@ -226,8 +229,19 @@ void PanelProject::SeeFiles()
 		// right click in window
 		if (!pop_up_item && ImGui::BeginPopupContextWindow()) {
 			if (ImGui::MenuItem("Create New Folder")) {
-				// TODO: new folder
-				
+				int folder_number = 0;
+				std::string folder_name = "NewFolder" + std::to_string(folder_number);
+
+				for (uint i = 0; i < current_active_folder->children.size(); ++i) {
+					if (App->StringCmp(current_active_folder->children[i]->name.data(), folder_name.data())) {
+						++folder_number;
+						folder_name = "NewFolder" + std::to_string(folder_number);
+						i = 0;
+					}
+				}
+				FileNode* folder = new FileNode(folder_name.data(), false, current_active_folder);
+				current_active_folder->children.push_back(folder);
+				App->file_system->CreateDirectoryA(std::string(folder->path + folder->name).data());
 			}
 			if (ImGui::MenuItem("Show In Explorer")) {
 				// TODO: open explorer

@@ -26,6 +26,15 @@ struct aiFileIO;
 
 class ResourceTexture;
 
+enum class FileDropType {
+	MODEL3D,
+	TEXTURE,
+	FOLDER,
+	SCRIPT,
+
+	UNKNOWN
+};
+
 struct FileNode {
 
 	FileNode(){}
@@ -37,20 +46,17 @@ struct FileNode {
 	bool is_file = true;
 	bool is_base_file = false;
 
+	bool changing_name = false;
+
 	FileNode* parent = nullptr;
 	std::vector<FileNode*> children;
 
 	ResourceTexture* icon = nullptr;
 
-	ResourceType type = ResourceType::RESOURCE_NONE;
+	FileDropType type = FileDropType::UNKNOWN;
 };
 
-enum class FileDropType {
-	MODEL3D,
-	TEXTURE,
 
-	UNKNOWN
-};
 
 class ModuleFileSystem : public Module
 {
