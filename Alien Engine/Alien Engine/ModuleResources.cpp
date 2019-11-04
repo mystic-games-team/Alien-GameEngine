@@ -112,8 +112,24 @@ void ModuleResources::AddNewFileNode(const std::string& path, bool is_file)
 		parent->children.push_back(new FileNode(name_file, is_file, parent));
 }
 
-void ModuleResources::SetNewMetaName(std::string new_name, std::string meta_user_path)
+void ModuleResources::SetNewMetaName(std::string new_name, std::string meta_user_path, const FileDropType& type)
 {
+	switch (type) {
+	case FileDropType::MODEL3D: {
+		std::vector<ResourceModel*>::iterator item = resource_models.begin();
+		for (; item != resource_models.end(); ++item) {
+			if (*item != nullptr && App->StringCmp(meta_user_path.data(), (*item)->GetLibraryPath())) {
+				(*item)->ChangeFileMetaName(new_name.data());
+				break;
+			}
+		}
+		break; }
+	case FileDropType::TEXTURE:
+		// TODO
+		break;
+	}
+
+
 }
 
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)

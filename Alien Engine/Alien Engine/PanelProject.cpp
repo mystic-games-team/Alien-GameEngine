@@ -227,9 +227,23 @@ void PanelProject::SeeFiles()
 						App->file_system->SplitFilePath(current_active_folder->children[i]->name.data(), nullptr, nullptr, &extension);
 						name_before_rename += std::string(".") + extension;
 					}
-					// TODO: if file name is changed, set this new name to meta data need change!!!!!
+
 					if (rename(std::string(current_active_folder->path + std::string("/") + current_active_folder->children[i]->name).data(), std::string(current_active_folder->path + std::string("/") + name_before_rename).data()) == 0) {
+						if (current_active_folder->children[i]->is_file) {
+							// TODO: if file name is changed, set this new name to meta data need change!!!!!
+							switch (current_active_folder->children[i]->type) {
+							case FileDropType::MODEL3D: {
+								std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(current_active_folder->children[i]->path) + App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()) + ".alien";
+								App->resources->SetNewMetaName(name, meta_path, current_active_folder->children[i]->type);
+								break; }
+							case FileDropType::TEXTURE:
+								// TODO: 
+								break;
+							}
+						}						
 						current_active_folder->children[i]->name = name_before_rename;
+
+
 						LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
 					}
 					else {

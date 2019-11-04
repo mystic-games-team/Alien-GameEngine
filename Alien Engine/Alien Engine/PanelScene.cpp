@@ -75,7 +75,7 @@ void PanelScene::PanelLogic()
 	// drop project files
 	if (ImGui::BeginDragDropTargetCustom({ min_space.x,min_space.y, max_space.x,max_space.y }, ImGui::GetID(panel_name.data()))) {
 
-		// drop texture
+		// TODO: drop texture
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_TEXTURE, ImGuiDragDropFlags_SourceNoDisableHover);
 		if (payload != nullptr && payload->IsDataType(DROP_ID_TEXTURE)) {
 			FileNode* node = *(FileNode**)payload->Data;

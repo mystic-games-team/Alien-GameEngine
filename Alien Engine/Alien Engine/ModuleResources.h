@@ -10,6 +10,7 @@
 #define DROP_ID_FOLDER "folder"
 
 struct FileNode;
+enum class FileDropType;
 
 class Resource;
 class ResourceModel;
@@ -45,7 +46,7 @@ public:
 
 	void AddNewFileNode(const std::string& path, bool is_file);
 
-	void SetNewMetaName(std::string new_name, std::string meta_user_path);
+	void SetNewMetaName(std::string new_name, std::string meta_user_path, const FileDropType& type);
 
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
