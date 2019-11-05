@@ -2,6 +2,7 @@
 #include "ModuleResources.h"
 #include "ModuleFileSystem.h"
 #include "ResourceTexture.h"
+#include "imgui/imgui_internal.h"
 
 PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -156,6 +157,17 @@ void PanelProject::SeeFiles()
 				current_active_file = current_active_folder->children[i];
 			}
 
+			if (ImGui::IsItemHovered() && current_active_file != current_active_folder->children[i]) {
+				if (ImGui::BeginDragDropTargetCustom(ImRect(ImGui::GetItemRectMin(),ImGui::GetItemRectMax()), ImGui::GetID("##ProjectChild"))) {
+					const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_FOLDER, ImGuiDragDropFlags_SourceNoDisableHover);
+					if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+						FileNode* node = *(FileNode**)payload->Data;
+
+					}
+					ImGui::EndDragDropTarget();
+				}
+			}
+
 			// right click in file/folder
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && ImGui::BeginPopupContextItem()) {
 				pop_up_item = true;
@@ -204,9 +216,9 @@ void PanelProject::SeeFiles()
 
 					ImGui::EndDragDropSource();
 				}
+				
 			}
-
-
+			
 			// go into a folder
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && current_active_file != nullptr && !current_active_file->is_file) {
 				change_folder = true;
