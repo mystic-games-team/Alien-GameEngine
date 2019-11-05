@@ -22,6 +22,7 @@ private:
 
 	void PrintDirectoryNodes(FileNode* node);
 	void SeeFiles();
+	void MoveToFolder(FileNode* node);
 	void DeleteNodes(FileNode* node);
 
 	int colum_width[2];

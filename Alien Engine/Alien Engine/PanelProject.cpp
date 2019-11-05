@@ -158,14 +158,7 @@ void PanelProject::SeeFiles()
 			}
 
 			if (ImGui::IsItemHovered() && current_active_file != current_active_folder->children[i]) {
-				if (ImGui::BeginDragDropTargetCustom(ImRect(ImGui::GetItemRectMin(),ImGui::GetItemRectMax()), ImGui::GetID("##ProjectChild"))) {
-					const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_FOLDER, ImGuiDragDropFlags_SourceNoDisableHover);
-					if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
-						FileNode* node = *(FileNode**)payload->Data;
-
-					}
-					ImGui::EndDragDropTarget();
-				}
+				MoveToFolder(current_active_folder->children[i]);
 			}
 
 			// right click in file/folder
@@ -329,6 +322,34 @@ void PanelProject::SeeFiles()
 	}
 	ImGui::EndChild();
 
+}
+
+void PanelProject::MoveToFolder(FileNode* node)
+{
+	if (ImGui::BeginDragDropTargetCustom(ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()), ImGui::GetID("##ProjectChild"))) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_FOLDER, ImGuiDragDropFlags_SourceNoDisableHover);
+		if (payload != nullptr && payload->IsDataType(DROP_ID_FOLDER)) {
+			FileNode* node_to_move = *(FileNode**)payload->Data;
+			std::vector<FileNode*>::iterator item = node_to_move->parent->children.begin();
+			for (; item != node_to_move->parent->children.end(); ++item) {
+				if (*item != nullptr && *item == node_to_move) {
+					node_to_move->parent->children.erase(item);
+					break;
+				}
+			}
+			node->children.push_back(node_to_move);
+			node_to_move->parent = node;
+
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	/*
+	fer:
+	enum DropFlagsType {
+		<< amb string
+	}
+	*/
 }
 
 void PanelProject::DeleteNodes(FileNode* node)
