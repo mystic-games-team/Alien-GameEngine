@@ -58,8 +58,8 @@ void PanelHierarchy::PanelLogic()
 	max_space.y += ImGui::GetWindowPos().y;
 
 	if (ImGui::BeginDragDropTargetCustom({ min_space.x,min_space.y, max_space.x,max_space.y }, ImGui::GetID(panel_name.data()))) {
-		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover | ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
-		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DragDropFlagsID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover | ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
+		if (payload != nullptr && payload->IsDataType(DragDropFlagsID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
 				App->objects->ReparentGameObject(obj, App->objects->base_game_object);
@@ -97,8 +97,8 @@ void PanelHierarchy::PrintNode(GameObject* node)
 	}
 
 	if (ImGui::BeginDragDropTarget()) {
-		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
-		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DragDropFlagsID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
+		if (payload != nullptr && payload->IsDataType(DragDropFlagsID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
 				App->objects->ReparentGameObject(obj, node);
@@ -108,7 +108,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 	}
 	
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
-		ImGui::SetDragDropPayload(DROP_ID_HIERARCHY_NODES, &node, sizeof(GameObject), ImGuiCond_Once);
+		ImGui::SetDragDropPayload(DragDropFlagsID_HIERARCHY_NODES, &node, sizeof(GameObject), ImGuiCond_Once);
 		ImGui::Text(node->GetName());
 		ImGui::EndDragDropSource();
 	}

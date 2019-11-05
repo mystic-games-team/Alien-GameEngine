@@ -76,8 +76,8 @@ void PanelScene::PanelLogic()
 	if (ImGui::BeginDragDropTargetCustom({ min_space.x,min_space.y, max_space.x,max_space.y }, ImGui::GetID(panel_name.data()))) {
 
 		// TODO: drop texture
-		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_TEXTURE, ImGuiDragDropFlags_SourceNoDisableHover);
-		if (payload != nullptr && payload->IsDataType(DROP_ID_TEXTURE)) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DragDropFlagsID_TEXTURE, ImGuiDragDropFlags_SourceNoDisableHover);
+		if (payload != nullptr && payload->IsDataType(DragDropFlagsID_TEXTURE)) {
 			FileNode* node = *(FileNode**)payload->Data;
 			if (node != nullptr) {
 				//App->objects->ReparentGameObject(obj, App->objects->base_game_object);
@@ -85,8 +85,8 @@ void PanelScene::PanelLogic()
 		}
 
 		// drop model
-		payload = ImGui::AcceptDragDropPayload(DROP_ID_MODEL, ImGuiDragDropFlags_SourceNoDisableHover);
-		if (payload != nullptr && payload->IsDataType(DROP_ID_MODEL)) {
+		payload = ImGui::AcceptDragDropPayload(DragDropFlagsID_MODEL, ImGuiDragDropFlags_SourceNoDisableHover);
+		if (payload != nullptr && payload->IsDataType(DragDropFlagsID_MODEL)) {
 			FileNode* node = *(FileNode**)payload->Data;
 			if (node != nullptr) {
 				std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(node->path) + App->file_system->GetBaseFileName(node->name.data()) + ".alien";

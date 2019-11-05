@@ -3,11 +3,21 @@
 #include "Globals.h"
 #include "ModuleObjects.h"
 
-#define DROP_ID_HIERARCHY_NODES "node"
-#define DROP_ID_MODEL "model"
-#define DROP_ID_MESH "mesh"
-#define DROP_ID_TEXTURE "texture"
-#define DROP_ID_FOLDER "folder"
+enum DragDropFlagsID {
+
+	DragDropFlagsID_NONE = 0,
+	DragDropFlagsID_HIERARCHY_NODES = 1 << 0,
+	DragDropFlagsID_MODEL			= 1 << 1,
+	DragDropFlagsID_MESH			= 1 << 2,
+	DragDropFlagsID_TEXTURE			= 1 << 3,
+	DragDropFlagsID_FOLDER			= 1 << 4,
+	IMGUI_PAYLOAD_TYPE_WINDOW		= 1 << 5,
+	IMGUI_PAYLOAD_TYPE_COLOR_3F		= 1 << 6,
+	IMGUI_PAYLOAD_TYPE_COLOR_4F		= 1 << 7,
+	DragDropFlagsID_DEMO			= 1 << 8,
+
+};
+
 
 struct FileNode;
 enum class FileDropType;

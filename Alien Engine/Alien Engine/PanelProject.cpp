@@ -184,24 +184,24 @@ void PanelProject::SeeFiles()
 			// drag
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && !current_active_file->is_base_file) {
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
-					std::string drag_id;
+					DragDropFlagsID drag_id;
 
 					switch (current_active_file->type) {
 					case FileDropType::MODEL3D:
-						drag_id = DROP_ID_MODEL;
+						drag_id = DragDropFlagsID_MODEL;
 						break;
 					case FileDropType::TEXTURE:
-						drag_id = DROP_ID_TEXTURE;
+						drag_id = DragDropFlagsID_TEXTURE;
 						break;
 					case FileDropType::FOLDER:
-						drag_id = DROP_ID_FOLDER;
+						drag_id = DragDropFlagsID_FOLDER;
 						break;
 					default:
 						LOG("Drop Type UNNWON");
 						break;
 					}
 
-					ImGui::SetDragDropPayload(drag_id.data(), &current_active_file, sizeof(FileNode), ImGuiCond_Once);
+					ImGui::SetDragDropPayload(drag_id, &current_active_file, sizeof(FileNode), ImGuiCond_Once);
 
 					ImGui::SetCursorPosX(((ImGui::GetWindowWidth())*0.5f)-26);
 					ImGui::Image((ImTextureID)current_active_file->icon->id, { 53,70 });
@@ -301,7 +301,7 @@ void PanelProject::SeeFiles()
 				FileNode* folder = new FileNode(std::string(current_active_folder->path + folder_name), folder_name.data(), false, current_active_folder);
 				folder->changing_name = true;
 				current_active_folder->children.push_back(folder);
-				App->file_system->CreateDirectoryA(std::string(folder->path + folder->name).data());
+				App->file_system->CreateDirectoryA(std::string(folder->path).data());
 			}
 			if (ImGui::MenuItem("Show In Explorer")) {
 				char name[500];
@@ -324,11 +324,11 @@ void PanelProject::SeeFiles()
 void PanelProject::MoveToFolder(FileNode* node)
 {
 	if (ImGui::BeginDragDropTargetCustom(ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()), ImGui::GetID("##ProjectChild"))) {
-		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_FOLDER, ImGuiDragDropFlags_SourceNoDisableHover);
-		if (payload != nullptr && payload->IsDataType(DROP_ID_FOLDER)) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DragDropFlagsID_FOLDER, ImGuiDragDropFlags_SourceNoDisableHover);
+		if (payload != nullptr && payload->IsDataType(DragDropFlagsID_FOLDER)) {
 			FileNode* node_to_move = *(FileNode**)payload->Data;
 
-			if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {
+			if (rename(node_to_move->path.data(), std::string(node->path + node_to_move->name).data()) == 0) {
 				std::vector<FileNode*>::iterator item = node_to_move->parent->children.begin();
 				for (; item != node_to_move->parent->children.end(); ++item) {
 					if (*item != nullptr && *item == node_to_move) {
@@ -340,7 +340,7 @@ void PanelProject::MoveToFolder(FileNode* node)
 				node_to_move->parent = node;
 			}
 			else {
-				LOG("Could not move this file/folder %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path).data());
+				LOG("Could not move this file/folder %s to %s", std::string(node_to_move->path).data(), std::string(node->path + node_to_move->name).data());
 			}
 		}
 		ImGui::EndDragDropTarget();
