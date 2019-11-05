@@ -94,6 +94,9 @@ void ShortCutManager::ChangeKey()
 						return;
 					}
 					break;
+				default:
+					LOG("ShortCutTStateChange UNKNOWN");
+					break;
 				}
 			}
 		}
@@ -145,6 +148,9 @@ const char* ShortCut::GetShortcutName()
 		break;
 	case ShortCutType::COMPLETE:
 		sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(key2_repeat), SDL_GetScancodeName(key3_repeat_extra), SDL_GetScancodeName(key1_down));
+		break;
+	default:
+		LOG("ShortCutType in get name UNKNOWN")
 		break;
 	}
 	return shortcut_char;

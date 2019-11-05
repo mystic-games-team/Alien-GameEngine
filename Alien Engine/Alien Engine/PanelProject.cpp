@@ -191,6 +191,9 @@ void PanelProject::SeeFiles()
 					case FileDropType::FOLDER:
 						drag_id = DROP_ID_FOLDER;
 						break;
+					default:
+						LOG("Drop Type UNNWON");
+						break;
 					}
 
 					ImGui::SetDragDropPayload(drag_id.data(), &current_active_file, sizeof(FileNode), ImGuiCond_Once);
@@ -238,6 +241,9 @@ void PanelProject::SeeFiles()
 								break; }
 							case FileDropType::TEXTURE:
 								// TODO: 
+								break;
+							default:
+								LOG("Drop Type to change name UNNWON");
 								break;
 							}
 						}						
