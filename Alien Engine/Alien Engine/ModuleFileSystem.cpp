@@ -812,6 +812,22 @@ FileNode::FileNode(std::string name, bool is_file, FileNode* parent)
 	path = previous_names;
 
 	// set icon
+	SetIcon();
+}
+
+FileNode::FileNode(const std::string& path, const std::string& name, bool is_file, FileNode* parent)
+{
+	this->name = name;
+	this->is_file = is_file;
+	this->parent = parent;
+	this->path = path;
+
+	// set icon
+	SetIcon();
+}
+
+void FileNode::SetIcon()
+{
 	if (is_file) {
 		std::string extension;
 		App->file_system->SplitFilePath(std::string(path + name).data(), nullptr, nullptr, &extension);

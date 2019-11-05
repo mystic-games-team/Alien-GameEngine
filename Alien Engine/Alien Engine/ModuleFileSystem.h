@@ -39,6 +39,9 @@ struct FileNode {
 
 	FileNode(){}
 	FileNode(std::string name, bool is_file, FileNode* parent);
+	FileNode(const std::string& path, const std::string& name, bool is_file, FileNode* parent);
+	
+public:
 
 	std::string name;
 	std::string path;
@@ -54,6 +57,11 @@ struct FileNode {
 	ResourceTexture* icon = nullptr;
 
 	FileDropType type = FileDropType::UNKNOWN;
+
+private:
+
+	void SetIcon();
+
 };
 
 

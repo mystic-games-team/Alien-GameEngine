@@ -241,7 +241,6 @@ void PanelProject::SeeFiles()
 
 					if (rename(std::string(current_active_folder->path + std::string("/") + current_active_folder->children[i]->name).data(), std::string(current_active_folder->path + std::string("/") + name_before_rename).data()) == 0) {
 						if (current_active_folder->children[i]->is_file) {
-							// TODO: if file name is changed, set this new name to meta data need change!!!!!
 							switch (current_active_folder->children[i]->type) {
 							case FileDropType::MODEL3D: {
 								std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(current_active_folder->children[i]->path) + App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()) + ".alien";
@@ -256,7 +255,6 @@ void PanelProject::SeeFiles()
 							}
 						}						
 						current_active_folder->children[i]->name = name_before_rename;
-
 
 						LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
 					}
@@ -300,13 +298,12 @@ void PanelProject::SeeFiles()
 						i = 0;
 					}
 				}
-				FileNode* folder = new FileNode(folder_name.data(), false, current_active_folder);
+				FileNode* folder = new FileNode(std::string(current_active_folder->path + folder_name), folder_name.data(), false, current_active_folder);
 				folder->changing_name = true;
 				current_active_folder->children.push_back(folder);
 				App->file_system->CreateDirectoryA(std::string(folder->path + folder->name).data());
 			}
 			if (ImGui::MenuItem("Show In Explorer")) {
-				// TODO: open explorer
 				char name[500];
 				GetCurrentDirectoryA(500, name);
 				std::string current(name + std::string("/") + current_active_folder->path);
@@ -330,16 +327,21 @@ void PanelProject::MoveToFolder(FileNode* node)
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_FOLDER, ImGuiDragDropFlags_SourceNoDisableHover);
 		if (payload != nullptr && payload->IsDataType(DROP_ID_FOLDER)) {
 			FileNode* node_to_move = *(FileNode**)payload->Data;
-			std::vector<FileNode*>::iterator item = node_to_move->parent->children.begin();
-			for (; item != node_to_move->parent->children.end(); ++item) {
-				if (*item != nullptr && *item == node_to_move) {
-					node_to_move->parent->children.erase(item);
-					break;
-				}
-			}
-			node->children.push_back(node_to_move);
-			node_to_move->parent = node;
 
+			if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {
+				std::vector<FileNode*>::iterator item = node_to_move->parent->children.begin();
+				for (; item != node_to_move->parent->children.end(); ++item) {
+					if (*item != nullptr && *item == node_to_move) {
+						node_to_move->parent->children.erase(item);
+						break;
+					}
+				}
+				node->children.push_back(node_to_move);
+				node_to_move->parent = node;
+			}
+			else {
+				LOG("Could not move this file/folder %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path).data());
+			}
 		}
 		ImGui::EndDragDropTarget();
 	}
