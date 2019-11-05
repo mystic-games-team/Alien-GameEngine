@@ -198,7 +198,7 @@ void PanelProject::SeeFiles()
 
 					ImGui::SetDragDropPayload(drag_id.data(), &current_active_file, sizeof(FileNode), ImGuiCond_Once);
 
-					ImGui::SetCursorPosX(((ImGui::GetWindowWidth()-1)*0.5f)-26);
+					ImGui::SetCursorPosX(((ImGui::GetWindowWidth())*0.5f)-26);
 					ImGui::Image((ImTextureID)current_active_file->icon->id, { 53,70 });
 					ImGui::Text(current_active_file->name.data());
 
