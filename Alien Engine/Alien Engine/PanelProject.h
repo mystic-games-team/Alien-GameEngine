@@ -13,6 +13,11 @@ public:
 	virtual ~PanelProject();
 	void PanelLogic();
 
+
+public:
+
+	FileNode* current_active_folder = nullptr;
+
 private:
 
 	void PrintDirectoryNodes(FileNode* node);
@@ -22,7 +27,7 @@ private:
 	int colum_width[2];
 
 	FileNode* assets = nullptr;
-	FileNode* current_active_folder = nullptr;
+
 	FileNode* current_active_file = nullptr;
 	FileNode go_back_folder;
 

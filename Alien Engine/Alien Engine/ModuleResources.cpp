@@ -6,6 +6,7 @@
 #include "ModuleImporter.h"
 #include "Application.h"
 #include "ResourceTexture.h"
+#include "PanelProject.h"
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 {
@@ -71,6 +72,7 @@ void ModuleResources::AddResource(Resource* resource)
 				resource_textures.push_back((ResourceTexture*)resource);
 			break;
 		default:
+			LOG("No resource type");
 			break;
 		}
 	}
@@ -110,6 +112,9 @@ void ModuleResources::AddNewFileNode(const std::string& path, bool is_file)
 	}
 	if (!exists)
 		parent->children.push_back(new FileNode(name_file, is_file, parent));
+
+	if (App->ui->panel_project != nullptr)
+		App->ui->panel_project->current_active_folder = parent;
 }
 
 void ModuleResources::SetNewMetaName(std::string new_name, std::string meta_user_path, const FileDropType& type)
@@ -126,6 +131,9 @@ void ModuleResources::SetNewMetaName(std::string new_name, std::string meta_user
 		break; }
 	case FileDropType::TEXTURE:
 		// TODO
+		break;
+	default:
+		LOG("Can not change meta name because of the UNKNOWN type");
 		break;
 	}
 
