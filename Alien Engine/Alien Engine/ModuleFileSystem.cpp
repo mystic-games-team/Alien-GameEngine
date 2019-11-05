@@ -826,6 +826,16 @@ FileNode::FileNode(const std::string& path, const std::string& name, bool is_fil
 	SetIcon();
 }
 
+void FileNode::RefreshPath()
+{
+	for (uint i = 0; i < children.size(); ++i) {
+		if (children[i] != nullptr) {
+			children[i]->path = std::string(path + children[i]->name + std::string("/"));
+			children[i]->RefreshPath();
+		}
+	}
+}
+
 void FileNode::SetIcon()
 {
 	if (is_file) {

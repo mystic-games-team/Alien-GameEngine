@@ -58,6 +58,8 @@ public:
 
 	FileDropType type = FileDropType::UNKNOWN;
 
+	void RefreshPath();
+
 private:
 
 	void SetIcon();

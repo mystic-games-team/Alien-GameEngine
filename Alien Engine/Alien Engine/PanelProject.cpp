@@ -2,6 +2,7 @@
 #include "ModuleResources.h"
 #include "ModuleFileSystem.h"
 #include "ResourceTexture.h"
+#include <filesystem>
 #include "imgui/imgui_internal.h"
 
 PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -158,7 +159,8 @@ void PanelProject::SeeFiles()
 			}
 
 			if (ImGui::IsItemHovered() && current_active_file != current_active_folder->children[i]) {
-				MoveToFolder(current_active_folder->children[i]);
+				if (MoveToFolder(current_active_folder->children[i]))
+					break;
 			}
 
 			// right click in file/folder
@@ -184,25 +186,7 @@ void PanelProject::SeeFiles()
 			// drag
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && !current_active_file->is_base_file) {
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
-					DragDropFlagsID drag_id;
-
-					switch (current_active_file->type) {
-					case FileDropType::MODEL3D:
-						drag_id = DragDropFlagsID_MODEL;
-						break;
-					case FileDropType::TEXTURE:
-						drag_id = DragDropFlagsID_TEXTURE;
-						break;
-					case FileDropType::FOLDER:
-						drag_id = DragDropFlagsID_FOLDER;
-						break;
-					default:
-						LOG("Drop Type UNNWON");
-						break;
-					}
-
-					ImGui::SetDragDropPayload(drag_id, &current_active_file, sizeof(FileNode), ImGuiCond_Once);
-
+					ImGui::SetDragDropPayload(DragDropFlagsID_FOLDER, &current_active_file, sizeof(FileNode), ImGuiCond_Once);
 					ImGui::SetCursorPosX(((ImGui::GetWindowWidth())*0.5f)-26);
 					ImGui::Image((ImTextureID)current_active_file->icon->id, { 53,70 });
 					ImGui::Text(current_active_file->name.data());
@@ -298,10 +282,11 @@ void PanelProject::SeeFiles()
 						i = 0;
 					}
 				}
-				FileNode* folder = new FileNode(std::string(current_active_folder->path + folder_name), folder_name.data(), false, current_active_folder);
+				FileNode* folder = new FileNode(std::string(current_active_folder->path + folder_name + std::string("/")), folder_name.data(), false, current_active_folder);
 				folder->changing_name = true;
 				current_active_folder->children.push_back(folder);
 				App->file_system->CreateDirectoryA(std::string(folder->path).data());
+				std::sort(current_active_folder->children.begin(), current_active_folder->children.end(), PanelProject::SortByFolder);
 			}
 			if (ImGui::MenuItem("Show In Explorer")) {
 				char name[500];
@@ -321,31 +306,100 @@ void PanelProject::SeeFiles()
 
 }
 
-void PanelProject::MoveToFolder(FileNode* node)
+bool PanelProject::MoveToFolder(FileNode* node)
 {
+	bool ret = false;
+	if (node->is_file)
+		return ret;
+
 	if (ImGui::BeginDragDropTargetCustom(ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()), ImGui::GetID("##ProjectChild"))) {
-		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DragDropFlagsID_FOLDER, ImGuiDragDropFlags_SourceNoDisableHover);
-		if (payload != nullptr && payload->IsDataType(DragDropFlagsID_FOLDER)) {
+		const ImGuiPayload* payload = ImGui::GetDragDropPayload();
+		if (ImGui::IsMouseDragging())
+			return ret;
+		
+		if (payload != nullptr) {
+			ret = true;
 			FileNode* node_to_move = *(FileNode**)payload->Data;
 
-			if (rename(node_to_move->path.data(), std::string(node->path + node_to_move->name).data()) == 0) {
-				std::vector<FileNode*>::iterator item = node_to_move->parent->children.begin();
-				for (; item != node_to_move->parent->children.end(); ++item) {
-					if (*item != nullptr && *item == node_to_move) {
-						node_to_move->parent->children.erase(item);
-						break;
+			if (node_to_move->is_file) {
+				if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {
+					FileNode* parent = node_to_move->parent;
+					std::vector<FileNode*>::iterator item = parent->children.begin();
+					for (; item != parent->children.end(); ++item) {
+						if (*item != nullptr && *item == node_to_move) {
+							delete* item;
+							*item = nullptr;
+							parent->children.erase(item);
+							break;
+						}
 					}
+					std::vector<FileNode*>::iterator item2 = node->children.begin();
+					while (item2 != node->children.end()) {
+						if (*item2 != nullptr) {
+							delete* item2;
+							*item2 = nullptr;
+							item2 = node->children.erase(item2);
+						}
+						else
+							++item2;
+					}
+					App->file_system->DiscoverEverythig(node);
 				}
-				node->children.push_back(node_to_move);
-				node_to_move->parent = node;
+				else {
+					LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
+				}
 			}
 			else {
-				LOG("Could not move this file/folder %s to %s", std::string(node_to_move->path).data(), std::string(node->path + node_to_move->name).data());
+				_SHFILEOPSTRUCTA files;
+				files.wFunc = FO_MOVE;
+
+				static char from_[300]; 
+				strcpy(from_, node_to_move->path.data());
+				memcpy(from_ + strlen(from_), "\0\0", 2);
+				files.pFrom = from_;
+
+				static char to_[300]; 
+				strcpy(to_, std::string(node->path + node_to_move->name + std::string("/")).data());
+				memcpy(to_ + strlen(to_), "\0\0", 2);
+				files.pTo = to_;
+
+				if (SHFileOperation(&files) == 0) {
+					FileNode* parent = node_to_move->parent;
+					std::vector<FileNode*>::iterator item = parent->children.begin();
+					for (; item != parent->children.end(); ++item) {
+						if (*item != nullptr && *item == node_to_move) {
+							delete* item;
+							*item = nullptr;
+							parent->children.erase(item);
+							break;
+						}
+					}
+					std::vector<FileNode*>::iterator item2 = node->children.begin();
+					while (item2 != node->children.end()) {
+						if (*item2 != nullptr) {
+							delete* item2;
+							*item2 = nullptr;
+							item2 = node->children.erase(item2);
+						}
+						else
+							++item2;
+					}
+					App->file_system->DiscoverEverythig(node);
+					//node_to_move->path = std::string(node->path + node_to_move->name + std::string("/"));
+					//node_to_move->RefreshPath();
+					// TODO: look what has been moved and change this to meta
+				}
+				else {
+					LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
+				}
 			}
+
+
+			
 		}
 		ImGui::EndDragDropTarget();
 	}
-
+	return ret;
 	/*
 	fer:
 	enum DropFlagsType {
@@ -363,4 +417,9 @@ void PanelProject::DeleteNodes(FileNode* node)
 		}
 	}
 	delete node;
+}
+
+bool PanelProject::SortByFolder(const FileNode* node1, const FileNode* node2)
+{
+	return !node1->is_file;
 }

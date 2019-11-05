@@ -9789,7 +9789,7 @@ void ImGui::EndDragDropSource()
 }
 
 // Use 'cond' to choose to submit payload on drag start or every frame
-bool ImGui::SetDragDropPayload(DragDropFlagsID identity_flags, const void* data, size_t data_size, ImGuiCond cond)
+bool ImGui::SetDragDropPayload(DragDropFlagsID_ identity_flags, const void* data, size_t data_size, ImGuiCond cond)
 {
     ImGuiContext& g = *GImGui;
     ImGuiPayload& payload = g.DragDropPayload;
@@ -9840,7 +9840,7 @@ bool ImGui::BeginDragDropTargetCustom(const ImRect& bb, ImGuiID id)
     ImGuiWindow* window = g.CurrentWindow;
     if (g.HoveredWindowUnderMovingWindow == NULL || window->RootWindow != g.HoveredWindowUnderMovingWindow->RootWindow)
         return false;
-    IM_ASSERT(id != 0);
+    //IM_ASSERT(id != 0);
     if (!IsMouseHoveringRect(bb.Min, bb.Max) || (id == g.DragDropPayload.SourceId))
         return false;
     if (window->SkipItems)
@@ -9889,7 +9889,7 @@ bool ImGui::IsDragDropPayloadBeingAccepted()
     return g.DragDropActive && g.DragDropAcceptIdPrev != 0;
 }
 
-const ImGuiPayload* ImGui::AcceptDragDropPayload(DragDropFlagsID identity_flags, ImGuiDragDropFlags flags)
+const ImGuiPayload* ImGui::AcceptDragDropPayload(DragDropFlagsID_ identity_flags, ImGuiDragDropFlags flags)
 {
     ImGuiContext& g = *GImGui;
     ImGuiWindow* window = g.CurrentWindow;

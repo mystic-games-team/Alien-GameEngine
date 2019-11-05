@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "ModuleObjects.h"
 
+typedef int DragDropFlagsID_;
 enum DragDropFlagsID {
 
 	DragDropFlagsID_NONE = 0,

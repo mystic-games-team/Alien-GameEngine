@@ -22,8 +22,10 @@ private:
 
 	void PrintDirectoryNodes(FileNode* node);
 	void SeeFiles();
-	void MoveToFolder(FileNode* node);
+	bool MoveToFolder(FileNode* node);
 	void DeleteNodes(FileNode* node);
+
+	static bool SortByFolder(const FileNode* node1, const FileNode* node2);
 
 	int colum_width[2];
 
