@@ -8,6 +8,7 @@
 #include "ResourceTexture.h"
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
+#include "MathGeoLib/include/Math/float4x4.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -126,7 +127,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->fake_camera->GetViewMatrix()->ptr());
+	glLoadMatrixf(App->camera->fake_camera->GetViewMatrix().ptr());
 
 	return UPDATE_CONTINUE;
 }

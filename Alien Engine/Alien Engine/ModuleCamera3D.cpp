@@ -9,6 +9,7 @@
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Camera3D");
+
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -19,6 +20,8 @@ bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
 	bool ret = true;
+
+	fake_camera = new ComponentCamera(nullptr);
 
 	return ret;
 }
