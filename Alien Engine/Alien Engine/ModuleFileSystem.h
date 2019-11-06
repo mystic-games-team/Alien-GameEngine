@@ -59,7 +59,7 @@ public:
 	FileDropType type = FileDropType::UNKNOWN;
 
 	void DeleteChildren();
-	void RefreshPath();
+
 	FileNode* FindChildrenByPath(const std::string& path); // just children, NO children of children!!!
 
 private:

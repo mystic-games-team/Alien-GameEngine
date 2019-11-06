@@ -291,7 +291,6 @@ void PanelProject::SeeFiles()
 				folder->changing_name = true;
 				current_active_folder->children.push_back(folder);
 				App->file_system->CreateDirectoryA(std::string(folder->path).data());
-				//std::sort(current_active_folder->children.begin(), current_active_folder->children.end(), PanelProject::SortByFolder);
 			}
 			if (ImGui::MenuItem("Show In Explorer")) {
 				char name[500];
@@ -301,8 +300,13 @@ void PanelProject::SeeFiles()
 			}
 			ImGui::Separator();
 			if (ImGui::MenuItem("Refresh")) {
-				// TODO: refresh
-
+				std::string current_folder_path = current_active_folder->path;
+				assets->DeleteChildren();
+				App->file_system->DiscoverEverythig(assets);
+				current_active_folder = assets->FindChildrenByPath(current_folder_path);
+				if (current_active_folder == nullptr)
+					current_active_folder = assets;
+				current_active_file = nullptr;
 			}
 			ImGui::EndPopup();
 		}
@@ -314,14 +318,11 @@ void PanelProject::SeeFiles()
 bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 {
 	bool ret = false;
-	if (node->is_file)
+	if (node->is_file || ImGui::IsMouseDragging())
 		return ret;
 
 	if (ImGui::BeginDragDropTargetCustom(ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()), ImGui::GetID("##ProjectChild"))) {
 		const ImGuiPayload* payload = ImGui::GetDragDropPayload();
-		if (ImGui::IsMouseDragging())
-			return ret;
-		
 		if (payload != nullptr) {
 			ret = true;
 			FileNode* node_to_move = *(FileNode**)payload->Data;
@@ -342,6 +343,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						// TODO: dont delete, just change paths of children of the node moved
 						node->DeleteChildren();
 						App->file_system->DiscoverEverythig(node);
+						// TODO: look what has been moved and change this to meta
 					}
 					else {
 						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
@@ -363,7 +365,6 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 
 					if (SHFileOperation(&files) == 0) {
 						FileNode* parent = node_to_move->parent;
-						// TODO: function to delete in node
 						std::vector<FileNode*>::iterator item = parent->children.begin();
 						for (; item != parent->children.end(); ++item) {
 							if (*item != nullptr && *item == node_to_move) {
@@ -389,16 +390,18 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						std::string actual_folder_path = current_active_folder->path;
 
 						FileNode* next_parent = node_to_move->parent->parent;
+						// TODO: dont delete, just change paths of children of the node moved
 						next_parent->DeleteChildren();
 						App->file_system->DiscoverEverythig(next_parent);
 						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
 						current_active_file = nullptr;
+						// TODO: look what has been moved and change this to meta
 					}
 					else {
 						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
 				}
-				else {
+				else { // DONE 100%
 					std::string actual_folder_path = current_active_folder->path;
 
 					_SHFILEOPSTRUCTA files;
@@ -416,10 +419,12 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 
 					if (SHFileOperation(&files) == 0) {
 						FileNode* next_parent = node_to_move->parent->parent;
+						// TODO: dont delete, just change paths of children of the node moved
 						next_parent->DeleteChildren();
 						App->file_system->DiscoverEverythig(next_parent);
 						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
 						current_active_file = nullptr;
+						// TODO: look what has been moved and change this to meta
 					}
 					else {
 						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
@@ -445,7 +450,3 @@ void PanelProject::DeleteNodes(FileNode* node)
 	delete node;
 }
 
-bool PanelProject::SortByFolder(const FileNode* node1, const FileNode* node2)
-{
-	return !node1->is_file;
-}

@@ -867,25 +867,21 @@ void FileNode::DeleteChildren()
 	children.clear();
 }
 
-void FileNode::RefreshPath()
-{
-	for (uint i = 0; i < children.size(); ++i) {
-		if (children[i] != nullptr) {
-			children[i]->path = std::string(path + children[i]->name + std::string("/"));
-			children[i]->RefreshPath();
-		}
-	}
-}
-
 FileNode* FileNode::FindChildrenByPath(const std::string& path)
 {
+	FileNode* ret = nullptr;
 	std::vector<FileNode*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
-		if (*item != nullptr && App->StringCmp((*item)->path.data(), path.data())) {
-			return (*item);
+		if (ret != nullptr)
+			break;
+		if (*item != nullptr) {
+			if (App->StringCmp((*item)->path.data(), path.data()))
+				return (*item);
+			else
+				ret = (*item)->FindChildrenByPath(path);
 		}
 	}
-	return nullptr;
+	return ret;
 }
 
 void FileNode::SetIcon()
