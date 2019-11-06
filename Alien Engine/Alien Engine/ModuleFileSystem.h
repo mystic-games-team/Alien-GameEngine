@@ -124,6 +124,7 @@ public:
 	std::string GetCurrentFolder(const std::string & path);
 	std::string GetCurrentHolePathFolder(const std::string& path);
 	void GetPreviousNames(std::string& previous, FileNode* node);
+	std::string GetPathWithoutExtension(const std::string& path);
 private:
 
 	void CreateAssimpIO();

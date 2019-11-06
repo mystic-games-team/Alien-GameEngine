@@ -16,22 +16,43 @@ ResourceModel::~ResourceModel()
 
 void ResourceModel::CreateMetaData()
 {	
-	meta_data_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(App->file_system->GetCurrentFolder(path) + App->file_system->GetBaseFileName(path.data())).data() + ".alien";
+	ID = App->resources->GetRandomID();
 
-	JSON_Value* value = json_value_init_object();
-	JSON_Object* object = json_value_get_object(value);
-	json_serialize_to_file_pretty(value, meta_data_path.data());
+	std::string alien_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data();
+
+	JSON_Value* alien_value = json_value_init_object();
+	JSON_Object* alien_object = json_value_get_object(alien_value);
+	json_serialize_to_file_pretty(alien_value, alien_path.data());
+
+	if (alien_value != nullptr && alien_object != nullptr) {
+		JSONfilepack* alien = new JSONfilepack(alien_path.data(), alien_object, alien_value);
+
+		alien->StartSave();
+
+		alien->SetNumber("Alien.ID", ID);
+
+		alien->SetNumber("Alien.Type", (uint)ResourceType::RESOURCE_MODEL);
+
+		alien->FinishSave();
+
+		LOG("Created alien file %s", alien_path.data());
+	}
+
+	meta_data_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(std::to_string(ID) + ".alienModel");
+
+	JSON_Value* model_value = json_value_init_object();
+	JSON_Object* model_object = json_value_get_object(model_value);
+	json_serialize_to_file_pretty(model_value, meta_data_path.data());
 	
-	if (value != nullptr && object != nullptr) {
+	if (model_value != nullptr && model_object != nullptr) {
 
-		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
+		JSONfilepack* meta = new JSONfilepack(meta_data_path, model_object, model_value);
 
 		meta->StartSave();
 
-		meta->SetNumber("Model.NumMeshes", meshes_attached.size());
-
 		meta->SetString("Model.Name", name);
-		meta->SetString("Model.Path", path);
+
+		meta->SetNumber("Model.NumMeshes", meshes_attached.size());
 
 		std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 		for (; item != meshes_attached.end(); ++item) {
@@ -66,7 +87,6 @@ bool ResourceModel::ReadMetaData(const char* path)
 		int num_meshes = meta->GetNumber("Model.NumMeshes");
 
 		name = meta->GetString("Model.Name");
-		this->path = meta->GetString("Model.Path");
 
 		for (uint i = 0; i < num_meshes; ++i) {
 			std::string mesh_path = meta->GetArrayString("Model.PathMeshes", i);
@@ -124,7 +144,7 @@ void ResourceModel::ChangeFileMetaName(const char* new_name)
 
 		meta->FinishSave();
 
-		std::string new_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(App->file_system->GetCurrentFolder(path) + App->file_system->GetBaseFileName(path.data())).data() + ".alien";
+		std::string new_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(App->file_system->GetCurrentFolder(path) + App->file_system->GetBaseFileName(path.data())).data() + ".alienModel";
 		rename(meta_data_path.data(), new_path.data());
 		meta_data_path = new_path;
 	}

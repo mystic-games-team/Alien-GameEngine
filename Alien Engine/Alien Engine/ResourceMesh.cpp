@@ -19,8 +19,10 @@ void ResourceMesh::CreateMetaData()
 	if (parent_name.empty()) {
 		parent_name.assign("null");
 	}
-	// TODO: random number
-	meta_data_path = std::string(LIBRARY_MESHES_FOLDER + name + ".alienMesh");
+
+	ID = App->resources->GetRandomID();
+
+	meta_data_path = std::string(LIBRARY_MESHES_FOLDER + std::to_string(ID) + ".alienMesh");
 
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* object = json_value_get_object(value);

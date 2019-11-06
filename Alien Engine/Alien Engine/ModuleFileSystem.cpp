@@ -128,8 +128,14 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file
 	{
 		if (PHYSFS_isDirectory((dir + *i).c_str()))
 			dir_list.push_back(*i);
-		else
-			file_list.push_back(*i);
+		else {
+			/*JUST TEMPORARLY CHANGE LATER D:*/
+			std::string ext;
+			SplitFilePath(*i, nullptr, nullptr, &ext);
+			if (!App->StringCmp(ext.data(),"alien"))
+				file_list.push_back(*i);
+			/*JUST TEMPORARLY CHANGE LATER D:*/
+		}
 	}
 
 	PHYSFS_freeList(rc);
@@ -794,6 +800,28 @@ void ModuleFileSystem::GetPreviousNames(std::string& previous, FileNode * node)
 	if (node->parent != nullptr) {
 		GetPreviousNames(previous, node->parent);
 	}
+}
+
+std::string ModuleFileSystem::GetPathWithoutExtension(const std::string& path)
+{
+	std::string name;
+	std::string hole_name(path);
+
+	bool start_copying = false;
+
+	std::string::const_reverse_iterator item = hole_name.crbegin();
+	for (; item != hole_name.crend(); ++item)
+	{
+		if (!start_copying) {
+			if (*item == '.') {
+				start_copying = true;
+			}
+		}
+		else {
+			name = *item + name;
+		}
+	}
+	return name;
 }
 
 BASS_FILEPROCS* ModuleFileSystem::GetBassIO()

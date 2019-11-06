@@ -6,6 +6,7 @@
 #include "ModuleImporter.h"
 #include "Application.h"
 #include "ResourceTexture.h"
+#include "RandomHelper.h"
 #include "PanelProject.h"
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
@@ -138,6 +139,11 @@ void ModuleResources::SetNewMetaName(std::string new_name, std::string meta_user
 	}
 
 
+}
+
+u64 ModuleResources::GetRandomID()
+{
+	return Random::GetRandomID();
 }
 
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)

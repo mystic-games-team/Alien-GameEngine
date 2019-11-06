@@ -3,6 +3,7 @@
 #include <string>
 
 typedef unsigned int uint;
+typedef unsigned long long u64;
 
 enum class ResourceType {
 	RESOURCE_NONE = -1,
@@ -43,5 +44,7 @@ protected:
 	std::string path;
 	std::string meta_data_path;
 	std::string name;
+
+	u64 ID = 0;
 
 };

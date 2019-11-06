@@ -227,7 +227,7 @@ void PanelProject::SeeFiles()
 						if (current_active_folder->children[i]->is_file) {
 							switch (current_active_folder->children[i]->type) {
 							case FileDropType::MODEL3D: {
-								std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(current_active_folder->children[i]->path) + App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()) + ".alien";
+								std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(current_active_folder->children[i]->path) + App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()) + ".alienModel";
 								App->resources->SetNewMetaName(name, meta_path, current_active_folder->children[i]->type);
 								break; }
 							case FileDropType::TEXTURE:

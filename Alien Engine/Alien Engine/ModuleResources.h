@@ -59,6 +59,8 @@ public:
 
 	void SetNewMetaName(std::string new_name, std::string meta_user_path, const FileDropType& type);
 
+	u64 GetRandomID();
+
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
 	void ReadAllMetaData();

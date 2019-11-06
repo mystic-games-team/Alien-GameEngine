@@ -89,7 +89,7 @@ void PanelScene::PanelLogic()
 		if (payload != nullptr && payload->IsDataType(DragDropFlagsID_MODEL)) {
 			FileNode* node = *(FileNode**)payload->Data;
 			if (node != nullptr) {
-				std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(node->path) + App->file_system->GetBaseFileName(node->name.data()) + ".alien";
+				std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(node->path) + App->file_system->GetBaseFileName(node->name.data()) + ".alienModel";
 				if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) {
 					// if it goes here it is because this file wasn't imported yet, so import it now
 					App->importer->LoadModelFile(std::string(node->path + node->name).data());

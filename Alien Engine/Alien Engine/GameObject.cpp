@@ -10,7 +10,8 @@
 
 GameObject::GameObject(GameObject* parent)
 {
-	id = GetRandomIntBetweenTwo(INT_MIN, INT_MAX);
+	// TODO: random id gameobjects
+	//id = GetRandomIntBetweenTwo(INT_MIN, INT_MAX);
 
 	if (parent != nullptr) {
 		this->parent = parent;
