@@ -62,7 +62,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 	LOG("Loading %s", path);
 
-	std::string meta_path = std::string((LIBRARY_MODELS_FOLDER) + App->file_system->GetBaseFileName(path) + std::string(".alienModel")).data();
+	std::string meta_path = std::string((LIBRARY_MODELS_FOLDER) + std::to_string(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data())) + std::string(".alienModel")).data();
 
 	// if this file has been already imported just load the .alienModel
 	if (!App->file_system->Exists(meta_path.data())) {
@@ -274,7 +274,7 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 			App->resources->AddNewFileNode(path, true);
 		iluFlipImage();
 		ilSave(IL_DDS, std::string(LIBRARY_TEXTURES_FOLDER + App->file_system->GetBaseFileName(path) + ".dds").data());
-
+		
 		LOG("Texture successfully loaded: %s", path);
 	}
 	else {
