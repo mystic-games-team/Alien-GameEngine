@@ -165,7 +165,7 @@ void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 
 	if (!node->children.empty()) {
 		for (uint i = 0; i < node->children.size(); ++i) {
-			if (!node->children[i]->is_file)
+			if (node->children[i] != nullptr && !node->children[i]->is_file)
 				DiscoverEverythig(node->children[i]);
 		}
 	}
@@ -854,6 +854,19 @@ FileNode::FileNode(const std::string& path, const std::string& name, bool is_fil
 	SetIcon();
 }
 
+void FileNode::DeleteChildren()
+{
+	std::vector<FileNode*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->DeleteChildren();
+			delete (*item);
+			*item = nullptr;
+		}
+	}
+	children.clear();
+}
+
 void FileNode::RefreshPath()
 {
 	for (uint i = 0; i < children.size(); ++i) {
@@ -862,6 +875,17 @@ void FileNode::RefreshPath()
 			children[i]->RefreshPath();
 		}
 	}
+}
+
+FileNode* FileNode::FindChildrenByPath(const std::string& path)
+{
+	std::vector<FileNode*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr && App->StringCmp((*item)->path.data(), path.data())) {
+			return (*item);
+		}
+	}
+	return nullptr;
 }
 
 void FileNode::SetIcon()

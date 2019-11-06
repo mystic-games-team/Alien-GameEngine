@@ -16,7 +16,8 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	go_back_folder.name = "Go Back";
 	go_back_folder.is_file = false;
 	go_back_folder.icon = App->resources->icons.folder;
-
+	go_back_folder.path.clear();
+	
 
 	//std::rename("Assets/Models/BakerHouse.fbx", "Assets/BakerHouse.fbx");
 }
@@ -133,6 +134,10 @@ void PanelProject::SeeFiles()
 				return;
 			}
 
+			if (ImGui::IsItemHovered()) {
+				MoveToFolder(&go_back_folder, false);
+			}
+
 			ImGui::NewLine();
 			ImGui::SameLine();
 
@@ -159,7 +164,7 @@ void PanelProject::SeeFiles()
 			}
 
 			if (ImGui::IsItemHovered() && current_active_file != current_active_folder->children[i]) {
-				if (MoveToFolder(current_active_folder->children[i]))
+				if (MoveToFolder(current_active_folder->children[i], true))
 					break;
 			}
 
@@ -306,7 +311,7 @@ void PanelProject::SeeFiles()
 
 }
 
-bool PanelProject::MoveToFolder(FileNode* node)
+bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 {
 	bool ret = false;
 	if (node->is_file)
@@ -321,79 +326,117 @@ bool PanelProject::MoveToFolder(FileNode* node)
 			ret = true;
 			FileNode* node_to_move = *(FileNode**)payload->Data;
 
-			if (node_to_move->is_file) {
-				if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {
-					FileNode* parent = node_to_move->parent;
-					std::vector<FileNode*>::iterator item = parent->children.begin();
-					for (; item != parent->children.end(); ++item) {
-						if (*item != nullptr && *item == node_to_move) {
-							delete* item;
-							*item = nullptr;
-							parent->children.erase(item);
-							break;
+			if (inside) {
+				if (node_to_move->is_file) {
+					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {
+						FileNode* parent = node_to_move->parent;
+						std::vector<FileNode*>::iterator item = parent->children.begin();
+						for (; item != parent->children.end(); ++item) {
+							if (*item != nullptr && *item == node_to_move) {
+								delete* item;
+								*item = nullptr;
+								parent->children.erase(item);
+								break;
+							}
 						}
+						// TODO: dont delete, just change paths of children of the node moved
+						node->DeleteChildren();
+						App->file_system->DiscoverEverythig(node);
 					}
-					std::vector<FileNode*>::iterator item2 = node->children.begin();
-					while (item2 != node->children.end()) {
-						if (*item2 != nullptr) {
-							delete* item2;
-							*item2 = nullptr;
-							item2 = node->children.erase(item2);
-						}
-						else
-							++item2;
+					else {
+						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
-					App->file_system->DiscoverEverythig(node);
 				}
 				else {
-					LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
+					_SHFILEOPSTRUCTA files;
+					files.wFunc = FO_MOVE;
+
+					static char from_[300];
+					strcpy(from_, node_to_move->path.data());
+					memcpy(from_ + strlen(from_), "\0\0", 2);
+					files.pFrom = from_;
+
+					static char to_[300];
+					strcpy(to_, std::string(node->path + node_to_move->name + std::string("/")).data());
+					memcpy(to_ + strlen(to_), "\0\0", 2);
+					files.pTo = to_;
+
+					if (SHFileOperation(&files) == 0) {
+						FileNode* parent = node_to_move->parent;
+						// TODO: function to delete in node
+						std::vector<FileNode*>::iterator item = parent->children.begin();
+						for (; item != parent->children.end(); ++item) {
+							if (*item != nullptr && *item == node_to_move) {
+								delete* item;
+								*item = nullptr;
+								parent->children.erase(item);
+								break;
+							}
+						}
+						// TODO: dont delete, just change paths of children of the node moved
+						node->DeleteChildren();
+						App->file_system->DiscoverEverythig(node);
+						// TODO: look what has been moved and change this to meta
+					}
+					else {
+						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
+					}
 				}
 			}
 			else {
-				_SHFILEOPSTRUCTA files;
-				files.wFunc = FO_MOVE;
+				if (node_to_move->is_file) {
+					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node_to_move->parent->parent->path + node_to_move->name).data()) == 0) {
+						std::string actual_folder_path = current_active_folder->path;
 
-				static char from_[300]; 
-				strcpy(from_, node_to_move->path.data());
-				memcpy(from_ + strlen(from_), "\0\0", 2);
-				files.pFrom = from_;
-
-				static char to_[300]; 
-				strcpy(to_, std::string(node->path + node_to_move->name + std::string("/")).data());
-				memcpy(to_ + strlen(to_), "\0\0", 2);
-				files.pTo = to_;
-
-				if (SHFileOperation(&files) == 0) {
-					FileNode* parent = node_to_move->parent;
-					std::vector<FileNode*>::iterator item = parent->children.begin();
-					for (; item != parent->children.end(); ++item) {
-						if (*item != nullptr && *item == node_to_move) {
-							delete* item;
-							*item = nullptr;
-							parent->children.erase(item);
-							break;
+						FileNode* actual_parent = node_to_move->parent;
+						FileNode* next_parent = node_to_move->parent->parent;
+						std::vector<FileNode*>::iterator item = actual_parent->children.begin();
+						for (; item != actual_parent->children.end(); ++item) {
+							if (*item != nullptr && *item == node_to_move) {
+								delete* item;
+								*item = nullptr;
+								actual_parent->children.erase(item);
+								break;
+							}
 						}
+						next_parent->DeleteChildren();
+						App->file_system->DiscoverEverythig(next_parent);
+						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
+						current_active_file = nullptr;
 					}
-					std::vector<FileNode*>::iterator item2 = node->children.begin();
-					while (item2 != node->children.end()) {
-						if (*item2 != nullptr) {
-							delete* item2;
-							*item2 = nullptr;
-							item2 = node->children.erase(item2);
-						}
-						else
-							++item2;
+					else {
+						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
-					App->file_system->DiscoverEverythig(node);
-					//node_to_move->path = std::string(node->path + node_to_move->name + std::string("/"));
-					//node_to_move->RefreshPath();
-					// TODO: look what has been moved and change this to meta
 				}
 				else {
-					LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
+					_SHFILEOPSTRUCTA files;
+					files.wFunc = FO_MOVE;
+
+					static char from_[300];
+					strcpy(from_, node_to_move->path.data());
+					memcpy(from_ + strlen(from_), "\0\0", 2);
+					files.pFrom = from_;
+
+					static char to_[300];
+					strcpy(to_, std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
+					memcpy(to_ + strlen(to_), "\0\0", 2);
+					files.pTo = to_;
+
+					if (SHFileOperation(&files) == 0) {
+						FileNode* parent = node_to_move->parent->parent;
+						parent->DeleteChildren();
+						App->file_system->DiscoverEverythig(parent);
+						current_active_folder = parent;
+						current_active_file = nullptr;
+						//node_to_move->path = std::string(node->path + node_to_move->name + std::string("/"));
+						//node_to_move->RefreshPath();
+						// TODO: look what has been moved and change this to meta
+					}
+					else {
+						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
+					}
 				}
 			}
-
 
 			
 		}

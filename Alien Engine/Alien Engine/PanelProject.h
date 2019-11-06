@@ -22,7 +22,7 @@ private:
 
 	void PrintDirectoryNodes(FileNode* node);
 	void SeeFiles();
-	bool MoveToFolder(FileNode* node);
+	bool MoveToFolder(FileNode* node, bool inside);
 	void DeleteNodes(FileNode* node);
 
 	static bool SortByFolder(const FileNode* node1, const FileNode* node2);
