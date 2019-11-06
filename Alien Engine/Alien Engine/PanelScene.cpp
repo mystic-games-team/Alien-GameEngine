@@ -89,37 +89,20 @@ void PanelScene::PanelLogic()
 		if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
 			FileNode* node = *(FileNode**)payload->Data;
 			if (node != nullptr && node->type == FileDropType::MODEL3D) {
-
 				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
 				path += "_meta.alien";
 
-				char* data = nullptr;
-				App->file_system->Load(path.data(), &data);
+				u64 ID = App->resources->GetIDFromAlienPath(path.data());
 
-				if (data != nullptr) {
-					char* cursor = data;
+				std::string meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
 
-					u64 ID = 0;
-
-					uint bytes = sizeof(ID);
-					memcpy(&ID, cursor, bytes);
-
-					std::string meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
-
-					if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) {
-					// if it goes here it is because this file wasn't imported yet, so import it now
-					//App->importer->LoadModelFile(std::string(node->path + node->name).data());
-					//App->resources->CreateNewModelInstanceOf(meta_path.data());
-					}
-
+				if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) { // if it goes here it is because this file wasn't imported yet, so import it now
+					
+					App->importer->LoadModelFile(std::string(node->path + node->name).data());
+					ID = App->resources->GetIDFromAlienPath(path.data());
+					meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+					App->resources->CreateNewModelInstanceOf(meta_path.data());
 				}
-
-				//std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(node->path) + App->file_system->GetBaseFileName(node->name.data()) + ".alienModel";
-				//if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) {
-				//	// if it goes here it is because this file wasn't imported yet, so import it now
-				//	App->importer->LoadModelFile(std::string(node->path + node->name).data());
-				//	App->resources->CreateNewModelInstanceOf(meta_path.data());
-				//}
 			}
 		}
 

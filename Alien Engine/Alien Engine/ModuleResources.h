@@ -41,6 +41,8 @@ public:
 	// meta path
 	bool CreateNewModelInstanceOf(const char* path);
 
+	u64 GetIDFromAlienPath(const char* path);
+
 	void AddNewFileNode(const std::string& path, bool is_file);
 
 	void SetNewMetaName(std::string new_name, std::string meta_user_path, const FileDropType& type);

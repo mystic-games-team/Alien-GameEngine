@@ -331,7 +331,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 
 	if (ImGui::BeginDragDropTargetCustom(ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()), ImGui::GetID("##ProjectChild"))) {
 		const ImGuiPayload* payload = ImGui::GetDragDropPayload();
-		if (payload != nullptr) {
+		if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
 			ret = true;
 			FileNode* node_to_move = *(FileNode**)payload->Data;
 

@@ -96,6 +96,23 @@ bool ModuleResources::CreateNewModelInstanceOf(const char* path)
 	return ret;
 }
 
+u64 ModuleResources::GetIDFromAlienPath(const char* path)
+{
+	u64 ID = 0;
+	char* data = nullptr;
+	App->file_system->Load(path, &data);
+
+	if (data != nullptr) {
+
+		uint bytes = sizeof(ID);
+		memcpy(&ID, data, bytes);
+
+		delete[] data;
+	}
+
+	return ID;
+}
+
 void ModuleResources::AddNewFileNode(const std::string& path, bool is_file)
 {
 	std::string folder = App->file_system->GetCurrentHolePathFolder(path);
