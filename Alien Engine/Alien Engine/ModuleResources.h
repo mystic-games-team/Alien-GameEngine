@@ -3,22 +3,8 @@
 #include "Globals.h"
 #include "ModuleObjects.h"
 
-typedef int DragDropFlagsID_;
-enum DragDropFlagsID {
-
-	DragDropFlagsID_NONE = 0,
-	DragDropFlagsID_HIERARCHY_NODES = 1 << 0,
-	DragDropFlagsID_MODEL			= 1 << 1,
-	DragDropFlagsID_MESH			= 1 << 2,
-	DragDropFlagsID_TEXTURE			= 1 << 3,
-	DragDropFlagsID_FOLDER			= 1 << 4,
-	IMGUI_PAYLOAD_TYPE_WINDOW		= 1 << 5,
-	IMGUI_PAYLOAD_TYPE_COLOR_3F		= 1 << 6,
-	IMGUI_PAYLOAD_TYPE_COLOR_4F		= 1 << 7,
-	DragDropFlagsID_DEMO			= 1 << 8,
-
-};
-
+#define DROP_ID_HIERARCHY_NODES "hierarchy_node"
+#define DROP_ID_PROJECT_NODE "project_node"
 
 struct FileNode;
 enum class FileDropType;

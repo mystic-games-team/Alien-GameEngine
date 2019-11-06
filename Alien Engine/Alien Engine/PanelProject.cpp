@@ -169,7 +169,7 @@ void PanelProject::SeeFiles()
 			// drag
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && !current_active_file->is_base_file) {
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
-					ImGui::SetDragDropPayload(DragDropFlagsID_FOLDER, &current_active_file, sizeof(FileNode), ImGuiCond_Once);
+					ImGui::SetDragDropPayload(DROP_ID_PROJECT_NODE, &current_active_file, sizeof(FileNode), ImGuiCond_Once);
 					ImGui::SetCursorPosX(((ImGui::GetWindowWidth())*0.5f)-26);
 					ImGui::Image((ImTextureID)current_active_file->icon->id, { 53,70 });
 					ImGui::Text(current_active_file->name.data());

@@ -76,19 +76,19 @@ void PanelScene::PanelLogic()
 	if (ImGui::BeginDragDropTargetCustom({ min_space.x,min_space.y, max_space.x,max_space.y }, ImGui::GetID(panel_name.data()))) {
 
 		// TODO: drop texture
-		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DragDropFlagsID_TEXTURE, ImGuiDragDropFlags_SourceNoDisableHover);
-		if (payload != nullptr && payload->IsDataType(DragDropFlagsID_TEXTURE)) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+		if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
 			FileNode* node = *(FileNode**)payload->Data;
-			if (node != nullptr) {
+			if (node != nullptr && node->type == FileDropType::TEXTURE) {
 				//App->objects->ReparentGameObject(obj, App->objects->base_game_object);
 			}
 		}
 
 		// drop model
-		payload = ImGui::AcceptDragDropPayload(DragDropFlagsID_MODEL, ImGuiDragDropFlags_SourceNoDisableHover);
-		if (payload != nullptr && payload->IsDataType(DragDropFlagsID_MODEL)) {
+		payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+		if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
 			FileNode* node = *(FileNode**)payload->Data;
-			if (node != nullptr) {
+			if (node != nullptr && node->type == FileDropType::MODEL3D) {
 				std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(node->path) + App->file_system->GetBaseFileName(node->name.data()) + ".alienModel";
 				if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) {
 					// if it goes here it is because this file wasn't imported yet, so import it now
