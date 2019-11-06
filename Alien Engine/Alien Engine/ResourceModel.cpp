@@ -12,6 +12,7 @@ ResourceModel::ResourceModel() : Resource()
 
 ResourceModel::~ResourceModel()
 {
+	// TODO: Clean Up
 }
 
 void ResourceModel::CreateMetaData()

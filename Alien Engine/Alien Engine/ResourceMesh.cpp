@@ -12,6 +12,7 @@ ResourceMesh::ResourceMesh() : Resource()
 
 ResourceMesh::~ResourceMesh()
 {
+	// TODO: Clean Up
 }
 
 void ResourceMesh::CreateMetaData()

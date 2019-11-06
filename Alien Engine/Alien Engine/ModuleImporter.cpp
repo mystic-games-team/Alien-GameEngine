@@ -236,7 +236,7 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 
 	std::vector<ResourceTexture*>::iterator item = App->resources->resource_textures.begin();
 	for (; item != App->resources->resource_textures.end(); ++item) {
-		if (*item != nullptr && (*item)->GetAssetsPath() == path) {
+		if (*item != nullptr && App->StringCmp((*item)->GetAssetsPath(), path)) {
 			if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
 				ApplyTextureToSelectedObject(*item);
 			}
@@ -266,14 +266,14 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		
 		App->resources->AddResource(texture);
 
-
-
 		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
 			ApplyTextureToSelectedObject(texture);
 		}
 
 		if (is_custom)
 			App->resources->AddNewFileNode(path, true);
+		iluFlipImage();
+		ilSave(IL_DDS, std::string(LIBRARY_TEXTURES_FOLDER + App->file_system->GetBaseFileName(path) + ".dds").data());
 
 		LOG("Texture successfully loaded: %s", path);
 	}
@@ -352,9 +352,9 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 			mesh->center_point_normal[i + 1] = normalized.y;
 			mesh->center_point_normal[i + 2] = normalized.z;
 		}
-	}*/
+	}
 
-	//InitMeshBuffers(mesh);
+	InitMeshBuffers(mesh);*/
 }
 
 
