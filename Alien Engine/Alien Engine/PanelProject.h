@@ -22,6 +22,8 @@ private:
 
 	void PrintDirectoryNodes(FileNode* node);
 	void SeeFiles();
+	void PrintNodeNameUnderIcon(const uint& i);
+	void RightClickToWindow(bool pop_up_item);
 	bool MoveToFolder(FileNode* node, bool inside);
 	void DeleteNodes(FileNode* node);
 

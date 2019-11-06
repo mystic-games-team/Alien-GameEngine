@@ -64,8 +64,8 @@ void PanelProject::PanelLogic()
 void PanelProject::PrintDirectoryNodes(FileNode * node)
 {
 	if (!node->is_file) {
-		ImGuiTreeNodeFlags_ node_flags = ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_Leaf;
-
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf;
+		
 		// look if is lead or not
 		for (uint i = 0; i < node->children.size(); ++i) {
 			if (node->children[i] != nullptr && !node->children[i]->is_file) {
@@ -73,11 +73,8 @@ void PanelProject::PrintDirectoryNodes(FileNode * node)
 				break;
 			}
 		}
-
-
 		bool is_open = ImGui::TreeNodeEx(node->name.data(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
 			| ImGuiTreeNodeFlags_SpanAvailWidth | node_flags | (current_active_folder == node ? ImGuiTreeNodeFlags_Selected : 0));
-
 
 		if (ImGui::IsItemClicked()) {
 			current_active_folder = node;
@@ -209,110 +206,118 @@ void PanelProject::SeeFiles()
 			ImGui::NewLine();
 			ImGui::SameLine();
 			
-			if (current_active_folder->children[i]->changing_name) {
-				char name[100];
-
-				if (current_active_folder->children[i]->is_file)
-					strcpy_s(name, 100, App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()).data());
-				else
-					strcpy_s(name, 100, current_active_folder->children[i]->name.data());
-
-				if (ImGui::InputText("##nodechangename", name, 100, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue)) {
-					current_active_folder->children[i]->changing_name = false;
-					
-					std::string name_before_rename = name;
-
-					if (current_active_folder->children[i]->is_file) {
-						std::string extension;
-						App->file_system->SplitFilePath(current_active_folder->children[i]->name.data(), nullptr, nullptr, &extension);
-						name_before_rename += std::string(".") + extension;
-					}
-
-					if (rename(std::string(current_active_folder->path + std::string("/") + current_active_folder->children[i]->name).data(), std::string(current_active_folder->path + std::string("/") + name_before_rename).data()) == 0) {
-						if (current_active_folder->children[i]->is_file) {
-							switch (current_active_folder->children[i]->type) {
-							case FileDropType::MODEL3D: {
-								std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(current_active_folder->children[i]->path) + App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()) + ".alienModel";
-								App->resources->SetNewMetaName(name, meta_path, current_active_folder->children[i]->type);
-								break; }
-							case FileDropType::TEXTURE:
-								// TODO: 
-								break;
-							default:
-								LOG("Drop Type to change name UNNWON");
-								break;
-							}
-						}						
-						current_active_folder->children[i]->name = name_before_rename;
-
-						LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
-					}
-					else {
-						LOG("Failing while renaming %s to %s because this name already exists", current_active_folder->children[i]->name.data(), name);
-					}
-				}
-
-				if (!ImGui::IsItemClicked() && ImGui::IsMouseClicked(0)) {
-					current_active_folder->children[i]->changing_name = false;
-				}
-			}
-			else {	// make the name smaller
-				if (current_active_folder->children[i]->name.length() > 7) {
-					char new_char[8];
-					memcpy(new_char, current_active_folder->children[i]->name.data(), 7);
-					new_char[7] = '\0';
-					std::string name(std::string(new_char) + std::string("..."));
-					ImGui::Text(name.data());
-				}
-				else
-					ImGui::Text(current_active_folder->children[i]->name.data());
-			}
+			PrintNodeNameUnderIcon(i);
 
 			ImGui::Spacing();
 
 			ImGui::NextColumn();
 		}
-		
-
 		// right click in window
-		if (!pop_up_item && ImGui::BeginPopupContextWindow()) {
-			if (ImGui::MenuItem("Create New Folder")) {
-				int folder_number = 0;
-				std::string folder_name = "NewFolder" + std::to_string(folder_number);
-
-				for (uint i = 0; i < current_active_folder->children.size(); ++i) {
-					if (App->StringCmp(current_active_folder->children[i]->name.data(), folder_name.data())) {
-						++folder_number;
-						folder_name = "NewFolder" + std::to_string(folder_number);
-						i = -1;
-					}
-				}
-				FileNode* folder = new FileNode(std::string(current_active_folder->path + folder_name + std::string("/")), folder_name.data(), false, current_active_folder);
-				folder->changing_name = true;
-				current_active_folder->children.push_back(folder);
-				App->file_system->CreateDirectoryA(std::string(folder->path).data());
-			}
-			if (ImGui::MenuItem("Show In Explorer")) {
-				char name[500];
-				GetCurrentDirectoryA(500, name);
-				std::string current(name + std::string("/") + current_active_folder->path);
-				ShellExecute(NULL, "open", current.data(), NULL, NULL, SW_SHOWDEFAULT);
-			}
-			ImGui::Separator();
-			if (ImGui::MenuItem("Refresh")) {
-				std::string current_folder_path = current_active_folder->path;
-				assets->DeleteChildren();
-				App->file_system->DiscoverEverythig(assets);
-				current_active_folder = assets->FindChildrenByPath(current_folder_path);
-				if (current_active_folder == nullptr)
-					current_active_folder = assets;
-				current_active_file = nullptr;
-			}
-			ImGui::EndPopup();
-		}
+		RightClickToWindow(pop_up_item);
 	}
 	ImGui::EndChild();
 
+}
+
+void PanelProject::PrintNodeNameUnderIcon(const uint& i)
+{
+	if (current_active_folder->children[i]->changing_name) {
+		char name[100];
+
+		if (current_active_folder->children[i]->is_file)
+			strcpy_s(name, 100, App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()).data());
+		else
+			strcpy_s(name, 100, current_active_folder->children[i]->name.data());
+
+		if (ImGui::InputText("##nodechangename", name, 100, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue)) {
+			current_active_folder->children[i]->changing_name = false;
+
+			std::string name_before_rename = name;
+
+			if (current_active_folder->children[i]->is_file) {
+				std::string extension;
+				App->file_system->SplitFilePath(current_active_folder->children[i]->name.data(), nullptr, nullptr, &extension);
+				name_before_rename += std::string(".") + extension;
+			}
+
+			if (rename(std::string(current_active_folder->path + std::string("/") + current_active_folder->children[i]->name).data(), std::string(current_active_folder->path + std::string("/") + name_before_rename).data()) == 0) {
+				if (current_active_folder->children[i]->is_file) {
+					switch (current_active_folder->children[i]->type) {
+					case FileDropType::MODEL3D: {
+						std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(current_active_folder->children[i]->path) + App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()) + ".alienModel";
+						App->resources->SetNewMetaName(name, meta_path, current_active_folder->children[i]->type);
+						break; }
+					case FileDropType::TEXTURE:
+						// TODO: 
+						break;
+					default:
+						LOG("Drop Type to change name UNNWON");
+						break;
+					}
+				}
+				current_active_folder->children[i]->name = name_before_rename;
+
+				LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
+			}
+			else {
+				LOG("Failing while renaming %s to %s because this name already exists", current_active_folder->children[i]->name.data(), name);
+			}
+		}
+
+		if (!ImGui::IsItemClicked() && ImGui::IsMouseClicked(0)) {
+			current_active_folder->children[i]->changing_name = false;
+		}
+	}
+	else {	// make the name smaller
+		if (current_active_folder->children[i]->name.length() > 7) {
+			char new_char[8];
+			memcpy(new_char, current_active_folder->children[i]->name.data(), 7);
+			new_char[7] = '\0';
+			std::string name(std::string(new_char) + std::string("..."));
+			ImGui::Text(name.data());
+		}
+		else
+			ImGui::Text(current_active_folder->children[i]->name.data());
+	}
+}
+
+void PanelProject::RightClickToWindow(bool pop_up_item)
+{
+	if (!pop_up_item && ImGui::BeginPopupContextWindow()) {
+		if (ImGui::MenuItem("Create New Folder")) {
+			int folder_number = 0;
+			std::string folder_name = "NewFolder" + std::to_string(folder_number);
+
+			for (uint i = 0; i < current_active_folder->children.size(); ++i) {
+				if (App->StringCmp(current_active_folder->children[i]->name.data(), folder_name.data())) {
+					++folder_number;
+					folder_name = "NewFolder" + std::to_string(folder_number);
+					i = -1;
+				}
+			}
+			FileNode* folder = new FileNode(std::string(current_active_folder->path + folder_name + std::string("/")), folder_name.data(), false, current_active_folder);
+			folder->changing_name = true;
+			current_active_folder->children.push_back(folder);
+			App->file_system->CreateDirectoryA(std::string(folder->path).data());
+		}
+		if (ImGui::MenuItem("Show In Explorer")) {
+			char name[500];
+			GetCurrentDirectoryA(500, name);
+			std::string current(name + std::string("/") + current_active_folder->path);
+			ShellExecute(NULL, "open", current.data(), NULL, NULL, SW_SHOWDEFAULT);
+		}
+		ImGui::Separator();
+		if (ImGui::MenuItem("Refresh")) {
+			std::string current_folder_path = current_active_folder->path;
+			assets->DeleteChildren();
+			App->file_system->DiscoverEverythig(assets);
+			current_active_folder = assets->FindChildrenByPath(current_folder_path);
+			if (current_active_folder == nullptr)
+				current_active_folder = assets;
+			current_active_file = nullptr;
+		}
+		ImGui::EndPopup();
+	}
 }
 
 bool PanelProject::MoveToFolder(FileNode* node, bool inside)
