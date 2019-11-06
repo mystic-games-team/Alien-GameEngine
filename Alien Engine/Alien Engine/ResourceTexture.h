@@ -13,6 +13,7 @@ public:
 	virtual ~ResourceTexture();
 
 	void CreateMetaData();
+	bool ReadMetaData(const char* path);
 
 public:
 

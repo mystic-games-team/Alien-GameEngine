@@ -257,7 +257,6 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		texture->ReadMetaData(meta_path.data());
 	}
 	else {
-		
 		texture->CreateMetaData();
 		App->resources->AddNewFileNode(path, true);
 	}

@@ -51,8 +51,10 @@ void ResourceTexture::CreateMetaData()
 			image_size = ilSaveL(IL_DDS, NULL, 0); // Get the size of the data buffer
 			if (image_size > 0) {
 				image_data = new ILubyte[image_size]; // allocate data buffer
-				if (ilSaveL(IL_DDS, image_data, image_size) > 0) // Save to buffer with the ilSaveIL function
+				if (ilSaveL(IL_DDS, image_data, image_size) > 0) {// Save to buffer with the ilSaveIL function
 					App->file_system->SaveUnique(output, image_data, image_size, LIBRARY_TEXTURES_FOLDER, std::to_string(ID).data(), ".dds");
+					meta_data_path = output;
+				}
 				RELEASE_ARRAY(image_data);
 			}
 		}
@@ -62,45 +64,15 @@ void ResourceTexture::CreateMetaData()
 		delete this;
 	}
 	
+}
 
+bool ResourceTexture::ReadMetaData(const char* path)
+{
+	bool ret = true;
 
-	//ILuint new_image_id = 0;
-	//ilGenImages(1, &new_image_id);
-	//ilBindImage(new_image_id);
+	meta_data_path = path;
+	// read the meta data 
 
-	//ilutRenderer(ILUT_OPENGL);
-
-	//if (ilLoadImage(path)) {
-	//	iluFlipImage();
-	//	texture = new ResourceTexture(path, ilutGLBindTexImage(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
-	//	texture->is_custom = is_custom;
-	//	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	//	glBindTexture(GL_TEXTURE_2D, texture->id);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	//	glBindTexture(GL_TEXTURE_2D, 0);
-
-	//	App->resources->AddResource(texture);
-
-	//	if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
-	//		ApplyTextureToSelectedObject(texture);
-	//	}
-
-	//	if (is_custom)
-	//		App->resources->AddNewFileNode(path, true);
-	//	iluFlipImage();
-	//	ilSave(IL_DDS, std::string(LIBRARY_TEXTURES_FOLDER + App->file_system->GetBaseFileName(path) + ".dds").data());
-
-	//	LOG("Texture successfully loaded: %s", path);
-	//}
-	//else {
-	//	LOG("Error while loading image in %s", path);
-	//	LOG("Error: %s", ilGetString(ilGetError()));
-	//}
-
-	//ilDeleteImages(1, &new_image_id);
+	return ret;
 }
 
