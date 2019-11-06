@@ -388,17 +388,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node_to_move->parent->parent->path + node_to_move->name).data()) == 0) {
 						std::string actual_folder_path = current_active_folder->path;
 
-						FileNode* actual_parent = node_to_move->parent;
 						FileNode* next_parent = node_to_move->parent->parent;
-						std::vector<FileNode*>::iterator item = actual_parent->children.begin();
-						for (; item != actual_parent->children.end(); ++item) {
-							if (*item != nullptr && *item == node_to_move) {
-								delete* item;
-								*item = nullptr;
-								actual_parent->children.erase(item);
-								break;
-							}
-						}
 						next_parent->DeleteChildren();
 						App->file_system->DiscoverEverythig(next_parent);
 						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
@@ -409,6 +399,8 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 					}
 				}
 				else {
+					std::string actual_folder_path = current_active_folder->path;
+
 					_SHFILEOPSTRUCTA files;
 					files.wFunc = FO_MOVE;
 
@@ -423,14 +415,11 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 					files.pTo = to_;
 
 					if (SHFileOperation(&files) == 0) {
-						FileNode* parent = node_to_move->parent->parent;
-						parent->DeleteChildren();
-						App->file_system->DiscoverEverythig(parent);
-						current_active_folder = parent;
+						FileNode* next_parent = node_to_move->parent->parent;
+						next_parent->DeleteChildren();
+						App->file_system->DiscoverEverythig(next_parent);
+						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
 						current_active_file = nullptr;
-						//node_to_move->path = std::string(node->path + node_to_move->name + std::string("/"));
-						//node_to_move->RefreshPath();
-						// TODO: look what has been moved and change this to meta
 					}
 					else {
 						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
