@@ -111,9 +111,6 @@
     <ClInclude Include="Color.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="glmath.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h">
       <Filter>Tools\ImGui</Filter>
     </ClInclude>
@@ -450,6 +447,9 @@
     <ClInclude Include="ResourceTexture.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -495,9 +495,6 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="glmath.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp">
@@ -697,6 +694,9 @@
     </ClCompile>
     <ClCompile Include="ResourceTexture.cpp">
       <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

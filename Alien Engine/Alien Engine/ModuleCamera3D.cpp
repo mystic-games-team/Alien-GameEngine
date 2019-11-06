@@ -3,19 +3,12 @@
 #include "ModuleCamera3D.h"
 #include "ModuleObjects.h"
 #include "ComponentTransform.h"
+#include "MathGeoLib/include/Math/float3.h"
+#include "MathGeoLib/include/Math/float4x4.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Camera3D");
-
-	CalculateViewMatrix();
-
-	X = vec3(1.0f, 0.0f, 0.0f);
-	Y = vec3(0.0f, 1.0f, 0.0f);
-	Z = vec3(0.0f, 0.0f, 1.0f);
-
-	Position = vec3(0.0f, 0.0f, 5.0f);
-	Reference = vec3(0.0f, 0.0f, 0.0f);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -67,57 +60,50 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		Focus();
 
-	Position += newPos;
-	Reference += newPos;
-
-	
+	fake_camera->Position += newPos;
+	fake_camera->Reference += newPos;
 
 	// Recalculate matrix -------------
-	CalculateViewMatrix();
+	fake_camera->CalculateViewMatrix();
 
 	return UPDATE_CONTINUE;
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)
+void ModuleCamera3D::Look(const float3& Position, const float3& Reference, bool RotateAroundReference)
 {
-	this->Position = Position;
-	this->Reference = Reference;
+	fake_camera->Position = Position;
+	fake_camera->Reference = Reference;
 
-	Z = normalize(Position - Reference);
-	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-	Y = cross(Z, X);
+	
+	fake_camera->Z = Position.Normalized() - Reference.Normalized();
+	fake_camera->X = (float3(0.0f, 1.0f, 0.0f).Cross(fake_camera->Z)).Normalized();
+	fake_camera->Y = fake_camera->Z.Cross(fake_camera->X);
 
 	if(!RotateAroundReference)
 	{
-		this->Reference = this->Position;
-		this->Position += Z * 0.05f;
+		fake_camera->Reference = fake_camera->Position;
+		fake_camera->Position += fake_camera->Z * 0.05f;
 	}
 
-	CalculateViewMatrix();
+	fake_camera->CalculateViewMatrix();
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::LookAt( const vec3 &Spot)
+void ModuleCamera3D::LookAt( const float3 &Spot)
 {
-	Reference = Spot;
+	fake_camera->Reference = Spot;
 
-	Z = normalize(Position - Reference);
-	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-	Y = cross(Z, X);
+	fake_camera->Z = fake_camera->Position.Normalized() - fake_camera->Reference.Normalized();
+	fake_camera->X = (float3(0.0f, 1.0f, 0.0f).Cross(fake_camera->Z)).Normalized();
+	fake_camera->Y = fake_camera->Z.Cross(fake_camera->X);
 
-	CalculateViewMatrix();
+	fake_camera->CalculateViewMatrix();
 }
 
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Move(const vec3 &Movement)
-{
-	Position += Movement;
-	Reference += Movement;
 
-	CalculateViewMatrix();
-}
 
 void ModuleCamera3D::Movement()
 {
@@ -126,11 +112,11 @@ void ModuleCamera3D::Movement()
 		if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT) newPos.y += speed;
 		if (App->input->GetKey(SDL_SCANCODE_X) == KEY_REPEAT) newPos.y -= speed;
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= fake_camera->Z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += fake_camera->Z * speed;
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= fake_camera->X * speed;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += fake_camera->X * speed;
 	}
 
 	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
@@ -138,11 +124,11 @@ void ModuleCamera3D::Movement()
 		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 		SDL_SetCursor(cursor);
 
-		if (App->input->GetMouseXMotion() > -1) newPos -= X * mouse_speed;
-		if (App->input->GetMouseXMotion() < 1) newPos += X * mouse_speed;
+		if (App->input->GetMouseXMotion() > -1) newPos -= fake_camera->X * mouse_speed;
+		if (App->input->GetMouseXMotion() < 1) newPos += fake_camera->X * mouse_speed;
 
-		if (App->input->GetMouseYMotion() < 1) newPos -= Y * mouse_speed*0.5f ;
-		if (App->input->GetMouseYMotion() > -1) newPos += Y * mouse_speed*0.5f;
+		if (App->input->GetMouseYMotion() < 1) newPos -= fake_camera->Y * mouse_speed*0.5f ;
+		if (App->input->GetMouseYMotion() > -1) newPos += fake_camera->Y * mouse_speed*0.5f;
 
 		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_UP)
 		{
@@ -155,59 +141,60 @@ void ModuleCamera3D::Zoom()
 {
 	if (App->input->GetMouseZ() > 0)
 	{
-		newPos -= Z * zoom_speed;
+		newPos -= fake_camera->Z * zoom_speed;
 	}
 	else if (App->input->GetMouseZ() < 0)
 	{
-		newPos += Z * zoom_speed;
+		newPos += fake_camera->Z * zoom_speed;
 	}
-	Reference -= newPos;
+	fake_camera->Reference -= newPos;
 }
 
 void ModuleCamera3D::Rotation()
 {
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT)==KEY_REPEAT)
-	{
-		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
+	//if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT)==KEY_REPEAT)
+	//{
+	//	int dx = -App->input->GetMouseXMotion();
+	//	int dy = -App->input->GetMouseYMotion();
 
-		float Sensitivity = 0.25f;
+	//	float Sensitivity = 0.25f;
 
-		Position -= Reference;
+	//	fake_camera->Position -= fake_camera->Reference;
 
-		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
-		SDL_SetCursor(cursor);
+	//	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
+	//	SDL_SetCursor(cursor);
 
-		if (dx != 0)
-		{
-			float DeltaX = (float)dx * Sensitivity;
+	//	if (dx != 0)
+	//	{
+	//		float DeltaX = (float)dx * Sensitivity;
 
-			X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-		}
+	//		
+	//		fake_camera->X = rotate(fake_camera->X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+	//		fake_camera->Y = rotate(fake_camera->Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+	//		fake_camera->Z = rotate(fake_camera->Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+	//	}
 
-		if (dy != 0)
-		{
-			float DeltaY = (float)dy * Sensitivity;
+	//	if (dy != 0)
+	//	{
+	//		float DeltaY = (float)dy * Sensitivity;
 
-			Y = rotate(Y, DeltaY, X);
-			Z = rotate(Z, DeltaY, X);
+	//		fake_camera->Y = rotate(Y, DeltaY, X);
+	//		fake_camera->Z = rotate(Z, DeltaY, X);
 
-			if (Y.y < 0.0f)
-			{
-				Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = cross(Z, X);
-			}
-		}
+	//		if (Y.y < 0.0f)
+	//		{
+	//			Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+	//			Y = cross(Z, X);
+	//		}
+	//	}
 
-		Position = Reference + Z * length(Position);
+	//	fake_camera->Position = fake_camera->Reference + fake_camera->Z * fake_camera->Position.Length();
 
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-		{
-			SDL_FreeCursor(cursor);
-		}
-	}
+	//	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	//	{
+	//		SDL_FreeCursor(cursor);
+	//	}
+	//}
 }
 
 void ModuleCamera3D::Focus()
@@ -219,24 +206,24 @@ void ModuleCamera3D::Focus()
 		if (bounding_box.Diagonal().Length() != 0)
 		{
 			float offset = bounding_box.Diagonal().Length() * 0.7;
-			vec3 offset_v = Z * offset;
-			Reference.x = bounding_box.CenterPoint().x;
-			Reference.y = bounding_box.CenterPoint().y;
-			Reference.z = bounding_box.CenterPoint().z;
-			Position = Reference + offset_v;
+			float3 offset_v = fake_camera->Z * offset;
+			fake_camera->Reference.x = bounding_box.CenterPoint().x;
+			fake_camera->Reference.y = bounding_box.CenterPoint().y;
+			fake_camera->Reference.z = bounding_box.CenterPoint().z;
+			fake_camera->Position = fake_camera->Reference + offset_v;
 		}
 		else
 		{
 			float offset = 5.F;
-			vec3 offset_v = Z * offset;
+			float3 offset_v = fake_camera->Z * offset;
 
 			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 
-			Reference.x = transform->GetGlobalPosition().x;
-			Reference.y = transform->GetGlobalPosition().y;
-			Reference.z = transform->GetGlobalPosition().z;
+			fake_camera->Reference.x = transform->GetGlobalPosition().x;
+			fake_camera->Reference.y = transform->GetGlobalPosition().y;
+			fake_camera->Reference.z = transform->GetGlobalPosition().z;
 
-			Position = Reference + offset_v;
+			fake_camera->Position = fake_camera->Reference + offset_v;
 		}
 	}
 	//else
@@ -253,16 +240,5 @@ void ModuleCamera3D::Focus()
 	//}
 }
 
-// -----------------------------------------------------------------
-float* ModuleCamera3D::GetViewMatrix()
-{
-	return &ViewMatrix;
-}
 
-// -----------------------------------------------------------------
-void ModuleCamera3D::CalculateViewMatrix()
-{
-	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
-	ViewMatrixInverse = inverse(ViewMatrix);
-}
 

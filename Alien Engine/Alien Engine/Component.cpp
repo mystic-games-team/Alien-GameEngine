@@ -6,6 +6,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
+#include "ComponentCamera.h"
 
 Component::Component(GameObject* attach)
 {
@@ -53,6 +54,9 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 				break;
 			case ComponentType::MATERIAL:
 				App->objects->component_in_copy = new ComponentMaterial(nullptr);
+				break;
+			case ComponentType::CAMERA:
+				App->objects->component_in_copy = new ComponentCamera(nullptr);
 				break;
 			}
 			App->objects->component_in_copy->SetComponent(this);
