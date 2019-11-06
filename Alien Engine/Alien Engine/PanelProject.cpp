@@ -279,7 +279,7 @@ void PanelProject::SeeFiles()
 					if (App->StringCmp(current_active_folder->children[i]->name.data(), folder_name.data())) {
 						++folder_number;
 						folder_name = "NewFolder" + std::to_string(folder_number);
-						i = 0;
+						i = -1;
 					}
 				}
 				FileNode* folder = new FileNode(std::string(current_active_folder->path + folder_name + std::string("/")), folder_name.data(), false, current_active_folder);
