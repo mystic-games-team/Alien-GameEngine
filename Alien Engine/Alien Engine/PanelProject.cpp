@@ -145,8 +145,6 @@ void PanelProject::SeeFiles()
 
 
 		for (uint i = 0; i < current_active_folder->children.size(); ++i) {
-
-			
 			color = { 0, 0, 0, 0 };
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i])
 				color = { 0.07F,0.64F,0.73F,1 };
@@ -166,24 +164,7 @@ void PanelProject::SeeFiles()
 			}
 
 			// right click in file/folder
-			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && ImGui::BeginPopupContextItem()) {
-				pop_up_item = true;
-
-				if (!current_active_file->is_base_file) { // so can not be modified
-					if (ImGui::MenuItem("Delete")) {
-						// TODO: delete
-						// Delete selected asset? You can not undo this action
-					}
-					if (ImGui::MenuItem("Rename")) {
-						current_active_folder->children[i]->changing_name = true;
-					}
-				}
-				if (ImGui::MenuItem("Copy Path")) {
-					// TODO: copy path
-
-				}
-				ImGui::EndPopup();
-			}
+			RightClickInFileOrFolder(i, pop_up_item);
 
 			// drag
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && !current_active_file->is_base_file) {
@@ -217,6 +198,28 @@ void PanelProject::SeeFiles()
 	}
 	ImGui::EndChild();
 
+}
+
+void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
+{
+	if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && ImGui::BeginPopupContextItem()) {
+		pop_up_item = true;
+
+		if (!current_active_file->is_base_file) { // so can not be modified
+			if (ImGui::MenuItem("Delete")) {
+				// TODO: delete
+				// Delete selected asset? You can not undo this action
+			}
+			if (ImGui::MenuItem("Rename")) {
+				current_active_folder->children[i]->changing_name = true;
+			}
+		}
+		if (ImGui::MenuItem("Copy Path")) {
+			// TODO: copy path
+
+		}
+		ImGui::EndPopup();
+	}
 }
 
 void PanelProject::PrintNodeNameUnderIcon(const uint& i)
