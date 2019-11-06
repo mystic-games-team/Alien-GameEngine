@@ -21,11 +21,11 @@ ModuleResources::~ModuleResources()
 bool ModuleResources::Start()
 {
 	// Load Icons
-	icons.jpg_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_jpg.png", false, false);
-	icons.png_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_png.png", false, false);
-	icons.dds_file = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_dds.png", false, false);
-	icons.folder = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_folder.png", false, false);
-	icons.model = App->importer->LoadTextureFile("Library/Textures/EngineTextures/icon_model.png", false, false);
+	icons.jpg_file = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_jpg.png");
+	icons.png_file = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_png.png");
+	icons.dds_file = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_dds.png");
+	icons.folder = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_folder.png");
+	icons.model = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_model.png");
 
 	assets = new FileNode();
 	assets->is_file = false;

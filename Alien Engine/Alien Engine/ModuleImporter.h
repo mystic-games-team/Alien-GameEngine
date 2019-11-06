@@ -45,6 +45,7 @@ public:
 
 	// textures
 	ResourceTexture* LoadTextureFile(const char* path, bool has_been_dropped = false, bool is_custom = true); // when dropped
+	ResourceTexture* LoadEngineTexture(const char* path);
 	void ApplyTextureToSelectedObject(ResourceTexture* texture);
 
 private:

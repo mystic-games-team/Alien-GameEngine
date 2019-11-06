@@ -234,6 +234,10 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 {
 	ResourceTexture* texture = nullptr;
 
+	if (!has_been_dropped && !App->file_system->Exists(path)) {
+		return nullptr;
+	}
+
 	std::vector<ResourceTexture*>::iterator item = App->resources->resource_textures.begin();
 	for (; item != App->resources->resource_textures.end(); ++item) {
 		if (*item != nullptr && App->StringCmp((*item)->GetAssetsPath(), path)) {
@@ -245,16 +249,44 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		}
 	}
 
+	std::string meta_path = std::string((LIBRARY_TEXTURES_FOLDER)+std::to_string(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data())) + std::string(".dds")).data();
+
+	texture = new ResourceTexture(path);
+
+	if (App->file_system->Exists(meta_path.data())) {
+		texture->ReadMetaData(meta_path.data());
+	}
+	else {
+		
+		texture->CreateMetaData();
+		App->resources->AddNewFileNode(path, true);
+	}
+
+	return texture;
+}
+
+ResourceTexture* ModuleImporter::LoadEngineTexture(const char* path)
+{
+	ResourceTexture* texture = nullptr;
+
+	std::vector<ResourceTexture*>::iterator item = App->resources->resource_textures.begin();
+	for (; item != App->resources->resource_textures.end(); ++item) {
+		if (*item != nullptr && App->StringCmp((*item)->GetAssetsPath(), path)) {
+			LOG("This texture was already loaded");
+			return (*item);
+		}
+	}
+
 	ILuint new_image_id = 0;
 	ilGenImages(1, &new_image_id);
 	ilBindImage(new_image_id);
 
-	ilutRenderer(ILUT_OPENGL);  
+	ilutRenderer(ILUT_OPENGL);
 
 	if (ilLoadImage(path)) {
 		iluFlipImage();
 		texture = new ResourceTexture(path, ilutGLBindTexImage(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
-		texture->is_custom = is_custom;
+		texture->is_custom = false;
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -263,18 +295,9 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
-		
+
 		App->resources->AddResource(texture);
 
-		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
-			ApplyTextureToSelectedObject(texture);
-		}
-
-		if (is_custom)
-			App->resources->AddNewFileNode(path, true);
-		iluFlipImage();
-		ilSave(IL_DDS, std::string(LIBRARY_TEXTURES_FOLDER + App->file_system->GetBaseFileName(path) + ".dds").data());
-		
 		LOG("Texture successfully loaded: %s", path);
 	}
 	else {

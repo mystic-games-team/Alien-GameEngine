@@ -248,7 +248,7 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 					switch (current_active_folder->children[i]->type) {
 					case FileDropType::MODEL3D: {
 						std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(current_active_folder->children[i]->path) + App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()) + ".alienModel";
-						App->resources->SetNewMetaName(name, meta_path, current_active_folder->children[i]->type);
+						App->resources->SetNewMetaName(name, meta_path, current_active_folder->children[i]->type); // TODO: change the meta data name
 						break; }
 					case FileDropType::TEXTURE:
 						// TODO: 

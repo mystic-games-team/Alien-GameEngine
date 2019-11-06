@@ -9,7 +9,10 @@ class ResourceTexture : public Resource {
 public:
 
 	ResourceTexture(const char* path, const uint& id, const uint& width, const uint& height);
+	ResourceTexture(const char* path) { this->path = std::string(path); type = ResourceType::RESOURCE_TEXTURE; }
 	virtual ~ResourceTexture();
+
+	void CreateMetaData();
 
 public:
 
