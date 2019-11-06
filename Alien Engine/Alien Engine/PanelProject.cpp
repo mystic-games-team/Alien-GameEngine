@@ -338,6 +338,10 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 			if (inside) { // DONE BUT ONE FRAME DISSAPEAR ALL 
 				if (node_to_move->is_file) {
 					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {
+						
+						// move the .alien too
+						rename(std::string(App->file_system->GetPathWithoutExtension(std::string(node_to_move->path + node_to_move->name)) + "_meta.alien").data(), std::string(App->file_system->GetPathWithoutExtension(std::string(node->path + node_to_move->name)) + "_meta.alien").data());
+
 						FileNode* parent = node_to_move->parent;
 						std::vector<FileNode*>::iterator item = parent->children.begin();
 						for (; item != parent->children.end(); ++item) {
@@ -396,6 +400,9 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 				if (node_to_move->is_file) { // DONE 100%
 					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node_to_move->parent->parent->path + node_to_move->name).data()) == 0) {
 						std::string actual_folder_path = current_active_folder->path;
+
+						// move the .alien too
+						rename(std::string(App->file_system->GetPathWithoutExtension(std::string(node_to_move->path + node_to_move->name)) + "_meta.alien").data(), std::string(App->file_system->GetPathWithoutExtension(std::string(node_to_move->parent->parent->path + node_to_move->name)) + "_meta.alien").data());
 
 						FileNode* next_parent = node_to_move->parent->parent;
 						// TODO: dont delete, just change paths of children of the node moved
