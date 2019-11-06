@@ -20,23 +20,20 @@ void ResourceModel::CreateMetaData()
 
 	std::string alien_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data();
 
-	JSON_Value* alien_value = json_value_init_object();
-	JSON_Object* alien_object = json_value_get_object(alien_value);
-	json_serialize_to_file_pretty(alien_value, alien_path.data());
+	uint size = sizeof(uint) + sizeof(ID);
 
-	if (alien_value != nullptr && alien_object != nullptr) {
-		JSONfilepack* alien = new JSONfilepack(alien_path.data(), alien_object, alien_value);
+	char* data = new char[size];
+	char* cursor = data;
 
-		alien->StartSave();
+	uint bytes = sizeof(ID);
+	memcpy(cursor, &ID, bytes);
+	cursor += bytes;
 
-		alien->SetNumber("Alien.ID", ID);
-
-		alien->SetNumber("Alien.Type", (uint)ResourceType::RESOURCE_MODEL);
-
-		alien->FinishSave();
-
-		LOG("Created alien file %s", alien_path.data());
-	}
+	bytes = sizeof((uint)type);
+	memcpy(cursor, &type, bytes);
+	
+	std::string output;
+	App->file_system->SaveUnique(output, data, size, App->file_system->GetPathWithoutExtension(path).data(), "_meta", ".alien");
 
 	meta_data_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(std::to_string(ID) + ".alienModel");
 
