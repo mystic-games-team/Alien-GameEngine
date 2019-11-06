@@ -22,7 +22,13 @@ private:
 
 	void PrintDirectoryNodes(FileNode* node);
 	void SeeFiles();
+	void RightClickInFileOrFolder(const uint& i, bool& pop_up_item);
+	void PrintNodeNameUnderIcon(const uint& i);
+	void RightClickToWindow(bool pop_up_item);
+	bool MoveToFolder(FileNode* node, bool inside);
 	void DeleteNodes(FileNode* node);
+
+	static bool SortByFolder(const FileNode* node1, const FileNode* node2);
 
 	int colum_width[2];
 

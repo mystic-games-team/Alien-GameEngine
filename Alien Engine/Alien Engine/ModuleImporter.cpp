@@ -62,9 +62,9 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 	LOG("Loading %s", path);
 
-	std::string meta_path = std::string((LIBRARY_MODELS_FOLDER) + App->file_system->GetBaseFileName(path) + std::string(".alien")).data();
+	std::string meta_path = std::string((LIBRARY_MODELS_FOLDER) + App->file_system->GetBaseFileName(path) + std::string(".alienModel")).data();
 
-	// if this file has been already imported just load the .alien
+	// if this file has been already imported just load the .alienModel
 	if (!App->file_system->Exists(meta_path.data())) {
 		
 		const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |

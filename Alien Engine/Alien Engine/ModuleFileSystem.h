@@ -39,6 +39,9 @@ struct FileNode {
 
 	FileNode(){}
 	FileNode(std::string name, bool is_file, FileNode* parent);
+	FileNode(const std::string& path, const std::string& name, bool is_file, FileNode* parent);
+	
+public:
 
 	std::string name;
 	std::string path;
@@ -54,6 +57,15 @@ struct FileNode {
 	ResourceTexture* icon = nullptr;
 
 	FileDropType type = FileDropType::UNKNOWN;
+
+	void DeleteChildren();
+
+	FileNode* FindChildrenByPath(const std::string& path); // just children, NO children of children!!!
+
+private:
+
+	void SetIcon();
+
 };
 
 
@@ -114,6 +126,7 @@ public:
 	std::string GetCurrentFolder(const std::string & path);
 	std::string GetCurrentHolePathFolder(const std::string& path);
 	void GetPreviousNames(std::string& previous, FileNode* node);
+	std::string GetPathWithoutExtension(const std::string& path);
 private:
 
 	void CreateAssimpIO();

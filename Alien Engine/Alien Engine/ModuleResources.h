@@ -3,11 +3,8 @@
 #include "Globals.h"
 #include "ModuleObjects.h"
 
-#define DROP_ID_HIERARCHY_NODES "node"
-#define DROP_ID_MODEL "model"
-#define DROP_ID_MESH "mesh"
-#define DROP_ID_TEXTURE "texture"
-#define DROP_ID_FOLDER "folder"
+#define DROP_ID_HIERARCHY_NODES "hierarchy_node"
+#define DROP_ID_PROJECT_NODE "project_node"
 
 struct FileNode;
 enum class FileDropType;
@@ -44,9 +41,13 @@ public:
 	// meta path
 	bool CreateNewModelInstanceOf(const char* path);
 
+	u64 GetIDFromAlienPath(const char* path);
+
 	void AddNewFileNode(const std::string& path, bool is_file);
 
 	void SetNewMetaName(std::string new_name, std::string meta_user_path, const FileDropType& type);
+
+	u64 GetRandomID();
 
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);

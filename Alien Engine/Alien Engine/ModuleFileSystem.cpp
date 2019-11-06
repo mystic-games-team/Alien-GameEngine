@@ -128,8 +128,14 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file
 	{
 		if (PHYSFS_isDirectory((dir + *i).c_str()))
 			dir_list.push_back(*i);
-		else
-			file_list.push_back(*i);
+		else {
+			/*JUST TEMPORARLY CHANGE LATER D:*/
+			std::string ext;
+			SplitFilePath(*i, nullptr, nullptr, &ext);
+			if (!App->StringCmp(ext.data(),"alien"))
+				file_list.push_back(*i);
+			/*JUST TEMPORARLY CHANGE LATER D:*/
+		}
 	}
 
 	PHYSFS_freeList(rc);
@@ -159,7 +165,7 @@ void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 
 	if (!node->children.empty()) {
 		for (uint i = 0; i < node->children.size(); ++i) {
-			if (!node->children[i]->is_file)
+			if (node->children[i] != nullptr && !node->children[i]->is_file)
 				DiscoverEverythig(node->children[i]);
 		}
 	}
@@ -796,6 +802,28 @@ void ModuleFileSystem::GetPreviousNames(std::string& previous, FileNode * node)
 	}
 }
 
+std::string ModuleFileSystem::GetPathWithoutExtension(const std::string& path)
+{
+	std::string name;
+	std::string hole_name(path);
+
+	bool start_copying = false;
+
+	std::string::const_reverse_iterator item = hole_name.crbegin();
+	for (; item != hole_name.crend(); ++item)
+	{
+		if (!start_copying) {
+			if (*item == '.') {
+				start_copying = true;
+			}
+		}
+		else {
+			name = *item + name;
+		}
+	}
+	return name;
+}
+
 BASS_FILEPROCS* ModuleFileSystem::GetBassIO()
 {
 	return BassIO;
@@ -812,6 +840,52 @@ FileNode::FileNode(std::string name, bool is_file, FileNode* parent)
 	path = previous_names;
 
 	// set icon
+	SetIcon();
+}
+
+FileNode::FileNode(const std::string& path, const std::string& name, bool is_file, FileNode* parent)
+{
+	this->name = name;
+	this->is_file = is_file;
+	this->parent = parent;
+	this->path = path;
+
+	// set icon
+	SetIcon();
+}
+
+void FileNode::DeleteChildren()
+{
+	std::vector<FileNode*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->DeleteChildren();
+			delete (*item);
+			*item = nullptr;
+		}
+	}
+	children.clear();
+}
+
+FileNode* FileNode::FindChildrenByPath(const std::string& path)
+{
+	FileNode* ret = nullptr;
+	std::vector<FileNode*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (ret != nullptr)
+			break;
+		if (*item != nullptr) {
+			if (App->StringCmp((*item)->path.data(), path.data()))
+				return (*item);
+			else
+				ret = (*item)->FindChildrenByPath(path);
+		}
+	}
+	return ret;
+}
+
+void FileNode::SetIcon()
+{
 	if (is_file) {
 		std::string extension;
 		App->file_system->SplitFilePath(std::string(path + name).data(), nullptr, nullptr, &extension);
