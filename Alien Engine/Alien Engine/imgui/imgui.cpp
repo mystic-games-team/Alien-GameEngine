@@ -9942,8 +9942,8 @@ const ImGuiPayload* ImGui::GetDragDropPayload()
 void ImGui::EndDragDropTarget()
 {
     ImGuiContext& g = *GImGui;
-    IM_ASSERT(g.DragDropActive);
-    IM_ASSERT(g.DragDropWithinSourceOrTarget);
+    //IM_ASSERT(g.DragDropActive);
+    //IM_ASSERT(g.DragDropWithinSourceOrTarget);
     g.DragDropWithinSourceOrTarget = false;
 }
 

@@ -291,7 +291,7 @@ void PanelProject::SeeFiles()
 				folder->changing_name = true;
 				current_active_folder->children.push_back(folder);
 				App->file_system->CreateDirectoryA(std::string(folder->path).data());
-				std::sort(current_active_folder->children.begin(), current_active_folder->children.end(), PanelProject::SortByFolder);
+				//std::sort(current_active_folder->children.begin(), current_active_folder->children.end(), PanelProject::SortByFolder);
 			}
 			if (ImGui::MenuItem("Show In Explorer")) {
 				char name[500];
@@ -326,7 +326,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 			ret = true;
 			FileNode* node_to_move = *(FileNode**)payload->Data;
 
-			if (inside) {
+			if (inside) { // DONE BUT ONE FRAME DISSAPEAR ALL 
 				if (node_to_move->is_file) {
 					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {
 						FileNode* parent = node_to_move->parent;
@@ -347,7 +347,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
 				}
-				else {
+				else { // DONE BUT ONE FRAME DISSAPEAR ALL
 					_SHFILEOPSTRUCTA files;
 					files.wFunc = FO_MOVE;
 
@@ -384,7 +384,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 				}
 			}
 			else {
-				if (node_to_move->is_file) {
+				if (node_to_move->is_file) { // DONE 100%
 					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node_to_move->parent->parent->path + node_to_move->name).data()) == 0) {
 						std::string actual_folder_path = current_active_folder->path;
 
@@ -438,17 +438,11 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 				}
 			}
 
-			
+			ImGui::ClearDragDrop();
 		}
 		ImGui::EndDragDropTarget();
 	}
 	return ret;
-	/*
-	fer:
-	enum DropFlagsType {
-		<< amb string
-	}
-	*/
 }
 
 void PanelProject::DeleteNodes(FileNode* node)
