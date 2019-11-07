@@ -1,4 +1,5 @@
 #include "JSONfilepack.h"
+#include "Color.h"
 
 JSONfilepack::JSONfilepack(const std::string& path, JSON_Object*& object, JSON_Value*& value)
 	: path(path), object(object), value(value)
@@ -51,7 +52,7 @@ void JSONfilepack::SetArrayNumber(const std::string& name, const double& number)
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
 		arr = json_value_get_array(new_val);
-
+		//json_array_clear(arr);
 		json_object_dotset_value(save_object, name.data(), new_val);
 	}
 	json_array_append_number(arr, number);
@@ -61,6 +62,36 @@ double JSONfilepack::GetArrayNumber(const std::string& name, const uint& index)
 {
 	JSON_Array* arr = json_object_dotget_array(object, name.data());
 	return json_array_get_number(arr, index);
+}
+
+void JSONfilepack::SetColor(const std::string& name, const Color& color)
+{
+	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
+	if (arr == nullptr) {
+		JSON_Value* new_val = json_value_init_array();
+		arr = json_value_get_array(new_val);
+		json_object_dotset_value(save_object, name.data(), new_val);
+	}
+	else {
+		json_array_clear(arr);
+	}
+	json_array_append_number(arr, color.r);
+	json_array_append_number(arr, color.g);
+	json_array_append_number(arr, color.b);
+	json_array_append_number(arr, color.a);
+}
+
+Color JSONfilepack::GetColor(const std::string& name)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+
+	Color color;
+	color.r = json_array_get_number(arr, 0);
+	color.g = json_array_get_number(arr, 1);
+	color.b = json_array_get_number(arr, 2);
+	color.a = json_array_get_number(arr, 3);
+
+	return color;
 }
 
 void JSONfilepack::SetArrayString(const std::string& name, const std::string& string_parameter)

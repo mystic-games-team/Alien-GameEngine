@@ -60,7 +60,7 @@ public:
 	void DeselectObject();
 
 	// if parent is nullptr, parent will be the invisible game object
-	GameObject* CreateEmptyGameObject(GameObject* parent);
+	GameObject* CreateEmptyGameObject(GameObject* parent, bool set_selected = true);
 
 	// right click menu, move
 	void MoveObjectDown(GameObject* object, bool bottom);
@@ -86,18 +86,18 @@ public:
 	// mesh
 	bool view_mesh_mode = true;
 	int mesh_line_width = 1;
-	Color mesh_color{ 1,1,1,255 };
+	Color mesh_color{ 1,1,1,1 };
 
 	// vertex normals
 	bool draw_vertex_normals = false;
 	uint vertex_normal_length = 1;
-	Color vertex_n_color{ 0,1,1, };
+	Color vertex_n_color{ 0,1,1, 1};
 	int vertex_n_width = 1;
 
 	// face normals
 	bool draw_face_normals = false;
 	uint face_normal_length = 1;
-	Color face_n_color{ 1,0,1, };
+	Color face_n_color{ 1,0,1, 1};
 	int face_n_width = 1;
 
 	// grid

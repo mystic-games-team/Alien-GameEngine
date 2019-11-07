@@ -183,8 +183,9 @@ void ResourceModel::ConvertToGameObjects()
 	if (meshes_attached.size() > 1) { // needs an empty gameobject
 		
 		// create the parent
-		GameObject* parent = App->objects->CreateEmptyGameObject(nullptr);
+		GameObject* parent = App->objects->CreateEmptyGameObject(nullptr, false);
 		parent->SetName(name.data());
+		
 
 		// vector to find the parents
 		std::vector<GameObject*> objects_created;

@@ -4,6 +4,8 @@
 #include <string>
 #include "Globals.h"
 
+struct Color;
+
 class JSONfilepack {
 
 public:
@@ -23,6 +25,9 @@ public:
 
 	void SetArrayNumber(const std::string& name, const double& number);
 	double GetArrayNumber(const std::string& name, const uint& index);
+
+	void SetColor(const std::string& name, const Color& color);
+	Color GetColor(const std::string& name);
 
 	void SetArrayString(const std::string& name, const std::string& string_parameter);
 	const char* GetArrayString(const std::string& name, const uint& index);

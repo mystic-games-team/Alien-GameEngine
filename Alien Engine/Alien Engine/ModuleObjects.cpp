@@ -171,7 +171,7 @@ void ModuleObjects::DeselectObject()
 	game_object_selected = nullptr;
 }
 
-GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent)
+GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent, bool set_selected)
 {
 	GameObject* object = nullptr;
 
@@ -186,7 +186,8 @@ GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent)
 
 	object->AddComponent(new ComponentTransform(object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
 	
-	SetNewSelectedObject(object);
+	if (set_selected)
+		SetNewSelectedObject(object);
 
 	return object;
 }
@@ -314,27 +315,13 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	App->renderer3D->grid_spacing = config->GetNumber("Configuration.Renderer.GridSpacing");
 	App->renderer3D->length_grid = config->GetNumber("Configuration.Renderer.GridLength");
 	App->renderer3D->line_grid_width = config->GetNumber("Configuration.Renderer.GridWidth");
-	App->renderer3D->grid_color.r = config->GetArrayNumber("Configuration.Renderer.GridColor", 0);
-	App->renderer3D->grid_color.g = config->GetArrayNumber("Configuration.Renderer.GridColor", 1);
-	App->renderer3D->grid_color.b = config->GetArrayNumber("Configuration.Renderer.GridColor", 2);
-	App->renderer3D->background_color.r = config->GetArrayNumber("Configuration.Renderer.BackgroundColor", 0);
-	App->renderer3D->background_color.g = config->GetArrayNumber("Configuration.Renderer.BackgroundColor", 1);
-	App->renderer3D->background_color.b = config->GetArrayNumber("Configuration.Renderer.BackgroundColor", 2);
-	vertex_n_color.r = config->GetArrayNumber("Configuration.Renderer.VertexNormalColor", 0);
-	vertex_n_color.g = config->GetArrayNumber("Configuration.Renderer.VertexNormalColor", 1);
-	vertex_n_color.b = config->GetArrayNumber("Configuration.Renderer.VertexNormalColor", 2);
-	face_n_color.r = config->GetArrayNumber("Configuration.Renderer.FaceNormalColor", 0);
-	face_n_color.g = config->GetArrayNumber("Configuration.Renderer.FaceNormalColor", 1);
-	face_n_color.b = config->GetArrayNumber("Configuration.Renderer.FaceNormalColor", 2);
-	mesh_color.r = config->GetArrayNumber("Configuration.Renderer.MeshColor", 0);
-	mesh_color.g = config->GetArrayNumber("Configuration.Renderer.MeshColor", 1);
-	mesh_color.b = config->GetArrayNumber("Configuration.Renderer.MeshColor", 2);
-	parent_outline_color.r = config->GetArrayNumber("Configuration.Renderer.ParentOutlineColor", 0);
-	parent_outline_color.g = config->GetArrayNumber("Configuration.Renderer.ParentOutlineColor", 1);
-	parent_outline_color.b = config->GetArrayNumber("Configuration.Renderer.ParentOutlineColor", 2);
-	no_child_outline_color.r = config->GetArrayNumber("Configuration.Renderer.NoChildOutlineColor", 0);
-	no_child_outline_color.g = config->GetArrayNumber("Configuration.Renderer.NoChildOutlineColor", 1);
-	no_child_outline_color.b = config->GetArrayNumber("Configuration.Renderer.NoChildOutlineColor", 2);
+	App->renderer3D->grid_color = config->GetColor("Configuration.Renderer.GridColor");
+	App->renderer3D->background_color = config->GetColor("Configuration.Renderer.BackgroundColor");
+	vertex_n_color = config->GetColor("Configuration.Renderer.VertexNormalColor");
+	face_n_color = config->GetColor("Configuration.Renderer.FaceNormalColor");
+	mesh_color = config->GetColor("Configuration.Renderer.MeshColor");
+	parent_outline_color = config->GetColor("Configuration.Renderer.ParentOutlineColor");
+	no_child_outline_color = config->GetColor("Configuration.Renderer.NoChildOutlineColor");
 	outline = config->GetBoolean("Configuration.Renderer.Outline");
 	parent_line_width = config->GetNumber("Configuration.Renderer.ParentLineWidth");
 	no_child_line_width = config->GetNumber("Configuration.Renderer.NoChildLineWidth");
@@ -355,27 +342,13 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetNumber("Configuration.Renderer.GridSpacing", App->renderer3D->grid_spacing);
 	config->SetNumber("Configuration.Renderer.GridWidth", App->renderer3D->line_grid_width);
 	config->SetNumber("Configuration.Renderer.GridLength", App->renderer3D->length_grid);
-	config->SetArrayNumber("Configuration.Renderer.GridColor", App->renderer3D->grid_color.r);
-	config->SetArrayNumber("Configuration.Renderer.GridColor", App->renderer3D->grid_color.g);
-	config->SetArrayNumber("Configuration.Renderer.GridColor", App->renderer3D->grid_color.b);
-	config->SetArrayNumber("Configuration.Renderer.BackgroundColor", App->renderer3D->background_color.r);
-	config->SetArrayNumber("Configuration.Renderer.BackgroundColor", App->renderer3D->background_color.g);
-	config->SetArrayNumber("Configuration.Renderer.BackgroundColor", App->renderer3D->background_color.b);
-	config->SetArrayNumber("Configuration.Renderer.VertexNormalColor", vertex_n_color.r);
-	config->SetArrayNumber("Configuration.Renderer.VertexNormalColor", vertex_n_color.g);
-	config->SetArrayNumber("Configuration.Renderer.VertexNormalColor", vertex_n_color.b);
-	config->SetArrayNumber("Configuration.Renderer.FaceNormalColor", face_n_color.r);
-	config->SetArrayNumber("Configuration.Renderer.FaceNormalColor", face_n_color.g);
-	config->SetArrayNumber("Configuration.Renderer.FaceNormalColor", face_n_color.b);
-	config->SetArrayNumber("Configuration.Renderer.MeshColor", mesh_color.r);
-	config->SetArrayNumber("Configuration.Renderer.MeshColor", mesh_color.g);
-	config->SetArrayNumber("Configuration.Renderer.MeshColor", mesh_color.b);
-	config->SetArrayNumber("Configuration.Renderer.ParentOutlineColor", parent_outline_color.r);
-	config->SetArrayNumber("Configuration.Renderer.ParentOutlineColor", parent_outline_color.g);
-	config->SetArrayNumber("Configuration.Renderer.ParentOutlineColor", parent_outline_color.b);
-	config->SetArrayNumber("Configuration.Renderer.NoChildOutlineColor", no_child_outline_color.r);
-	config->SetArrayNumber("Configuration.Renderer.NoChildOutlineColor", no_child_outline_color.g);
-	config->SetArrayNumber("Configuration.Renderer.NoChildOutlineColor", no_child_outline_color.b);
+	config->SetColor("Configuration.Renderer.GridColor", App->renderer3D->grid_color);
+	config->SetColor("Configuration.Renderer.BackgroundColor", App->renderer3D->background_color);
+	config->SetColor("Configuration.Renderer.VertexNormalColor", vertex_n_color);
+	config->SetColor("Configuration.Renderer.FaceNormalColor", face_n_color);
+	config->SetColor("Configuration.Renderer.MeshColor", mesh_color);
+	config->SetColor("Configuration.Renderer.ParentOutlineColor", parent_outline_color);
+	config->SetColor("Configuration.Renderer.NoChildOutlineColor", no_child_outline_color);
 	config->SetBoolean("Configuration.Renderer.Outline", outline);
 	config->SetNumber("Configuration.Renderer.ParentLineWidth", parent_line_width);
 	config->SetNumber("Configuration.Renderer.NoChildLineWidth", no_child_line_width);
