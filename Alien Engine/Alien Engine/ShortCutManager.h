@@ -49,6 +49,8 @@ struct ShortCut {
 	const char* GetExtraKeyRepeatName();
 	const SDL_Scancode& GetScancode(const uint& index);
 
+	const SDL_Scancode* GetScancodesArray();
+
 	// variables
 	SDL_Scancode key1_down = SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode key2_repeat = SDL_SCANCODE_UNKNOWN; 

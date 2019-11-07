@@ -1,6 +1,7 @@
 #include "JSONfilepack.h"
 #include "Color.h"
 
+
 JSONfilepack::JSONfilepack(const std::string& path, JSON_Object*& object, JSON_Value*& value)
 	: path(path), object(object), value(value)
 {
@@ -92,6 +93,126 @@ Color JSONfilepack::GetColor(const std::string& name)
 	color.a = json_array_get_number(arr, 3);
 
 	return color;
+}
+
+void JSONfilepack::SetFloat3(const std::string& name, const float3& numbers)
+{
+	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
+	if (arr == nullptr) {
+		JSON_Value* new_val = json_value_init_array();
+		arr = json_value_get_array(new_val);
+		json_object_dotset_value(save_object, name.data(), new_val);
+	}
+	else {
+		json_array_clear(arr);
+	}
+	json_array_append_number(arr, numbers.x);
+	json_array_append_number(arr, numbers.y);
+	json_array_append_number(arr, numbers.z);
+}
+
+float3 JSONfilepack::GetFloat3(const std::string& name)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+
+	float3 numbers;
+	numbers.x = json_array_get_number(arr, 0);
+	numbers.y = json_array_get_number(arr, 1);
+	numbers.z = json_array_get_number(arr, 2);
+
+	return numbers;
+}
+
+void JSONfilepack::SetQuat(const std::string& name, const Quat& numbers)
+{
+	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
+	if (arr == nullptr) {
+		JSON_Value* new_val = json_value_init_array();
+		arr = json_value_get_array(new_val);
+		json_object_dotset_value(save_object, name.data(), new_val);
+	}
+	else {
+		json_array_clear(arr);
+	}
+	json_array_append_number(arr, numbers.x);
+	json_array_append_number(arr, numbers.y);
+	json_array_append_number(arr, numbers.z);
+	json_array_append_number(arr, numbers.w);
+}
+
+Quat JSONfilepack::GetQuat(const std::string& name)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+
+	Quat quat;
+	quat.x = json_array_get_number(arr, 0);
+	quat.y = json_array_get_number(arr, 1);
+	quat.z = json_array_get_number(arr, 2);
+	quat.w = json_array_get_number(arr, 3);
+
+	return quat;
+}
+
+void JSONfilepack::SetNumberArray(const std::string& name, double* numbers, uint size)
+{
+	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
+	if (arr == nullptr) {
+		JSON_Value* new_val = json_value_init_array();
+		arr = json_value_get_array(new_val);
+		json_object_dotset_value(save_object, name.data(), new_val);
+	}
+	else {
+		json_array_clear(arr);
+	}
+	for (uint i = 0; i < size; ++i) {
+		json_array_append_number(arr, numbers[i]);
+	}
+}
+
+double* JSONfilepack::GetNumberArray(const std::string& name)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+	
+	uint size = json_array_get_count(arr);
+
+	double* numbers = new double[size];
+	
+	for (uint i = 0; i < size; ++i) {
+		numbers[i] = json_array_get_number(arr, i);
+	}
+	
+	return numbers;
+}
+
+void JSONfilepack::SetShortcutCodes(const std::string& name, uint codes[3])
+{
+	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
+	if (arr == nullptr) {
+		JSON_Value* new_val = json_value_init_array();
+		arr = json_value_get_array(new_val);
+		json_object_dotset_value(save_object, name.data(), new_val);
+	}
+	else {
+		json_array_clear(arr);
+	}
+	for (uint i = 0; i < 3; ++i) {
+		json_array_append_number(arr, codes[i]);
+	}
+}
+
+SDL_Scancode* JSONfilepack::GetShortcutCodes(const std::string& name)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+
+	uint size = json_array_get_count(arr);
+
+	SDL_Scancode codes[3];
+
+	for (uint i = 0; i < 3; ++i) {
+		codes[i] = (SDL_Scancode)(uint)json_array_get_number(arr, i);
+	}
+
+	return codes;
 }
 
 void JSONfilepack::SetArrayString(const std::string& name, const std::string& string_parameter)

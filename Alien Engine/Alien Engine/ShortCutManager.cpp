@@ -235,3 +235,12 @@ const SDL_Scancode& ShortCut::GetScancode(const uint& index)
 	}
 	return ret;
 }
+
+const SDL_Scancode* ShortCut::GetScancodesArray() 
+{
+	SDL_Scancode codes[3];
+	codes[0] = key1_down;
+	codes[1] = key2_repeat;
+	codes[2] = key3_repeat_extra;
+	return codes;
+}

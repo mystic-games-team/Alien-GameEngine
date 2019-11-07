@@ -95,25 +95,25 @@ bool ModuleUI::CleanUp()
 
 void ModuleUI::LoadConfig(JSONfilepack*& config)
 {
-	for (uint i = 0; i < 3; ++i) {
-		panel_config_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", i);
-		panel_about_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", i);
-		panel_create_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
-		panel_project_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
-		panel_hierarchy_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelProject", i);
-		panel_console_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", i);
-		panel_inspector_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelInspector", i);
-		panel_layout_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelLayout", i);
-		panel_render_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelRender", i);
-		panel_scene_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelScene", i);
-		shortcut_demo_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ImGuiDemo", i);
-		shortcut_report_bug_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ReportBug", i);
-		shortcut_view_mesh_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ViewMesh", i);
-		shortcut_wireframe_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.WireframeMode", i);
-		shortcut_view_grid_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ShowGrid", i);
-		shortcut_view_normal_vertex_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ShowNormalVertex", i);
-		shortcut_view_normal_face_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ShowNormalFace", i);
-	}
+	uint size_of_codes = sizeof(panel_config_codes);
+	memcpy(panel_config_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelConfig"), size_of_codes);
+	memcpy(panel_about_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelAbout"), size_of_codes);
+	memcpy(panel_create_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate"), size_of_codes);
+	memcpy(panel_project_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate"), size_of_codes);
+	memcpy(panel_hierarchy_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelProject"), size_of_codes);
+	memcpy(panel_console_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelConsole"), size_of_codes);
+	memcpy(panel_inspector_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelInspector"), size_of_codes);
+	memcpy(panel_layout_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelLayout"), size_of_codes);
+	memcpy(panel_render_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelRender"), size_of_codes);
+	memcpy(panel_scene_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelScene"), size_of_codes);
+	memcpy(shortcut_demo_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ImGuiDemo"), size_of_codes);
+	memcpy(shortcut_report_bug_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ReportBug"), size_of_codes);
+	memcpy(shortcut_view_mesh_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ViewMesh"), size_of_codes);
+	memcpy(shortcut_wireframe_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.WireframeMode"), size_of_codes);
+	memcpy(shortcut_view_grid_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ShowGrid"), size_of_codes);
+	memcpy(shortcut_view_normal_vertex_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalVertex"), size_of_codes);
+	memcpy(shortcut_view_normal_face_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalFace"), size_of_codes);
+
 	if (panel_about != nullptr) {
 		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
 		panel_config->shortcut->SetShortcutKeys(panel_config_codes[0], panel_config_codes[1], panel_config_codes[2]);
@@ -140,25 +140,23 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 
 void ModuleUI::SaveConfig(JSONfilepack*& config)
 {
-	for (uint i = 0; i < 3; ++i) {
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_config->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelProject", (uint)panel_project->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelHierarchy", (uint)panel_hierarchy->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelRender", (uint)panel_render->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelInspector", (uint)panel_inspector->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", (uint)panel_console->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", (uint)panel_create_object->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelScene", (uint)panel_scene->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelLayout", (uint)panel_layout->shortcut->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.WireframeMode", (uint)shortcut_wireframe->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.ViewMesh", (uint)shortcut_view_mesh->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.ReportBug", (uint)shortcut_report_bug->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.ImGuiDemo", (uint)shortcut_demo->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowGrid", (uint)shortcut_view_grid->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowNormalVertex", (uint)shortcut_view_normal_vertex->GetScancode(i));
-		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowNormalFace", (uint)shortcut_view_normal_face->GetScancode(i));
-	}
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelConfig", (uint*)panel_config->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelProject", (uint*)panel_project->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelAbout", (uint*)panel_about->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelHierarchy", (uint*)panel_hierarchy->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelRender", (uint*)panel_render->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelInspector", (uint*)panel_inspector->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelConsole", (uint*)panel_console->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate", (uint*)panel_create_object->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelScene", (uint*)panel_scene->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelLayout", (uint*)panel_layout->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.WireframeMode", (uint*)shortcut_wireframe->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ViewMesh", (uint*)shortcut_view_mesh->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ReportBug", (uint*)shortcut_report_bug->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ImGuiDemo", (uint*)shortcut_demo->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowGrid", (uint*)shortcut_view_grid->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalVertex", (uint*)shortcut_view_normal_vertex->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalFace", (uint*)shortcut_view_normal_face->GetScancodesArray());
 }
 void ModuleUI::LoadLayouts()
 {
