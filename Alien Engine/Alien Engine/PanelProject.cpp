@@ -193,11 +193,32 @@ void PanelProject::SeeFiles()
 
 			ImGui::NextColumn();
 		}
+
 		// right click in window
 		RightClickToWindow(pop_up_item);
 	}
 	ImGui::EndChild();
 
+	DeleteSelectedAssetPopUp();
+}
+
+void PanelProject::DeleteSelectedAssetPopUp()
+{
+	if (to_delete_menu && current_active_file != nullptr) {
+		ImGui::OpenPopup("Delete Selected Asset?");
+		ImGui::SetNextWindowSize({ 500,600 });
+		if (ImGui::BeginPopupModal("Delete Selected Asset?", &to_delete_menu, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			if (current_active_file->is_file)
+				ImGui::Text(std::string(current_active_file->path + current_active_file->name).data());
+			else
+				ImGui::Text(current_active_file->path.data());
+
+			ImGui::Text("You cannot undo this action.");
+
+			ImGui::EndPopup();
+		}
+	}
 }
 
 void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
@@ -209,6 +230,8 @@ void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 			if (ImGui::MenuItem("Delete")) {
 				// TODO: delete
 				// Delete selected asset? You can not undo this action
+				to_delete_menu = true;
+
 			}
 			if (ImGui::MenuItem("Rename")) {
 				current_active_folder->children[i]->changing_name = true;
@@ -245,18 +268,9 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 
 			if (rename(std::string(current_active_folder->path + std::string("/") + current_active_folder->children[i]->name).data(), std::string(current_active_folder->path + std::string("/") + name_before_rename).data()) == 0) {
 				if (current_active_folder->children[i]->is_file) {
-					switch (current_active_folder->children[i]->type) {
-					case FileDropType::MODEL3D: {
-						std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(current_active_folder->children[i]->path) + App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()) + ".alienModel";
-						App->resources->SetNewMetaName(name, meta_path, current_active_folder->children[i]->type); // TODO: change the meta data name
-						break; }
-					case FileDropType::TEXTURE:
-						// TODO: 
-						break;
-					default:
-						LOG("Drop Type to change name UNNWON");
-						break;
-					}
+					std::string current_meta_path = App->file_system->GetPathWithoutExtension(current_active_folder->children[i]->path + current_active_folder->children[i]->name) + "_meta.alien";
+					std::string next_meta_name = App->file_system->GetPathWithoutExtension(current_active_folder->children[i]->path + name_before_rename) + "_meta.alien";
+					rename(current_meta_path.data(), next_meta_name.data());
 				}
 				current_active_folder->children[i]->name = name_before_rename;
 
