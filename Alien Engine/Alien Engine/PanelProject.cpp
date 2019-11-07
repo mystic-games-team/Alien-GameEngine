@@ -7,6 +7,9 @@
 #include "ResourceModel.h"
 
 
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include <experimental/filesystem>
+
 PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
@@ -383,8 +386,8 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 			ret = true;
 			FileNode* node_to_move = *(FileNode**)payload->Data;
 
-			if (inside) { // DONE BUT ONE FRAME DISSAPEAR ALL 
-				if (node_to_move->is_file) {
+			if (inside) {
+				if (node_to_move->is_file) { // move file up
 					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {
 						
 						// move the .alien too
@@ -409,21 +412,9 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
 				}
-				else { // DONE BUT ONE FRAME DISSAPEAR ALL
-					_SHFILEOPSTRUCTA files;
-					files.wFunc = FO_MOVE;
-
-					static char from_[300];
-					strcpy(from_, node_to_move->path.data());
-					memcpy(from_ + strlen(from_), "\0\0", 2);
-					files.pFrom = from_;
-
-					static char to_[300];
-					strcpy(to_, std::string(node->path + node_to_move->name + std::string("/")).data());
-					memcpy(to_ + strlen(to_), "\0\0", 2);
-					files.pTo = to_;
-
-					if (SHFileOperation(&files) == 0) {
+				else { // move folder down
+					std::experimental::filesystem::rename(node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
+					if (!std::experimental::filesystem::exists(node_to_move->path.data())) {
 						FileNode* parent = node_to_move->parent;
 						std::vector<FileNode*>::iterator item = parent->children.begin();
 						for (; item != parent->children.end(); ++item) {
@@ -445,7 +436,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 				}
 			}
 			else {
-				if (node_to_move->is_file) { // DONE 100%
+				if (node_to_move->is_file) { // move file up
 					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node_to_move->parent->parent->path + node_to_move->name).data()) == 0) {
 						std::string actual_folder_path = current_active_folder->path;
 
@@ -464,24 +455,11 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
 				}
-				else { // DONE 100%
-					std::string actual_folder_path = current_active_folder->path;
-
-					_SHFILEOPSTRUCTA files;
-					files.wFunc = FO_MOVE;
-
-					static char from_[300];
-					strcpy(from_, node_to_move->path.data());
-					memcpy(from_ + strlen(from_), "\0\0", 2);
-					files.pFrom = from_;
-
-					static char to_[300];
-					strcpy(to_, std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
-					memcpy(to_ + strlen(to_), "\0\0", 2);
-					files.pTo = to_;
-
-					if (SHFileOperation(&files) == 0) {
+				else { // move folder up
+					std::experimental::filesystem::rename(node_to_move->path.data(), std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
+					if (!std::experimental::filesystem::exists(node_to_move->path.data())) {
 						FileNode* next_parent = node_to_move->parent->parent;
+						std::string actual_folder_path = current_active_folder->path;
 						// TODO: dont delete, just change paths of children of the node moved
 						next_parent->DeleteChildren();
 						App->file_system->DiscoverEverythig(next_parent);
@@ -490,7 +468,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						// TODO: look what has been moved and change this to meta
 					}
 					else {
-						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
+						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
 					}
 				}
 			}

@@ -70,7 +70,6 @@ void FileNode::DeleteNodeData(bool delete_folder)
 		resource_to_delete->DeleteMetaData();
 	}
 	else {
-
 		std::vector<FileNode*>::iterator item = children.begin();
 		for (; item != children.end(); ++item) {
 			if (*item != nullptr)
