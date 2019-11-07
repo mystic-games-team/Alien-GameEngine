@@ -8,6 +8,7 @@
 #include "ResourceTexture.h"
 #include "RandomHelper.h"
 #include "PanelProject.h"
+#include "FileNode.h"
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 {

@@ -6,7 +6,7 @@
 #define DROP_ID_HIERARCHY_NODES "hierarchy_node"
 #define DROP_ID_PROJECT_NODE "project_node"
 
-struct FileNode;
+class FileNode;
 enum class FileDropType;
 
 class Resource;

@@ -25,6 +25,7 @@ struct aiFileIO;
 #include "Resource_.h"
 
 class ResourceTexture;
+class FileNode;
 
 enum class FileDropType {
 	MODEL3D,
@@ -34,41 +35,6 @@ enum class FileDropType {
 
 	UNKNOWN
 };
-
-struct FileNode {
-
-	FileNode(){}
-	FileNode(std::string name, bool is_file, FileNode* parent);
-	FileNode(const std::string& path, const std::string& name, bool is_file, FileNode* parent);
-	~FileNode();
-	
-public:
-
-	std::string name;
-	std::string path;
-
-	bool is_file = true;
-	bool is_base_file = false;
-
-	bool changing_name = false;
-
-	FileNode* parent = nullptr;
-	std::vector<FileNode*> children;
-
-	ResourceTexture* icon = nullptr;
-
-	FileDropType type = FileDropType::UNKNOWN;
-
-	void DeleteChildren();
-
-	FileNode* FindChildrenByPath(const std::string& path); // just children, NO children of children!!!
-
-private:
-
-	void SetIcon();
-
-};
-
 
 
 class ModuleFileSystem : public Module

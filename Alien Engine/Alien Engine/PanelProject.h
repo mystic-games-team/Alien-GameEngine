@@ -2,7 +2,7 @@
 
 #include "Panel.h"
 
-struct FileNode;
+#include "FileNode.h"
 
 
 class PanelProject : public Panel {

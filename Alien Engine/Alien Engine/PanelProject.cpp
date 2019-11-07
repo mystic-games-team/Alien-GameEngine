@@ -6,6 +6,7 @@
 #include "imgui/imgui_internal.h"
 #include "ResourceModel.h"
 
+
 PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
@@ -229,36 +230,22 @@ void PanelProject::DeleteSelectedAssetPopUp()
 				std::vector<FileNode*>::iterator item = current_active_folder->children.begin();
 
 				if (current_active_file->is_file) {
-					remove(path.data());
-
-					std::string meta_path = App->file_system->GetPathWithoutExtension(path.data()) + "_meta.alien";
-
-					u64 ID = App->resources->GetIDFromAlienPath(meta_path.data());
-
-					remove(meta_path.data());
-
-					Resource* resource_to_delete = App->resources->GetResourceWithID(ID);
-
-					resource_to_delete->DeleteMetaData();
+					current_active_file->DeleteNodeData();
 				}
 				else {
 					// TODO: iter all files and remove meta in LIBRARY
-					/*
-					For the folders _SHFILEOPSTRUCTA files;
-						files.wFunc = FO_MOVE;
+					//For the folders 
+						_SHFILEOPSTRUCTA files;
+						files.wFunc = FO_DELETE;
 
 						static char from_[300];
-						strcpy(from_, node_to_move->path.data());
+						strcpy(from_, current_active_file->path.data());
 						memcpy(from_ + strlen(from_), "\0\0", 2);
 						files.pFrom = from_;
 
-						static char to_[300];
-						strcpy(to_, std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
-						memcpy(to_ + strlen(to_), "\0\0", 2);
-						files.pTo = to_;
-
 						if (SHFileOperation(&files) == 0) {
-					*/
+
+						}
 				}
 
 				for (; item != current_active_folder->children.end(); ++item) {
