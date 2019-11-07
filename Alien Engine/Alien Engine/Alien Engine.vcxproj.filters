@@ -450,6 +450,9 @@
     <ClInclude Include="ComponentCamera.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="glmath.h">
+      <Filter>Tools\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -697,6 +700,9 @@
     </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="glmath.cpp">
+      <Filter>Tools\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

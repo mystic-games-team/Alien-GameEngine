@@ -73,6 +73,15 @@ update_status ModuleCamera3D::Update(float dt)
 }
 
 // -----------------------------------------------------------------
+void ModuleCamera3D::Move(const float3& Movement)
+{
+	fake_camera->Position += Movement;
+	fake_camera->Reference += Movement;
+
+	fake_camera->CalculateViewMatrix();
+}
+
+// -----------------------------------------------------------------
 void ModuleCamera3D::Look(const float3& Position, const float3& Reference, bool RotateAroundReference)
 {
 	fake_camera->Position = Position;

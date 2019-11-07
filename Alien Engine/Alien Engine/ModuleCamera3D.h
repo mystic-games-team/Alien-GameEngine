@@ -13,6 +13,7 @@ public:
 
 	bool Start();
 	update_status Update(float dt);
+	void Move(const float3& Movement);
 	bool CleanUp();
 
 	void Look(const float3 &Position, const float3 &Reference, bool RotateAroundReference = false);
