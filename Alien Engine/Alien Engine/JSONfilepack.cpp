@@ -47,24 +47,6 @@ bool JSONfilepack::GetBoolean(const std::string& name)
 	return json_object_dotget_boolean(object, name.data());
 }
 
-void JSONfilepack::SetArrayNumber(const std::string& name, const double& number)
-{
-	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
-	if (arr == nullptr) {
-		JSON_Value* new_val = json_value_init_array();
-		arr = json_value_get_array(new_val);
-		//json_array_clear(arr);
-		json_object_dotset_value(save_object, name.data(), new_val);
-	}
-	json_array_append_number(arr, number);
-}
-
-double JSONfilepack::GetArrayNumber(const std::string& name, const uint& index)
-{
-	JSON_Array* arr = json_object_dotget_array(object, name.data());
-	return json_array_get_number(arr, index);
-}
-
 void JSONfilepack::SetColor(const std::string& name, const Color& color)
 {
 	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
@@ -153,7 +135,7 @@ Quat JSONfilepack::GetQuat(const std::string& name)
 	return quat;
 }
 
-void JSONfilepack::SetNumberArray(const std::string& name, double* numbers, uint size)
+void JSONfilepack::SetNumberArray(const std::string& name, float* numbers, uint size)
 {
 	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
 	if (arr == nullptr) {
@@ -169,18 +151,49 @@ void JSONfilepack::SetNumberArray(const std::string& name, double* numbers, uint
 	}
 }
 
-double* JSONfilepack::GetNumberArray(const std::string& name)
+float* JSONfilepack::GetNumberArray(const std::string& name)
 {
 	JSON_Array* arr = json_object_dotget_array(object, name.data());
 	
 	uint size = json_array_get_count(arr);
 
-	double* numbers = new double[size];
+	float* numbers = new float[size];
 	
 	for (uint i = 0; i < size; ++i) {
 		numbers[i] = json_array_get_number(arr, i);
 	}
 	
+	return numbers;
+}
+
+void JSONfilepack::SetUintArray(const std::string& name, uint* numbers, uint size)
+{
+	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
+	if (arr == nullptr) {
+		JSON_Value* new_val = json_value_init_array();
+		arr = json_value_get_array(new_val);
+		json_object_dotset_value(save_object, name.data(), new_val);
+	}
+	else {
+		json_array_clear(arr);
+	}
+	for (uint i = 0; i < size; ++i) {
+		json_array_append_number(arr, numbers[i]);
+	}
+}
+
+uint* JSONfilepack::GetUintArray(const std::string& name)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+
+	uint size = json_array_get_count(arr);
+
+	uint* numbers = new uint[size];
+
+	for (uint i = 0; i < size; ++i) {
+		numbers[i] = json_array_get_number(arr, i);
+	}
+
 	return numbers;
 }
 

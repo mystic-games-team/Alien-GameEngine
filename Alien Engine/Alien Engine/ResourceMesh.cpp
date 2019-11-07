@@ -48,20 +48,13 @@ void ResourceMesh::CreateMetaData()
 
 		// transformations
 		// pos
-		meta->SetArrayNumber("Mesh.Position", pos.x);
-		meta->SetArrayNumber("Mesh.Position", pos.y);
-		meta->SetArrayNumber("Mesh.Position", pos.z);
+		meta->SetFloat3("Mesh.Position", pos);
 
 		// scale
-		meta->SetArrayNumber("Mesh.Scale", scale.x);
-		meta->SetArrayNumber("Mesh.Scale", scale.y);
-		meta->SetArrayNumber("Mesh.Scale", scale.z);
+		meta->SetFloat3("Mesh.Scale", scale);
 
 		// rot
-		meta->SetArrayNumber("Mesh.Rotation", rot.x);
-		meta->SetArrayNumber("Mesh.Rotation", rot.y);
-		meta->SetArrayNumber("Mesh.Rotation", rot.z);
-		meta->SetArrayNumber("Mesh.Rotation", rot.w);
+		meta->SetQuat("Mesh.Rotation", rot);
 
 		// ranges
 		meta->SetNumber("Mesh.NumVertex", num_vertex);
@@ -69,14 +62,10 @@ void ResourceMesh::CreateMetaData()
 		meta->SetNumber("Mesh.NumFaces", num_faces);
 
 		// vertex
-		for (uint i = 0; i < num_vertex * 3; ++i) {
-			meta->SetArrayNumber("Mesh.Vertex", vertex[i]);
-		}
-
+		meta->SetNumberArray("Mesh.Vertex", vertex, num_vertex * 3);
+		
 		// index
-		for (uint i = 0; i < num_index; ++i) {
-			meta->SetArrayNumber("Mesh.Index", index[i]);
-		}
+		meta->SetUintArray("Mesh.Index", index, num_index);
 
 		// set a bolean to know if it has normals
 		meta->SetBoolean("Mesh.HasNormals", (normals != nullptr ? true : false));
@@ -84,17 +73,13 @@ void ResourceMesh::CreateMetaData()
 		// normals
 		if (normals != nullptr) {
 			// normals
-			for (uint i = 0; i < num_vertex * 3; ++i) {
-				meta->SetArrayNumber("Mesh.Normals", normals[i]);
-			}
+			meta->SetNumberArray("Mesh.Normals", normals, num_vertex * 3);
+
 			// center point
-			for (uint i = 0; i < num_faces * 3; ++i) {
-				meta->SetArrayNumber("Mesh.CenterPoint", center_point[i]);
-			}
+			meta->SetNumberArray("Mesh.CenterPoint", center_point, num_faces * 3);
+
 			// center point normals
-			for (uint i = 0; i < num_faces * 3; ++i) {
-				meta->SetArrayNumber("Mesh.CenterPointNormals", center_point_normal[i]);
-			}
+			meta->SetNumberArray("Mesh.CenterPointNormals", center_point_normal, num_faces * 3);
 		}
 
 		// set a bolean to know if it has uv
@@ -102,11 +87,8 @@ void ResourceMesh::CreateMetaData()
 
 		// uv
 		if (uv_cords != nullptr) {
-			for (uint i = 0; i < num_vertex * 3; ++i) {
-				meta->SetArrayNumber("Mesh.UV", uv_cords[i]);
-			}
+			meta->SetNumberArray("Mesh.UV", uv_cords, num_vertex * 3);
 		}
-
 
 		meta->FinishSave();
 
@@ -147,20 +129,13 @@ bool ResourceMesh::ReadMetaData(const char* path)
 
 		// transformations
 		// pos
-		pos.x = meta->GetArrayNumber("Mesh.Position", 0);
-		pos.y = meta->GetArrayNumber("Mesh.Position", 1);
-		pos.z = meta->GetArrayNumber("Mesh.Position", 2);
+		pos = meta->GetFloat3("Mesh.Position");
 
 		// scale
-		scale.x = meta->GetArrayNumber("Mesh.Scale", 0);
-		scale.y = meta->GetArrayNumber("Mesh.Scale", 1);
-		scale.z = meta->GetArrayNumber("Mesh.Scale", 2);
+		scale = meta->GetFloat3("Mesh.Scale");
 
 		// rot
-		rot.x = meta->GetArrayNumber("Mesh.Rotation", 0);
-		rot.y = meta->GetArrayNumber("Mesh.Rotation", 1);
-		rot.z = meta->GetArrayNumber("Mesh.Rotation", 2);
-		rot.w = meta->GetArrayNumber("Mesh.Rotation", 3);
+		rot = meta->GetQuat("Mesh.Rotation");
 
 		// ranges
 		num_vertex = meta->GetNumber("Mesh.NumVertex");
@@ -168,48 +143,30 @@ bool ResourceMesh::ReadMetaData(const char* path)
 		num_faces = meta->GetNumber("Mesh.NumFaces");
 
 		// vertex
-		vertex = new float[num_vertex * 3];
-		for (uint i = 0; i < num_vertex * 3; ++i) {
-			vertex[i] = meta->GetArrayNumber("Mesh.Vertex", i);
-		}
+		vertex = (float*)meta->GetNumberArray("Mesh.Vertex");
 
 		// index
-		index = new uint[num_index];
-		for (uint i = 0; i < num_index; ++i) {
-			index[i] = meta->GetArrayNumber("Mesh.Index", i);
-		}
+		index = meta->GetUintArray("Mesh.Index");
 
 		// normals
 		bool has_normals = meta->GetBoolean("Mesh.HasNormals");
 
 		if (has_normals) {
 			// normals
-			normals = new float[num_vertex * 3];
-			for (uint i = 0; i < num_vertex * 3; ++i) {
-				normals[i] = meta->GetArrayNumber("Mesh.Normals", i);
-			}
+			normals = (float*)meta->GetNumberArray("Mesh.Normals");
 
 			// center point
-			center_point = new float[num_faces * 3];
-			for (uint i = 0; i < num_faces * 3; ++i) {
-				center_point[i] = meta->GetArrayNumber("Mesh.CenterPoint", i);
-			}
+			center_point = (float*)meta->GetNumberArray("Mesh.CenterPoint");
 
 			// center point normal
-			center_point_normal = new float[num_faces * 3];
-			for (uint i = 0; i < num_faces * 3; ++i) {
-				center_point_normal[i] = meta->GetArrayNumber("Mesh.CenterPointNormals", i);
-			}
+			center_point_normal = (float*)meta->GetNumberArray("Mesh.CenterPointNormals");
 		}
 
 		// uv
 		bool has_uv = meta->GetBoolean("Mesh.HasUV");
 
 		if (has_uv) {
-			uv_cords = new float[num_vertex * 3];
-			for (uint i = 0; i < num_vertex * 3; ++i) {
-				uv_cords[i] = meta->GetArrayNumber("Mesh.UV", i);
-			}
+			uv_cords = (float*)meta->GetNumberArray("Mesh.UV");
 		}
 
 		InitBuffers();
