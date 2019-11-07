@@ -52,16 +52,19 @@ void ResourceModel::CreateMetaData()
 
 		meta->SetNumber("Model.NumMeshes", meshes_attached.size());
 
+		std::string* meshes_paths = new std::string[meshes_attached.size()];
+
 		std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 		for (; item != meshes_attached.end(); ++item) {
 			if ((*item) != nullptr) {
 				(*item)->CreateMetaData();
 
-				meta->SetArrayString("Model.PathMeshes", (*item)->GetLibraryPath());
-
+				meshes_paths[item - meshes_attached.begin()] = (*item)->GetLibraryPath();
 				LOG("Created alienMesh file %s", (*item)->GetLibraryPath());
 			}
 		}
+		meta->SetArrayString("Model.PathMeshes", meshes_paths, meshes_attached.size());
+		delete[] meshes_paths;
 		// Create the file
 		LOG("Created alien file %s", meta_data_path.data());
 
@@ -88,18 +91,20 @@ bool ResourceModel::ReadMetaData(const char* path)
 
 		name = meta->GetString("Model.Name");
 
+		std::string* mesh_path = meta->GetArrayString("Model.PathMeshes");
+
 		for (uint i = 0; i < num_meshes; ++i) {
-			std::string mesh_path = meta->GetArrayString("Model.PathMeshes", i);
+			
 			ResourceMesh* r_mesh = new ResourceMesh();
-			if (r_mesh->ReadMetaData(mesh_path.data())) {
+			if (r_mesh->ReadMetaData(mesh_path[i].data())) {
 				meshes_attached.push_back(r_mesh);
 			}
 			else {
-				LOG("Error loading %s", mesh_path.data());
+				LOG("Error loading %s", mesh_path[i].data());
 				delete r_mesh;
 			}
 		}
-
+		delete[] mesh_path;
 		App->resources->AddResource(this);
 	}
 

@@ -43,8 +43,8 @@ public:
 	void SetShortcutCodes(const std::string& name, uint codes[3]);
 	SDL_Scancode* GetShortcutCodes(const std::string& name);
 
-	void SetArrayString(const std::string& name, const std::string& string_parameter);
-	const char* GetArrayString(const std::string& name, const uint& index);
+	void SetArrayString(const std::string& name, std::string* strings, uint size);
+	std::string* GetArrayString(const std::string& name);
 
 	void SetString(const std::string& name, const std::string& string_parameter);
 	const char* GetString(const std::string& name);

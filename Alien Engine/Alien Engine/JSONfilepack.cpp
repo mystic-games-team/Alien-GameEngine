@@ -228,22 +228,35 @@ SDL_Scancode* JSONfilepack::GetShortcutCodes(const std::string& name)
 	return codes;
 }
 
-void JSONfilepack::SetArrayString(const std::string& name, const std::string& string_parameter)
+void JSONfilepack::SetArrayString(const std::string& name, std::string* strings, uint size)
 {
 	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
 		arr = json_value_get_array(new_val);
-
 		json_object_dotset_value(save_object, name.data(), new_val);
 	}
-	json_array_append_string(arr, string_parameter.data());
+	else {
+		json_array_clear(arr);
+	}
+	for (uint i = 0; i < size; ++i) {
+		json_array_append_string(arr, strings[i].data());
+	}
 }
 
-const char* JSONfilepack::GetArrayString(const std::string& name, const uint& index)
+std::string* JSONfilepack::GetArrayString(const std::string& name)
 {
 	JSON_Array* arr = json_object_dotget_array(object, name.data());
-	return json_array_get_string(arr, index);
+
+	uint size = json_array_get_count(arr);
+
+	std::string* strings = new std::string[size];
+
+	for (uint i = 0; i < size; ++i) {
+		strings[i] = json_array_get_string(arr, i);
+	}
+
+	return strings;
 }
 
 void JSONfilepack::SetString(const std::string& name, const std::string& string_parameter)
