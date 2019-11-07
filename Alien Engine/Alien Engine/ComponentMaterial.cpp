@@ -53,11 +53,13 @@ void ComponentMaterial::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Text("Texture Information");
 
+		static ResourceTexture* selected_texture = nullptr;
 		if (texture != nullptr)
 		{
 			ImGui::SameLine(220, 15);
 			if (ImGui::Button("Change Texture", { 120,20 })) {
 				change_texture_menu = true;
+				selected_texture = texture;
 			}
 
 			ImGui::SameLine(140, 15);
@@ -83,21 +85,11 @@ void ComponentMaterial::DrawInspector()
 			ImGui::SameLine(220, 15);
 			if (ImGui::Button("Add Texture", { 120,20 })) {
 				change_texture_menu = true;
+				selected_texture = texture;
 			}
 		}
 
 		if (change_texture_menu) {
-			/*_________________________________________________________________*/
-			static ResourceTexture* tex = nullptr;
-			static bool first = true;
-			if (first) { // SAD need to think what to do here, this sucks :D SAD
-				if (texture == nullptr && !App->resources->resources.empty())
-					tex = static_cast<ResourceTexture*>(App->resources->resources.front()); // checkers
-				else tex = texture;
-				first = false;
-			}
-			/*_________________________________________________________________*/
-
 			ImGui::OpenPopup("Textures Loaded");
 			ImGui::SetNextWindowSize({ 522,570 });
 			if (ImGui::BeginPopupModal("Textures Loaded", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
@@ -107,20 +99,20 @@ void ComponentMaterial::DrawInspector()
 				ImGui::Text("Texture Selected");
 				ImGui::Text("");
 				ImGui::SameLine(170);
-				if (tex != nullptr) {
-					ImGui::Image((ImTextureID)tex->id, { 150,150 });
+				if (selected_texture != nullptr) {
+					ImGui::Image((ImTextureID)selected_texture->id, { 150,150 });
 					ImGui::Spacing();
 					ImGui::Text("");
 					ImGui::SameLine(150);
-					ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", tex->width);
-					ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", tex->height);
+					ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", selected_texture->width);
+					ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", selected_texture->height);
 					ImGui::Text("");
 					ImGui::SameLine(112);
-					ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", tex->GetAssetsPath());
+					ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", selected_texture->GetAssetsPath());
 				}
 				ImGui::Spacing();
-				if (ImGui::BeginChild("##TexturesSelectorChild", { 492,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
 
+				if (ImGui::BeginChild("##TexturesSelectorChild", { 492,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {	
 					ImGui::Columns(3, 0, false);
 					ImGui::SetColumnWidth(0, 156);
 					ImGui::SetColumnWidth(1, 156);
@@ -128,13 +120,12 @@ void ComponentMaterial::DrawInspector()
 					
 					std::vector<Resource*>::iterator item = App->resources->resources.begin();
 					for (; item != App->resources->resources.end(); ++item) {
-						if (*item != nullptr && static_cast<ResourceTexture*>(*item)->is_custom) {
+						if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && static_cast<ResourceTexture*>(*item)->is_custom) {
 							ImGui::ImageButton((ImTextureID)static_cast<ResourceTexture*>(*item)->id, { 140,140 });
 							if (ImGui::IsItemClicked()) {
-								tex = static_cast<ResourceTexture*>(*item);
+								selected_texture = static_cast<ResourceTexture*>(*item);
 							}
 							ImGui::NextColumn();
-
 						}
 					}
 
@@ -144,11 +135,13 @@ void ComponentMaterial::DrawInspector()
 				ImGui::Text("");
 				ImGui::SameLine(377);
 				if (ImGui::Button("Apply", { 120,20 })) {
-					texture = tex;
+					texture = selected_texture;
+					selected_texture = nullptr;
 					change_texture_menu = false;
 				}
 				ImGui::SameLine(237);
 				if (ImGui::Button("Cancel", { 120,20 })) {
+					selected_texture = nullptr;
 					change_texture_menu = false;
 				}
 				ImGui::EndPopup();

@@ -267,14 +267,6 @@ ResourceTexture* ModuleImporter::LoadEngineTexture(const char* path)
 {
 	ResourceTexture* texture = nullptr;
 
-	std::vector<Resource*>::iterator item = App->resources->resources.begin();
-	for (; item != App->resources->resources.end(); ++item) {
-		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && App->StringCmp((*item)->GetAssetsPath(), path)) {
-			LOG("This texture was already loaded");
-			return (static_cast<ResourceTexture*>(*item));
-		}
-	}
-
 	ILuint new_image_id = 0;
 	ilGenImages(1, &new_image_id);
 	ilBindImage(new_image_id);
@@ -320,7 +312,7 @@ void ModuleImporter::LoadTextureToResource(const char* path, ResourceTexture* te
 		iluFlipImage();
 
 		texture->id = ilutGLBindTexImage();
-		texture->is_custom = false;
+		texture->is_custom = true;
 		texture->width = ilGetInteger(IL_IMAGE_WIDTH);
 		texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
 

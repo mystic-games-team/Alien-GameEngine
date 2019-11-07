@@ -57,7 +57,7 @@ void ResourceTexture::CreateMetaData()
 				}
 
 				id = ilutGLBindTexImage();
-				is_custom = false;
+				is_custom = true;
 				width = ilGetInteger(IL_IMAGE_WIDTH);
 				height = ilGetInteger(IL_IMAGE_HEIGHT);
 
