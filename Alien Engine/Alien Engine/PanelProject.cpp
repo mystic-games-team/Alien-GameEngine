@@ -15,7 +15,7 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 
 	go_back_folder.name = "Go Back";
 	go_back_folder.is_file = false;
-	go_back_folder.icon = App->resources->icons.folder;
+	go_back_folder.icon = App->resources->icons.return_icon;
 	go_back_folder.path.clear();
 	
 
@@ -125,7 +125,7 @@ void PanelProject::SeeFiles()
 			}
 			
 			// go back a folder
-			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
+			if (ImGui::IsItemClicked()) {
 				current_active_folder = current_active_folder->parent;
 				ImGui::EndChild();
 				return;
