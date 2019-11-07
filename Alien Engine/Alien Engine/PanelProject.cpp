@@ -6,7 +6,6 @@
 #include "imgui/imgui_internal.h"
 #include "ResourceModel.h"
 
-
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 
@@ -263,8 +262,6 @@ void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 
 		if (!current_active_file->is_base_file) { // so can not be modified
 			if (ImGui::MenuItem("Delete")) {
-				// TODO: delete
-				// Delete selected asset? You can not undo this action
 				to_delete_menu = true;
 			}
 			if (ImGui::MenuItem("Rename")) {
@@ -273,7 +270,6 @@ void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 		}
 		if (ImGui::MenuItem("Copy Path")) {
 			// TODO: copy path
-
 		}
 		ImGui::EndPopup();
 	}
@@ -403,7 +399,6 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 								break;
 							}
 						}
-						// TODO: dont delete, just change paths of children of the node moved
 						node->DeleteChildren();
 						App->file_system->DiscoverEverythig(node);
 						// TODO: look what has been moved and change this to meta
@@ -425,7 +420,6 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 								break;
 							}
 						}
-						// TODO: dont delete, just change paths of children of the node moved
 						node->DeleteChildren();
 						App->file_system->DiscoverEverythig(node);
 						// TODO: look what has been moved and change this to meta
@@ -444,7 +438,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						rename(std::string(App->file_system->GetPathWithoutExtension(std::string(node_to_move->path + node_to_move->name)) + "_meta.alien").data(), std::string(App->file_system->GetPathWithoutExtension(std::string(node_to_move->parent->parent->path + node_to_move->name)) + "_meta.alien").data());
 
 						FileNode* next_parent = node_to_move->parent->parent;
-						// TODO: dont delete, just change paths of children of the node moved
+
 						next_parent->DeleteChildren();
 						App->file_system->DiscoverEverythig(next_parent);
 						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
@@ -460,7 +454,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 					if (!std::experimental::filesystem::exists(node_to_move->path.data())) {
 						FileNode* next_parent = node_to_move->parent->parent;
 						std::string actual_folder_path = current_active_folder->path;
-						// TODO: dont delete, just change paths of children of the node moved
+
 						next_parent->DeleteChildren();
 						App->file_system->DiscoverEverythig(next_parent);
 						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);

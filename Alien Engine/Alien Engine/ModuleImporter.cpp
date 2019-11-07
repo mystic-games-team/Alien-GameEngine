@@ -309,6 +309,41 @@ ResourceTexture* ModuleImporter::LoadEngineTexture(const char* path)
 	return texture;
 }
 
+void ModuleImporter::LoadTextureToResource(const char* path, ResourceTexture* texture)
+{
+	ILuint new_image_id = 0;
+	ilGenImages(1, &new_image_id);
+	ilBindImage(new_image_id);
+
+	ilutRenderer(ILUT_OPENGL);
+
+	if (ilLoadImage(path)) {
+		iluFlipImage();
+
+		texture->id = ilutGLBindTexImage();
+		texture->is_custom = false;
+		texture->width = ilGetInteger(IL_IMAGE_WIDTH);
+		texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glBindTexture(GL_TEXTURE_2D, texture->id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		LOG("Texture successfully loaded: %s", path);
+	}
+	else {
+		LOG("Error while loading image in %s", path);
+		LOG("Error: %s", ilGetString(ilGetError()));
+	}
+
+	ilDeleteImages(1, &new_image_id);
+}
+
 void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 {
 	GameObject* selected = App->objects->GetSelectedObject();

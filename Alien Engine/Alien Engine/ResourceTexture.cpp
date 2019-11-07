@@ -70,10 +70,17 @@ bool ResourceTexture::ReadMetaData(const char* path)
 {
 	bool ret = true;
 
+	meta_data_path = path;
+
 	ID = std::stoull(App->file_system->GetBaseFileName(path));
 
+	std::string texture_path = LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds";
+
+	App->importer->LoadTextureToResource(texture_path.data(), this);
+
+	//set paths
 	meta_data_path = path;
-	// read the meta data 
+
 	App->resources->AddResource(this);
 
 	return ret;

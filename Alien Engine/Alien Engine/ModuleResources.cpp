@@ -153,8 +153,20 @@ FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* 
 
 void ModuleResources::ReadAllMetaData()
 {
+	SDL_assert((uint)ResourceType::RESOURECE_MAX == 3); // load the new resource
+
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
+
+	App->file_system->DiscoverFiles(LIBRARY_TEXTURES_FOLDER, files, directories);
+
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceTexture* texture = new ResourceTexture();
+		texture->ReadMetaData(std::string(LIBRARY_TEXTURES_FOLDER + files[i]).data());
+	}
+
+	files.clear();
+	directories.clear();
 
 	App->file_system->DiscoverFiles(LIBRARY_MODELS_FOLDER, files, directories);
 
@@ -162,8 +174,6 @@ void ModuleResources::ReadAllMetaData()
 		ResourceModel* model = new ResourceModel();
 		model->ReadMetaData(std::string(LIBRARY_MODELS_FOLDER + files[i]).data());
 	}
-
-	// TODO: Textures
 }
 
 
