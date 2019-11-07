@@ -33,7 +33,7 @@ public:
 	FileDropType type = FileDropType::UNKNOWN;
 
 	void DeleteChildren();
-	void DeleteNodeData();
+	void DeleteNodeData(bool delete_folder = true);
 
 	FileNode* FindChildrenByPath(const std::string& path); // just children, NO children of children!!!
 

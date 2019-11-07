@@ -1,6 +1,9 @@
 #include "FileNode.h"
 #include "Application.h"
 
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include <experimental/filesystem>
+
 FileNode::FileNode()
 {
 }
@@ -48,7 +51,7 @@ void FileNode::DeleteChildren()
 	children.clear();
 }
 
-void FileNode::DeleteNodeData()
+void FileNode::DeleteNodeData(bool delete_folder)
 {
 
 	if (is_file) {
@@ -68,6 +71,20 @@ void FileNode::DeleteNodeData()
 	}
 	else {
 
+		std::vector<FileNode*>::iterator item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr)
+				(*item)->DeleteNodeData(false);
+		}
+
+		if (delete_folder) {			
+			if (std::experimental::filesystem::remove_all(path.data())) {
+				LOG("Folder removed successfully %s", path.data());
+			}
+			else {
+				LOG("Could not remove folder %s", path.data());
+			}
+		}
 	}
 }
 

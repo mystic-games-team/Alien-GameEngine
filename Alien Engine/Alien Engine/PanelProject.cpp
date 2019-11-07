@@ -229,25 +229,9 @@ void PanelProject::DeleteSelectedAssetPopUp()
 			if (ImGui::Button("Delete")) {
 				std::vector<FileNode*>::iterator item = current_active_folder->children.begin();
 
-				if (current_active_file->is_file) {
-					current_active_file->DeleteNodeData();
-				}
-				else {
-					// TODO: iter all files and remove meta in LIBRARY
-					//For the folders 
-						_SHFILEOPSTRUCTA files;
-						files.wFunc = FO_DELETE;
-
-						static char from_[300];
-						strcpy(from_, current_active_file->path.data());
-						memcpy(from_ + strlen(from_), "\0\0", 2);
-						files.pFrom = from_;
-
-						if (SHFileOperation(&files) == 0) {
-
-						}
-				}
-
+				// this removes all meta data of the nodes
+				current_active_file->DeleteNodeData();
+				
 				for (; item != current_active_folder->children.end(); ++item) {
 					if (*item != nullptr && *item == current_active_file) {
 						delete* item;
