@@ -206,15 +206,74 @@ void PanelProject::DeleteSelectedAssetPopUp()
 {
 	if (to_delete_menu && current_active_file != nullptr) {
 		ImGui::OpenPopup("Delete Selected Asset?");
-		ImGui::SetNextWindowSize({ 500,600 });
+		ImGui::SetNextWindowSize({ 410,100 });
 		if (ImGui::BeginPopupModal("Delete Selected Asset?", &to_delete_menu, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 		{
+			std::string path;
 			if (current_active_file->is_file)
-				ImGui::Text(std::string(current_active_file->path + current_active_file->name).data());
+				path = std::string(current_active_file->path + current_active_file->name).data();
 			else
-				ImGui::Text(current_active_file->path.data());
+				path = current_active_file->path.data();
+
+			ImGui::Text(path.data());
 
 			ImGui::Text("You cannot undo this action.");
+
+			ImGui::Spacing();
+			ImGui::Spacing();
+
+			ImGui::NewLine();
+			ImGui::SameLine(150);
+			if (ImGui::Button("Delete")) {
+				std::vector<FileNode*>::iterator item = current_active_folder->children.begin();
+
+
+				if (current_active_file->is_file) {
+					remove(path.data());
+
+					std::string meta_path = App->file_system->GetPathWithoutExtension(path.data()) + "_meta.alien";
+
+					u64 ID = App->resources->GetIDFromAlienPath(meta_path.data());
+
+					ResourceModel* resource_to_delete = (ResourceModel*)App->resources->GetResourceWithID(ID);
+
+					// TODO: remove meta data
+				}
+				else {
+					// TODO: iter all files and remove meta in LIBRARY
+					/*
+					For the folders _SHFILEOPSTRUCTA files;
+						files.wFunc = FO_MOVE;
+
+						static char from_[300];
+						strcpy(from_, node_to_move->path.data());
+						memcpy(from_ + strlen(from_), "\0\0", 2);
+						files.pFrom = from_;
+
+						static char to_[300];
+						strcpy(to_, std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
+						memcpy(to_ + strlen(to_), "\0\0", 2);
+						files.pTo = to_;
+
+						if (SHFileOperation(&files) == 0) {
+					*/
+				}
+
+				for (; item != current_active_folder->children.end(); ++item) {
+					if (*item != nullptr && *item == current_active_file) {
+						delete* item;
+						*item = nullptr;
+						current_active_folder->children.erase(item);
+						break;
+					}
+				}
+				current_active_file = nullptr;
+				to_delete_menu = false;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel")) {
+				to_delete_menu = false;
+			}
 
 			ImGui::EndPopup();
 		}

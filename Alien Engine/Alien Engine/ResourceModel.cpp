@@ -73,6 +73,8 @@ bool ResourceModel::ReadMetaData(const char* path)
 {
 	bool ret = true;
 
+	//ID = std::stoi(App->file_system->GetBaseFileName(path));
+
 	JSON_Value* value = json_parse_file(path);
 	JSON_Object* object = json_value_get_object(value);
 

@@ -854,6 +854,11 @@ FileNode::FileNode(const std::string& path, const std::string& name, bool is_fil
 	SetIcon();
 }
 
+FileNode::~FileNode()
+{
+	// TODO: clean up
+}
+
 void FileNode::DeleteChildren()
 {
 	std::vector<FileNode*>::iterator item = children.begin();
