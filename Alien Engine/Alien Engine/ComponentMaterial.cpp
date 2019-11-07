@@ -49,7 +49,6 @@ void ComponentMaterial::DrawInspector()
 		ImGui::Separator();
 		ImGui::Spacing();
 
-
 		ImGui::Spacing();
 		ImGui::Text("Texture Information");
 

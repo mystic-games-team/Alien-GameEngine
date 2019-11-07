@@ -252,8 +252,6 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		return texture;
 	}
 	else {
-		std::string meta_path = std::string((LIBRARY_TEXTURES_FOLDER)+std::to_string(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data())) + std::string(".dds")).data();
-
 		texture = new ResourceTexture(path);
 
 		texture->CreateMetaData();
