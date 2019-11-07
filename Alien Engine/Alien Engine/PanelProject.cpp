@@ -331,6 +331,9 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 					std::string next_meta_name = App->file_system->GetPathWithoutExtension(current_active_folder->children[i]->path + name_before_rename) + "_meta.alien";
 					rename(current_meta_path.data(), next_meta_name.data());
 				}
+				else {
+					current_active_folder->children[i]->path = current_active_folder->children[i]->parent->path + name_before_rename + "/";
+				}
 				current_active_folder->children[i]->name = name_before_rename;
 
 				LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
