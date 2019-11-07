@@ -43,6 +43,7 @@ public:
 	bool CreateNewModelInstanceOf(const char* path);
 
 	u64 GetIDFromAlienPath(const char* path);
+	Resource* GetResourceWithID(const u64& ID);
 
 	void AddNewFileNode(const std::string& path, bool is_file);
 

@@ -193,11 +193,91 @@ void PanelProject::SeeFiles()
 
 			ImGui::NextColumn();
 		}
+
 		// right click in window
 		RightClickToWindow(pop_up_item);
 	}
 	ImGui::EndChild();
 
+	DeleteSelectedAssetPopUp();
+}
+
+void PanelProject::DeleteSelectedAssetPopUp()
+{
+	if (to_delete_menu && current_active_file != nullptr) {
+		ImGui::OpenPopup("Delete Selected Asset?");
+		ImGui::SetNextWindowSize({ 410,100 });
+		if (ImGui::BeginPopupModal("Delete Selected Asset?", &to_delete_menu, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			std::string path;
+			if (current_active_file->is_file)
+				path = std::string(current_active_file->path + current_active_file->name).data();
+			else
+				path = current_active_file->path.data();
+
+			ImGui::Text(path.data());
+
+			ImGui::Text("You cannot undo this action.");
+
+			ImGui::Spacing();
+			ImGui::Spacing();
+
+			ImGui::NewLine();
+			ImGui::SameLine(150);
+			if (ImGui::Button("Delete")) {
+				std::vector<FileNode*>::iterator item = current_active_folder->children.begin();
+
+
+				if (current_active_file->is_file) {
+					remove(path.data());
+
+					std::string meta_path = App->file_system->GetPathWithoutExtension(path.data()) + "_meta.alien";
+
+					u64 ID = App->resources->GetIDFromAlienPath(meta_path.data());
+
+					ResourceModel* resource_to_delete = (ResourceModel*)App->resources->GetResourceWithID(ID);
+
+					// TODO: remove meta data
+				}
+				else {
+					// TODO: iter all files and remove meta in LIBRARY
+					/*
+					For the folders _SHFILEOPSTRUCTA files;
+						files.wFunc = FO_MOVE;
+
+						static char from_[300];
+						strcpy(from_, node_to_move->path.data());
+						memcpy(from_ + strlen(from_), "\0\0", 2);
+						files.pFrom = from_;
+
+						static char to_[300];
+						strcpy(to_, std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
+						memcpy(to_ + strlen(to_), "\0\0", 2);
+						files.pTo = to_;
+
+						if (SHFileOperation(&files) == 0) {
+					*/
+				}
+
+				for (; item != current_active_folder->children.end(); ++item) {
+					if (*item != nullptr && *item == current_active_file) {
+						delete* item;
+						*item = nullptr;
+						current_active_folder->children.erase(item);
+						break;
+					}
+				}
+				current_active_file = nullptr;
+				to_delete_menu = false;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel")) {
+				to_delete_menu = false;
+			}
+
+			ImGui::EndPopup();
+		}
+	}
 }
 
 void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
@@ -209,6 +289,8 @@ void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 			if (ImGui::MenuItem("Delete")) {
 				// TODO: delete
 				// Delete selected asset? You can not undo this action
+				to_delete_menu = true;
+
 			}
 			if (ImGui::MenuItem("Rename")) {
 				current_active_folder->children[i]->changing_name = true;
@@ -245,18 +327,9 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 
 			if (rename(std::string(current_active_folder->path + std::string("/") + current_active_folder->children[i]->name).data(), std::string(current_active_folder->path + std::string("/") + name_before_rename).data()) == 0) {
 				if (current_active_folder->children[i]->is_file) {
-					switch (current_active_folder->children[i]->type) {
-					case FileDropType::MODEL3D: {
-						std::string meta_path = LIBRARY_MODELS_FOLDER + App->file_system->GetCurrentFolder(current_active_folder->children[i]->path) + App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()) + ".alienModel";
-						App->resources->SetNewMetaName(name, meta_path, current_active_folder->children[i]->type); // TODO: change the meta data name
-						break; }
-					case FileDropType::TEXTURE:
-						// TODO: 
-						break;
-					default:
-						LOG("Drop Type to change name UNNWON");
-						break;
-					}
+					std::string current_meta_path = App->file_system->GetPathWithoutExtension(current_active_folder->children[i]->path + current_active_folder->children[i]->name) + "_meta.alien";
+					std::string next_meta_name = App->file_system->GetPathWithoutExtension(current_active_folder->children[i]->path + name_before_rename) + "_meta.alien";
+					rename(current_meta_path.data(), next_meta_name.data());
 				}
 				current_active_folder->children[i]->name = name_before_rename;
 

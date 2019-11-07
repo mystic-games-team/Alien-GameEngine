@@ -114,6 +114,15 @@ u64 ModuleResources::GetIDFromAlienPath(const char* path)
 	return ID;
 }
 
+Resource* ModuleResources::GetResourceWithID(const u64& ID)
+{
+	Resource* ret = nullptr;
+
+
+
+	return ret;
+}
+
 void ModuleResources::AddNewFileNode(const std::string& path, bool is_file)
 {
 	std::string folder = App->file_system->GetCurrentHolePathFolder(path);
