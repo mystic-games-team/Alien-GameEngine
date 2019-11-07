@@ -47,14 +47,20 @@ void ResourceTexture::CreateMetaData()
 		else {
 			ILuint image_size;
 			ILubyte* image_data;
-			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
-			image_size = ilSaveL(IL_DDS, NULL, 0); // Get the size of the data buffer
+			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+			image_size = ilSaveL(IL_DDS, NULL, 0); 
 			if (image_size > 0) {
-				image_data = new ILubyte[image_size]; // allocate data buffer
-				if (ilSaveL(IL_DDS, image_data, image_size) > 0) {// Save to buffer with the ilSaveIL function
+				image_data = new ILubyte[image_size]; 
+				if (ilSaveL(IL_DDS, image_data, image_size) > 0) {
 					App->file_system->SaveUnique(output, image_data, image_size, LIBRARY_TEXTURES_FOLDER, std::to_string(ID).data(), ".dds");
 					meta_data_path = output;
 				}
+
+				id = ilutGLBindTexImage();
+				is_custom = false;
+				width = ilGetInteger(IL_IMAGE_WIDTH);
+				height = ilGetInteger(IL_IMAGE_HEIGHT);
+
 				RELEASE_ARRAY(image_data);
 			}
 		}

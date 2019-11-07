@@ -237,30 +237,29 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 	if (!has_been_dropped && !App->file_system->Exists(path)) {
 		return nullptr;
 	}
+	std::string meta_path_in_assets = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
+	if (App->file_system->Exists(meta_path_in_assets.data())) {
 
-	std::vector<Resource*>::iterator item = App->resources->resources.begin();
-	for (; item != App->resources->resources.end(); ++item) {
-		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && App->StringCmp((*item)->GetAssetsPath(), path)) {
-			if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
-				ApplyTextureToSelectedObject(static_cast<ResourceTexture*>(*item));
-			}
-			LOG("This texture was already loaded");
-			return (static_cast<ResourceTexture*>(*item));
+		u64 ID = App->resources->GetIDFromAlienPath(meta_path_in_assets.data());
+
+		texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+
+		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+			ApplyTextureToSelectedObject(texture);
 		}
-	}
+		LOG("This texture was already loaded");
 
-	std::string meta_path = std::string((LIBRARY_TEXTURES_FOLDER)+std::to_string(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data())) + std::string(".dds")).data();
-
-	texture = new ResourceTexture(path);
-
-	if (App->file_system->Exists(meta_path.data())) {
-		texture->ReadMetaData(meta_path.data());
+		return texture;
 	}
 	else {
+		std::string meta_path = std::string((LIBRARY_TEXTURES_FOLDER)+std::to_string(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data())) + std::string(".dds")).data();
+
+		texture = new ResourceTexture(path);
+
 		texture->CreateMetaData();
 		App->resources->AddNewFileNode(path, true);
 	}
-
+	
 	return texture;
 }
 
@@ -347,15 +346,20 @@ void ModuleImporter::LoadTextureToResource(const char* path, ResourceTexture* te
 void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 {
 	GameObject* selected = App->objects->GetSelectedObject();
-	ComponentMaterial* material = (ComponentMaterial*)selected->GetComponent(ComponentType::MATERIAL);
+	if (selected != nullptr) {
+		ComponentMaterial* material = (ComponentMaterial*)selected->GetComponent(ComponentType::MATERIAL);
 
-	if (selected->HasComponent(ComponentType::MESH)) {
-		if (material == nullptr) {
-			material = new ComponentMaterial(selected);
-			selected->AddComponent(material);
+		if (selected->HasComponent(ComponentType::MESH)) {
+			if (material == nullptr) {
+				material = new ComponentMaterial(selected);
+				selected->AddComponent(material);
+			}
+			material->texture = texture;
 		}
-		material->texture = texture;
+		else
+			LOG("Selected GameObject has no mesh");
 	}
+	
 }
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)

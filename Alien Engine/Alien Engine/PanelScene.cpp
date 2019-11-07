@@ -76,19 +76,26 @@ void PanelScene::PanelLogic()
 	// drop project files
 	if (ImGui::BeginDragDropTargetCustom({ min_space.x,min_space.y, max_space.x,max_space.y }, ImGui::GetID(panel_name.data()))) {
 
-		// TODO: drop texture
+		// drop texture
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
 		if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
 			FileNode* node = *(FileNode**)payload->Data;
-			if (node != nullptr && node->type == FileDropType::TEXTURE) {
-				//App->objects->ReparentGameObject(obj, App->objects->base_game_object);
-			}
-		}
 
-		// drop model
-		payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
-		if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
-			FileNode* node = *(FileNode**)payload->Data;
+			// drop texture
+			if (node != nullptr && node->type == FileDropType::TEXTURE) {
+				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+				path += "_meta.alien";
+
+				u64 ID = App->resources->GetIDFromAlienPath(path.data());
+
+				ResourceTexture* texture_dropped = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+
+				if (texture_dropped != nullptr) {
+					App->importer->ApplyTextureToSelectedObject(texture_dropped);
+				}
+			}
+
+			// drop model
 			if (node != nullptr && node->type == FileDropType::MODEL3D) {
 				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
 				path += "_meta.alien";
@@ -98,7 +105,7 @@ void PanelScene::PanelLogic()
 				std::string meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
 
 				if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) { // if it goes here it is because this file wasn't imported yet, so import it now
-					
+
 					App->importer->LoadModelFile(std::string(node->path + node->name).data());
 					ID = App->resources->GetIDFromAlienPath(path.data());
 					meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
