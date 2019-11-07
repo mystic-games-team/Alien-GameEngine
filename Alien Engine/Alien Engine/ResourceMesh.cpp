@@ -121,6 +121,8 @@ bool ResourceMesh::ReadMetaData(const char* path)
 {	
 	bool ret = true;
 
+	ID = std::stoull(App->file_system->GetBaseFileName(path));
+
 	JSON_Value* value = json_parse_file(path);
 	JSON_Object* object = json_value_get_object(value);
 
@@ -221,6 +223,19 @@ bool ResourceMesh::ReadMetaData(const char* path)
 	}
 
 	return ret;
+}
+
+bool ResourceMesh::DeleteMetaData()
+{
+	remove(meta_data_path.data());
+
+	std::vector<Resource*>::iterator position = std::find(App->resources->resources.begin(), App->resources->resources.end(), static_cast<Resource*>(this));
+	if (position != App->resources->resources.end())
+		App->resources->resources.erase(position);
+
+	delete this;
+
+	return true;
 }
 
 void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created)

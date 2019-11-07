@@ -4,6 +4,7 @@
 #include "ResourceTexture.h"
 #include <filesystem>
 #include "imgui/imgui_internal.h"
+#include "ResourceModel.h"
 
 PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -227,7 +228,6 @@ void PanelProject::DeleteSelectedAssetPopUp()
 			if (ImGui::Button("Delete")) {
 				std::vector<FileNode*>::iterator item = current_active_folder->children.begin();
 
-
 				if (current_active_file->is_file) {
 					remove(path.data());
 
@@ -235,9 +235,11 @@ void PanelProject::DeleteSelectedAssetPopUp()
 
 					u64 ID = App->resources->GetIDFromAlienPath(meta_path.data());
 
-					ResourceModel* resource_to_delete = (ResourceModel*)App->resources->GetResourceWithID(ID);
+					remove(meta_path.data());
 
-					// TODO: remove meta data
+					Resource* resource_to_delete = App->resources->GetResourceWithID(ID);
+
+					resource_to_delete->DeleteMetaData();
 				}
 				else {
 					// TODO: iter all files and remove meta in LIBRARY
@@ -290,7 +292,6 @@ void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 				// TODO: delete
 				// Delete selected asset? You can not undo this action
 				to_delete_menu = true;
-
 			}
 			if (ImGui::MenuItem("Rename")) {
 				current_active_folder->children[i]->changing_name = true;

@@ -73,7 +73,7 @@ bool ResourceModel::ReadMetaData(const char* path)
 {
 	bool ret = true;
 
-	//ID = std::stoi(App->file_system->GetBaseFileName(path));
+	ID = std::stoull(App->file_system->GetBaseFileName(path));
 
 	JSON_Value* value = json_parse_file(path);
 	JSON_Object* object = json_value_get_object(value);
@@ -104,6 +104,27 @@ bool ResourceModel::ReadMetaData(const char* path)
 	}
 
 	return ret;
+}
+
+bool ResourceModel::DeleteMetaData()
+{
+	remove(meta_data_path.data());
+
+	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
+	for (; item != meshes_attached.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->DeleteMetaData();
+		}
+	}
+	meshes_attached.clear();
+
+	std::vector<Resource*>::iterator position = std::find(App->resources->resources.begin(), App->resources->resources.end(), static_cast<Resource*>(this));
+	if (position != App->resources->resources.end()) 
+		App->resources->resources.erase(position);
+
+	delete this;
+
+	return true;
 }
 
 void ResourceModel::ChangeFileMetaName(const char* new_name)

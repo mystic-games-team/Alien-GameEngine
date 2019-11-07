@@ -56,39 +56,20 @@ bool ModuleResources::CleanUp()
 
 void ModuleResources::AddResource(Resource* resource)
 {
-	SDL_assert((uint)ResourceType::RESOURECE_MAX == 3); // add new type
-
 	if (resource != nullptr) {
-		switch (resource->GetType())
-		{
-		case ResourceType::RESOURCE_MODEL:
-			if (std::find(resource_models.begin(), resource_models.end(), resource) == resource_models.end())
-				resource_models.push_back((ResourceModel*)resource);
-			break;
-		case ResourceType::RESOURCE_MESH:
-			if (std::find(resource_meshes.begin(), resource_meshes.end(), resource) == resource_meshes.end())
-				resource_meshes.push_back((ResourceMesh*)resource);
-			break;
-		case ResourceType::RESOURCE_TEXTURE:
-			if (std::find(resource_textures.begin(), resource_textures.end(), resource) == resource_textures.end())
-				resource_textures.push_back((ResourceTexture*)resource);
-			break;
-		default:
-			LOG("No resource type");
-			break;
-		}
+		if (std::find(resources.begin(), resources.end(), resource) == resources.end())
+			resources.push_back(resource);
 	}
-
 }
 
 bool ModuleResources::CreateNewModelInstanceOf(const char* path)
 {
 	bool ret = false;
-	std::vector<ResourceModel*>::iterator item = resource_models.begin();
-	for (; item != resource_models.end(); ++item) {
-		if (*item != nullptr) {
+	std::vector<Resource*>::iterator item = resources.begin();
+	for (; item != resources.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_MODEL) {
 			if (App->StringCmp((*item)->GetLibraryPath(), path)) {
-				(*item)->ConvertToGameObjects();
+				static_cast<ResourceModel*>(*item)->ConvertToGameObjects();
 				ret = true;
 				break;
 			}
@@ -116,11 +97,13 @@ u64 ModuleResources::GetIDFromAlienPath(const char* path)
 
 Resource* ModuleResources::GetResourceWithID(const u64& ID)
 {
-	Resource* ret = nullptr;
-
-
-
-	return ret;
+	std::vector<Resource*>::iterator item = resources.begin();
+	for (; item != resources.end(); ++item) {
+		if (*item != nullptr && (*item)->GetID() == ID)
+			return (*item);
+	}
+	LOG("No resource found with ID %i", ID);
+	return nullptr;
 }
 
 void ModuleResources::AddNewFileNode(const std::string& path, bool is_file)
@@ -143,29 +126,6 @@ void ModuleResources::AddNewFileNode(const std::string& path, bool is_file)
 
 	if (App->ui->panel_project != nullptr)
 		App->ui->panel_project->current_active_folder = parent;
-}
-
-void ModuleResources::SetNewMetaName(std::string new_name, std::string meta_user_path, const FileDropType& type)
-{
-	switch (type) {
-	case FileDropType::MODEL3D: {
-		std::vector<ResourceModel*>::iterator item = resource_models.begin();
-		for (; item != resource_models.end(); ++item) {
-			if (*item != nullptr && App->StringCmp(meta_user_path.data(), (*item)->GetLibraryPath())) {
-				(*item)->ChangeFileMetaName(new_name.data());
-				break;
-			}
-		}
-		break; }
-	case FileDropType::TEXTURE:
-		// TODO
-		break;
-	default:
-		LOG("Can not change meta name because of the UNKNOWN type");
-		break;
-	}
-
-
 }
 
 u64 ModuleResources::GetRandomID()

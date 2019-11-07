@@ -91,8 +91,8 @@ void ComponentMaterial::DrawInspector()
 			static ResourceTexture* tex = nullptr;
 			static bool first = true;
 			if (first) { // SAD need to think what to do here, this sucks :D SAD
-				if (texture == nullptr && !App->resources->resource_textures.empty())
-					tex = App->resources->resource_textures.front(); // checkers
+				if (texture == nullptr && !App->resources->resources.empty())
+					tex = static_cast<ResourceTexture*>(App->resources->resources.front()); // checkers
 				else tex = texture;
 				first = false;
 			}
@@ -126,12 +126,12 @@ void ComponentMaterial::DrawInspector()
 					ImGui::SetColumnWidth(1, 156);
 					ImGui::SetColumnWidth(2, 156);
 					
-					std::vector<ResourceTexture*>::iterator item = App->resources->resource_textures.begin();
-					for (; item != App->resources->resource_textures.end(); ++item) {
-						if (*item != nullptr && (*item)->is_custom) {
-							ImGui::ImageButton((ImTextureID)(*item)->id, { 140,140 });
+					std::vector<Resource*>::iterator item = App->resources->resources.begin();
+					for (; item != App->resources->resources.end(); ++item) {
+						if (*item != nullptr && static_cast<ResourceTexture*>(*item)->is_custom) {
+							ImGui::ImageButton((ImTextureID)static_cast<ResourceTexture*>(*item)->id, { 140,140 });
 							if (ImGui::IsItemClicked()) {
-								tex = (*item);
+								tex = static_cast<ResourceTexture*>(*item);
 							}
 							ImGui::NextColumn();
 

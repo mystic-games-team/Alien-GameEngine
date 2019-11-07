@@ -14,6 +14,7 @@ public:
 
 	void CreateMetaData();
 	bool ReadMetaData(const char* path);
+	bool DeleteMetaData();
 
 public:
 

@@ -27,3 +27,8 @@ const ResourceType Resource::GetType() const
 {
 	return type;
 }
+
+const u64& Resource::GetID() const
+{
+	return ID;
+}

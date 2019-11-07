@@ -70,9 +70,25 @@ bool ResourceTexture::ReadMetaData(const char* path)
 {
 	bool ret = true;
 
+	ID = std::stoull(App->file_system->GetBaseFileName(path));
+
 	meta_data_path = path;
 	// read the meta data 
+	App->resources->AddResource(this);
 
 	return ret;
+}
+
+bool ResourceTexture::DeleteMetaData()
+{
+	remove(meta_data_path.data());
+
+	std::vector<Resource*>::iterator position = std::find(App->resources->resources.begin(), App->resources->resources.end(), static_cast<Resource*>(this));
+	if (position != App->resources->resources.end())
+		App->resources->resources.erase(position);
+
+	delete this;
+
+	return true;
 }
 

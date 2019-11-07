@@ -238,14 +238,14 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		return nullptr;
 	}
 
-	std::vector<ResourceTexture*>::iterator item = App->resources->resource_textures.begin();
-	for (; item != App->resources->resource_textures.end(); ++item) {
-		if (*item != nullptr && App->StringCmp((*item)->GetAssetsPath(), path)) {
+	std::vector<Resource*>::iterator item = App->resources->resources.begin();
+	for (; item != App->resources->resources.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && App->StringCmp((*item)->GetAssetsPath(), path)) {
 			if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
-				ApplyTextureToSelectedObject(*item);
+				ApplyTextureToSelectedObject(static_cast<ResourceTexture*>(*item));
 			}
 			LOG("This texture was already loaded");
-			return (*item);
+			return (static_cast<ResourceTexture*>(*item));
 		}
 	}
 
@@ -268,11 +268,11 @@ ResourceTexture* ModuleImporter::LoadEngineTexture(const char* path)
 {
 	ResourceTexture* texture = nullptr;
 
-	std::vector<ResourceTexture*>::iterator item = App->resources->resource_textures.begin();
-	for (; item != App->resources->resource_textures.end(); ++item) {
-		if (*item != nullptr && App->StringCmp((*item)->GetAssetsPath(), path)) {
+	std::vector<Resource*>::iterator item = App->resources->resources.begin();
+	for (; item != App->resources->resources.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && App->StringCmp((*item)->GetAssetsPath(), path)) {
 			LOG("This texture was already loaded");
-			return (*item);
+			return (static_cast<ResourceTexture*>(*item));
 		}
 	}
 

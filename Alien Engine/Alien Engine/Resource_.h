@@ -34,7 +34,9 @@ public:
 
 	virtual void CreateMetaData() {} // when someting is dropped
 	virtual bool ReadMetaData(const char* path) { return true; } // when engine is being inicialized read all meta data
-	virtual bool DeleteMetaData() { return true; } // delete meta
+	virtual bool DeleteMetaData() { return true; } // this deletes the resource too
+
+	const u64& GetID() const;
 
 private:
 

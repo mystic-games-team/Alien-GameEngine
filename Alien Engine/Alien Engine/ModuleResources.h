@@ -47,8 +47,6 @@ public:
 
 	void AddNewFileNode(const std::string& path, bool is_file);
 
-	void SetNewMetaName(std::string new_name, std::string meta_user_path, const FileDropType& type);
-
 	u64 GetRandomID();
 
 private:
@@ -59,9 +57,7 @@ public:
 
 	Icons icons;
 
-	std::vector<ResourceModel*> resource_models;
-	std::vector<ResourceMesh*> resource_meshes;
-	std::vector<ResourceTexture*> resource_textures;
+	std::vector<Resource*> resources;
 
 	FileNode* assets = nullptr;
 };

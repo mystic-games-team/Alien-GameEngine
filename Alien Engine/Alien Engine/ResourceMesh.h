@@ -19,6 +19,7 @@ public:
 
 	void CreateMetaData();
 	bool ReadMetaData(const char* path);
+	bool DeleteMetaData();
 
 	void ConvertToGameObject(std::vector<GameObject*>* objects_created);
 

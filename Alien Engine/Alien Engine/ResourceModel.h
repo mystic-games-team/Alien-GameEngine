@@ -17,6 +17,7 @@ public:
 	// meta data
 	void CreateMetaData();
 	bool ReadMetaData(const char* path);
+	bool DeleteMetaData();
 
 	// change meta name
 	void ChangeFileMetaName(const char* new_name);
