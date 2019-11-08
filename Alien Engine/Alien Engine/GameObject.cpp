@@ -13,8 +13,11 @@ GameObject::GameObject(GameObject* parent)
 	// TODO: random id gameobjects
 	//id = GetRandomIntBetweenTwo(INT_MIN, INT_MAX);
 
+	ID = App->resources->GetRandomID();
+
 	if (parent != nullptr) {
 		this->parent = parent;
+		parentID = parent->ID;
 		parent->AddChild(this);
 	}
 }
@@ -385,10 +388,10 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 	}
 }
 
-GameObject* GameObject::GetGameObjectByID(const int& id)
+GameObject* GameObject::GetGameObjectByID(const u64 & id)
 {
 	GameObject* ret = nullptr;
-	if (id == this->id) {
+	if (id == this->ID) {
 		return this;
 	}
 	std::vector<GameObject*>::iterator item = children.begin();
@@ -470,7 +473,13 @@ void GameObject::SaveObject(JSONArraypack* to_save)
 {
 	// TODO: save with json
 
-	to_save->SetNumber(name, 10);
+	to_save->SetString("Name", name);
+	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ParentID", std::to_string(parentID));
+	to_save->SetBoolean("Enabled", enabled);
+	to_save->SetBoolean("ParentEnabled", parent_enabled);
+	to_save->SetBoolean("Selected", selected);
+	to_save->SetBoolean("ParentSelected", parent_selected);
 
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {

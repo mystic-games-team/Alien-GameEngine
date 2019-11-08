@@ -414,3 +414,13 @@ void JSONArraypack::SetAnotherNode()
 	value = json_value_init_object();
 	json_array_append_value(arr, value);
 }
+
+void JSONArraypack::SetString(const std::string& name, const std::string& string_parameter)
+{
+	json_object_dotset_string(json_value_get_object(value), name.data(), string_parameter.data());
+}
+
+const char* JSONArraypack::GetString(const std::string& name)
+{
+	return json_object_dotget_string(json_value_get_object(value), name.data());
+}

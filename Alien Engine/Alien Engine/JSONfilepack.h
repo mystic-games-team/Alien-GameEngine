@@ -88,6 +88,10 @@ public:
 
 	void SetAnotherNode();
 
+	void SetString(const std::string& name, const std::string& string_parameter);
+
+	const char* GetString(const std::string& name);
+
 private:
 
 	JSON_Array* arr = nullptr;

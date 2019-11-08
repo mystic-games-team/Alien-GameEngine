@@ -62,7 +62,7 @@ public:
 	void SearchToDelete();
 
 	// id's
-	GameObject* GetGameObjectByID(const int& id);
+	GameObject* GetGameObjectByID(const u64 & id);
 
 	// search and return true if exists in its children or children of children bla bla
 	bool Exists(GameObject* object);
@@ -83,7 +83,8 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 	bool enabled = true;
-	int id = 0;
+	u64 ID = 0;
+	u64 parentID = 0;
 
 private:
 

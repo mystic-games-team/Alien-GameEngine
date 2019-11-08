@@ -2,19 +2,40 @@
     "Scene": {
         "GameObjects": [
             {
-                "Light": 10
+                "Name": "BakerHouse",
+                "ID": "15239191124453881008",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false
             },
             {
-                "BakerHouse": 10
+                "Name": "Chimney",
+                "ID": "7621772282223311349",
+                "ParentID": "15239191124453881008",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false
             },
             {
-                "Chimney": 10
+                "Name": "Baker_house",
+                "ID": "14057417457954625046",
+                "ParentID": "15239191124453881008",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false
             },
             {
-                "Baker_house": 10
-            },
-            {
-                "watchtowerHigh": 10
+                "Name": "watchtowerHigh",
+                "ID": "10394315958796140534",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false
             }
         ]
     }
