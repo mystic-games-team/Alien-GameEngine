@@ -62,13 +62,17 @@ void ComponentMaterial::DrawInspector()
 			}
 
 			ImGui::SameLine(140, 15);
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.5F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
 			if (ImGui::Button("Delete", { 60,20 })) {
 				texture = nullptr;
 				ImGui::PopStyleColor();
 				return;
 			}
 
+			ImGui::PopStyleColor();
+			ImGui::PopStyleColor();
 			ImGui::PopStyleColor();
 
 			ImGui::Checkbox("Texture Active", &texture_activated);

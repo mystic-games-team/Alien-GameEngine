@@ -228,6 +228,9 @@ void PanelProject::DeleteSelectedAssetPopUp()
 
 			ImGui::NewLine();
 			ImGui::SameLine(150);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
 			if (ImGui::Button("Delete")) {
 				std::vector<FileNode*>::iterator item = current_active_folder->children.begin();
 
@@ -245,6 +248,9 @@ void PanelProject::DeleteSelectedAssetPopUp()
 				current_active_file = nullptr;
 				to_delete_menu = false;
 			}
+			ImGui::PopStyleColor();
+			ImGui::PopStyleColor();
+			ImGui::PopStyleColor();
 			ImGui::SameLine();
 			if (ImGui::Button("Cancel")) {
 				to_delete_menu = false;
