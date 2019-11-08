@@ -156,7 +156,8 @@ bool ModuleResources::Exists(const char * path, Resource** resource)
 	for (; item != resources.end(); ++item) {
 		if (*item != nullptr && App->StringCmp(App->file_system->GetBaseFileName(path).data(), App->file_system->GetBaseFileName((*item)->GetAssetsPath()).data())) {
 			exists = true;
-			*resource = (*item);
+			if (resource != nullptr)
+				*resource = (*item);
 			break;
 		}
 	}

@@ -507,7 +507,11 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 		break;
 	}
 
-	CopyFromOutsideFS(extern_path, final_path.c_str()); // copy file if doesnt exist
+	std::string normalized = extern_path;
+	NormalizePath(normalized);
+	if (!App->resources->Exists(normalized.data(), nullptr)) {
+		CopyFromOutsideFS(extern_path, final_path.c_str()); // copy file if doesnt exist
+	}
 
 	switch (type) { // call the loader
 	case FileDropType::MODEL3D:
