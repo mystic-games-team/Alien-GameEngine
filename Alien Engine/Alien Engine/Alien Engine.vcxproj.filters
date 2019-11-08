@@ -453,6 +453,9 @@
     <ClInclude Include="FileNode.h">
       <Filter>Tools\OurClassHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="PanelSceneSelector.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -703,6 +706,9 @@
     </ClCompile>
     <ClCompile Include="FileNode.cpp">
       <Filter>Tools\OurClassHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelSceneSelector.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

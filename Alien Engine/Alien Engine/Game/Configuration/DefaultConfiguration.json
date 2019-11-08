@@ -43,6 +43,11 @@
                     224,
                     228
                 ],
+				"PanelSceneSelector": [
+                    22,
+                    224,
+                    228
+                ],
                 "PanelInspector": [
                     16,
                     224,
@@ -79,7 +84,7 @@
                     228
                 ],
                 "PanelScene": [
-                    22,
+                    8,
                     224,
                     228
                 ],

@@ -16,6 +16,7 @@
 #include "PanelLayout.h"
 #include "PanelInspector.h"
 #include "PanelProject.h"
+#include "PanelSceneSelector.h"
 #include "PanelScene.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
@@ -102,6 +103,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	memcpy(panel_project_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate"), size_of_codes);
 	memcpy(panel_hierarchy_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelProject"), size_of_codes);
 	memcpy(panel_console_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelConsole"), size_of_codes);
+	memcpy(panel_scene_selector_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelSceneSelector"), size_of_codes);
 	memcpy(panel_inspector_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelInspector"), size_of_codes);
 	memcpy(panel_layout_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelLayout"), size_of_codes);
 	memcpy(panel_render_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelRender"), size_of_codes);
@@ -117,6 +119,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	if (panel_about != nullptr) {
 		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
 		panel_config->shortcut->SetShortcutKeys(panel_config_codes[0], panel_config_codes[1], panel_config_codes[2]);
+		panel_scene_selector->shortcut->SetShortcutKeys(panel_scene_selector_codes[0], panel_scene_selector_codes[1], panel_scene_selector_codes[2]);
 		panel_project->shortcut->SetShortcutKeys(panel_project_codes[0], panel_project_codes[1], panel_project_codes[2]);
 		panel_console->shortcut->SetShortcutKeys(panel_console_codes[0], panel_console_codes[1], panel_console_codes[2]);
 		panel_render->shortcut->SetShortcutKeys(panel_render_codes[0], panel_render_codes[1], panel_render_codes[2]);
@@ -149,6 +152,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelConsole", (uint*)panel_console->shortcut->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate", (uint*)panel_create_object->shortcut->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelScene", (uint*)panel_scene->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelSceneSelector", (uint*)panel_scene_selector->shortcut->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelLayout", (uint*)panel_layout->shortcut->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.WireframeMode", (uint*)shortcut_wireframe->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.ViewMesh", (uint*)shortcut_view_mesh->GetScancodesArray());
@@ -307,7 +311,7 @@ void ModuleUI::MainMenuBar()
 		{
 			
 		}
-		if (ImGui::MenuItem("Save Scene"))
+		if (ImGui::MenuItem("Save Scene", panel_scene_selector->shortcut->GetNameScancodes()))
 		{
 			
 		}	
@@ -551,6 +555,7 @@ void ModuleUI::InitPanels()
 	panel_create_object = new PanelCreateObject("Create Object", panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
 	panel_inspector = new PanelInspector("Inspector", panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
 	panel_scene = new PanelScene("Scene", panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
+	panel_scene_selector = new PanelSceneSelector("Save", panel_scene_selector_codes[0], panel_scene_selector_codes[1], panel_scene_selector_codes[2]);
 	panel_layout = new PanelLayout("Layout Editor", panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
 
 	panels.push_back(panel_about);
@@ -563,6 +568,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_inspector);
 	panels.push_back(panel_scene);
 	panels.push_back(panel_layout);
+	panels.push_back(panel_scene_selector);
 }
 
 void ModuleUI::UpdatePanels()
