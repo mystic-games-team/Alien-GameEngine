@@ -158,12 +158,9 @@ void ModuleResources::ReadAllMetaData()
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
 
-	App->file_system->DiscoverFiles(LIBRARY_TEXTURES_FOLDER, files, directories);
+	App->file_system->DiscoverFiles(TEXTURES_FOLDER, files, directories);
 
-	for (uint i = 0; i < files.size(); ++i) {
-		ResourceTexture* texture = new ResourceTexture();
-		texture->ReadMetaData(std::string(LIBRARY_TEXTURES_FOLDER + files[i]).data());
-	}
+	ReadTextures(directories, files, TEXTURES_FOLDER);
 
 	files.clear();
 	directories.clear();
@@ -173,6 +170,24 @@ void ModuleResources::ReadAllMetaData()
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourceModel* model = new ResourceModel();
 		model->ReadMetaData(std::string(LIBRARY_MODELS_FOLDER + files[i]).data());
+	}
+}
+
+void ModuleResources::ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
+{
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceTexture* texture = new ResourceTexture();
+		texture->ReadMetaData(std::string(current_folder + files[i]).data());
+	}
+	if (!directories.empty()) {
+		std::vector<std::string> new_files;
+		std::vector<std::string> new_directories;
+
+		for (uint i = 0; i < directories.size(); ++i) {
+			std::string dir = current_folder + directories[i] + "/";
+			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
+			ReadTextures(new_directories, new_files, dir);
+		}
 	}
 }
 
