@@ -332,10 +332,14 @@ void ComponentTransform::SetComponent(Component* component)
 
 void ComponentTransform::SaveComponent(JSONArraypack* to_save)
 {
+	float3 pos, scale;
+	Quat rot;
+	global_transformation.Decompose(pos, rot, scale);
+
 	to_save->SetNumber("Type", (int)type);
-	to_save->SetFloat3("Position", GetGlobalPosition());
-	to_save->SetQuat("Rotation", GetGlobalRotation());
-	to_save->SetFloat3("Scale", GetGlobalScale());
+	to_save->SetFloat3("Position", pos);
+	to_save->SetQuat("Rotation", rot);
+	to_save->SetFloat3("Scale", scale);
 	to_save->SetBoolean("ScaleNegative", is_scale_negative);
 }
 
