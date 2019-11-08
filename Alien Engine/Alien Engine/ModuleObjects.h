@@ -133,6 +133,6 @@ private:
 
 private:
 
-	void SaveGameObject(GameObject* obj);
+	void SaveGameObject(GameObject* obj, JSONArraypack* to_save);
 
 };

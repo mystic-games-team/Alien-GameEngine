@@ -2,10 +2,19 @@
     "Scene": {
         "GameObjects": [
             {
-                "fsd": 2
+                "Light": 10
             },
             {
-                "fdsfdsfds": false
+                "BakerHouse": 10
+            },
+            {
+                "Chimney": 10
+            },
+            {
+                "Baker_house": 10
+            },
+            {
+                "watchtowerHigh": 10
             }
         ]
     }

@@ -466,9 +466,11 @@ AABB GameObject::GetBB()
 	}
 }
 
-void GameObject::SaveObject()
+void GameObject::SaveObject(JSONArraypack* to_save)
 {
 	// TODO: save with json
+
+	to_save->SetNumber(name, 10);
 
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {

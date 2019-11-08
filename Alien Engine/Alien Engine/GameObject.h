@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "JSONfilepack.h"
 
 class GameObject
 {
@@ -69,7 +70,7 @@ public:
 	// Bounding Boxes
 	AABB GetBB(); // 0 = Local Bounding Box, 1 = Global Bounding Box
 
-	void SaveObject();
+	void SaveObject(JSONArraypack* to_save);
 
 private:
 

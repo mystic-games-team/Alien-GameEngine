@@ -312,16 +312,14 @@ void ModuleObjects::SaveScene()
 
 		scene->StartSave();
 
-		JSONArraypack*  array_pack = scene->InitNewArray("Scene.GameObjects");
-
-		array_pack->SetNumber("fsd", 2);
-		array_pack->SetAnotherNode();
-		array_pack->SetBoolean("fdsfdsfds", false);
-
+		JSONArraypack*  game_objects = scene->InitNewArray("Scene.GameObjects");
+		
 		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 		for (; item != base_game_object->children.end(); ++item) {
 			if (*item != nullptr) {
-				SaveGameObject(*item);
+				SaveGameObject(*item, game_objects);
+				if ((*item) != base_game_object->children.back())
+					game_objects->SetAnotherNode();
 			}
 		}
 
@@ -333,14 +331,15 @@ void ModuleObjects::SaveScene()
 	}
 }
 
-void ModuleObjects::SaveGameObject(GameObject* obj)
+void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save)
 {
-	obj->SaveObject();
+	obj->SaveObject(to_save);
 
 	std::vector<GameObject*>::iterator item = obj->children.begin();
 	for (; item != obj->children.end(); ++item) {
 		if (*item != nullptr) {
-			SaveGameObject(*item);
+			to_save->SetAnotherNode();
+			SaveGameObject(*item, to_save);
 		}
 	}
 }
