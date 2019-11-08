@@ -74,6 +74,9 @@ public:
 	//reparent object in the next preupdate
 	void ReparentGameObject(GameObject* object, GameObject* next_parent);
 
+	// saving scene
+	void SaveScene();
+
 public:
 
 	// root
@@ -127,4 +130,9 @@ private:
 	GameObject* game_object_selected = nullptr;
 
 	std::map<GameObject*, GameObject*> to_reparent;
+
+private:
+
+	void SaveGameObject(GameObject* obj);
+
 };

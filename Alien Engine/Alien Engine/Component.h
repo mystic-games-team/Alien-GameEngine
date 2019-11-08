@@ -28,6 +28,8 @@ public:
 	virtual void Reset() {}
 	virtual void SetComponent(Component* component) {}
 
+	virtual void SaveComponent() {}
+
 	const ComponentType& GetType() const;
 
 public:

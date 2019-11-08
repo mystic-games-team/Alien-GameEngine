@@ -1,0 +1,9 @@
+{
+    "Scene": {
+        "TestArray": [
+            {
+                "test": 10
+            }
+        ]
+    }
+}

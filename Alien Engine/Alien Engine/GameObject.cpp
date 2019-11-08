@@ -466,6 +466,18 @@ AABB GameObject::GetBB()
 	}
 }
 
+void GameObject::SaveObject()
+{
+	// TODO: save with json
+
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->SaveComponent();
+		}
+	}
+}
+
 void GameObject::SearchToDelete()
 {
 	std::vector<GameObject*>::iterator item = children.begin();

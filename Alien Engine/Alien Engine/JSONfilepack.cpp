@@ -271,12 +271,31 @@ const char* JSONfilepack::GetString(const std::string& name)
 
 JSON_Array* JSONfilepack::InitNewArray(const std::string& name)
 {
-	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
-	if (arr == nullptr) {
-		JSON_Value* new_val = json_value_init_array();
-		arr = json_value_get_array(new_val);
+	//json_object_dotset_value(save_object, name.data(), json_value_init_array());
 
-		json_object_dotset_value(save_object, name.data(), new_val);
-	}
+
+	//json_array_append_number(json_object_get_array(save_object, name.data()), 10);
+	//json_object_dotset_value(json_array_get_object(json_object_get_array(save_object, name.data()), 0), "attach", json_array_get_value(json_object_get_array(save_object, name.data()), 0));
+	JSON_Value* val = json_value_init_array();
+	json_object_dotset_value(save_object, name.data(), val);
+	JSON_Array* arr = json_value_get_array(val);
+
+	JSON_Object* obj = json_array_get_object(arr, 0);
+
+	JSON_Value* new_val = json_value_init_object();
+	json_object_dotset_number(json_value_get_object(new_val), "test", 10);
+
+	json_array_append_value(arr, new_val);
+
 	return arr;
+}
+
+void JSONfilepack::SetNumberInArray(const std::string& name, const double& number, JSON_Array* arr)
+{
+	json_array_append_number(arr, number);
+}
+
+void JSONfilepack::AttachObjectToArray(JSON_Object* obj, JSON_Array* arr) 
+{
+
 }

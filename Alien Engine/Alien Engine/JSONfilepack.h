@@ -51,6 +51,10 @@ public:
 
 	JSON_Array* InitNewArray(const std::string& name);
 
+	void SetNumberInArray(const std::string& name, const double& number, JSON_Array* arr);
+
+	void AttachObjectToArray(JSON_Object* obj, JSON_Array* arr);
+
 private:
 
 	std::string path;

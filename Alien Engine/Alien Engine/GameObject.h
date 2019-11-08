@@ -69,6 +69,8 @@ public:
 	// Bounding Boxes
 	AABB GetBB(); // 0 = Local Bounding Box, 1 = Global Bounding Box
 
+	void SaveObject();
+
 private:
 
 	// parent selected

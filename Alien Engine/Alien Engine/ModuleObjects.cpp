@@ -300,6 +300,42 @@ void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_pare
 	}
 }
 
+void ModuleObjects::SaveScene()
+{
+	JSONfilepack* scene = App->CreateJSONFile(SCENE_FOLDER + std::string("scene.alienScene"));
+
+	if (scene != nullptr) {
+		scene->StartSave();
+
+		JSON_Array*  arr = scene->InitNewArray("Scene.TestArray");
+		//scene->SetNumberInArray("Num", 10, arr);
+		//scene->AttachObjectToArray(nullptr, arr);
+		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+		for (; item != base_game_object->children.end(); ++item) {
+			if (*item != nullptr) {
+				SaveGameObject(*item);
+			}
+		}
+
+		scene->FinishSave();
+	}
+	else {
+		LOG("Could not load scene, fail when creating the file");
+	}
+}
+
+void ModuleObjects::SaveGameObject(GameObject* obj)
+{
+	obj->SaveObject();
+
+	std::vector<GameObject*>::iterator item = obj->children.begin();
+	for (; item != obj->children.end(); ++item) {
+		if (*item != nullptr) {
+			SaveGameObject(*item);
+		}
+	}
+}
+
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 
 {
 	wireframe_mode = config->GetBoolean("Configuration.Renderer.Wireframe");

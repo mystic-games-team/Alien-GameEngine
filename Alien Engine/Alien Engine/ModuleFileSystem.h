@@ -21,6 +21,7 @@ struct aiFileIO;
 #define MODELS_FOLDER "Assets/Models/"
 #define TEXTURES_FOLDER "Assets/Textures/"
 #define SCRIPTS_FOLDER "Assets/Scripts/"
+#define SCENE_FOLDER "Assets/Scenes/"
 
 #include "Resource_.h"
 
