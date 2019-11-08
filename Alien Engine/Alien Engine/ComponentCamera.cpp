@@ -1,20 +1,22 @@
 #include "Component.h"
 #include "ComponentCamera.h"
-#include "MathGeoLib/include/Math/float3.h"
-#include "MathGeoLib/include/Math/float4x4.h"
+#include "MathGeoLib/include/MathGeoLib.h"
+#include "MathGeoLib/include/MathBuildConfig.h"
+#include "ComponentTransform.h"
 
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
 	type = ComponentType::CAMERA;
 
-	CalculateViewMatrix();
+	frustum.type = FrustumType::PerspectiveFrustum;
+	frustum.pos = float3::zero;
+	frustum.front = float3::unitZ;
+	frustum.up = float3::unitY;
 
-	X = float3(1.0f, 0.0f, 0.0f);
-	Y = float3(0.0f, 1.0f, 0.0f);
-	Z = float3(0.0f, 0.0f, 1.0f);
-
-	Position = float3(0.0f, 0.0f, 5.0f);
-	Reference = float3(0.0f, 0.0f, 0.0f);
+	frustum.nearPlaneDistance = 10.0f;
+	frustum.farPlaneDistance = 1000.0f;
+	frustum.verticalFov = DegToRad(vertical_fov);
+	
 }
 
 ComponentCamera::~ComponentCamera()
@@ -23,7 +25,7 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::Reset()
 {
-	camera_background = { 0.0f, 0.0f, 0.0f, 1.0f };
+	camera_color_background = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	CalculateViewMatrix();
 
@@ -31,7 +33,7 @@ void ComponentCamera::Reset()
 	Y = float3(0.0f, 1.0f, 0.0f);
 	Z = float3(0.0f, 0.0f, 1.0f);
 
-	Position = float3(0.0f, 0.0f, 5.0f);
+	Position = float3(0.0f, 5.0f, 5.0f);
 	Reference = float3(0.0f, 0.0f, 0.0f);
 }
 
@@ -41,7 +43,7 @@ void ComponentCamera::SetComponent(Component* component)
 
 		ComponentCamera* camera = (ComponentCamera*)component;
 
-		camera_background = camera->camera_background;
+		camera_color_background = camera->camera_color_background;
 	}
 }
 

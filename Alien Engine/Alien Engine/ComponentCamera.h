@@ -2,8 +2,8 @@
 
 #include "Component.h"
 #include "Color.h"
-#include "MathGeoLib/include/Math/float3.h"
-#include "MathGeoLib/include/Math/float4x4.h"
+#include "MathGeoLib/include/MathGeoLib.h"
+#include "MathGeoLib/include/MathBuildConfig.h"
 
 class ComponentCamera : public Component {
 public:
@@ -24,11 +24,15 @@ public:
 
 	float3 X, Y, Z, Position, Reference;
 
+	Frustum frustum;
+
+	float vertical_fov = 60.0f;
+
 private:
 
 	float3 newPos{ 0,0,0 };
 
 	float4x4 ViewMatrix, ViewMatrixInverse;
 
-	Color camera_background{ 0.0f, 0.0f, 0.0f, 1.0f };
+	Color camera_color_background{ 0.0f, 0.0f, 0.0f, 1.0f };
 };
