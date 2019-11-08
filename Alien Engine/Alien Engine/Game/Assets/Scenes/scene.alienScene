@@ -1,8 +1,11 @@
 {
     "Scene": {
-        "TestArray": [
+        "GameObjects": [
             {
-                "test": 10
+                "fsd": 2
+            },
+            {
+                "fdsfdsfds": false
             }
         ]
     }

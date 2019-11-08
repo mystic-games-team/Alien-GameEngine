@@ -302,14 +302,22 @@ void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_pare
 
 void ModuleObjects::SaveScene()
 {
-	JSONfilepack* scene = App->CreateJSONFile(SCENE_FOLDER + std::string("scene.alienScene"));
+	JSON_Value* value = json_value_init_object();
+	JSON_Object* object = json_value_get_object(value);
+	json_serialize_to_file_pretty(value, std::string(SCENE_FOLDER + std::string("scene.alienScene")).data());
 
-	if (scene != nullptr) {
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* scene = new JSONfilepack(std::string(SCENE_FOLDER + std::string("scene.alienScene")).data(), object, value);
+
 		scene->StartSave();
 
-		JSON_Array*  arr = scene->InitNewArray("Scene.TestArray");
-		//scene->SetNumberInArray("Num", 10, arr);
-		//scene->AttachObjectToArray(nullptr, arr);
+		JSONArraypack*  array_pack = scene->InitNewArray("Scene.GameObjects");
+
+		array_pack->SetNumber("fsd", 2);
+		array_pack->SetAnotherNode();
+		array_pack->SetBoolean("fdsfdsfds", false);
+
 		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 		for (; item != base_game_object->children.end(); ++item) {
 			if (*item != nullptr) {
@@ -318,6 +326,7 @@ void ModuleObjects::SaveScene()
 		}
 
 		scene->FinishSave();
+		delete scene;
 	}
 	else {
 		LOG("Could not load scene, fail when creating the file");

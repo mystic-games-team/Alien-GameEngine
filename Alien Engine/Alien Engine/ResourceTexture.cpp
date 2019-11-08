@@ -68,6 +68,9 @@ void ResourceTexture::CreateMetaData()
 				RELEASE_ARRAY(image_data);
 			}
 		}
+
+		delete[] data;
+
 		glBindTexture(GL_TEXTURE_2D, 0);
 		App->resources->AddResource(this);
 	}

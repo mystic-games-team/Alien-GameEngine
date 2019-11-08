@@ -7,6 +7,7 @@
 #include "SDL/include/SDL_scancode.h"
 
 struct Color;
+class JSONArraypack;
 
 class JSONfilepack {
 
@@ -49,11 +50,7 @@ public:
 	void SetString(const std::string& name, const std::string& string_parameter);
 	const char* GetString(const std::string& name);
 
-	JSON_Array* InitNewArray(const std::string& name);
-
-	void SetNumberInArray(const std::string& name, const double& number, JSON_Array* arr);
-
-	void AttachObjectToArray(JSON_Object* obj, JSON_Array* arr);
+	JSONArraypack* InitNewArray(const std::string& name);
 
 private:
 
@@ -62,5 +59,40 @@ private:
 	JSON_Value* value = nullptr;
 	JSON_Value* save_value = nullptr;
 	JSON_Object* save_object = nullptr;
+
+	std::vector<JSONArraypack*> arrays;
+
+};
+
+class JSONArraypack {
+
+public:
+
+	JSONArraypack(JSON_Array* arr, JSON_Value* value) { this->arr = arr; this->value = value; }
+	~JSONArraypack();
+
+	void SetNumber(const std::string& name, const double& number);
+	double GetNumber(const std::string& name);
+
+	void SetBoolean(const std::string& name, const bool& boolean);
+	bool GetBoolean(const std::string& name);
+
+	void SetColor(const std::string& name, const Color& color);
+	Color GetColor(const std::string& name);
+
+	void SetFloat3(const std::string& name, const float3& numbers);
+	float3 GetFloat3(const std::string& name);
+
+	void SetQuat(const std::string& name, const Quat& numbers);
+	Quat GetQuat(const std::string& name);
+
+	void SetAnotherNode();
+
+private:
+
+	JSON_Array* arr = nullptr;
+	JSON_Value* value = nullptr;
+
+	std::vector<JSONArraypack*> arrays;
 
 };
