@@ -388,3 +388,19 @@ AABB ComponentMesh::GetGlobalAABB()
 	
 	return global_aabb;
 }
+
+void ComponentMesh::SaveComponent(JSONArraypack* to_save)
+{
+	to_save->SetNumber("Type", (int)type);
+	to_save->SetBoolean("ViewMesh", view_mesh);
+	to_save->SetBoolean("Wireframe", wireframe);
+	to_save->SetBoolean("ViewVertexNormals", view_vertex_normals);
+	to_save->SetBoolean("ViewFaceNormals", view_face_normals);
+	to_save->SetBoolean("DrawAABB", draw_AABB);
+	to_save->SetBoolean("DrawOBB", draw_OBB);
+	to_save->SetBoolean("HasMesh", (mesh != nullptr) ? true : false);
+	if (mesh != nullptr) {
+		to_save->SetString("MeshID", std::to_string(mesh->GetID()));
+	}
+	to_save->SetBoolean("Enabled", enabled);
+}

@@ -481,10 +481,14 @@ void GameObject::SaveObject(JSONArraypack* to_save)
 	to_save->SetBoolean("Selected", selected);
 	to_save->SetBoolean("ParentSelected", parent_selected);
 
+	JSONArraypack* components_to_save = to_save->InitNewArray("Components");
+
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
 		if (*item != nullptr) {
-			(*item)->SaveComponent();
+			(*item)->SaveComponent(components_to_save);
+			if ((*item) != components.back())
+				components_to_save->SetAnotherNode();
 		}
 	}
 }

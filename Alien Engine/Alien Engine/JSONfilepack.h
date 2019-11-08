@@ -92,6 +92,8 @@ public:
 
 	const char* GetString(const std::string& name);
 
+	JSONArraypack* InitNewArray(const std::string& name);
+
 private:
 
 	JSON_Array* arr = nullptr;

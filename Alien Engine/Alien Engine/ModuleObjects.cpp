@@ -314,6 +314,8 @@ void ModuleObjects::SaveScene()
 
 		JSONArraypack*  game_objects = scene->InitNewArray("Scene.GameObjects");
 		
+		game_objects->SetAnotherNode();
+
 		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 		for (; item != base_game_object->children.end(); ++item) {
 			if (*item != nullptr) {

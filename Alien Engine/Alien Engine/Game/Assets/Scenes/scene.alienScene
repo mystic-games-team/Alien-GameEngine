@@ -2,40 +2,194 @@
     "Scene": {
         "GameObjects": [
             {
-                "Name": "BakerHouse",
-                "ID": "15239191124453881008",
+                "Name": "Light",
+                "ID": "9820177283059974317",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false
+                "ParentSelected": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            7.3465801434866354e-31,
+                            -107374176,
+                            -107374176
+                        ],
+                        "Rotation": [
+                            -107374176,
+                            -107374176,
+                            -107374176,
+                            -107374176
+                        ],
+                        "Scale": [
+                            -107374176,
+                            -107374176,
+                            7.3484646960298737e-31
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 3,
+                        "DiffuseColor": [
+                            0.75,
+                            0.75,
+                            0.75,
+                            1
+                        ],
+                        "AmbienColor": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ],
+                        "Enabled": true
+                    }
+                ]
             },
             {
-                "Name": "Chimney",
-                "ID": "7621772282223311349",
-                "ParentID": "15239191124453881008",
+                "Name": "BakerHouse",
+                "ID": "15002360374065315035",
+                "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
-                "ParentSelected": false
+                "ParentSelected": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            7.3504169570477193e-31,
+                            -107374176,
+                            -107374176
+                        ],
+                        "Rotation": [
+                            -107374176,
+                            -107374176,
+                            -107374176,
+                            -107374176
+                        ],
+                        "Scale": [
+                            -107374176,
+                            -107374176,
+                            7.3508119231495956e-31
+                        ],
+                        "ScaleNegative": false
+                    }
+                ]
+            },
+            {
+                "Name": "Chimney",
+                "ID": "10021061470649610650",
+                "ParentID": "15002360374065315035",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            7.3517824112856345e-31,
+                            -107374176,
+                            -107374176
+                        ],
+                        "Rotation": [
+                            -107374176,
+                            -107374176,
+                            -107374176,
+                            -107374176
+                        ],
+                        "Scale": [
+                            -107374176,
+                            -107374176,
+                            7.3523579333197971e-31
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "MeshID": "281038028362187218",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": true,
+                        "TextureID": "16925044378009346189",
+                        "Enabled": true
+                    }
+                ]
             },
             {
                 "Name": "Baker_house",
-                "ID": "14057417457954625046",
-                "ParentID": "15239191124453881008",
+                "ID": "4621874917445689373",
+                "ParentID": "15002360374065315035",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false
-            },
-            {
-                "Name": "watchtowerHigh",
-                "ID": "10394315958796140534",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false
+                "ParentSelected": true,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            7.3532945672185323e-31,
+                            -107374176,
+                            -107374176
+                        ],
+                        "Rotation": [
+                            -107374176,
+                            -107374176,
+                            -107374176,
+                            -107374176
+                        ],
+                        "Scale": [
+                            -107374176,
+                            -107374176,
+                            7.3530124485743349e-31
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "MeshID": "5340682057429463393",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": true,
+                        "TextureID": "16925044378009346189",
+                        "Enabled": true
+                    }
+                ]
             }
         ]
     }

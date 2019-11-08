@@ -28,6 +28,8 @@ public:
 
 	AABB GetGlobalAABB();
 
+	void SaveComponent(JSONArraypack* to_save);
+
 private:
 
 	AABB GenerateAABB();

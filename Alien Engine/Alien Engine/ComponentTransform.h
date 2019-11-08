@@ -32,6 +32,8 @@ public:
 	void Reset();
 	void SetComponent(Component* component);
 
+	void SaveComponent(JSONArraypack* to_save);
+
 private:
 
 	void LookScale();

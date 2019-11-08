@@ -424,3 +424,14 @@ const char* JSONArraypack::GetString(const std::string& name)
 {
 	return json_object_dotget_string(json_value_get_object(value), name.data());
 }
+
+JSONArraypack* JSONArraypack::InitNewArray(const std::string& name)
+{
+	JSON_Value* val = json_value_init_array();
+	json_object_dotset_value(json_value_get_object(value), name.data(), val);
+
+	JSONArraypack* array_pack = new JSONArraypack(json_value_get_array(val), json_value_init_object());
+	arrays.push_back(array_pack);
+
+	return array_pack;
+}
