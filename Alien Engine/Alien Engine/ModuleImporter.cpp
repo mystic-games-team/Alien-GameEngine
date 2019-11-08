@@ -204,8 +204,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	aiMaterial* ai_material = scene->mMaterials[ai_mesh->mMaterialIndex];
 	aiString path;
 	ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-	std::string full_path(TEXTURES_FOLDER + std::string(path.C_Str()));
-	ret->texture = LoadTextureFile(full_path.data());
+	ret->texture = App->resources->GetTextureByName(path.C_Str());
 
 	// get local transformations
 	aiVector3D translation, scaling;

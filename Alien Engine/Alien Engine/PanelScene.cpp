@@ -82,7 +82,7 @@ void PanelScene::PanelLogic()
 			FileNode* node = *(FileNode**)payload->Data;
 
 			// drop texture
-			if (node != nullptr && node->type == FileDropType::TEXTURE) {
+			if (node != nullptr && node->type == FileDropType::TEXTURE && App->objects->GetSelectedObject() != nullptr) {
 				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
 				path += "_meta.alien";
 

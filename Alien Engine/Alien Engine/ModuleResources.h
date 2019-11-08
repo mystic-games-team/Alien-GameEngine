@@ -49,9 +49,12 @@ public:
 
 	u64 GetRandomID();
 
+	ResourceTexture* GetTextureByName(const char* name);
+
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
 	void ReadAllMetaData();
+	void ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
 
 public:
 

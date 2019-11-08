@@ -1,9 +1,0 @@
-{
-    "Model": {
-        "Name": "wooden watch tower2",
-        "NumMeshes": 1,
-        "PathMeshes": [
-            "Library\/Meshes\/10117984731127915618.alienMesh"
-        ]
-    }
-}

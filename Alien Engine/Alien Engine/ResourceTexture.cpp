@@ -76,9 +76,20 @@ bool ResourceTexture::ReadMetaData(const char* path)
 {
 	bool ret = true;
 
-	meta_data_path = path;
+	this->path = path;
 
-	ID = std::stoull(App->file_system->GetBaseFileName(path));
+	std::string alien_path = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
+
+	char* data = nullptr;
+
+	App->file_system->Load(alien_path.data(), &data);
+
+	if (data != nullptr) {
+
+		memcpy(&ID, data, sizeof(ID));
+
+		delete[] data;
+	}
 
 	std::string texture_path = LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds";
 
