@@ -76,10 +76,12 @@ public:
 	void ReparentGameObject(GameObject* object, GameObject* next_parent);
 
 	// saving scene
-	void SaveScene();
-	void LoadScene();
+	void SaveScene(const char* path);
+	void LoadScene(const char* path);
 	static bool SortByFamilyNumber(std::pair<uint, u64> pair1, std::pair<uint, u64> pair2);
 public:
+
+	const char* current_scene = nullptr;
 
 	// root
 	GameObject* base_game_object = nullptr;

@@ -38,6 +38,8 @@ bool ModuleObjects::Start()
 	light_test->AddComponent(new ComponentTransform(light_test, { 0,0,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
 	light_test->AddComponent(new ComponentLight(light_test));
 
+	current_scene = "Untitled";
+
 	return ret;
 }
 
@@ -300,15 +302,15 @@ void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_pare
 	}
 }
 
-void ModuleObjects::SaveScene()
+void ModuleObjects::SaveScene(const char* path)
 {
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* object = json_value_get_object(value);
-	json_serialize_to_file_pretty(value, std::string(SCENE_FOLDER + std::string("scene.alienScene")).data());
+	json_serialize_to_file_pretty(value, path);
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* scene = new JSONfilepack(std::string(SCENE_FOLDER + std::string("scene.alienScene")).data(), object, value);
+		JSONfilepack* scene = new JSONfilepack(path, object, value);
 
 		scene->StartSave();
 
@@ -333,14 +335,14 @@ void ModuleObjects::SaveScene()
 	}
 }
 
-void ModuleObjects::LoadScene()
+void ModuleObjects::LoadScene(const char* path)
 {
-	JSON_Value* value = json_parse_file(std::string(SCENE_FOLDER + std::string("scene.alienScene")).data());
+	JSON_Value* value = json_parse_file(path);
 	JSON_Object* object = json_value_get_object(value);
 	// TODO: delete all scene before that and set again the base game object. Add a popup to accept the load
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* scene = new JSONfilepack(std::string(SCENE_FOLDER + std::string("scene.alienScene")).data(), object, value);
+		JSONfilepack* scene = new JSONfilepack(path, object, value);
 
 		JSONArraypack* game_objects = scene->GetArray("Scene.GameObjects");
 
@@ -377,7 +379,7 @@ void ModuleObjects::LoadScene()
 		delete scene;
 	}
 	else {
-		LOG("Error loading scene %s", std::string(SCENE_FOLDER + std::string("scene.alienScene")).data());
+		LOG("Error loading scene %s", path);
 	}
 }
 

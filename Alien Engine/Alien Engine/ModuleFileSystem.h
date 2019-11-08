@@ -33,6 +33,7 @@ enum class FileDropType {
 	TEXTURE,
 	FOLDER,
 	SCRIPT,
+	SCENE,
 
 	UNKNOWN
 };

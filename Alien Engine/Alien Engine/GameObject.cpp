@@ -471,8 +471,6 @@ AABB GameObject::GetBB()
 
 void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 {
-	// TODO: save with json
-
 	to_save->SetString("Name", name);
 	to_save->SetNumber("FamilyNumber", family_number);
 	to_save->SetString("ID", std::to_string(ID));
