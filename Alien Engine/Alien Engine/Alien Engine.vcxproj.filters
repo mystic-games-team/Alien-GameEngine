@@ -451,7 +451,7 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="glmath.h">
-      <Filter>Tools\Math</Filter>
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -702,7 +702,7 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="glmath.cpp">
-      <Filter>Tools\Math</Filter>
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

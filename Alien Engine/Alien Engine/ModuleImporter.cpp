@@ -173,15 +173,15 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 			uint index2 = ret->index[i + 1] * 3;
 			uint index3 = ret->index[i + 2] * 3;
 
-			vec3 x0(ret->vertex[index1], ret->vertex[index1 + 1], ret->vertex[index1 + 2]);
-			vec3 x1(ret->vertex[index2], ret->vertex[index2 + 1], ret->vertex[index2 + 2]);
-			vec3 x2(ret->vertex[index3], ret->vertex[index3 + 1], ret->vertex[index3 + 2]);
+			float3 x0(ret->vertex[index1], ret->vertex[index1 + 1], ret->vertex[index1 + 2]);
+			float3 x1(ret->vertex[index2], ret->vertex[index2 + 1], ret->vertex[index2 + 2]);
+			float3 x2(ret->vertex[index3], ret->vertex[index3 + 1], ret->vertex[index3 + 2]);
 
-			vec3 v0 = x0 - x2;
-			vec3 v1 = x1 - x2;
-			vec3 n = cross(v0, v1);
+			float3 v0 = x0 - x2;
+			float3 v1 = x1 - x2;
+			float3 n = v0.Cross(v1);
 
-			vec3 normalized = normalize(n);
+			float3 normalized = n.Normalized();
 
 			ret->center_point[i] = (x0.x + x1.x + x2.x) / 3;
 			ret->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
@@ -303,6 +303,7 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
 {
+	// TODO ORIOL
 	/*par_shapes_unweld(shape, true);
 	par_shapes_compute_normals(shape);
 
