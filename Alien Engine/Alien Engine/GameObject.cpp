@@ -527,7 +527,9 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 				AddComponent(light);
 				break; }
 			case (int)ComponentType::MATERIAL: {
-				
+				ComponentMaterial* material = new ComponentMaterial(this);
+				material->LoadComponent(components_to_load);
+				AddComponent(material);
 				break; }
 			case (int)ComponentType::MESH: {
 				ComponentMesh* mesh = new ComponentMesh(this);
