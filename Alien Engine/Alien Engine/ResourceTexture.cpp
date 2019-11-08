@@ -40,9 +40,9 @@ void ResourceTexture::CreateMetaData()
 		App->file_system->SaveUnique(output, data, size, App->file_system->GetPathWithoutExtension(path).data(), "_meta", ".alien");
 		
 		App->file_system->SplitFilePath(path.data(), nullptr, nullptr, &output);
-
+		meta_data_path = std::string(LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds");
 		if (App->StringCmp(output.data(), "dds")) {
-			App->file_system->Copy(path.data(), std::string(LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds").data());
+			App->file_system->Copy(path.data(), meta_data_path.data());
 		}
 		else {
 			ILuint image_size;
@@ -53,7 +53,6 @@ void ResourceTexture::CreateMetaData()
 				image_data = new ILubyte[image_size]; 
 				if (ilSaveL(IL_DDS, image_data, image_size) > 0) {
 					App->file_system->SaveUnique(output, image_data, image_size, LIBRARY_TEXTURES_FOLDER, std::to_string(ID).data(), ".dds");
-					meta_data_path = output;
 				}
 
 				id = ilutGLBindTexImage();
@@ -91,12 +90,9 @@ bool ResourceTexture::ReadMetaData(const char* path)
 		delete[] data;
 	}
 
-	std::string texture_path = LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds";
+	meta_data_path = LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds";
 
-	App->importer->LoadTextureToResource(texture_path.data(), this);
-
-	//set paths
-	meta_data_path = path;
+	App->importer->LoadTextureToResource(meta_data_path.data(), this);
 
 	App->resources->AddResource(this);
 
