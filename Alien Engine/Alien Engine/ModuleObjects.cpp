@@ -4,7 +4,7 @@
 #include "ModuleInput.h"
 #include "glew/include/glew.h"
 #include "Application.h"
-
+#include <algorithm>
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
@@ -288,7 +288,7 @@ void ModuleObjects::MoveComponentUp(GameObject* object, Component* component, bo
 	}
 }
 
-GameObject* ModuleObjects::GetGameObjectByID(const int& id)
+GameObject* ModuleObjects::GetGameObjectByID(const u64& id)
 {
 	return base_game_object->GetGameObjectByID(id);
 }
@@ -319,7 +319,7 @@ void ModuleObjects::SaveScene()
 		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 		for (; item != base_game_object->children.end(); ++item) {
 			if (*item != nullptr) {
-				SaveGameObject(*item, game_objects);
+				SaveGameObject(*item, game_objects, 1);
 				if ((*item) != base_game_object->children.back())
 					game_objects->SetAnotherNode();
 			}
@@ -333,17 +333,70 @@ void ModuleObjects::SaveScene()
 	}
 }
 
-void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save)
+void ModuleObjects::LoadScene()
 {
-	obj->SaveObject(to_save);
+	JSON_Value* value = json_parse_file(std::string(SCENE_FOLDER + std::string("scene.alienScene")).data());
+	JSON_Object* object = json_value_get_object(value);
+	// TODO: delete all scene before that and set again the base game object. Add a popup to accept the load
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* scene = new JSONfilepack(std::string(SCENE_FOLDER + std::string("scene.alienScene")).data(), object, value);
+
+		JSONArraypack* game_objects = scene->GetArray("Scene.GameObjects");
+
+		std::vector<std::pair<uint, u64>> objects_to_create;
+
+		for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
+			uint family_number = game_objects->GetNumber("FamilyNumber");
+			u64 parentID = std::stoull(game_objects->GetString("ParentID"));
+			objects_to_create.push_back({ family_number,parentID });
+			game_objects->GetAnotherNode();
+		}
+		std::sort(objects_to_create.begin(), objects_to_create.end(), ModuleObjects::SortByFamilyNumber);
+		game_objects->GetFirstNode();
+		std::vector<GameObject*> objects_created;
+
+		std::vector<std::pair<uint, u64>>::iterator item = objects_to_create.begin();
+		for (; item != objects_to_create.end(); ++item) {
+			GameObject* obj = new GameObject();
+			if ((*item).first == 1) { // family number == 1 so parent is the base game object
+				obj->LoadObject(game_objects, base_game_object);
+			}
+			else { // search parent
+				std::vector<GameObject*>::iterator objects = objects_created.begin();
+				for (; objects != objects_created.end(); ++objects) {
+					if ((*objects)->ID == (*item).second) {
+						obj->LoadObject(game_objects, *objects);
+						break;
+					}
+				}
+			}
+			objects_created.push_back(obj);
+			game_objects->GetAnotherNode();
+		}
+		delete scene;
+	}
+	else {
+		LOG("Error loading scene %s", std::string(SCENE_FOLDER + std::string("scene.alienScene")).data());
+	}
+}
+
+void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number)
+{
+	obj->SaveObject(to_save, family_number);
 
 	std::vector<GameObject*>::iterator item = obj->children.begin();
 	for (; item != obj->children.end(); ++item) {
 		if (*item != nullptr) {
 			to_save->SetAnotherNode();
-			SaveGameObject(*item, to_save);
+			SaveGameObject(*item, to_save, family_number + 1);
 		}
 	}
+}
+
+bool ModuleObjects::SortByFamilyNumber(std::pair<uint,u64> pair1, std::pair<uint, u64> pair2)
+{
+	return pair1.first < pair2.first;
 }
 
 void ModuleObjects::LoadConfig(JSONfilepack*& config) 

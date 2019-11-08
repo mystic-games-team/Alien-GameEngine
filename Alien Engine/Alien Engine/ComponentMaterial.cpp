@@ -186,3 +186,7 @@ void ComponentMaterial::SaveComponent(JSONArraypack* to_save)
 	}
 	to_save->SetBoolean("Enabled", enabled);
 }
+
+void ComponentMaterial::LoadComponent(JSONArraypack* to_load)
+{
+}

@@ -29,6 +29,7 @@ public:
 	AABB GetGlobalAABB();
 
 	void SaveComponent(JSONArraypack* to_save);
+	void LoadComponent(JSONArraypack* to_load);
 
 private:
 

@@ -332,15 +332,34 @@ void ComponentTransform::SetComponent(Component* component)
 
 void ComponentTransform::SaveComponent(JSONArraypack* to_save)
 {
-	float3 pos, scale;
-	Quat rot;
-	global_transformation.Decompose(pos, rot, scale);
-
 	to_save->SetNumber("Type", (int)type);
-	to_save->SetFloat3("Position", pos);
-	to_save->SetQuat("Rotation", rot);
-	to_save->SetFloat3("Scale", scale);
+	to_save->SetFloat3("Position", local_position);
+	to_save->SetQuat("Rotation", local_rotation);
+	to_save->SetFloat3("Scale", local_scale);
 	to_save->SetBoolean("ScaleNegative", is_scale_negative);
+}
+
+void ComponentTransform::LoadComponent(JSONArraypack* to_load)
+{
+	local_position = to_load->GetFloat3("Position");
+	local_rotation = to_load->GetQuat("Rotation");
+	local_scale = to_load->GetFloat3("Scale");
+	is_scale_negative = to_load->GetBoolean("ScaleNegative");
+
+	euler_rotation = local_rotation.ToEulerXYZ();
+	euler_rotation.x = RadToDeg(euler_rotation.x);
+	euler_rotation.y = RadToDeg(euler_rotation.y);
+	euler_rotation.z = RadToDeg(euler_rotation.z);
+
+	local_transformation = float4x4::FromTRS(local_position, local_rotation, local_scale);
+
+	if (game_object_attached->parent != nullptr) {
+		ComponentTransform* tr = (ComponentTransform*)game_object_attached->parent->GetComponent(ComponentType::TRANSFORM);
+		if (tr != nullptr) global_transformation = tr->global_transformation * local_transformation;
+		else global_transformation = local_transformation;
+	}
+	else
+		global_transformation = local_transformation;
 }
 
 

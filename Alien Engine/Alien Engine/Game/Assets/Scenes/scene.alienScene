@@ -3,7 +3,8 @@
         "GameObjects": [
             {
                 "Name": "Light",
-                "ID": "6394745569021234694",
+                "FamilyNumber": 1,
+                "ID": "1982097812161820531",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -50,11 +51,12 @@
             },
             {
                 "Name": "BakerHouse",
-                "ID": "3559725698675127621",
+                "FamilyNumber": 1,
+                "ID": "17810534414123356148",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "Components": [
                     {
@@ -81,12 +83,13 @@
             },
             {
                 "Name": "Chimney",
-                "ID": "9160600388357931638",
-                "ParentID": "3559725698675127621",
+                "FamilyNumber": 2,
+                "ID": "8869041343607623440",
+                "ParentID": "17810534414123356148",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "Components": [
                     {
                         "Type": 0,
@@ -137,12 +140,13 @@
             },
             {
                 "Name": "Baker_house",
-                "ID": "580684988349129822",
-                "ParentID": "3559725698675127621",
+                "FamilyNumber": 2,
+                "ID": "9388183672791519615",
+                "ParentID": "17810534414123356148",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "Components": [
                     {
                         "Type": 0,
@@ -187,6 +191,62 @@
                         "TextureEnabled": true,
                         "HasTexture": true,
                         "TextureID": "16925044378009346189",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "watchtowerHigh",
+                "FamilyNumber": 3,
+                "ID": "9519205786754733538",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            67.149971008300781,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999994039535522,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "MeshID": "6635556451671599920",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": false,
                         "Enabled": true
                     }
                 ]

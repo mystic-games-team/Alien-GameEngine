@@ -11,6 +11,7 @@ class GameObject
 {
 public:
 	GameObject(GameObject* parent);
+	GameObject(); // just for loading objects, dont use it
 	virtual ~GameObject();
 
 	// OnEnable/Disable
@@ -70,7 +71,8 @@ public:
 	// Bounding Boxes
 	AABB GetBB(); // 0 = Local Bounding Box, 1 = Global Bounding Box
 
-	void SaveObject(JSONArraypack* to_save);
+	void SaveObject(JSONArraypack* to_save, const uint& family_number);
+	void LoadObject(JSONArraypack* to_save, GameObject* parent);
 
 private:
 

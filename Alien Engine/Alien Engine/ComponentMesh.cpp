@@ -404,3 +404,7 @@ void ComponentMesh::SaveComponent(JSONArraypack* to_save)
 	}
 	to_save->SetBoolean("Enabled", enabled);
 }
+
+void ComponentMesh::LoadComponent(JSONArraypack* to_load)
+{
+}

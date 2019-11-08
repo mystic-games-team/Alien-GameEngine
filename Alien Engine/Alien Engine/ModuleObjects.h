@@ -6,6 +6,7 @@
 #include "Color.h"
 #include <vector>
 #include <map>
+#include <utility>
 
 enum class PrimitiveType
 {
@@ -69,14 +70,15 @@ public:
 	void MoveComponentUp(GameObject* object, Component* component, bool top);
 	
 	// get object
-	GameObject* GetGameObjectByID(const int& id);
+	GameObject* GetGameObjectByID(const u64& id);
 
 	//reparent object in the next preupdate
 	void ReparentGameObject(GameObject* object, GameObject* next_parent);
 
 	// saving scene
 	void SaveScene();
-
+	void LoadScene();
+	static bool SortByFamilyNumber(std::pair<uint, u64> pair1, std::pair<uint, u64> pair2);
 public:
 
 	// root
@@ -133,6 +135,10 @@ private:
 
 private:
 
-	void SaveGameObject(GameObject* obj, JSONArraypack* to_save);
+	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
+
+
+
+
 
 };

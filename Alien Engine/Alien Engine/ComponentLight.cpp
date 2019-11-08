@@ -86,3 +86,7 @@ void ComponentLight::SaveComponent(JSONArraypack* to_save)
 	to_save->SetColor("AmbienColor", ambient);
 	to_save->SetBoolean("Enabled", enabled);
 }
+
+void ComponentLight::LoadComponent(JSONArraypack* to_load)
+{
+}

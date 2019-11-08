@@ -52,6 +52,8 @@ public:
 
 	JSONArraypack* InitNewArray(const std::string& name);
 
+	JSONArraypack* GetArray(const std::string& name);
+
 private:
 
 	std::string path;
@@ -87,6 +89,10 @@ public:
 	Quat GetQuat(const std::string& name);
 
 	void SetAnotherNode();
+	bool GetAnotherNode();
+	void GetFirstNode();
+
+	uint GetArraySize();
 
 	void SetString(const std::string& name, const std::string& string_parameter);
 
@@ -94,11 +100,14 @@ public:
 
 	JSONArraypack* InitNewArray(const std::string& name);
 
+	JSONArraypack* GetArray(const std::string& name);
+
+
 private:
 
 	JSON_Array* arr = nullptr;
 	JSON_Value* value = nullptr;
 
 	std::vector<JSONArraypack*> arrays;
-
+	uint index = 0;
 };

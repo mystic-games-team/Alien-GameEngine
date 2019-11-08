@@ -288,6 +288,16 @@ JSONArraypack* JSONfilepack::InitNewArray(const std::string& name)
 	return array_pack;
 }
 
+JSONArraypack* JSONfilepack::GetArray(const std::string& name)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+	JSON_Value* value = json_array_get_value(arr, 0);
+	JSONArraypack* array_pack = new JSONArraypack(arr, value);
+	arrays.push_back(array_pack);
+
+	return array_pack;
+}
+
 JSONArraypack::~JSONArraypack()
 {
 	if (!arrays.empty()) {
@@ -415,6 +425,29 @@ void JSONArraypack::SetAnotherNode()
 	json_array_append_value(arr, value);
 }
 
+bool JSONArraypack::GetAnotherNode()
+{
+	++index;
+	if (index < json_array_get_count(arr)) {
+		value = json_array_get_value(arr, index);
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void JSONArraypack::GetFirstNode()
+{
+	index = 0;
+	value = json_array_get_value(arr, index);
+}
+
+uint JSONArraypack::GetArraySize()
+{
+	return json_array_get_count(arr);
+}
+
 void JSONArraypack::SetString(const std::string& name, const std::string& string_parameter)
 {
 	json_object_dotset_string(json_value_get_object(value), name.data(), string_parameter.data());
@@ -431,6 +464,16 @@ JSONArraypack* JSONArraypack::InitNewArray(const std::string& name)
 	json_object_dotset_value(json_value_get_object(value), name.data(), val);
 
 	JSONArraypack* array_pack = new JSONArraypack(json_value_get_array(val), json_value_init_object());
+	arrays.push_back(array_pack);
+
+	return array_pack;
+}
+
+JSONArraypack* JSONArraypack::GetArray(const std::string& name)
+{
+	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name.data());
+	JSON_Value* value = json_array_get_value(arr, 0);
+	JSONArraypack* array_pack = new JSONArraypack(arr, value);
 	arrays.push_back(array_pack);
 
 	return array_pack;

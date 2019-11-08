@@ -313,7 +313,7 @@ void ModuleUI::MainMenuBar()
 		}		
 		if (ImGui::MenuItem("Load Scene"))
 		{
-
+			App->objects->LoadScene();
 		}
 		if (ImGui::MenuItem("Close", "Alt + F4"))
 		{

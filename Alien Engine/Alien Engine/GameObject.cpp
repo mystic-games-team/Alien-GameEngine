@@ -10,9 +10,6 @@
 
 GameObject::GameObject(GameObject* parent)
 {
-	// TODO: random id gameobjects
-	//id = GetRandomIntBetweenTwo(INT_MIN, INT_MAX);
-
 	ID = App->resources->GetRandomID();
 
 	if (parent != nullptr) {
@@ -20,6 +17,10 @@ GameObject::GameObject(GameObject* parent)
 		parentID = parent->ID;
 		parent->AddChild(this);
 	}
+}
+
+GameObject::GameObject()
+{
 }
 
 GameObject::~GameObject()
@@ -469,11 +470,12 @@ AABB GameObject::GetBB()
 	}
 }
 
-void GameObject::SaveObject(JSONArraypack* to_save)
+void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 {
 	// TODO: save with json
 
 	to_save->SetString("Name", name);
+	to_save->SetNumber("FamilyNumber", family_number);
 	to_save->SetString("ID", std::to_string(ID));
 	to_save->SetString("ParentID", std::to_string(parentID));
 	to_save->SetBoolean("Enabled", enabled);
@@ -491,6 +493,52 @@ void GameObject::SaveObject(JSONArraypack* to_save)
 				components_to_save->SetAnotherNode();
 		}
 	}
+}
+
+void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
+{
+	name = to_load->GetString("Name");
+	ID = std::stoull(to_load->GetString("ID"));
+	parentID = std::stoull(to_load->GetString("ParentID"));
+	enabled = to_load->GetBoolean("Enabled");
+	parent_enabled = to_load->GetBoolean("ParentEnabled");
+	selected = to_load->GetBoolean("Selected");
+	parent_selected = to_load->GetBoolean("ParentSelected");
+
+	if (parent != nullptr) {
+		this->parent = parent;
+		parent->AddChild(this);
+	}
+
+	JSONArraypack* components_to_load = to_load->GetArray("Components");
+
+	if (components_to_load != nullptr) {
+		for (uint i = 0; i < components_to_load->GetArraySize(); ++i) {
+			SDL_assert((uint)ComponentType::UNKNOWN == 4); // add new type to switch
+			switch ((int)components_to_load->GetNumber("Type")) {
+			case (int)ComponentType::TRANSFORM: {
+				ComponentTransform* transform = new ComponentTransform(this);
+				transform->LoadComponent(components_to_load);
+				break; }
+			case (int)ComponentType::LIGHT: {
+
+				break; }
+			case (int)ComponentType::MATERIAL: {
+
+				break; }
+			case (int)ComponentType::MESH: {
+
+				break; }
+			default:
+				LOG("Unknown component type while loading");
+				break;
+			}
+
+			components_to_load->GetAnotherNode();
+		}
+	}
+
+
 }
 
 void GameObject::SearchToDelete()

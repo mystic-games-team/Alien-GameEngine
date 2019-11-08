@@ -30,6 +30,7 @@ public:
 	virtual void SetComponent(Component* component) {}
 
 	virtual void SaveComponent(JSONArraypack* to_save) {}
+	virtual void LoadComponent(JSONArraypack* to_load) {}
 
 	const ComponentType& GetType() const;
 
