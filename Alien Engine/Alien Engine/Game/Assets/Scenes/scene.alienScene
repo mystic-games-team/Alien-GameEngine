@@ -4,7 +4,7 @@
             {
                 "Name": "Light",
                 "FamilyNumber": 1,
-                "ID": "1982097812161820531",
+                "ID": "3433733770428196848",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -22,7 +22,7 @@
                             0,
                             0,
                             0,
-                            1
+                            0
                         ],
                         "Scale": [
                             1,
@@ -50,9 +50,9 @@
                 ]
             },
             {
-                "Name": "BakerHouse",
+                "Name": "Pare1",
                 "FamilyNumber": 1,
-                "ID": "17810534414123356148",
+                "ID": "5160573026722758581",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -62,7 +62,7 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
+                            1,
                             0,
                             0
                         ],
@@ -70,7 +70,7 @@
                             0,
                             0,
                             0,
-                            1
+                            0
                         ],
                         "Scale": [
                             1,
@@ -82,10 +82,10 @@
                 ]
             },
             {
-                "Name": "Chimney",
+                "Name": "FillPare1",
                 "FamilyNumber": 2,
-                "ID": "8869041343607623440",
-                "ParentID": "17810534414123356148",
+                "ID": "15410786297163580296",
+                "ParentID": "5160573026722758581",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -106,8 +106,8 @@
                         ],
                         "Scale": [
                             1,
-                            0.99999994039535522,
-                            0.99999994039535522
+                            10.5,
+                            1
                         ],
                         "ScaleNegative": false
                     },
@@ -139,10 +139,99 @@
                 ]
             },
             {
-                "Name": "Baker_house",
+                "Name": "Pare2",
                 "FamilyNumber": 2,
-                "ID": "9388183672791519615",
-                "ParentID": "17810534414123356148",
+                "ID": "15738481683568565338",
+                "ParentID": "5160573026722758581",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -3,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.70105749368667603,
+                            -0.09229595959186554,
+                            0.092295974493026733,
+                            0.70105737447738647
+                        ],
+                        "Scale": [
+                            1,
+                            4,
+                            2
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "MeshID": "5340682057429463393",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": true,
+                        "TextureID": "16925044378009346189",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Pare3",
+                "FamilyNumber": 3,
+                "ID": "1154191186794220813",
+                "ParentID": "15738481683568565338",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false
+                    }
+                ]
+            },
+            {
+                "Name": "FillPare3",
+                "FamilyNumber": 4,
+                "ID": "2053170757340161126",
+                "ParentID": "1154191186794220813",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -163,8 +252,65 @@
                         ],
                         "Scale": [
                             1,
-                            0.99999994039535522,
-                            0.99999994039535522
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "MeshID": "281038028362187218",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": true,
+                        "TextureID": "16925044378009346189",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "FillPare3_2",
+                "FamilyNumber": 4,
+                "ID": "854481731157590950",
+                "ParentID": "1154191186794220813",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
                         ],
                         "ScaleNegative": false
                     },
@@ -197,9 +343,9 @@
             },
             {
                 "Name": "watchtowerHigh",
-                "FamilyNumber": 3,
-                "ID": "9519205786754733538",
-                "ParentID": "0",
+                "FamilyNumber": 5,
+                "ID": "17796005303198998708",
+                "ParentID": "854481731157590950",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -208,8 +354,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            67.149971008300781,
+                            -6.5,
+                            -5.8499999046325684,
                             0
                         ],
                         "Rotation": [
@@ -220,8 +366,8 @@
                         ],
                         "Scale": [
                             1,
-                            0.99999994039535522,
-                            0.99999994039535522
+                            1,
+                            1
                         ],
                         "ScaleNegative": false
                     },
@@ -246,7 +392,8 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "HasTexture": false,
+                        "HasTexture": true,
+                        "TextureID": "6015216122611076316",
                         "Enabled": true
                     }
                 ]

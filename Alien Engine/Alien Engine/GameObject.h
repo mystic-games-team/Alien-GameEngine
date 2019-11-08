@@ -86,7 +86,6 @@ public:
 	GameObject* parent = nullptr;
 	bool enabled = true;
 	u64 ID = 0;
-	u64 parentID = 0;
 
 private:
 

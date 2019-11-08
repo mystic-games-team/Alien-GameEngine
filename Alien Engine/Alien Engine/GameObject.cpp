@@ -14,7 +14,6 @@ GameObject::GameObject(GameObject* parent)
 
 	if (parent != nullptr) {
 		this->parent = parent;
-		parentID = parent->ID;
 		parent->AddChild(this);
 	}
 }
@@ -477,7 +476,7 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 	to_save->SetString("Name", name);
 	to_save->SetNumber("FamilyNumber", family_number);
 	to_save->SetString("ID", std::to_string(ID));
-	to_save->SetString("ParentID", std::to_string(parentID));
+	to_save->SetString("ParentID",(parent != nullptr) ? std::to_string(parent->ID) : 0);
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetBoolean("ParentEnabled", parent_enabled);
 	to_save->SetBoolean("Selected", selected);
@@ -499,7 +498,6 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 {
 	name = to_load->GetString("Name");
 	ID = std::stoull(to_load->GetString("ID"));
-	parentID = std::stoull(to_load->GetString("ParentID"));
 	enabled = to_load->GetBoolean("Enabled");
 	parent_enabled = to_load->GetBoolean("ParentEnabled");
 	selected = to_load->GetBoolean("Selected");
