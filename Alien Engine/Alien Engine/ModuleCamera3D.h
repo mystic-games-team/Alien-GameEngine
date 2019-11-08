@@ -15,9 +15,6 @@ public:
 	void Move(const float3& Movement);
 	bool CleanUp();
 
-	void Look(const float3 &Position, const float3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const float3 &Spot);
-
 	void Movement();
 	void Rotation();
 	void Focus();

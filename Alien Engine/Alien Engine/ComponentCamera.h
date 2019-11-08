@@ -18,6 +18,8 @@ public:
 
 	void AspectRatio(int width_ratio, int height_ratio);
 
+	void Look(const float3& position_to_look);
+
 	float4x4 GetViewMatrix() const;
 
 	float4x4 GetProjectionMatrix() const;
@@ -27,9 +29,6 @@ public:
 	float4x4 OpenGLProjectionMatrix() const;
 
 public:
-
-	float3 X, Y, Z, Position, Reference;
-
 	Frustum frustum;
 
 	float vertical_fov = 60.0f;
@@ -37,8 +36,6 @@ public:
 private:
 
 	bool projection_changed = false;
-
-	float3 newPos{ 0,0,0 };
 
 	float4x4 ViewMatrix, ViewMatrixInverse;
 

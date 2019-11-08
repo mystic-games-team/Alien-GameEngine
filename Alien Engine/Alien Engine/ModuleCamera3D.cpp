@@ -50,10 +50,13 @@ update_status ModuleCamera3D::Update(float dt)
 		speed = camera_speed * 2 * dt;
 		zoom_speed = camera_zoom_speed * 2 * dt;
 	}
-	if (is_scene_hovered) 
+	if (is_scene_hovered)
 	{
 		Zoom();
-		Rotation();
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+		{
+			Rotation();
+		}
 	}
 	if (is_scene_hovered || is_scene_focused) 
 	{
@@ -73,39 +76,6 @@ void ModuleCamera3D::Move(const float3& Movement)
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Look(const float3& Position, const float3& Reference, bool RotateAroundReference)
-{
-	fake_camera->Position = Position;
-	fake_camera->Reference = Reference;
-
-	
-	fake_camera->Z = Position.Normalized() - Reference.Normalized();
-	fake_camera->X = (float3(0.0f, 1.0f, 0.0f).Cross(fake_camera->Z)).Normalized();
-	fake_camera->Y = fake_camera->Z.Cross(fake_camera->X);
-
-	if(!RotateAroundReference)
-	{
-		fake_camera->Reference = fake_camera->Position;
-		fake_camera->Position += fake_camera->Z * 0.05f;
-	}
-
-}
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::LookAt( const float3 &Spot)
-{
-	fake_camera->Reference = Spot;
-
-	fake_camera->Z = fake_camera->Position.Normalized() - fake_camera->Reference.Normalized();
-	fake_camera->X = (float3(0.0f, 1.0f, 0.0f).Cross(fake_camera->Z)).Normalized();
-	fake_camera->Y = fake_camera->Z.Cross(fake_camera->X);
-
-}
-
-
-// -----------------------------------------------------------------
-
-
 void ModuleCamera3D::Movement()
 {
 	float3 movement(float3::zero);
@@ -170,80 +140,56 @@ void ModuleCamera3D::Zoom()
 
 void ModuleCamera3D::Rotation()
 {
-	//if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT)==KEY_REPEAT)
-	//{
-	//	int dx = -App->input->GetMouseXMotion();
-	//	int dy = -App->input->GetMouseYMotion();
+		float3 point = float3::zero;
 
-	//	float Sensitivity = 0.25f;
+		float3 focus = fake_camera->frustum.pos - point;
 
-	//	fake_camera->Position -= fake_camera->Reference;
+		Quat rotationy(fake_camera->frustum.up, App->input->GetMouseXMotion());
+		Quat rotationx(fake_camera->frustum.WorldRight(), App->input->GetMouseYMotion());
 
-	//	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
-	//	SDL_SetCursor(cursor);
+		focus = rotationx.Transform(focus);
+		focus = rotationy.Transform(focus);
 
-	//	if (dx != 0)
-	//	{
-	//		float DeltaX = (float)dx * Sensitivity;
+		fake_camera->frustum.pos = focus + point;
 
-	//		
-	//		fake_camera->X = rotate(fake_camera->X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-	//		fake_camera->Y = rotate(fake_camera->Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-	//		fake_camera->Z = rotate(fake_camera->Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-	//	}
+		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
+		SDL_SetCursor(cursor);
 
-	//	if (dy != 0)
-	//	{
-	//		float DeltaY = (float)dy * Sensitivity;
-
-	//		fake_camera->Y = rotate(Y, DeltaY, X);
-	//		fake_camera->Z = rotate(Z, DeltaY, X);
-
-	//		if (Y.y < 0.0f)
-	//		{
-	//			Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-	//			Y = cross(Z, X);
-	//		}
-	//	}
-
-	//	fake_camera->Position = fake_camera->Reference + fake_camera->Z * fake_camera->Position.Length();
-
-	//	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-	//	{
-	//		SDL_FreeCursor(cursor);
-	//	}
-	//}
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+		{
+			SDL_FreeCursor(cursor);
+		}
 }
 
 void ModuleCamera3D::Focus()
 {
-	if (App->objects->GetSelectedObject() != nullptr)
-	{
-		AABB bounding_box = App->objects->GetSelectedObject()->GetBB();
+	//if (App->objects->GetSelectedObject() != nullptr)
+	//{
+	//	AABB bounding_box = App->objects->GetSelectedObject()->GetBB();
 
-		if (bounding_box.Diagonal().Length() != 0)
-		{
-			float offset = bounding_box.Diagonal().Length() * 0.7;
-			float3 offset_v = fake_camera->Z * offset;
-			fake_camera->Reference.x = bounding_box.CenterPoint().x;
-			fake_camera->Reference.y = bounding_box.CenterPoint().y;
-			fake_camera->Reference.z = bounding_box.CenterPoint().z;
-			fake_camera->Position = fake_camera->Reference + offset_v;
-		}
-		else
-		{
-			float offset = 5.F;
-			float3 offset_v = fake_camera->Z * offset;
+	//	if (bounding_box.Diagonal().Length() != 0)
+	//	{
+	//		float offset = bounding_box.Diagonal().Length() * 0.7;
+	//		float3 offset_v = fake_camera->Z * offset;
+	//		fake_camera->Reference.x = bounding_box.CenterPoint().x;
+	//		fake_camera->Reference.y = bounding_box.CenterPoint().y;
+	//		fake_camera->Reference.z = bounding_box.CenterPoint().z;
+	//		fake_camera->Position = fake_camera->Reference + offset_v;
+	//	}
+	//	else
+	//	{
+	//		float offset = 5.F;
+	//		float3 offset_v = fake_camera->Z * offset;
 
-			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
+	//		ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 
-			fake_camera->Reference.x = transform->GetGlobalPosition().x;
-			fake_camera->Reference.y = transform->GetGlobalPosition().y;
-			fake_camera->Reference.z = transform->GetGlobalPosition().z;
+	//		fake_camera->Reference.x = transform->GetGlobalPosition().x;
+	//		fake_camera->Reference.y = transform->GetGlobalPosition().y;
+	//		fake_camera->Reference.z = transform->GetGlobalPosition().z;
 
-			fake_camera->Position = fake_camera->Reference + offset_v;
-		}
-	}
+	//		fake_camera->Position = fake_camera->Reference + offset_v;
+	//	}
+	//}
 	//else
 	//{
 	//	for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)

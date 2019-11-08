@@ -14,13 +14,12 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 
-	frustum.nearPlaneDistance = 10.0f;
-	frustum.farPlaneDistance = 1000.0f;
+	frustum.nearPlaneDistance = 100.0f;
+	frustum.farPlaneDistance = 10000.0f;
 	frustum.verticalFov = DegToRad(vertical_fov);
 	AspectRatio(16, 9);
 	
 	camera_color_background = Color(0.1f, 0.1f, 0.1f, 1.0f);
-	projection_changed = true;
 }
 
 ComponentCamera::~ComponentCamera()
@@ -30,13 +29,6 @@ ComponentCamera::~ComponentCamera()
 void ComponentCamera::Reset()
 {
 	camera_color_background = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-	X = float3(1.0f, 0.0f, 0.0f);
-	Y = float3(0.0f, 1.0f, 0.0f);
-	Z = float3(0.0f, 0.0f, 1.0f);
-
-	Position = float3(0.0f, 5.0f, 5.0f);
-	Reference = float3(0.0f, 0.0f, 0.0f);
 }
 
 void ComponentCamera::SetComponent(Component* component)
@@ -54,7 +46,16 @@ void ComponentCamera::AspectRatio(int width_ratio, int height_ratio)
 	float ratio = width_ratio / height_ratio;
 
 	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ratio);
-	projection_changed = true;
+}
+
+void ComponentCamera::Look(const float3& position_to_look)
+{
+	float3 direction = position_to_look - frustum.pos;
+
+	float3x3 matrix = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3::unitY);
+
+	frustum.front = matrix.MulDir(frustum.front).Normalized();
+	frustum.up = matrix.MulDir(frustum.up).Normalized();
 }
 
 // -----------------------------------------------------------------
