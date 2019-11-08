@@ -62,10 +62,9 @@ bool ModuleImporter::LoadModelFile(const char* path)
 
 	LOG("Loading %s", path);
 
-	std::string meta_path = std::string((LIBRARY_MODELS_FOLDER) + std::to_string(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data())) + std::string(".alienModel")).data();
-
 	// if this file has been already imported just load the .alienModel
-	if (!App->file_system->Exists(meta_path.data())) {
+	Resource* model = nullptr;
+	if (!App->resources->Exists(path, &model)) {
 		
 		const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
 			aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
@@ -83,7 +82,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 		App->resources->AddNewFileNode(path, true);
 	}
 	else {
-		App->resources->CreateNewModelInstanceOf(meta_path.data());
+		App->resources->CreateNewModelInstanceOf(model->GetLibraryPath());
 	}
 	
 	return ret;
@@ -236,9 +235,11 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 	if (!has_been_dropped && !App->file_system->Exists(path)) {
 		return nullptr;
 	}
-	std::string meta_path_in_assets = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
-	if (App->file_system->Exists(meta_path_in_assets.data())) {
 
+	Resource* tex = nullptr;
+	if (App->resources->Exists(path, &tex)) {
+
+		std::string meta_path_in_assets = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
 		u64 ID = App->resources->GetIDFromAlienPath(meta_path_in_assets.data());
 
 		texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);

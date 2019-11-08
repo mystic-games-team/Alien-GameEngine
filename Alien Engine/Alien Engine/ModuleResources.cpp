@@ -148,6 +148,22 @@ ResourceTexture * ModuleResources::GetTextureByName(const char * name)
 	return ret;
 }
 
+bool ModuleResources::Exists(const char * path, Resource** resource)
+{
+	bool exists = false;
+
+	std::vector<Resource*>::iterator item = resources.begin();
+	for (; item != resources.end(); ++item) {
+		if (*item != nullptr && App->StringCmp(App->file_system->GetBaseFileName(path).data(), App->file_system->GetBaseFileName((*item)->GetAssetsPath()).data())) {
+			exists = true;
+			*resource = (*item);
+			break;
+		}
+	}
+
+	return exists;
+}
+
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)
 {
 	FileNode* to_search = nullptr;

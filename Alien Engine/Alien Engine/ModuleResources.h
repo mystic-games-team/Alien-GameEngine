@@ -51,6 +51,8 @@ public:
 
 	ResourceTexture* GetTextureByName(const char* name);
 
+	bool Exists(const char* path, Resource** resource);
+
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
 	void ReadAllMetaData();
