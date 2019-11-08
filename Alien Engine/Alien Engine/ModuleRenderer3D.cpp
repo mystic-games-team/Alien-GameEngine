@@ -110,8 +110,8 @@ bool ModuleRenderer3D::Init()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
+	App->camera->fake_camera = new ComponentCamera(nullptr);
 	// Projection matrix for
-
 	OnResize(App->window->width, App->window->height);
 
 
@@ -160,8 +160,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
+	
+	glLoadMatrixf(App->camera->fake_camera->OpenGLProjectionMatrix().ptr());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

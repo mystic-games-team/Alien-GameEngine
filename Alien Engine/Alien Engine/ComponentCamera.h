@@ -16,9 +16,15 @@ public:
 	void Reset();
 	void SetComponent(Component* component);
 
-	float4x4 GetViewMatrix();
+	void AspectRatio(int width_ratio, int height_ratio);
 
-	void CalculateViewMatrix();
+	float4x4 GetViewMatrix() const;
+
+	float4x4 GetProjectionMatrix() const;
+
+	float4x4 OpenGLViewMatrix() const;
+
+	float4x4 OpenGLProjectionMatrix() const;
 
 public:
 
@@ -29,6 +35,8 @@ public:
 	float vertical_fov = 60.0f;
 
 private:
+
+	bool projection_changed = false;
 
 	float3 newPos{ 0,0,0 };
 

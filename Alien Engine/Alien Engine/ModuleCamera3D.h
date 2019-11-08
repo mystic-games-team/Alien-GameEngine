@@ -36,7 +36,7 @@ public:
 
 private:
 
-	float3 newPos{ 0,0,0 };
+	Frustum* frustum=nullptr;
 
 	float speed = 0.f;
 	float zoom_speed = 0.f;

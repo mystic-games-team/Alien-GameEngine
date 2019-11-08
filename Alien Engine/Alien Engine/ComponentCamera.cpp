@@ -9,6 +9,7 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	type = ComponentType::CAMERA;
 
 	frustum.type = FrustumType::PerspectiveFrustum;
+
 	frustum.pos = float3::zero;
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
@@ -16,7 +17,10 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	frustum.nearPlaneDistance = 10.0f;
 	frustum.farPlaneDistance = 1000.0f;
 	frustum.verticalFov = DegToRad(vertical_fov);
+	AspectRatio(16, 9);
 	
+	camera_color_background = Color(0.1f, 0.1f, 0.1f, 1.0f);
+	projection_changed = true;
 }
 
 ComponentCamera::~ComponentCamera()
@@ -26,8 +30,6 @@ ComponentCamera::~ComponentCamera()
 void ComponentCamera::Reset()
 {
 	camera_color_background = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-	CalculateViewMatrix();
 
 	X = float3(1.0f, 0.0f, 0.0f);
 	Y = float3(0.0f, 1.0f, 0.0f);
@@ -47,17 +49,45 @@ void ComponentCamera::SetComponent(Component* component)
 	}
 }
 
-float4x4 ComponentCamera::GetViewMatrix()
+void ComponentCamera::AspectRatio(int width_ratio, int height_ratio)
 {
-	return ViewMatrix;
+	float ratio = width_ratio / height_ratio;
+
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ratio);
+	projection_changed = true;
 }
 
 // -----------------------------------------------------------------
-void ComponentCamera::CalculateViewMatrix()
+float4x4 ComponentCamera::GetViewMatrix() const
 {
-	ViewMatrix = float4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -Position.Dot(X), -Position.Dot(Y), -Position.Dot(Z), 1.0f);
-	
-	ViewMatrixInverse = ViewMatrix;
+	return frustum.ViewMatrix();
+}
 
-	ViewMatrixInverse.Inverse();
+// -----------------------------------------------------------------
+float4x4 ComponentCamera::GetProjectionMatrix() const
+{
+	//return frustum.ProjectionMatrix();
+	return float4x4::D3DPerspProjRH(frustum.nearPlaneDistance, frustum.farPlaneDistance, frustum.NearPlaneWidth(), frustum.NearPlaneHeight());
+}
+
+
+float4x4 ComponentCamera::OpenGLViewMatrix() const
+{
+	float4x4 view_matrix;
+
+	view_matrix = frustum.ViewMatrix();
+	view_matrix.Transpose();
+
+	return view_matrix;
+}
+
+// -----------------------------------------------------------------
+float4x4 ComponentCamera::OpenGLProjectionMatrix() const
+{
+	float4x4 view_matrix;
+
+	view_matrix = frustum.ProjectionMatrix();
+	view_matrix.Transpose();
+
+	return view_matrix;
 }
