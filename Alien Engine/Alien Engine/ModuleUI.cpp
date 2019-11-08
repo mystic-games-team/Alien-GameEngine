@@ -309,19 +309,19 @@ void ModuleUI::MainMenuBar()
 	{
 		if (ImGui::MenuItem("Create New Scene"))
 		{
-			
+			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::CREATE_NEW_SCENE);
 		}
 		if (ImGui::MenuItem("Save Scene", panel_scene_selector->shortcut->GetNameScancodes()))
 		{
-			
+			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::SAVE_SCENE);
 		}	
 		if (ImGui::MenuItem("Save Scene As"))
 		{
-			
+			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::SAVE_AS_NEW);
 		}
 		if (ImGui::MenuItem("Load Scene"))
 		{
-			
+			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::LOAD_SCENE);
 		}
 		if (ImGui::MenuItem("Import"))
 		{

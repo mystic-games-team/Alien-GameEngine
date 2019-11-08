@@ -18,6 +18,36 @@ PanelSceneSelector::~PanelSceneSelector()
 
 void PanelSceneSelector::PanelLogic()
 {
-	ImGui::Begin("dfsd", &enabled);
-	ImGui::End();
+	switch (state) {
+	case SceneSelectorState::SAVE_SCENE:
+
+		break;
+	case SceneSelectorState::SAVE_AS_NEW:
+
+		break;
+	case SceneSelectorState::CREATE_NEW_SCENE:
+
+		break;
+	case SceneSelectorState::LOAD_SCENE:
+
+		break;
+	}
+}
+
+void PanelSceneSelector::OrganizeSave(const SceneSelectorState& state)
+{
+	switch (state) {
+	case SceneSelectorState::SAVE_SCENE:
+
+		break;
+	case SceneSelectorState::SAVE_AS_NEW:
+
+		break;
+	case SceneSelectorState::CREATE_NEW_SCENE:
+
+		break;
+	case SceneSelectorState::LOAD_SCENE:
+
+		break;
+	}
 }

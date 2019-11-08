@@ -9,7 +9,8 @@ public:
 	enum class SceneSelectorState {
 		SAVE_SCENE,
 		SAVE_AS_NEW,
-
+		LOAD_SCENE,
+		CREATE_NEW_SCENE,
 
 		NONE
 	};
@@ -18,6 +19,12 @@ public:
 	virtual ~PanelSceneSelector();
 
 	void PanelLogic();
+
+	void OrganizeSave(const SceneSelectorState& state);
+
+private:
+
+	SceneSelectorState state = SceneSelectorState::NONE;
 
 };
 
