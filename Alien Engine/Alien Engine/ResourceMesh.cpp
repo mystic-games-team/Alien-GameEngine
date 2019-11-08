@@ -123,7 +123,7 @@ bool ResourceMesh::ReadMetaData(const char* path)
 		// texture path
 		bool has_texture = meta->GetBoolean("Mesh.HasTexture");
 
-		if (has_texture) {
+		if (has_texture) { // just save a string with the texture name and do GetResourceByName
 			texture = App->importer->LoadTextureFile(meta->GetString("Mesh.Texture"));
 		}
 

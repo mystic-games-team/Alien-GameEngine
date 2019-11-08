@@ -21,7 +21,7 @@ void ResourceTexture::CreateMetaData()
 {
 	if (ilLoadImage(path.data())) {
 		ID = App->resources->GetRandomID();
-
+		iluFlipImage();
 		std::string alien_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data();
 
 		uint size = sizeof(uint) + sizeof(ID);
@@ -43,8 +43,13 @@ void ResourceTexture::CreateMetaData()
 		meta_data_path = std::string(LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds");
 		if (App->StringCmp(output.data(), "dds")) {
 			App->file_system->Copy(path.data(), meta_data_path.data());
+			id = ilutGLBindTexImage();
+			is_custom = true;
+			width = ilGetInteger(IL_IMAGE_WIDTH);
+			height = ilGetInteger(IL_IMAGE_HEIGHT);
 		}
 		else {
+			iluFlipImage();
 			ILuint image_size;
 			ILubyte* image_data;
 			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
@@ -54,12 +59,12 @@ void ResourceTexture::CreateMetaData()
 				if (ilSaveL(IL_DDS, image_data, image_size) > 0) {
 					App->file_system->SaveUnique(output, image_data, image_size, LIBRARY_TEXTURES_FOLDER, std::to_string(ID).data(), ".dds");
 				}
-
+				iluFlipImage();
 				id = ilutGLBindTexImage();
 				is_custom = true;
 				width = ilGetInteger(IL_IMAGE_WIDTH);
 				height = ilGetInteger(IL_IMAGE_HEIGHT);
-
+				
 				RELEASE_ARRAY(image_data);
 			}
 		}
