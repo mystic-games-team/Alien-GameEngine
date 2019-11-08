@@ -78,3 +78,18 @@ void ComponentLight::SetComponent(Component* component)
 		ambient = light->ambient;
 	}
 }
+
+void ComponentLight::SaveComponent(JSONArraypack* to_save)
+{
+	to_save->SetNumber("Type", (int)type);
+	to_save->SetColor("DiffuseColor", diffuse);
+	to_save->SetColor("AmbienColor", ambient);
+	to_save->SetBoolean("Enabled", enabled);
+}
+
+void ComponentLight::LoadComponent(JSONArraypack* to_load)
+{
+	diffuse = to_load->GetColor("DiffuseColor");
+	ambient = to_load->GetColor("AmbienColor");
+	enabled = to_load->GetBoolean("Enabled");
+}

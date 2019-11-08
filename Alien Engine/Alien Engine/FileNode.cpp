@@ -126,6 +126,10 @@ void FileNode::SetIcon()
 			icon = App->resources->icons.model;
 			type = FileDropType::MODEL3D;
 		}
+		else if (App->StringCmp(extension.data(), "alienScene")) {
+			icon = App->resources->icons.scene_file;
+			type = FileDropType::SCENE;
+		}
 		else {
 			// TODO: fer un icon que sigui unknown
 			icon = App->resources->icons.model;

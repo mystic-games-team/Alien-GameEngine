@@ -28,6 +28,9 @@ public:
 
 	AABB GetGlobalAABB();
 
+	void SaveComponent(JSONArraypack* to_save);
+	void LoadComponent(JSONArraypack* to_load);
+
 private:
 
 	AABB GenerateAABB();
@@ -49,6 +52,4 @@ private:
 	AABB local_aabb;
 	OBB obb;
 	AABB global_aabb;
-
-	uint obb_id=0;
 };

@@ -10,13 +10,16 @@
 
 GameObject::GameObject(GameObject* parent)
 {
-	// TODO: random id gameobjects
-	//id = GetRandomIntBetweenTwo(INT_MIN, INT_MAX);
+	ID = App->resources->GetRandomID();
 
 	if (parent != nullptr) {
 		this->parent = parent;
 		parent->AddChild(this);
 	}
+}
+
+GameObject::GameObject()
+{
 }
 
 GameObject::~GameObject()
@@ -385,10 +388,10 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 	}
 }
 
-GameObject* GameObject::GetGameObjectByID(const int& id)
+GameObject* GameObject::GetGameObjectByID(const u64 & id)
 {
 	GameObject* ret = nullptr;
-	if (id == this->id) {
+	if (id == this->ID) {
 		return this;
 	}
 	std::vector<GameObject*>::iterator item = children.begin();
@@ -464,6 +467,81 @@ AABB GameObject::GetBB()
 			return aabb_null;
 		}
 	}
+}
+
+void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
+{
+	to_save->SetString("Name", name);
+	to_save->SetNumber("FamilyNumber", family_number);
+	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ParentID",(parent != nullptr) ? std::to_string(parent->ID) : "0");
+	to_save->SetBoolean("Enabled", enabled);
+	to_save->SetBoolean("ParentEnabled", parent_enabled);
+	to_save->SetBoolean("Selected", selected);
+	to_save->SetBoolean("ParentSelected", parent_selected);
+
+	JSONArraypack* components_to_save = to_save->InitNewArray("Components");
+
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->SaveComponent(components_to_save);
+			if ((*item) != components.back())
+				components_to_save->SetAnotherNode();
+		}
+	}
+}
+
+void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
+{
+	name = to_load->GetString("Name");
+	ID = std::stoull(to_load->GetString("ID"));
+	enabled = to_load->GetBoolean("Enabled");
+	parent_enabled = to_load->GetBoolean("ParentEnabled");
+	selected = to_load->GetBoolean("Selected");
+	parent_selected = to_load->GetBoolean("ParentSelected");
+
+	if (parent != nullptr) {
+		this->parent = parent;
+		parent->AddChild(this);
+	}
+
+	JSONArraypack* components_to_load = to_load->GetArray("Components");
+
+	if (components_to_load != nullptr) {
+		for (uint i = 0; i < components_to_load->GetArraySize(); ++i) {
+			SDL_assert((uint)ComponentType::UNKNOWN == 4); // add new type to switch
+			switch ((int)components_to_load->GetNumber("Type")) {
+			case (int)ComponentType::TRANSFORM: {
+				ComponentTransform* transform = new ComponentTransform(this);
+				transform->LoadComponent(components_to_load);
+				AddComponent(transform);
+				break; }
+			case (int)ComponentType::LIGHT: {
+				ComponentLight* light = new ComponentLight(this);
+				light->LoadComponent(components_to_load);
+				AddComponent(light);
+				break; }
+			case (int)ComponentType::MATERIAL: {
+				ComponentMaterial* material = new ComponentMaterial(this);
+				material->LoadComponent(components_to_load);
+				AddComponent(material);
+				break; }
+			case (int)ComponentType::MESH: {
+				ComponentMesh* mesh = new ComponentMesh(this);
+				mesh->LoadComponent(components_to_load);
+				AddComponent(mesh);
+				break; }
+			default:
+				LOG("Unknown component type while loading");
+				break;
+			}
+
+			components_to_load->GetAnotherNode();
+		}
+	}
+
+
 }
 
 void GameObject::SearchToDelete()

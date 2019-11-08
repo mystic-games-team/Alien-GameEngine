@@ -16,6 +16,9 @@ public:
 	void Reset();
 	void SetComponent(Component* component);
 
+	void SaveComponent(JSONArraypack* to_save);
+	void LoadComponent(JSONArraypack* to_load);
+
 private:
 
 	Color ambient{ 0.5f, 0.5f, 0.5f, 1.0f };

@@ -407,7 +407,6 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						}
 						node->DeleteChildren();
 						App->file_system->DiscoverEverythig(node);
-						// TODO: look what has been moved and change this to meta
 					}
 					else {
 						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
@@ -428,7 +427,6 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						}
 						node->DeleteChildren();
 						App->file_system->DiscoverEverythig(node);
-						// TODO: look what has been moved and change this to meta
 					}
 					else {
 						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
@@ -449,7 +447,6 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						App->file_system->DiscoverEverythig(next_parent);
 						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
 						current_active_file = nullptr;
-						// TODO: look what has been moved and change this to meta
 					}
 					else {
 						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
@@ -465,7 +462,6 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						App->file_system->DiscoverEverythig(next_parent);
 						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
 						current_active_file = nullptr;
-						// TODO: look what has been moved and change this to meta
 					}
 					else {
 						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());

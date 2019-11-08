@@ -22,6 +22,7 @@ struct Icons {
 	ResourceTexture* folder = nullptr;
 	ResourceTexture* model = nullptr;
 	ResourceTexture* return_icon = nullptr;
+	ResourceTexture* scene_file = nullptr;
 
 };
 

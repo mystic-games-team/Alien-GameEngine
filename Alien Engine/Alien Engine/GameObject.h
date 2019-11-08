@@ -5,11 +5,13 @@
 #include <vector>
 #include <string>
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "JSONfilepack.h"
 
 class GameObject
 {
 public:
 	GameObject(GameObject* parent);
+	GameObject(); // just for loading objects, dont use it
 	virtual ~GameObject();
 
 	// OnEnable/Disable
@@ -61,13 +63,16 @@ public:
 	void SearchToDelete();
 
 	// id's
-	GameObject* GetGameObjectByID(const int& id);
+	GameObject* GetGameObjectByID(const u64 & id);
 
 	// search and return true if exists in its children or children of children bla bla
 	bool Exists(GameObject* object);
 
 	// Bounding Boxes
 	AABB GetBB(); // 0 = Local Bounding Box, 1 = Global Bounding Box
+
+	void SaveObject(JSONArraypack* to_save, const uint& family_number);
+	void LoadObject(JSONArraypack* to_save, GameObject* parent);
 
 private:
 
@@ -80,7 +85,7 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 	bool enabled = true;
-	int id = 0;
+	u64 ID = 0;
 
 private:
 

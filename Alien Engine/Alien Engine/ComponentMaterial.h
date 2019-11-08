@@ -17,10 +17,12 @@ public:
 	void Reset();
 	void SetComponent(Component* component);
 
+	void SaveComponent(JSONArraypack* to_save);
+	void LoadComponent(JSONArraypack* to_load);
+
 public:
 
 	ResourceTexture* texture = nullptr;
-	uint material_index = 0;
 	Color color{ 1,1,1,1 };
 
 private:

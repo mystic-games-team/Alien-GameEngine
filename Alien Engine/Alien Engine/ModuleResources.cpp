@@ -28,6 +28,7 @@ bool ModuleResources::Start()
 	icons.folder = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_folder.png");
 	icons.model = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_model.png");
 	icons.return_icon = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_return.png");
+	icons.scene_file = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_scene.png");
 
 	assets = new FileNode();
 	assets->is_file = false;

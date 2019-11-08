@@ -303,6 +303,26 @@ void ModuleUI::MainMenuBar()
 	ImGui::BeginMainMenuBar();
 	if (ImGui::BeginMenu("File"))
 	{
+		if (ImGui::MenuItem("Create New Scene"))
+		{
+			
+		}
+		if (ImGui::MenuItem("Save Scene"))
+		{
+			
+		}	
+		if (ImGui::MenuItem("Save Scene As"))
+		{
+			
+		}
+		if (ImGui::MenuItem("Load Scene"))
+		{
+			
+		}
+		if (ImGui::MenuItem("Import"))
+		{
+
+		}
 		if (ImGui::MenuItem("Close", "Alt + F4"))
 		{
 			App->QuitApp();

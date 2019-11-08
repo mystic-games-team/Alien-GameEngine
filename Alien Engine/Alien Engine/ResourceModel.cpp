@@ -69,6 +69,7 @@ void ResourceModel::CreateMetaData()
 		LOG("Created alien file %s", meta_data_path.data());
 
 		meta->FinishSave();
+		delete meta;
 	}
 }
 
@@ -105,6 +106,7 @@ bool ResourceModel::ReadMetaData(const char* path)
 			}
 		}
 		delete[] mesh_path;
+		delete meta;
 		App->resources->AddResource(this);
 	}
 
@@ -173,6 +175,7 @@ void ResourceModel::ChangeFileMetaName(const char* new_name)
 		std::string new_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(App->file_system->GetCurrentFolder(path) + App->file_system->GetBaseFileName(path.data())).data() + ".alienModel";
 		rename(meta_data_path.data(), new_path.data());
 		meta_data_path = new_path;
+		delete meta;
 	}
 }
 

@@ -3,6 +3,7 @@
 class GameObject;
 
 typedef unsigned int uint;
+class JSONArraypack;
 
 enum class ComponentType {
 	TRANSFORM = 0,
@@ -27,6 +28,9 @@ public:
 
 	virtual void Reset() {}
 	virtual void SetComponent(Component* component) {}
+
+	virtual void SaveComponent(JSONArraypack* to_save) {}
+	virtual void LoadComponent(JSONArraypack* to_load) {}
 
 	const ComponentType& GetType() const;
 

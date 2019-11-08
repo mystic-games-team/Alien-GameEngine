@@ -28,9 +28,9 @@ void PanelHierarchy::PanelLogic()
 	{
 		App->objects->GetSelectedObject()->ToDelete();
 	}
-
+	
 	ImGui::Spacing();
-	ImGui::Text("GameObjects");
+	ImGui::Text(std::string("Current Scene: " + std::string(App->objects->current_scene)).data());
 	ImGui::Spacing();
 	ImGui::Separator();
 	ImGui::Spacing();
