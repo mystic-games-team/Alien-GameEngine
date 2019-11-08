@@ -519,15 +519,20 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 			case (int)ComponentType::TRANSFORM: {
 				ComponentTransform* transform = new ComponentTransform(this);
 				transform->LoadComponent(components_to_load);
+				AddComponent(transform);
 				break; }
 			case (int)ComponentType::LIGHT: {
-
+				ComponentLight* light = new ComponentLight(this);
+				light->LoadComponent(components_to_load);
+				AddComponent(light);
 				break; }
 			case (int)ComponentType::MATERIAL: {
-
+				
 				break; }
 			case (int)ComponentType::MESH: {
-
+				ComponentMesh* mesh = new ComponentMesh(this);
+				mesh->LoadComponent(components_to_load);
+				AddComponent(mesh);
 				break; }
 			default:
 				LOG("Unknown component type while loading");

@@ -52,6 +52,4 @@ private:
 	AABB local_aabb;
 	OBB obb;
 	AABB global_aabb;
-
-	uint obb_id=0;
 };

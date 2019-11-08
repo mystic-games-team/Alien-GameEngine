@@ -89,4 +89,7 @@ void ComponentLight::SaveComponent(JSONArraypack* to_save)
 
 void ComponentLight::LoadComponent(JSONArraypack* to_load)
 {
+	diffuse = to_load->GetColor("DiffuseColor");
+	ambient = to_load->GetColor("AmbienColor");
+	enabled = to_load->GetBoolean("Enabled");
 }
