@@ -4,7 +4,7 @@
         "Name": "Chimney",
         "FamilyNumber": 1,
         "HasTexture": true,
-        "Texture": "Assets\/Textures\/Baker_house.dds",
+        "Texture": "Assets\/Textures\/Baker\/Baker_house.dds",
         "Position": [
             0,
             0,

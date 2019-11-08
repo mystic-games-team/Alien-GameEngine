@@ -1,0 +1,10 @@
+{
+    "Model": {
+        "Name": "BakerHouse",
+        "NumMeshes": 2,
+        "PathMeshes": [
+            "Library\/Meshes\/94546474153250453.alienMesh",
+            "Library\/Meshes\/6445323516393550589.alienMesh"
+        ]
+    }
+}

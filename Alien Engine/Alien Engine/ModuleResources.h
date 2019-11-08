@@ -49,6 +49,8 @@ public:
 
 	u64 GetRandomID();
 
+	ResourceTexture* GetTextureByName(const char* name);
+
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
 	void ReadAllMetaData();

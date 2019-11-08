@@ -134,6 +134,20 @@ u64 ModuleResources::GetRandomID()
 	return Random::GetRandomID();
 }
 
+ResourceTexture * ModuleResources::GetTextureByName(const char * name)
+{
+	ResourceTexture* ret = nullptr;
+
+	std::vector<Resource*>::iterator item = resources.begin();
+	for (; item != resources.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && App->StringCmp(App->file_system->GetBaseFileName((*item)->GetAssetsPath()).data(),App->file_system->GetBaseFileName(name).data())) {
+			return static_cast<ResourceTexture*>(*item);
+		}
+	}
+
+	return ret;
+}
+
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)
 {
 	FileNode* to_search = nullptr;
