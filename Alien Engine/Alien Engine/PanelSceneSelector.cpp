@@ -80,19 +80,20 @@ void PanelSceneSelector::SaveSceneAsNew()
 	ZeroMemory(&filename, sizeof(filename));
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = NULL;  // If you have a window to center over, put its HANDLE here
-	ofn.lpstrFilter = "alienScene\0*.alienScene";  //Add a filter, so you can limite the files you want. In this case you can only selet .json files
-	ofn.lpstrFile = filename; //This will recieve the name
-	ofn.nMaxFile = MAX_PATH; //max size in characters of the path
-	ofn.lpstrTitle = "Save As New .alienScene"; //the title of the dialogue box
+	ofn.hwndOwner = NULL;  
+	ofn.lpstrFilter = "alienScene\0*.alienScene";  
+	ofn.lpstrFile = filename; 
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrTitle = "Save As New .alienScene"; 
 	ofn.lpstrInitialDir = dir.data();
-	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER; //Flags that do flag things :)
-	if (GetOpenFileNameA(&ofn)) //the function that opens the file folder
+	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER; 
+	if (GetSaveFileNameA(&ofn)) 
 	{	
 		SetCurrentDirectoryA(curr_dir);
+		LOG("FILENAME: %s", filename);
 		App->ui->panel_project->RefreshAllNodes();
 	}
-	else {
+	else { 
 		SetCurrentDirectoryA(curr_dir);
 	}
 	
