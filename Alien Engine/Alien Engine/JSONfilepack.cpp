@@ -443,6 +443,12 @@ void JSONArraypack::GetFirstNode()
 	value = json_array_get_value(arr, index);
 }
 
+void JSONArraypack::GetNode(const uint& index)
+{
+	this->index = index;
+	value = json_array_get_value(arr, index);
+}
+
 uint JSONArraypack::GetArraySize()
 {
 	return json_array_get_count(arr);

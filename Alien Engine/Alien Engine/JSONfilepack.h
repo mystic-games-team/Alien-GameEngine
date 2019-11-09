@@ -91,6 +91,7 @@ public:
 	void SetAnotherNode();
 	bool GetAnotherNode();
 	void GetFirstNode();
+	void GetNode(const uint& index);
 
 	uint GetArraySize();
 

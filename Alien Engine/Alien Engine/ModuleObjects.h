@@ -86,10 +86,12 @@ public:
 	//reparent object in the next preupdate
 	void ReparentGameObject(GameObject* object, GameObject* next_parent);
 
-	// saving scene
+	// scenes
 	void SaveScene(const char* path);
 	void LoadScene(const char* path);
-	static bool SortByFamilyNumber(std::pair<uint, u64> pair1, std::pair<uint, u64> pair2);
+	void CreateEmptyScene(const char* path);
+
+	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);
 public:
 
 	Scene current_scene;

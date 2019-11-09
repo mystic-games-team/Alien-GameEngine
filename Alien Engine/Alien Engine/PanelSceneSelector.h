@@ -26,6 +26,8 @@ private:
 
 	bool ExistsScene(const char* scene_name_with_extension);
 	void SaveSceneAsNew();
+	void LoadScene();
+	void CreateNewScene();
 
 private:
 

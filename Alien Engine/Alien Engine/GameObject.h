@@ -59,7 +59,7 @@ public:
 	void ChangeOBB(const bool& OBB_view);
 
 	// deleting 
-	void ToDelete();
+	void ToDelete(); // delete it at the begining of the next frame
 	void SearchToDelete();
 
 	// id's
