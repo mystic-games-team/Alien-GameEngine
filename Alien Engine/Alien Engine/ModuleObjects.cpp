@@ -419,6 +419,14 @@ void ModuleObjects::CreateEmptyScene(const char* path)
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* object = json_value_get_object(value);
 	json_serialize_to_file_pretty(value, path);
+
+	std::string path_normalized = path;
+	App->file_system->NormalizePath(path_normalized);
+	current_scene.full_path = path;
+	current_scene.is_untitled = false;
+	current_scene.name_without_extension = App->file_system->GetBaseFileName(path_normalized.data());
+	current_scene.need_to_save = false;
+
 }
 
 void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number)

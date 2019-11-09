@@ -24,14 +24,15 @@ public:
 
 private:
 
-	bool ExistsScene(const char* scene_name_with_extension);
 	void SaveSceneAsNew();
 	void LoadScene();
 	void CreateNewScene();
+	void MenuSaveCurrentScene();
 
 private:
-
-	SceneSelectorState state = SceneSelectorState::NONE;
+	bool menu_save_current = false;
+	bool create_new = false;
+	bool load = false;
 
 };
 

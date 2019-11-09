@@ -19,19 +19,8 @@ PanelSceneSelector::~PanelSceneSelector()
 
 void PanelSceneSelector::PanelLogic()
 {
-	switch (state) {
-	case SceneSelectorState::SAVE_SCENE:
-		
-		break;
-	case SceneSelectorState::SAVE_AS_NEW:
-
-		break;
-	case SceneSelectorState::CREATE_NEW_SCENE:
-
-		break;
-	case SceneSelectorState::LOAD_SCENE:
-
-		break;
+	if (menu_save_current) {
+		MenuSaveCurrentScene();
 	}
 }
 
@@ -50,20 +39,24 @@ void PanelSceneSelector::OrganizeSave(const SceneSelectorState& state)
 		SaveSceneAsNew();
 		break; }
 	case SceneSelectorState::CREATE_NEW_SCENE:
-		CreateNewScene();
+		if (App->objects->current_scene.is_untitled) {
+			CreateNewScene();
+		}
+		else {
+			menu_save_current = true;
+			create_new = true;
+		}
 		break;
 	case SceneSelectorState::LOAD_SCENE:
-		LoadScene();
+		if (App->objects->current_scene.is_untitled) {
+			LoadScene();
+		}
+		else {
+			menu_save_current = true;
+			load = true;
+		}
 		break;
 	}
-}
-
-bool PanelSceneSelector::ExistsScene(const char* scene_name_with_extension)
-{
-	if (App->file_system->ExistsInFolderRecursive(SCENE_FOLDER, scene_name_with_extension)) {
-		return true;
-	}
-	return false;
 }
 
 void PanelSceneSelector::SaveSceneAsNew()
@@ -95,7 +88,12 @@ void PanelSceneSelector::SaveSceneAsNew()
 	{	
 		SetCurrentDirectoryA(curr_dir);
 
-		App->objects->SaveScene(filename);
+		std::string extension;
+		App->file_system->SplitFilePath(filename, nullptr, nullptr, &extension);
+		if (!App->StringCmp("alienScene", extension.data()))
+			App->objects->CreateEmptyScene(std::string(filename + std::string(".alienScene")).data());
+		else
+			App->objects->CreateEmptyScene(filename);
 
 		// last of all, refresh nodes because I have no idea if the user has created folders or moved things in the explorer. Users are bad people creating folders without using the alien engine explorer :(
 		App->ui->panel_project->RefreshAllNodes();
@@ -174,12 +172,64 @@ void PanelSceneSelector::CreateNewScene()
 	{
 		SetCurrentDirectoryA(curr_dir);
 
-		App->objects->CreateEmptyScene(filename);
+		std::string extension;
+		App->file_system->SplitFilePath(filename, nullptr, nullptr, &extension);
+
+		if (!App->StringCmp("alienScene",extension.data()))
+			App->objects->CreateEmptyScene(std::string(filename + std::string(".alienScene")).data());
+		else 
+			App->objects->CreateEmptyScene(filename);
 
 		// last of all, refresh nodes because I have no idea if the user has created folders or moved things in the explorer. Users are bad people creating folders without using the alien engine explorer :(
 		App->ui->panel_project->RefreshAllNodes();
 	}
 	else {
 		SetCurrentDirectoryA(curr_dir);
+	}
+}
+
+void PanelSceneSelector::MenuSaveCurrentScene()
+{
+	ImGui::OpenPopup("Save Current Scene");
+	ImGui::SetNextWindowSize({ 200,60 });
+	if (ImGui::BeginPopupModal("Save Current Scene", &menu_save_current, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	{
+		ImGui::Spacing();
+
+		if (ImGui::Button("Don't save")) {
+			menu_save_current = false;
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Save")) {
+			App->objects->SaveScene(App->objects->current_scene.full_path.data());
+			menu_save_current = false;
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			menu_save_current = false;
+			load = false;
+			create_new = false;
+		}
+
+		ImGui::EndPopup();
+	}
+	else {
+		load = false;
+		create_new = false;
+	}
+
+	if (!menu_save_current) {
+		if (load) {
+			load = false;
+			LoadScene();
+		}
+		else if (create_new) {
+			create_new = false;
+			CreateNewScene();
+		}
 	}
 }
