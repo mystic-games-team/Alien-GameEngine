@@ -1,4 +1,5 @@
 #include "Component.h"
+#include "Globals.h"
 #include "ComponentCamera.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MathGeoLib/include/MathBuildConfig.h"
@@ -16,7 +17,7 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 
 	frustum.nearPlaneDistance = 100.0f;
 	frustum.farPlaneDistance = 10000.0f;
-	frustum.verticalFov = DegToRad(vertical_fov);
+	frustum.verticalFov = DEGTORAD * vertical_fov;
 	AspectRatio(16, 9);
 	
 	camera_color_background = Color(0.1f, 0.1f, 0.1f, 1.0f);
@@ -43,9 +44,7 @@ void ComponentCamera::SetComponent(Component* component)
 
 void ComponentCamera::AspectRatio(int width_ratio, int height_ratio)
 {
-	float ratio = width_ratio / height_ratio;
-
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ratio);
+	frustum.horizontalFov = DEGTORAD * (2.f * atanf(tanf(vertical_fov * 0.5f) * (width_ratio / height_ratio)));
 }
 
 void ComponentCamera::Look(const float3& position_to_look)

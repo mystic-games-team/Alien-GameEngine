@@ -31,7 +31,7 @@ public:
 public:
 	Frustum frustum;
 
-	float vertical_fov = 60.0f;
+	float vertical_fov = 90.0f;
 
 private:
 
