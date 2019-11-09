@@ -38,7 +38,7 @@ bool ModuleObjects::Start()
 	light_test->AddComponent(new ComponentTransform(light_test, { 0,0,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
 	light_test->AddComponent(new ComponentLight(light_test));
 
-	current_scene = "Untitled";
+	current_scene.name_without_extension = "Untitled*";
 
 	return ret;
 }

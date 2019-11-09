@@ -8,6 +8,17 @@
 #include <map>
 #include <utility>
 
+struct Scene {
+
+	Scene() {}
+	~Scene() {}
+
+	std::string name_without_extension;
+	std::string full_path;
+	bool need_to_save = false;
+	bool is_untitled = true;
+};
+
 enum class PrimitiveType
 {
 	CUBE,
@@ -81,7 +92,7 @@ public:
 	static bool SortByFamilyNumber(std::pair<uint, u64> pair1, std::pair<uint, u64> pair2);
 public:
 
-	const char* current_scene = nullptr;
+	Scene current_scene;
 
 	// root
 	GameObject* base_game_object = nullptr;
@@ -138,9 +149,5 @@ private:
 private:
 
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
-
-
-
-
 
 };

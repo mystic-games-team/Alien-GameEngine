@@ -106,6 +106,30 @@ bool ModuleFileSystem::Exists(const char* file) const
 	return PHYSFS_exists(file) != 0;
 }
 
+bool ModuleFileSystem::ExistsInFolderRecursive(const char* folder, const char* file_name)
+{
+	bool ret = false;
+
+	std::vector<std::string> files, directories;
+	DiscoverFiles(folder, files, directories);
+	for (uint i = 0; i < files.size(); ++i) {
+		if (App->StringCmp(file_name, files[i].data())) {
+			ret = true;
+			break;
+		}
+	}
+
+	if (!ret) {
+		for (uint i = 0; i < directories.size(); ++i) {
+			ret = ExistsInFolderRecursive(std::string(folder + directories[i] + std::string("/")).data(), file_name);
+			if (ret)
+				break;
+		}
+	}
+
+	return ret;
+}
+
 // Check if a file is a directory
 bool ModuleFileSystem::IsDirectory(const char* file) const
 {

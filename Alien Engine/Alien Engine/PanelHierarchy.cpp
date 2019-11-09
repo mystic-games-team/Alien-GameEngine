@@ -29,7 +29,7 @@ void PanelHierarchy::PanelLogic()
 	}
 	
 	ImGui::Spacing();
-	ImGui::Text(std::string("Current Scene: " + std::string(App->objects->current_scene)).data());
+	ImGui::Text(std::string("Current Scene: " + App->objects->current_scene.name_without_extension).data());
 	ImGui::Spacing();
 	ImGui::Separator();
 	ImGui::Spacing();

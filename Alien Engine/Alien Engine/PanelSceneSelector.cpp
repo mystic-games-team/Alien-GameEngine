@@ -20,7 +20,7 @@ void PanelSceneSelector::PanelLogic()
 {
 	switch (state) {
 	case SceneSelectorState::SAVE_SCENE:
-
+		
 		break;
 	case SceneSelectorState::SAVE_AS_NEW:
 
@@ -38,10 +38,16 @@ void PanelSceneSelector::OrganizeSave(const SceneSelectorState& state)
 {
 	switch (state) {
 	case SceneSelectorState::SAVE_SCENE:
-
+		if (App->objects->current_scene.is_untitled) {
+			OrganizeSave(SceneSelectorState::SAVE_AS_NEW);
+		}
+		else {
+			App->file_system->Remove(App->objects->current_scene.full_path.data());
+			App->objects->SaveScene(App->objects->current_scene.full_path.data());
+		}
 		break;
 	case SceneSelectorState::SAVE_AS_NEW:
-
+		// si el nom es untitled mirar si  ja hi ha alguna aixi i posa 2
 		break;
 	case SceneSelectorState::CREATE_NEW_SCENE:
 
@@ -50,4 +56,12 @@ void PanelSceneSelector::OrganizeSave(const SceneSelectorState& state)
 
 		break;
 	}
+}
+
+bool PanelSceneSelector::ExistsScene(const char* scene_name_with_extension)
+{
+	if (App->file_system->ExistsInFolderRecursive(SCENE_FOLDER, scene_name_with_extension)) {
+		return true;
+	}
+	return false;
 }

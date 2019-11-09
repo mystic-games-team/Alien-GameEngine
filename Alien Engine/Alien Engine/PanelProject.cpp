@@ -16,7 +16,7 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 
 	assets = App->resources->assets;
 	current_active_folder = assets;
-
+	
 	go_back_folder.name = "Go Back";
 	go_back_folder.is_file = false;
 	go_back_folder.icon = App->resources->icons.return_icon;
