@@ -25,7 +25,7 @@ public:
 private:
 
 	bool ExistsScene(const char* scene_name_with_extension);
-	void GetSceneFullPathWithName(const char* scene_name);
+	void SaveSceneAsNew();
 
 private:
 

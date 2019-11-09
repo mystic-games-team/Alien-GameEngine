@@ -364,13 +364,7 @@ void PanelProject::RightClickToWindow(bool pop_up_item)
 		}
 		ImGui::Separator();
 		if (ImGui::MenuItem("Refresh")) {
-			std::string current_folder_path = current_active_folder->path;
-			assets->DeleteChildren();
-			App->file_system->DiscoverEverythig(assets);
-			current_active_folder = assets->FindChildrenByPath(current_folder_path);
-			if (current_active_folder == nullptr)
-				current_active_folder = assets;
-			current_active_file = nullptr;
+			RefreshAllNodes();
 		}
 		ImGui::EndPopup();
 	}
@@ -485,5 +479,16 @@ void PanelProject::DeleteNodes(FileNode* node)
 		}
 	}
 	delete node;
+}
+
+void PanelProject::RefreshAllNodes()
+{
+	std::string current_folder_path = current_active_folder->path;
+	assets->DeleteChildren();
+	App->file_system->DiscoverEverythig(assets);
+	current_active_folder = assets->FindChildrenByPath(current_folder_path);
+	if (current_active_folder == nullptr || (current_active_folder != nullptr && current_active_folder->is_file))
+		current_active_folder = assets;
+	current_active_file = nullptr;
 }
 
