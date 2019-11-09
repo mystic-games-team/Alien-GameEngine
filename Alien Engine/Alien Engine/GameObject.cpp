@@ -498,7 +498,9 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	ID = std::stoull(to_load->GetString("ID"));
 	enabled = to_load->GetBoolean("Enabled");
 	parent_enabled = to_load->GetBoolean("ParentEnabled");
-	selected = to_load->GetBoolean("Selected");
+	if (to_load->GetBoolean("Selected")) {
+		App->objects->SetNewSelectedObject(this);
+	}
 	parent_selected = to_load->GetBoolean("ParentSelected");
 
 	if (parent != nullptr) {
@@ -540,7 +542,8 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 			components_to_load->GetAnotherNode();
 		}
 	}
-
+	if (selected)
+		App->objects->SetNewSelectedObject(this);
 
 }
 

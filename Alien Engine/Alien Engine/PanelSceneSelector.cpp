@@ -91,9 +91,9 @@ void PanelSceneSelector::SaveSceneAsNew()
 		std::string extension;
 		App->file_system->SplitFilePath(filename, nullptr, nullptr, &extension);
 		if (!App->StringCmp("alienScene", extension.data()))
-			App->objects->CreateEmptyScene(std::string(filename + std::string(".alienScene")).data());
+			App->objects->SaveScene(std::string(filename + std::string(".alienScene")).data());
 		else
-			App->objects->CreateEmptyScene(filename);
+			App->objects->SaveScene(filename);
 
 		// last of all, refresh nodes because I have no idea if the user has created folders or moved things in the explorer. Users are bad people creating folders without using the alien engine explorer :(
 		App->ui->panel_project->RefreshAllNodes();

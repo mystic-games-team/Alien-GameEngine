@@ -2,27 +2,27 @@
     "Scene": {
         "GameObjects": [
             {
-                "Name": "watchtowerHigh",
+                "Name": "Light",
                 "FamilyNumber": 1,
-                "ID": "10655477406925702383",
+                "ID": "3422554045577339002",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
                             0,
-                            67.149971008300781,
-                            0
+                            0,
+                            2.5
                         ],
                         "Rotation": [
-                            -0.7071068286895752,
                             0,
                             0,
-                            0.70710670948028564
+                            0,
+                            0
                         ],
                         "Scale": [
                             1,
@@ -32,27 +32,19 @@
                         "ScaleNegative": false
                     },
                     {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "HasMesh": true,
-                        "MeshID": "6635556451671599920",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
+                        "Type": 3,
+                        "DiffuseColor": [
+                            0.75,
+                            0.75,
+                            0.75,
                             1
                         ],
-                        "TextureEnabled": true,
-                        "HasTexture": false,
+                        "AmbienColor": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ],
                         "Enabled": true
                     }
                 ]
@@ -60,7 +52,7 @@
             {
                 "Name": "BakerHouse",
                 "FamilyNumber": 1,
-                "ID": "13930410657467121042",
+                "ID": "6062138921905371603",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -92,8 +84,8 @@
             {
                 "Name": "Chimney",
                 "FamilyNumber": 2,
-                "ID": "5341257025125145919",
-                "ParentID": "13930410657467121042",
+                "ID": "16032679693738944195",
+                "ParentID": "6062138921905371603",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -149,8 +141,8 @@
             {
                 "Name": "Baker_house",
                 "FamilyNumber": 2,
-                "ID": "3011002379640639976",
-                "ParentID": "13930410657467121042",
+                "ID": "9963918854482024825",
+                "ParentID": "6062138921905371603",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -199,6 +191,62 @@
                         "TextureEnabled": true,
                         "HasTexture": true,
                         "TextureID": "16925044378009346189",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "watchtowerHigh",
+                "FamilyNumber": 1,
+                "ID": "12305112380150786694",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            67.149971008300781,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "MeshID": "6635556451671599920",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": false,
                         "Enabled": true
                     }
                 ]

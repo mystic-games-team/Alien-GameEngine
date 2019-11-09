@@ -354,7 +354,7 @@ void ModuleObjects::LoadScene(const char* path)
 	if (value != nullptr && object != nullptr)
 	{
 		delete base_game_object;
-
+		game_object_selected = nullptr;
 		base_game_object = new GameObject(nullptr);
 		base_game_object->ID = 0;
 
@@ -410,7 +410,7 @@ void ModuleObjects::LoadScene(const char* path)
 void ModuleObjects::CreateEmptyScene(const char* path)
 {
 	delete base_game_object;
-
+	game_object_selected = nullptr;
 	base_game_object = new GameObject(nullptr);
 	base_game_object->ID = 0;
 
