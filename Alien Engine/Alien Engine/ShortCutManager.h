@@ -36,6 +36,10 @@ struct ShortCut {
 		else
 			type = ShortCutType::ONE_KEY;
 
+		codes[0] = key1_down;
+		codes[1] = key2_repeat;
+		codes[2] = key3_repeat_extra;
+
 		name = GetShortcutName();
 	}
 
@@ -49,7 +53,7 @@ struct ShortCut {
 	const char* GetExtraKeyRepeatName();
 	const SDL_Scancode& GetScancode(const uint& index);
 
-	const SDL_Scancode* GetScancodesArray();
+	SDL_Scancode* GetScancodesArray();
 
 	// variables
 	SDL_Scancode key1_down = SDL_SCANCODE_UNKNOWN;
@@ -68,7 +72,7 @@ struct ShortCut {
 	const char* name = nullptr;
 	const char* order_name = nullptr;
 	char shortcut_char[50];
-
+	SDL_Scancode codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN,SDL_SCANCODE_UNKNOWN };
 
 };
 

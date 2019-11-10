@@ -9,7 +9,7 @@
 PanelSceneSelector::PanelSceneSelector(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
-	shortcut = App->shortcut_manager->AddShortCut("Save", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
+	shortcut = App->shortcut_manager->AddShortCut("Save", key1_down, std::bind(&PanelSceneSelector::OrganizeSaveScene, this), key2_repeat, key3_repeat_extra);
 	enabled = false;
 }
 
@@ -27,35 +27,50 @@ void PanelSceneSelector::PanelLogic()
 void PanelSceneSelector::OrganizeSave(const SceneSelectorState& state)
 {
 	switch (state) {
-	case SceneSelectorState::SAVE_SCENE:
-		if (App->objects->current_scene.is_untitled) {
-			OrganizeSave(SceneSelectorState::SAVE_AS_NEW);
-		}
-		else {
-			App->objects->SaveScene(App->objects->current_scene.full_path.data());
-		}
-		break;
+	case SceneSelectorState::SAVE_SCENE: {
+		OrganizeSaveScene();
+		break; }
 	case SceneSelectorState::SAVE_AS_NEW: {
 		SaveSceneAsNew();
 		break; }
-	case SceneSelectorState::CREATE_NEW_SCENE:
-		if (App->objects->current_scene.is_untitled) {
-			CreateNewScene();
-		}
-		else {
-			menu_save_current = true;
-			create_new = true;
-		}
-		break;
-	case SceneSelectorState::LOAD_SCENE:
-		if (App->objects->current_scene.is_untitled) {
-			LoadScene();
-		}
-		else {
-			menu_save_current = true;
-			load = true;
-		}
-		break;
+	case SceneSelectorState::CREATE_NEW_SCENE: {
+		OrganizeCreateNewScene();
+		break; }
+	case SceneSelectorState::LOAD_SCENE: {
+		OrganizeLoad();
+		break; }
+	}
+}
+
+void PanelSceneSelector::OrganizeSaveScene()
+{
+	if (App->objects->current_scene.is_untitled) {
+		OrganizeSave(SceneSelectorState::SAVE_AS_NEW);
+	}
+	else {
+		App->objects->SaveScene(App->objects->current_scene.full_path.data());
+	}
+}
+
+void PanelSceneSelector::OrganizeCreateNewScene()
+{
+	if (App->objects->current_scene.is_untitled) {
+		CreateNewScene();
+	}
+	else {
+		menu_save_current = true;
+		create_new = true;
+	}
+}
+
+void PanelSceneSelector::OrganizeLoad()
+{
+	if (App->objects->current_scene.is_untitled) {
+		LoadScene();
+	}
+	else {
+		menu_save_current = true;
+		load = true;
 	}
 }
 

@@ -205,7 +205,7 @@ uint* JSONfilepack::GetUintArray(const std::string& name)
 	return numbers;
 }
 
-void JSONfilepack::SetShortcutCodes(const std::string& name, uint codes[3])
+void JSONfilepack::SetShortcutCodes(const std::string& name, SDL_Scancode* codes)
 {
 	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
 	if (arr == nullptr) {

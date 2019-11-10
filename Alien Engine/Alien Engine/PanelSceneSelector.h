@@ -6,6 +6,8 @@ class PanelSceneSelector : public Panel {
 
 public:
 
+	friend class ModuleUI;
+
 	enum class SceneSelectorState {
 		SAVE_SCENE,
 		SAVE_AS_NEW,
@@ -21,6 +23,7 @@ public:
 	void PanelLogic();
 
 	void OrganizeSave(const SceneSelectorState& state);
+
 	void LoadSceneWithPath(const char* path);
 
 private:
@@ -29,6 +32,9 @@ private:
 	void LoadScene();
 	void CreateNewScene();
 	void MenuSaveCurrentScene();
+	void OrganizeSaveScene();
+	void OrganizeCreateNewScene();
+	void OrganizeLoad();
 
 private:
 
