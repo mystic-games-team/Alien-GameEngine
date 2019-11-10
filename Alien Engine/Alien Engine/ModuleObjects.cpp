@@ -39,6 +39,8 @@ bool ModuleObjects::Start()
 	light_test->AddComponent(new ComponentLight(light_test));
 
 	current_scene.name_without_extension = "Untitled*";
+	current_scene.full_path = "Untitled*";
+	current_scene.is_untitled = true;
 
 	return ret;
 }

@@ -196,19 +196,26 @@ void PanelSceneSelector::CreateNewScene()
 
 void PanelSceneSelector::MenuSaveCurrentScene()
 {
-	ImGui::OpenPopup("Save Current Scene");
-	ImGui::SetNextWindowSize({ 200,60 });
-	if (ImGui::BeginPopupModal("Save Current Scene", &menu_save_current, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	ImGui::OpenPopup("Scene might have been modified");
+	ImGui::SetNextWindowSize({ 240,140 });
+	if (ImGui::BeginPopupModal("Scene might have been modified", &menu_save_current, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		ImGui::Spacing();
 
-		if (ImGui::Button("Don't save")) {
-			menu_save_current = false;
-		}
+		ImGui::Text("Do you want to save changes in:");
 
-		ImGui::SameLine();
+		ImGui::Spacing();
 
-		if (ImGui::Button("Save")) {
+		ImGui::Text(App->file_system->GetBaseFileNameWithExtension(App->objects->current_scene.full_path.data()).data());
+
+		ImGui::Spacing();
+
+		ImGui::Text("Your changes will be lost if you\ndon't save them.");
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		if (ImGui::Button("Save", { 65,20 })) {
 			if (App->objects->current_scene.is_untitled) {
 				SaveSceneAsNew();
 			}
@@ -217,10 +224,17 @@ void PanelSceneSelector::MenuSaveCurrentScene()
 			}
 			menu_save_current = false;
 		}
+		
 
 		ImGui::SameLine();
 
-		if (ImGui::Button("Cancel")) {
+		if (ImGui::Button("Don't save", { 80,20 })) {
+			menu_save_current = false;
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel", { 65,20 })) {
 			scene_to_load.clear();
 			menu_save_current = false;
 			load = false;
