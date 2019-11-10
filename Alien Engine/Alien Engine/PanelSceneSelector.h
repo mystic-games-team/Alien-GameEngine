@@ -21,6 +21,7 @@ public:
 	void PanelLogic();
 
 	void OrganizeSave(const SceneSelectorState& state);
+	void LoadSceneWithPath(const char* path);
 
 private:
 
@@ -30,9 +31,11 @@ private:
 	void MenuSaveCurrentScene();
 
 private:
+
 	bool menu_save_current = false;
 	bool create_new = false;
 	bool load = false;
 
+	std::string scene_to_load;
 };
 

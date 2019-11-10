@@ -115,7 +115,7 @@ void PanelScene::PanelLogic()
 			// drop scene
 			if (node != nullptr && node->type == FileDropType::SCENE) {
 				std::string full_scene_path = node->path + node->name;
-				App->objects->LoadScene(full_scene_path.data());
+				App->ui->panel_scene_selector->LoadSceneWithPath(full_scene_path.data());
 			}
 		}
 

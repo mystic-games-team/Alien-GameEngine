@@ -59,6 +59,12 @@ void PanelSceneSelector::OrganizeSave(const SceneSelectorState& state)
 	}
 }
 
+void PanelSceneSelector::LoadSceneWithPath(const char* path)
+{
+	scene_to_load = std::string(path);
+	menu_save_current = true;
+}
+
 void PanelSceneSelector::SaveSceneAsNew()
 {
 	OPENFILENAME to_save;
@@ -203,13 +209,19 @@ void PanelSceneSelector::MenuSaveCurrentScene()
 		ImGui::SameLine();
 
 		if (ImGui::Button("Save")) {
-			App->objects->SaveScene(App->objects->current_scene.full_path.data());
+			if (App->objects->current_scene.is_untitled) {
+				SaveSceneAsNew();
+			}
+			else {
+				App->objects->SaveScene(App->objects->current_scene.full_path.data());
+			}
 			menu_save_current = false;
 		}
 
 		ImGui::SameLine();
 
 		if (ImGui::Button("Cancel")) {
+			scene_to_load.clear();
 			menu_save_current = false;
 			load = false;
 			create_new = false;
@@ -220,6 +232,7 @@ void PanelSceneSelector::MenuSaveCurrentScene()
 	else {
 		load = false;
 		create_new = false;
+		scene_to_load.clear();
 	}
 
 	if (!menu_save_current) {
@@ -230,6 +243,10 @@ void PanelSceneSelector::MenuSaveCurrentScene()
 		else if (create_new) {
 			create_new = false;
 			CreateNewScene();
+		}
+		else if (!scene_to_load.empty()) {
+			App->objects->LoadScene(scene_to_load.data());
+			scene_to_load.clear();
 		}
 	}
 }
