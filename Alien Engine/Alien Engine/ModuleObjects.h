@@ -136,10 +136,10 @@ public:
 	Color no_child_outline_color{ 1,1,1 };
 
 	// Bounding Boxes
-	bool draw_all_AABB = true;
-	bool draw_all_OBB = true;
+	bool draw_all_AABB = false;
+	bool draw_all_OBB = false;
 	Color global_AABB_color{ 1,1,1 };
-	Color global_OBB_color{ 0,1,0 };
+	Color global_OBB_color{ 1,1,1 };
 	uint AABB_line_width = 1;
 	uint OBB_line_width = 1;
 

@@ -19,9 +19,6 @@ public:
 	bool ReadMetaData(const char* path);
 	bool DeleteMetaData();
 
-	// change meta name
-	void ChangeFileMetaName(const char* new_name);
-
 	// create GameObjects
 	void ConvertToGameObjects();
 

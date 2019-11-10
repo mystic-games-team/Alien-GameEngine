@@ -145,51 +145,6 @@ bool ResourceModel::DeleteMetaData()
 	return true;
 }
 
-void ResourceModel::ChangeFileMetaName(const char* new_name)
-{
-	JSON_Value* value = json_parse_file(meta_data_path.data());
-	JSON_Object* object = json_value_get_object(value);
-
-	if (value != nullptr && object != nullptr)
-	{
-		JSONfilepack* meta = new JSONfilepack(meta_data_path.data(), object, value);
-
-		meta->StartSave();
-
-		name = new_name;
-		
-		std::string copy;
-		bool start_copying = false;
-		std::string::reverse_iterator item = path.rbegin();
-		for (; item != path.rend(); ++item) {
-			if (!start_copying) {
-				if ((*item) == '/') {
-					start_copying = true;
-					copy = (*item);
-				}
-			}
-			else {
-				copy = (*item) + copy;
-			}
-		}
-
-		std::string extension;
-		App->file_system->SplitFilePath(path.data(), nullptr, nullptr, &extension);
-		path = copy + new_name + "." + extension;
-
-
-		meta->SetString("Model.Name", new_name);
-		meta->SetString("Model.Path", path);
-
-		meta->FinishSave();
-
-		std::string new_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(App->file_system->GetCurrentFolder(path) + App->file_system->GetBaseFileName(path.data())).data() + ".alienModel";
-		rename(meta_data_path.data(), new_path.data());
-		meta_data_path = new_path;
-		delete meta;
-	}
-}
-
 void ResourceModel::ConvertToGameObjects()
 {
 	if (meshes_attached.empty())

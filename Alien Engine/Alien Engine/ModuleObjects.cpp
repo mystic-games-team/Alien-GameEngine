@@ -477,6 +477,12 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	outline = config->GetBoolean("Configuration.Renderer.Outline");
 	parent_line_width = config->GetNumber("Configuration.Renderer.ParentLineWidth");
 	no_child_line_width = config->GetNumber("Configuration.Renderer.NoChildLineWidth");
+	draw_all_AABB = config->GetBoolean("Configuration.Renderer.DrawAABB");
+	draw_all_OBB = config->GetBoolean("Configuration.Renderer.DrawOBB");
+	global_AABB_color = config->GetColor("Configuration.Renderer.ColorAABB");
+	global_OBB_color = config->GetColor("Configuration.Renderer.ColorOBB");
+	AABB_line_width = config->GetNumber("Configuration.Renderer.LineWidthAABB");
+	OBB_line_width = config->GetNumber("Configuration.Renderer.LineWidth0BB");
 }
 
 void ModuleObjects::SaveConfig(JSONfilepack*& config)
@@ -504,6 +510,13 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetBoolean("Configuration.Renderer.Outline", outline);
 	config->SetNumber("Configuration.Renderer.ParentLineWidth", parent_line_width);
 	config->SetNumber("Configuration.Renderer.NoChildLineWidth", no_child_line_width);
+
+	config->SetBoolean("Configuration.Renderer.DrawAABB", draw_all_AABB);
+	config->SetBoolean("Configuration.Renderer.DrawOBB", draw_all_OBB);
+	config->SetColor("Configuration.Renderer.ColorAABB", global_AABB_color);
+	config->SetColor("Configuration.Renderer.ColorOBB", global_OBB_color);
+	config->SetNumber("Configuration.Renderer.LineWidthAABB", AABB_line_width);
+	config->SetNumber("Configuration.Renderer.LineWidthOBB", OBB_line_width);
 }
 
 void ModuleObjects::CreateBasePrimitive(PrimitiveType type)

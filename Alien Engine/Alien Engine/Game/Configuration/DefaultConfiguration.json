@@ -142,6 +142,20 @@
             "Outline": true,
             "ParentLineWidth": 12,
             "NoChildLineWidth": 12,
+			"DrawAABB": true,
+			"DrawOBB": true,
+			"LineWidthAABB": 1,
+			"LineWidthOBB": 1,
+			"ColorAABB": [
+                1,
+                1,
+                1
+            ],
+			"ColorOBB": [
+                0,
+                1,
+                0
+            ],
             "ParentOutlineColor": [
                 0,
                 1,
