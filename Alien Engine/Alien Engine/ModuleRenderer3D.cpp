@@ -171,6 +171,9 @@ void ModuleRenderer3D::CreateRenderTexture()
 	if (tex != nullptr) {
 		delete tex;
 		tex = nullptr;
+
+		glDeleteFramebuffers(1, &frame_buffer);
+		glDeleteRenderbuffers(1, &depthrenderbuffer);
 	}
 
 	glGenFramebuffers(1, &frame_buffer);
