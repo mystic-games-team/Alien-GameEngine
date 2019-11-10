@@ -366,6 +366,8 @@ void ComponentMesh::SetComponent(Component* component)
 		view_vertex_normals = tmp->view_vertex_normals;
 		view_face_normals = tmp->view_face_normals;
 
+		if (game_object_attached != nullptr)
+			RecalculateAABB_OBB();
 	}
 }
 
@@ -377,7 +379,7 @@ AABB ComponentMesh::GenerateAABB()
 	return local_aabb;
 }
 
-AABB ComponentMesh::GetGlobalAABB()
+void ComponentMesh::RecalculateAABB_OBB()
 {
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	obb = GenerateAABB();
@@ -385,7 +387,10 @@ AABB ComponentMesh::GetGlobalAABB()
 
 	global_aabb.SetNegativeInfinity();
 	global_aabb.Enclose(obb);
-	
+}
+
+const AABB ComponentMesh::GetGlobalAABB() const
+{
 	return global_aabb;
 }
 
@@ -419,5 +424,5 @@ void ComponentMesh::LoadComponent(JSONArraypack* to_load)
 		mesh = (ResourceMesh*)App->resources->GetResourceWithID(ID);
 	}
 	GenerateAABB();
-	GetGlobalAABB();
+	RecalculateAABB_OBB();
 }

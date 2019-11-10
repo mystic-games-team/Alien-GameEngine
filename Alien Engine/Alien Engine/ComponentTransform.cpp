@@ -157,7 +157,7 @@ void ComponentTransform::RecalculateTransform()
 	ComponentMesh* mesh = (ComponentMesh*)game_object_attached->GetComponent(ComponentType::MESH);
 	if (mesh != nullptr)
 	{
-		mesh->GetGlobalAABB();
+		mesh->RecalculateAABB_OBB();
 	}
 }
 

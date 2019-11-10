@@ -244,6 +244,7 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 	ComponentMesh* mesh = new ComponentMesh(obj);
 		
 	mesh->mesh = this;
+	mesh->RecalculateAABB_OBB();
 
 	obj->AddComponent(mesh);
 
