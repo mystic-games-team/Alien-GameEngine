@@ -16,7 +16,7 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	frustum.up = float3::unitY;
 
 	frustum.nearPlaneDistance = 1.0F;
-	frustum.farPlaneDistance = 1000.0f;
+	frustum.farPlaneDistance = 100.0f;
 	frustum.verticalFov = DEGTORAD * vertical_fov;
 	AspectRatio(16, 9);
 	
