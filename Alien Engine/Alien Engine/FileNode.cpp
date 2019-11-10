@@ -53,7 +53,6 @@ void FileNode::DeleteChildren()
 
 void FileNode::DeleteNodeData(bool delete_folder)
 {
-
 	if (is_file) {
 		std::string hole_path = std::string(path + name).data();
 
@@ -66,8 +65,8 @@ void FileNode::DeleteNodeData(bool delete_folder)
 		remove(meta_path.data());
 
 		Resource* resource_to_delete = App->resources->GetResourceWithID(ID);
-
-		resource_to_delete->DeleteMetaData();
+		if (resource_to_delete != nullptr)
+			resource_to_delete->DeleteMetaData();
 	}
 	else {
 		std::vector<FileNode*>::iterator item = children.begin();
@@ -102,6 +101,38 @@ FileNode* FileNode::FindChildrenByPath(const std::string& path)
 		}
 	}
 	return ret;
+}
+
+void FileNode::RemoveResourceOfGameObjects()
+{
+	if (is_file) {
+		SDL_assert((uint)FileDropType::UNKNOWN == 5);
+		switch (type) {
+		case FileDropType::SCENE:
+			// I think nothing should happen with scene
+			break;
+		case FileDropType::SCRIPT:
+			// TODO:
+			break;
+		case FileDropType::TEXTURE: {
+			std::string path_ = App->file_system->GetPathWithoutExtension(path + name);
+			path_ += "_meta.alien";
+			u64 ID = App->resources->GetIDFromAlienPath(path_.data());
+			ResourceTexture* texture_to_delete = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+			if (texture_to_delete != nullptr) {
+				App->objects->base_game_object->SearchResourceToDelete(ResourceType::RESOURCE_TEXTURE, (Resource*)texture_to_delete);
+			}
+			break; }
+		case FileDropType::MODEL3D:
+			// TODO:
+			break;
+		}
+	}
+	else {
+		for (uint i = 0; i < children.size(); ++i) {
+			children[i]->RemoveResourceOfGameObjects();
+		}
+	}
 }
 
 void FileNode::SetIcon()

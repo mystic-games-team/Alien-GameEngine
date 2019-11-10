@@ -234,6 +234,9 @@ void PanelProject::DeleteSelectedAssetPopUp()
 			if (ImGui::Button("Delete")) {
 				std::vector<FileNode*>::iterator item = current_active_folder->children.begin();
 
+				// set nullptr to this resource of the gameobjects that are using it
+				current_active_file->RemoveResourceOfGameObjects();
+
 				// this removes all meta data of the nodes
 				current_active_file->DeleteNodeData();
 				

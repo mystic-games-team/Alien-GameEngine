@@ -547,6 +547,26 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 
 }
 
+void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_delete)
+{
+	SDL_assert((uint)FileDropType::UNKNOWN == 5);
+	switch (type) {
+	case ResourceType::RESOURCE_TEXTURE:
+		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
+		if (material != nullptr && material->texture == (ResourceTexture*)to_delete) {
+			material->texture = nullptr;
+		}
+		break;
+	}
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->SearchResourceToDelete(type, to_delete);
+		}
+	}
+}
+
 void GameObject::SearchToDelete()
 {
 	std::vector<GameObject*>::iterator item = children.begin();

@@ -7,6 +7,9 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "JSONfilepack.h"
 
+enum class ResourceType;
+class Resource;
+
 class GameObject
 {
 public:
@@ -73,6 +76,8 @@ public:
 
 	void SaveObject(JSONArraypack* to_save, const uint& family_number);
 	void LoadObject(JSONArraypack* to_save, GameObject* parent);
+
+	void SearchResourceToDelete(const ResourceType& type, Resource* to_delete);
 
 private:
 
