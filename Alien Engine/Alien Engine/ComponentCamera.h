@@ -24,6 +24,8 @@ public:
 
 	float* GetViewMatrix() const;
 
+	void DrawFrustum();
+
 
 public:
 	Frustum frustum;

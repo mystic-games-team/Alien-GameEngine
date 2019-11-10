@@ -112,6 +112,7 @@ bool ModuleRenderer3D::Init()
 	}
 
 	App->camera->fake_camera = new ComponentCamera(nullptr);
+	App->camera->fake_camera->frustum.farPlaneDistance = 1000.0F;
 	// Projection matrix for
 	OnResize(App->window->width, App->window->height);
 

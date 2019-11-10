@@ -83,6 +83,10 @@ void GameObject::Draw()
 		light->LightLogic();
 	}
 
+	if (camera != nullptr && camera->IsEnabled()) {
+		camera->DrawFrustum();
+	}
+
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
