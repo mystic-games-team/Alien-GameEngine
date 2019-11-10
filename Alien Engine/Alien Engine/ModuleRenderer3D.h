@@ -36,6 +36,8 @@ public:
 
 	// scene texture
 	ResourceTexture* tex = nullptr;
+	ResourceTexture* z_buffer = nullptr;
+	uint z_framebuffer;
 
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;

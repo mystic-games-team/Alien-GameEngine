@@ -77,6 +77,8 @@ update_status ModuleObjects::PostUpdate(float dt)
 {
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->z_framebuffer);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearStencil(0);
 	if (allow_grid)
