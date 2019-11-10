@@ -13,7 +13,7 @@ public:
 	ResourceTexture(const char* path) { this->path = std::string(path); type = ResourceType::RESOURCE_TEXTURE; }
 	virtual ~ResourceTexture();
 
-	void CreateMetaData();
+	bool CreateMetaData();
 	bool ReadMetaData(const char* path);
 	bool DeleteMetaData();
 

@@ -32,15 +32,11 @@ public:
 	// type
 	const ResourceType GetType() const;
 
-	virtual void CreateMetaData() {} // when someting is dropped
+	virtual bool CreateMetaData() { return true; } // when someting is dropped
 	virtual bool ReadMetaData(const char* path) { return true; } // when engine is being inicialized read all meta data
 	virtual bool DeleteMetaData() { return true; } // this deletes the resource too
 
 	const u64& GetID() const;
-
-private:
-
-
 
 protected:
 

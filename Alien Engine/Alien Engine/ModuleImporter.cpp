@@ -98,11 +98,10 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 	LoadSceneNode(scene->mRootNode, scene, nullptr, 1);
 
 	// create the meta data files like .alien
-	model->CreateMetaData(); // TODO: CreateMetaData of: transformations & texture path
+	if (model->CreateMetaData()) {
+		App->resources->AddResource(model);
+	}
 
-	// TODO: fer que es faci pushback nomes si tot ha sortit be
-
-	App->resources->AddResource(model);
 	model = nullptr;
 }
 
@@ -131,8 +130,6 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Res
 
 ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* node, const aiMesh* ai_mesh, ResourceMesh* parent)
 {
-	// TODO: resource mesh should do this??
-
 	ResourceMesh* ret = new ResourceMesh();
 	if (parent != nullptr)
 		ret->parent_name = parent->name;

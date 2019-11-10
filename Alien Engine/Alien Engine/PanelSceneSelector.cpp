@@ -54,24 +54,14 @@ void PanelSceneSelector::OrganizeSaveScene()
 
 void PanelSceneSelector::OrganizeCreateNewScene()
 {
-	if (App->objects->current_scene.is_untitled) {
-		CreateNewScene();
-	}
-	else {
-		menu_save_current = true;
-		create_new = true;
-	}
+	menu_save_current = true;
+	create_new = true;
 }
 
 void PanelSceneSelector::OrganizeLoad()
 {
-	if (App->objects->current_scene.is_untitled) {
-		LoadScene();
-	}
-	else {
-		menu_save_current = true;
-		load = true;
-	}
+	menu_save_current = true;
+	load = true;
 }
 
 void PanelSceneSelector::LoadSceneWithPath(const char* path)
@@ -259,6 +249,7 @@ void PanelSceneSelector::MenuSaveCurrentScene()
 		ImGui::EndPopup();
 	}
 	else {
+		menu_save_current = false;
 		load = false;
 		create_new = false;
 		scene_to_load.clear();
