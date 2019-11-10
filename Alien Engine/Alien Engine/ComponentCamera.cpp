@@ -44,7 +44,7 @@ void ComponentCamera::SetComponent(Component* component)
 
 void ComponentCamera::AspectRatio(int width_ratio, int height_ratio)
 {
-	frustum.horizontalFov = DEGTORAD * (2.f * atanf(tanf(vertical_fov * 0.5f) * (width_ratio / height_ratio)));
+	frustum.horizontalFov = (2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ((float)width_ratio/(float)height_ratio)));
 }
 
 void ComponentCamera::Look(const float3& position_to_look)
