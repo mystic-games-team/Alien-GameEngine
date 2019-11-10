@@ -66,6 +66,9 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		Focus();
 
+	LOG("%f", fake_camera->frustum.verticalFov * RADTODEG);
+	LOG("%f", fake_camera->frustum.horizontalFov * RADTODEG);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -85,11 +88,11 @@ void ModuleCamera3D::Movement()
 		if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT) movement += float3::unitY;
 		if (App->input->GetKey(SDL_SCANCODE_X) == KEY_REPEAT) movement -= float3::unitY;
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) movement -= frustum->front;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) movement += frustum->front;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) movement -= frustum->front;
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) movement += frustum->front;
 
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) movement -= frustum->WorldRight();
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) movement += frustum->WorldRight();
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) movement -= frustum->WorldRight();
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) movement += frustum->WorldRight();
 
 		if (!movement.Equals(float3::zero))
 		{
@@ -128,11 +131,11 @@ void ModuleCamera3D::Zoom()
 
 	if (App->input->GetMouseZ() > 0)
 	{
-		zoom -= frustum->front;
+		zoom += frustum->front;
 	}
 	else if (App->input->GetMouseZ() < 0)
 	{
-		zoom += frustum->front;
+		zoom -= frustum->front;
 	}
 
 	frustum->Translate(zoom * mouse_speed);

@@ -16,7 +16,7 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	frustum.up = float3::unitY;
 
 	frustum.nearPlaneDistance = 1.0F;
-	frustum.farPlaneDistance = 1000.0f;
+	frustum.farPlaneDistance = 100.0f;
 	frustum.verticalFov = DEGTORAD * vertical_fov;
 	AspectRatio(16, 9);
 	
@@ -44,7 +44,9 @@ void ComponentCamera::SetComponent(Component* component)
 
 void ComponentCamera::AspectRatio(int width_ratio, int height_ratio)
 {
-	frustum.horizontalFov = DEGTORAD * (2.f * atanf(tanf(vertical_fov * 0.5f) * (width_ratio / height_ratio)));
+	float ratio = (width_ratio / height_ratio);
+	float mid_vf = vertical_fov * 0.5 * DEGTORAD;
+	frustum.horizontalFov =2.f * atanf(tanf(mid_vf) * ratio);
 }
 
 void ComponentCamera::Look(const float3& position_to_look)
