@@ -13,7 +13,7 @@ public:
 	virtual ~PanelProject();
 	void PanelLogic();
 
-
+	void RefreshAllNodes();
 public:
 
 	FileNode* current_active_folder = nullptr;
@@ -28,6 +28,7 @@ private:
 	void RightClickToWindow(bool pop_up_item);
 	bool MoveToFolder(FileNode* node, bool inside);
 	void DeleteNodes(FileNode* node);
+
 
 	int colum_width[2];
 

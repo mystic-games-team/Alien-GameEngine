@@ -68,6 +68,8 @@ void ComponentMaterial::DrawInspector()
 			if (ImGui::Button("Delete", { 60,20 })) {
 				texture = nullptr;
 				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
 				return;
 			}
 

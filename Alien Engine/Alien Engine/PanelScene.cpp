@@ -4,6 +4,7 @@
 #include "ResourceTexture.h"
 #include "imgui/imgui_internal.h"
 #include "FileNode.h"
+#include "PanelSceneSelector.h"
 
 PanelScene::PanelScene(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -75,7 +76,6 @@ void PanelScene::PanelLogic()
 	// drop project files
 	if (ImGui::BeginDragDropTargetCustom({ min_space.x,min_space.y, max_space.x,max_space.y }, ImGui::GetID(panel_name.data()))) {
 
-		// drop texture
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
 		if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
 			FileNode* node = *(FileNode**)payload->Data;
@@ -110,6 +110,12 @@ void PanelScene::PanelLogic()
 					meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
 					App->resources->CreateNewModelInstanceOf(meta_path.data());
 				}
+			}
+
+			// drop scene
+			if (node != nullptr && node->type == FileDropType::SCENE) {
+				std::string full_scene_path = node->path + node->name;
+				App->ui->panel_scene_selector->LoadSceneWithPath(full_scene_path.data());
 			}
 		}
 

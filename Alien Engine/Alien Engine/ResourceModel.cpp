@@ -12,10 +12,17 @@ ResourceModel::ResourceModel() : Resource()
 
 ResourceModel::~ResourceModel()
 {
-	// TODO: Clean Up
+	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
+	for (; item != meshes_attached.end(); ++item) {
+		if (*item != nullptr) { // aixo passa pq es fa el delete del modul resources i aquest respurce mesh ja la borrat alla
+			delete* item;
+			*item = nullptr;
+		}
+	}
+	meshes_attached.clear();
 }
 
-void ResourceModel::CreateMetaData()
+bool ResourceModel::CreateMetaData()
 {	
 	ID = App->resources->GetRandomID();
 
@@ -67,9 +74,13 @@ void ResourceModel::CreateMetaData()
 		delete[] meshes_paths;
 		// Create the file
 		LOG("Created alien file %s", meta_data_path.data());
-
+		return true;
 		meta->FinishSave();
 		delete meta;
+	}
+	else {
+		LOG("Error creating meta with path %s", meta_data_path.data());
+		return false;
 	}
 }
 
@@ -181,8 +192,6 @@ void ResourceModel::ChangeFileMetaName(const char* new_name)
 
 void ResourceModel::ConvertToGameObjects()
 {
-	// TODO: save & load the family number
-
 	if (meshes_attached.empty())
 		return;
 

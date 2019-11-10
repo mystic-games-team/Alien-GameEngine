@@ -14,11 +14,12 @@ ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& w
 
 ResourceTexture::~ResourceTexture()
 {
-	// TODO: Clean Up
+	glDeleteTextures(1, &id);
 }
 
-void ResourceTexture::CreateMetaData()
+bool ResourceTexture::CreateMetaData()
 {
+	bool ret = false;
 	if (ilLoadImage(path.data())) {
 		ID = App->resources->GetRandomID();
 		iluFlipImage();
@@ -70,14 +71,15 @@ void ResourceTexture::CreateMetaData()
 		}
 
 		delete[] data;
-
+		ret = true;
 		glBindTexture(GL_TEXTURE_2D, 0);
 		App->resources->AddResource(this);
 	}
 	else {
 		delete this;
+		ret = false;
 	}
-	
+	return ret;
 }
 
 bool ResourceTexture::ReadMetaData(const char* path)

@@ -21,6 +21,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 	SDL_free(base_path);
 
 	// workaround VS string directory mess
+
 	AddPath(".");
 
 	if (0 && game_path != nullptr)
@@ -172,7 +173,7 @@ void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 	GetPreviousNames(previous_names, node);
 	node->path = previous_names;
 
-	if (App->StringCmp(node->path.data(), MODELS_FOLDER) || App->StringCmp(node->path.data(), TEXTURES_FOLDER) || App->StringCmp(node->path.data(), SCRIPTS_FOLDER))
+	if (App->StringCmp(node->path.data(), MODELS_FOLDER) || App->StringCmp(node->path.data(), SCENE_FOLDER) || App->StringCmp(node->path.data(), TEXTURES_FOLDER) || App->StringCmp(node->path.data(), SCRIPTS_FOLDER))
 		node->is_base_file = true;
 
 	if (!node->is_file) {

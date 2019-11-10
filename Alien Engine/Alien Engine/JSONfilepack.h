@@ -41,7 +41,7 @@ public:
 	void SetUintArray(const std::string& name, uint* numbers, uint size);
 	uint* GetUintArray(const std::string& name);
 
-	void SetShortcutCodes(const std::string& name, uint codes[3]);
+	void SetShortcutCodes(const std::string& name, SDL_Scancode* codes);
 	SDL_Scancode* GetShortcutCodes(const std::string& name);
 
 	void SetArrayString(const std::string& name, std::string* strings, uint size);
@@ -91,6 +91,7 @@ public:
 	void SetAnotherNode();
 	bool GetAnotherNode();
 	void GetFirstNode();
+	void GetNode(const uint& index);
 
 	uint GetArraySize();
 

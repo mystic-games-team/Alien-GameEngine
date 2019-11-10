@@ -100,8 +100,8 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	memcpy(panel_config_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelConfig"), size_of_codes);
 	memcpy(panel_about_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelAbout"), size_of_codes);
 	memcpy(panel_create_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate"), size_of_codes);
-	memcpy(panel_project_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate"), size_of_codes);
-	memcpy(panel_hierarchy_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelProject"), size_of_codes);
+	memcpy(panel_project_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelProject"), size_of_codes);
+	memcpy(panel_hierarchy_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelHierarchy"), size_of_codes);
 	memcpy(panel_console_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelConsole"), size_of_codes);
 	memcpy(panel_scene_selector_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelSceneSelector"), size_of_codes);
 	memcpy(panel_inspector_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelInspector"), size_of_codes);
@@ -115,6 +115,9 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	memcpy(shortcut_view_grid_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ShowGrid"), size_of_codes);
 	memcpy(shortcut_view_normal_vertex_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalVertex"), size_of_codes);
 	memcpy(shortcut_view_normal_face_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalFace"), size_of_codes);
+	memcpy(shortcut_save_scene_as_new_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.SaveSceneAsNew"), size_of_codes);
+	memcpy(shortcut_load_scene_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.LoadScene"), size_of_codes);
+	memcpy(shortcut_new_scene_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.NewScene"), size_of_codes);
 
 	if (panel_about != nullptr) {
 		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
@@ -135,6 +138,9 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		shortcut_view_grid->SetShortcutKeys(shortcut_view_grid_codes[0], shortcut_view_grid_codes[1], shortcut_view_grid_codes[2]);
 		shortcut_view_normal_vertex->SetShortcutKeys(shortcut_view_normal_vertex_codes[0], shortcut_view_normal_vertex_codes[1], shortcut_view_normal_vertex_codes[2]);
 		shortcut_view_normal_face->SetShortcutKeys(shortcut_view_normal_face_codes[0], shortcut_view_normal_face_codes[1], shortcut_view_normal_face_codes[2]);
+		shortcut_load_scene->SetShortcutKeys(shortcut_load_scene_codes[0], shortcut_load_scene_codes[1], shortcut_load_scene_codes[2]);
+		shortcut_save_scene_as_new->SetShortcutKeys(shortcut_save_scene_as_new_codes[0], shortcut_save_scene_as_new_codes[1], shortcut_save_scene_as_new_codes[2]);
+		shortcut_new_scene->SetShortcutKeys(shortcut_new_scene_codes[0], shortcut_new_scene_codes[1], shortcut_new_scene_codes[2]);
 
 		// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 		App->shortcut_manager->OrderShortCuts();
@@ -143,24 +149,27 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 
 void ModuleUI::SaveConfig(JSONfilepack*& config)
 {
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelConfig", (uint*)panel_config->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelProject", (uint*)panel_project->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelAbout", (uint*)panel_about->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelHierarchy", (uint*)panel_hierarchy->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelRender", (uint*)panel_render->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelInspector", (uint*)panel_inspector->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelConsole", (uint*)panel_console->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate", (uint*)panel_create_object->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelScene", (uint*)panel_scene->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelSceneSelector", (uint*)panel_scene_selector->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelLayout", (uint*)panel_layout->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.WireframeMode", (uint*)shortcut_wireframe->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ViewMesh", (uint*)shortcut_view_mesh->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ReportBug", (uint*)shortcut_report_bug->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ImGuiDemo", (uint*)shortcut_demo->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowGrid", (uint*)shortcut_view_grid->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalVertex", (uint*)shortcut_view_normal_vertex->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalFace", (uint*)shortcut_view_normal_face->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelConfig", panel_config->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelProject", panel_project->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelAbout", panel_about->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelHierarchy", panel_hierarchy->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelRender", panel_render->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelInspector", panel_inspector->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelConsole", panel_console->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate", panel_create_object->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelScene", panel_scene->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelSceneSelector", panel_scene_selector->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelLayout", panel_layout->shortcut->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.WireframeMode", shortcut_wireframe->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ViewMesh", shortcut_view_mesh->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ReportBug", shortcut_report_bug->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ImGuiDemo", shortcut_demo->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowGrid", shortcut_view_grid->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalVertex", shortcut_view_normal_vertex->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalFace", shortcut_view_normal_face->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.LoadScene", shortcut_load_scene->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.SaveSceneAsNew", shortcut_save_scene_as_new->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.NewScene", shortcut_new_scene->GetScancodesArray());
 }
 void ModuleUI::LoadLayouts()
 {
@@ -307,7 +316,7 @@ void ModuleUI::MainMenuBar()
 	ImGui::BeginMainMenuBar();
 	if (ImGui::BeginMenu("File"))
 	{
-		if (ImGui::MenuItem("Create New Scene"))
+		if (ImGui::MenuItem("Create New Scene", shortcut_new_scene->GetNameScancodes()))
 		{
 			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::CREATE_NEW_SCENE);
 		}
@@ -315,11 +324,11 @@ void ModuleUI::MainMenuBar()
 		{
 			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::SAVE_SCENE);
 		}	
-		if (ImGui::MenuItem("Save Scene As"))
+		if (ImGui::MenuItem("Save Scene As", shortcut_save_scene_as_new->GetNameScancodes()))
 		{
 			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::SAVE_AS_NEW);
 		}
-		if (ImGui::MenuItem("Load Scene"))
+		if (ImGui::MenuItem("Load Scene", shortcut_load_scene->GetNameScancodes()))
 		{
 			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::LOAD_SCENE);
 		}
@@ -603,7 +612,9 @@ void ModuleUI::InitShortCuts()
 	shortcut_view_grid = App->shortcut_manager->AddShortCut("View Grid", shortcut_view_grid_codes[0], std::bind(&ModuleObjects::ChangeEnableGrid, App->objects), shortcut_view_grid_codes[1], shortcut_view_grid_codes[2]);
 	shortcut_view_normal_vertex = App->shortcut_manager->AddShortCut("Normal Vertex", shortcut_view_normal_vertex_codes[0], std::bind(&ModuleObjects::ChangeEnableNormalVertex, App->objects), shortcut_view_normal_vertex_codes[1], shortcut_view_normal_vertex_codes[2]);
 	shortcut_view_normal_face = App->shortcut_manager->AddShortCut("Normal Face", shortcut_view_normal_face_codes[0], std::bind(&ModuleObjects::ChangeEnableNormalFace, App->objects), shortcut_view_normal_face_codes[1], shortcut_view_normal_face_codes[2]);
-
+	shortcut_new_scene = App->shortcut_manager->AddShortCut("New Scene", shortcut_new_scene_codes[0], std::bind(&PanelSceneSelector::OrganizeCreateNewScene, panel_scene_selector), shortcut_new_scene_codes[1], shortcut_new_scene_codes[2]);
+	shortcut_save_scene_as_new = App->shortcut_manager->AddShortCut("Save Scene As New", shortcut_save_scene_as_new_codes[0], std::bind(&PanelSceneSelector::SaveSceneAsNew , panel_scene_selector), shortcut_save_scene_as_new_codes[1], shortcut_save_scene_as_new_codes[2]);
+	shortcut_load_scene = App->shortcut_manager->AddShortCut("Load Scene", shortcut_load_scene_codes[0], std::bind(&PanelSceneSelector::OrganizeLoad, panel_scene_selector), shortcut_load_scene_codes[1], shortcut_load_scene_codes[2]);
 	// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 	App->shortcut_manager->OrderShortCuts();
 }

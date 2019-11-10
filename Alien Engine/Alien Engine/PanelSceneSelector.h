@@ -6,6 +6,8 @@ class PanelSceneSelector : public Panel {
 
 public:
 
+	friend class ModuleUI;
+
 	enum class SceneSelectorState {
 		SAVE_SCENE,
 		SAVE_AS_NEW,
@@ -22,14 +24,24 @@ public:
 
 	void OrganizeSave(const SceneSelectorState& state);
 
-private:
-
-	bool ExistsScene(const char* scene_name_with_extension);
-	void GetSceneFullPathWithName(const char* scene_name);
+	void LoadSceneWithPath(const char* path);
 
 private:
 
-	SceneSelectorState state = SceneSelectorState::NONE;
+	void SaveSceneAsNew();
+	void LoadScene();
+	void CreateNewScene();
+	void MenuSaveCurrentScene();
+	void OrganizeSaveScene();
+	void OrganizeCreateNewScene();
+	void OrganizeLoad();
 
+private:
+
+	bool menu_save_current = false;
+	bool create_new = false;
+	bool load = false;
+
+	std::string scene_to_load;
 };
 

@@ -110,7 +110,7 @@ private:
 	PanelInspector* panel_inspector = nullptr;
 	PanelScene* panel_scene = nullptr;
 	PanelLayout* panel_layout = nullptr;
-	PanelSceneSelector* panel_scene_selector = nullptr;
+
 
 	// ShortCuts
 	ShortCut* shortcut_demo = nullptr;
@@ -120,6 +120,9 @@ private:
 	ShortCut* shortcut_view_grid = nullptr;
 	ShortCut* shortcut_view_normal_vertex = nullptr;
 	ShortCut* shortcut_view_normal_face = nullptr;
+	ShortCut* shortcut_new_scene = nullptr;
+	ShortCut* shortcut_save_scene_as_new = nullptr;
+	ShortCut* shortcut_load_scene = nullptr;
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_project_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -139,6 +142,9 @@ private:
 	SDL_Scancode shortcut_view_grid_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_view_normal_vertex_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_view_normal_face_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode shortcut_new_scene_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode shortcut_save_scene_as_new_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode shortcut_load_scene_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 
 public:
 
@@ -146,6 +152,7 @@ public:
 	PanelConfig* panel_config = nullptr;
 	PanelCreateObject* panel_create_object = nullptr;
 	PanelProject* panel_project = nullptr;
+	PanelSceneSelector* panel_scene_selector = nullptr;
 
 	// layouts
 	std::vector<Layout*> layouts;

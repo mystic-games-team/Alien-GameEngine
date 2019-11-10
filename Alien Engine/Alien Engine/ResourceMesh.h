@@ -17,7 +17,7 @@ public:
 	ResourceMesh();
 	virtual ~ResourceMesh();
 
-	void CreateMetaData();
+	bool CreateMetaData();
 	bool ReadMetaData(const char* path);
 	bool DeleteMetaData();
 

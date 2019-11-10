@@ -35,7 +35,7 @@ FileNode::FileNode(const std::string& path, const std::string& name, bool is_fil
 
 FileNode::~FileNode()
 {
-	// TODO: clean up
+	DeleteChildren();
 }
 
 void FileNode::DeleteChildren()

@@ -79,6 +79,10 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 				OnDisable();
 			}
 
+			if (ImGui::MenuItem("Delete Component", nullptr, nullptr, enabled)) {
+				not_destroy = false;
+			}
+
 			ImGui::Separator();
 
 			bool is_on_top = false;

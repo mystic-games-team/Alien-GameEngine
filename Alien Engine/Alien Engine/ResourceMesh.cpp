@@ -12,10 +12,27 @@ ResourceMesh::ResourceMesh() : Resource()
 
 ResourceMesh::~ResourceMesh()
 {
-	// TODO: Clean Up
+	if (index != nullptr)
+		RELEASE_ARRAY(index);
+	if (vertex != nullptr)
+		RELEASE_ARRAY(vertex);
+	if (normals != nullptr)
+		RELEASE_ARRAY(normals);
+	if (uv_cords != nullptr)
+		RELEASE_ARRAY(uv_cords);
+	if (center_point_normal != nullptr)
+		RELEASE_ARRAY(center_point_normal);
+	if (center_point != nullptr)
+		RELEASE_ARRAY(center_point);
+
+	glDeleteBuffers(1, &id_vertex);
+	glDeleteBuffers(1, &id_index);
+	glDeleteBuffers(1, &id_normals);
+	glDeleteBuffers(1, &id_uv);
+
 }
 
-void ResourceMesh::CreateMetaData()
+bool ResourceMesh::CreateMetaData()
 {
 	if (parent_name.empty()) {
 		parent_name.assign("null");
@@ -93,9 +110,11 @@ void ResourceMesh::CreateMetaData()
 		meta->FinishSave();
 
 		delete meta;
+		return true;
 	}
 	else {
 		LOG("Error creating meta with path %s", meta_data_path.data());
+		return false;
 	}
 }
 

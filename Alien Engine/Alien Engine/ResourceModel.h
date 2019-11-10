@@ -15,7 +15,7 @@ public:
 	virtual ~ResourceModel();
 
 	// meta data
-	void CreateMetaData();
+	bool CreateMetaData();
 	bool ReadMetaData(const char* path);
 	bool DeleteMetaData();
 
