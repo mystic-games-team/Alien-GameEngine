@@ -101,11 +101,13 @@ bool ModuleObjects::CleanUp()
 
 void ModuleObjects::ChangeWireframeMode()
 {
+	wireframe_mode = !wireframe_mode;
 	base_game_object->ChangeWireframe(wireframe_mode);
 }
 
 void ModuleObjects::ChangeViewMeshMode()
 {
+	view_mesh_mode = !view_mesh_mode;
 	base_game_object->ChangeMeshView(view_mesh_mode);
 }
 
@@ -129,23 +131,32 @@ void ModuleObjects::ChangeEnableGrid()
 	allow_grid = !allow_grid;
 }
 
+void ModuleObjects::ChangeEnableOutline()
+{
+	outline = !outline;
+}
+
 void ModuleObjects::ChangeEnableNormalVertex()
 {
+	draw_vertex_normals = !draw_vertex_normals;
 	base_game_object->ChangeVertexNormalsView(draw_vertex_normals);
 }
 
 void ModuleObjects::ChangeEnableNormalFace()
 {
+	draw_face_normals = !draw_face_normals;
 	base_game_object->ChangeFaceNormalsView(draw_face_normals);
 }
 
 void ModuleObjects::ChangeEnableAABB()
 {
+	draw_all_AABB = !draw_all_AABB;
 	base_game_object->ChangeAABB(draw_all_AABB);
 }
 
 void ModuleObjects::ChangeEnableOBB()
 {
+	draw_all_OBB = !draw_all_OBB;
 	base_game_object->ChangeOBB(draw_all_OBB);
 }
 

@@ -28,6 +28,11 @@
                     224,
                     228
                 ],
+				"EnableOutline": [
+					65,
+					0,
+					0
+				],
 				"PanelLayout": [
                     5,
                     224,

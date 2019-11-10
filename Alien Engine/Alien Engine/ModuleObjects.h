@@ -64,6 +64,8 @@ public:
 	// enable/disable grid
 	void ChangeEnableGrid();
 
+	void ChangeEnableOutline();
+
 	void DeleteAllObjects();
 
 	// select/disselect objects

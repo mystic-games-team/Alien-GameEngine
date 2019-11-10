@@ -118,6 +118,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	memcpy(shortcut_save_scene_as_new_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.SaveSceneAsNew"), size_of_codes);
 	memcpy(shortcut_load_scene_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.LoadScene"), size_of_codes);
 	memcpy(shortcut_new_scene_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.NewScene"), size_of_codes);
+	memcpy(shortcut_outline_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.EnableOutline"), size_of_codes);
 
 	if (panel_about != nullptr) {
 		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
@@ -141,6 +142,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		shortcut_load_scene->SetShortcutKeys(shortcut_load_scene_codes[0], shortcut_load_scene_codes[1], shortcut_load_scene_codes[2]);
 		shortcut_save_scene_as_new->SetShortcutKeys(shortcut_save_scene_as_new_codes[0], shortcut_save_scene_as_new_codes[1], shortcut_save_scene_as_new_codes[2]);
 		shortcut_new_scene->SetShortcutKeys(shortcut_new_scene_codes[0], shortcut_new_scene_codes[1], shortcut_new_scene_codes[2]);
+		shortcut_outline->SetShortcutKeys(shortcut_outline_codes[0], shortcut_outline_codes[1], shortcut_outline_codes[2]);
 
 		// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 		App->shortcut_manager->OrderShortCuts();
@@ -170,6 +172,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.LoadScene", shortcut_load_scene->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.SaveSceneAsNew", shortcut_save_scene_as_new->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.NewScene", shortcut_new_scene->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.EnableOutline", shortcut_outline->GetScancodesArray());
 }
 void ModuleUI::LoadLayouts()
 {
@@ -615,6 +618,7 @@ void ModuleUI::InitShortCuts()
 	shortcut_new_scene = App->shortcut_manager->AddShortCut("New Scene", shortcut_new_scene_codes[0], std::bind(&PanelSceneSelector::OrganizeCreateNewScene, panel_scene_selector), shortcut_new_scene_codes[1], shortcut_new_scene_codes[2]);
 	shortcut_save_scene_as_new = App->shortcut_manager->AddShortCut("Save Scene As New", shortcut_save_scene_as_new_codes[0], std::bind(&PanelSceneSelector::SaveSceneAsNew , panel_scene_selector), shortcut_save_scene_as_new_codes[1], shortcut_save_scene_as_new_codes[2]);
 	shortcut_load_scene = App->shortcut_manager->AddShortCut("Load Scene", shortcut_load_scene_codes[0], std::bind(&PanelSceneSelector::OrganizeLoad, panel_scene_selector), shortcut_load_scene_codes[1], shortcut_load_scene_codes[2]);
+	shortcut_outline = App->shortcut_manager->AddShortCut("Outline", shortcut_outline_codes[0], std::bind(&ModuleObjects::ChangeEnableOutline, App->objects), shortcut_outline_codes[1], shortcut_outline_codes[2]);
 	// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 	App->shortcut_manager->OrderShortCuts();
 }
