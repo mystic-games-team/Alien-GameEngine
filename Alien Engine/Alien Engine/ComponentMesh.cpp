@@ -249,6 +249,9 @@ void ComponentMesh::DrawInspector()
 
 void ComponentMesh::DrawGlobalAABB()
 {
+	if (mesh == nullptr)
+		return;
+
 	glColor3f(App->objects->global_AABB_color.r, App->objects->global_AABB_color.g, App->objects->global_AABB_color.b);
 	glLineWidth(App->objects->AABB_line_width);
 	glBegin(GL_LINES);
@@ -296,6 +299,9 @@ void ComponentMesh::DrawGlobalAABB()
 
 void ComponentMesh::DrawOBB()
 {
+	if (mesh == nullptr)
+		return;
+
 	glColor3f(App->objects->global_OBB_color.r, App->objects->global_OBB_color.g, App->objects->global_OBB_color.b);
 	glLineWidth(App->objects->OBB_line_width);
 	float3* obb_points=nullptr;
@@ -373,9 +379,10 @@ void ComponentMesh::SetComponent(Component* component)
 
 AABB ComponentMesh::GenerateAABB()
 {
-	local_aabb.SetNegativeInfinity();
-	local_aabb.Enclose((float3*)mesh->vertex, mesh->num_vertex);
-
+	if (mesh != nullptr) {
+		local_aabb.SetNegativeInfinity();
+		local_aabb.Enclose((float3*)mesh->vertex, mesh->num_vertex);
+	}
 	return local_aabb;
 }
 

@@ -551,12 +551,18 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 {
 	SDL_assert((uint)FileDropType::UNKNOWN == 5);
 	switch (type) {
-	case ResourceType::RESOURCE_TEXTURE:
+	case ResourceType::RESOURCE_TEXTURE: {
 		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 		if (material != nullptr && material->texture == (ResourceTexture*)to_delete) {
 			material->texture = nullptr;
 		}
-		break;
+		break; }
+	case ResourceType::RESOURCE_MESH: {
+		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+		if (mesh != nullptr && mesh->mesh == (ResourceMesh*)to_delete) {
+			mesh->mesh = nullptr;
+		}
+		break; }
 	}
 
 	std::vector<GameObject*>::iterator item = children.begin();

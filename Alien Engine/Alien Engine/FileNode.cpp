@@ -1,5 +1,6 @@
 #include "FileNode.h"
 #include "Application.h"
+#include "ResourceModel.h"
 
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
@@ -123,9 +124,19 @@ void FileNode::RemoveResourceOfGameObjects()
 				App->objects->base_game_object->SearchResourceToDelete(ResourceType::RESOURCE_TEXTURE, (Resource*)texture_to_delete);
 			}
 			break; }
-		case FileDropType::MODEL3D:
-			// TODO:
-			break;
+		case FileDropType::MODEL3D: {
+			std::string path_ = App->file_system->GetPathWithoutExtension(path + name);
+			path_ += "_meta.alien";
+			u64 ID = App->resources->GetIDFromAlienPath(path_.data());
+			ResourceModel* model_to_delete = (ResourceModel*)App->resources->GetResourceWithID(ID);
+			if (model_to_delete != nullptr) {
+				for (uint i = 0; i < model_to_delete->meshes_attached.size(); ++i) {
+					if (model_to_delete->meshes_attached[i] != nullptr) {
+						App->objects->base_game_object->SearchResourceToDelete(ResourceType::RESOURCE_MESH, (Resource*)model_to_delete->meshes_attached[i]);
+					}
+				}
+			}
+			break; }
 		}
 	}
 	else {
