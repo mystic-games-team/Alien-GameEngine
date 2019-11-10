@@ -147,6 +147,7 @@ public:
 	PanelCreateObject* panel_create_object = nullptr;
 	PanelProject* panel_project = nullptr;
 
+
 	// layouts
 	std::vector<Layout*> layouts;
 	Layout* active_layout = nullptr;
