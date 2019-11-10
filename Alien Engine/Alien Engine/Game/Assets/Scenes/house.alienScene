@@ -67,10 +67,10 @@
                             0
                         ],
                         "Rotation": [
+                            0.7071068286895752,
                             0,
                             0,
-                            0,
-                            0
+                            0.7071068286895752
                         ],
                         "Scale": [
                             1,
@@ -145,7 +145,7 @@
                 "ParentID": "16478453375559400973",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "Components": [
                     {
