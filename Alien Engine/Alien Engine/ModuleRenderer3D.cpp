@@ -114,7 +114,7 @@ bool ModuleRenderer3D::Init()
 
 	z_buffer = new ResourceTexture();
 	App->resources->AddResource(z_buffer);
-	//CREATE FB TEXTURE
+
 	glGenTextures(1, &z_buffer->id);
 	glBindTexture(GL_TEXTURE_2D, z_buffer->id);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -124,14 +124,14 @@ bool ModuleRenderer3D::Init()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, App->window->width, App->window->height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	//CREATE FBO AND ATTACH TEXTURE TO IT
 	glGenFramebuffers(1, &z_framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, z_framebuffer);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, z_buffer->id, 0);
+	glDepthRange(1, 0);
+
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 
-	// switch back to window-system-provided framebuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return ret;
