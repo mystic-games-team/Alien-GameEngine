@@ -354,7 +354,7 @@ void ModuleObjects::LoadScene(const char* path)
 {
 	JSON_Value* value = json_parse_file(path);
 	JSON_Object* object = json_value_get_object(value);
-	// TODO: delete all scene before that and set again the base game object. Add a popup to accept the load
+
 	if (value != nullptr && object != nullptr)
 	{
 		delete base_game_object;

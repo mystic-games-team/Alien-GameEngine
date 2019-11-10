@@ -27,7 +27,7 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 }
 PanelProject::~PanelProject()
 {
-	DeleteNodes(assets);
+	delete assets;
 }
 
 void PanelProject::PanelLogic()
