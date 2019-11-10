@@ -317,16 +317,18 @@ void ModuleObjects::SaveScene(const char* path)
 
 		scene->StartSave();
 
-		JSONArraypack*  game_objects = scene->InitNewArray("Scene.GameObjects");
-		
-		game_objects->SetAnotherNode();
+		if (!base_game_object->children.empty()) { // if base game objects has children, save them
+			JSONArraypack* game_objects = scene->InitNewArray("Scene.GameObjects");
 
-		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
-		for (; item != base_game_object->children.end(); ++item) {
-			if (*item != nullptr) {
-				SaveGameObject(*item, game_objects, 1);
-				if ((*item) != base_game_object->children.back())
-					game_objects->SetAnotherNode();
+			game_objects->SetAnotherNode();
+
+			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+			for (; item != base_game_object->children.end(); ++item) {
+				if (*item != nullptr) {
+					SaveGameObject(*item, game_objects, 1);
+					if ((*item) != base_game_object->children.back())
+						game_objects->SetAnotherNode();
+				}
 			}
 		}
 
@@ -414,6 +416,7 @@ void ModuleObjects::CreateEmptyScene(const char* path)
 	base_game_object = new GameObject(nullptr);
 	base_game_object->ID = 0;
 
+	// try to remove the file because the user might have selected a name that already exists
 	remove(path);
 
 	JSON_Value* value = json_value_init_object();
