@@ -9,6 +9,7 @@
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
 #include "MathGeoLib/include/Math/float4x4.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -120,14 +121,14 @@ bool ModuleRenderer3D::Init()
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
-{
+{	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearStencil(0);
 	glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->fake_camera->OpenGLProjectionMatrix().ptr());
+	glLoadMatrixf(App->camera->fake_camera->GetViewMatrix());
 
 	return UPDATE_CONTINUE;
 }
@@ -160,8 +161,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	
-	glLoadMatrixf(App->camera->fake_camera->OpenGLProjectionMatrix().ptr());
+
+	glLoadMatrixf(App->camera->fake_camera->GetProjectionMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

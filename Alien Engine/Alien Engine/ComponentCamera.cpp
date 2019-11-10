@@ -15,8 +15,8 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 
-	frustum.nearPlaneDistance = 100.0f;
-	frustum.farPlaneDistance = 10000.0f;
+	frustum.nearPlaneDistance = 1.0F;
+	frustum.farPlaneDistance = 1000.0f;
 	frustum.verticalFov = DEGTORAD * vertical_fov;
 	AspectRatio(16, 9);
 	
@@ -58,36 +58,13 @@ void ComponentCamera::Look(const float3& position_to_look)
 }
 
 // -----------------------------------------------------------------
-float4x4 ComponentCamera::GetViewMatrix() const
+float* ComponentCamera::GetProjectionMatrix() const
 {
-	return frustum.ViewMatrix();
-}
-
-// -----------------------------------------------------------------
-float4x4 ComponentCamera::GetProjectionMatrix() const
-{
-	//return frustum.ProjectionMatrix();
-	return float4x4::D3DPerspProjRH(frustum.nearPlaneDistance, frustum.farPlaneDistance, frustum.NearPlaneWidth(), frustum.NearPlaneHeight());
+	return (float*)frustum.ProjectionMatrix().Transposed().v;
 }
 
 
-float4x4 ComponentCamera::OpenGLViewMatrix() const
+float* ComponentCamera::GetViewMatrix() const
 {
-	float4x4 view_matrix;
-
-	view_matrix = frustum.ViewMatrix();
-	view_matrix.Transpose();
-
-	return view_matrix;
-}
-
-// -----------------------------------------------------------------
-float4x4 ComponentCamera::OpenGLProjectionMatrix() const
-{
-	float4x4 view_matrix;
-
-	view_matrix = frustum.ProjectionMatrix();
-	view_matrix.Transpose();
-
-	return view_matrix;
+	return (float*)static_cast<float4x4>(frustum.ViewMatrix()).Transposed().v;
 }

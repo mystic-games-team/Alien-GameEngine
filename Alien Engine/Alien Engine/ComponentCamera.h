@@ -20,13 +20,10 @@ public:
 
 	void Look(const float3& position_to_look);
 
-	float4x4 GetViewMatrix() const;
+	float* GetProjectionMatrix() const;
 
-	float4x4 GetProjectionMatrix() const;
+	float* GetViewMatrix() const;
 
-	float4x4 OpenGLViewMatrix() const;
-
-	float4x4 OpenGLProjectionMatrix() const;
 
 public:
 	Frustum frustum;
