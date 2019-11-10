@@ -72,7 +72,7 @@ float* ComponentCamera::GetViewMatrix() const
 
 void ComponentCamera::DrawFrustum()
 {
-	float3 points[8];
+	static float3 points[8];
 	frustum.GetCornerPoints(points);
 
 	glLineWidth(1);
@@ -117,5 +117,4 @@ void ComponentCamera::DrawFrustum()
 
 	glEnd();
 	glLineWidth(1);
-
 }
