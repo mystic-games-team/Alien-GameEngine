@@ -66,9 +66,6 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		Focus();
 
-	LOG("%f", fake_camera->frustum.verticalFov * RADTODEG);
-	LOG("%f", fake_camera->frustum.horizontalFov * RADTODEG);
-
 	return UPDATE_CONTINUE;
 }
 
@@ -143,25 +140,33 @@ void ModuleCamera3D::Zoom()
 
 void ModuleCamera3D::Rotation()
 {
-		float3 point = float3::zero;
+	float3 point = (float3::zero);
 
-		float3 focus = fake_camera->frustum.pos - point;
+	if (App->objects->GetSelectedObject() != nullptr)
+	{
+		ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
+		point = transform->GetGlobalPosition();
+	}
 
-		Quat rotationy(fake_camera->frustum.up, App->input->GetMouseXMotion());
-		Quat rotationx(fake_camera->frustum.WorldRight(), App->input->GetMouseYMotion());
+	float3 focus = fake_camera->frustum.pos - point;
 
-		focus = rotationx.Transform(focus);
-		focus = rotationy.Transform(focus);
+	Quat rotationy(fake_camera->frustum.up, App->input->GetMouseXMotion()*0.1f);
+	Quat rotationx(fake_camera->frustum.WorldRight(), App->input->GetMouseYMotion()*0.05f);
 
-		fake_camera->frustum.pos = focus + point;
+	focus = rotationx.Transform(focus);
+	focus = rotationy.Transform(focus);
 
-		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
-		SDL_SetCursor(cursor);
+	fake_camera->frustum.pos = focus + point;
 
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-		{
-			SDL_FreeCursor(cursor);
-		}
+	fake_camera->Look(point);
+
+	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
+	SDL_SetCursor(cursor);
+
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	{
+		SDL_FreeCursor(cursor);
+	}
 }
 
 void ModuleCamera3D::Focus()
