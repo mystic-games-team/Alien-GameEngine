@@ -42,8 +42,13 @@ bool ModuleRenderer3D::Init()
 	
 	glewInit();
 
+	App->camera->fake_camera = new ComponentCamera(nullptr);
+	App->camera->fake_camera->frustum.farPlaneDistance = 1000.0F;
+	actual_camera = App->camera->fake_camera;
+
 	if(ret == true)
 	{
+		
 		//Use Vsync
 		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
@@ -76,7 +81,7 @@ bool ModuleRenderer3D::Init()
 		glClearDepth(1.0f);
 		
 		//Initialize clear color
-		glClearColor(background_color.r,background_color.g,background_color.b,background_color.a);
+		glClearColor(actual_camera->camera_color_background.r, actual_camera->camera_color_background.g, actual_camera->camera_color_background.b, actual_camera->camera_color_background.a);
 
 		//Check for error
 		error = glGetError();
@@ -98,7 +103,7 @@ bool ModuleRenderer3D::Init()
 
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
-		glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
+		glClearColor(actual_camera->camera_color_background.r, actual_camera->camera_color_background.g, actual_camera->camera_color_background.b, actual_camera->camera_color_background.a);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
@@ -111,8 +116,6 @@ bool ModuleRenderer3D::Init()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
-	App->camera->fake_camera = new ComponentCamera(nullptr);
-	App->camera->fake_camera->frustum.farPlaneDistance = 1000.0F;
 	// Projection matrix for
 	OnResize(App->window->width, App->window->height);
 
@@ -124,7 +127,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearStencil(0);
-	glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
+	glClearColor(actual_camera->camera_color_background.r, actual_camera->camera_color_background.g, actual_camera->camera_color_background.b, actual_camera->camera_color_background.a);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
@@ -230,11 +233,6 @@ void ModuleRenderer3D::CreateRenderTexture()
 
 		tex = new ResourceTexture("RenderTexture", render_texture, App->window->width, App->window->height);
 	}
-}
-
-void ModuleRenderer3D::SetBackgroundColor(const Color & bg_color)
-{
-	background_color = bg_color;
 }
 
 void ModuleRenderer3D::RenderGrid()

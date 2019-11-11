@@ -540,6 +540,11 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 				mesh->LoadComponent(components_to_load);
 				AddComponent(mesh);
 				break; }
+			case (int)ComponentType::CAMERA: {
+				ComponentCamera* camera = new ComponentCamera(this);
+				camera->LoadComponent(components_to_load);
+				AddComponent(camera);
+				break; }
 			default:
 				LOG("Unknown component type while loading");
 				break;

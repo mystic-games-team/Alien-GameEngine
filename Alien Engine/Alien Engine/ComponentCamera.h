@@ -11,7 +11,7 @@ public:
 	ComponentCamera(GameObject* attach);
 	virtual ~ComponentCamera();
 
-	//void DrawInspector();
+	void DrawInspector();
 
 	void Reset();
 	void SetComponent(Component* component);
@@ -32,11 +32,11 @@ public:
 
 	float vertical_fov = 60.0f;
 
+	Color camera_color_background{ 0.05f, 0.05f, 0.05f, 1.0f };
+
 private:
 
 	bool projection_changed = false;
 
 	float4x4 ViewMatrix, ViewMatrixInverse;
-
-	Color camera_color_background{ 0.0f, 0.0f, 0.0f, 1.0f };
 };

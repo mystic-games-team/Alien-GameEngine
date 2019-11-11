@@ -42,11 +42,6 @@ bool ModuleObjects::Start()
 	current_scene.full_path = "Untitled*";
 	current_scene.is_untitled = true;
 
-	GameObject* camera = new GameObject(base_game_object);
-	camera->SetName("Camera");
-	camera->AddComponent(new ComponentTransform(camera, { 0,0,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
-	camera->AddComponent(new ComponentCamera(camera));
-
 	return ret;
 }
 
@@ -490,7 +485,6 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	App->renderer3D->length_grid = config->GetNumber("Configuration.Renderer.GridLength");
 	App->renderer3D->line_grid_width = config->GetNumber("Configuration.Renderer.GridWidth");
 	App->renderer3D->grid_color = config->GetColor("Configuration.Renderer.GridColor");
-	App->renderer3D->background_color = config->GetColor("Configuration.Renderer.BackgroundColor");
 	vertex_n_color = config->GetColor("Configuration.Renderer.VertexNormalColor");
 	face_n_color = config->GetColor("Configuration.Renderer.FaceNormalColor");
 	mesh_color = config->GetColor("Configuration.Renderer.MeshColor");
@@ -523,7 +517,6 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetNumber("Configuration.Renderer.GridWidth", App->renderer3D->line_grid_width);
 	config->SetNumber("Configuration.Renderer.GridLength", App->renderer3D->length_grid);
 	config->SetColor("Configuration.Renderer.GridColor", App->renderer3D->grid_color);
-	config->SetColor("Configuration.Renderer.BackgroundColor", App->renderer3D->background_color);
 	config->SetColor("Configuration.Renderer.VertexNormalColor", vertex_n_color);
 	config->SetColor("Configuration.Renderer.FaceNormalColor", face_n_color);
 	config->SetColor("Configuration.Renderer.MeshColor", mesh_color);

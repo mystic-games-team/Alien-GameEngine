@@ -4,6 +4,7 @@
 #include "glmath.h"
 #include "glew/include/glew.h"
 #include "ModuleImporter.h"
+#include "ComponentCamera.h"
 
 #define MAX_LIGHTS 8
 
@@ -21,8 +22,6 @@ public:
 	void OnResize(int width, int height);
 
 	void CreateRenderTexture();
-
-	void SetBackgroundColor(const Color & bg_color);
 
 	void RenderGrid();
 
@@ -45,10 +44,10 @@ public:
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	
 	bool render_zbuffer = false;
+
 public:
 
-	// background
-	Color background_color{ 0.05f, 0.05f, 0.05f, 1.f };
+	ComponentCamera* actual_camera = nullptr;
 
 	// grid
 	int length_grid = 20;

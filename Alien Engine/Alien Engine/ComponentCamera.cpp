@@ -6,6 +6,7 @@
 #include "ComponentTransform.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "imgui/imgui.h"
 
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
@@ -27,6 +28,46 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 
 ComponentCamera::~ComponentCamera()
 {
+}
+
+void ComponentCamera::DrawInspector()
+{
+	ImGui::PushID(this);
+	if (ImGui::Checkbox("##CmpActive", &enabled)) {
+		if (!enabled)
+			OnDisable();
+		else
+			OnEnable();
+	}
+
+	ImGui::PopID();
+	ImGui::SameLine();
+
+	if (ImGui::CollapsingHeader("Camera", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		RightClickMenu("Camera");
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		ImGui::ColorEdit3("Background Color", &camera_color_background, ImGuiColorEditFlags_Float);
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		if (ImGui::InputFloat("FOV", &vertical_fov))
+		{
+			frustum.verticalFov = vertical_fov*DEGTORAD;
+			AspectRatio(16, 9);
+		}
+
+		ImGui::Spacing();
+		ImGui::Separator();
+	}
+
+	else
+		RightClickMenu("Camera");
 }
 
 void ComponentCamera::Reset()

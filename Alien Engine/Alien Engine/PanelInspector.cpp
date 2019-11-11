@@ -74,7 +74,7 @@ void PanelInspector::ButtonAddComponent()
 {
 	ImGui::Spacing();
 
-	ImGui::Combo("##choose component", &component, "Select Component\0Mesh\0Material\0Light\0");
+	ImGui::Combo("##choose component", &component, "Select Component\0Mesh\0Material\0Light\0Camera\0");
 
 	ImGui::SameLine();
 
@@ -132,7 +132,20 @@ void PanelInspector::ButtonAddComponent()
 
 			break;
 
+		case 4:
+
+			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::CAMERA))
+			{
+				ComponentCamera* camera = new ComponentCamera(App->objects->GetSelectedObject());
+				App->objects->GetSelectedObject()->AddComponent(camera);
+			}
+
+			else
+				LOG("The selected object already has this component!");
+
+			break;
 		}
+
 
 		component = 0;
 	}
