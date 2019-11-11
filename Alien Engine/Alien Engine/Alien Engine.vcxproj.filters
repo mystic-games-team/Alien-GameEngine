@@ -111,9 +111,6 @@
     <ClInclude Include="Color.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="glmath.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h">
       <Filter>Tools\ImGui</Filter>
     </ClInclude>
@@ -455,6 +452,12 @@
     </ClInclude>
     <ClInclude Include="PanelSceneSelector.h">
       <Filter>Panels</Filter>
+        </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="glmath.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -501,9 +504,6 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="glmath.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp">
@@ -709,6 +709,12 @@
     </ClCompile>
     <ClCompile Include="PanelSceneSelector.cpp">
       <Filter>Panels</Filter>
+      </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="glmath.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

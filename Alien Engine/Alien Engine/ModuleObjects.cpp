@@ -42,6 +42,11 @@ bool ModuleObjects::Start()
 	current_scene.full_path = "Untitled*";
 	current_scene.is_untitled = true;
 
+	GameObject* camera = new GameObject(base_game_object);
+	camera->SetName("Camera");
+	camera->AddComponent(new ComponentTransform(camera, { 0,0,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
+	camera->AddComponent(new ComponentCamera(camera));
+
 	return ret;
 }
 
