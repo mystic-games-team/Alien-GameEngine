@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
 #include "RandomHelper.h"
+#include "ComponentCamera.h"
 
 GameObject::GameObject(GameObject* parent)
 {
@@ -54,6 +55,7 @@ void GameObject::Draw()
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
+	ComponentCamera* camera = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
 
 	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled()) 
 	{
@@ -83,6 +85,10 @@ void GameObject::Draw()
 	if (light != nullptr && light->IsEnabled()) 
 	{
 		light->LightLogic();
+	}
+
+	if (camera != nullptr && camera->IsEnabled()) {
+		camera->DrawFrustum();
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();

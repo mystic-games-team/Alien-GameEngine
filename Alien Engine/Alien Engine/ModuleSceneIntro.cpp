@@ -7,6 +7,8 @@
 #include "Shapes.h"
 #include "ModuleObjects.h"
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("SceneIntro");
@@ -22,8 +24,8 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
-	App->camera->LookAt(vec3(0, 0, 0));
+	App->camera->fake_camera->frustum.pos = { 0,5,0 };
+	//App->camera->LookAt(float3(0, 0, 0));
 
 	return ret;
 }
