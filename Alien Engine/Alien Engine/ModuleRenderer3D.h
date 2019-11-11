@@ -44,7 +44,7 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	
-	bool render_zbuffer = true;
+	bool render_zbuffer = false;
 public:
 
 	// background
