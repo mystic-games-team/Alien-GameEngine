@@ -111,7 +111,6 @@ bool ModuleRenderer3D::Init()
 
 	OnResize(App->window->width, App->window->height);
 
-
 	return ret;
 }
 
@@ -174,33 +173,58 @@ void ModuleRenderer3D::CreateRenderTexture()
 
 		glDeleteFramebuffers(1, &frame_buffer);
 		glDeleteRenderbuffers(1, &depthrenderbuffer);
+		glDeleteFramebuffers(1, &z_framebuffer);
 	}
 
-	glGenFramebuffers(1, &frame_buffer);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer);
+	if (render_zbuffer) {
+		tex = new ResourceTexture();
 
-	glGenTextures(1, &render_texture);
-	glBindTexture(GL_TEXTURE_2D, render_texture);
+		glGenTextures(1, &tex->id);
+		glBindTexture(GL_TEXTURE_2D, tex->id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, App->window->width, App->window->height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, App->window->width, App->window->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+		glGenFramebuffers(1, &z_framebuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, z_framebuffer);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->id, 0);
+		glDepthRange(1, 0);
 
-	glGenRenderbuffers(1, &depthrenderbuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->width, App->window->height);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		//glDrawBuffer(GL_NONE);
+		//glReadBuffer(GL_NONE);
 
-	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
-	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
-
-	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		LOG("Error creating frame buffer");
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	else {
+		glGenFramebuffers(1, &frame_buffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer);
+		glDepthRange(0, 1);
+		glGenTextures(1, &render_texture);
+		glBindTexture(GL_TEXTURE_2D, render_texture);
 
-	tex = new ResourceTexture("RenderTexture", render_texture, App->window->width, App->window->height);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, App->window->width, App->window->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glGenRenderbuffers(1, &depthrenderbuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->width, App->window->height);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
+		glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
+
+		if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			LOG("Error creating frame buffer");
+		}
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+		tex = new ResourceTexture("RenderTexture", render_texture, App->window->width, App->window->height);
+	}
 }
 
 void ModuleRenderer3D::SetBackgroundColor(const Color & bg_color)
@@ -222,4 +246,10 @@ void ModuleRenderer3D::RenderGrid()
 	}
 	glEnd();
 	glLineWidth(1);
+}
+
+void ModuleRenderer3D::ChangeDrawFrameBuffer(bool normal_frameBuffer)
+{
+	render_zbuffer = normal_frameBuffer;
+	CreateRenderTexture();
 }

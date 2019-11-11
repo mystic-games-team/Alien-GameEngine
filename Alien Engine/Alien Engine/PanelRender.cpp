@@ -60,6 +60,12 @@ void PanelRender::PanelLogic()
 		ImGui::ColorEdit3("Background Color", (float*)&App->renderer3D->background_color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
 		ImGui::Spacing();
 	}
+	if (ImGui::CollapsingHeader("Render Z-Buffer")) {
+		ImGui::Spacing();
+		if (ImGui::Checkbox("View Z-Buffer", &App->renderer3D->render_zbuffer)) {
+			App->renderer3D->ChangeDrawFrameBuffer(App->renderer3D->render_zbuffer);
+		}
+	}
 	if (ImGui::CollapsingHeader("Personalize Grid")) 
 	{
 		ImGui::Spacing();

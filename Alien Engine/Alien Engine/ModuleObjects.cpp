@@ -75,10 +75,16 @@ update_status ModuleObjects::Update(float dt)
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
+	if (App->renderer3D->render_zbuffer) {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
+	}
+	else {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
+	}
 
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearStencil(0);
+
 	if (allow_grid)
 		App->renderer3D->RenderGrid();
 
