@@ -141,17 +141,28 @@ void ModuleCamera3D::Zoom()
 void ModuleCamera3D::Rotation()
 {
 	float3 point = (float3::zero);
-
+	float3 offset_height(float3::zero);
+	
 	if (App->objects->GetSelectedObject() != nullptr)
 	{
 		ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
-		point = transform->GetGlobalPosition();
+		
+		ComponentMesh* mesh = (ComponentMesh*)App->objects->GetSelectedObject()->GetComponent(ComponentType::MESH);
+
+		if (mesh != nullptr && mesh->mesh != nullptr)
+		{
+			point = mesh->GetGlobalAABB().CenterPoint();
+		}
+		else
+		{
+			point = transform->GetGlobalPosition();
+		}
 	}
 
 	float3 focus = fake_camera->frustum.pos - point;
 
-	Quat rotationy(fake_camera->frustum.up, App->input->GetMouseXMotion()*0.1f);
-	Quat rotationx(fake_camera->frustum.WorldRight(), App->input->GetMouseYMotion()*0.05f);
+	Quat rotationy(fake_camera->frustum.up, -App->input->GetMouseXMotion()*0.01f);
+	Quat rotationx(fake_camera->frustum.WorldRight(), -App->input->GetMouseYMotion()*0.005f);
 
 	focus = rotationx.Transform(focus);
 	focus = rotationy.Transform(focus);
@@ -171,33 +182,29 @@ void ModuleCamera3D::Rotation()
 
 void ModuleCamera3D::Focus()
 {
-	//if (App->objects->GetSelectedObject() != nullptr)
-	//{
-	//	AABB bounding_box = App->objects->GetSelectedObject()->GetBB();
+	if (App->objects->GetSelectedObject() != nullptr)
+	{
+		AABB bounding_box = App->objects->GetSelectedObject()->GetBB();
 
-	//	if (bounding_box.Diagonal().Length() != 0)
-	//	{
-	//		float offset = bounding_box.Diagonal().Length() * 0.7;
-	//		float3 offset_v = fake_camera->Z * offset;
-	//		fake_camera->Reference.x = bounding_box.CenterPoint().x;
-	//		fake_camera->Reference.y = bounding_box.CenterPoint().y;
-	//		fake_camera->Reference.z = bounding_box.CenterPoint().z;
-	//		fake_camera->Position = fake_camera->Reference + offset_v;
-	//	}
-	//	else
-	//	{
-	//		float offset = 5.F;
-	//		float3 offset_v = fake_camera->Z * offset;
+		if (bounding_box.Diagonal().Length() != 0)
+		{
+			float offset = bounding_box.Diagonal().Length();
+			float3 offset_v = float3 { 0,0,offset };
 
-	//		ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
+			fake_camera->frustum.pos = bounding_box.CenterPoint() + offset_v;
+			fake_camera->Look(bounding_box.CenterPoint());
+		}
+		else
+		{
+			float offset = 5.F;
+			float3 offset_v = float3{ 0,0,fake_camera->frustum.pos.z } *offset;
 
-	//		fake_camera->Reference.x = transform->GetGlobalPosition().x;
-	//		fake_camera->Reference.y = transform->GetGlobalPosition().y;
-	//		fake_camera->Reference.z = transform->GetGlobalPosition().z;
+			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 
-	//		fake_camera->Position = fake_camera->Reference + offset_v;
-	//	}
-	//}
+			fake_camera->frustum.pos = transform->GetGlobalPosition() + offset_v;
+			fake_camera->Look(bounding_box.CenterPoint());
+		}
+	}
 	//else
 	//{
 	//	for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
