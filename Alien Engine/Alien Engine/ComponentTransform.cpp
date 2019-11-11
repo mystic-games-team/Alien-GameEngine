@@ -166,10 +166,7 @@ void ComponentTransform::DrawInspector()
 {
 	ImGui::Spacing();
 
-	ImGui::Text("Object");
-	ImGui::SameLine();
-
-	if (ImGui::Checkbox("##ObjectActive", &game_object_attached->enabled))
+	if (ImGui::Checkbox("Enabled", &game_object_attached->enabled))
 		game_object_attached->SayChildrenParentIsEnabled(game_object_attached->enabled);
 	ImGui::SameLine();
 
@@ -178,6 +175,13 @@ void ComponentTransform::DrawInspector()
 
 	if (ImGui::InputText("##ObjectName", name, 30, ImGuiInputTextFlags_AutoSelectAll)) {
 		game_object_attached->SetName(name);
+	}
+
+
+	ImGui::SameLine();
+
+	if (ImGui::Checkbox("Static", &game_object_attached->is_static)) {
+		// TODO: call something of the quadtree xd
 	}
 
 	ImGui::Spacing();

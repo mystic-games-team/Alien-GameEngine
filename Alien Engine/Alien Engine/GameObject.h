@@ -90,6 +90,7 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 	bool enabled = true;
+	bool is_static = false;
 	u64 ID = 0;
 
 private:
