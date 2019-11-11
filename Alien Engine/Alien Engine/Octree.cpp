@@ -19,10 +19,7 @@ OctreeNode::~OctreeNode()
 
 void OctreeNode::Insert(GameObject* object, const AABB& sect)
 {
-	bool intersects = section.Intersects(sect);
-	bool contains = section.Contains(sect);
-
-	if (contains) {  
+	if (section.Contains(sect)) {
 		if (children.empty()) {
 			if (game_objects.size() < App->objects->octree.GetBucket()) {
 				AddGameObject(object);
@@ -48,19 +45,8 @@ void OctreeNode::Insert(GameObject* object, const AABB& sect)
 			}
 		}
 	}
-	else if (intersects) { //
-		
-	}
-	else { // need to make the octree again 
-
-	}
-
-	if (children.size() < App->objects->octree.GetBucket()) { // we can insert it here
-		
-	}
-	else { // need to subdivide
-
-	}
+	else
+		App->objects->octree.Recalculate(object);
 }
 
 void OctreeNode::Remove(GameObject* object)
@@ -135,6 +121,31 @@ void OctreeNode::AddNode(const float3& min, const float3& max)
 	children.push_back(node);
 }
 
+void OctreeNode::SaveGameObjects(std::vector<GameObject*>* to_save, AABB* new_section)
+{
+	if (!game_objects.empty()) {
+		std::vector<GameObject*>::iterator item = game_objects.begin();
+		for (; item != game_objects.end(); ++item) {
+			if (*item != nullptr) {
+				ComponentMesh* mesh = (ComponentMesh*)(*item)->GetComponent(ComponentType::MESH);
+				AABB aabb = mesh->GetGlobalAABB();
+				new_section->minPoint = { min(new_section->minPoint.x, aabb.minPoint.x), min(new_section->minPoint.y, aabb.minPoint.y),min(new_section->minPoint.z, aabb.minPoint.z) };
+				new_section->maxPoint = { max(new_section->maxPoint.x, aabb.maxPoint.x), max(new_section->maxPoint.y, aabb.maxPoint.y),max(new_section->maxPoint.z, aabb.maxPoint.z) };
+				to_save->push_back((*item));
+			}
+		}
+	}
+
+	if (!children.empty()) {
+		std::vector<OctreeNode*>::iterator item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->SaveGameObjects(to_save, new_section);
+			}
+		}
+	}
+}
+
 void OctreeNode::Subdivide()
 {
 	float3 mid_point = section.minPoint + (section.maxPoint - section.minPoint) * 0.5F;
@@ -195,8 +206,6 @@ void OctreeNode::Subdivide()
 			++objs;
 		}
 	}
-
-	
 }
 
 Octree::Octree()
@@ -211,6 +220,9 @@ void Octree::Insert(GameObject* object)
 {
 	ComponentMesh* mesh_parent = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
 	if (mesh_parent != nullptr && mesh_parent->mesh != nullptr) {
+		if (root == nullptr) {
+			Init(mesh_parent->GetGlobalAABB().minPoint, mesh_parent->GetGlobalAABB().maxPoint);
+		}
 		root->Insert(object, mesh_parent->GetGlobalAABB());
 	}
 
@@ -258,4 +270,31 @@ void Octree::Init(const float3& min, const float3& max)
 bool Octree::IsRoot(const OctreeNode* node)
 {
 	return node == root;
+}
+
+void Octree::Recalculate(GameObject* new_object)
+{
+	std::vector<GameObject*> to_save;
+	to_save.push_back(new_object);
+
+	AABB new_section;
+
+	ComponentMesh* mesh = (ComponentMesh*)new_object->GetComponent(ComponentType::MESH);
+	new_section = mesh->GetGlobalAABB();
+
+	// get all gameobjects in octree and get the min & max points
+	root->SaveGameObjects(&to_save, &new_section);
+
+	// delete the old octree and create it again
+	delete root;
+	root = nullptr;
+	Init(new_section.minPoint, new_section.maxPoint);
+
+	// insert all the game objects
+	std::vector<GameObject*>::iterator item = to_save.begin();
+	for (; item != to_save.end(); ++item) {
+		if (*item != nullptr) {
+			Insert((*item));
+		}
+	}
 }

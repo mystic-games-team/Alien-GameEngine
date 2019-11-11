@@ -6,6 +6,8 @@
 
 class OctreeNode {
 
+	friend class Octree;
+
 public:
 
 	OctreeNode();
@@ -24,6 +26,7 @@ private:
 	void AddGameObject(GameObject* obj);
 	void AddNode(const float3& min, const float3& max);
 	void Subdivide();
+	void SaveGameObjects(std::vector<GameObject*>* to_save, AABB* new_section);
 
 public:
 
@@ -56,6 +59,8 @@ public:
 	void Init(const float3& min, const float3& max);
 
 	bool IsRoot(const OctreeNode* node);
+
+	void Recalculate(GameObject* new_object);
 
 private:
 

@@ -42,8 +42,6 @@ bool ModuleObjects::Start()
 	current_scene.full_path = "Untitled*";
 	current_scene.is_untitled = true;
 
-	octree.Init({ -10,-7.2F,-10 }, { 10,6.67F,9.92F });
-
 	return ret;
 }
 
