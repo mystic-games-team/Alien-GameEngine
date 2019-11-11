@@ -139,17 +139,70 @@ void OctreeNode::Subdivide()
 {
 	float3 mid_point = section.minPoint + (section.maxPoint - section.minPoint) * 0.5F;
 
-	AddNode(section.minPoint, mid_point);
-	AddNode(float3{ section.minPoint.x,section.maxPoint.y,section.minPoint.z }, mid_point);
+	AddNode(section.minPoint, mid_point); // 0
+	AddNode(mid_point, section.maxPoint); // 2
 
-	AddNode(mid_point, section.maxPoint);
-	AddNode(mid_point, float3{ section.maxPoint.x,section.minPoint.y,section.maxPoint.z });
+	float3 point1 = mid_point;
+	float3 point2 = { section.minPoint.x,section.maxPoint.y,section.minPoint.z };
 
-	AddNode(float3{ section.maxPoint.x,section.maxPoint.y,section.minPoint.z }, mid_point);
-	AddNode(float3{ section.maxPoint.x,section.minPoint.y,section.minPoint.z }, mid_point);
+	AddNode(float3{min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
+		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
 
-	AddNode(mid_point, float3{ section.minPoint.x,section.maxPoint.y,section.maxPoint.z });
-	AddNode(mid_point, float3{ section.minPoint.x,section.minPoint.y,section.maxPoint.z });
+	point1 = mid_point;
+	point2 = { section.maxPoint.x,section.minPoint.y,section.maxPoint.z };
+
+	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
+		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+
+	point1 = { section.maxPoint.x,section.maxPoint.y,section.minPoint.z };
+	point2 = mid_point;
+
+	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
+		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+
+	point1 = { section.maxPoint.x,section.minPoint.y,section.minPoint.z };
+	point2 = mid_point;
+
+	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
+		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+
+	point1 = mid_point;
+	point2 = { section.minPoint.x,section.maxPoint.y,section.maxPoint.z };
+
+	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
+		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+
+	point1 = mid_point;
+	point2 = { section.minPoint.x,section.minPoint.y,section.maxPoint.z };
+	
+	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
+		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+
+	// reorder the gameobjects to the new nodes if possible, if intersects parent keep them
+	std::vector<GameObject*>::iterator objs = game_objects.begin();
+	while (objs != game_objects.end()) {
+		bool to_delete = false;
+		if (*objs != nullptr) {
+			std::vector<OctreeNode*>::iterator item = children.begin();
+			uint intersections = 0;
+			for (; item != children.end(); ++item) {
+				ComponentMesh* mesh = (ComponentMesh*)(*objs)->GetComponent(ComponentType::MESH);
+				if (*item != nullptr && (*item)->section.Contains(mesh->GetGlobalAABB().minPoint) && (*item)->section.Contains(mesh->GetGlobalAABB().maxPoint)) {
+					(*item)->Insert(*objs, mesh->GetGlobalAABB());
+					to_delete = true;
+					break;
+				}
+			}
+		}
+		if (to_delete) {
+			objs = game_objects.erase(objs);
+		}
+		else {
+			++objs;
+		}
+	}
+
+	
 }
 
 Octree::Octree()
