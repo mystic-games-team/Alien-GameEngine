@@ -21,6 +21,7 @@ public:
 
 private:
 
+	void AddGameObject(GameObject* obj);
 	void AddNode(const float3& min, const float3& max);
 	void Subdivide();
 
@@ -54,8 +55,10 @@ public:
 
 	void Init(const float3& min, const float3& max);
 
+	bool IsRoot(const OctreeNode* node);
+
 private:
 
 	OctreeNode* root = nullptr;
-	uint bucket = 1;
+	uint bucket = 2;
 };

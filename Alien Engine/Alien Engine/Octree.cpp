@@ -22,28 +22,45 @@ void OctreeNode::Insert(GameObject* object, const AABB& sect)
 	bool intersects = section.Intersects(sect);
 	bool contains = section.Contains(sect);
 
-	//if (intersects && contains) { // sect == section
-
-	//}
-	//else if (intersects) { // 
-
-	//}
-	//else if (contains) { //
-
-	//}
-	//else { // need to make the octree again 
-
-	//}
-
-	//if (children.size() < App->objects->octree.GetBucket()) { // we can insert it here
-	//	
-	//}
-	//else { // need to subdivide
-
-	//}
-
-	Subdivide();
+	if (contains) {  
+		if (children.empty()) {
+			if (game_objects.size() < App->objects->octree.GetBucket()) {
+				AddGameObject(object);
+			}
+			else {
+				Subdivide();
+			}
+		}
+		if (!children.empty()) {
+			std::vector<OctreeNode*>::iterator item = children.begin();
+			uint intersections = 0;
+			for (; item != children.end(); ++item) {
+				if (*item != nullptr && (*item)->section.Contains(sect)) {
+					(*item)->Insert(object, sect);
+					break;
+				}
+				if (*item != nullptr && (*item)->section.Intersects(sect)) {
+					++intersections;
+				}
+			}
+			if (intersections > 1) { // if objects intersects with more than one child, obj belongs to the parent now
+				AddGameObject(object);
+			}
+		}
+	}
+	else if (intersects) { //
 		
+	}
+	else { // need to make the octree again 
+
+	}
+
+	if (children.size() < App->objects->octree.GetBucket()) { // we can insert it here
+		
+	}
+	else { // need to subdivide
+
+	}
 }
 
 void OctreeNode::Remove(GameObject* object)
@@ -104,6 +121,11 @@ void OctreeNode::DrawNode()
 			}
 		}
 	}
+}
+
+void OctreeNode::AddGameObject(GameObject* obj)
+{
+	game_objects.push_back(obj);
 }
 
 void OctreeNode::AddNode(const float3& min, const float3& max)
@@ -184,4 +206,9 @@ void Octree::Init(const float3& min, const float3& max)
 		delete root;
 	}
 	root = new OctreeNode(min, max);
+}
+
+bool Octree::IsRoot(const OctreeNode* node)
+{
+	return node == root;
 }
