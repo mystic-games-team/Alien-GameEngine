@@ -9,6 +9,7 @@ class OctreeNode {
 public:
 
 	OctreeNode();
+	OctreeNode(const float3& min, const float3& max);
 	~OctreeNode();
 
 	// insert a gameobject
@@ -17,6 +18,11 @@ public:
 	void Remove(GameObject* object);
 	// draw AABB
 	void DrawNode();
+
+private:
+
+	void AddNode(const float3& min, const float3& max);
+	void Subdivide();
 
 public:
 

@@ -7,35 +7,43 @@ OctreeNode::OctreeNode()
 {
 }
 
+OctreeNode::OctreeNode(const float3& min, const float3& max)
+{
+	section.minPoint = min;
+	section.maxPoint = max;
+}
+
 OctreeNode::~OctreeNode()
 {
 }
 
 void OctreeNode::Insert(GameObject* object, const AABB& sect)
 {
-	bool intersects = section.Intersects(sect); 
+	bool intersects = section.Intersects(sect);
 	bool contains = section.Contains(sect);
 
-	if (intersects && contains) { // sect == section
+	//if (intersects && contains) { // sect == section
 
-	}
-	else if (intersects) { // 
+	//}
+	//else if (intersects) { // 
 
-	}
-	else if (contains) { //
+	//}
+	//else if (contains) { //
 
-	}
-	else { // need to make the octree again 
+	//}
+	//else { // need to make the octree again 
 
-	}
+	//}
 
-	if (children.size() < App->objects->octree.GetBucket()) { // we can insert it here
+	//if (children.size() < App->objects->octree.GetBucket()) { // we can insert it here
+	//	
+	//}
+	//else { // need to subdivide
+
+	//}
+
+	Subdivide();
 		
-	}
-	else { // need to subdivide
-
-	}
-
 }
 
 void OctreeNode::Remove(GameObject* object)
@@ -87,6 +95,39 @@ void OctreeNode::DrawNode()
 	glEnd();
 
 	glLineWidth(1);
+
+	if (!children.empty()) {
+		std::vector<OctreeNode*>::iterator item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->DrawNode();
+			}
+		}
+	}
+}
+
+void OctreeNode::AddNode(const float3& min, const float3& max)
+{
+	OctreeNode* node = new OctreeNode(min, max);
+	node->parent = this;
+	children.push_back(node);
+}
+
+void OctreeNode::Subdivide()
+{
+	float3 mid_point = section.minPoint + (section.maxPoint - section.minPoint) * 0.5F;
+
+	AddNode(section.minPoint, mid_point);
+	AddNode(float3{ section.minPoint.x,section.maxPoint.y,section.minPoint.z }, mid_point);
+
+	AddNode(mid_point, section.maxPoint);
+	AddNode(mid_point, float3{ section.maxPoint.x,section.minPoint.y,section.maxPoint.z });
+
+	AddNode(float3{ section.maxPoint.x,section.maxPoint.y,section.minPoint.z }, mid_point);
+	AddNode(float3{ section.maxPoint.x,section.minPoint.y,section.minPoint.z }, mid_point);
+
+	AddNode(mid_point, float3{ section.minPoint.x,section.maxPoint.y,section.maxPoint.z });
+	AddNode(mid_point, float3{ section.minPoint.x,section.minPoint.y,section.maxPoint.z });
 }
 
 Octree::Octree()
@@ -142,7 +183,5 @@ void Octree::Init(const float3& min, const float3& max)
 	if (root != nullptr) {
 		delete root;
 	}
-	root = new OctreeNode();
-	root->section.minPoint = min;
-	root->section.maxPoint = max;
+	root = new OctreeNode(min, max);
 }
