@@ -26,6 +26,7 @@ public:
 
 	void RenderGrid();
 
+	void ChangeDrawFrameBuffer(bool normal_frameBuffer);
 
 public:
 
@@ -36,13 +37,14 @@ public:
 
 	// scene texture
 	ResourceTexture* tex = nullptr;
-	ResourceTexture* z_buffer = nullptr;
+
 	uint z_framebuffer;
 
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	
+	bool render_zbuffer = true;
 public:
 
 	// background
