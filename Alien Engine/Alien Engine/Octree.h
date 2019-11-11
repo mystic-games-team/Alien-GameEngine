@@ -12,7 +12,7 @@ public:
 	~OctreeNode();
 
 	// insert a gameobject
-	void Insert(GameObject* object);
+	void Insert(GameObject* object, const AABB& sect);
 	// remove a gameobject
 	void Remove(GameObject* object);
 	// draw AABB
@@ -31,6 +31,8 @@ class Octree {
 
 public:
 
+	Octree();
+	~Octree();
 	
 	// insert a gameobject
 	void Insert(GameObject* object);
@@ -39,7 +41,14 @@ public:
 	// remove the hole octree
 	void Clear();
 
-public:
+	// draw
+	void Draw();
+
+	const uint& GetBucket() const;
+
+	void Init(const float3& min, const float3& max);
+
+private:
 
 	OctreeNode* root = nullptr;
 	uint bucket = 1;

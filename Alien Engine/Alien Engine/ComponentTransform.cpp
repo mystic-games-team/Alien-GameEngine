@@ -1,6 +1,8 @@
 #include "ComponentTransform.h"
 #include "GameObject.h"
 #include "imgui/imgui.h"
+#include "ModuleObjects.h"
+#include "Application.h"
 
 #include "ComponentMesh.h"
 
@@ -181,7 +183,8 @@ void ComponentTransform::DrawInspector()
 	ImGui::SameLine();
 
 	if (ImGui::Checkbox("Static", &game_object_attached->is_static)) {
-		// TODO: call something of the quadtree xd
+		game_object_attached->ChangeStatic(game_object_attached->is_static);
+		App->objects->octree.Insert(game_object_attached);
 	}
 
 	ImGui::Spacing();

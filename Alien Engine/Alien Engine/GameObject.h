@@ -79,6 +79,9 @@ public:
 
 	void SearchResourceToDelete(const ResourceType& type, Resource* to_delete);
 
+	//static
+	void ChangeStatic(bool static_);
+
 private:
 
 	// parent selected

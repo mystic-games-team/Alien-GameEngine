@@ -7,6 +7,8 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include "Octree.h"
+
 
 struct Scene {
 
@@ -148,13 +150,12 @@ public:
 	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;
 	
+	Octree octree;
 
 private:
 
 	GameObject* game_object_selected = nullptr;
 
 	std::map<GameObject*, GameObject*> to_reparent;
-
-
 
 };

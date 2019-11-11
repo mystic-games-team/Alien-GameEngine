@@ -578,6 +578,17 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 	}
 }
 
+void GameObject::ChangeStatic(bool static_)
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->is_static = static_;
+			(*item)->ChangeStatic(static_);
+		}
+	}
+}
+
 void GameObject::SearchToDelete()
 {
 	std::vector<GameObject*>::iterator item = children.begin();
