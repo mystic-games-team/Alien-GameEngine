@@ -142,41 +142,35 @@ void OctreeNode::Subdivide()
 	AddNode(section.minPoint, mid_point); // 0
 	AddNode(mid_point, section.maxPoint); // 2
 
-	float3 point1 = mid_point;
-	float3 point2 = { section.minPoint.x,section.maxPoint.y,section.minPoint.z };
+	float3 point = { section.minPoint.x,section.maxPoint.y,section.minPoint.z };
 
-	AddNode(float3{min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
-		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+	AddNode(float3{min(point.x,mid_point.x), min(point.y,mid_point.y), min(point.z,mid_point.z) },
+		float3{ max(point.x,mid_point.x), max(point.y,mid_point.y), max(point.z,mid_point.z) });
 
-	point1 = mid_point;
-	point2 = { section.maxPoint.x,section.minPoint.y,section.maxPoint.z };
+	point = { section.maxPoint.x,section.minPoint.y,section.maxPoint.z };
 
-	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
-		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+	AddNode(float3{ min(point.x,mid_point.x), min(point.y,mid_point.y), min(point.z,mid_point.z) },
+		float3{ max(point.x,mid_point.x), max(point.y,mid_point.y), max(point.z,mid_point.z) });
 
-	point1 = { section.maxPoint.x,section.maxPoint.y,section.minPoint.z };
-	point2 = mid_point;
+	point = { section.maxPoint.x,section.maxPoint.y,section.minPoint.z };
 
-	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
-		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+	AddNode(float3{ min(point.x,mid_point.x), min(point.y,mid_point.y), min(point.z,mid_point.z) },
+		float3{ max(point.x,mid_point.x), max(point.y,mid_point.y), max(point.z,mid_point.z) });
 
-	point1 = { section.maxPoint.x,section.minPoint.y,section.minPoint.z };
-	point2 = mid_point;
+	point = { section.maxPoint.x,section.minPoint.y,section.minPoint.z };
 
-	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
-		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+	AddNode(float3{ min(point.x,mid_point.x), min(point.y,mid_point.y), min(point.z,mid_point.z) },
+		float3{ max(point.x,mid_point.x), max(point.y,mid_point.y), max(point.z,mid_point.z) });
 
-	point1 = mid_point;
-	point2 = { section.minPoint.x,section.maxPoint.y,section.maxPoint.z };
+	point = { section.minPoint.x,section.maxPoint.y,section.maxPoint.z };
 
-	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
-		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+	AddNode(float3{ min(point.x,mid_point.x), min(point.y,mid_point.y), min(point.z,mid_point.z) },
+		float3{ max(point.x,mid_point.x), max(point.y,mid_point.y), max(point.z,mid_point.z) });
 
-	point1 = mid_point;
-	point2 = { section.minPoint.x,section.minPoint.y,section.maxPoint.z };
+	point = { section.minPoint.x,section.minPoint.y,section.maxPoint.z };
 	
-	AddNode(float3{ min(point1.x,point2.x), min(point1.y,point2.y), min(point1.z,point2.z) },
-		float3{ max(point1.x,point2.x), max(point1.y,point2.y), max(point1.z,point2.z) });
+	AddNode(float3{ min(point.x,mid_point.x), min(point.y,mid_point.y), min(point.z,mid_point.z) },
+		float3{ max(point.x,mid_point.x), max(point.y,mid_point.y), max(point.z,mid_point.z) });
 
 	// reorder the gameobjects to the new nodes if possible, if intersects parent keep them
 	std::vector<GameObject*>::iterator objs = game_objects.begin();
