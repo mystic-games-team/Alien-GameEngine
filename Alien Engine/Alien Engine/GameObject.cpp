@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
 #include "RandomHelper.h"
+#include "ModuleObjects.h"
 #include "ComponentCamera.h"
 
 GameObject::GameObject(GameObject* parent)
@@ -87,7 +88,7 @@ void GameObject::Draw()
 		light->LightLogic();
 	}
 
-	if (camera != nullptr && camera->IsEnabled()) {
+	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum) {
 		camera->DrawFrustum();
 	}
 

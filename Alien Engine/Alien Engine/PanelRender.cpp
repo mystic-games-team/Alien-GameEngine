@@ -111,5 +111,10 @@ void PanelRender::PanelLogic()
 		ImGui::ColorEdit3("No children Color", (float*)& App->objects->no_child_outline_color, ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("No children Line Width", (int*)&App->objects->no_child_line_width, 1, 30);
 	}
+	if (ImGui::CollapsingHeader("Frustum")) {
+		ImGui::Checkbox("Active Frustum", &App->objects->draw_frustum);
+		ImGui::ColorEdit3("Frustum Color", (float*)& App->objects->frustum_color, ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("Frustum Line Width", (int*)& App->objects->frustum_line_width, 1, 30);
+	}
 	ImGui::End();
 }

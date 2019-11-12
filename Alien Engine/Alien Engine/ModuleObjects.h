@@ -107,6 +107,11 @@ public:
 	GameObject* base_game_object = nullptr;
 	Component* component_in_copy = nullptr;
 
+	// Frustum
+	bool draw_frustum = true;
+	Color frustum_color{ 1,0,0,1 };
+	int frustum_line_width = 1;
+
 	// wireframe
 	bool wireframe_mode = false;
 

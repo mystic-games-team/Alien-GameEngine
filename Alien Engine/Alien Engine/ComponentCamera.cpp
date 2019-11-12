@@ -4,9 +4,13 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MathGeoLib/include/MathBuildConfig.h"
 #include "ComponentTransform.h"
+#include "ModuleObjects.h"
+#include "Application.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "imgui/imgui.h"
+
+
 
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
@@ -161,8 +165,8 @@ void ComponentCamera::DrawFrustum()
 	static float3 points[8];
 	frustum.GetCornerPoints(points);
 
-	glLineWidth(1);
-	glColor3f(1, 0, 0);
+	glLineWidth(App->objects->frustum_line_width);
+	glColor3f(App->objects->frustum_color.r, App->objects->frustum_color.g, App->objects->frustum_color.b);
 	glBegin(GL_LINES);
 
 	glVertex3f(points[0].x, points[0].y, points[0].z);
