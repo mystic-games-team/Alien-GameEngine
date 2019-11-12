@@ -17,7 +17,7 @@ public:
 	void Insert(GameObject* object, const AABB& sect);
 	
 	// remove a gameobject
-	void Remove(GameObject* object);
+	bool Remove(GameObject* object);
 	// draw AABB
 	void DrawNode();
 
@@ -63,6 +63,10 @@ public:
 
 	// create again the octree
 	void Recalculate(GameObject* new_object);
+
+private:
+
+	void RemoveRecursively(GameObject* obj);
 
 private:
 

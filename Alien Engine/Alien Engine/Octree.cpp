@@ -62,40 +62,16 @@ void OctreeNode::Regrup()
 	children.clear();
 }
 
-void OctreeNode::Remove(GameObject* object)
+bool OctreeNode::Remove(GameObject* object)
 {
+	bool ret = false;
 	if (!game_objects.empty()) {
-		bool deleted = false;
 		std::vector<GameObject*>::iterator item = game_objects.begin();
 		for (; item != game_objects.end(); ++item) {
 			if (*item != nullptr && *item == object) {
 				game_objects.erase(item);
-				deleted = true;
-				break;
-			}
-		}
-
-		if (deleted) { // look parent to know if regrup or not
-			if (parent != nullptr) {
-				bool need_regrup = true;
-				std::vector<OctreeNode*>::iterator nodes = parent->children.begin();
-				for (; nodes != parent->children.end(); ++nodes) {
-					if (*nodes != nullptr && !(*nodes)->game_objects.empty()) {
-						need_regrup = false;
-						break;
-					}
-				}
-
-				if (need_regrup) {
-					parent->Regrup();
-					return;
-				}
-			}
-			else { // so its root
-				if (game_objects.empty()) {
-					App->objects->octree.Clear();
-					return;
-				}
+				ret = true;
+				return ret;
 			}
 		}
 	}
@@ -104,10 +80,13 @@ void OctreeNode::Remove(GameObject* object)
 		std::vector<OctreeNode*>::iterator item = children.begin();
 		for (; item != children.end(); ++item) {
 			if (*item != nullptr) {
-				(*item)->Remove(object);
+				ret = (*item)->Remove(object);
+				if (ret)
+					break;
 			}
 		}
 	}
+	return ret;
 }
 
 void OctreeNode::DrawNode()
@@ -312,9 +291,12 @@ void Octree::Insert(GameObject* object)
 
 void Octree::Remove(GameObject* object)
 {
-	if (root != nullptr) {
-		root->Remove(object);
-	}
+	if (root == nullptr)
+		return;
+
+	RemoveRecursively(object);
+
+	App->objects->octree.Recalculate(nullptr);
 }
 
 void Octree::Clear()
@@ -347,12 +329,17 @@ void Octree::Init(const float3& min, const float3& max)
 void Octree::Recalculate(GameObject* new_object)
 {
 	std::vector<GameObject*> to_save;
-	to_save.push_back(new_object);
 
 	AABB new_section;
 
-	ComponentMesh* mesh = (ComponentMesh*)new_object->GetComponent(ComponentType::MESH);
-	new_section = mesh->GetGlobalAABB();
+	if (new_object != nullptr) {
+		to_save.push_back(new_object);
+		ComponentMesh* mesh = (ComponentMesh*)new_object->GetComponent(ComponentType::MESH);
+		new_section = mesh->GetGlobalAABB();
+	}
+	else {
+		new_section.SetNegativeInfinity();
+	}
 
 	// get all gameobjects in octree and get the min & max points
 	root->SaveGameObjects(&to_save, &new_section);
@@ -367,6 +354,23 @@ void Octree::Recalculate(GameObject* new_object)
 	for (; item != to_save.end(); ++item) {
 		if (*item != nullptr) {
 			Insert((*item));
+		}
+	}
+}
+
+void Octree::RemoveRecursively(GameObject* obj)
+{
+	ComponentMesh* mesh_parent = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
+	if (mesh_parent != nullptr && mesh_parent->mesh != nullptr) {
+		root->Remove(obj);
+	}
+
+	if (!obj->children.empty()) {
+		std::vector<GameObject*>::iterator item = obj->children.begin();
+		for (; item != obj->children.end(); ++item) {
+			if (*item != nullptr) {
+				RemoveRecursively((*item));
+			}
 		}
 	}
 }

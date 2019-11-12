@@ -186,7 +186,12 @@ void ComponentTransform::DrawInspector()
 
 	if (ImGui::Checkbox("Static", &game_object_attached->is_static)) {
 		game_object_attached->ChangeStatic(game_object_attached->is_static);
-		App->objects->octree.Insert(game_object_attached);
+		if (game_object_attached->is_static) {
+			App->objects->octree.Insert(game_object_attached);
+		}
+		else {
+			App->objects->octree.Remove(game_object_attached);
+		}
 	}
 
 	ImGui::Spacing();
