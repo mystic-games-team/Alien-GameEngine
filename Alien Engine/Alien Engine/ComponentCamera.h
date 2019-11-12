@@ -42,7 +42,7 @@ private:
 	float4x4 ViewMatrix, ViewMatrixInverse;
 
 	float far_plane = 100.f;
-	float near_plane = 1.f;
+	float near_plane = 0.1f;
 
 	int is_fov_horizontal = 0;
 };
