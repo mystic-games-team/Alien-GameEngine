@@ -88,6 +88,9 @@ update_status ModuleObjects::PostUpdate(float dt)
 	if (allow_grid)
 		App->renderer3D->RenderGrid();
 
+	if (render_octree)
+		octree.Draw();
+
 	base_game_object->Draw();
 
 	
@@ -502,6 +505,11 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	frustum_color = config->GetColor("Configuration.Renderer.FrustumColor");
 	frustum_line_width = config->GetNumber("Configuration.Renderer.FrustumLineWidth");
 	draw_frustum = config->GetBoolean("Configuration.Renderer.DrawFrustum");
+	octree.SetBucket(config->GetNumber("Configuration.Renderer.Octreebucket"));
+	octree.Recalculate(nullptr);
+	octree_line_color = config->GetColor("Configuration.Renderer.OctreeColor");
+	octree_line_width = config->GetNumber("Configuration.Renderer.OctreelineWidth");
+	render_octree = config->GetBoolean("Configuration.Renderer.RenderOctree");
 }
 
 void ModuleObjects::SaveConfig(JSONfilepack*& config)
@@ -528,7 +536,6 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetBoolean("Configuration.Renderer.Outline", outline);
 	config->SetNumber("Configuration.Renderer.ParentLineWidth", parent_line_width);
 	config->SetNumber("Configuration.Renderer.NoChildLineWidth", no_child_line_width);
-
 	config->SetBoolean("Configuration.Renderer.DrawAABB", draw_all_AABB);
 	config->SetBoolean("Configuration.Renderer.DrawOBB", draw_all_OBB);
 	config->SetColor("Configuration.Renderer.ColorAABB", global_AABB_color);
@@ -538,6 +545,10 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetNumber("Configuration.Renderer.FrustumLineWidth", frustum_line_width);
 	config->SetColor("Configuration.Renderer.FrustumColor", frustum_color);
 	config->SetBoolean("Configuration.Renderer.DrawFrustum", draw_frustum);
+	config->SetBoolean("Configuration.Renderer.RenderOctree", render_octree);
+	config->SetNumber("Configuration.Renderer.OctreelineWidth", octree_line_width);
+	config->SetColor("Configuration.Renderer.OctreeColor", octree_line_color);
+	config->SetNumber("Configuration.Renderer.Octreebucket", octree.GetBucket());
 }
 
 void ModuleObjects::CreateBasePrimitive(PrimitiveType type)

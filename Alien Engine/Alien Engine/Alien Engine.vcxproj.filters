@@ -459,6 +459,9 @@
     <ClInclude Include="glmath.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Tools\OurClassHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -715,6 +718,9 @@
     </ClCompile>
     <ClCompile Include="glmath.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Tools\OurClassHelpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

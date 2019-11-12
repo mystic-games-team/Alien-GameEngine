@@ -4,13 +4,13 @@
             {
                 "Name": "Light",
                 "FamilyNumber": 1,
-                "ID": "11948319014195000350",
+                "ID": "5629016978491430306",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-		"IsStatic": false,
                 "Selected": false,
                 "ParentSelected": false,
+                "IsStatic": false,
                 "Components": [
                     {
                         "Type": 0,
@@ -53,26 +53,26 @@
             {
                 "Name": "BakerHouse",
                 "FamilyNumber": 1,
-                "ID": "16478453375559400973",
+                "ID": "16265494379026252563",
                 "ParentID": "0",
-		"IsStatic": false,
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
+                "IsStatic": false,
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
+                            -7.5,
+                            3.5,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0,
                             0,
                             0,
                             0
-                        ],
-                        "Rotation": [
-                            0.7071068286895752,
-                            0,
-                            0,
-                            0.7071068286895752
                         ],
                         "Scale": [
                             1,
@@ -86,13 +86,13 @@
             {
                 "Name": "Chimney",
                 "FamilyNumber": 2,
-                "ID": "4027676832279040545",
-                "ParentID": "16478453375559400973",
+                "ID": "13712641086634368583",
+                "ParentID": "16265494379026252563",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-		"IsStatic": false,
                 "ParentSelected": false,
+                "IsStatic": false,
                 "Components": [
                     {
                         "Type": 0,
@@ -144,13 +144,13 @@
             {
                 "Name": "Baker_house",
                 "FamilyNumber": 2,
-                "ID": "17399059861228237892",
-                "ParentID": "16478453375559400973",
+                "ID": "14640867145310218710",
+                "ParentID": "16265494379026252563",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-		"IsStatic": false,
                 "ParentSelected": false,
+                "IsStatic": false,
                 "Components": [
                     {
                         "Type": 0,
@@ -194,7 +194,64 @@
                         ],
                         "TextureEnabled": true,
                         "HasTexture": true,
-                        "TextureID": "6015216122611076316",
+                        "TextureID": "16925044378009346189",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "watchtowerHigh",
+                "FamilyNumber": 1,
+                "ID": "5511391406948212259",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            7,
+                            3.5,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            0.5
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "MeshID": "6635556451671599920",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": false,
                         "Enabled": true
                     }
                 ]

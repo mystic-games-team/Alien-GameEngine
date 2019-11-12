@@ -79,6 +79,9 @@ public:
 
 	void SearchResourceToDelete(const ResourceType& type, Resource* to_delete);
 
+	//static
+	void ChangeStatic(bool static_);
+
 private:
 
 	// parent selected
@@ -90,6 +93,7 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
 	bool enabled = true;
+	bool is_static = false;
 	u64 ID = 0;
 
 private:

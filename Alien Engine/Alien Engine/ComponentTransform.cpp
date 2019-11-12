@@ -1,6 +1,8 @@
 #include "ComponentTransform.h"
 #include "GameObject.h"
 #include "imgui/imgui.h"
+#include "ModuleObjects.h"
+#include "Application.h"
 
 #include "ComponentMesh.h"
 
@@ -166,18 +168,30 @@ void ComponentTransform::DrawInspector()
 {
 	ImGui::Spacing();
 
-	ImGui::Text("Object");
-	ImGui::SameLine();
-
-	if (ImGui::Checkbox("##ObjectActive", &game_object_attached->enabled))
+	if (ImGui::Checkbox("Enabled", &game_object_attached->enabled))
 		game_object_attached->SayChildrenParentIsEnabled(game_object_attached->enabled);
 	ImGui::SameLine();
 
 	static char name[30];
 	memcpy(name, game_object_attached->GetName(), 30);
 
+	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.5F);
+
 	if (ImGui::InputText("##ObjectName", name, 30, ImGuiInputTextFlags_AutoSelectAll)) {
 		game_object_attached->SetName(name);
+	}
+
+
+	ImGui::SameLine();
+
+	if (ImGui::Checkbox("Static", &game_object_attached->is_static)) {
+		game_object_attached->ChangeStatic(game_object_attached->is_static);
+		if (game_object_attached->is_static) {
+			App->objects->octree.Insert(game_object_attached);
+		}
+		else {
+			App->objects->octree.Remove(game_object_attached);
+		}
 	}
 
 	ImGui::Spacing();

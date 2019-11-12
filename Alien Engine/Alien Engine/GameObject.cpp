@@ -486,6 +486,7 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 	to_save->SetBoolean("ParentEnabled", parent_enabled);
 	to_save->SetBoolean("Selected", selected);
 	to_save->SetBoolean("ParentSelected", parent_selected);
+	to_save->SetBoolean("IsStatic", is_static);
 
 	JSONArraypack* components_to_save = to_save->InitNewArray("Components");
 
@@ -509,6 +510,10 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 		App->objects->SetNewSelectedObject(this);
 	}
 	parent_selected = to_load->GetBoolean("ParentSelected");
+	is_static = to_load->GetBoolean("IsStatic");
+	if (is_static) {
+		// TODO: call something of the quadtree
+	}
 
 	if (parent != nullptr) {
 		this->parent = parent;
@@ -581,6 +586,17 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
 			(*item)->SearchResourceToDelete(type, to_delete);
+		}
+	}
+}
+
+void GameObject::ChangeStatic(bool static_)
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->is_static = static_;
+			(*item)->ChangeStatic(static_);
 		}
 	}
 }

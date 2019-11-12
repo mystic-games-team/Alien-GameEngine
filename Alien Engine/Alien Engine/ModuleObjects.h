@@ -7,6 +7,8 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include "Octree.h"
+
 
 struct Scene {
 
@@ -135,6 +137,11 @@ public:
 	// grid
 	bool allow_grid = true;
 
+	// octree
+	bool render_octree = false;
+	uint octree_line_width = 1;
+	Color octree_line_color = { 1,0,0,1 };
+
 	// outline
 	bool outline = false;
 	uint parent_line_width = 1;
@@ -153,13 +160,12 @@ public:
 	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;
 	
+	Octree octree;
 
 private:
 
 	GameObject* game_object_selected = nullptr;
 
 	std::map<GameObject*, GameObject*> to_reparent;
-
-
 
 };

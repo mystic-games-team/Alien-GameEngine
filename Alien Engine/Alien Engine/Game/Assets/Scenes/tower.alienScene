@@ -7,6 +7,7 @@
                 "ID": "4724101058610214914",
                 "ParentID": "0",
                 "Enabled": true,
+		"IsStatic": false,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
@@ -56,6 +57,7 @@
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
+		"IsStatic": false,
                 "Selected": true,
                 "ParentSelected": false,
                 "Components": [
