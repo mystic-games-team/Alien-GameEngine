@@ -27,6 +27,7 @@ private:
 	void AddNode(const float3& min, const float3& max);
 	void Subdivide();
 	void SaveGameObjects(std::vector<GameObject*>* to_save, AABB* new_section);
+	bool AddToChildren(GameObject* obj, const AABB& sect);
 
 public:
 

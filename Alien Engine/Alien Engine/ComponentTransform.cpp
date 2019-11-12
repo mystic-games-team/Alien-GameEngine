@@ -175,6 +175,8 @@ void ComponentTransform::DrawInspector()
 	static char name[30];
 	memcpy(name, game_object_attached->GetName(), 30);
 
+	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.5F);
+
 	if (ImGui::InputText("##ObjectName", name, 30, ImGuiInputTextFlags_AutoSelectAll)) {
 		game_object_attached->SetName(name);
 	}

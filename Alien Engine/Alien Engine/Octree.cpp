@@ -26,21 +26,21 @@ void OctreeNode::Insert(GameObject* object, const AABB& sect)
 			}
 			else {
 				Subdivide();
+				if (!AddToChildren(object, sect)) { // after the subdivision test if gameobject fits in children, if not delete childrena and object belogns to parent
+					std::vector<OctreeNode*>::iterator item = children.begin();
+					for (; item != children.end(); ++item) {
+						if (*item != nullptr) {
+							delete *item;
+							*item = nullptr;
+						}
+					}
+					children.clear();
+					AddGameObject(object);
+				}
 			}
 		}
-		if (!children.empty()) {
-			std::vector<OctreeNode*>::iterator item = children.begin();
-			uint intersections = 0;
-			for (; item != children.end(); ++item) {
-				if (*item != nullptr && (*item)->section.Contains(sect)) {
-					(*item)->Insert(object, sect);
-					break;
-				}
-				if (*item != nullptr && (*item)->section.Intersects(sect)) {
-					++intersections;
-				}
-			}
-			if (intersections > 1) { // if objects intersects with more than one child, obj belongs to the parent now
+		else if (!children.empty()) {
+			if (!AddToChildren(object, sect)) {
 				AddGameObject(object);
 			}
 		}
@@ -144,6 +144,21 @@ void OctreeNode::SaveGameObjects(std::vector<GameObject*>* to_save, AABB* new_se
 			}
 		}
 	}
+}
+
+bool OctreeNode::AddToChildren(GameObject * obj, const AABB& sect)
+{
+	bool ret = false;
+	std::vector<OctreeNode*>::iterator item = children.begin();
+	uint intersections = 0;
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr && (*item)->section.Contains(sect)) {
+			(*item)->Insert(obj, sect);
+			ret = true;
+			break;
+		}
+	}
+	return ret;
 }
 
 void OctreeNode::Subdivide()
