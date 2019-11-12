@@ -15,6 +15,7 @@ public:
 
 	// insert a gameobject
 	void Insert(GameObject* object, const AABB& sect);
+	
 	// remove a gameobject
 	void Remove(GameObject* object);
 	// draw AABB
@@ -25,6 +26,7 @@ private:
 	void AddGameObject(GameObject* obj);
 	void AddNode(const float3& min, const float3& max);
 	void Subdivide();
+	void Regrup();
 	void SaveGameObjects(std::vector<GameObject*>* to_save, AABB* new_section);
 	bool AddToChildren(GameObject* obj, const AABB& sect);
 

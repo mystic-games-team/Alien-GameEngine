@@ -35,14 +35,7 @@ void OctreeNode::Insert(GameObject* object, const AABB& sect)
 			else {
 				Subdivide();
 				if (!AddToChildren(object, sect)) { // after the subdivision test if gameobject fits in children, if not delete childrena and object belogns to parent
-					std::vector<OctreeNode*>::iterator item = children.begin();
-					for (; item != children.end(); ++item) {
-						if (*item != nullptr) {
-							delete *item;
-							*item = nullptr;
-						}
-					}
-					children.clear();
+					Regrup();
 					AddGameObject(object);
 				}
 			}
@@ -57,8 +50,64 @@ void OctreeNode::Insert(GameObject* object, const AABB& sect)
 		App->objects->octree.Recalculate(object);
 }
 
+void OctreeNode::Regrup()
+{
+	std::vector<OctreeNode*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			delete* item;
+			*item = nullptr;
+		}
+	}
+	children.clear();
+}
+
 void OctreeNode::Remove(GameObject* object)
 {
+	if (!game_objects.empty()) {
+		bool deleted = false;
+		std::vector<GameObject*>::iterator item = game_objects.begin();
+		for (; item != game_objects.end(); ++item) {
+			if (*item != nullptr && *item == object) {
+				game_objects.erase(item);
+				deleted = true;
+				break;
+			}
+		}
+
+		if (deleted) { // look parent to know if regrup or not
+			if (parent != nullptr) {
+				bool need_regrup = true;
+				std::vector<OctreeNode*>::iterator nodes = parent->children.begin();
+				for (; nodes != parent->children.end(); ++nodes) {
+					if (*nodes != nullptr && !(*nodes)->game_objects.empty()) {
+						need_regrup = false;
+						break;
+					}
+				}
+
+				if (need_regrup) {
+					parent->Regrup();
+					return;
+				}
+			}
+			else { // so its root
+				if (game_objects.empty()) {
+					App->objects->octree.Clear();
+					return;
+				}
+			}
+		}
+	}
+
+	if (!children.empty()) {
+		std::vector<OctreeNode*>::iterator item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->Remove(object);
+			}
+		}
+	}
 }
 
 void OctreeNode::DrawNode()
@@ -263,7 +312,9 @@ void Octree::Insert(GameObject* object)
 
 void Octree::Remove(GameObject* object)
 {
-
+	if (root != nullptr) {
+		root->Remove(object);
+	}
 }
 
 void Octree::Clear()
