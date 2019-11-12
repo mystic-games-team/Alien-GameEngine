@@ -91,8 +91,8 @@ bool OctreeNode::Remove(GameObject* object)
 
 void OctreeNode::DrawNode()
 {
-	glColor3f(1, 0, 0);
-	glLineWidth(1);
+	glColor3f(App->objects->octree_line_color.r, App->objects->octree_line_color.g, App->objects->octree_line_color.b);
+	glLineWidth(App->objects->octree_line_width);
 	glBegin(GL_LINES);
 
 	glVertex3f(section.minPoint.x, section.minPoint.y, section.minPoint.z);
@@ -318,6 +318,11 @@ const uint& Octree::GetBucket() const
 	return bucket;
 }
 
+void Octree::SetBucket(const uint& bucket)
+{
+	this->bucket = bucket;
+}
+
 void Octree::Init(const float3& min, const float3& max)
 {
 	if (root != nullptr) {
@@ -328,6 +333,9 @@ void Octree::Init(const float3& min, const float3& max)
 
 void Octree::Recalculate(GameObject* new_object)
 {
+	if (root == nullptr)
+		return;
+
 	std::vector<GameObject*> to_save;
 
 	AABB new_section;

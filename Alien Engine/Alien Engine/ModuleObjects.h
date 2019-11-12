@@ -137,6 +137,11 @@ public:
 	// grid
 	bool allow_grid = true;
 
+	// octree
+	bool render_octree = false;
+	uint octree_line_width = 1;
+	Color octree_line_color = { 1,0,0,1 };
+
 	// outline
 	bool outline = false;
 	uint parent_line_width = 1;

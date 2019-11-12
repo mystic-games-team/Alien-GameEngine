@@ -57,12 +57,16 @@ public:
 	void Draw();
 
 	const uint& GetBucket() const;
+	void SetBucket(const uint& bucket);
 
 	// init the octree with min and max
 	void Init(const float3& min, const float3& max);
 
 	// create again the octree
 	void Recalculate(GameObject* new_object);
+
+
+	uint bucket = 2;
 
 private:
 
@@ -71,5 +75,5 @@ private:
 private:
 
 	OctreeNode* root = nullptr;
-	uint bucket = 2;
+
 };

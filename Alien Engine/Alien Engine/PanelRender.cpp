@@ -86,6 +86,7 @@ void PanelRender::PanelLogic()
 	}
 	if (ImGui::CollapsingHeader("Vertex Normals")) 
 	{
+		ImGui::Spacing();
 		if (ImGui::Checkbox("Show Vertex Normals", &App->objects->draw_vertex_normals)) {
 			App->objects->draw_vertex_normals = !App->objects->draw_vertex_normals;
 			App->objects->ChangeEnableNormalVertex();
@@ -96,6 +97,7 @@ void PanelRender::PanelLogic()
 	}
 	if (ImGui::CollapsingHeader("Face Normals")) 
 	{
+		ImGui::Spacing();
 		if (ImGui::Checkbox("Show Face Normals", &App->objects->draw_face_normals)) {
 			App->objects->draw_face_normals = !App->objects->draw_face_normals;
 			App->objects->ChangeEnableNormalFace();
@@ -105,13 +107,24 @@ void PanelRender::PanelLogic()
 		ImGui::SliderInt("Face Line Width", &App->objects->face_n_width, 1, 30);
 	}
 	if (ImGui::CollapsingHeader("Outline")) {
+		ImGui::Spacing();
 		ImGui::Checkbox("Active Outline", &App->objects->outline);
 		ImGui::ColorEdit3("Parent Color", (float*)& App->objects->parent_outline_color, ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("Parent Line Width", (int*)&App->objects->parent_line_width, 1, 30);
 		ImGui::ColorEdit3("No children Color", (float*)& App->objects->no_child_outline_color, ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("No children Line Width", (int*)&App->objects->no_child_line_width, 1, 30);
 	}
+	if (ImGui::CollapsingHeader("Octree")) {
+		ImGui::Spacing();
+		ImGui::Checkbox("Render Octree", &App->objects->render_octree);
+		ImGui::ColorEdit3("Octree Color", (float*)& App->objects->octree_line_color, ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("Octree Line Width", (int*)& App->objects->octree_line_width, 1, 30);
+		if (ImGui::InputInt("Bucket", (int*)& App->objects->octree.bucket, 0, 0, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll)) {
+			App->objects->octree.Recalculate(nullptr);
+		}
+	}
 	if (ImGui::CollapsingHeader("Frustum")) {
+		ImGui::Spacing();
 		ImGui::Checkbox("Active Frustum", &App->objects->draw_frustum);
 		ImGui::ColorEdit3("Frustum Color", (float*)& App->objects->frustum_color, ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("Frustum Line Width", (int*)& App->objects->frustum_line_width, 1, 30);

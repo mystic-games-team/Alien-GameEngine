@@ -130,80 +130,88 @@
                 ]
             }
         },
-        "Renderer": {
-            "Wireframe": false,
-            "MeshView": false,
-            "VertexNormals": false,
-            "FaceNormals": false,
-            "MeshWidth": 1,
-            "VertexNormalsWidth": 1,
-            "FaceNormalsWidth": 1,
-            "VertexNormalsLength": 1,
-            "FaceNormalsLength": 1,
-            "AllowGrid": true,
-            "GridWidth": 1,
-            "GridSpacing": 1,
-            "GridLength": 20,
-            "Outline": true,
-            "ParentLineWidth": 12,
-            "NoChildLineWidth": 12,
-			      "DrawAABB": true,
-			      "DrawOBB": true,
-			      "LineWidthAABB": 1,
-			      "LineWidthOBB": 1,
-			      "ColorAABB": [
-                      1,
-                      1,
-                      1
-            ],
-			      "ColorOBB": [
-                      0,
-                      1,
-                      0
-                  ],
-                  "ParentOutlineColor": [
-                      0,
-                      1,
-                      1
-                  ],
-                  "NoChildOutlineColor": [
-                      1,
-                      0.5,
-                      0
-                  ],
-                  "GridColor": [
-                      1,
-                      1,
-                      1
-                  ],
-                  "BackgroundColor": [
-                      0.05,
-                      0.05,
-                      0.05
-                  ],
-                  "VertexNormalColor": [
-                      1,
-                      0,
-                      1
-                  ],
-          "FaceNormalColor": [
-            0,
-            0,
-            1
-          ],
-          "MeshColor": [
-            1,
-            1,
-            1
-          ],
-          "FrustumLineWidth": 1,
-          "DrawFrustum": true,
-          "FrustumColor": [
-            1,
-            0,
-            0,
-            1
-          ]
-        }
+      "Renderer": {
+        "Wireframe": false,
+        "MeshView": false,
+        "VertexNormals": false,
+        "FaceNormals": false,
+        "MeshWidth": 1,
+        "VertexNormalsWidth": 1,
+        "FaceNormalsWidth": 1,
+        "VertexNormalsLength": 1,
+        "FaceNormalsLength": 1,
+        "AllowGrid": true,
+        "GridWidth": 1,
+        "GridSpacing": 1,
+        "GridLength": 20,
+        "Outline": true,
+        "ParentLineWidth": 12,
+        "NoChildLineWidth": 12,
+        "DrawAABB": true,
+        "DrawOBB": true,
+        "LineWidthAABB": 1,
+        "LineWidthOBB": 1,
+        "RenderOctree": false,
+        "OctreelineWidth": 3,
+        "Octreebucket":  2,
+        "ColorAABB": [
+          1,
+          1,
+          1
+        ],
+        "ColorOBB": [
+          0,
+          1,
+          0
+        ],
+        "ParentOutlineColor": [
+          0,
+          1,
+          1
+        ],
+        "NoChildOutlineColor": [
+          1,
+          0.5,
+          0
+        ],
+        "GridColor": [
+          1,
+          1,
+          1
+        ],
+        "OctreeColor": [
+          1,
+          0,
+          0
+        ],
+        "BackgroundColor": [
+          0.05,
+          0.05,
+          0.05
+        ],
+        "VertexNormalColor": [
+          1,
+          0,
+          1
+        ],
+        "FaceNormalColor": [
+          0,
+          0,
+          1
+        ],
+        "MeshColor": [
+          1,
+          1,
+          1
+        ],
+        "FrustumLineWidth": 1,
+        "DrawFrustum": true,
+        "FrustumColor": [
+          1,
+          0,
+          0,
+          1
+        ]
+      }
     }
 }
