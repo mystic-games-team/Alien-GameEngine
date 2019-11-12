@@ -44,4 +44,7 @@ private:
 	GameObject* looking_at = nullptr;
 	
 	SDL_Cursor* cursor = nullptr;
+
+	bool start_lerp = false;
+	float3 point_to_look=(float3::zero);
 };
