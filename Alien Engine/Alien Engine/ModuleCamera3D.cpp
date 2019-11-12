@@ -153,6 +153,7 @@ void ModuleCamera3D::Rotation()
 	fake_camera->frustum.pos = distance + reference;
 
 	fake_camera->Look(reference);
+	
 
 	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
 	SDL_SetCursor(cursor);
@@ -174,20 +175,17 @@ void ModuleCamera3D::Focus()
 			float offset = bounding_box.Diagonal().Length();
 			float3 offset_v = float3 { 0,0,offset };
 
-			fake_camera->frustum.pos = bounding_box.CenterPoint() + offset_v;
+			fake_camera->frustum.pos = bounding_box.CenterPoint()+float3(0,2.5f,0) + offset_v;
 			fake_camera->Look(bounding_box.CenterPoint());
 			reference = bounding_box.CenterPoint();
 		}
 		else
 		{
-			float offset = 5.F;
-			float3 offset_v = float3{ 0,0,fake_camera->frustum.pos.z } *offset;
-
 			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
-
-			fake_camera->frustum.pos = transform->GetGlobalPosition() + offset_v;
-			fake_camera->Look(transform->GetGlobalPosition());
-			reference = transform->GetGlobalPosition();
+			float3 pos = transform->GetGlobalPosition();
+			fake_camera->frustum.pos = pos + float3(0, 1, 1);
+			fake_camera->Look(pos);
+			reference = pos;
 		}
 	}
 	//else
