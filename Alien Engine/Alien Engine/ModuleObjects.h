@@ -61,6 +61,7 @@ public:
 	void ChangeEnableNormalVertex();
 	void ChangeEnableNormalFace();
 	void ChangeEnableAABB();
+	void ChangeEnableOctree();
 	void ChangeEnableOBB();
 	
 	// enable/disable grid

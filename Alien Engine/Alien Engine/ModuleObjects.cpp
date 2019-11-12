@@ -164,6 +164,11 @@ void ModuleObjects::ChangeEnableAABB()
 	base_game_object->ChangeAABB(draw_all_AABB);
 }
 
+void ModuleObjects::ChangeEnableOctree()
+{
+	render_octree = !render_octree;
+}
+
 void ModuleObjects::ChangeEnableOBB()
 {
 	draw_all_OBB = !draw_all_OBB;

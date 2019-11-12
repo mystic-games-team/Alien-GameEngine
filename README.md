@@ -38,6 +38,10 @@ Alien Engine is a Game Engine made by Víctor Segura Blanco and Oriol Capdevila 
 * F5: View Grid
 * F6: View Normal Vertex
 * F7: View Normal Face
+* F8: View Outline
+* F9: View AABB
+* F10: View OBB
+* F11: View Octree
 
 ## Innovations
 
