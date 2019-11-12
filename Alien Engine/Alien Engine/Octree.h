@@ -10,7 +10,6 @@ class OctreeNode {
 
 public:
 
-	OctreeNode();
 	OctreeNode(const float3& min, const float3& max);
 	~OctreeNode();
 
@@ -57,10 +56,10 @@ public:
 
 	const uint& GetBucket() const;
 
+	// init the octree with min and max
 	void Init(const float3& min, const float3& max);
 
-	bool IsRoot(const OctreeNode* node);
-
+	// create again the octree
 	void Recalculate(GameObject* new_object);
 
 private:

@@ -3,10 +3,6 @@
 #include "ModuleObjects.h"
 #include "Application.h"
 
-OctreeNode::OctreeNode()
-{
-}
-
 OctreeNode::OctreeNode(const float3& min, const float3& max)
 {
 	section.minPoint = min;
@@ -15,6 +11,18 @@ OctreeNode::OctreeNode(const float3& min, const float3& max)
 
 OctreeNode::~OctreeNode()
 {
+	if (!children.empty()) {
+		std::vector<OctreeNode*>::iterator item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				delete* item;
+				*item = nullptr;
+			}
+		}
+		children.clear();
+	}
+	if (!game_objects.empty())
+		game_objects.clear();
 }
 
 void OctreeNode::Insert(GameObject* object, const AABB& sect)
@@ -229,6 +237,8 @@ Octree::Octree()
 
 Octree::~Octree()
 {
+	if (root != nullptr)
+		delete root;
 }
 
 void Octree::Insert(GameObject* object)
@@ -253,6 +263,7 @@ void Octree::Insert(GameObject* object)
 
 void Octree::Remove(GameObject* object)
 {
+
 }
 
 void Octree::Clear()
@@ -280,11 +291,6 @@ void Octree::Init(const float3& min, const float3& max)
 		delete root;
 	}
 	root = new OctreeNode(min, max);
-}
-
-bool Octree::IsRoot(const OctreeNode* node)
-{
-	return node == root;
 }
 
 void Octree::Recalculate(GameObject* new_object)
