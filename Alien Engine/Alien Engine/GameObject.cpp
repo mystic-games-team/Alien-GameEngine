@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
 #include "RandomHelper.h"
+#include "ModuleObjects.h"
 #include "ComponentCamera.h"
 
 GameObject::GameObject(GameObject* parent)
@@ -87,7 +88,7 @@ void GameObject::Draw()
 		light->LightLogic();
 	}
 
-	if (camera != nullptr && camera->IsEnabled()) {
+	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum) {
 		camera->DrawFrustum();
 	}
 
@@ -544,6 +545,11 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 				ComponentMesh* mesh = new ComponentMesh(this);
 				mesh->LoadComponent(components_to_load);
 				AddComponent(mesh);
+				break; }
+			case (int)ComponentType::CAMERA: {
+				ComponentCamera* camera = new ComponentCamera(this);
+				camera->LoadComponent(components_to_load);
+				AddComponent(camera);
 				break; }
 			default:
 				LOG("Unknown component type while loading");

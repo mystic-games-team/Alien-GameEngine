@@ -24,8 +24,8 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	App->camera->fake_camera->frustum.pos = { 0,5,0 };
-	//App->camera->LookAt(float3(0, 0, 0));
+	App->camera->fake_camera->frustum.pos = { 4,3,5 };
+	App->camera->fake_camera->Look(float3(0, 0, 0));
 
 	return ret;
 }

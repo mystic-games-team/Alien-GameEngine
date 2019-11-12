@@ -11,12 +11,12 @@ public:
 	ComponentCamera(GameObject* attach);
 	virtual ~ComponentCamera();
 
-	//void DrawInspector();
+	void DrawInspector();
 
 	void Reset();
 	void SetComponent(Component* component);
 
-	void AspectRatio(int width_ratio, int height_ratio);
+	void AspectRatio(int width_ratio, int height_ratio, bool fov_type = 0);
 
 	void Look(const float3& position_to_look);
 
@@ -31,6 +31,9 @@ public:
 	Frustum frustum;
 
 	float vertical_fov = 60.0f;
+	float horizontal_fov = 91.0f;
+
+	Color camera_color_background{ 0.05f, 0.05f, 0.05f, 1.0f };
 
 private:
 
@@ -38,5 +41,8 @@ private:
 
 	float4x4 ViewMatrix, ViewMatrixInverse;
 
-	Color camera_color_background{ 0.0f, 0.0f, 0.0f, 1.0f };
+	float far_plane = 100.f;
+	float near_plane = 1.f;
+
+	int is_fov_horizontal = 0;
 };

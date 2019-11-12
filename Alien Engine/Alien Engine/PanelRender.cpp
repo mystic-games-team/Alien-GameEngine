@@ -57,7 +57,7 @@ void PanelRender::PanelLogic()
 	if (ImGui::CollapsingHeader("Background")) 
 	{
 		ImGui::Spacing();
-		ImGui::ColorEdit3("Background Color", (float*)&App->renderer3D->background_color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
+		ImGui::ColorEdit3("Scene Background Color", (float*)&App->camera->fake_camera->camera_color_background, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
 		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Render Z-Buffer")) {
@@ -110,6 +110,11 @@ void PanelRender::PanelLogic()
 		ImGui::SliderInt("Parent Line Width", (int*)&App->objects->parent_line_width, 1, 30);
 		ImGui::ColorEdit3("No children Color", (float*)& App->objects->no_child_outline_color, ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("No children Line Width", (int*)&App->objects->no_child_line_width, 1, 30);
+	}
+	if (ImGui::CollapsingHeader("Frustum")) {
+		ImGui::Checkbox("Active Frustum", &App->objects->draw_frustum);
+		ImGui::ColorEdit3("Frustum Color", (float*)& App->objects->frustum_color, ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("Frustum Line Width", (int*)& App->objects->frustum_line_width, 1, 30);
 	}
 	ImGui::End();
 }

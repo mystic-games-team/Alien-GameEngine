@@ -94,6 +94,7 @@ void ModuleCamera3D::Movement()
 		if (!movement.Equals(float3::zero))
 		{
 			frustum->Translate(movement * speed);
+			reference += movement*speed;
 		}
 	}
 
@@ -113,6 +114,7 @@ void ModuleCamera3D::Movement()
 		if (!movement.Equals(float3::zero))
 		{
 			frustum->Translate(movement * mouse_speed);
+			reference += movement * mouse_speed;
 		}
 
 		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_UP)
@@ -139,37 +141,19 @@ void ModuleCamera3D::Zoom()
 }
 
 void ModuleCamera3D::Rotation()
-{
-	float3 point = (float3::zero);
-	float3 offset_height(float3::zero);
-	
-	if (App->objects->GetSelectedObject() != nullptr)
-	{
-		ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
-		
-		ComponentMesh* mesh = (ComponentMesh*)App->objects->GetSelectedObject()->GetComponent(ComponentType::MESH);
-
-		if (mesh != nullptr && mesh->mesh != nullptr)
-		{
-			point = mesh->GetGlobalAABB().CenterPoint();
-		}
-		else
-		{
-			point = transform->GetGlobalPosition();
-		}
-	}
-
-	float3 focus = fake_camera->frustum.pos - point;
+{	
+	float3 distance = fake_camera->frustum.pos - reference;
 
 	Quat rotationy(fake_camera->frustum.up, -App->input->GetMouseXMotion()*0.01f);
 	Quat rotationx(fake_camera->frustum.WorldRight(), -App->input->GetMouseYMotion()*0.005f);
 
-	focus = rotationx.Transform(focus);
-	focus = rotationy.Transform(focus);
+	distance = rotationx.Transform(distance);
+	distance = rotationy.Transform(distance);
 
-	fake_camera->frustum.pos = focus + point;
+	fake_camera->frustum.pos = distance + reference;
 
-	fake_camera->Look(point);
+	fake_camera->Look(reference);
+	
 
 	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
 	SDL_SetCursor(cursor);
@@ -191,18 +175,17 @@ void ModuleCamera3D::Focus()
 			float offset = bounding_box.Diagonal().Length();
 			float3 offset_v = float3 { 0,0,offset };
 
-			fake_camera->frustum.pos = bounding_box.CenterPoint() + offset_v;
+			fake_camera->frustum.pos = bounding_box.CenterPoint()+float3(0,2.5f,0) + offset_v;
 			fake_camera->Look(bounding_box.CenterPoint());
+			reference = bounding_box.CenterPoint();
 		}
 		else
 		{
-			float offset = 5.F;
-			float3 offset_v = float3{ 0,0,fake_camera->frustum.pos.z } *offset;
-
 			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
-
-			fake_camera->frustum.pos = transform->GetGlobalPosition() + offset_v;
-			fake_camera->Look(bounding_box.CenterPoint());
+			float3 pos = transform->GetGlobalPosition();
+			fake_camera->frustum.pos = pos + float3(0, 1, 1);
+			fake_camera->Look(pos);
+			reference = pos;
 		}
 	}
 	//else

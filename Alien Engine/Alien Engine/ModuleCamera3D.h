@@ -33,6 +33,8 @@ public:
 
 private:
 
+	float3 reference = float3::zero;
+
 	Frustum* frustum=nullptr;
 
 	float speed = 0.f;

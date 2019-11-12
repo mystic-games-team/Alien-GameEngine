@@ -78,7 +78,7 @@ void PanelProject::PrintDirectoryNodes(FileNode * node)
 			}
 		}
 		bool is_open = ImGui::TreeNodeEx(node->name.data(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
-			| ImGuiTreeNodeFlags_SpanAvailWidth | node_flags | (current_active_folder == node ? ImGuiTreeNodeFlags_Selected : 0));
+			| ImGuiTreeNodeFlags_SpanAvailWidth| node_flags | (current_active_folder == node ? ImGuiTreeNodeFlags_Selected : 0));
 
 		if (ImGui::IsItemClicked()) {
 			current_active_folder = node;
@@ -87,7 +87,8 @@ void PanelProject::PrintDirectoryNodes(FileNode * node)
 
 		if (is_open) {
 			for (uint i = 0; i < node->children.size(); ++i) {
-				if (node->children[i] != nullptr && !node->children[i]->is_file) {
+				if (node->children[i] != nullptr && !node->children[i]->is_file)
+				{
 					PrintDirectoryNodes(node->children[i]);
 				}
 			}

@@ -487,7 +487,6 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	App->renderer3D->length_grid = config->GetNumber("Configuration.Renderer.GridLength");
 	App->renderer3D->line_grid_width = config->GetNumber("Configuration.Renderer.GridWidth");
 	App->renderer3D->grid_color = config->GetColor("Configuration.Renderer.GridColor");
-	App->renderer3D->background_color = config->GetColor("Configuration.Renderer.BackgroundColor");
 	vertex_n_color = config->GetColor("Configuration.Renderer.VertexNormalColor");
 	face_n_color = config->GetColor("Configuration.Renderer.FaceNormalColor");
 	mesh_color = config->GetColor("Configuration.Renderer.MeshColor");
@@ -502,6 +501,9 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	global_OBB_color = config->GetColor("Configuration.Renderer.ColorOBB");
 	AABB_line_width = config->GetNumber("Configuration.Renderer.LineWidthAABB");
 	OBB_line_width = config->GetNumber("Configuration.Renderer.LineWidth0BB");
+	frustum_color = config->GetColor("Configuration.Renderer.FrustumColor");
+	frustum_line_width = config->GetNumber("Configuration.Renderer.FrustumLineWidth");
+	draw_frustum = config->GetBoolean("Configuration.Renderer.DrawFrustum");
 }
 
 void ModuleObjects::SaveConfig(JSONfilepack*& config)
@@ -520,7 +522,6 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetNumber("Configuration.Renderer.GridWidth", App->renderer3D->line_grid_width);
 	config->SetNumber("Configuration.Renderer.GridLength", App->renderer3D->length_grid);
 	config->SetColor("Configuration.Renderer.GridColor", App->renderer3D->grid_color);
-	config->SetColor("Configuration.Renderer.BackgroundColor", App->renderer3D->background_color);
 	config->SetColor("Configuration.Renderer.VertexNormalColor", vertex_n_color);
 	config->SetColor("Configuration.Renderer.FaceNormalColor", face_n_color);
 	config->SetColor("Configuration.Renderer.MeshColor", mesh_color);
@@ -536,6 +537,9 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetColor("Configuration.Renderer.ColorOBB", global_OBB_color);
 	config->SetNumber("Configuration.Renderer.LineWidthAABB", AABB_line_width);
 	config->SetNumber("Configuration.Renderer.LineWidthOBB", OBB_line_width);
+	config->SetNumber("Configuration.Renderer.FrustumLineWidth", frustum_line_width);
+	config->SetColor("Configuration.Renderer.FrustumColor", frustum_color);
+	config->SetBoolean("Configuration.Renderer.DrawFrustum", draw_frustum);
 }
 
 void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
