@@ -45,26 +45,37 @@ update_status ModuleCamera3D::Update(float dt)
 	zoom_speed = camera_zoom_speed * dt;
 	mouse_speed = camera_mouse_speed * dt;
 
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) 
+	if (start_lerp)
 	{
-		speed = camera_speed * 2 * dt;
-		zoom_speed = camera_zoom_speed * 2 * dt;
-	}
-	if (is_scene_hovered)
-	{
-		Zoom();
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+		fake_camera->frustum.pos = Lerp(fake_camera->frustum.pos, point_to_look, 0.5f);
+		if (fake_camera->frustum.pos.Equals(point_to_look))
 		{
-			Rotation();
+			start_lerp = false;
 		}
 	}
-	if (is_scene_hovered || is_scene_focused) 
+	else
 	{
-		Movement();
-	}
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		{
+			speed = camera_speed * 2 * dt;
+			zoom_speed = camera_zoom_speed * 2 * dt;
+		}
+		if (is_scene_hovered)
+		{
+			Zoom();
+			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+			{
+				Rotation();
+			}
+		}
+		if (is_scene_hovered || is_scene_focused)
+		{
+			Movement();
+		}
 
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
-		Focus();
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+			Focus();
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -170,22 +181,28 @@ void ModuleCamera3D::Focus()
 	{
 		AABB bounding_box = App->objects->GetSelectedObject()->GetBB();
 
-		if (bounding_box.Diagonal().Length() != 0)
+		if (bounding_box.IsFinite())
 		{
 			float offset = bounding_box.Diagonal().Length();
-			float3 offset_v = float3 { 0,0,offset };
 
-			fake_camera->frustum.pos = bounding_box.CenterPoint()+float3(0,2.5f,0) + offset_v;
 			fake_camera->Look(bounding_box.CenterPoint());
 			reference = bounding_box.CenterPoint();
+			float3 vector_distance = fake_camera->frustum.pos - bounding_box.CenterPoint();
+
+			point_to_look = fake_camera->frustum.pos - (vector_distance - (offset * vector_distance.Normalized()));
+			start_lerp = true;
 		}
 		else
 		{
 			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 			float3 pos = transform->GetGlobalPosition();
-			fake_camera->frustum.pos = pos + float3(0, 1, 1);
+
 			fake_camera->Look(pos);
 			reference = pos;
+
+			float3 vector_distance = fake_camera->frustum.pos - pos;
+			point_to_look = fake_camera->frustum.pos - (vector_distance - (3.f * vector_distance.Normalized()));
+			start_lerp = true;
 		}
 	}
 	//else

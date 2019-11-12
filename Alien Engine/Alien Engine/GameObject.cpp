@@ -88,7 +88,7 @@ void GameObject::Draw()
 		light->LightLogic();
 	}
 
-	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum) {
+	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) {
 		camera->DrawFrustum();
 	}
 
@@ -468,8 +468,7 @@ AABB GameObject::GetBB()
 		{
 			AABB aabb_null;
 
-			aabb_null.maxPoint.Max(transform->GetGlobalPosition());
-			aabb_null.minPoint.Min(transform->GetGlobalPosition());
+			aabb_null.SetNegativeInfinity();
 
 			return aabb_null;
 		}
