@@ -15,6 +15,8 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	shortcut = App->shortcut_manager->AddShortCut("Panel Project", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
 
 	assets = App->resources->assets;
+	assets->set_open = true;
+
 	current_active_folder = assets;
 	
 	go_back_folder.name = "Go Back";
@@ -69,14 +71,22 @@ void PanelProject::PrintDirectoryNodes(FileNode * node)
 {
 	if (!node->is_file) {
 		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf;
-		
+
 		// look if is lead or not
-		for (uint i = 0; i < node->children.size(); ++i) {
-			if (node->children[i] != nullptr && !node->children[i]->is_file) {
-				node_flags = ImGuiTreeNodeFlags_None;
-				break;
+		if (!node->children.empty()) {
+			for (uint i = 0; i < node->children.size(); ++i) {
+				if (node->children[i] != nullptr && !node->children[i]->is_file) {
+					node_flags = ImGuiTreeNodeFlags_None;
+					break;
+				}
 			}
 		}
+
+		if (node->set_open) {
+			node->set_open = false;
+			ImGui::SetNextItemOpen(true);
+		}
+
 		bool is_open = ImGui::TreeNodeEx(node->name.data(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
 			| ImGuiTreeNodeFlags_SpanAvailWidth| node_flags | (current_active_folder == node ? ImGuiTreeNodeFlags_Selected : 0));
 
@@ -125,12 +135,9 @@ void PanelProject::SeeFiles()
 			ImGui::ImageButton((ImTextureID)go_back_folder.icon->id, { 53,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
 			ImGui::PopStyleColor();
 
-			if (ImGui::IsItemClicked()) {
-				current_active_file = &go_back_folder;
-			}
-			
 			// go back a folder
 			if (ImGui::IsItemClicked()) {
+				current_active_file = &go_back_folder;
 				current_active_folder = current_active_folder->parent;
 				ImGui::EndChild();
 				return;
@@ -187,6 +194,7 @@ void PanelProject::SeeFiles()
 			// go into a folder
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && current_active_file != nullptr && !current_active_file->is_file) {
 				change_folder = true;
+				current_active_folder->children[i]->set_open = true;
 			}
 
 			ImGui::NewLine();

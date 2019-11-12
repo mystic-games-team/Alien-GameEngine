@@ -65,7 +65,7 @@ update_status ModuleCamera3D::Update(float dt)
 			Zoom();
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 			{
-				Rotation();
+				Rotation(dt);
 			}
 		}
 		if (is_scene_hovered || is_scene_focused)
@@ -151,12 +151,12 @@ void ModuleCamera3D::Zoom()
 	frustum->Translate(zoom * mouse_speed);
 }
 
-void ModuleCamera3D::Rotation()
+void ModuleCamera3D::Rotation(float dt)
 {	
 	float3 distance = fake_camera->frustum.pos - reference;
 
-	Quat rotationy(fake_camera->frustum.up, -App->input->GetMouseXMotion()*0.01f);
-	Quat rotationx(fake_camera->frustum.WorldRight(), -App->input->GetMouseYMotion()*0.005f);
+	Quat rotationy(fake_camera->frustum.up, -App->input->GetMouseXMotion()* dt*0.3F);
+	Quat rotationx(fake_camera->frustum.WorldRight(), -App->input->GetMouseYMotion()* dt*0.3F);
 
 	distance = rotationx.Transform(distance);
 	distance = rotationy.Transform(distance);

@@ -16,7 +16,7 @@ public:
 	bool CleanUp();
 
 	void Movement();
-	void Rotation();
+	void Rotation(float dt);
 	void Focus();
 	void Zoom();
 

@@ -22,7 +22,7 @@ public:
 
 	bool is_file = true;
 	bool is_base_file = false;
-
+	bool set_open = false;
 	bool changing_name = false;
 
 	FileNode* parent = nullptr;
