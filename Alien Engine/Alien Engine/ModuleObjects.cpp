@@ -142,6 +142,7 @@ void ModuleObjects::ChangeEnableOutline()
 	outline = !outline;
 }
 
+
 void ModuleObjects::ChangeEnableNormalVertex()
 {
 	draw_vertex_normals = !draw_vertex_normals;
