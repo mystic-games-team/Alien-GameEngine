@@ -181,7 +181,7 @@ void ModuleCamera3D::Focus()
 	{
 		AABB bounding_box = App->objects->GetSelectedObject()->GetBB();
 
-		if (bounding_box.Diagonal().Length() != 0)
+		if (bounding_box.IsFinite())
 		{
 			float offset = bounding_box.Diagonal().Length();
 
