@@ -88,7 +88,7 @@ void GameObject::Draw()
 		light->LightLogic();
 	}
 
-	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum) {
+	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) {
 		camera->DrawFrustum();
 	}
 
