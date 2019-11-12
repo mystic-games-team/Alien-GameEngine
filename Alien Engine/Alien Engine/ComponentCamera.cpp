@@ -18,8 +18,8 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 
-	frustum.nearPlaneDistance = 1.0F;
-	frustum.farPlaneDistance = 100.0f;
+	frustum.nearPlaneDistance = near_plane;
+	frustum.farPlaneDistance = far_plane;
 	frustum.verticalFov = DEGTORAD * vertical_fov;
 	AspectRatio(16, 9);
 	
@@ -56,11 +56,49 @@ void ComponentCamera::DrawInspector()
 		ImGui::Separator();
 		ImGui::Spacing();
 
-		if (ImGui::InputFloat("FOV", &vertical_fov))
+		ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.25f);
+		if (ImGui::DragFloat("Near Plane", &near_plane, 1, 0.1f, far_plane - 0.1f, "%.1f"))
 		{
-			frustum.verticalFov = vertical_fov*DEGTORAD;
-			AspectRatio(16, 9);
+			frustum.nearPlaneDistance = near_plane;
 		}
+		
+		ImGui::SameLine();
+
+		ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.25f);
+		if (ImGui::DragFloat("Far Plane", &far_plane, 1, near_plane + 0.1f, 1000, "%.1f"))
+		{
+			frustum.farPlaneDistance = far_plane;
+		}
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+		
+		if (is_fov_horizontal!=0)
+		{
+			ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
+			if (ImGui::DragFloat("FOV ", &horizontal_fov, 1, 1, 163, "%.1f"))
+			{
+				frustum.horizontalFov = horizontal_fov * DEGTORAD;
+				AspectRatio(16, 9, true);
+				vertical_fov = frustum.verticalFov * RADTODEG;
+			}
+		}
+		else
+		{
+			ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
+			if (ImGui::DragFloat("FOV", &vertical_fov, 1, 1, 150, "%.1f"))
+			{
+				frustum.verticalFov = vertical_fov * DEGTORAD;
+				AspectRatio(16, 9);
+				horizontal_fov = frustum.horizontalFov * RADTODEG;
+			}
+		}
+
+		ImGui::SameLine();
+
+
+		ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
+		ImGui::Combo("## cool fov combp", &is_fov_horizontal, "Vertical\0Horizontal\0");
 
 		ImGui::Spacing();
 		ImGui::Separator();
@@ -85,9 +123,16 @@ void ComponentCamera::SetComponent(Component* component)
 	}
 }
 
-void ComponentCamera::AspectRatio(int width_ratio, int height_ratio)
+void ComponentCamera::AspectRatio(int width_ratio, int height_ratio, bool fov_type)
 {
-	frustum.horizontalFov = (2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ((float)width_ratio/(float)height_ratio)));
+	if (!fov_type)
+	{
+		frustum.horizontalFov = (2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ((float)width_ratio / (float)height_ratio)));
+	}
+	else
+	{
+		frustum.verticalFov = (2.f * atanf(tanf(frustum.horizontalFov * 0.5f) * ((float)height_ratio) / (float)width_ratio));
+	}
 }
 
 void ComponentCamera::Look(const float3& position_to_look)
