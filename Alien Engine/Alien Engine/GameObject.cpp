@@ -466,9 +466,9 @@ AABB GameObject::GetBB()
 		else
 		{
 			AABB aabb_null;
-
-			aabb_null.SetNegativeInfinity();
-
+			ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+			float3 pos = transform->GetGlobalPosition();
+			aabb_null.SetFromCenterAndSize(pos, { 2,2,2 });
 			return aabb_null;
 		}
 	}
