@@ -2,16 +2,18 @@
 
 #include "ModuleObjects.h"
 
-enum class ReturnActions {
-	UNKNOWKN = -1,
 
-	DELETE_OBJECT,
-	ADD_OBJECT,
-};
 
 class ReturnZ {
 
 public:
+
+	enum class ReturnActions {
+		UNKNOWKN = -1,
+
+		DELETE_OBJECT,
+		ADD_OBJECT,
+	};
 
 	ReturnZ() {}
 	~ReturnZ() {}

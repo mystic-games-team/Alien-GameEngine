@@ -27,7 +27,7 @@ void PanelHierarchy::PanelLogic()
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr && ImGui::IsWindowFocused())
 	{
 		App->objects->GetSelectedObject()->ToDelete();
-		ReturnZ::AddNewAction(ReturnActions::DELETE_OBJECT, App->objects->GetSelectedObject());
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, App->objects->GetSelectedObject());
 	}
 	
 	ImGui::Spacing();
