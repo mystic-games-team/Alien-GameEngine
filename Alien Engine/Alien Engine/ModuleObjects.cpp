@@ -23,6 +23,7 @@ bool ModuleObjects::Init()
 {
 	base_game_object = new GameObject(nullptr);
 	base_game_object->ID = 0;
+	base_game_object->is_static = true;
 	//base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
 
 	return true;
@@ -387,6 +388,7 @@ void ModuleObjects::LoadScene(const char* path)
 		game_object_selected = nullptr;
 		base_game_object = new GameObject(nullptr);
 		base_game_object->ID = 0;
+		base_game_object->is_static = true;
 
 		JSONfilepack* scene = new JSONfilepack(path, object, value);
 
@@ -443,6 +445,7 @@ void ModuleObjects::CreateEmptyScene(const char* path)
 	game_object_selected = nullptr;
 	base_game_object = new GameObject(nullptr);
 	base_game_object->ID = 0;
+	base_game_object->is_static = true;
 
 	// try to remove the file because the user might have selected a name that already exists
 	remove(path);
@@ -566,38 +569,38 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 	par_shapes_mesh* par_mesh = nullptr;
 	
 	switch (type) {
-	case PrimitiveType::CUBE:
+	case PrimitiveType::CUBE: {
 		par_mesh = par_shapes_create_cube();
 		object->SetName("Cube");
-		break;
-	case PrimitiveType::DODECAHEDRON:
+		break; }
+	case PrimitiveType::DODECAHEDRON: {
 		par_mesh = par_shapes_create_dodecahedron();
 		object->SetName("Dodecahedron");
-		break;
-	case PrimitiveType::ICOSAHEDRON:
+		break; }
+	case PrimitiveType::ICOSAHEDRON: {
 		par_mesh = par_shapes_create_icosahedron();
 		object->SetName("Icosahedron");
-		break;
-	case PrimitiveType::OCTAHEDRON:
+		break; }
+	case PrimitiveType::OCTAHEDRON: {
 		par_mesh = par_shapes_create_octahedron();
 		object->SetName("Octahedron");
-		break;
-	case PrimitiveType::ROCK:
+		break; }
+	case PrimitiveType::ROCK: {
 		par_mesh = par_shapes_create_rock(5, 3);
 		object->SetName("Rock");
-		break;
-	case PrimitiveType::SPHERE_ALIEN:
+		break; }
+	case PrimitiveType::SPHERE_ALIEN: {
 		par_mesh = par_shapes_create_subdivided_sphere(4);
 		object->SetName("Sphere");
-		break;
-	case PrimitiveType::TORUS:
+		break; }
+	case PrimitiveType::TORUS: {
 		par_mesh = par_shapes_create_torus(3, 10, 0.5F);
 		object->SetName("Torus");
-		break;
-	case PrimitiveType::KLEIN_BOTTLE:
+		break; }
+	case PrimitiveType::KLEIN_BOTTLE: {
 		par_mesh = par_shapes_create_klein_bottle(10, 10);
 		object->SetName("Klein Bottle");
-		break;
+		break; }
 	default:
 		break;
 	}

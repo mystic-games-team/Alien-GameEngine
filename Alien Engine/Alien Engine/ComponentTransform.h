@@ -58,4 +58,6 @@ private:
 
 	// to know if flip poly or not
 	bool is_scale_negative = false;
+
+	bool popup_static = false;
 };

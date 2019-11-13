@@ -29,6 +29,8 @@ GameObject::~GameObject()
 	if (App->objects->GetSelectedObject() == this)
 		App->objects->DeselectObject();
 
+	App->objects->octree.Remove(this);
+
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
 		if (*item != nullptr) {
@@ -598,6 +600,31 @@ void GameObject::ChangeStatic(bool static_)
 			(*item)->ChangeStatic(static_);
 		}
 	}
+}
+
+bool GameObject::HasChildrenStatic() const 
+{
+	bool ret = false;
+
+	if (!children.empty()) {
+		std::vector<GameObject*>::const_iterator item = children.cbegin();
+		for (; item != children.cend(); ++item) {
+			if (*item != nullptr) {
+				if (ret)
+					break;
+
+				if ((*item)->is_static) {
+					ret = true;
+					break;
+				}
+				else {
+					ret = (*item)->HasChildrenStatic();
+				}
+			}
+		}
+
+	}
+	return ret;
 }
 
 void GameObject::SearchToDelete()
