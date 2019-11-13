@@ -3,6 +3,8 @@
 #include "ModuleObjects.h"
 #include "ComponentTransform.h"
 #include "ResourceMesh.h"
+#include "ComponentMaterial.h"
+#include "ResourceTexture.h"
 
 void ReturnZ::SetAction(const ReturnActions& type, void* data)
 {
@@ -54,6 +56,7 @@ void ReturnZ::SetDeleteObject(GameObject* obj, Obj* to_fill)
 		for (; item != obj->components.end(); ++item) {
 			if (*item != nullptr) {
 				Obj::Comp* comp = new Obj::Comp();
+				comp->type = (*item)->GetType();
 				switch ((*item)->GetType()) {
 				case ComponentType::TRANSFORM: {
 					ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
@@ -61,8 +64,6 @@ void ReturnZ::SetDeleteObject(GameObject* obj, Obj* to_fill)
 					comp->transform.scale = transform->GetLocalScale();
 					comp->transform.rot = transform->GetLocalRotation();
 					comp->transform.is_scale_negative = transform->IsScaleNegative();
-					comp->type = ComponentType::TRANSFORM;
-					to_fill->comps.push_back(comp);
 					break; }
 				case ComponentType::MESH: {
 					ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
@@ -74,9 +75,17 @@ void ReturnZ::SetDeleteObject(GameObject* obj, Obj* to_fill)
 					comp->mesh.view_vertex_normals = mesh->view_vertex_normals;
 					comp->mesh.wireframe = mesh->wireframe;
 					comp->mesh.view_mesh = mesh->view_mesh;
-					comp->type = ComponentType::MESH;
-					to_fill->comps.push_back(comp);
 					break; }
+				case ComponentType::MATERIAL: {
+					ComponentMaterial* material = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
+					if (material->texture != nullptr)
+						comp->material.ID = material->texture->GetID();
+					comp->material.color = material->color;
+					comp->material.texture_activated = material->texture_activated;
+					break; }
+				}
+				if (comp != nullptr) {
+					to_fill->comps.push_back(comp);
 				}
 			}
 		}
@@ -135,6 +144,14 @@ void ReturnZ::CreateObject(Obj* obj)
 					mesh->view_face_normals = (*item)->mesh.view_face_normals;
 					mesh->view_vertex_normals = (*item)->mesh.view_vertex_normals;
 					new_obj->AddComponent(mesh);
+					break; }
+				case ComponentType::MATERIAL: {
+					ComponentMaterial* material = new ComponentMaterial(new_obj);
+					if ((*item)->material.ID != 0)
+						material->texture = (ResourceTexture*)App->resources->GetResourceWithID((*item)->material.ID);
+					material->texture_activated = (*item)->material.texture_activated;
+					material->color = (*item)->material.color;
+					new_obj->AddComponent(material);
 					break; }
 				default:
 					break;

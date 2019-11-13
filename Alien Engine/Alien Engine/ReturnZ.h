@@ -59,6 +59,12 @@ public:
 				bool draw_OBB = true;
 			} mesh;
 
+			struct {
+				u64 ID = 0;
+				Color color{ 1,1,1,1 };
+				bool texture_activated = true;
+			} material;
+
 		}; std::vector<Comp*> comps;
 
 	} object;
