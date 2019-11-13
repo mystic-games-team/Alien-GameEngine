@@ -474,7 +474,7 @@ AABB GameObject::GetBB()
 	}
 }
 
-OBB GameObject::GetChildrenOBB()
+OBB GameObject::GetGlobalOBB()
 {
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
@@ -494,10 +494,10 @@ OBB GameObject::GetChildrenOBB()
 		}
 		else
 		{
-			OBB aabb_null;
-
-			aabb_null.SetNegativeInfinity();
-
+			AABB aabb_null;
+			ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+			float3 pos = transform->GetGlobalPosition();
+			aabb_null.SetFromCenterAndSize(pos, { 2,2,2 });
 			return aabb_null;
 		}
 	}

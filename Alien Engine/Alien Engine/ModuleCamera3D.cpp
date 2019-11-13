@@ -6,6 +6,8 @@
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "PanelScene.h"
+#include "ComponentMesh.h"
+#include "ResourceMesh.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -227,40 +229,67 @@ void ModuleCamera3D::Focus()
 
 void ModuleCamera3D::CreateRay()
 {
-	float2 origin = float2(App->input->GetMousePosition().x / (float)App->ui->panel_scene->width , App->input->GetMousePosition().y / (float)App->ui->panel_scene->height);
+	float2 origin = float2(App->input->GetMousePosition().x / (float)App->ui->panel_scene->width, App->input->GetMousePosition().y / (float)App->ui->panel_scene->height);
 	origin.x = (origin.x - 0.5f) * 2;
 	origin.y = (origin.y - 0.5f) * 2;
-	
+
 	LineSegment ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
 
-	
-
-	float closest_distance = 0.f;
 	float distance_out = 0.f;
 	float distance = 0.f;
 	GameObject* closest_object = nullptr;
+	std::map<float, GameObject*> objects_hit;
+
 
 	for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
 	{
-		if (ray.Intersects((*iter)->GetBB(), distance, distance_out))
+		if (ray.Intersects((*iter)->GetBB()))
 		{
-			if (closest_distance > distance || closest_distance == 0)
+			if (ray.Intersects((*iter)->GetGlobalOBB(), distance, distance_out))
 			{
-				if (distance > distance_out)
-				{
-					closest_distance = distance_out;
-				}
-				else
-				{
-					closest_distance = distance;
-				}
-				closest_object = (*iter);
+				objects_hit[distance] = (*iter);
 			}
 		}
 	}
-	if (closest_object != nullptr)
+
+
+	for (std::map<float, GameObject*>::iterator iter = objects_hit.begin(); iter != objects_hit.end(); ++iter)
 	{
-		App->objects->SetNewSelectedObject(closest_object);
+		ComponentMesh* mesh = (ComponentMesh*)(*iter).second->GetComponent(ComponentType::MESH);
+
+		if (mesh != nullptr)
+		{
+			ResourceMesh* r_mesh = mesh->mesh;
+
+			if (r_mesh)
+			{
+				LineSegment transformed_ray = ray;
+				ComponentTransform* transform = (ComponentTransform*)(*iter).second->GetComponent(ComponentType::TRANSFORM);
+				ray.Transform(transform->global_transformation);
+
+				for (uint check_triangles = 0; check_triangles < mesh->mesh->num_index; check_triangles += 3)
+				{
+					uint index_a, index_b, index_c;
+
+					index_a = r_mesh->index[check_triangles] * 3;
+					float3 point_a(&r_mesh->vertex[index_a]);
+
+					index_b = r_mesh->index[check_triangles + 1] * 3;
+					float3 point_b(&r_mesh->vertex[index_b]);
+
+					index_c = r_mesh->index[check_triangles + 2] * 3;
+					float3 point_c(&r_mesh->vertex[index_c]);
+
+					Triangle triangle_to_check(point_a, point_b, point_c);
+
+					if (transformed_ray.Intersects(triangle_to_check, nullptr, nullptr))
+					{
+						App->objects->SetNewSelectedObject(closest_object);
+						break;
+					}
+				}
+			}
+		}
 	}
 }
 
