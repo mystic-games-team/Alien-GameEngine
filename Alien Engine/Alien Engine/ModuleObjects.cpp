@@ -72,7 +72,7 @@ update_status ModuleObjects::PreUpdate(float dt)
 update_status ModuleObjects::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
-		GoBackOneAction();
+		ReturnZ::GoBackOneAction();
 	}
 	return UPDATE_CONTINUE;
 }
@@ -477,12 +477,6 @@ void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, cons
 			SaveGameObject(*item, to_save, family_number + 1);
 		}
 	}
-}
-
-void ModuleObjects::GoBackOneAction()
-{
-	
-
 }
 
 bool ModuleObjects::SortByFamilyNumber(std::tuple<uint,u64, uint> tuple1, std::tuple<uint, u64, uint> tuple2)

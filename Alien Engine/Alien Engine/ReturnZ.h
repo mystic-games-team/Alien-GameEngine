@@ -19,6 +19,7 @@ public:
 	~ReturnZ() {}
 
 	static void AddNewAction(const ReturnActions& type, void* data);
+	static void GoBackOneAction();
 
 public:
 
@@ -46,7 +47,7 @@ public:
 
 			struct Comp {
 
-				uint type = 0;
+				ComponentType type = ComponentType::UNKNOWN;
 
 				struct {
 					float3 pos = float3::zero;
@@ -63,6 +64,8 @@ public:
 
 private:
 
-	ReturnZ::Actions::Obj SetDeleteObject(GameObject* obj);
+	ReturnZ::Actions::Obj SetDeleteObject(GameObject* obj, Actions::Obj &to_fill);
+	void CreateObject(Actions::Obj obj);
+	
 	void SetAction(const ReturnActions& type, void* data);
 };

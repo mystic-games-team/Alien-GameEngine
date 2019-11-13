@@ -96,13 +96,14 @@ public:
 	bool enabled = true;
 	bool is_static = false;
 	u64 ID = 0;
-
+	bool parent_enabled = true;
+	bool parent_selected = false;
 private:
 
 	bool to_delete = false; 
-	bool parent_selected = false;
+
 	bool selected = false;
-	bool parent_enabled = true;
+
 
 	std::string name = "UnNamed";
 };
