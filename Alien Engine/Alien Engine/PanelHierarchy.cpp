@@ -100,7 +100,12 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
-				App->objects->ReparentGameObject(obj, node);
+				if (obj->is_static && !node->is_static) {
+					LOG("Can reparent %s to %s because is dynamic and object selected is static", obj->GetName(), node->GetName());
+				}
+				else {
+					App->objects->ReparentGameObject(obj, node);
+				}
 			}
 		}
 		ImGui::EndDragDropTarget();
