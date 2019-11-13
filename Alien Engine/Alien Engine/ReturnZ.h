@@ -57,7 +57,7 @@ public:
 
 private:
 
-	ReturnZ::Obj SetDeleteObject(GameObject* obj, Obj &to_fill);
+	static void SetDeleteObject(GameObject* obj, Obj* to_fill);
 	void CreateObject(Obj obj);
 	
 	void SetAction(const ReturnActions& type, void* data);

@@ -10,7 +10,7 @@ void ReturnZ::SetAction(const ReturnActions& type, void* data)
 	switch (type)
 	{
 	case ReturnActions::DELETE_OBJECT: {
-		SetDeleteObject((GameObject*)data, object);
+		ReturnZ::SetDeleteObject((GameObject*)data, &object);
 		break; }
 	default:
 		break;
@@ -37,16 +37,16 @@ void ReturnZ::GoBackOneAction()
 	App->objects->return_actions.pop();
 }
 
-ReturnZ::Obj ReturnZ::SetDeleteObject(GameObject* obj, Obj& to_fill)
+void ReturnZ::SetDeleteObject(GameObject* obj, Obj* to_fill)
 {
-	to_fill.enabled = obj->enabled;
-	to_fill.is_static = obj->is_static;
-	to_fill.ID = obj->ID;
-	to_fill.parentID = obj->parent->ID;
-	to_fill.parent_selected = obj->IsParentSelected();
-	to_fill.selected = obj->IsSelected();
-	to_fill.parent_enabled = obj->IsParentEnabled();
-	to_fill.name = std::string(obj->GetName()).data();
+	to_fill->enabled = obj->enabled;
+	to_fill->is_static = obj->is_static;
+	to_fill->ID = obj->ID;
+	to_fill->parentID = obj->parent->ID;
+	to_fill->parent_selected = obj->IsParentSelected();
+	to_fill->selected = obj->IsSelected();
+	to_fill->parent_enabled = obj->IsParentEnabled();
+	to_fill->name = std::string(obj->GetName()).data();
 	// components
 	
 	if (!obj->components.empty()) {
@@ -62,7 +62,7 @@ ReturnZ::Obj ReturnZ::SetDeleteObject(GameObject* obj, Obj& to_fill)
 					comp->transform.rot = transform->GetLocalRotation();
 					comp->transform.is_scale_negative = transform->IsScaleNegative();
 					comp->type = ComponentType::TRANSFORM;
-					to_fill.comps.push_back(comp);
+					to_fill->comps.push_back(comp);
 					break; }
 				}
 			}
@@ -73,13 +73,12 @@ ReturnZ::Obj ReturnZ::SetDeleteObject(GameObject* obj, Obj& to_fill)
 		std::vector<GameObject*>::iterator item = obj->children.begin();
 		for (; item != obj->children.end(); ++item) {
 			if (*item != nullptr) {
-				Obj obj;
-				to_fill.children.push_back(&(SetDeleteObject((*item), obj)));
+				Obj* obj = new Obj();
+				ReturnZ::SetDeleteObject((*item), obj);
+				to_fill->children.push_back(obj);
 			}
 		}
 	}
-
-	return object;
 }
 
 void ReturnZ::CreateObject(Obj obj)
