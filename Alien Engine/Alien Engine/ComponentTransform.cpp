@@ -307,9 +307,6 @@ void ComponentTransform::DrawInspector()
 		if (game_object_attached->is_static) {
 			if (game_object_attached->parent != nullptr && !game_object_attached->parent->is_static) {
 				// if your parent is dynamic, you cant be static
-
-				// TODO: popup parent is dynamic you cant be static
-
 				ImGui::OpenPopup("Static Problems!");
 				ImGui::SetNextWindowSize({ 290,140 });
 				if (ImGui::BeginPopupModal("Static Problems!", &popup_static, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
@@ -325,8 +322,6 @@ void ComponentTransform::DrawInspector()
 					ImGui::Spacing();
 
 					ImGui::Text("Make parent static to set this static");
-
-					//ImGui::NewLine();
 					ImGui::SetCursorPosX(((ImGui::GetWindowWidth()) * 0.5f) - 50);
 
 					if (ImGui::Button("Accept", { 100,20 })) {
@@ -339,12 +334,42 @@ void ComponentTransform::DrawInspector()
 					popup_static = false;
 					game_object_attached->is_static = false;
 				}
-
-				// TODO: DONT FORGET THIS LINE game_object_attached->is_static = false;
 			}
 			else {
 				// TODO: popup do you want to make children static?
+				ImGui::OpenPopup("Static Question");
+				ImGui::SetNextWindowSize({ 290,120 });
+				if (ImGui::BeginPopupModal("Static Question", &popup_static, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+				{
+					ImGui::Spacing();
+					ImGui::SetCursorPosX(30);
+					ImGui::Text("Do you want to make all children\nstatic as well?");
+					ImGui::Spacing();
 
+					ImGui::SetCursorPosX(22);
+					if (ImGui::Button("Change children")) {
+						game_object_attached->ChangeStatic(game_object_attached->is_static);
+						App->objects->octree.Insert(game_object_attached, true);
+						popup_static = false;
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Only this object")) {
+						App->objects->octree.Insert(game_object_attached, false);
+						popup_static = false;
+					}
+					ImGui::Spacing();
+					ImGui::SetCursorPosX(((ImGui::GetWindowWidth()) * 0.5f) - 30);
+					if (ImGui::Button("Cancel")) {
+						game_object_attached->is_static = false;
+						popup_static = false;
+					}
+
+					ImGui::EndPopup();
+				}
+				else {
+					game_object_attached->is_static = false;
+					popup_static = false;
+				}
 				// call App->objects->octree.Insert(game_object_attached); and add a bool to add children or not
 				// make a function in octree to know if x object is in octree or not
 			}

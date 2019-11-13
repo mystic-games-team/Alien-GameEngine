@@ -278,7 +278,8 @@ void Octree::Insert(GameObject* object, bool add_children)
 		}
 		root->Insert(object, mesh_parent->GetGlobalAABB());
 	}
-
+	// TODO: look somewhere if objects added are in the octree, so do not repeat
+	// maybe a list in octree of all gameobjects
 	if (add_children && !object->children.empty()) {
 		std::vector<GameObject*>::iterator item = object->children.begin();
 		for (; item != object->children.end(); ++item) {
