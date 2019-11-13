@@ -263,6 +263,7 @@
     <ClInclude Include="ResourceModel.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Resource_.h" />
+    <ClInclude Include="ReturnZ.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
     <ClInclude Include="Timer.h" />
@@ -351,6 +352,7 @@
     <ClCompile Include="ResourceModel.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="Resource_.cpp" />
+    <ClCompile Include="ReturnZ.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
     <ClCompile Include="Timer.cpp" />

@@ -452,7 +452,7 @@
     </ClInclude>
     <ClInclude Include="PanelSceneSelector.h">
       <Filter>Panels</Filter>
-        </ClInclude>
+    </ClInclude>
     <ClInclude Include="ComponentCamera.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -460,6 +460,9 @@
       <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="Octree.h">
+      <Filter>Tools\OurClassHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ReturnZ.h">
       <Filter>Tools\OurClassHelpers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -712,7 +715,7 @@
     </ClCompile>
     <ClCompile Include="PanelSceneSelector.cpp">
       <Filter>Panels</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -720,6 +723,9 @@
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="Octree.cpp">
+      <Filter>Tools\OurClassHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ReturnZ.cpp">
       <Filter>Tools\OurClassHelpers</Filter>
     </ClCompile>
   </ItemGroup>

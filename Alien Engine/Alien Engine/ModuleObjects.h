@@ -8,7 +8,9 @@
 #include <map>
 #include <utility>
 #include "Octree.h"
+#include <stack>
 
+class ReturnZ;
 
 struct Scene {
 
@@ -96,6 +98,9 @@ public:
 	void LoadScene(const char* path);
 	void CreateEmptyScene(const char* path);
 
+	// return
+	void GoBackOneAction();
+
 	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);
 
 private:
@@ -162,11 +167,11 @@ public:
 	bool need_to_delete_objects = false;
 	
 	Octree octree;
+	std::stack<ReturnZ> return_actions;
 
 private:
 
 	GameObject* game_object_selected = nullptr;
 
 	std::map<GameObject*, GameObject*> to_reparent;
-
 };
