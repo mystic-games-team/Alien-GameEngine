@@ -29,6 +29,8 @@ GameObject::~GameObject()
 	if (App->objects->GetSelectedObject() == this)
 		App->objects->DeselectObject();
 
+	App->objects->octree.Remove(this);
+
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
 		if (*item != nullptr) {
