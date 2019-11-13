@@ -20,7 +20,7 @@ void ReturnZ::AddNewAction(const ReturnActions& type, void* data)
 {
 	ReturnZ ret;
 	ret.SetAction(type, data);
-	App->objects->return_actions.push(ret);
+	//App->objects->return_actions.push(ret);
 }
 
 ReturnZ::Actions::Obj ReturnZ::SetDeleteObject(GameObject* obj)

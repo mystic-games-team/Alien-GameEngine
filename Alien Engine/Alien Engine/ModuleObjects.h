@@ -167,7 +167,7 @@ public:
 	bool need_to_delete_objects = false;
 	
 	Octree octree;
-	std::stack<ReturnZ> return_actions;
+	//std::stack<ReturnZ> return_actions;
 
 private:
 
