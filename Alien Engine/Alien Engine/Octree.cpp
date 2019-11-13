@@ -276,10 +276,12 @@ void Octree::Insert(GameObject* object, bool add_children)
 		if (root == nullptr) {
 			Init(mesh_parent->GetGlobalAABB().minPoint, mesh_parent->GetGlobalAABB().maxPoint);
 		}
-		root->Insert(object, mesh_parent->GetGlobalAABB());
+		if (!Exists(object)) {
+			all_objects.push_back(object);
+			root->Insert(object, mesh_parent->GetGlobalAABB());
+		}
 	}
-	// TODO: look somewhere if objects added are in the octree, so do not repeat
-	// maybe a list in octree of all gameobjects
+
 	if (add_children && !object->children.empty()) {
 		std::vector<GameObject*>::iterator item = object->children.begin();
 		for (; item != object->children.end(); ++item) {
@@ -328,6 +330,7 @@ void Octree::Init(const float3& min, const float3& max)
 {
 	if (root != nullptr) {
 		delete root;
+		all_objects.clear();
 	}
 	root = new OctreeNode(min, max);
 }
@@ -354,8 +357,6 @@ void Octree::Recalculate(GameObject* new_object)
 	root->SaveGameObjects(&to_save, &new_section);
 
 	// delete the old octree and create it again
-	delete root;
-	root = nullptr;
 	Init(new_section.minPoint, new_section.maxPoint);
 
 	// insert all the game objects
@@ -367,11 +368,21 @@ void Octree::Recalculate(GameObject* new_object)
 	}
 }
 
+bool Octree::Exists(GameObject* object)
+{
+	bool ret = false;
+	if (!all_objects.empty()) {
+		ret = std::find(all_objects.begin(), all_objects.end(), object) == all_objects.begin();
+	}
+	return ret;
+}
+
 void Octree::RemoveRecursively(GameObject* obj)
 {
 	ComponentMesh* mesh_parent = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
 	if (mesh_parent != nullptr && mesh_parent->mesh != nullptr) {
 		root->Remove(obj);
+		all_objects.remove(obj);
 	}
 
 	if (!obj->children.empty()) {
