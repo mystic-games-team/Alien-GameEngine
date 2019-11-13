@@ -2,8 +2,6 @@
 
 #include "ModuleObjects.h"
 
-
-
 class ReturnZ {
 
 public:
@@ -51,6 +49,16 @@ public:
 				bool is_scale_negative = false;
 			} transform;
 
+			struct {
+				u64 ID = 0;
+				bool view_mesh = false;
+				bool wireframe = false;
+				bool view_vertex_normals = false;
+				bool view_face_normals = false;
+				bool draw_AABB = true;
+				bool draw_OBB = true;
+			} mesh;
+
 		}; std::vector<Comp*> comps;
 
 	} object;
@@ -58,7 +66,7 @@ public:
 private:
 
 	static void SetDeleteObject(GameObject* obj, Obj* to_fill);
-	void CreateObject(Obj obj);
+	static void CreateObject(Obj* obj);
 	
 	void SetAction(const ReturnActions& type, void* data);
 };
