@@ -22,6 +22,8 @@ public:
 
 	void CreateRay();
 
+	void CreateObjectsHitMap(std::map<float, GameObject*>& map, GameObject* go, LineSegment &ray);
+
 public:
 	
 	bool is_scene_hovered = false;

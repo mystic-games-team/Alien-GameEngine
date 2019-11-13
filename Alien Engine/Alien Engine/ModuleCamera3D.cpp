@@ -233,26 +233,17 @@ void ModuleCamera3D::CreateRay()
 	origin.x = (origin.x - 0.5f) * 2;
 	origin.y = (origin.y - 0.5f) * 2;
 
+	/*MousePicking(fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y));*/
 	LineSegment ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
-
-	float distance_out = 0.f;
-	float distance = 0.f;
-	GameObject* closest_object = nullptr;
 	std::map<float, GameObject*> objects_hit;
 
-
+	// Create a map of the objects than intersect with the ray in order by distance
 	for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
 	{
-		if (ray.Intersects((*iter)->GetBB()))
-		{
-			if (ray.Intersects((*iter)->GetGlobalOBB(), distance, distance_out))
-			{
-				objects_hit[distance] = (*iter);
-			}
-		}
+		CreateObjectsHitMap(objects_hit, (*iter), ray);
 	}
 
-
+	// Check every object hit by the ray
 	for (std::map<float, GameObject*>::iterator iter = objects_hit.begin(); iter != objects_hit.end(); ++iter)
 	{
 		ComponentMesh* mesh = (ComponentMesh*)(*iter).second->GetComponent(ComponentType::MESH);
@@ -267,6 +258,7 @@ void ModuleCamera3D::CreateRay()
 				ComponentTransform* transform = (ComponentTransform*)(*iter).second->GetComponent(ComponentType::TRANSFORM);
 				ray.Transform(transform->global_transformation);
 
+				// Create every triangle in the mesh and check it versus the Ray
 				for (uint check_triangles = 0; check_triangles < mesh->mesh->num_index; check_triangles += 3)
 				{
 					uint index_a, index_b, index_c;
@@ -284,12 +276,31 @@ void ModuleCamera3D::CreateRay()
 
 					if (transformed_ray.Intersects(triangle_to_check, nullptr, nullptr))
 					{
-						App->objects->SetNewSelectedObject(closest_object);
+						App->objects->SetNewSelectedObject((*iter).second);
 						break;
 					}
 				}
 			}
 		}
+	}
+}
+
+void ModuleCamera3D::CreateObjectsHitMap(std::map<float, GameObject*>& map, GameObject* go, LineSegment &ray)
+{
+	float distance_out = 0.f;
+	float distance = 0.f;
+
+	if (ray.Intersects(go->GetBB()) && go->children.empty())
+	{
+		if (ray.Intersects(go->GetGlobalOBB(),distance,distance_out))
+		{
+			map[distance] = go;
+		}
+	}
+
+	for (std::vector<GameObject*>::iterator iter = go->children.begin(); iter != go->children.end(); ++iter)
+	{
+		CreateObjectsHitMap(map, go, ray);
 	}
 }
 
