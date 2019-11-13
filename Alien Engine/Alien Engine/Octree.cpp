@@ -269,7 +269,7 @@ Octree::~Octree()
 		delete root;
 }
 
-void Octree::Insert(GameObject* object)
+void Octree::Insert(GameObject* object, bool add_children)
 {
 	ComponentMesh* mesh_parent = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
 	if (mesh_parent != nullptr && mesh_parent->mesh != nullptr) {
@@ -279,11 +279,11 @@ void Octree::Insert(GameObject* object)
 		root->Insert(object, mesh_parent->GetGlobalAABB());
 	}
 
-	if (!object->children.empty()) {
+	if (add_children && !object->children.empty()) {
 		std::vector<GameObject*>::iterator item = object->children.begin();
 		for (; item != object->children.end(); ++item) {
 			if (*item != nullptr) {
-				Insert((*item));
+				Insert((*item), add_children);
 			}
 		}
 	}
@@ -361,7 +361,7 @@ void Octree::Recalculate(GameObject* new_object)
 	std::vector<GameObject*>::iterator item = to_save.begin();
 	for (; item != to_save.end(); ++item) {
 		if (*item != nullptr) {
-			Insert((*item));
+			Insert((*item), false);
 		}
 	}
 }

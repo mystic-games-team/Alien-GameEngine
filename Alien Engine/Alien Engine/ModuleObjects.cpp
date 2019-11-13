@@ -23,6 +23,7 @@ bool ModuleObjects::Init()
 {
 	base_game_object = new GameObject(nullptr);
 	base_game_object->ID = 0;
+	base_game_object->is_static = true;
 	//base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
 
 	return true;
@@ -387,6 +388,7 @@ void ModuleObjects::LoadScene(const char* path)
 		game_object_selected = nullptr;
 		base_game_object = new GameObject(nullptr);
 		base_game_object->ID = 0;
+		base_game_object->is_static = true;
 
 		JSONfilepack* scene = new JSONfilepack(path, object, value);
 
@@ -443,6 +445,7 @@ void ModuleObjects::CreateEmptyScene(const char* path)
 	game_object_selected = nullptr;
 	base_game_object = new GameObject(nullptr);
 	base_game_object->ID = 0;
+	base_game_object->is_static = true;
 
 	// try to remove the file because the user might have selected a name that already exists
 	remove(path);

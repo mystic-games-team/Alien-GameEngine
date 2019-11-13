@@ -47,7 +47,7 @@ public:
 	~Octree();
 	
 	// insert a gameobject
-	void Insert(GameObject* object);
+	void Insert(GameObject* object, bool add_children);
 	// remove a gameobject
 	void Remove(GameObject* object);
 	// remove the hole octree
