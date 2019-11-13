@@ -161,6 +161,11 @@ bool ModuleInput::CleanUp()
 	return true;
 }
 
+float3 ModuleInput::GetMousePosition()
+{
+	return float3(mouse_x, mouse_y, mouse_z);
+}
+
 void ModuleInput::AddInputBuff(const uint& key, const uint& state, const bool& is_mouse)
 {
 	static char text[60];

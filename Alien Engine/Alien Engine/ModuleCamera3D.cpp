@@ -55,6 +55,11 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 	else
 	{
+		if (is_scene_hovered && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+		{
+			CreateRay();
+		}
+
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		{
 			speed = camera_speed * 2 * dt;
@@ -219,5 +224,36 @@ void ModuleCamera3D::Focus()
 	//}
 }
 
+void ModuleCamera3D::CreateRay()
+{
+	float2 origin = fake_camera->frustum.ScreenToViewportSpace(App->input->GetMousePosition().x, App->input->GetMousePosition().y, App->window->width, App->window->height);
+	LineSegment ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
+	float closest_distance = 0.f;
+	float distance_out = 0.f;
+	float distance = 0.f;
+	GameObject* closest_object = nullptr;
 
+	for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
+	{
+		if (ray.Intersects((*iter)->GetBB(), distance, distance_out))
+		{
+			if (closest_distance > distance || closest_distance == 0)
+			{
+				if (distance > distance_out)
+				{
+					closest_distance = distance_out;
+				}
+				else
+				{
+					closest_distance = distance;
+				}
+				closest_object = (*iter);
+			}
+		}
+	}
+	if (closest_object != nullptr)
+	{
+		App->objects->SetNewSelectedObject(closest_object);
+	}
+}
 

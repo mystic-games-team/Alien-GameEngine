@@ -20,6 +20,8 @@ public:
 	void Focus();
 	void Zoom();
 
+	void CreateRay();
+
 public:
 	
 	bool is_scene_hovered = false;
