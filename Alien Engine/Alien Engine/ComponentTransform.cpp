@@ -185,7 +185,7 @@ void ComponentTransform::DrawInspector()
 	ImGui::SameLine();
 
 	if (ImGui::Checkbox("Static", &game_object_attached->is_static)) {		
-		if (!game_object_attached->is_static && game_object_attached->children.empty()) {
+		if (!game_object_attached->is_static && (game_object_attached->children.empty() || !game_object_attached->HasChildrenStatic())) {
 			App->objects->octree.Remove(game_object_attached);
 		}
 		else if (game_object_attached->is_static && game_object_attached->parent != nullptr && game_object_attached->parent->is_static && game_object_attached->children.empty()) {
@@ -336,17 +336,16 @@ void ComponentTransform::DrawInspector()
 				}
 			}
 			else {
-				// TODO: popup do you want to make children static?
 				ImGui::OpenPopup("Static Question");
-				ImGui::SetNextWindowSize({ 290,120 });
+				ImGui::SetNextWindowSize({ 270,120 });
 				if (ImGui::BeginPopupModal("Static Question", &popup_static, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 				{
 					ImGui::Spacing();
-					ImGui::SetCursorPosX(30);
+					ImGui::SetCursorPosX(20);
 					ImGui::Text("Do you want to make all children\nstatic as well?");
 					ImGui::Spacing();
 
-					ImGui::SetCursorPosX(22);
+					ImGui::SetCursorPosX(12);
 					if (ImGui::Button("Change children")) {
 						game_object_attached->ChangeStatic(game_object_attached->is_static);
 						App->objects->octree.Insert(game_object_attached, true);
@@ -358,7 +357,7 @@ void ComponentTransform::DrawInspector()
 						popup_static = false;
 					}
 					ImGui::Spacing();
-					ImGui::SetCursorPosX(((ImGui::GetWindowWidth()) * 0.5f) - 30);
+					ImGui::SetCursorPosX(((ImGui::GetWindowWidth()) * 0.5f) - 35);
 					if (ImGui::Button("Cancel")) {
 						game_object_attached->is_static = false;
 						popup_static = false;
@@ -370,14 +369,45 @@ void ComponentTransform::DrawInspector()
 					game_object_attached->is_static = false;
 					popup_static = false;
 				}
-				// call App->objects->octree.Insert(game_object_attached); and add a bool to add children or not
-				// make a function in octree to know if x object is in octree or not
 			}
 		}
 		else {
 			// if you make a object dynamic, children will transform to dynamic
 
 			// TODO: popup if you make x object dynamic, all children will become dynamic too. Do you want this? 
+			ImGui::OpenPopup("Static Question");
+			ImGui::SetNextWindowSize({ 290,150 });
+			if (ImGui::BeginPopupModal("Static Question", &popup_static, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+			{
+				ImGui::Spacing();
+				ImGui::SetCursorPosX(20);
+				ImGui::Text("To set this object dynamic, you must\nset children dynamic too");
+				ImGui::SetCursorPosX(20);
+				ImGui::Text("Do you want to make all children\ndynamic as well?");
+				ImGui::Spacing();
+				ImGui::SetCursorPosX(20);
+				ImGui::Text("GameObject: %s", game_object_attached->GetName());
+
+				ImGui::Spacing();
+
+				ImGui::SetCursorPosX(37);
+
+				if (ImGui::Button("Yes, change children")) {
+					popup_static = false;
+					game_object_attached->ChangeStatic(game_object_attached->is_static);
+					App->objects->octree.Remove(game_object_attached);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel")) {
+					popup_static = false;
+					game_object_attached->is_static = true;
+				}
+				ImGui::EndPopup();
+			}
+			else {
+				popup_static = false;
+				game_object_attached->is_static = true;
+			}
 		}
 	}
 }

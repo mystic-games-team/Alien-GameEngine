@@ -81,6 +81,7 @@ public:
 
 	//static
 	void ChangeStatic(bool static_);
+	bool HasChildrenStatic() const;
 
 private:
 

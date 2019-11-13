@@ -600,6 +600,31 @@ void GameObject::ChangeStatic(bool static_)
 	}
 }
 
+bool GameObject::HasChildrenStatic() const 
+{
+	bool ret = false;
+
+	if (!children.empty()) {
+		std::vector<GameObject*>::const_iterator item = children.cbegin();
+		for (; item != children.cend(); ++item) {
+			if (*item != nullptr) {
+				if (ret)
+					break;
+
+				if ((*item)->is_static) {
+					ret = true;
+					break;
+				}
+				else {
+					ret = (*item)->HasChildrenStatic();
+				}
+			}
+		}
+
+	}
+	return ret;
+}
+
 void GameObject::SearchToDelete()
 {
 	std::vector<GameObject*>::iterator item = children.begin();
