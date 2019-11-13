@@ -5,12 +5,12 @@
 
 void ReturnZ::SetAction(const ReturnActions& type, void* data)
 {
-	action.type = type;
+	this->type = type;
 
 	switch (type)
 	{
 	case ReturnActions::DELETE_OBJECT: {
-		SetDeleteObject((GameObject*)data, action.object);
+		SetDeleteObject((GameObject*)data, object);
 		break; }
 	default:
 		break;
@@ -28,16 +28,16 @@ void ReturnZ::GoBackOneAction()
 {
 	ReturnZ* to_return = App->objects->return_actions.top();
 
-	switch (to_return->action.type) {
+	switch (to_return->type) {
 	case ReturnActions::DELETE_OBJECT: {
-		to_return->CreateObject(to_return->action.object);
+		to_return->CreateObject(to_return->object);
 		break; }
 	}
 
 	App->objects->return_actions.pop();
 }
 
-ReturnZ::Actions::Obj ReturnZ::SetDeleteObject(GameObject* obj, Actions::Obj& to_fill)
+ReturnZ::Obj ReturnZ::SetDeleteObject(GameObject* obj, Obj& to_fill)
 {
 	to_fill.enabled = obj->enabled;
 	to_fill.is_static = obj->is_static;
@@ -46,23 +46,23 @@ ReturnZ::Actions::Obj ReturnZ::SetDeleteObject(GameObject* obj, Actions::Obj& to
 	to_fill.parent_selected = obj->IsParentSelected();
 	to_fill.selected = obj->IsSelected();
 	to_fill.parent_enabled = obj->IsParentEnabled();
-	to_fill.name = std::string(obj->GetName());
+	to_fill.name = std::string(obj->GetName()).data();
 	// components
 	
 	if (!obj->components.empty()) {
 		std::vector<Component*>::iterator item = obj->components.begin();
 		for (; item != obj->components.end(); ++item) {
 			if (*item != nullptr) {
-				Actions::Obj::Comp comp;
+				Obj::Comp* comp = new Obj::Comp();
 				switch ((*item)->GetType()) {
 				case ComponentType::TRANSFORM: {
 					ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
-					comp.transform.pos = transform->GetLocalPosition();
-					comp.transform.scale = transform->GetLocalScale();
-					comp.transform.rot = transform->GetLocalRotation();
-					comp.transform.is_scale_negative = transform->IsScaleNegative();
-					comp.type = ComponentType::TRANSFORM;
-					to_fill.comps.push_back(&comp);
+					comp->transform.pos = transform->GetLocalPosition();
+					comp->transform.scale = transform->GetLocalScale();
+					comp->transform.rot = transform->GetLocalRotation();
+					comp->transform.is_scale_negative = transform->IsScaleNegative();
+					comp->type = ComponentType::TRANSFORM;
+					to_fill.comps.push_back(comp);
 					break; }
 				}
 			}
@@ -73,16 +73,16 @@ ReturnZ::Actions::Obj ReturnZ::SetDeleteObject(GameObject* obj, Actions::Obj& to
 		std::vector<GameObject*>::iterator item = obj->children.begin();
 		for (; item != obj->children.end(); ++item) {
 			if (*item != nullptr) {
-				Actions::Obj obj;
+				Obj obj;
 				to_fill.children.push_back(&(SetDeleteObject((*item), obj)));
 			}
 		}
 	}
 
-	return action.object;
+	return object;
 }
 
-void ReturnZ::CreateObject(Actions::Obj obj)
+void ReturnZ::CreateObject(Obj obj)
 {
 	GameObject* new_obj = new GameObject();
 	new_obj->parent = App->objects->GetGameObjectByID(obj.parentID);
@@ -103,7 +103,7 @@ void ReturnZ::CreateObject(Actions::Obj obj)
 	new_obj->parent_selected = obj.parent_selected;
 
 	if (!obj.comps.empty()) {
-		std::vector<Actions::Obj::Comp*>::iterator item = obj.comps.begin();
+		std::vector<Obj::Comp*>::iterator item = obj.comps.begin();
 		for (; item != obj.comps.end(); ++item) {
 			if (*item != nullptr) {
 				switch ((*item)->type)

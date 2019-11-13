@@ -23,49 +23,42 @@ public:
 
 public:
 
-	union Actions {
+	ReturnActions type = ReturnActions::UNKNOWKN;
 
-		Actions() {}
-		~Actions() {}
+	struct Obj {
 
-		ReturnActions type = ReturnActions::UNKNOWKN;
+		bool enabled = false;
+		bool is_static = false;
+		u64 ID = 0;
+		u64 parentID = 0;
+		bool to_delete = false;
+		bool parent_selected = false;
+		bool selected = false;
+		bool parent_enabled = false;
 
-		struct Obj {
+		std::string name = "UnNamed";
 
-			bool enabled = false;
-			bool is_static = false;
-			u64 ID = 0;
-			u64 parentID = 0;
-			bool to_delete = false;
-			bool parent_selected = false;
-			bool selected = false;
-			bool parent_enabled = false;
+		std::vector<Obj*> children;
 
-			std::string name = "UnNamed";
+		struct Comp {
 
-			std::vector<Obj*> children;
+			ComponentType type = ComponentType::UNKNOWN;
 
-			struct Comp {
+			struct {
+				float3 pos = float3::zero;
+				float3 scale = float3::zero;
+				Quat rot = Quat::identity;
+				bool is_scale_negative = false;
+			} transform;
 
-				ComponentType type = ComponentType::UNKNOWN;
+		}; std::vector<Comp*> comps;
 
-				struct {
-					float3 pos = float3::zero;
-					float3 scale = float3::zero;
-					Quat rot = Quat::identity;
-					bool is_scale_negative = false;
-				} transform;
-
-			}; std::vector<Comp*> comps;
-
-		} object;
-
-	} action; 
+	} object;
 
 private:
 
-	ReturnZ::Actions::Obj SetDeleteObject(GameObject* obj, Actions::Obj &to_fill);
-	void CreateObject(Actions::Obj obj);
+	ReturnZ::Obj SetDeleteObject(GameObject* obj, Obj &to_fill);
+	void CreateObject(Obj obj);
 	
 	void SetAction(const ReturnActions& type, void* data);
 };
