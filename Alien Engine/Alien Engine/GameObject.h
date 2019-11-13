@@ -73,7 +73,7 @@ public:
 
 	// Bounding Boxes
 	AABB GetBB(); // 0 = Local Bounding Box, 1 = Global Bounding Box
-
+	OBB GetChildrenOBB();
 	void SaveObject(JSONArraypack* to_save, const uint& family_number);
 	void LoadObject(JSONArraypack* to_save, GameObject* parent);
 

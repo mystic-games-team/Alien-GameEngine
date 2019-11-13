@@ -5,6 +5,7 @@
 #include "ComponentTransform.h"
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/float4x4.h"
+#include "PanelScene.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -226,8 +227,14 @@ void ModuleCamera3D::Focus()
 
 void ModuleCamera3D::CreateRay()
 {
-	float2 origin = fake_camera->frustum.ScreenToViewportSpace(App->input->GetMousePosition().x, App->input->GetMousePosition().y, App->window->width, App->window->height);
+	float2 origin = float2(App->input->GetMousePosition().x / (float)App->ui->panel_scene->width , App->input->GetMousePosition().y / (float)App->ui->panel_scene->height);
+	origin.x = (origin.x - 0.5f) * 2;
+	origin.y = (origin.y - 0.5f) * 2;
+	
 	LineSegment ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
+
+	
+
 	float closest_distance = 0.f;
 	float distance_out = 0.f;
 	float distance = 0.f;

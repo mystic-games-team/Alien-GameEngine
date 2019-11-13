@@ -28,6 +28,7 @@ public:
 
 	void RecalculateAABB_OBB();
 	const AABB GetGlobalAABB() const;
+	const OBB GetOBB() const;
 
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);

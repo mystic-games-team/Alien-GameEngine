@@ -401,6 +401,11 @@ const AABB ComponentMesh::GetGlobalAABB() const
 	return global_aabb;
 }
 
+const OBB ComponentMesh::GetOBB() const
+{
+	return obb;
+}
+
 void ComponentMesh::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);

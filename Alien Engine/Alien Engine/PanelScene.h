@@ -11,7 +11,7 @@ public:
 
 	void PanelLogic();
 
-private:
+public:
 	float width = 960;
 	float height = 540;
 
