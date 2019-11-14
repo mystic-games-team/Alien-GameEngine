@@ -55,6 +55,7 @@ bool GameObject::IsEnabled()
 
 void GameObject::Draw()
 {
+	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
@@ -92,6 +93,8 @@ void GameObject::Draw()
 
 	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) {
 		camera->DrawFrustum();
+		camera->frustum.pos = transform->GetGlobalPosition();
+		camera->Look(transform->GetLocalRotation().WorldZ());
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();
