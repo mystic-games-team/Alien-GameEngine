@@ -164,6 +164,8 @@ public:
 	
 	Octree octree;
 
+	std::vector<ComponentCamera*> game_cameras;
+
 private:
 
 	GameObject* game_object_selected = nullptr;

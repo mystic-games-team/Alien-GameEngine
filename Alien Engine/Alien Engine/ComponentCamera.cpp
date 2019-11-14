@@ -10,8 +10,6 @@
 #include <gl/GLU.h>
 #include "imgui/imgui.h"
 
-
-
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
 	type = ComponentType::CAMERA;
@@ -28,10 +26,25 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	AspectRatio(16, 9);
 	
 	camera_color_background = Color(0.1f, 0.1f, 0.1f, 1.0f);
+
+	if (attach != nullptr)
+	{
+		App->objects->game_cameras.push_back(this);
+	}
 }
 
 ComponentCamera::~ComponentCamera()
 {
+	for (std::vector<ComponentCamera*>::iterator iter = App->objects->game_cameras.begin(); iter != App->objects->game_cameras.end(); ++iter)
+	{
+		if (this == (*iter))
+		{
+			delete (*iter);
+			(*iter) = nullptr;
+			App->objects->game_cameras.erase(iter);
+			break;
+		}
+	}
 }
 
 void ComponentCamera::DrawInspector()
