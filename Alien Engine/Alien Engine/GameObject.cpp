@@ -94,7 +94,7 @@ void GameObject::Draw()
 	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) {
 		camera->DrawFrustum();
 		camera->frustum.pos = transform->GetGlobalPosition();
-		camera->Look(transform->GetLocalRotation().WorldZ());
+		camera->frustum.front = transform->GetLocalRotation().WorldZ();
 		camera->frustum.up = transform->GetLocalRotation().WorldY();
 	}
 
