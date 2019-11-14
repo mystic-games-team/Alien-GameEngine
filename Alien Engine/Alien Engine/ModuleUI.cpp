@@ -19,6 +19,7 @@
 #include "PanelSceneSelector.h"
 #include "PanelScene.h"
 #include "PanelGame.h"
+#include <string>
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -498,6 +499,29 @@ void ModuleUI::MainMenuBar()
 	}
 	ImGui::EndMainMenuBar();
 
+	ImGui::BeginMainMenuBar();
+	static int camera_combo = 0;
+	std::string combo_cameras_name;
+	static const char* actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+
+	if (ImGui::BeginCombo("Current Game Camera", actual_name))
+	{
+		for (std::vector<ComponentCamera*>::iterator iter = App->objects->game_cameras.begin(); iter != App->objects->game_cameras.end(); ++iter)
+		{
+			bool is_selected = (actual_name == (*iter)->game_object_attached->GetName());
+			if (ImGui::Selectable((*iter)->game_object_attached->GetName(), is_selected))
+			{
+				actual_name = (*iter)->game_object_attached->GetName();
+			}
+			if (is_selected)
+			{
+				ImGui::SetItemDefaultFocus();
+				App->renderer3D->actual_game_camera = (*iter);
+			}
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::EndMainMenuBar();
 }
 
 void ModuleUI::ResetImGui()
