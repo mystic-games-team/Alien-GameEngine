@@ -4,6 +4,8 @@
 
 class Action;
 class ActionDeleteObject;
+class ObjZ;
+class CompZ;
 
 class ReturnZ {
 
@@ -44,6 +46,11 @@ public:
 };
 
 class ActionDeleteObject : public Action {
+public:
+	ObjZ* object = nullptr;
+};
+
+class ObjZ {
 
 public:
 
@@ -60,33 +67,40 @@ public:
 
 	std::vector<ActionDeleteObject*> children;
 
-	struct Comp {
+	std::vector<CompZ*> comps;
 
-		ComponentType type = ComponentType::UNKNOWN;
+};
 
-		struct {
-			float3 pos = float3::zero;
-			float3 scale = float3::zero;
-			Quat rot = Quat::identity;
-			bool is_scale_negative = false;
-		} transform;
+class CompZ {
+public:
+	ComponentType type = ComponentType::UNKNOWN;
+};
 
-		struct {
-			u64 ID = 0;
-			bool view_mesh = false;
-			bool wireframe = false;
-			bool view_vertex_normals = false;
-			bool view_face_normals = false;
-			bool draw_AABB = true;
-			bool draw_OBB = true;
-		} mesh;
+class CompMeshZ : public CompZ{
+public:
+	u64 objectID = 0;
+	u64 resourceID = 0;
+	bool view_mesh = false;
+	bool wireframe = false;
+	bool view_vertex_normals = false;
+	bool view_face_normals = false;
+	bool draw_AABB = true;
+	bool draw_OBB = true;
+};
 
-		struct {
-			u64 ID = 0;
-			Color color{ 1,1,1,1 };
-			bool texture_activated = true;
-		} material;
+class CompMaterialZ : public CompZ {
+public:
+	u64 objectID = 0;
+	u64 resourceID = 0;
+	Color color{ 1,1,1,1 };
+	bool texture_activated = true;
+};
 
-	}; std::vector<Comp*> comps;
-
+class CompTransformZ : public CompZ {
+public:
+	u64 objectID = 0;
+	float3 pos = float3::zero;
+	float3 scale = float3::zero;
+	Quat rot = Quat::identity;
+	bool is_scale_negative = false;
 };
