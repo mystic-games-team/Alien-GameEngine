@@ -23,7 +23,7 @@ public:
 	};
 
 	ReturnZ() {}
-	~ReturnZ() {}
+	~ReturnZ();
 
 	static void AddNewAction(const ReturnActions& type, void* data);
 	static void GoBackOneAction();
@@ -44,12 +44,14 @@ private:
 
 class Action {
 public:
+	virtual ~Action() {}
 	ReturnZ::ReturnActions type = ReturnZ::ReturnActions::UNKNOWKN;
 };
 
 // for deleting objects
 class ActionDeleteObject : public Action {
 public:
+	~ActionDeleteObject();
 	ObjZ* object = nullptr;
 };
 
@@ -68,6 +70,7 @@ public:
 // changing components & deleting
 class ActionComponent : public Action {
 public:
+	~ActionComponent();
 	CompZ* comp = nullptr;
 };
 
@@ -82,7 +85,7 @@ public:
 class ObjZ {
 
 public:
-
+	~ObjZ();
 	bool enabled = false;
 	bool is_static = false;
 	u64 ID = 0;
@@ -102,7 +105,7 @@ public:
 
 class CompZ {
 public:
-
+	virtual ~CompZ() {}
 	static void SetCompZ(Component* component, CompZ** compZ);
 	static void SetComponent(Component* component, CompZ* compZ);
 	static void AttachCompZToGameObject(CompZ* compZ);

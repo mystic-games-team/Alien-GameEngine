@@ -103,6 +103,7 @@ public:
 private:
 
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
+	void DeleteReturns();
 
 public:
 

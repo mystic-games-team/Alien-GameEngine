@@ -18,6 +18,7 @@ ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 
 ModuleObjects::~ModuleObjects()
 {
+	DeleteReturns();
 }
 
 bool ModuleObjects::Init()
@@ -74,7 +75,8 @@ update_status ModuleObjects::PreUpdate(float dt)
 update_status ModuleObjects::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
-		ReturnZ::GoBackOneAction();
+		if (!return_actions.empty())
+			ReturnZ::GoBackOneAction();
 	}
 	return UPDATE_CONTINUE;
 }
@@ -389,6 +391,7 @@ void ModuleObjects::LoadScene(const char* path)
 
 	if (value != nullptr && object != nullptr)
 	{
+		DeleteReturns();
 		delete base_game_object;
 		game_object_selected = nullptr;
 		base_game_object = new GameObject();
@@ -477,6 +480,17 @@ void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, cons
 		if (*item != nullptr) {
 			to_save->SetAnotherNode();
 			SaveGameObject(*item, to_save, family_number + 1);
+		}
+	}
+}
+
+void ModuleObjects::DeleteReturns()
+{
+	if (!return_actions.empty()) {
+		for (uint i = 0; i < return_actions.size(); ++i) {
+			ReturnZ* action = return_actions.top();
+			delete action;
+			return_actions.pop();
 		}
 	}
 }

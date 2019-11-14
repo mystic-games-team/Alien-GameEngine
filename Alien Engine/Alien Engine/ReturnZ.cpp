@@ -6,6 +6,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentLight.h"
 #include "ResourceTexture.h"
+#include "Octree.h"
 
 void ReturnZ::SetAction(const ReturnActions& type, void* data)
 {
@@ -65,6 +66,12 @@ void ReturnZ::SetAction(const ReturnActions& type, void* data)
 	}
 }
 
+ReturnZ::~ReturnZ()
+{
+	if (action != nullptr)
+		delete action;
+}
+
 void ReturnZ::AddNewAction(const ReturnActions& type, void* data)
 {
 	ReturnZ* ret = new ReturnZ();
@@ -94,6 +101,9 @@ void ReturnZ::GoBackOneAction()
 		case ComponentType::TRANSFORM: {
 			ComponentTransform* transform = (ComponentTransform*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
 			CompZ::SetComponent(transform, comp->comp);
+			if (App->objects->octree.Exists(transform->game_object_attached)) {
+				App->objects->octree.Recalculate(nullptr);
+			}
 			break; }
 		case ComponentType::MESH: {
 			ComponentMesh* mesh = (ComponentMesh*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
@@ -148,6 +158,7 @@ void ReturnZ::GoBackOneAction()
 		break; }
 	}
 	App->objects->in_cntrl_Z = false;
+	delete to_return;
 }
 
 void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
@@ -449,5 +460,39 @@ void CompZ::AttachCompZToGameObject(CompZ* compZ)
 		CompZ::SetComponent(camera, compZ);
 		obj->AddComponent(camera);
 		break; }
+	}
+}
+
+ActionDeleteObject::~ActionDeleteObject()
+{
+	if (object != nullptr)
+		delete object;
+}
+
+ActionComponent::~ActionComponent()
+{
+	if (comp != nullptr)
+		delete comp;
+}
+
+ObjZ::~ObjZ()
+{
+	if (!children.empty()) {
+		std::vector< ActionDeleteObject*>::iterator item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				delete* item;
+				*item = nullptr;
+			}
+		}
+	}
+	if (!comps.empty()) {
+		std::vector<CompZ*>::iterator item = comps.begin();
+		for (; item != comps.end(); ++item) {
+			if (*item != nullptr) {
+				delete* item;
+				*item = nullptr;
+			}
+		}
 	}
 }
