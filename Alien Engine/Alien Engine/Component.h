@@ -4,7 +4,7 @@ class GameObject;
 
 typedef unsigned int uint;
 class JSONArraypack;
-
+typedef unsigned long long u64;
 enum class ComponentType {
 	TRANSFORM = 0,
 	MESH,
@@ -39,6 +39,7 @@ public:
 
 public:
 
+	u64 ID = 0;
 	GameObject* game_object_attached = nullptr;
 	bool not_destroy = true;
 

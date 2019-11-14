@@ -163,6 +163,17 @@ Component* GameObject::GetComponent(const ComponentType& type)
 	return nullptr;
 }
 
+Component* GameObject::GetComponentWithID(const u64& compID)
+{
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr && (*item)->ID == compID) {
+			return *item;
+		}
+	}
+	return nullptr;
+}
+
 bool GameObject::IsSelected()
 {
 	return selected;

@@ -18,4 +18,5 @@ private:
 
 	int component = 0;
 	bool* delete_panel = nullptr;
+	Component* to_destroy = nullptr;
 };

@@ -5,6 +5,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentLight.h"
+#include "ReturnZ.h"
 
 PanelInspector::PanelInspector(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -31,6 +32,7 @@ void PanelInspector::PanelLogic()
 			{
 				(*item)->DrawInspector();
 				if (!(*item)->not_destroy) {
+					to_destroy = (*item);
 					delete_panel = &(*item)->not_destroy;
 					*delete_panel = !(*delete_panel);
 				}
@@ -59,10 +61,12 @@ void PanelInspector::DeleteComponentPopup()
 				*delete_panel = !(*delete_panel);
 				delete_panel = nullptr;
 				App->objects->need_to_delete_objects = true;
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_COMPONENT, to_destroy);
+				to_destroy = nullptr;
 			}
 			ImGui::PopStyleColor();
 			ImGui::SameLine(100);
-			if (ImGui::Button("Cancele")) {
+			if (ImGui::Button("Cancel")) {
 				delete_panel = nullptr;
 			}
 			ImGui::EndPopup();

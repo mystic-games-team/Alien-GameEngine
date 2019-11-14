@@ -11,6 +11,7 @@
 
 Component::Component(GameObject* attach)
 {
+	ID = App->resources->GetRandomID();
 	game_object_attached = attach;
 }
 
@@ -93,7 +94,7 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 				OnDisable();
 			}
 
-			if (ImGui::MenuItem("Delete Component", nullptr, nullptr, enabled)) {
+			if (ImGui::MenuItem("Delete Component", nullptr, nullptr)) {
 				not_destroy = false;
 			}
 

@@ -16,6 +16,8 @@ public:
 
 		DELETE_OBJECT,
 		ADD_OBJECT,
+		DELETE_COMPONENT,
+		ADD_COMPONENT,
 		CHANGE_COMPONENT,
 	};
 
@@ -56,11 +58,19 @@ public:
 	u64 objectID = 0;
 };
 
-// changing components
-class ActionChangeComp : public Action {
+// changing components & deleting
+class ActionComponent : public Action {
 public:
 	CompZ* comp = nullptr;
 };
+
+// add 
+class ActionAddComponent : public Action {
+public:
+	u64 compID = 0;
+	u64 objectID = 0;
+};
+
 
 class ObjZ {
 
@@ -88,10 +98,13 @@ public:
 
 	static void SetCompZ(Component* component, CompZ** compZ);
 	static void SetComponent(Component* component, CompZ* compZ);
+	static void AttachCompZToGameObject(CompZ* compZ);
 
 	ComponentType type = ComponentType::UNKNOWN;
 	u64 objectID = 0;
+	u64 compID = 0;
 	bool enabled = true;
+	bool has_material = false; // sorry sucks D:
 };
 
 class CompMeshZ : public CompZ{

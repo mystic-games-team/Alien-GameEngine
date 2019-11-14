@@ -24,10 +24,32 @@ void ReturnZ::SetAction(const ReturnActions& type, void* data)
 		action = object;
 		break; }
 	case ReturnActions::CHANGE_COMPONENT: {
-		ActionChangeComp* comp = new ActionChangeComp();
+		ActionComponent* comp = new ActionComponent();
 		comp->type = ReturnActions::CHANGE_COMPONENT;
 		Component* component = (Component*)data;
 		CompZ::SetCompZ(component, &comp->comp);
+		action = comp;
+		break; }
+	case ReturnActions::DELETE_COMPONENT: {
+		ActionComponent* comp = new ActionComponent();
+		comp->type = ReturnActions::DELETE_COMPONENT;
+		Component* component = (Component*)data;
+		CompZ::SetCompZ(component, &comp->comp);
+		action = comp;
+
+		// TODO: think another way
+		if (component->game_object_attached->HasComponent(ComponentType::MATERIAL) && component != component->game_object_attached->GetComponent(ComponentType::MATERIAL)) {
+			comp->comp->has_material = true;
+			ComponentMaterial* material = (ComponentMaterial*)component->game_object_attached->GetComponent(ComponentType::MATERIAL);
+			ReturnZ::AddNewAction(ReturnActions::DELETE_COMPONENT, material);
+		}
+		break; }
+	case ReturnActions::ADD_COMPONENT: {
+		ActionAddComponent* comp = new ActionAddComponent();
+		comp->type = ReturnActions::ADD_COMPONENT;
+		Component* component = (Component*)data;
+		comp->compID = component->ID;
+		comp->objectID = component->game_object_attached->ID;
 		action = comp;
 		break; }
 	default:
@@ -45,6 +67,7 @@ void ReturnZ::AddNewAction(const ReturnActions& type, void* data)
 void ReturnZ::GoBackOneAction()
 {
 	ReturnZ* to_return = App->objects->return_actions.top();
+	App->objects->return_actions.pop();
 
 	switch (to_return->action->type) {
 	case ReturnActions::DELETE_OBJECT: {
@@ -57,33 +80,47 @@ void ReturnZ::GoBackOneAction()
 		to_delete->ToDelete();
 		break; }
 	case ReturnActions::CHANGE_COMPONENT: {
-		ActionChangeComp* comp = (ActionChangeComp*)to_return->action;
+		ActionComponent* comp = (ActionComponent*)to_return->action;
 		switch (comp->comp->type) {
 		case ComponentType::TRANSFORM: {
-			ComponentTransform* transform = (ComponentTransform*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::TRANSFORM);
+			ComponentTransform* transform = (ComponentTransform*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
 			CompZ::SetComponent(transform, comp->comp);
 			break; }
 		case ComponentType::MESH: {
-			ComponentMesh* mesh = (ComponentMesh*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::MESH);
+			ComponentMesh* mesh = (ComponentMesh*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
 			CompZ::SetComponent(mesh, comp->comp);
 			break; }
 		case ComponentType::MATERIAL: {
-			ComponentMaterial* material = (ComponentMaterial*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::MATERIAL);
+			ComponentMaterial* material = (ComponentMaterial*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
 			CompZ::SetComponent(material, comp->comp);
 			break; }
 		case ComponentType::CAMERA: {
-			ComponentCamera* camera = (ComponentCamera*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::CAMERA);
+			ComponentCamera* camera = (ComponentCamera*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
 			CompZ::SetComponent(camera, comp->comp);
 			break; }
 		case ComponentType::LIGHT: {
-			ComponentLight* light = (ComponentLight*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::LIGHT);
+			ComponentLight* light = (ComponentLight*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
 			CompZ::SetComponent(light, comp->comp);
 			break; }
 		}
 		break; }
+	case ReturnActions::DELETE_COMPONENT: {
+		ActionComponent* comp = (ActionComponent*)to_return->action;
+		CompZ::AttachCompZToGameObject(comp->comp);
+		if (comp->comp->has_material) {
+			ReturnZ::GoBackOneAction();
+		}
+		break; }
+	case ReturnActions::ADD_COMPONENT: {
+		ActionAddComponent* comp = (ActionAddComponent*)to_return->action;
+		GameObject* obj = App->objects->GetGameObjectByID(comp->objectID);
+		if (obj != nullptr) {
+			Component* component = obj->GetComponentWithID(comp->compID);
+			if (component != nullptr)
+				component->not_destroy = false;
+		}
+		break; }
 	}
-
-	App->objects->return_actions.pop();
 }
 
 void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
@@ -107,27 +144,27 @@ void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 				switch ((*item)->GetType()) {
 				case ComponentType::TRANSFORM: {
 					CompTransformZ* transZ = nullptr;
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::TRANSFORM), (CompZ**)&transZ);
+					CompZ::SetCompZ((*item), (CompZ**)&transZ);
 					comp = transZ;
 					break; }
 				case ComponentType::MESH: {
 					CompMeshZ* meshZ = nullptr;
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::MESH), (CompZ**)&meshZ);
+					CompZ::SetCompZ((*item), (CompZ**)&meshZ);
 					comp = meshZ;
 					break; }
 				case ComponentType::MATERIAL: {
 					CompMaterialZ* materialZ = nullptr;
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::MATERIAL), (CompZ**)&materialZ);
+					CompZ::SetCompZ((*item), (CompZ**)&materialZ);
 					comp = materialZ;
 					break; }
 				case ComponentType::LIGHT: {
 					CompLightZ* lightZ = nullptr;
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::LIGHT), (CompZ**)&lightZ);
+					CompZ::SetCompZ((*item), (CompZ**)&lightZ);
 					comp = lightZ;
 					break; }
 				case ComponentType::CAMERA: {
 					CompCameraZ* cameraZ = nullptr;
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::CAMERA), (CompZ**)&cameraZ);
+					CompZ::SetCompZ((*item), (CompZ**)&cameraZ);
 					comp = cameraZ;
 					break; }
 				default:
@@ -288,6 +325,7 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 	}
 	(*compZ)->type = component->GetType();
 	(*compZ)->objectID = component->game_object_attached->ID;
+	(*compZ)->compID = component->ID;
 	(*compZ)->enabled = component->IsEnabled();
 }
 
@@ -354,4 +392,35 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		break; }
 	}
 	component->SetEnable(compZ->enabled);
+	component->ID = compZ->compID;
+}
+
+void CompZ::AttachCompZToGameObject(CompZ* compZ)
+{
+	GameObject* obj = App->objects->GetGameObjectByID(compZ->objectID);
+	if (obj == nullptr)
+		return;
+
+	switch (compZ->type) {
+	case ComponentType::MESH: {
+		ComponentMesh* mesh = new ComponentMesh(obj);
+		CompZ::SetComponent(mesh, compZ);
+		obj->AddComponent(mesh);
+		break; }
+	case ComponentType::MATERIAL: {
+		ComponentMaterial* material = new ComponentMaterial(obj);
+		CompZ::SetComponent(material, compZ);
+		obj->AddComponent(material);
+		break; }
+	case ComponentType::LIGHT: {
+		ComponentLight* light = new ComponentLight(obj);
+		CompZ::SetComponent(light, compZ);
+		obj->AddComponent(light);
+		break; }
+	case ComponentType::CAMERA: {
+		ComponentCamera* camera = new ComponentCamera(obj);
+		CompZ::SetComponent(camera, compZ);
+		obj->AddComponent(camera);
+		break; }
+	}
 }
