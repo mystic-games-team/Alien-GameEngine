@@ -8,6 +8,7 @@
 #include <map>
 #include <utility>
 #include "Octree.h"
+#include "ComponentCamera.h"
 #include <stack>
 
 class ReturnZ;
@@ -107,6 +108,7 @@ private:
 
 public:
 
+	ComponentCamera* camera = nullptr;
 	Scene current_scene;
 
 	// root
@@ -168,6 +170,8 @@ public:
 	std::stack<ReturnZ*> return_actions;
 
 	bool in_cntrl_Z = false;
+
+	std::vector<ComponentCamera*> game_cameras;
 
 private:
 

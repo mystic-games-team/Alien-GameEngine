@@ -18,6 +18,8 @@
 #include "PanelProject.h"
 #include "PanelSceneSelector.h"
 #include "PanelScene.h"
+#include "PanelGame.h"
+#include <string>
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -122,6 +124,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	memcpy(shortcut_AABB_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.AABB"), size_of_codes);
 	memcpy(shortcut_OBB_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.OBB"), size_of_codes);
 	memcpy(shortcut_octree_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ViewOctree"), size_of_codes);
+	memcpy(panel_game_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.Game"), size_of_codes);
 
 
 	if (panel_about != nullptr) {
@@ -135,6 +138,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		panel_create_object->shortcut->SetShortcutKeys(panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
 		panel_inspector->shortcut->SetShortcutKeys(panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
 		panel_scene->shortcut->SetShortcutKeys(panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
+		panel_game->shortcut->SetShortcutKeys(panel_game_codes[0], panel_game_codes[1], panel_game_codes[2]);
 		panel_layout->shortcut->SetShortcutKeys(panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
 		shortcut_demo->SetShortcutKeys(shortcut_demo_codes[0], shortcut_demo_codes[1], shortcut_demo_codes[2]);
 		shortcut_report_bug->SetShortcutKeys(shortcut_report_bug_codes[0], shortcut_report_bug_codes[1], shortcut_report_bug_codes[2]);
@@ -183,6 +187,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.AABB", shortcut_AABB->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.OBB", shortcut_OBB->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.ViewOctree", shortcut_octree->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.Game", shortcut_game->GetScancodesArray());
 }
 void ModuleUI::LoadLayouts()
 {
@@ -318,6 +323,7 @@ void ModuleUI::Draw() {
 
 	MainMenuBar();
 	BackgroundDockspace();
+	SecondMenuBar();
 	UpdatePanels();
 
 	ImGui::Render();
@@ -385,6 +391,10 @@ void ModuleUI::MainMenuBar()
 		if (ImGui::MenuItem("Render Options", panel_render->shortcut->GetNameScancodes()))
 		{
 			panel_render->ChangeEnable();
+		}
+		if (ImGui::MenuItem("Game", panel_render->shortcut->GetNameScancodes()))
+		{
+			panel_game->ChangeEnable();
 		}
 		ImGui::EndMenu();
 	}
@@ -489,7 +499,34 @@ void ModuleUI::MainMenuBar()
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
+}
 
+void ModuleUI::SecondMenuBar()
+{
+	ImGui::Begin("## Camera options", (bool*)false, ImGuiWindowFlags_NoDecoration);
+	static int camera_combo = 0;
+	std::string combo_cameras_name;
+	static const char* actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+
+	ImGui::PushItemWidth(175);
+	if (ImGui::BeginCombo("Current Game Camera", actual_name))
+	{
+		for (std::vector<ComponentCamera*>::iterator iter = App->objects->game_cameras.begin(); iter != App->objects->game_cameras.end(); ++iter)
+		{
+			bool is_selected = (actual_name == (*iter)->game_object_attached->GetName());
+			if (ImGui::Selectable((*iter)->game_object_attached->GetName(), is_selected))
+			{
+				actual_name = (*iter)->game_object_attached->GetName();
+			}
+			if (ImGui::IsItemClicked())
+			{
+				ImGui::SetItemDefaultFocus();
+				App->renderer3D->actual_game_camera = (*iter);
+			}
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::End();
 }
 
 void ModuleUI::ResetImGui()
@@ -579,6 +616,7 @@ void ModuleUI::InitPanels()
 	panel_scene = new PanelScene("Scene", panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
 	panel_scene_selector = new PanelSceneSelector("Save", panel_scene_selector_codes[0], panel_scene_selector_codes[1], panel_scene_selector_codes[2]);
 	panel_layout = new PanelLayout("Layout Editor", panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
+	panel_game = new PanelGame("Game", panel_game_codes[0], panel_game_codes[1], panel_game_codes[2]);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
@@ -591,6 +629,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_scene);
 	panels.push_back(panel_layout);
 	panels.push_back(panel_scene_selector);
+	panels.push_back(panel_game);
 }
 
 void ModuleUI::UpdatePanels()

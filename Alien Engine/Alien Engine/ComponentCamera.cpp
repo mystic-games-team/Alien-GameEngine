@@ -28,10 +28,22 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	AspectRatio(16, 9);
 	
 	camera_color_background = Color(0.1f, 0.1f, 0.1f, 1.0f);
+
+	if (attach != nullptr)
+	{
+		App->objects->game_cameras.push_back(this);
+	}
 }
 
 ComponentCamera::~ComponentCamera()
 {
+	std::vector<ComponentCamera*>::iterator item = App->objects->game_cameras.begin();
+	for (; item != App->objects->game_cameras.end(); ++item) {
+		if (*item != nullptr && *item == this) {
+			App->objects->game_cameras.erase(item);
+			break;
+		}
+	}
 }
 
 void ComponentCamera::DrawInspector()
@@ -205,6 +217,9 @@ float* ComponentCamera::GetViewMatrix() const
 
 void ComponentCamera::DrawFrustum()
 {
+
+
+
 	static float3 points[8];
 	frustum.GetCornerPoints(points);
 

@@ -464,6 +464,9 @@
     </ClInclude>
     <ClInclude Include="ReturnZ.h">
       <Filter>Tools\OurClassHelpers</Filter>
+      </ClInclude>
+    <ClInclude Include="PanelGame.h">
+      <Filter>Panels</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -727,6 +730,9 @@
     </ClCompile>
     <ClCompile Include="ReturnZ.cpp">
       <Filter>Tools\OurClassHelpers</Filter>
+      </ClCompile>
+    <ClCompile Include="PanelGame.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

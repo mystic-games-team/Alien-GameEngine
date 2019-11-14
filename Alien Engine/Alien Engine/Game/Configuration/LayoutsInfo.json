@@ -15,11 +15,13 @@
             "Inspector": true,
             "Scene": true,
             "Layout Editor": false,
-            "Panel Project": true
+            "Panel Project": true,
+            "Save": true,
+            "Game": true
         },
         "Layout2": {
             "Number": 2,
-            "Active": true,
+            "Active": false,
             "Name": "Oriol's Layout",
             "Path": "Configuration\/Layouts\/Oriol's Layout2.ini",
             "About Alien Engine": false,
@@ -31,11 +33,13 @@
             "Inspector": true,
             "Scene": true,
             "Layout Editor": false,
-            "Panel Project": true
+            "Panel Project": true,
+            "Save": true,
+            "Game": true
         },
         "Layout3": {
             "Number": 3,
-            "Active": false,
+            "Active": true,
             "Name": "Victor's Layout",
             "Path": "Configuration\/Layouts\/Victor's Layout3.ini",
             "About Alien Engine": false,
@@ -47,7 +51,9 @@
             "Inspector": true,
             "Scene": true,
             "Layout Editor": false,
-            "Panel Project": true
+            "Panel Project": true,
+            "Save": true,
+            "Game": true
         }
     }
 }
