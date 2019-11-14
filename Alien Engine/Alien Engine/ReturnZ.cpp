@@ -4,6 +4,7 @@
 #include "ComponentTransform.h"
 #include "ResourceMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentLight.h"
 #include "ResourceTexture.h"
 
 void ReturnZ::SetAction(const ReturnActions& type, void* data)
@@ -95,6 +96,14 @@ void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 					materialZ->texture_activated = material->texture_activated;
 					comp = materialZ;
 					break; }
+				case ComponentType::LIGHT: {
+					ComponentLight* light = (ComponentLight*)obj->GetComponent(ComponentType::LIGHT);
+					CompLightZ* lightZ = new CompLightZ();
+					lightZ->diffuse = light->diffuse;
+					lightZ->ambient = light->ambient;
+					lightZ->objectID = light->game_object_attached->ID;
+					comp = lightZ;
+					break; }
 				}
 				if (comp != nullptr) {
 					comp->type = (*item)->GetType();
@@ -170,6 +179,13 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 					material->texture_activated = materialZ->texture_activated;
 					material->color = materialZ->color;
 					new_obj->AddComponent(material);
+					break; }
+				case ComponentType::LIGHT: {
+					ComponentLight* light = new ComponentLight(new_obj);
+					CompLightZ* lightZ = (CompLightZ*)(*item);
+					light->ambient = lightZ->ambient;
+					light->diffuse = lightZ->diffuse;
+					new_obj->AddComponent(light);
 					break; }
 				default:
 					break;

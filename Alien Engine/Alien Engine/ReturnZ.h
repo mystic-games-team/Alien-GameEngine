@@ -39,12 +39,11 @@ private:
 
 
 class Action {
-
 public:
-
 	ReturnZ::ReturnActions type = ReturnZ::ReturnActions::UNKNOWKN;
 };
 
+// for deleting objects
 class ActionDeleteObject : public Action {
 public:
 	ObjZ* object = nullptr;
@@ -74,11 +73,11 @@ public:
 class CompZ {
 public:
 	ComponentType type = ComponentType::UNKNOWN;
+	u64 objectID = 0;
 };
 
 class CompMeshZ : public CompZ{
 public:
-	u64 objectID = 0;
 	u64 resourceID = 0;
 	bool view_mesh = false;
 	bool wireframe = false;
@@ -90,7 +89,6 @@ public:
 
 class CompMaterialZ : public CompZ {
 public:
-	u64 objectID = 0;
 	u64 resourceID = 0;
 	Color color{ 1,1,1,1 };
 	bool texture_activated = true;
@@ -98,9 +96,19 @@ public:
 
 class CompTransformZ : public CompZ {
 public:
-	u64 objectID = 0;
 	float3 pos = float3::zero;
 	float3 scale = float3::zero;
 	Quat rot = Quat::identity;
 	bool is_scale_negative = false;
+};
+
+class CompLightZ : public CompZ {
+public:
+	Color ambient{ 0.5f, 0.5f, 0.5f, 1.0f };
+	Color diffuse{ 0.75f, 0.75f, 0.75f, 1.0f };
+};
+
+class CompCameraZ : public CompZ {
+public:
+
 };
