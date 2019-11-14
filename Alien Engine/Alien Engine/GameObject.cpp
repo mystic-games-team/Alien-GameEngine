@@ -95,6 +95,7 @@ void GameObject::Draw()
 		camera->DrawFrustum();
 		camera->frustum.pos = transform->GetGlobalPosition();
 		camera->Look(transform->GetLocalRotation().WorldZ());
+		camera->frustum.up = transform->GetLocalRotation().WorldY();
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();
