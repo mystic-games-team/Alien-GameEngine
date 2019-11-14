@@ -9,7 +9,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "imgui/imgui.h"
-
+#include "ReturnZ.h"
 
 
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
@@ -50,51 +50,90 @@ void ComponentCamera::DrawInspector()
 	if (ImGui::CollapsingHeader("Camera", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		RightClickMenu("Camera");
-
+		static bool cntrl_z = true;
 		ImGui::Spacing();
 		ImGui::Spacing();
-
-		ImGui::ColorEdit3("Background Color", &camera_color_background, ImGuiColorEditFlags_Float);
-
+		static Color col;
+		col = camera_color_background;
+		if (ImGui::ColorEdit3("Background Color", &col, ImGuiColorEditFlags_Float)) {
+			if (cntrl_z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			cntrl_z = false;
+			camera_color_background = col;
+		}
+		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+			cntrl_z = true;
+		}
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
 
+		static float sup;
 		ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.25f);
-		if (ImGui::DragFloat("Near Plane", &near_plane, 1, 0.1f, far_plane - 0.1f, "%.1f"))
+		sup = near_plane;
+		if (ImGui::DragFloat("Near Plane", &sup, 1, 0.1f, far_plane - 0.1f, "%.1f"))
 		{
+			if (cntrl_z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			cntrl_z = false;
+			near_plane = sup;
 			frustum.nearPlaneDistance = near_plane;
 		}
-		
+		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+			cntrl_z = true;
+		}
 		ImGui::SameLine();
 
 		ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.25f);
-		if (ImGui::DragFloat("Far Plane", &far_plane, 1, near_plane + 0.1f, 1000, "%.1f"))
+		sup = far_plane;
+		if (ImGui::DragFloat("Far Plane", &sup, 1, near_plane + 0.1f, 1000, "%.1f"))
 		{
+			if (cntrl_z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			cntrl_z = false;
+			far_plane = sup;
 			frustum.farPlaneDistance = far_plane;
 		}
-
+		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+			cntrl_z = true;
+		}
 		ImGui::Spacing();
 		ImGui::Spacing();
 		
 		if (is_fov_horizontal!=0)
 		{
 			ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
-			if (ImGui::DragFloat("FOV ", &horizontal_fov, 1, 1, 163, "%.1f"))
+			sup = horizontal_fov;
+			if (ImGui::DragFloat("FOV ", &sup, 1, 1, 163, "%.1f"))
 			{
+				if (cntrl_z)
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+				cntrl_z = false;
+				horizontal_fov = sup;
 				frustum.horizontalFov = horizontal_fov * DEGTORAD;
 				AspectRatio(16, 9, true);
 				vertical_fov = frustum.verticalFov * RADTODEG;
+			}
+			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+				cntrl_z = true;
 			}
 		}
 		else
 		{
 			ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
-			if (ImGui::DragFloat("FOV", &vertical_fov, 1, 1, 150, "%.1f"))
+			sup = vertical_fov;
+			if (ImGui::DragFloat("FOV", &sup, 1, 1, 150, "%.1f"))
 			{
+				if (cntrl_z)
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+				cntrl_z = false;
+				vertical_fov = sup;
 				frustum.verticalFov = vertical_fov * DEGTORAD;
 				AspectRatio(16, 9);
 				horizontal_fov = frustum.horizontalFov * RADTODEG;
+			}
+			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+				cntrl_z = true;
 			}
 		}
 
