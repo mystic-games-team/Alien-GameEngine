@@ -123,6 +123,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	memcpy(shortcut_AABB_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.AABB"), size_of_codes);
 	memcpy(shortcut_OBB_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.OBB"), size_of_codes);
 	memcpy(shortcut_octree_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ViewOctree"), size_of_codes);
+	memcpy(panel_game_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.Game"), size_of_codes);
 
 
 	if (panel_about != nullptr) {
@@ -136,6 +137,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		panel_create_object->shortcut->SetShortcutKeys(panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
 		panel_inspector->shortcut->SetShortcutKeys(panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
 		panel_scene->shortcut->SetShortcutKeys(panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
+		panel_game->shortcut->SetShortcutKeys(panel_game_codes[0], panel_game_codes[1], panel_game_codes[2]);
 		panel_layout->shortcut->SetShortcutKeys(panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
 		shortcut_demo->SetShortcutKeys(shortcut_demo_codes[0], shortcut_demo_codes[1], shortcut_demo_codes[2]);
 		shortcut_report_bug->SetShortcutKeys(shortcut_report_bug_codes[0], shortcut_report_bug_codes[1], shortcut_report_bug_codes[2]);
