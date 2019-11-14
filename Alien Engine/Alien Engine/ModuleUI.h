@@ -55,6 +55,7 @@ public:
 
 	// draw UI
 	void MainMenuBar();
+	void SecondMenuBar();
 	void Draw();
 
 	// reset imgui

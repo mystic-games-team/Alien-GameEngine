@@ -323,6 +323,7 @@ void ModuleUI::Draw() {
 
 	MainMenuBar();
 	BackgroundDockspace();
+	SecondMenuBar();
 	UpdatePanels();
 
 	ImGui::Render();
@@ -498,12 +499,16 @@ void ModuleUI::MainMenuBar()
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
+}
 
-	ImGui::BeginMainMenuBar();
+void ModuleUI::SecondMenuBar()
+{
+	ImGui::Begin("## Camera options", (bool*)false, ImGuiWindowFlags_NoDecoration);
 	static int camera_combo = 0;
 	std::string combo_cameras_name;
 	static const char* actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
 
+	ImGui::PushItemWidth(175);
 	if (ImGui::BeginCombo("Current Game Camera", actual_name))
 	{
 		for (std::vector<ComponentCamera*>::iterator iter = App->objects->game_cameras.begin(); iter != App->objects->game_cameras.end(); ++iter)
@@ -521,7 +526,7 @@ void ModuleUI::MainMenuBar()
 		}
 		ImGui::EndCombo();
 	}
-	ImGui::EndMainMenuBar();
+	ImGui::End();
 }
 
 void ModuleUI::ResetImGui()
