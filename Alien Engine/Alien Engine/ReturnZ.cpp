@@ -224,7 +224,6 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 		transZ->pos = transform->GetLocalPosition();
 		transZ->scale = transform->GetLocalScale();
 		transZ->rot = transform->GetLocalRotation();
-		transZ->is_scale_negative = transform->IsScaleNegative();
 		break; }
 	case ComponentType::MESH: {
 		ComponentMesh* mesh = (ComponentMesh*)component;
@@ -288,7 +287,7 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		transform->euler_rotation.x = RadToDeg(transform->euler_rotation.x);
 		transform->euler_rotation.y = RadToDeg(transform->euler_rotation.y);
 		transform->euler_rotation.z = RadToDeg(transform->euler_rotation.z);
-		transform->is_scale_negative = transZ->is_scale_negative;
+		transform->LookScale();
 		transform->RecalculateTransform();
 		break; }
 	case ComponentType::MESH: {

@@ -203,9 +203,7 @@ void ComponentTransform::DrawInspector()
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 		RightClickMenu("Transform");
-
-		static uint change_type = 0;
-
+		static bool set_cntrl_Z = true;
 		ImGui::Spacing();
 		ImGui::Text("Position  ");
 		ImGui::SameLine();
@@ -214,42 +212,42 @@ void ComponentTransform::DrawInspector()
 		static float3 view_pos;
 		view_pos = local_position;
 		if (ImGui::DragFloat("X", &view_pos.x, 0.5F)) {
-			if (change_type == 0)
+			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			change_type = 1;
+			set_cntrl_Z = false;
 			local_position = view_pos;
 			RecalculateTransform();
 		}
-		else if (change_type == 1 && ImGui::IsMouseReleased(0)) {
-			change_type = 0;
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(2);
 		if (ImGui::DragFloat("Y", &view_pos.y, 0.5F)) {
-			if (change_type == 0)
+			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			change_type = 1;
+			set_cntrl_Z = false;
 			local_position = view_pos;
 			RecalculateTransform();
 		}
-		else if (change_type == 2 && ImGui::IsMouseReleased(0)) {
-			change_type = 0;
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(3);
 		if (ImGui::DragFloat("Z", &view_pos.z, 0.5F)) {
-			if (change_type == 0)
+			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			change_type = 1;
+			set_cntrl_Z = false;
 			local_position = view_pos;
 			RecalculateTransform();
 		}
-		else if (change_type == 3 && ImGui::IsMouseReleased(0)) {
-			change_type = 0;
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::Spacing();
@@ -261,9 +259,9 @@ void ComponentTransform::DrawInspector()
 		static float3 view_rot;
 		view_rot = euler_rotation;
 		if (ImGui::DragFloat("X", &view_rot.x, 0.5F)) {
-			if (change_type == 0)
+			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			change_type = 4;
+			set_cntrl_Z = false;
 			euler_rotation = view_rot;
 			float3 aux = euler_rotation;
 			aux.x = DegToRad(euler_rotation.x);
@@ -272,17 +270,17 @@ void ComponentTransform::DrawInspector()
 			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
 		}
-		else if (change_type == 4 && ImGui::IsMouseReleased(0)) {
-			change_type = 0;
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(5);
 		if (ImGui::DragFloat("Y", &view_rot.y, 0.5F)) {
-			if (change_type == 0)
+			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			change_type = 5;
+			set_cntrl_Z = false;
 			euler_rotation = view_rot;
 			float3 aux = euler_rotation;
 			aux.x = DegToRad(euler_rotation.x);
@@ -291,17 +289,17 @@ void ComponentTransform::DrawInspector()
 			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
 		}
-		else if (change_type == 5 && ImGui::IsMouseReleased(0)) {
-			change_type = 0;
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(6);
 		if (ImGui::DragFloat("Z", &view_rot.z, 0.5F)) {
-			if (change_type == 0)
+			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			change_type = 6;
+			set_cntrl_Z = false;
 			euler_rotation = view_rot;
 			float3 aux = euler_rotation;
 			aux.x = DegToRad(euler_rotation.x);
@@ -310,8 +308,8 @@ void ComponentTransform::DrawInspector()
 			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
 		}
-		else if (change_type == 6 && ImGui::IsMouseReleased(0)) {
-			change_type = 0;
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::Spacing();
@@ -323,45 +321,45 @@ void ComponentTransform::DrawInspector()
 		static float3 view_scale;
 		view_scale = local_scale;
 		if (ImGui::DragFloat("X", &view_scale.x, 0.5F)) {
-			if (change_type == 0)
+			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			change_type = 7;
+			set_cntrl_Z = false;
 			local_scale = view_scale;
 			LookScale();
 			RecalculateTransform();
 		}
-		else if (change_type == 7 && ImGui::IsMouseReleased(0)) {
-			change_type = 0;
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(8);
 		if (ImGui::DragFloat("Y", &view_scale.y, 0.5F)) {
-			if (change_type == 0)
+			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			change_type = 8;
+			set_cntrl_Z = false;
 			local_scale = view_scale;
 			LookScale();
 			RecalculateTransform();
 		}
-		else if (change_type == 8 && ImGui::IsMouseReleased(0)) {
-			change_type = 0;
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(9);
 		if (ImGui::DragFloat("Z", &view_scale.z, 0.5F)) {
-			if (change_type == 0)
+			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			change_type = 9;
+			set_cntrl_Z = false;
 			local_scale = view_scale;
 			LookScale();
 			RecalculateTransform();
 		}
-		else if (change_type == 9 && ImGui::IsMouseReleased(0)) {
-			change_type = 0;
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::Spacing();

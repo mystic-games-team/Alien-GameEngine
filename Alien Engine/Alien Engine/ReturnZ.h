@@ -116,7 +116,6 @@ public:
 	float3 pos = float3::zero;
 	float3 scale = float3::zero;
 	Quat rot = Quat::identity;
-	bool is_scale_negative = false;
 };
 
 class CompLightZ : public CompZ {
