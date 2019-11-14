@@ -116,8 +116,17 @@ void ReturnZ::GoBackOneAction()
 		GameObject* obj = App->objects->GetGameObjectByID(comp->objectID);
 		if (obj != nullptr) {
 			Component* component = obj->GetComponentWithID(comp->compID);
-			if (component != nullptr)
-				component->not_destroy = false;
+			if (component != nullptr) {
+				std::vector<Component*>::iterator item = obj->components.begin();
+				for (; item != obj->components.end(); ++item) {
+					if (*item == component) {
+						delete component;
+						component = nullptr;
+						obj->components.erase(item);
+						break;
+					}
+				}
+			}
 		}
 		break; }
 	}

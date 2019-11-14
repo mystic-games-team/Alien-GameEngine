@@ -84,6 +84,7 @@ void PanelInspector::ButtonAddComponent()
 
 	if (ImGui::Button("Add Component"))
 	{
+		Component* comp = nullptr;
 		switch (component)
 		{
 
@@ -95,8 +96,8 @@ void PanelInspector::ButtonAddComponent()
 
 			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
 			{
-				ComponentMesh* mesh = new ComponentMesh(App->objects->GetSelectedObject());
-				App->objects->GetSelectedObject()->AddComponent(mesh);
+				comp = new ComponentMesh(App->objects->GetSelectedObject());
+				App->objects->GetSelectedObject()->AddComponent(comp);
 			}
 
 			else
@@ -109,8 +110,8 @@ void PanelInspector::ButtonAddComponent()
 			if ((!App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL)) &&
 				App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
 			{
-				ComponentMaterial* material = new ComponentMaterial(App->objects->GetSelectedObject());
-				App->objects->GetSelectedObject()->AddComponent(material);
+				comp = new ComponentMaterial(App->objects->GetSelectedObject());
+				App->objects->GetSelectedObject()->AddComponent(comp);
 			}
 
 			else if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
@@ -127,8 +128,8 @@ void PanelInspector::ButtonAddComponent()
 
 			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::LIGHT))
 			{
-				ComponentLight* light = new ComponentLight(App->objects->GetSelectedObject());
-				App->objects->GetSelectedObject()->AddComponent(light);
+				comp = new ComponentLight(App->objects->GetSelectedObject());
+				App->objects->GetSelectedObject()->AddComponent(comp);
 			}
 
 			else
@@ -140,8 +141,8 @@ void PanelInspector::ButtonAddComponent()
 
 			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::CAMERA))
 			{
-				ComponentCamera* camera = new ComponentCamera(App->objects->GetSelectedObject());
-				App->objects->GetSelectedObject()->AddComponent(camera);
+				comp = new ComponentCamera(App->objects->GetSelectedObject());
+				App->objects->GetSelectedObject()->AddComponent(comp);
 			}
 
 			else
@@ -150,7 +151,9 @@ void PanelInspector::ButtonAddComponent()
 			break;
 		}
 
-
+		if (comp != nullptr) {
+			ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, comp);
+		}
 		component = 0;
 	}
 }
