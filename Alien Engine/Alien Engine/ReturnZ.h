@@ -16,6 +16,7 @@ public:
 
 		DELETE_OBJECT,
 		ADD_OBJECT,
+		TRANSFORM,
 	};
 
 	ReturnZ() {}

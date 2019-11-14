@@ -75,9 +75,10 @@ bool ResourceModel::CreateMetaData()
 		delete[] meshes_paths;
 		// Create the file
 		LOG("Created alien file %s", meta_data_path.data());
-		return true;
+
 		meta->FinishSave();
 		delete meta;
+		return true;
 	}
 	else {
 		LOG("Error creating meta with path %s", meta_data_path.data());
