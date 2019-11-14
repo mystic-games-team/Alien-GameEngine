@@ -9,6 +9,7 @@
 #include "RandomHelper.h"
 #include "ModuleObjects.h"
 #include "ComponentCamera.h"
+#include "ReturnZ.h"
 
 GameObject::GameObject(GameObject* parent)
 {
@@ -316,6 +317,7 @@ void GameObject::ToDelete()
 {
 	to_delete = true;
 	App->objects->need_to_delete_objects = true;
+	ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, App->objects->GetSelectedObject());
 }
 
 void GameObject::SayChildrenParentIsEnabled(const bool& enabled)

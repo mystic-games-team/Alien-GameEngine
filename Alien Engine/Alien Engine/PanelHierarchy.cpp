@@ -3,7 +3,6 @@
 #include "GameObject.h"
 #include "PanelCreateObject.h"
 #include "imgui/imgui_internal.h"
-#include "ReturnZ.h"
 
 PanelHierarchy::PanelHierarchy(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -27,7 +26,6 @@ void PanelHierarchy::PanelLogic()
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr && ImGui::IsWindowFocused())
 	{
 		App->objects->GetSelectedObject()->ToDelete();
-		ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, App->objects->GetSelectedObject());
 	}
 	
 	ImGui::Spacing();
