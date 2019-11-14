@@ -166,6 +166,8 @@ public:
 	Octree octree;
 	std::stack<ReturnZ*> return_actions;
 
+	bool in_cntrl_Z = false;
+
 private:
 
 	GameObject* game_object_selected = nullptr;

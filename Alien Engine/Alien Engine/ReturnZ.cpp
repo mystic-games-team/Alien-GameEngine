@@ -74,6 +74,7 @@ void ReturnZ::AddNewAction(const ReturnActions& type, void* data)
 
 void ReturnZ::GoBackOneAction()
 {
+	App->objects->in_cntrl_Z = true;
 	ReturnZ* to_return = App->objects->return_actions.top();
 	App->objects->return_actions.pop();
 
@@ -146,6 +147,7 @@ void ReturnZ::GoBackOneAction()
 		}
 		break; }
 	}
+	App->objects->in_cntrl_Z = false;
 }
 
 void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)

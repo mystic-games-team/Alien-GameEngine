@@ -328,7 +328,8 @@ void GameObject::ToDelete()
 {
 	to_delete = true;
 	App->objects->need_to_delete_objects = true;
-	ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, App->objects->GetSelectedObject());
+	if (!App->objects->in_cntrl_Z)
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, App->objects->GetSelectedObject());
 }
 
 void GameObject::SayChildrenParentIsEnabled(const bool& enabled)
