@@ -104,6 +104,21 @@ void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 					lightZ->objectID = light->game_object_attached->ID;
 					comp = lightZ;
 					break; }
+				case ComponentType::CAMERA: {
+					ComponentCamera* camera = (ComponentCamera*)obj->GetComponent(ComponentType::CAMERA);
+					CompCameraZ* cameraZ = new CompCameraZ();
+					cameraZ->camera_color_background = camera->camera_color_background;
+					cameraZ->far_plane = camera->far_plane;
+					cameraZ->horizontal_fov = camera->horizontal_fov;
+					cameraZ->vertical_fov = camera->vertical_fov;
+					cameraZ->is_fov_horizontal = camera->is_fov_horizontal;
+					cameraZ->objectID = camera->game_object_attached->ID;
+					cameraZ->near_plane = camera->near_plane;
+					comp = cameraZ;
+					break; }
+				default:
+					LOG("A component hasn't been saved");
+					break;
 				}
 				if (comp != nullptr) {
 					comp->type = (*item)->GetType();
@@ -186,6 +201,22 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 					light->ambient = lightZ->ambient;
 					light->diffuse = lightZ->diffuse;
 					new_obj->AddComponent(light);
+					break; }
+				case ComponentType::CAMERA: {
+					ComponentCamera* camera = new ComponentCamera(new_obj);
+					CompCameraZ* cameraZ = (CompCameraZ*)(*item);
+					camera->camera_color_background = cameraZ->camera_color_background;
+					camera->near_plane = cameraZ->near_plane;
+					camera->far_plane = cameraZ->far_plane;
+					camera->horizontal_fov = cameraZ->horizontal_fov;
+					camera->vertical_fov = cameraZ->vertical_fov;
+					camera->is_fov_horizontal = cameraZ->is_fov_horizontal;
+					// set frustum
+					camera->frustum.verticalFov = camera->vertical_fov * DEGTORAD;
+					camera->frustum.horizontalFov = camera->horizontal_fov * DEGTORAD;
+					camera->frustum.nearPlaneDistance = camera->near_plane;
+					camera->frustum.farPlaneDistance = camera->far_plane;
+					new_obj->AddComponent(camera);
 					break; }
 				default:
 					break;

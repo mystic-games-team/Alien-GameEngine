@@ -110,5 +110,10 @@ public:
 
 class CompCameraZ : public CompZ {
 public:
-
+	float vertical_fov = 0.f;
+	float horizontal_fov = 0.f;
+	Color camera_color_background{ 1, 1, 1, 1 };
+	float far_plane = 0.f;
+	float near_plane = 0.f;
+	int is_fov_horizontal = 0;
 };

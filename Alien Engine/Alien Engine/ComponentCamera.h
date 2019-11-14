@@ -35,14 +35,12 @@ public:
 
 	Color camera_color_background{ 0.05f, 0.05f, 0.05f, 1.0f };
 
-private:
-
-	bool projection_changed = false;
-
-	float4x4 ViewMatrix, ViewMatrixInverse;
-
 	float far_plane = 100.f;
 	float near_plane = 0.1f;
 
 	int is_fov_horizontal = 0;
+private:
+
+	float4x4 ViewMatrix = float4x4::identity;
+	float4x4 ViewMatrixInverse = float4x4::identity;
 };
