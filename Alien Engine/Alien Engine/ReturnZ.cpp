@@ -13,6 +13,7 @@ void ReturnZ::SetAction(const ReturnActions& type, void* data)
 	{
 	case ReturnActions::DELETE_OBJECT: {
 		ActionDeleteObject* object = new ActionDeleteObject();
+		object->type = ReturnActions::DELETE_OBJECT;
 		ReturnZ::SetDeleteObject((GameObject*)data, object);
 		action = object;
 		break; }
@@ -21,6 +22,13 @@ void ReturnZ::SetAction(const ReturnActions& type, void* data)
 		object->type = ReturnActions::ADD_OBJECT;
 		object->objectID = static_cast<GameObject*>(data)->ID;
 		action = object;
+		break; }
+	case ReturnActions::CHANGE_COMPONENT: {
+		ActionChangeComp* comp = new ActionChangeComp();
+		comp->type = ReturnActions::CHANGE_COMPONENT;
+		Component* component = (Component*)data;
+		CompZ::SetCompZ(component, &comp->comp);
+		action = comp;
 		break; }
 	default:
 		break;
@@ -55,8 +63,6 @@ void ReturnZ::GoBackOneAction()
 
 void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 {
-	to_fill->type = ReturnZ::ReturnActions::DELETE_OBJECT;
-
 	to_fill->object = new ObjZ();
 
 	to_fill->object->enabled = obj->enabled;
@@ -75,28 +81,28 @@ void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 				CompZ* comp = nullptr;
 				switch ((*item)->GetType()) {
 				case ComponentType::TRANSFORM: {
-					CompTransformZ* transZ = new CompTransformZ();
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::TRANSFORM), transZ);
+					CompTransformZ* transZ = nullptr;
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::TRANSFORM), (CompZ**)&transZ);
 					comp = transZ;
 					break; }
 				case ComponentType::MESH: {
-					CompMeshZ* meshZ = new CompMeshZ();
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::MESH), meshZ);
+					CompMeshZ* meshZ = nullptr;
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::MESH), (CompZ**)&meshZ);
 					comp = meshZ;
 					break; }
 				case ComponentType::MATERIAL: {
-					CompMaterialZ* materialZ = new CompMaterialZ();
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::MATERIAL), materialZ);
+					CompMaterialZ* materialZ = nullptr;
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::MATERIAL), (CompZ**)&materialZ);
 					comp = materialZ;
 					break; }
 				case ComponentType::LIGHT: {
-					CompLightZ* lightZ = new CompLightZ();
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::LIGHT), lightZ);
+					CompLightZ* lightZ = nullptr;
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::LIGHT), (CompZ**)&lightZ);
 					comp = lightZ;
 					break; }
 				case ComponentType::CAMERA: {
-					CompCameraZ* cameraZ = new CompCameraZ();
-					CompZ::SetCompZ(obj->GetComponent(ComponentType::CAMERA), cameraZ);
+					CompCameraZ* cameraZ = nullptr;
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::CAMERA), (CompZ**)&cameraZ);
 					comp = cameraZ;
 					break; }
 				default:
@@ -199,20 +205,22 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 
 }
 
-void CompZ::SetCompZ(Component* component, CompZ* compZ)
+void CompZ::SetCompZ(Component* component, CompZ** compZ)
 {
 	switch (component->GetType()) {
 	case ComponentType::TRANSFORM: {
-		CompTransformZ* trans = (CompTransformZ*)compZ;
+		CompTransformZ* transZ = new CompTransformZ();
+		*compZ = transZ;
 		ComponentTransform* transform = (ComponentTransform*)component;
-		trans->pos = transform->GetLocalPosition();
-		trans->scale = transform->GetLocalScale();
-		trans->rot = transform->GetLocalRotation();
-		trans->is_scale_negative = transform->IsScaleNegative();
+		transZ->pos = transform->GetLocalPosition();
+		transZ->scale = transform->GetLocalScale();
+		transZ->rot = transform->GetLocalRotation();
+		transZ->is_scale_negative = transform->IsScaleNegative();
 		break; }
 	case ComponentType::MESH: {
 		ComponentMesh* mesh = (ComponentMesh*)component;
-		CompMeshZ* meshZ = (CompMeshZ*)compZ;
+		CompMeshZ* meshZ = new CompMeshZ();
+		*compZ = meshZ;
 		if (mesh->mesh != nullptr)
 			meshZ->resourceID = mesh->mesh->GetID();
 		meshZ->objectID = mesh->game_object_attached->ID;
@@ -225,7 +233,8 @@ void CompZ::SetCompZ(Component* component, CompZ* compZ)
 		break; }
 	case ComponentType::MATERIAL: {
 		ComponentMaterial* material = (ComponentMaterial*)component;
-		CompMaterialZ* materialZ = (CompMaterialZ*)compZ;
+		CompMaterialZ* materialZ = new CompMaterialZ();
+		*compZ = materialZ;
 		if (material->texture != nullptr)
 			materialZ->resourceID = material->texture->GetID();
 		materialZ->objectID = material->game_object_attached->ID;
@@ -234,14 +243,16 @@ void CompZ::SetCompZ(Component* component, CompZ* compZ)
 		break; }
 	case ComponentType::LIGHT: {
 		ComponentLight* light = (ComponentLight*)component;
-		CompLightZ* lightZ = (CompLightZ*)compZ;
+		CompLightZ* lightZ = new CompLightZ();
+		*compZ = lightZ;
 		lightZ->diffuse = light->diffuse;
 		lightZ->ambient = light->ambient;
 		lightZ->objectID = light->game_object_attached->ID;
 		break; }
 	case ComponentType::CAMERA: {
 		ComponentCamera* camera = (ComponentCamera*)component;
-		CompCameraZ* cameraZ = (CompCameraZ*)compZ;
+		CompCameraZ* cameraZ = new CompCameraZ();
+		*compZ = cameraZ;
 		cameraZ->camera_color_background = camera->camera_color_background;
 		cameraZ->far_plane = camera->far_plane;
 		cameraZ->horizontal_fov = camera->horizontal_fov;

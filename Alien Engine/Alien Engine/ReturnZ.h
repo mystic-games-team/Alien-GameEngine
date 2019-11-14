@@ -16,7 +16,7 @@ public:
 
 		DELETE_OBJECT,
 		ADD_OBJECT,
-		TRANSFORM,
+		CHANGE_COMPONENT,
 	};
 
 	ReturnZ() {}
@@ -58,6 +58,7 @@ public:
 
 // changing components
 class ActionChangeComp : public Action {
+public:
 	CompZ* comp = nullptr;
 };
 
@@ -85,7 +86,7 @@ public:
 class CompZ {
 public:
 
-	static void SetCompZ(Component* component, CompZ* compZ);
+	static void SetCompZ(Component* component, CompZ** compZ);
 	static void SetComponent(Component* component, CompZ* compZ);
 
 	ComponentType type = ComponentType::UNKNOWN;
