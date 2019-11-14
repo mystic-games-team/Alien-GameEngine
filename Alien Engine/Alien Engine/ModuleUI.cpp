@@ -18,6 +18,7 @@
 #include "PanelProject.h"
 #include "PanelSceneSelector.h"
 #include "PanelScene.h"
+#include "PanelGame.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -183,6 +184,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.AABB", shortcut_AABB->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.OBB", shortcut_OBB->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.ViewOctree", shortcut_octree->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.Game", shortcut_game->GetScancodesArray());
 }
 void ModuleUI::LoadLayouts()
 {
@@ -386,6 +388,10 @@ void ModuleUI::MainMenuBar()
 		{
 			panel_render->ChangeEnable();
 		}
+		if (ImGui::MenuItem("Game", panel_render->shortcut->GetNameScancodes()))
+		{
+			panel_game->ChangeEnable();
+		}
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Create"))
@@ -579,6 +585,7 @@ void ModuleUI::InitPanels()
 	panel_scene = new PanelScene("Scene", panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
 	panel_scene_selector = new PanelSceneSelector("Save", panel_scene_selector_codes[0], panel_scene_selector_codes[1], panel_scene_selector_codes[2]);
 	panel_layout = new PanelLayout("Layout Editor", panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
+	panel_game = new PanelGame("Game", panel_game_codes[0], panel_game_codes[1], panel_game_codes[2]);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
@@ -591,6 +598,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_scene);
 	panels.push_back(panel_layout);
 	panels.push_back(panel_scene_selector);
+	panels.push_back(panel_game);
 }
 
 void ModuleUI::UpdatePanels()

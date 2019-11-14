@@ -19,6 +19,7 @@ class PanelScene;
 class PanelLayout;
 class PanelProject;
 class PanelSceneSelector;
+class PanelGame;
 
 struct ShortCut;
 
@@ -110,7 +111,7 @@ private:
 	PanelInspector* panel_inspector = nullptr;
 	PanelScene* panel_scene = nullptr;
 	PanelLayout* panel_layout = nullptr;
-
+	PanelGame* panel_game = nullptr;
 
 	// ShortCuts
 	ShortCut* shortcut_demo = nullptr;
@@ -127,6 +128,7 @@ private:
 	ShortCut* shortcut_AABB = nullptr;
 	ShortCut* shortcut_OBB = nullptr;
 	ShortCut* shortcut_octree = nullptr;
+	ShortCut* shortcut_game = nullptr;
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_project_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -139,6 +141,7 @@ private:
 	SDL_Scancode panel_console_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_render_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_scene_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_game_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_demo_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_report_bug_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_wireframe_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
