@@ -59,10 +59,14 @@ void ReturnZ::GoBackOneAction()
 	case ReturnActions::CHANGE_COMPONENT: {
 		ActionChangeComp* comp = (ActionChangeComp*)to_return->action;
 		switch (comp->comp->type) {
-		case ComponentType::TRANSFORM:
+		case ComponentType::TRANSFORM: {
 			ComponentTransform* transform = (ComponentTransform*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::TRANSFORM);
 			CompZ::SetComponent(transform, comp->comp);
-			break;
+			break; }
+		case ComponentType::MESH: {
+			ComponentMesh* mesh = (ComponentMesh*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::MESH);
+			CompZ::SetComponent(mesh, comp->comp);
+			break; }
 		}
 		break; }
 	}
