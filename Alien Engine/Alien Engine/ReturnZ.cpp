@@ -76,27 +76,27 @@ void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 				switch ((*item)->GetType()) {
 				case ComponentType::TRANSFORM: {
 					CompTransformZ* transZ = new CompTransformZ();
-					CompZ::SetComponent(obj->GetComponent(ComponentType::TRANSFORM), transZ);
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::TRANSFORM), transZ);
 					comp = transZ;
 					break; }
 				case ComponentType::MESH: {
 					CompMeshZ* meshZ = new CompMeshZ();
-					CompZ::SetComponent(obj->GetComponent(ComponentType::MESH), meshZ);
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::MESH), meshZ);
 					comp = meshZ;
 					break; }
 				case ComponentType::MATERIAL: {
 					CompMaterialZ* materialZ = new CompMaterialZ();
-					CompZ::SetComponent(obj->GetComponent(ComponentType::MATERIAL), materialZ);
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::MATERIAL), materialZ);
 					comp = materialZ;
 					break; }
 				case ComponentType::LIGHT: {
 					CompLightZ* lightZ = new CompLightZ();
-					CompZ::SetComponent(obj->GetComponent(ComponentType::LIGHT), lightZ);
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::LIGHT), lightZ);
 					comp = lightZ;
 					break; }
 				case ComponentType::CAMERA: {
 					CompCameraZ* cameraZ = new CompCameraZ();
-					CompZ::SetComponent(obj->GetComponent(ComponentType::CAMERA), cameraZ);
+					CompZ::SetCompZ(obj->GetComponent(ComponentType::CAMERA), cameraZ);
 					comp = cameraZ;
 					break; }
 				default:
@@ -151,59 +151,37 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 				switch ((*item)->type)
 				{
 				case ComponentType::TRANSFORM: {
-					CompTransformZ* trans = (CompTransformZ*)(*item);
-					new_obj->AddComponent(new ComponentTransform(new_obj, trans->pos, trans->rot, trans->scale));
-					static_cast<ComponentTransform*>(new_obj->components.back())->is_scale_negative = trans->is_scale_negative;
+					CompTransformZ* transZ = (CompTransformZ*)(*item);
+					ComponentTransform* transform = new ComponentTransform(new_obj);
+					CompZ::SetComponent(transform, transZ);
+					new_obj->AddComponent(transform);
 					break; }
 				case ComponentType::MESH: {
 					ComponentMesh* mesh = new ComponentMesh(new_obj);
 					CompMeshZ* meshZ = (CompMeshZ*)(*item);
-					if (meshZ->resourceID != 0)
-						mesh->mesh = (ResourceMesh*)App->resources->GetResourceWithID(meshZ->resourceID);
-					mesh->draw_AABB = meshZ->draw_AABB;
-					mesh->draw_OBB = meshZ->draw_OBB;
-					mesh->wireframe = meshZ->wireframe;
-					mesh->view_mesh = meshZ->view_mesh;
-					mesh->view_face_normals = meshZ->view_face_normals;
-					mesh->view_vertex_normals = meshZ->view_vertex_normals;
-					mesh->RecalculateAABB_OBB();
+					CompZ::SetComponent(mesh, meshZ);
 					new_obj->AddComponent(mesh);
 					break; }
 				case ComponentType::MATERIAL: {
 					ComponentMaterial* material = new ComponentMaterial(new_obj);
 					CompMaterialZ* materialZ = (CompMaterialZ*)(*item);
-					if (materialZ->resourceID != 0)
-						material->texture = (ResourceTexture*)App->resources->GetResourceWithID(materialZ->resourceID);
-					material->texture_activated = materialZ->texture_activated;
-					material->color = materialZ->color;
+					CompZ::SetComponent(material, materialZ);
 					new_obj->AddComponent(material);
 					break; }
 				case ComponentType::LIGHT: {
 					ComponentLight* light = new ComponentLight(new_obj);
 					CompLightZ* lightZ = (CompLightZ*)(*item);
-					light->ambient = lightZ->ambient;
-					light->diffuse = lightZ->diffuse;
+					CompZ::SetComponent(light, lightZ);
 					new_obj->AddComponent(light);
 					break; }
 				case ComponentType::CAMERA: {
 					ComponentCamera* camera = new ComponentCamera(new_obj);
 					CompCameraZ* cameraZ = (CompCameraZ*)(*item);
-					camera->camera_color_background = cameraZ->camera_color_background;
-					camera->near_plane = cameraZ->near_plane;
-					camera->far_plane = cameraZ->far_plane;
-					camera->horizontal_fov = cameraZ->horizontal_fov;
-					camera->vertical_fov = cameraZ->vertical_fov;
-					camera->is_fov_horizontal = cameraZ->is_fov_horizontal;
-					// set frustum
-					camera->frustum.verticalFov = camera->vertical_fov * DEGTORAD;
-					camera->frustum.horizontalFov = camera->horizontal_fov * DEGTORAD;
-					camera->frustum.nearPlaneDistance = camera->near_plane;
-					camera->frustum.farPlaneDistance = camera->far_plane;
+					CompZ::SetComponent(camera, cameraZ);
 					new_obj->AddComponent(camera);
 					break; }
 				default:
 					break;
-
 				}
 			}
 		}
@@ -221,7 +199,7 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 
 }
 
-void CompZ::SetComponent(Component* component, CompZ* compZ)
+void CompZ::SetCompZ(Component* component, CompZ* compZ)
 {
 	switch (component->GetType()) {
 	case ComponentType::TRANSFORM: {
@@ -271,6 +249,75 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		cameraZ->is_fov_horizontal = camera->is_fov_horizontal;
 		cameraZ->objectID = camera->game_object_attached->ID;
 		cameraZ->near_plane = camera->near_plane;
+		break; }
+	}
+}
+
+void CompZ::SetComponent(Component* component, CompZ* compZ)
+{
+	switch (compZ->type) {
+	case ComponentType::TRANSFORM: {
+		ComponentTransform* transform = (ComponentTransform*)component;
+		CompTransformZ* transZ = (CompTransformZ*)compZ;
+		transform->local_position = transZ->pos;
+		transform->local_rotation = transZ->rot;
+		transform->local_scale = transZ->scale;
+		transform->euler_rotation = transform->local_rotation.ToEulerXYZ();
+		transform->euler_rotation.x = RadToDeg(transform->euler_rotation.x);
+		transform->euler_rotation.y = RadToDeg(transform->euler_rotation.y);
+		transform->euler_rotation.z = RadToDeg(transform->euler_rotation.z);
+		transform->is_scale_negative = transZ->is_scale_negative;
+		transform->local_transformation = float4x4::FromTRS(transform->local_position, transform->local_rotation, transform->local_scale);
+
+		if (transform->game_object_attached->parent != nullptr) {
+			ComponentTransform* tr = (ComponentTransform*)transform->game_object_attached->parent->GetComponent(ComponentType::TRANSFORM);
+			if (tr != nullptr) transform->global_transformation = tr->global_transformation * transform->local_transformation;
+			else transform->global_transformation = transform->local_transformation;
+		}
+		else
+			transform->global_transformation = transform->local_transformation;
+		break; }
+	case ComponentType::MESH: {
+		ComponentMesh* mesh = (ComponentMesh*)component;
+		CompMeshZ* meshZ = (CompMeshZ*)compZ;
+		if (meshZ->resourceID != 0)
+			mesh->mesh = (ResourceMesh*)App->resources->GetResourceWithID(meshZ->resourceID);
+		mesh->draw_AABB = meshZ->draw_AABB;
+		mesh->draw_OBB = meshZ->draw_OBB;
+		mesh->wireframe = meshZ->wireframe;
+		mesh->view_mesh = meshZ->view_mesh;
+		mesh->view_face_normals = meshZ->view_face_normals;
+		mesh->view_vertex_normals = meshZ->view_vertex_normals;
+		mesh->RecalculateAABB_OBB();
+		break; }
+	case ComponentType::MATERIAL: {
+		ComponentMaterial* material = (ComponentMaterial*)component;
+		CompMaterialZ* materialZ = (CompMaterialZ*)compZ;
+		if (materialZ->resourceID != 0)
+			material->texture = (ResourceTexture*)App->resources->GetResourceWithID(materialZ->resourceID);
+		material->texture_activated = materialZ->texture_activated;
+		material->color = materialZ->color;
+		break; }
+	case ComponentType::LIGHT: {
+		ComponentLight* light = (ComponentLight*)component;
+		CompLightZ* lightZ = (CompLightZ*)compZ;
+		light->ambient = lightZ->ambient;
+		light->diffuse = lightZ->diffuse;
+		break; }
+	case ComponentType::CAMERA: {
+		ComponentCamera* camera = (ComponentCamera*)component;
+		CompCameraZ* cameraZ = (CompCameraZ*)compZ;
+		camera->camera_color_background = cameraZ->camera_color_background;
+		camera->near_plane = cameraZ->near_plane;
+		camera->far_plane = cameraZ->far_plane;
+		camera->horizontal_fov = cameraZ->horizontal_fov;
+		camera->vertical_fov = cameraZ->vertical_fov;
+		camera->is_fov_horizontal = cameraZ->is_fov_horizontal;
+		// set frustum
+		camera->frustum.verticalFov = camera->vertical_fov * DEGTORAD;
+		camera->frustum.horizontalFov = camera->horizontal_fov * DEGTORAD;
+		camera->frustum.nearPlaneDistance = camera->near_plane;
+		camera->frustum.farPlaneDistance = camera->far_plane;
 		break; }
 	}
 }

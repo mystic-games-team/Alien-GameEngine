@@ -85,6 +85,7 @@ public:
 class CompZ {
 public:
 
+	static void SetCompZ(Component* component, CompZ* compZ);
 	static void SetComponent(Component* component, CompZ* compZ);
 
 	ComponentType type = ComponentType::UNKNOWN;

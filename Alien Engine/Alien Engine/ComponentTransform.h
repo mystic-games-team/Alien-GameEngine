@@ -4,7 +4,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 
 class ComponentTransform : public Component {
-	
+	friend class CompZ;
 public:
 
 	ComponentTransform(GameObject* attach);
