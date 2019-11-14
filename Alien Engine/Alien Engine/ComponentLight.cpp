@@ -4,6 +4,7 @@
 #include "imgui/imgui.h"
 #include "ComponentTransform.h"
 #include "Application.h"
+#include "ReturnZ.h"
 
 ComponentLight::ComponentLight(GameObject* attach) : Component(attach)
 {
@@ -43,12 +44,29 @@ void ComponentLight::DrawInspector()
 	if (ImGui::CollapsingHeader("Light", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		RightClickMenu("Light");
-
+		static bool cntl_Z = true;
 		ImGui::Spacing();
-
-		ImGui::ColorEdit3("Ambient Light", &ambient, ImGuiColorEditFlags_Float);
-		ImGui::ColorEdit3("Diffuse Light", &diffuse, ImGuiColorEditFlags_Float);
-
+		static Color col;
+		col = ambient;
+		if (ImGui::ColorEdit3("Ambient Light", &col, ImGuiColorEditFlags_Float)) {
+			if (cntl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			cntl_Z = false;
+			ambient = col;
+		}
+		else if (!cntl_Z && ImGui::IsMouseReleased(0)) {
+			cntl_Z = true;
+		}
+		col = diffuse;
+		if (ImGui::ColorEdit3("Diffuse Light", &col, ImGuiColorEditFlags_Float)) {
+			if (cntl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			cntl_Z = false;
+			diffuse = col;
+		}
+		else if (!cntl_Z && ImGui::IsMouseReleased(0)) {
+			cntl_Z = true;
+		}
 		ImGui::Spacing();
 		ImGui::Separator();
 	}
