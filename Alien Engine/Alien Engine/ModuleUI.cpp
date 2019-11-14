@@ -518,7 +518,7 @@ void ModuleUI::SecondMenuBar()
 			{
 				actual_name = (*iter)->game_object_attached->GetName();
 			}
-			if (is_selected)
+			if (ImGui::IsItemClicked())
 			{
 				ImGui::SetItemDefaultFocus();
 				App->renderer3D->actual_game_camera = (*iter);
