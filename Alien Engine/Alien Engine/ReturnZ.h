@@ -19,6 +19,7 @@ public:
 		DELETE_COMPONENT,
 		ADD_COMPONENT,
 		CHANGE_COMPONENT,
+		REPARENT_HIERARCHY
 	};
 
 	ReturnZ() {}
@@ -50,6 +51,12 @@ public:
 class ActionDeleteObject : public Action {
 public:
 	ObjZ* object = nullptr;
+};
+
+class ActionReparent : public Action {
+public:
+	u64 objectID = 0;
+	u64 parentID = 0;
 };
 
 // for creating objects

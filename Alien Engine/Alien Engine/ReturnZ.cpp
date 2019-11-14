@@ -52,6 +52,14 @@ void ReturnZ::SetAction(const ReturnActions& type, void* data)
 		comp->objectID = component->game_object_attached->ID;
 		action = comp;
 		break; }
+	case ReturnActions::REPARENT_HIERARCHY: {
+		ActionReparent* reparent = new ActionReparent();
+		reparent->type = ReturnActions::REPARENT_HIERARCHY;
+		GameObject* object = (GameObject*)data;
+		reparent->objectID = object->ID;
+		reparent->parentID = object->parent->ID;
+		action = reparent;
+		break; }
 	default:
 		break;
 	}
@@ -127,6 +135,14 @@ void ReturnZ::GoBackOneAction()
 					}
 				}
 			}
+		}
+		break; }
+	case ReturnActions::REPARENT_HIERARCHY: {
+		ActionReparent* reparent = (ActionReparent*)to_return->action;
+		GameObject* obj = App->objects->GetGameObjectByID(reparent->objectID);
+		GameObject* parent = App->objects->GetGameObjectByID(reparent->parentID);
+		if (obj != nullptr && parent != nullptr) {
+			App->objects->ReparentGameObject(obj, parent, false);
 		}
 		break; }
 	}

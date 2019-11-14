@@ -57,10 +57,12 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 	// change parent
 	if (!to_reparent.empty()) {
-		std::map<GameObject*, GameObject*>::iterator item = to_reparent.begin();
+		std::vector< std::tuple<GameObject*, GameObject*, bool>>::iterator item = to_reparent.begin();
 		for (; item != to_reparent.end(); ++item) {
-			if ((*item).first != nullptr && (*item).second != nullptr) {
-				(*item).first->SetNewParent((*item).second);
+			if (std::get<0>(*item) != nullptr && std::get<1>(*item) != nullptr) {
+				if (std::get<2>(*item))
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::REPARENT_HIERARCHY, std::get<0>(*item));
+				std::get<0>(*item)->SetNewParent(std::get<1>(*item));
 			}
 		}
 		to_reparent.clear();
@@ -327,10 +329,10 @@ GameObject* ModuleObjects::GetGameObjectByID(const u64& id)
 	return base_game_object->GetGameObjectByID(id);
 }
 
-void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_parent)
+void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ)
 {
 	if (object != nullptr && next_parent != nullptr && !object->Exists(next_parent)) {
-		to_reparent.emplace(object, next_parent);
+		to_reparent.push_back({ object,next_parent,to_cntrlZ });
 	}
 }
 

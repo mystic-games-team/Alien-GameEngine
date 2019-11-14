@@ -91,7 +91,7 @@ public:
 	GameObject* GetGameObjectByID(const u64& id);
 
 	//reparent object in the next preupdate
-	void ReparentGameObject(GameObject* object, GameObject* next_parent);
+	void ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ = true);
 
 	// scenes
 	void SaveScene(const char* path);
@@ -170,5 +170,5 @@ private:
 
 	GameObject* game_object_selected = nullptr;
 
-	std::map<GameObject*, GameObject*> to_reparent;
+	std::vector< std::tuple<GameObject*, GameObject*, bool>> to_reparent;
 };
