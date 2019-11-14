@@ -67,6 +67,18 @@ void ReturnZ::GoBackOneAction()
 			ComponentMesh* mesh = (ComponentMesh*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::MESH);
 			CompZ::SetComponent(mesh, comp->comp);
 			break; }
+		case ComponentType::MATERIAL: {
+			ComponentMaterial* material = (ComponentMaterial*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::MATERIAL);
+			CompZ::SetComponent(material, comp->comp);
+			break; }
+		case ComponentType::CAMERA: {
+			ComponentCamera* camera = (ComponentCamera*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::CAMERA);
+			CompZ::SetComponent(camera, comp->comp);
+			break; }
+		case ComponentType::LIGHT: {
+			ComponentLight* light = (ComponentLight*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::LIGHT);
+			CompZ::SetComponent(light, comp->comp);
+			break; }
 		}
 		break; }
 	}
@@ -280,6 +292,9 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 
 void CompZ::SetComponent(Component* component, CompZ* compZ)
 {
+	if (component == nullptr)
+		return;
+
 	switch (compZ->type) {
 	case ComponentType::TRANSFORM: {
 		ComponentTransform* transform = (ComponentTransform*)component;

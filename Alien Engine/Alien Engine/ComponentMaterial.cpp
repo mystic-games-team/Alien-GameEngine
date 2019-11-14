@@ -5,6 +5,7 @@
 #include "ComponentMesh.h"
 #include "Application.h"
 #include "ResourceTexture.h"
+#include "ReturnZ.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* attach) : Component(attach)
 {
@@ -38,12 +39,32 @@ void ComponentMaterial::DrawInspector()
 	if (ImGui::CollapsingHeader("Material", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		RightClickMenu("Material");
-
+		static bool set_Z = true;
 		ImGui::Spacing();
 
 		ImGui::Spacing();
-		ImGui::ColorEdit3("Material Color", &color, ImGuiColorEditFlags_Float);
-		ImGui::SliderFloat("Alpha", &color.a, 0.0F, 1.0F);
+		static Color col;
+		col = color;
+		if (ImGui::ColorEdit3("Material Color", &col, ImGuiColorEditFlags_Float)) {
+			if (set_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_Z = false;
+			color = col;
+		}
+		else if (!set_Z && ImGui::IsMouseReleased(0)) {
+			set_Z = true;
+		}
+
+		if (ImGui::SliderFloat("Alpha", &col.a, 0.0F, 1.0F)) {
+			if (set_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_Z = false;
+			color.a = col.a;
+		}
+		else if (!set_Z && ImGui::IsMouseReleased(0)) {
+			set_Z = true;
+		}
+
 		ImGui::Spacing();
 
 		ImGui::Separator();
@@ -77,7 +98,12 @@ void ComponentMaterial::DrawInspector()
 			ImGui::PopStyleColor();
 			ImGui::PopStyleColor();
 
-			ImGui::Checkbox("Texture Active", &texture_activated);
+			static bool check;
+			check = texture_activated;
+			if (ImGui::Checkbox("Texture Active", &check)) {
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+				texture_activated = check;
+			}
 
 			ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->width);
 			ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->height);
@@ -140,6 +166,7 @@ void ComponentMaterial::DrawInspector()
 				ImGui::Text("");
 				ImGui::SameLine(377);
 				if (ImGui::Button("Apply", { 120,20 })) {
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 					texture = selected_texture;
 					selected_texture = nullptr;
 					change_texture_menu = false;
