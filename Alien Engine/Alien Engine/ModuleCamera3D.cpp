@@ -233,7 +233,6 @@ void ModuleCamera3D::CreateRay()
 	origin.x = (origin.x - 0.5f) * 2;
 	origin.y = (origin.y - 0.5f) * 2;
 
-	/*MousePicking(fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y));*/
 	LineSegment ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
 	std::map<float, GameObject*> objects_hit;
 
@@ -252,11 +251,11 @@ void ModuleCamera3D::CreateRay()
 		{
 			ResourceMesh* r_mesh = mesh->mesh;
 
-			if (r_mesh)
+			if (r_mesh != nullptr)
 			{
 				LineSegment transformed_ray = ray;
 				ComponentTransform* transform = (ComponentTransform*)(*iter).second->GetComponent(ComponentType::TRANSFORM);
-				ray.Transform(transform->global_transformation);
+				transformed_ray.Transform(transform->global_transformation);
 
 				// Create every triangle in the mesh and check it versus the Ray
 				for (uint check_triangles = 0; check_triangles < mesh->mesh->num_index; check_triangles += 3)
@@ -290,17 +289,14 @@ void ModuleCamera3D::CreateObjectsHitMap(std::map<float, GameObject*>& map, Game
 	float distance_out = 0.f;
 	float distance = 0.f;
 
-	if (ray.Intersects(go->GetBB()) && go->children.empty())
+	if (ray.Intersects(go->GetBB(), distance, distance_out) && go->children.empty())
 	{
-		if (ray.Intersects(go->GetGlobalOBB(),distance,distance_out))
-		{
-			map[distance] = go;
-		}
+		map[distance] = go;
 	}
 
 	for (std::vector<GameObject*>::iterator iter = go->children.begin(); iter != go->children.end(); ++iter)
 	{
-		CreateObjectsHitMap(map, go, ray);
+		CreateObjectsHitMap(map, (*iter), ray);
 	}
 }
 

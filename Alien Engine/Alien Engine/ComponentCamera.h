@@ -35,9 +35,9 @@ public:
 
 	Color camera_color_background{ 0.05f, 0.05f, 0.05f, 1.0f };
 
-private:
+	private:
 
-	bool projection_changed = false;
+		bool projection_changed = false;
 
 	float4x4 ViewMatrix, ViewMatrixInverse;
 
