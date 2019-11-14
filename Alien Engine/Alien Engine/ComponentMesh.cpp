@@ -208,9 +208,14 @@ void ComponentMesh::DrawFaceNormals()
 
 void ComponentMesh::DrawInspector()
 {
+	static bool check;
 
 	ImGui::PushID(this);
-	ImGui::Checkbox("##CmpActive", &enabled);
+	check = enabled;
+	if (ImGui::Checkbox("##CmpActive", &check)) {
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+		enabled = check;
+	}
 	ImGui::PopID();
 	ImGui::SameLine();
 
@@ -232,8 +237,7 @@ void ComponentMesh::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-		
-		static bool check;
+	
 		check = view_mesh;
 		if (ImGui::Checkbox("Active Mesh          ", &check)) {
 			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);

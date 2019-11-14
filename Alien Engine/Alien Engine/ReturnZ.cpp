@@ -288,6 +288,7 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 	}
 	(*compZ)->type = component->GetType();
 	(*compZ)->objectID = component->game_object_attached->ID;
+	(*compZ)->enabled = component->IsEnabled();
 }
 
 void CompZ::SetComponent(Component* component, CompZ* compZ)
@@ -352,4 +353,5 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		camera->frustum.farPlaneDistance = camera->far_plane;
 		break; }
 	}
+	component->SetEnable(compZ->enabled);
 }

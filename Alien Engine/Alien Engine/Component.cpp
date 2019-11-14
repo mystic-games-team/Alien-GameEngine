@@ -23,6 +23,11 @@ bool Component::IsEnabled()
 	return enabled;
 }
 
+void Component::SetEnable(bool enable)
+{
+	enabled = enable;
+}
+
 const ComponentType& Component::GetType() const
 {
 	return type;

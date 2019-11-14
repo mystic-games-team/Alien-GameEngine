@@ -91,6 +91,7 @@ public:
 
 	ComponentType type = ComponentType::UNKNOWN;
 	u64 objectID = 0;
+	bool enabled = true;
 };
 
 class CompMeshZ : public CompZ{

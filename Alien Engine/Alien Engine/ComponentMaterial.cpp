@@ -31,17 +31,22 @@ void ComponentMaterial::BindTexture()
 
 void ComponentMaterial::DrawInspector()
 {
+	static bool en;
 	ImGui::PushID(this);
-	ImGui::Checkbox("##CmpActive", &enabled);
+	en = enabled;
+	if (ImGui::Checkbox("##CmpActive", &en)) {
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+		enabled = en;
+	}
 	ImGui::PopID();
 	ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader("Material", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		RightClickMenu("Material");
-		static bool set_Z = true;
-		ImGui::Spacing();
 
+		ImGui::Spacing();
+		static bool set_Z = true;
 		ImGui::Spacing();
 		static Color col;
 		col = color;

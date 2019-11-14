@@ -36,8 +36,12 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::DrawInspector()
 {
+	static bool en;
 	ImGui::PushID(this);
-	if (ImGui::Checkbox("##CmpActive", &enabled)) {
+	en = enabled;
+	if (ImGui::Checkbox("##CmpActive", &en)) {
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+		enabled = en;
 		if (!enabled)
 			OnDisable();
 		else

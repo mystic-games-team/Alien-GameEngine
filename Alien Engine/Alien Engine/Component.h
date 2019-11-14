@@ -16,6 +16,7 @@ enum class ComponentType {
 };
 
 class Component {
+
 public:
 
 	Component(GameObject* attach);
@@ -24,7 +25,8 @@ public:
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
 
-	virtual bool IsEnabled();
+	bool IsEnabled();
+	void SetEnable(bool enable);
 	virtual void DrawInspector() {}
 
 	virtual void Reset() {}
