@@ -59,7 +59,7 @@ void PanelScene::PanelLogic()
 	ImGui::SetCursorPosX((ImGui::GetWindowWidth() - width) * 0.5f);
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() - height) * 0.5f);
 	
-	ImGui::Image((ImTextureID)App->renderer3D->tex->id, { width,height }, { 0,1 }, { 1,0 });
+	ImGui::Image((ImTextureID)App->renderer3D->scene_tex->id, { width,height }, { 0,1 }, { 1,0 });
 
 	lastHeight = ImGui::GetWindowHeight();
 

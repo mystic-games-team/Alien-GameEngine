@@ -9,6 +9,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
+#include "ModuleRenderer3D.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {
@@ -76,11 +77,12 @@ update_status ModuleObjects::Update(float dt)
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
+	// Scene Drawing
 	if (App->renderer3D->render_zbuffer) {
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
 	}
 	else {
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->scene_frame_buffer);
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -97,6 +99,33 @@ update_status ModuleObjects::PostUpdate(float dt)
 	
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	
+	// Game Drawing
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearStencil(0);
+	glClearColor(App->renderer3D->actual_game_camera->camera_color_background.r, App->renderer3D->actual_game_camera->camera_color_background.g, App->renderer3D->actual_game_camera->camera_color_background.b, App->renderer3D->actual_game_camera->camera_color_background.a);
+	glLoadIdentity();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(App->renderer3D->actual_game_camera->GetViewMatrix());
+
+	if (App->renderer3D->render_zbuffer) {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
+	}
+	else {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->game_frame_buffer);
+	}
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearStencil(0);
+
+	if (allow_grid)
+		App->renderer3D->RenderGrid();
+
+	base_game_object->Draw();
+
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
 	return UPDATE_CONTINUE;
 }
 
