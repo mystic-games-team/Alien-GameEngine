@@ -56,6 +56,15 @@ void ReturnZ::GoBackOneAction()
 		GameObject* to_delete = App->objects->GetGameObjectByID(object->objectID);
 		to_delete->ToDelete();
 		break; }
+	case ReturnActions::CHANGE_COMPONENT: {
+		ActionChangeComp* comp = (ActionChangeComp*)to_return->action;
+		switch (comp->comp->type) {
+		case ComponentType::TRANSFORM:
+			ComponentTransform* transform = (ComponentTransform*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponent(ComponentType::TRANSFORM);
+			CompZ::SetComponent(transform, comp->comp);
+			break;
+		}
+		break; }
 	}
 
 	App->objects->return_actions.pop();
@@ -262,6 +271,8 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 		cameraZ->near_plane = camera->near_plane;
 		break; }
 	}
+	(*compZ)->type = component->GetType();
+	(*compZ)->objectID = component->game_object_attached->ID;
 }
 
 void CompZ::SetComponent(Component* component, CompZ* compZ)
@@ -278,15 +289,7 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		transform->euler_rotation.y = RadToDeg(transform->euler_rotation.y);
 		transform->euler_rotation.z = RadToDeg(transform->euler_rotation.z);
 		transform->is_scale_negative = transZ->is_scale_negative;
-		transform->local_transformation = float4x4::FromTRS(transform->local_position, transform->local_rotation, transform->local_scale);
-
-		if (transform->game_object_attached->parent != nullptr) {
-			ComponentTransform* tr = (ComponentTransform*)transform->game_object_attached->parent->GetComponent(ComponentType::TRANSFORM);
-			if (tr != nullptr) transform->global_transformation = tr->global_transformation * transform->local_transformation;
-			else transform->global_transformation = transform->local_transformation;
-		}
-		else
-			transform->global_transformation = transform->local_transformation;
+		transform->RecalculateTransform();
 		break; }
 	case ComponentType::MESH: {
 		ComponentMesh* mesh = (ComponentMesh*)component;

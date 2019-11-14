@@ -59,6 +59,5 @@ private:
 	
 	float3 euler_rotation = { 0,0,0 };
 
-
 	bool popup_static = false;
 };

@@ -3,7 +3,7 @@
 #include "imgui/imgui.h"
 #include "ModuleObjects.h"
 #include "Application.h"
-
+#include "ReturnZ.h"
 #include "ComponentMesh.h"
 
 ComponentTransform::ComponentTransform(GameObject* attach) : Component(attach)
@@ -204,27 +204,52 @@ void ComponentTransform::DrawInspector()
 
 		RightClickMenu("Transform");
 
+		static uint change_type = 0;
+
 		ImGui::Spacing();
 		ImGui::Text("Position  ");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(1);
-		if (ImGui::DragFloat("X", &local_position.x, 0.5F)) {
+		static float3 view_pos;
+		view_pos = local_position;
+		if (ImGui::DragFloat("X", &view_pos.x, 0.5F)) {
+			if (change_type == 0)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			change_type = 1;
+			local_position = view_pos;
 			RecalculateTransform();
+		}
+		else if (change_type == 1 && ImGui::IsMouseReleased(0)) {
+			change_type = 0;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(2);
-		if (ImGui::DragFloat("Y", &local_position.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &view_pos.y, 0.5F)) {
+			if (change_type == 0)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			change_type = 1;
+			local_position = view_pos;
 			RecalculateTransform();
+		}
+		else if (change_type == 2 && ImGui::IsMouseReleased(0)) {
+			change_type = 0;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(3);
-		if (ImGui::DragFloat("Z", &local_position.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &view_pos.z, 0.5F)) {
+			if (change_type == 0)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			change_type = 1;
+			local_position = view_pos;
 			RecalculateTransform();
+		}
+		else if (change_type == 3 && ImGui::IsMouseReleased(0)) {
+			change_type = 0;
 		}
 		ImGui::PopID();
 		ImGui::Spacing();
@@ -233,19 +258,32 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(4);
-		if (ImGui::DragFloat("X", &euler_rotation.x, 0.5F)) {
+		static float3 view_rot;
+		view_rot = euler_rotation;
+		if (ImGui::DragFloat("X", &view_rot.x, 0.5F)) {
+			if (change_type == 0)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			change_type = 4;
+			euler_rotation = view_rot;
 			float3 aux = euler_rotation;
 			aux.x = DegToRad(euler_rotation.x);
 			aux.y = DegToRad(euler_rotation.y);
 			aux.z = DegToRad(euler_rotation.z);
 			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
+		}
+		else if (change_type == 4 && ImGui::IsMouseReleased(0)) {
+			change_type = 0;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(5);
-		if (ImGui::DragFloat("Y", &euler_rotation.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &view_rot.y, 0.5F)) {
+			if (change_type == 0)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			change_type = 5;
+			euler_rotation = view_rot;
 			float3 aux = euler_rotation;
 			aux.x = DegToRad(euler_rotation.x);
 			aux.y = DegToRad(euler_rotation.y);
@@ -253,17 +291,27 @@ void ComponentTransform::DrawInspector()
 			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
 		}
+		else if (change_type == 5 && ImGui::IsMouseReleased(0)) {
+			change_type = 0;
+		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(6);
-		if (ImGui::DragFloat("Z", &euler_rotation.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &view_rot.z, 0.5F)) {
+			if (change_type == 0)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			change_type = 6;
+			euler_rotation = view_rot;
 			float3 aux = euler_rotation;
 			aux.x = DegToRad(euler_rotation.x);
 			aux.y = DegToRad(euler_rotation.y);
 			aux.z = DegToRad(euler_rotation.z);
 			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
+		}
+		else if (change_type == 6 && ImGui::IsMouseReleased(0)) {
+			change_type = 0;
 		}
 		ImGui::PopID();
 		ImGui::Spacing();
@@ -272,32 +320,53 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(7);
-		if (ImGui::DragFloat("X", &local_scale.x, 0.5F)) {
+		static float3 view_scale;
+		view_scale = local_scale;
+		if (ImGui::DragFloat("X", &view_scale.x, 0.5F)) {
+			if (change_type == 0)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			change_type = 7;
+			local_scale = view_scale;
 			LookScale();
 			RecalculateTransform();
+		}
+		else if (change_type == 7 && ImGui::IsMouseReleased(0)) {
+			change_type = 0;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(8);
-		if (ImGui::DragFloat("Y", &local_scale.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &view_scale.y, 0.5F)) {
+			if (change_type == 0)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			change_type = 8;
+			local_scale = view_scale;
 			LookScale();
 			RecalculateTransform();
+		}
+		else if (change_type == 8 && ImGui::IsMouseReleased(0)) {
+			change_type = 0;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(9);
-		if (ImGui::DragFloat("Z", &local_scale.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &view_scale.z, 0.5F)) {
+			if (change_type == 0)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			change_type = 9;
+			local_scale = view_scale;
 			LookScale();
 			RecalculateTransform();
+		}
+		else if (change_type == 9 && ImGui::IsMouseReleased(0)) {
+			change_type = 0;
 		}
 		ImGui::PopID();
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-
-		
 	}
 	else {
 		RightClickMenu("Transform");
