@@ -4,6 +4,7 @@
 #include "ModuleFileSystem.h"
 #include "Application.h"
 #include <algorithm>
+#include "ReturnZ.h"
 
 ResourceModel::ResourceModel() : Resource()
 {
@@ -173,10 +174,12 @@ void ResourceModel::ConvertToGameObjects()
 
 		// set it selected
 		App->objects->SetNewSelectedObject(parent);
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, parent);
 	}
 	else { 
 		meshes_attached.at(0)->ConvertToGameObject(nullptr);
 		App->objects->SetNewSelectedObject(App->objects->base_game_object->children.back());
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->base_game_object->children.back());
 	}
 	App->camera->Focus();
 }

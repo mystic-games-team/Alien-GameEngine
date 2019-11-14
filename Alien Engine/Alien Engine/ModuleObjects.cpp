@@ -22,7 +22,7 @@ ModuleObjects::~ModuleObjects()
 
 bool ModuleObjects::Init()
 {
-	base_game_object = new GameObject(nullptr);
+	base_game_object = new GameObject();
 	base_game_object->ID = 0;
 	base_game_object->is_static = true;
 	//base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
@@ -389,7 +389,7 @@ void ModuleObjects::LoadScene(const char* path)
 	{
 		delete base_game_object;
 		game_object_selected = nullptr;
-		base_game_object = new GameObject(nullptr);
+		base_game_object = new GameObject();
 		base_game_object->ID = 0;
 		base_game_object->is_static = true;
 
@@ -446,7 +446,7 @@ void ModuleObjects::CreateEmptyScene(const char* path)
 {
 	delete base_game_object;
 	game_object_selected = nullptr;
-	base_game_object = new GameObject(nullptr);
+	base_game_object = new GameObject();
 	base_game_object->ID = 0;
 	base_game_object->is_static = true;
 

@@ -49,6 +49,12 @@ public:
 	ObjZ* object = nullptr;
 };
 
+// for creating objects
+class ActionAddObject : public Action {
+public:
+	u64 objectID = 0;
+};
+
 class ObjZ {
 
 public:

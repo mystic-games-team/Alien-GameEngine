@@ -16,6 +16,12 @@ void ReturnZ::SetAction(const ReturnActions& type, void* data)
 		ReturnZ::SetDeleteObject((GameObject*)data, object);
 		action = object;
 		break; }
+	case ReturnActions::ADD_OBJECT: {
+		ActionAddObject* object = new ActionAddObject();
+		object->type = ReturnActions::ADD_OBJECT;
+		object->objectID = static_cast<GameObject*>(data)->ID;
+		action = object;
+		break; }
 	default:
 		break;
 	}
@@ -36,6 +42,11 @@ void ReturnZ::GoBackOneAction()
 	case ReturnActions::DELETE_OBJECT: {
 		ActionDeleteObject* object = (ActionDeleteObject*)to_return->action;
 		ReturnZ::CreateObject(object);
+		break; }
+	case ReturnActions::ADD_OBJECT: {
+		ActionAddObject* object = (ActionAddObject*)to_return->action;
+		GameObject* to_delete = App->objects->GetGameObjectByID(object->objectID);
+		to_delete->ToDelete();
 		break; }
 	}
 
