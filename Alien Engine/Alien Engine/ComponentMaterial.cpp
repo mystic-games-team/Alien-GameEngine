@@ -92,6 +92,7 @@ void ComponentMaterial::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
 			if (ImGui::Button("Delete", { 60,20 })) {
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 				texture = nullptr;
 				ImGui::PopStyleColor();
 				ImGui::PopStyleColor();
