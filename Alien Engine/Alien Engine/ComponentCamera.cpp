@@ -35,13 +35,10 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 
 ComponentCamera::~ComponentCamera()
 {
-	for (std::vector<ComponentCamera*>::iterator iter = App->objects->game_cameras.begin(); iter != App->objects->game_cameras.end(); ++iter)
-	{
-		if (this == (*iter))
-		{
-			delete (*iter);
-			(*iter) = nullptr;
-			App->objects->game_cameras.erase(iter);
+	std::vector<ComponentCamera*>::iterator item = App->objects->game_cameras.begin();
+	for (; item != App->objects->game_cameras.end(); ++item) {
+		if (*item != nullptr && *item == this) {
+			App->objects->game_cameras.erase(item);
 			break;
 		}
 	}
@@ -175,6 +172,9 @@ float* ComponentCamera::GetViewMatrix() const
 
 void ComponentCamera::DrawFrustum()
 {
+
+
+
 	static float3 points[8];
 	frustum.GetCornerPoints(points);
 
