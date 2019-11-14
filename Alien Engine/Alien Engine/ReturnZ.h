@@ -56,6 +56,11 @@ public:
 	u64 objectID = 0;
 };
 
+// changing components
+class ActionChangeComp : public Action {
+	CompZ* comp = nullptr;
+};
+
 class ObjZ {
 
 public:
@@ -79,6 +84,9 @@ public:
 
 class CompZ {
 public:
+
+	static void SetComponent(Component* component, CompZ* compZ);
+
 	ComponentType type = ComponentType::UNKNOWN;
 	u64 objectID = 0;
 };

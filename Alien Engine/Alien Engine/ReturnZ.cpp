@@ -75,56 +75,28 @@ void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 				CompZ* comp = nullptr;
 				switch ((*item)->GetType()) {
 				case ComponentType::TRANSFORM: {
-					ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
-					CompTransformZ* trans = new CompTransformZ();
-					trans->pos = transform->GetLocalPosition();
-					trans->scale = transform->GetLocalScale();
-					trans->rot = transform->GetLocalRotation();
-					trans->is_scale_negative = transform->IsScaleNegative();
-					comp = trans;
+					CompTransformZ* transZ = new CompTransformZ();
+					CompZ::SetComponent(obj->GetComponent(ComponentType::TRANSFORM), transZ);
+					comp = transZ;
 					break; }
 				case ComponentType::MESH: {
-					ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
 					CompMeshZ* meshZ = new CompMeshZ();
-					if (mesh->mesh != nullptr)
-						meshZ->resourceID = mesh->mesh->GetID();
-					meshZ->objectID = mesh->game_object_attached->ID;
-					meshZ->draw_AABB = mesh->draw_AABB;
-					meshZ->draw_OBB = mesh->draw_OBB;
-					meshZ->view_face_normals = mesh->view_face_normals;
-					meshZ->view_vertex_normals = mesh->view_vertex_normals;
-					meshZ->wireframe = mesh->wireframe;
-					meshZ->view_mesh = mesh->view_mesh;
+					CompZ::SetComponent(obj->GetComponent(ComponentType::MESH), meshZ);
 					comp = meshZ;
 					break; }
 				case ComponentType::MATERIAL: {
-					ComponentMaterial* material = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
 					CompMaterialZ* materialZ = new CompMaterialZ();
-					if (material->texture != nullptr)
-						materialZ->resourceID = material->texture->GetID();
-					materialZ->objectID = material->game_object_attached->ID;
-					materialZ->color = material->color;
-					materialZ->texture_activated = material->texture_activated;
+					CompZ::SetComponent(obj->GetComponent(ComponentType::MATERIAL), materialZ);
 					comp = materialZ;
 					break; }
 				case ComponentType::LIGHT: {
-					ComponentLight* light = (ComponentLight*)obj->GetComponent(ComponentType::LIGHT);
 					CompLightZ* lightZ = new CompLightZ();
-					lightZ->diffuse = light->diffuse;
-					lightZ->ambient = light->ambient;
-					lightZ->objectID = light->game_object_attached->ID;
+					CompZ::SetComponent(obj->GetComponent(ComponentType::LIGHT), lightZ);
 					comp = lightZ;
 					break; }
 				case ComponentType::CAMERA: {
-					ComponentCamera* camera = (ComponentCamera*)obj->GetComponent(ComponentType::CAMERA);
 					CompCameraZ* cameraZ = new CompCameraZ();
-					cameraZ->camera_color_background = camera->camera_color_background;
-					cameraZ->far_plane = camera->far_plane;
-					cameraZ->horizontal_fov = camera->horizontal_fov;
-					cameraZ->vertical_fov = camera->vertical_fov;
-					cameraZ->is_fov_horizontal = camera->is_fov_horizontal;
-					cameraZ->objectID = camera->game_object_attached->ID;
-					cameraZ->near_plane = camera->near_plane;
+					CompZ::SetComponent(obj->GetComponent(ComponentType::CAMERA), cameraZ);
 					comp = cameraZ;
 					break; }
 				default:
@@ -247,4 +219,58 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 	}
 
 
+}
+
+void CompZ::SetComponent(Component* component, CompZ* compZ)
+{
+	switch (component->GetType()) {
+	case ComponentType::TRANSFORM: {
+		CompTransformZ* trans = (CompTransformZ*)compZ;
+		ComponentTransform* transform = (ComponentTransform*)component;
+		trans->pos = transform->GetLocalPosition();
+		trans->scale = transform->GetLocalScale();
+		trans->rot = transform->GetLocalRotation();
+		trans->is_scale_negative = transform->IsScaleNegative();
+		break; }
+	case ComponentType::MESH: {
+		ComponentMesh* mesh = (ComponentMesh*)component;
+		CompMeshZ* meshZ = (CompMeshZ*)compZ;
+		if (mesh->mesh != nullptr)
+			meshZ->resourceID = mesh->mesh->GetID();
+		meshZ->objectID = mesh->game_object_attached->ID;
+		meshZ->draw_AABB = mesh->draw_AABB;
+		meshZ->draw_OBB = mesh->draw_OBB;
+		meshZ->view_face_normals = mesh->view_face_normals;
+		meshZ->view_vertex_normals = mesh->view_vertex_normals;
+		meshZ->wireframe = mesh->wireframe;
+		meshZ->view_mesh = mesh->view_mesh;
+		break; }
+	case ComponentType::MATERIAL: {
+		ComponentMaterial* material = (ComponentMaterial*)component;
+		CompMaterialZ* materialZ = (CompMaterialZ*)compZ;
+		if (material->texture != nullptr)
+			materialZ->resourceID = material->texture->GetID();
+		materialZ->objectID = material->game_object_attached->ID;
+		materialZ->color = material->color;
+		materialZ->texture_activated = material->texture_activated;
+		break; }
+	case ComponentType::LIGHT: {
+		ComponentLight* light = (ComponentLight*)component;
+		CompLightZ* lightZ = (CompLightZ*)compZ;
+		lightZ->diffuse = light->diffuse;
+		lightZ->ambient = light->ambient;
+		lightZ->objectID = light->game_object_attached->ID;
+		break; }
+	case ComponentType::CAMERA: {
+		ComponentCamera* camera = (ComponentCamera*)component;
+		CompCameraZ* cameraZ = (CompCameraZ*)compZ;
+		cameraZ->camera_color_background = camera->camera_color_background;
+		cameraZ->far_plane = camera->far_plane;
+		cameraZ->horizontal_fov = camera->horizontal_fov;
+		cameraZ->vertical_fov = camera->vertical_fov;
+		cameraZ->is_fov_horizontal = camera->is_fov_horizontal;
+		cameraZ->objectID = camera->game_object_attached->ID;
+		cameraZ->near_plane = camera->near_plane;
+		break; }
+	}
 }
