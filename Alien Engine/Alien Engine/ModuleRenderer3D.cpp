@@ -44,8 +44,9 @@ bool ModuleRenderer3D::Init()
 
 	App->camera->fake_camera = new ComponentCamera(nullptr);
 	App->camera->fake_camera->frustum.farPlaneDistance = 1000.0F;
+	App->objects->camera = new ComponentCamera(nullptr);
 	scene_fake_camera = App->camera->fake_camera;
-	actual_game_camera = App->camera->fake_camera;
+	actual_game_camera = App->objects->camera;
 
 	if(ret == true)
 	{
@@ -245,13 +246,13 @@ void ModuleRenderer3D::CreateRenderTexture()
 
 		scene_tex = new ResourceTexture("RenderTexture", scene_render_texture, App->window->width, App->window->height);
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
+		//glMatrixMode(GL_PROJECTION);
+		//glLoadIdentity();
 
-		glLoadMatrixf(actual_game_camera->GetProjectionMatrix());
+		//glLoadMatrixf(actual_game_camera->GetProjectionMatrix());
 
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		//glMatrixMode(GL_MODELVIEW);
+		//glLoadIdentity();
 
 		glGenFramebuffers(1, &game_frame_buffer);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, game_frame_buffer);

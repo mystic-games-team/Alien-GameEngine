@@ -8,7 +8,7 @@
 #include <map>
 #include <utility>
 #include "Octree.h"
-
+#include "ComponentCamera.h"
 
 struct Scene {
 
@@ -104,6 +104,7 @@ private:
 
 public:
 
+	ComponentCamera* camera = nullptr;
 	Scene current_scene;
 
 	// root
