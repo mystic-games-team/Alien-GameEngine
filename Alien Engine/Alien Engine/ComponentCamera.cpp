@@ -266,3 +266,29 @@ void ComponentCamera::DrawFrustum()
 	glEnd();
 	glLineWidth(1);
 }
+
+void ComponentCamera::SaveComponent(JSONArraypack* to_save)
+{
+	to_save->SetNumber("Type", (int)type);
+	to_save->SetNumber("VerticalFov", vertical_fov);
+	to_save->SetNumber("HoritzontalFov", horizontal_fov);
+	to_save->SetColor("BackCol", camera_color_background);
+	to_save->SetNumber("FarPlane", far_plane);
+	to_save->SetNumber("NearPlane", near_plane);
+	to_save->SetNumber("isFovHori", is_fov_horizontal);
+}
+
+void ComponentCamera::LoadComponent(JSONArraypack* to_load)
+{
+	vertical_fov = to_load->GetNumber("VerticalFov");
+	horizontal_fov = to_load->GetNumber("HoritzontalFov");
+	far_plane = to_load->GetNumber("FarPlane");
+	near_plane = to_load->GetNumber("NearPlane");
+	is_fov_horizontal = to_load->GetNumber("isFovHori");
+	camera_color_background = to_load->GetColor("BackCol");
+
+	frustum.nearPlaneDistance = near_plane;
+	frustum.farPlaneDistance = far_plane;
+	frustum.verticalFov = vertical_fov * DEGTORAD;
+	frustum.horizontalFov = horizontal_fov * DEGTORAD;
+}
