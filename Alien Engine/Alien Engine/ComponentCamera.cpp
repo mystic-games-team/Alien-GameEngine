@@ -31,6 +31,10 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 
 	if (attach != nullptr)
 	{
+		if (App->renderer3D->actual_game_camera == nullptr)
+		{
+			App->renderer3D->actual_game_camera = this;
+		}
 		App->objects->game_cameras.push_back(this);
 	}
 }
@@ -41,6 +45,16 @@ ComponentCamera::~ComponentCamera()
 	for (; item != App->objects->game_cameras.end(); ++item) {
 		if (*item != nullptr && *item == this) {
 			App->objects->game_cameras.erase(item);
+			if (App->renderer3D->actual_game_camera == this)
+			{
+				if (!App->objects->game_cameras.empty())
+				{
+					App->renderer3D->actual_game_camera = App->objects->game_cameras.front();
+					App->ui->actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+				}
+				else
+					App->renderer3D->actual_game_camera = nullptr;
+			}
 			break;
 		}
 	}

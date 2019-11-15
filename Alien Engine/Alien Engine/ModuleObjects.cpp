@@ -130,7 +130,6 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 
-
 	return UPDATE_CONTINUE;
 }
 
