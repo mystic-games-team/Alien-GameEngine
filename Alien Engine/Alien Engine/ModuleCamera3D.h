@@ -28,7 +28,7 @@ public:
 	
 	bool is_scene_hovered = false;
 	bool is_scene_focused = false;
-
+	LineSegment ray;
 	float camera_speed = 30.0f;
 	float camera_zoom_speed = 15.0f;
 	float camera_mouse_speed = 10.0f;

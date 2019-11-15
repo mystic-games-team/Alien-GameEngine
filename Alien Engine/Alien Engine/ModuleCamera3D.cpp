@@ -99,6 +99,8 @@ void ModuleCamera3D::Movement()
 {
 	float3 movement(float3::zero);
 
+
+
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT) movement += float3::unitY;
@@ -231,7 +233,7 @@ void ModuleCamera3D::CreateRay()
 {
 	float2 origin = float2((App->input->GetMousePosition().x - App->ui->panel_scene->posX)/ App->ui->panel_scene->width, (App->input->GetMousePosition().y - App->ui->panel_scene->posY) / App->ui->panel_scene->height);
 
-	LineSegment ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
+	ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
 	std::map<float, GameObject*> objects_hit;
 
 	// Create a map of the objects than intersect with the ray in order by distance
