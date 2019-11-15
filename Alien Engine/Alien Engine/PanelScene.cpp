@@ -5,6 +5,7 @@
 #include "imgui/imgui_internal.h"
 #include "FileNode.h"
 #include "PanelSceneSelector.h"
+#include "ComponentTransform.h"
 
 PanelScene::PanelScene(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -117,5 +118,29 @@ void PanelScene::PanelLogic()
 		ImGui::EndDragDropTarget();
 	}
 
+	GuizmosLogic();
+
 	ImGui::End();
+}
+
+void PanelScene::GuizmosLogic()
+{
+	ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
+
+	float4x4 view_transposed = App->camera->fake_camera->frustum.ViewMatrix();
+	view_transposed.Transpose();
+	float4x4 projection_transposed = App->camera->fake_camera->frustum.ProjectionMatrix();
+	projection_transposed.Transpose();
+	float4x4 object_transform_matrix = transform->global_transformation;
+	object_transform_matrix.Transpose();
+
+	ImGuizmo::SetDrawlist();
+	ImGuizmo::SetRect((ImGui::GetWindowWidth() - width) * 0.5f, (ImGui::GetWindowHeight() - height) * 0.5f, width, height);
+	ImGuizmo::MODE mode = ImGuizmo::MODE::WORLD;
+	if (guizmo_operation != ImGuizmo::OPERATION::SCALE)
+	{
+		ImGuizmo::MODE::LOCAL;
+	}
+	ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, mode, object_transform_matrix.ptr());
+
 }

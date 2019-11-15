@@ -3,6 +3,7 @@
 #include "Globals.h"
 
 #include "ComponentCamera.h"
+#include "ImGuizmos/ImGuizmo.h"
 
 class ModuleCamera3D : public Module
 {

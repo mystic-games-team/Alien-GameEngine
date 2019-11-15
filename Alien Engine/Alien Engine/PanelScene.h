@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Panel.h"
+#include "ImGuizmos/ImGuizmo.h"
 
 class PanelScene : public Panel {
 
@@ -12,9 +13,15 @@ public:
 	void PanelLogic();
 
 private:
+
+	void GuizmosLogic();
+
+private:
 	float width = 960;
 	float height = 540;
 
 	float lastHeight = 540;
+
+	ImGuizmo::OPERATION guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 };
 
