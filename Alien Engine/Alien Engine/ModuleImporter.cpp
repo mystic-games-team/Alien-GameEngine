@@ -16,7 +16,7 @@
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
 #include "ResourceTexture.h"
-
+#include "ReturnZ.h"
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -343,6 +343,7 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 			if (material == nullptr) {
 				material = new ComponentMaterial(selected);
 				selected->AddComponent(material);
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, material);
 			}
 			material->texture = texture;
 		}
