@@ -229,9 +229,7 @@ void ModuleCamera3D::Focus()
 
 void ModuleCamera3D::CreateRay()
 {
-	float2 origin = float2(App->input->GetMousePosition().x / (float)App->ui->panel_scene->width, App->input->GetMousePosition().y / (float)App->ui->panel_scene->height);
-	origin.x = (origin.x - 0.5f) * 2;
-	origin.y = (origin.y - 0.5f) * 2;
+	float2 origin = float2((App->input->GetMousePosition().x - App->ui->panel_scene->posX)/ App->ui->panel_scene->width, (App->input->GetMousePosition().y - App->ui->panel_scene->posY) / App->ui->panel_scene->height);
 
 	LineSegment ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
 	std::map<float, GameObject*> objects_hit;

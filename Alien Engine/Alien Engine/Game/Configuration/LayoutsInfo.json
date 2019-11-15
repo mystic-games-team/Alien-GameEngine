@@ -39,7 +39,7 @@
         },
         "Layout3": {
             "Number": 3,
-            "Active": true,
+            "Active": false,
             "Name": "Victor's Layout",
             "Path": "Configuration\/Layouts\/Victor's Layout3.ini",
             "About Alien Engine": false,

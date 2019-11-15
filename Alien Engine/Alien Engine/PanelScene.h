@@ -16,5 +16,8 @@ public:
 	float height = 540;
 
 	float lastHeight = 540;
+
+	float posX = 0;
+	float posY = 0;
 };
 
