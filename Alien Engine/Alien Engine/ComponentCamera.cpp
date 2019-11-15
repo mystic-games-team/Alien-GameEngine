@@ -130,6 +130,7 @@ void ComponentCamera::DrawInspector()
 				horizontal_fov = sup;
 				frustum.horizontalFov = horizontal_fov * DEGTORAD;
 				AspectRatio(16, 9, true);
+				vertical_fov = frustum.verticalFov * RADTODEG;
 				App->renderer3D->UpdateCameraMatrix();
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
@@ -148,6 +149,7 @@ void ComponentCamera::DrawInspector()
 				vertical_fov = sup;
 				frustum.verticalFov = vertical_fov * DEGTORAD;
 				AspectRatio(16, 9);
+				horizontal_fov = frustum.horizontalFov * RADTODEG;
 				App->renderer3D->UpdateCameraMatrix();
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
