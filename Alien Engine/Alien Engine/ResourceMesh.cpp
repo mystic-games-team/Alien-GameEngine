@@ -220,6 +220,10 @@ bool ResourceMesh::LoadMemory()
 			uv_cords = (float*)meta->GetNumberArray("Mesh.UV");
 		}
 
+		if (!texture_name.empty()) {
+			texture = App->importer->LoadTextureFile(texture_name.data());
+		}
+
 		InitBuffers();
 
 		delete meta;
@@ -284,7 +288,9 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 
 	ComponentMaterial* material = new ComponentMaterial(obj);
 
-	material->texture = texture;
+	if (texture != nullptr) {
+		material->texture = texture;
+	}
 
 	obj->AddComponent(material);
 }
