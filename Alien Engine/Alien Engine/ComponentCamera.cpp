@@ -10,7 +10,7 @@
 #include <gl/GLU.h>
 #include "imgui/imgui.h"
 #include "ReturnZ.h"
-
+#include "ModuleRenderer3D.h"
 
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
@@ -26,7 +26,7 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	frustum.farPlaneDistance = far_plane;
 	frustum.verticalFov = DEGTORAD * vertical_fov;
 	AspectRatio(16, 9);
-	
+
 	camera_color_background = Color(0.1f, 0.1f, 0.1f, 1.0f);
 
 	if (attach != nullptr)
@@ -94,6 +94,7 @@ void ComponentCamera::DrawInspector()
 			cntrl_z = false;
 			near_plane = sup;
 			frustum.nearPlaneDistance = near_plane;
+			App->renderer3D->UpdateCameraMatrix();
 		}
 		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 			cntrl_z = true;
@@ -109,6 +110,7 @@ void ComponentCamera::DrawInspector()
 			cntrl_z = false;
 			far_plane = sup;
 			frustum.farPlaneDistance = far_plane;
+			App->renderer3D->UpdateCameraMatrix();
 		}
 		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 			cntrl_z = true;
@@ -128,7 +130,7 @@ void ComponentCamera::DrawInspector()
 				horizontal_fov = sup;
 				frustum.horizontalFov = horizontal_fov * DEGTORAD;
 				AspectRatio(16, 9, true);
-				vertical_fov = frustum.verticalFov * RADTODEG;
+				App->renderer3D->UpdateCameraMatrix();
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 				cntrl_z = true;
@@ -146,7 +148,7 @@ void ComponentCamera::DrawInspector()
 				vertical_fov = sup;
 				frustum.verticalFov = vertical_fov * DEGTORAD;
 				AspectRatio(16, 9);
-				horizontal_fov = frustum.horizontalFov * RADTODEG;
+				App->renderer3D->UpdateCameraMatrix();
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 				cntrl_z = true;
@@ -184,7 +186,7 @@ void ComponentCamera::SetComponent(Component* component)
 
 void ComponentCamera::AspectRatio(int width_ratio, int height_ratio, bool fov_type)
 {
-	if (!fov_type)
+	if (fov_type == 0)
 	{
 		frustum.horizontalFov = (2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ((float)width_ratio / (float)height_ratio)));
 	}

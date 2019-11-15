@@ -254,14 +254,6 @@ void ModuleRenderer3D::CreateRenderTexture()
 
 		scene_tex = new ResourceTexture("RenderTexture", scene_render_texture, App->window->width, App->window->height);
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-
-		glLoadMatrixf(actual_game_camera->GetProjectionMatrix());
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
 		glGenFramebuffers(1, &game_frame_buffer);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, game_frame_buffer);
 		glDepthRange(0, 1);
@@ -310,4 +302,15 @@ void ModuleRenderer3D::ChangeDrawFrameBuffer(bool normal_frameBuffer)
 {
 	render_zbuffer = normal_frameBuffer;
 	CreateRenderTexture();
+}
+
+void ModuleRenderer3D::UpdateCameraMatrix()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glLoadMatrixf(actual_game_camera->GetProjectionMatrix());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }

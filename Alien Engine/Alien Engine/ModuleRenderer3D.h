@@ -28,6 +28,8 @@ public:
 
 	void ChangeDrawFrameBuffer(bool normal_frameBuffer);
 
+	void UpdateCameraMatrix();
+
 public:
 
 	// buffers to draw scene
