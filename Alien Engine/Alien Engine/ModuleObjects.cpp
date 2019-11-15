@@ -417,6 +417,7 @@ void ModuleObjects::LoadScene(const char* path)
 
 	if (value != nullptr && object != nullptr)
 	{
+		octree.Clear();
 		DeleteReturns();
 		delete base_game_object;
 		game_object_selected = nullptr;

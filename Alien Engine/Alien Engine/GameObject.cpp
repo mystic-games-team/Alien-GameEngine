@@ -530,9 +530,6 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	}
 	parent_selected = to_load->GetBoolean("ParentSelected");
 	is_static = to_load->GetBoolean("IsStatic");
-	if (is_static) {
-		// TODO: call something of the quadtree
-	}
 
 	if (parent != nullptr) {
 		this->parent = parent;
@@ -580,6 +577,10 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	}
 	if (selected)
 		App->objects->SetNewSelectedObject(this);
+
+	if (is_static) {
+		App->objects->octree.Insert(this, false);
+	}
 
 }
 
