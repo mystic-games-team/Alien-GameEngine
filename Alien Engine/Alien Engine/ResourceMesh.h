@@ -18,7 +18,11 @@ public:
 	virtual ~ResourceMesh();
 
 	bool CreateMetaData();
-	bool ReadMetaData(const char* path);
+	bool ReadBaseInfo(const char* assets_file_path);
+
+	void FreeMemory();
+	bool LoadMemory();
+
 	bool DeleteMetaData();
 
 	void ConvertToGameObject(std::vector<GameObject*>* objects_created);
@@ -47,6 +51,7 @@ public:
 private:
 
 	std::string parent_name;
+	std::string texture_name;
 	uint family_number = 0;
 
 	ResourceTexture* texture = nullptr;

@@ -267,6 +267,8 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 					CompMeshZ* meshZ = (CompMeshZ*)(*item);
 					CompZ::SetComponent(mesh, meshZ);
 					new_obj->AddComponent(mesh);
+					if (mesh->mesh != nullptr)
+						mesh->mesh->IncreaseReferences();
 					break; }
 				case ComponentType::MATERIAL: {
 					ComponentMaterial* material = new ComponentMaterial(new_obj);
@@ -444,6 +446,8 @@ void CompZ::AttachCompZToGameObject(CompZ* compZ)
 		ComponentMesh* mesh = new ComponentMesh(obj);
 		CompZ::SetComponent(mesh, compZ);
 		obj->AddComponent(mesh);
+		if (mesh->mesh != nullptr)
+			mesh->mesh->IncreaseReferences();
 		break; }
 	case ComponentType::MATERIAL: {
 		ComponentMaterial* material = new ComponentMaterial(obj);

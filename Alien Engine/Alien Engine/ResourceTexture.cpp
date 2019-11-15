@@ -25,24 +25,22 @@ bool ResourceTexture::CreateMetaData()
 		iluFlipImage();
 		std::string alien_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data();
 
-		uint size = sizeof(uint) + sizeof(ID);
+		JSON_Value* alien_value = json_value_init_object();
+		JSON_Object* alien_object = json_value_get_object(alien_value);
+		json_serialize_to_file_pretty(alien_value, alien_path.data());
 
-		char* data = new char[size];
-		char* cursor = data;
+		if (alien_value != nullptr && alien_object != nullptr) {
+			JSONfilepack* alien = new JSONfilepack(alien_path, alien_object, alien_value);
+			alien->StartSave();
+			alien->SetString("Meta.ID", std::to_string(ID));
+			alien->FinishSave();
+			delete alien;
+		}
 
-		uint bytes = sizeof(ID);
-		memcpy(cursor, &ID, bytes);
-		cursor += bytes;
-
-		bytes = sizeof((uint)type);
-		memcpy(cursor, &type, bytes);
-
-		std::string output;
-		App->file_system->SaveUnique(output, data, size, App->file_system->GetPathWithoutExtension(path).data(), "_meta", ".alien");
-		
-		App->file_system->SplitFilePath(path.data(), nullptr, nullptr, &output);
 		meta_data_path = std::string(LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds");
-		if (App->StringCmp(output.data(), "dds")) {
+		std::string ext;
+		App->file_system->SplitFilePath(path.data(), nullptr, nullptr, &ext);
+		if (App->StringCmp(ext.data(), "dds")) {
 			App->file_system->Copy(path.data(), meta_data_path.data());
 			id = ilutGLBindTexImage();
 			is_custom = true;
@@ -58,6 +56,7 @@ bool ResourceTexture::CreateMetaData()
 			if (image_size > 0) {
 				image_data = new ILubyte[image_size]; 
 				if (ilSaveL(IL_DDS, image_data, image_size) > 0) {
+					std::string output;
 					App->file_system->SaveUnique(output, image_data, image_size, LIBRARY_TEXTURES_FOLDER, std::to_string(ID).data(), ".dds");
 				}
 				iluFlipImage();
@@ -70,7 +69,6 @@ bool ResourceTexture::CreateMetaData()
 			}
 		}
 
-		delete[] data;
 		ret = true;
 		glBindTexture(GL_TEXTURE_2D, 0);
 		App->resources->AddResource(this);
@@ -82,23 +80,23 @@ bool ResourceTexture::CreateMetaData()
 	return ret;
 }
 
-bool ResourceTexture::ReadMetaData(const char* path)
+bool ResourceTexture::LoadMemory(const char* library_file_path)
 {
 	bool ret = true;
 
-	this->path = path;
-
+	this->path = library_file_path;
 	std::string alien_path = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
 
-	char* data = nullptr;
+	JSON_Value* value = json_parse_file(alien_path.data());
+	JSON_Object* object = json_value_get_object(value);
 
-	App->file_system->Load(alien_path.data(), &data);
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* meta = new JSONfilepack(alien_path, object, value);
 
-	if (data != nullptr) {
+		ID = std::stoull(meta->GetString("Meta.ID"));
 
-		memcpy(&ID, data, sizeof(ID));
-
-		delete[] data;
+		delete meta;
 	}
 
 	meta_data_path = LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds";

@@ -100,6 +100,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 	// create the meta data files like .alien
 	if (model->CreateMetaData()) {
 		App->resources->AddResource(model);
+		model->ConvertToGameObjects();
 	}
 
 	model = nullptr;
