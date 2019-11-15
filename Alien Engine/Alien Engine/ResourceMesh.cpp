@@ -156,20 +156,14 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 	return ret;
 }
 
-bool ResourceMesh::ReadMetaData(const char* library_file_path)
+bool ResourceMesh::LoadMemory()
 {	
-	bool ret = true;
-
-	ID = std::stoull(App->file_system->GetBaseFileName(library_file_path));
-
-	JSON_Value* value = json_parse_file(library_file_path);
+	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* meta = new JSONfilepack(library_file_path, object, value);
-
-		meta_data_path = std::string(library_file_path);
+		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
 
 		// ranges
 		num_vertex = meta->GetNumber("Mesh.NumVertex");
@@ -204,16 +198,14 @@ bool ResourceMesh::ReadMetaData(const char* library_file_path)
 		}
 
 		InitBuffers();
-		
 
 		delete meta;
 	}
 	else {
 		LOG("Error loading %s", path);
-		ret = false;
 	}
 
-	return ret;
+	return true;
 }
 
 bool ResourceMesh::DeleteMetaData()
@@ -231,6 +223,12 @@ bool ResourceMesh::DeleteMetaData()
 
 void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created)
 {
+	// look if is loaded
+	if (NeedToLoad()) {
+		LoadMemory();
+	}
+	IncreaseReferences();
+
 	// get the parent
 	GameObject* obj = nullptr;
 
@@ -269,7 +267,6 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 	material->texture = texture;
 
 	obj->AddComponent(material);
-
 }
 
 void ResourceMesh::InitBuffers()

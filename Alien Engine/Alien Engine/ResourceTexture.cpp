@@ -82,7 +82,7 @@ bool ResourceTexture::CreateMetaData()
 	return ret;
 }
 
-bool ResourceTexture::ReadMetaData(const char* library_file_path)
+bool ResourceTexture::LoadMemory(const char* library_file_path)
 {
 	bool ret = true;
 

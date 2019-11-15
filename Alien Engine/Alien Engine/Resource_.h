@@ -32,13 +32,19 @@ public:
 	// type
 	const ResourceType GetType() const;
 
-	virtual bool ReadBaseInfo(const char* assets_file_path) { return nullptr; }
+	virtual bool ReadBaseInfo(const char* assets_file_path) { return true; }
 
 	virtual bool CreateMetaData() { return true; } // when someting is dropped
-	virtual bool ReadMetaData(const char* library_file_path) { return true; } // when engine is being inicialized read all meta data
 	virtual bool DeleteMetaData() { return true; } // this deletes the resource too
+	
+	virtual bool LoadMemory() { return true; }
+	virtual void FreeMemory() {}
 
 	const u64& GetID() const;
+
+	const bool NeedToLoad() const;
+	void IncreaseReferences();
+	void DecreaseReferences();
 
 protected:
 
@@ -47,7 +53,7 @@ protected:
 	std::string path;
 	std::string meta_data_path;
 	std::string name;
-
+	uint references = 0u;
 	u64 ID = 0;
 
 };

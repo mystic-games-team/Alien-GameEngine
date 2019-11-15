@@ -216,7 +216,7 @@ void ModuleResources::ReadTextures(std::vector<std::string> directories, std::ve
 {
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourceTexture* texture = new ResourceTexture();
-		texture->ReadMetaData(std::string(current_folder + files[i]).data());
+		texture->LoadMemory(std::string(current_folder + files[i]).data());
 	}
 	if (!directories.empty()) {
 		std::vector<std::string> new_files;

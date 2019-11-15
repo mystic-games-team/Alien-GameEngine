@@ -32,3 +32,20 @@ const u64& Resource::GetID() const
 {
 	return ID;
 }
+
+const bool Resource::NeedToLoad() const
+{
+	return references == 0;
+}
+
+void Resource::IncreaseReferences()
+{
+	++references;
+}
+
+void Resource::DecreaseReferences()
+{
+	--references;
+	if (references == 0)
+		FreeMemory();
+}
