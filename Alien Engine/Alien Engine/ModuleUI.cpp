@@ -506,7 +506,15 @@ void ModuleUI::SecondMenuBar()
 	ImGui::Begin("## Camera options", (bool*)false, ImGuiWindowFlags_NoDecoration);
 	static int camera_combo = 0;
 	std::string combo_cameras_name;
-	static const char* actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+
+	if (App->objects->game_cameras.empty())
+	{
+		actual_name = "No selected camera";
+	}
+	else
+	{
+		actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+	}
 
 	ImGui::PushItemWidth(175);
 	if (ImGui::BeginCombo("Current Game Camera", actual_name))
@@ -626,10 +634,10 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_hierarchy);
 	panels.push_back(panel_create_object);
 	panels.push_back(panel_inspector);
+	panels.push_back(panel_game);
 	panels.push_back(panel_scene);
 	panels.push_back(panel_layout);
 	panels.push_back(panel_scene_selector);
-	panels.push_back(panel_game);
 }
 
 void ModuleUI::UpdatePanels()

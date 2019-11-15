@@ -44,10 +44,20 @@ void PanelGame::PanelLogic()
 		}
 	}
 
+	if (App->objects->game_cameras.empty())
+	{
+		ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.5f) - 80);
+		ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f));
+		ImGui::Text("No Cameras Available :(");
+	}
+
 	ImGui::SetCursorPosX((ImGui::GetWindowWidth() - width) * 0.5f);
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() - height) * 0.5f);
 
-	ImGui::Image((ImTextureID)App->renderer3D->game_tex->id, { width,height }, { 0,1 }, { 1,0 });
+	if (App->renderer3D->actual_game_camera != nullptr)
+	{
+		ImGui::Image((ImTextureID)App->renderer3D->game_tex->id, { width,height }, { 0,1 }, { 1,0 });
+	}
 
 	lastHeight = ImGui::GetWindowHeight();
 

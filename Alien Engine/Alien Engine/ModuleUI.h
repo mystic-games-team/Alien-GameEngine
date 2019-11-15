@@ -172,5 +172,6 @@ public:
 	bool need_to_save_layouts = false;
 	uint number_of_layouts = 0;
 	
+	const char* actual_name="";
 };
 

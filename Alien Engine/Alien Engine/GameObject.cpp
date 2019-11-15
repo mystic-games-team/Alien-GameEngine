@@ -54,7 +54,7 @@ bool GameObject::IsEnabled()
 	return enabled;
 }
 
-void GameObject::Draw()
+void GameObject::DrawScene()
 {
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
@@ -102,7 +102,38 @@ void GameObject::Draw()
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
-			(*child)->Draw();
+			(*child)->DrawScene();
+		}
+	}
+}
+
+void GameObject::DrawGame()
+{
+	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
+	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
+	{
+		material->BindTexture();
+	}
+
+	if (mesh != nullptr && mesh->IsEnabled())
+	{
+		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
+			glColor3f(1, 1, 1);
+			mesh->DrawPolygon();
+	}
+
+	if (light != nullptr && light->IsEnabled())
+	{
+		light->LightLogic();
+	}
+
+	std::vector<GameObject*>::iterator child = children.begin();
+	for (; child != children.end(); ++child) {
+		if (*child != nullptr && (*child)->IsEnabled()) {
+			(*child)->DrawGame();
 		}
 	}
 }
@@ -530,9 +561,6 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	}
 	parent_selected = to_load->GetBoolean("ParentSelected");
 	is_static = to_load->GetBoolean("IsStatic");
-	if (is_static) {
-		// TODO: call something of the quadtree
-	}
 
 	if (parent != nullptr) {
 		this->parent = parent;
@@ -580,6 +608,10 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	}
 	if (selected)
 		App->objects->SetNewSelectedObject(this);
+
+	if (is_static) {
+		App->objects->octree.Insert(this, false);
+	}
 
 }
 

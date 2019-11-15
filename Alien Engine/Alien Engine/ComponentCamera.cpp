@@ -10,7 +10,7 @@
 #include <gl/GLU.h>
 #include "imgui/imgui.h"
 #include "ReturnZ.h"
-
+#include "ModuleRenderer3D.h"
 
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
@@ -26,11 +26,15 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	frustum.farPlaneDistance = far_plane;
 	frustum.verticalFov = DEGTORAD * vertical_fov;
 	AspectRatio(16, 9);
-	
+
 	camera_color_background = Color(0.1f, 0.1f, 0.1f, 1.0f);
 
 	if (attach != nullptr)
 	{
+		if (App->renderer3D->actual_game_camera == nullptr)
+		{
+			App->renderer3D->actual_game_camera = this;
+		}
 		App->objects->game_cameras.push_back(this);
 	}
 }
@@ -41,6 +45,16 @@ ComponentCamera::~ComponentCamera()
 	for (; item != App->objects->game_cameras.end(); ++item) {
 		if (*item != nullptr && *item == this) {
 			App->objects->game_cameras.erase(item);
+			if (App->renderer3D->actual_game_camera == this)
+			{
+				if (!App->objects->game_cameras.empty())
+				{
+					App->renderer3D->actual_game_camera = App->objects->game_cameras.front();
+					App->ui->actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+				}
+				else
+					App->renderer3D->actual_game_camera = nullptr;
+			}
 			break;
 		}
 	}
@@ -94,6 +108,7 @@ void ComponentCamera::DrawInspector()
 			cntrl_z = false;
 			near_plane = sup;
 			frustum.nearPlaneDistance = near_plane;
+			App->renderer3D->UpdateCameraMatrix();
 		}
 		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 			cntrl_z = true;
@@ -109,6 +124,7 @@ void ComponentCamera::DrawInspector()
 			cntrl_z = false;
 			far_plane = sup;
 			frustum.farPlaneDistance = far_plane;
+			App->renderer3D->UpdateCameraMatrix();
 		}
 		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 			cntrl_z = true;
@@ -129,6 +145,7 @@ void ComponentCamera::DrawInspector()
 				frustum.horizontalFov = horizontal_fov * DEGTORAD;
 				AspectRatio(16, 9, true);
 				vertical_fov = frustum.verticalFov * RADTODEG;
+				App->renderer3D->UpdateCameraMatrix();
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 				cntrl_z = true;
@@ -147,6 +164,7 @@ void ComponentCamera::DrawInspector()
 				frustum.verticalFov = vertical_fov * DEGTORAD;
 				AspectRatio(16, 9);
 				horizontal_fov = frustum.horizontalFov * RADTODEG;
+				App->renderer3D->UpdateCameraMatrix();
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 				cntrl_z = true;
@@ -184,7 +202,7 @@ void ComponentCamera::SetComponent(Component* component)
 
 void ComponentCamera::AspectRatio(int width_ratio, int height_ratio, bool fov_type)
 {
-	if (!fov_type)
+	if (fov_type == 0)
 	{
 		frustum.horizontalFov = (2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ((float)width_ratio / (float)height_ratio)));
 	}
@@ -265,4 +283,30 @@ void ComponentCamera::DrawFrustum()
 
 	glEnd();
 	glLineWidth(1);
+}
+
+void ComponentCamera::SaveComponent(JSONArraypack* to_save)
+{
+	to_save->SetNumber("Type", (int)type);
+	to_save->SetNumber("VerticalFov", vertical_fov);
+	to_save->SetNumber("HoritzontalFov", horizontal_fov);
+	to_save->SetColor("BackCol", camera_color_background);
+	to_save->SetNumber("FarPlane", far_plane);
+	to_save->SetNumber("NearPlane", near_plane);
+	to_save->SetNumber("isFovHori", is_fov_horizontal);
+}
+
+void ComponentCamera::LoadComponent(JSONArraypack* to_load)
+{
+	vertical_fov = to_load->GetNumber("VerticalFov");
+	horizontal_fov = to_load->GetNumber("HoritzontalFov");
+	far_plane = to_load->GetNumber("FarPlane");
+	near_plane = to_load->GetNumber("NearPlane");
+	is_fov_horizontal = to_load->GetNumber("isFovHori");
+	camera_color_background = to_load->GetColor("BackCol");
+
+	frustum.nearPlaneDistance = near_plane;
+	frustum.farPlaneDistance = far_plane;
+	frustum.verticalFov = vertical_fov * DEGTORAD;
+	frustum.horizontalFov = horizontal_fov * DEGTORAD;
 }

@@ -1,5 +1,6 @@
 #include "PanelInspector.h"
 #include "ModuleObjects.h"
+#include "ModuleRenderer3D.h"
 
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"

@@ -28,6 +28,10 @@ public:
 
 	void ChangeDrawFrameBuffer(bool normal_frameBuffer);
 
+	void UpdateCameraMatrix();
+
+	bool SetCameraToDraw(const ComponentCamera* camera);
+
 public:
 
 	// buffers to draw scene

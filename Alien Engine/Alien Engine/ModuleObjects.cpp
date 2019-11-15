@@ -84,54 +84,51 @@ update_status ModuleObjects::Update(float dt)
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
-	// Scene Drawing
-	if (App->renderer3D->render_zbuffer) {
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
-	}
-	else {
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->scene_frame_buffer);
-	}
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearStencil(0);
-
-	if (allow_grid)
-		App->renderer3D->RenderGrid();
-
-	if (render_octree)
-		octree.Draw();
-
-	base_game_object->Draw();
-
 	
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	
-	// Game Drawing
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearStencil(0);
-	glClearColor(App->renderer3D->actual_game_camera->camera_color_background.r, App->renderer3D->actual_game_camera->camera_color_background.g, App->renderer3D->actual_game_camera->camera_color_background.b, App->renderer3D->actual_game_camera->camera_color_background.a);
-	glLoadIdentity();
+	if (App->renderer3D->SetCameraToDraw(App->camera->fake_camera)) {
+		// Scene Drawing
+		if (App->renderer3D->render_zbuffer) {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
+		}
+		else {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->scene_frame_buffer);
+		}
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->renderer3D->actual_game_camera->GetViewMatrix());
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearStencil(0);
 
-	if (App->renderer3D->render_zbuffer) {
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
+		if (allow_grid)
+			App->renderer3D->RenderGrid();
+
+		if (render_octree)
+			octree.Draw();
+
+		base_game_object->DrawScene();
+
+
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
-	else {
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->game_frame_buffer);
+
+	if (App->renderer3D->SetCameraToDraw(App->renderer3D->actual_game_camera)) {
+
+		if (App->renderer3D->render_zbuffer) {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
+		}
+		else {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->game_frame_buffer);
+		}
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearStencil(0);
+
+		if (allow_grid)
+			App->renderer3D->RenderGrid();
+
+		base_game_object->DrawGame();
+
+
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearStencil(0);
-
-	if (allow_grid)
-		App->renderer3D->RenderGrid();
-
-	base_game_object->Draw();
-
-
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 	return UPDATE_CONTINUE;
 }
@@ -420,6 +417,7 @@ void ModuleObjects::LoadScene(const char* path)
 
 	if (value != nullptr && object != nullptr)
 	{
+		octree.Clear();
 		DeleteReturns();
 		delete base_game_object;
 		game_object_selected = nullptr;
