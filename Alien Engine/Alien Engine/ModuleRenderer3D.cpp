@@ -134,13 +134,6 @@ bool ModuleRenderer3D::Start()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearStencil(0);
-	glClearColor(scene_fake_camera->camera_color_background.r, scene_fake_camera->camera_color_background.g, scene_fake_camera->camera_color_background.b, scene_fake_camera->camera_color_background.a);
-	glLoadIdentity();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->fake_camera->GetViewMatrix());
 
 	return UPDATE_CONTINUE;
 }
@@ -169,16 +162,7 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	
-	glViewport(0, 0, width, height);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	glLoadMatrixf(App->camera->fake_camera->GetProjectionMatrix());
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	glViewport(0, 0, App->window->width, App->window->height);
 
 	CreateRenderTexture();
 }
@@ -313,4 +297,28 @@ void ModuleRenderer3D::UpdateCameraMatrix()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+bool ModuleRenderer3D::SetCameraToDraw(const ComponentCamera * camera)
+{
+	if (camera == nullptr)
+		return false;
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearStencil(0);
+	glClearColor(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b, camera->camera_color_background.a);
+	glLoadIdentity();
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glLoadMatrixf(camera->GetProjectionMatrix());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(camera->GetViewMatrix());
+
+	return true;
 }
