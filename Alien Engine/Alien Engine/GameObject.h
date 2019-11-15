@@ -23,7 +23,8 @@ public:
 	bool IsEnabled();
 
 	// here we call Component Mesh, Material & light
-	void Draw();
+	void DrawScene();
+	void DrawGame();
 
 	// components
 	void AddComponent(Component* component);
