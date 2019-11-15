@@ -211,7 +211,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::PushID(1);
 		static float3 view_pos;
 		view_pos = local_position;
-		if (ImGui::DragFloat("X", &view_pos.x, 0.5F)) {
+		if (ImGui::DragFloat("X", &view_pos.x, 0.5F) && !game_object_attached->is_static) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;

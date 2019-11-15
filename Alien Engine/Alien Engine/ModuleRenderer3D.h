@@ -30,6 +30,8 @@ public:
 
 	void UpdateCameraMatrix();
 
+	bool SetCameraToDraw(const ComponentCamera* camera);
+
 public:
 
 	// buffers to draw scene
