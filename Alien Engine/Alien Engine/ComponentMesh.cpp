@@ -20,6 +20,8 @@ ComponentMesh::~ComponentMesh()
 	{
 		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
 	}
+	if (mesh != nullptr)
+		mesh->DecreaseReferences();
 }
 
 void ComponentMesh::DrawPolygon()
@@ -399,6 +401,12 @@ void ComponentMesh::SetComponent(Component* component)
 	if (component->GetType() == type) {
 
 		ComponentMesh* tmp = (ComponentMesh*)component;
+		if (tmp->mesh != nullptr) {
+			tmp->mesh->IncreaseReferences();
+		}
+		if (mesh != nullptr) {
+			mesh->DecreaseReferences();
+		}
 
 		mesh = tmp->mesh;
 
@@ -464,6 +472,8 @@ void ComponentMesh::LoadComponent(JSONArraypack* to_load)
 	if (to_load->GetBoolean("HasMesh")) {
 		u64 ID = std::stoull(to_load->GetString("MeshID"));
 		mesh = (ResourceMesh*)App->resources->GetResourceWithID(ID);
+		if (mesh != nullptr)
+			mesh->IncreaseReferences();
 	}
 	GenerateAABB();
 	RecalculateAABB_OBB();
