@@ -37,7 +37,7 @@ bool ResourceModel::CreateMetaData()
 
 		JSONfilepack* alien = new JSONfilepack(alien_path, alien_object, alien_value);
 		alien->StartSave();
-		alien->SetString("Model.ID", std::to_string(ID));
+		alien->SetString("Meta.ID", std::to_string(ID));
 		alien->FinishSave();
 		delete alien;
 
@@ -101,7 +101,7 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 	{
 		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
 
-		ID = std::stoull(meta->GetString("Model.ID"));
+		ID = std::stoull(meta->GetString("Meta.ID"));
 		
 		delete meta;
 

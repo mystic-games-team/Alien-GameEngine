@@ -91,15 +91,17 @@ bool ModuleResources::CreateNewModelInstanceOf(const char* path)
 u64 ModuleResources::GetIDFromAlienPath(const char* path)
 {
 	u64 ID = 0;
-	char* data = nullptr;
-	App->file_system->Load(path, &data);
+	
+	JSON_Value* value = json_parse_file(path);
+	JSON_Object* object = json_value_get_object(value);
 
-	if (data != nullptr) {
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* meta = new JSONfilepack(path, object, value);
 
-		uint bytes = sizeof(ID);
-		memcpy(&ID, data, bytes);
+		ID = std::stoull(meta->GetString("Meta.ID"));
 
-		delete[] data;
+		delete meta;
 	}
 
 	return ID;
