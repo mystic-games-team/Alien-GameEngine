@@ -175,6 +175,8 @@ void ResourceMesh::FreeMemory()
 	id_index = 0;
 	id_normals = 0;
 	id_uv = 0;
+
+	references = 0;
 }
 
 bool ResourceMesh::LoadMemory()
@@ -245,9 +247,6 @@ bool ResourceMesh::DeleteMetaData()
 void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created)
 {
 	// look if is loaded
-	if (NeedToLoad()) {
-		LoadMemory();
-	}
 	IncreaseReferences();
 
 	// get the parent

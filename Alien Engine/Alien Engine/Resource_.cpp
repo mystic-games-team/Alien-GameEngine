@@ -40,6 +40,8 @@ const bool Resource::NeedToLoad() const
 
 void Resource::IncreaseReferences()
 {
+	if (references == 0)
+		LoadMemory();
 	++references;
 }
 
