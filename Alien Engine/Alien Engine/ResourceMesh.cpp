@@ -11,25 +11,8 @@ ResourceMesh::ResourceMesh() : Resource()
 }
 
 ResourceMesh::~ResourceMesh()
-{
-	if (index != nullptr)
-		RELEASE_ARRAY(index);
-	if (vertex != nullptr)
-		RELEASE_ARRAY(vertex);
-	if (normals != nullptr)
-		RELEASE_ARRAY(normals);
-	if (uv_cords != nullptr)
-		RELEASE_ARRAY(uv_cords);
-	if (center_point_normal != nullptr)
-		RELEASE_ARRAY(center_point_normal);
-	if (center_point != nullptr)
-		RELEASE_ARRAY(center_point);
-
-	glDeleteBuffers(1, &id_vertex);
-	glDeleteBuffers(1, &id_index);
-	glDeleteBuffers(1, &id_normals);
-	glDeleteBuffers(1, &id_uv);
-
+{	
+	FreeMemory();
 }
 
 bool ResourceMesh::CreateMetaData()
@@ -156,6 +139,44 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 	return ret;
 }
 
+void ResourceMesh::FreeMemory()
+{
+	if (index != nullptr) {
+		RELEASE_ARRAY(index);
+		index = nullptr;
+	}
+	if (vertex != nullptr) {
+		RELEASE_ARRAY(vertex);
+		vertex = nullptr;
+	}
+	if (normals != nullptr) {
+		RELEASE_ARRAY(normals);
+		normals = nullptr;
+	}
+	if (uv_cords != nullptr) {
+		RELEASE_ARRAY(uv_cords);
+		uv_cords = nullptr;
+	}
+	if (center_point_normal != nullptr) {
+		RELEASE_ARRAY(center_point_normal);
+		center_point_normal = nullptr;
+	}
+	if (center_point != nullptr) {
+		RELEASE_ARRAY(center_point);
+		center_point = nullptr;
+	}
+
+	glDeleteBuffers(1, &id_vertex);
+	glDeleteBuffers(1, &id_index);
+	glDeleteBuffers(1, &id_normals);
+	glDeleteBuffers(1, &id_uv);
+
+	id_vertex = 0;
+	id_index = 0;
+	id_normals = 0;
+	id_uv = 0;
+}
+
 bool ResourceMesh::LoadMemory()
 {	
 	JSON_Value* value = json_parse_file(meta_data_path.data());
@@ -202,7 +223,7 @@ bool ResourceMesh::LoadMemory()
 		delete meta;
 	}
 	else {
-		LOG("Error loading %s", path);
+		LOG("Error loading %s", meta_data_path.data());
 	}
 
 	return true;

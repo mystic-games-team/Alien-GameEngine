@@ -116,7 +116,6 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 
 			int num_meshes = model->GetNumber("Model.NumMeshes");
 			name = model->GetString("Model.Name");
-
 			
 			std::string* mesh_path = model->GetArrayString("Model.PathMeshes");
 
@@ -194,7 +193,6 @@ void ResourceModel::ConvertToGameObjects()
 		GameObject* parent = App->objects->CreateEmptyGameObject(nullptr, false);
 		parent->SetName(name.data());
 		
-
 		// vector to find the parents
 		std::vector<GameObject*> objects_created;
 		objects_created.push_back(parent);

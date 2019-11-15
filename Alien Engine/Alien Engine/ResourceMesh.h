@@ -19,7 +19,10 @@ public:
 
 	bool CreateMetaData();
 	bool ReadBaseInfo(const char* assets_file_path);
+
+	void FreeMemory();
 	bool LoadMemory();
+
 	bool DeleteMetaData();
 
 	void ConvertToGameObject(std::vector<GameObject*>* objects_created);
