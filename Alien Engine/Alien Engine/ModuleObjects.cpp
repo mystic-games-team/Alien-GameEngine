@@ -103,7 +103,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		if (render_octree)
 			octree.Draw();
 
-		base_game_object->Draw();
+		base_game_object->DrawScene();
 
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -124,7 +124,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		if (allow_grid)
 			App->renderer3D->RenderGrid();
 
-		base_game_object->Draw();
+		base_game_object->DrawGame();
 
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
