@@ -148,6 +148,8 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 		for (uint i = 0; i < ai_mesh->mNumFaces; ++i)
 		{
 			if (ai_mesh->mFaces[i].mNumIndices != 3) {
+				uint zero[3] = { 0u,0u,0u };
+				memcpy(&ret->index[i * 3], zero, sizeof(uint) * 3);
 				LOG("WARNING, geometry face with != 3 indices!");
 			}
 			else {

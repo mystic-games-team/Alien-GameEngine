@@ -166,10 +166,14 @@ void ResourceMesh::FreeMemory()
 		center_point = nullptr;
 	}
 
-	glDeleteBuffers(1, &id_vertex);
-	glDeleteBuffers(1, &id_index);
-	glDeleteBuffers(1, &id_normals);
-	glDeleteBuffers(1, &id_uv);
+	if (id_vertex != 0)
+		glDeleteBuffers(1, &id_vertex);
+	if (id_index != 0)
+		glDeleteBuffers(1, &id_index);
+	if (id_normals != 0)
+		glDeleteBuffers(1, &id_normals);
+	if (id_uv != 0)
+		glDeleteBuffers(1, &id_uv);
 
 	id_vertex = 0;
 	id_index = 0;
@@ -194,7 +198,7 @@ bool ResourceMesh::LoadMemory()
 		num_faces = meta->GetNumber("Mesh.NumFaces");
 
 		// vertex
-		vertex = (float*)meta->GetNumberArray("Mesh.Vertex");
+		vertex = meta->GetNumberArray("Mesh.Vertex");
 
 		// index
 		index = meta->GetUintArray("Mesh.Index");
@@ -204,20 +208,20 @@ bool ResourceMesh::LoadMemory()
 
 		if (has_normals) {
 			// normals
-			normals = (float*)meta->GetNumberArray("Mesh.Normals");
+			normals = meta->GetNumberArray("Mesh.Normals");
 
 			// center point
-			center_point = (float*)meta->GetNumberArray("Mesh.CenterPoint");
+			center_point = meta->GetNumberArray("Mesh.CenterPoint");
 
 			// center point normal
-			center_point_normal = (float*)meta->GetNumberArray("Mesh.CenterPointNormals");
+			center_point_normal = meta->GetNumberArray("Mesh.CenterPointNormals");
 		}
 
 		// uv
 		bool has_uv = meta->GetBoolean("Mesh.HasUV");
 
 		if (has_uv) {
-			uv_cords = (float*)meta->GetNumberArray("Mesh.UV");
+			uv_cords = meta->GetNumberArray("Mesh.UV");
 		}
 
 		if (!texture_name.empty()) {
