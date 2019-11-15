@@ -32,8 +32,10 @@ public:
 	// type
 	const ResourceType GetType() const;
 
+	virtual bool ReadBaseInfo(const char* assets_file_path) { return nullptr; }
+
 	virtual bool CreateMetaData() { return true; } // when someting is dropped
-	virtual bool ReadMetaData(const char* path) { return true; } // when engine is being inicialized read all meta data
+	virtual bool ReadMetaData(const char* library_file_path) { return true; } // when engine is being inicialized read all meta data
 	virtual bool DeleteMetaData() { return true; } // this deletes the resource too
 
 	const u64& GetID() const;

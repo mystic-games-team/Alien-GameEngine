@@ -16,7 +16,8 @@ public:
 
 	// meta data
 	bool CreateMetaData();
-	bool ReadMetaData(const char* path);
+	bool ReadBaseInfo(const char* assets_file_path);
+	bool ReadMetaData(const char* library_file_path);
 	bool DeleteMetaData();
 
 	// create GameObjects

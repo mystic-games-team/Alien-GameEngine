@@ -82,11 +82,11 @@ bool ResourceTexture::CreateMetaData()
 	return ret;
 }
 
-bool ResourceTexture::ReadMetaData(const char* path)
+bool ResourceTexture::ReadMetaData(const char* library_file_path)
 {
 	bool ret = true;
 
-	this->path = path;
+	this->path = library_file_path;
 
 	std::string alien_path = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
 

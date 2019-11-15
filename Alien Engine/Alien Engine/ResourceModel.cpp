@@ -86,20 +86,78 @@ bool ResourceModel::CreateMetaData()
 	}
 }
 
-bool ResourceModel::ReadMetaData(const char* path)
+bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 {
 	bool ret = true;
 
-	ID = std::stoull(App->file_system->GetBaseFileName(path));
+	path = std::string(assets_file_path);
+	meta_data_path = App->file_system->GetPathWithoutExtension(assets_file_path) + "_meta.alien";
 
-	JSON_Value* value = json_parse_file(path);
+	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* meta = new JSONfilepack(path, object, value);
+		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
 
-		meta_data_path = std::string(path);
+		ID = std::stoull(meta->GetString("ID"));
+		
+		delete meta;
+
+		// InitMeshes
+		std::string library_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+		JSON_Value* mesh_value = json_parse_file(library_path.data());
+		JSON_Object* mesh_object = json_value_get_object(value);
+
+		if (mesh_value != nullptr && mesh_object != nullptr) {
+
+			JSONfilepack* model = new JSONfilepack(library_path, mesh_object, mesh_value);
+
+			int num_meshes = model->GetNumber("Model.NumMeshes");
+			name = model->GetString("Model.Name");
+
+
+			std::string* mesh_path = model->GetArrayString("Model.PathMeshes");
+
+			for (uint i = 0; i < num_meshes; ++i) {
+				ResourceMesh* r_mesh = new ResourceMesh();
+				if (r_mesh->ReadBaseInfo(mesh_path[i].data())) {
+					meshes_attached.push_back(r_mesh);
+				}
+				else {
+					LOG("Error loading %s", mesh_path[i].data());
+					delete r_mesh;
+				}
+			}
+			delete[] mesh_path;
+			delete model;
+			App->resources->AddResource(this);
+		}
+		else {
+			ret = false;
+		}
+	}
+	else {
+		ret = false;
+	}
+
+	return ret;
+}
+
+bool ResourceModel::ReadMetaData(const char* library_file_path)
+{
+	bool ret = true;
+
+	ID = std::stoull(App->file_system->GetBaseFileName(library_file_path));
+
+	JSON_Value* value = json_parse_file(library_file_path);
+	JSON_Object* object = json_value_get_object(value);
+
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* meta = new JSONfilepack(library_file_path, object, value);
+
+		meta_data_path = std::string(library_file_path);
 
 		int num_meshes = meta->GetNumber("Model.NumMeshes");
 

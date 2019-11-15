@@ -14,7 +14,7 @@ public:
 	virtual ~ResourceTexture();
 
 	bool CreateMetaData();
-	bool ReadMetaData(const char* path);
+	bool ReadMetaData(const char* library_file_path);
 	bool DeleteMetaData();
 
 public:

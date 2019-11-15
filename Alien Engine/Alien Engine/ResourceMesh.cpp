@@ -118,43 +118,58 @@ bool ResourceMesh::CreateMetaData()
 	}
 }
 
-bool ResourceMesh::ReadMetaData(const char* path)
-{	
+bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
+{
 	bool ret = true;
 
-	ID = std::stoull(App->file_system->GetBaseFileName(path));
+	meta_data_path = std::string(meta_file_path);
+	ID = std::stoull(App->file_system->GetBaseFileName(meta_file_path));
 
-	JSON_Value* value = json_parse_file(path);
+	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* meta = new JSONfilepack(path, object, value);
-
-		meta_data_path = std::string(path); 
-
+		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
 		// names
 		parent_name = meta->GetString("Mesh.ParentName");
 		name = meta->GetString("Mesh.Name");
-
 		family_number = meta->GetNumber("Mesh.FamilyNumber");
-
 		// texture path
 		bool has_texture = meta->GetBoolean("Mesh.HasTexture");
-
-		if (has_texture) { // just save a string with the texture name and do GetResourceByName
-			texture = App->importer->LoadTextureFile(meta->GetString("Mesh.Texture"));
-		}
-
+		if (has_texture)
+			texture_name = meta->GetString("Mesh.Texture");
 		// transformations
 		// pos
 		pos = meta->GetFloat3("Mesh.Position");
-
 		// scale
 		scale = meta->GetFloat3("Mesh.Scale");
-
 		// rot
 		rot = meta->GetQuat("Mesh.Rotation");
+		delete meta;
+		App->resources->AddResource(this);
+	}
+	else {
+		ret = false;
+	}
+
+	return ret;
+}
+
+bool ResourceMesh::ReadMetaData(const char* library_file_path)
+{	
+	bool ret = true;
+
+	ID = std::stoull(App->file_system->GetBaseFileName(library_file_path));
+
+	JSON_Value* value = json_parse_file(library_file_path);
+	JSON_Object* object = json_value_get_object(value);
+
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* meta = new JSONfilepack(library_file_path, object, value);
+
+		meta_data_path = std::string(library_file_path);
 
 		// ranges
 		num_vertex = meta->GetNumber("Mesh.NumVertex");
@@ -189,7 +204,7 @@ bool ResourceMesh::ReadMetaData(const char* path)
 		}
 
 		InitBuffers();
-		App->resources->AddResource(this);
+		
 
 		delete meta;
 	}

@@ -198,6 +198,7 @@ void ModuleResources::ReadAllMetaData()
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
 
+	// Init Textures
 	App->file_system->DiscoverFiles(TEXTURES_FOLDER, files, directories);
 
 	ReadTextures(directories, files, TEXTURES_FOLDER);
@@ -205,12 +206,10 @@ void ModuleResources::ReadAllMetaData()
 	files.clear();
 	directories.clear();
 
-	App->file_system->DiscoverFiles(LIBRARY_MODELS_FOLDER, files, directories);
+	// Init Models & Meshes
+	App->file_system->DiscoverFiles(MODELS_FOLDER, files, directories);
 
-	for (uint i = 0; i < files.size(); ++i) {
-		ResourceModel* model = new ResourceModel();
-		model->ReadMetaData(std::string(LIBRARY_MODELS_FOLDER + files[i]).data());
-	}
+	ReadModels(directories, files, MODELS_FOLDER);
 }
 
 void ModuleResources::ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
@@ -227,6 +226,27 @@ void ModuleResources::ReadTextures(std::vector<std::string> directories, std::ve
 			std::string dir = current_folder + directories[i] + "/";
 			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
 			ReadTextures(new_directories, new_files, dir);
+		}
+	}
+}
+
+void ModuleResources::ReadModels(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
+{
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceModel* model = new ResourceModel();
+		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
+			LOG("Error while loading %s because has not .alien", files[i]);
+			delete model;
+		}
+	}
+	if (!directories.empty()) {
+		std::vector<std::string> new_files;
+		std::vector<std::string> new_directories;
+
+		for (uint i = 0; i < directories.size(); ++i) {
+			std::string dir = current_folder + directories[i] + "/";
+			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
+			ReadModels(new_directories, new_files, dir);
 		}
 	}
 }
