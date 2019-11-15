@@ -44,6 +44,13 @@ void PanelGame::PanelLogic()
 		}
 	}
 
+	if (App->objects->game_cameras.empty())
+	{
+		ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.5f) - 80);
+		ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f));
+		ImGui::Text("No Cameras Available :(");
+	}
+
 	ImGui::SetCursorPosX((ImGui::GetWindowWidth() - width) * 0.5f);
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() - height) * 0.5f);
 
