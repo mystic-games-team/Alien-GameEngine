@@ -15,6 +15,7 @@ public:
 	~ModuleRenderer3D();
 
 	bool Init();
+	bool Start();
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
@@ -27,15 +28,28 @@ public:
 
 	void ChangeDrawFrameBuffer(bool normal_frameBuffer);
 
+	void UpdateCameraMatrix();
+
+	bool SetCameraToDraw(const ComponentCamera* camera);
+
 public:
 
 	// buffers to draw scene
-	uint frame_buffer = 0;
-	uint render_texture = 0;
-	uint depthrenderbuffer = 0;
+	uint scene_frame_buffer = 0;
+	uint scene_render_texture = 0;
+	uint scene_depthrenderbuffer = 0;
+
+	// buffers to draw game
+	uint game_frame_buffer = 0;
+	uint game_render_texture = 0;
+	uint game_depthrenderbuffer = 0;
+
 
 	// scene texture
-	ResourceTexture* tex = nullptr;
+	ResourceTexture* scene_tex = nullptr;
+
+	// Game texture
+	ResourceTexture* game_tex = nullptr;
 
 	uint z_framebuffer;
 
@@ -47,7 +61,8 @@ public:
 
 public:
 
-	ComponentCamera* actual_camera = nullptr;
+	ComponentCamera* scene_fake_camera = nullptr;
+	ComponentCamera* actual_game_camera = nullptr;
 
 	// grid
 	int length_grid = 20;

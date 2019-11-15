@@ -9,8 +9,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "imgui/imgui.h"
-
-
+#include "ReturnZ.h"
+#include "ModuleRenderer3D.h"
 
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
@@ -26,18 +26,48 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	frustum.farPlaneDistance = far_plane;
 	frustum.verticalFov = DEGTORAD * vertical_fov;
 	AspectRatio(16, 9);
-	
+
 	camera_color_background = Color(0.1f, 0.1f, 0.1f, 1.0f);
+
+	if (attach != nullptr)
+	{
+		if (App->renderer3D->actual_game_camera == nullptr)
+		{
+			App->renderer3D->actual_game_camera = this;
+		}
+		App->objects->game_cameras.push_back(this);
+	}
 }
 
 ComponentCamera::~ComponentCamera()
 {
+	std::vector<ComponentCamera*>::iterator item = App->objects->game_cameras.begin();
+	for (; item != App->objects->game_cameras.end(); ++item) {
+		if (*item != nullptr && *item == this) {
+			App->objects->game_cameras.erase(item);
+			if (App->renderer3D->actual_game_camera == this)
+			{
+				if (!App->objects->game_cameras.empty())
+				{
+					App->renderer3D->actual_game_camera = App->objects->game_cameras.front();
+					App->ui->actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+				}
+				else
+					App->renderer3D->actual_game_camera = nullptr;
+			}
+			break;
+		}
+	}
 }
 
 void ComponentCamera::DrawInspector()
 {
+	static bool en;
 	ImGui::PushID(this);
-	if (ImGui::Checkbox("##CmpActive", &enabled)) {
+	en = enabled;
+	if (ImGui::Checkbox("##CmpActive", &en)) {
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+		enabled = en;
 		if (!enabled)
 			OnDisable();
 		else
@@ -50,51 +80,94 @@ void ComponentCamera::DrawInspector()
 	if (ImGui::CollapsingHeader("Camera", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		RightClickMenu("Camera");
-
+		static bool cntrl_z = true;
 		ImGui::Spacing();
 		ImGui::Spacing();
-
-		ImGui::ColorEdit3("Background Color", &camera_color_background, ImGuiColorEditFlags_Float);
-
+		static Color col;
+		col = camera_color_background;
+		if (ImGui::ColorEdit3("Background Color", &col, ImGuiColorEditFlags_Float)) {
+			if (cntrl_z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			cntrl_z = false;
+			camera_color_background = col;
+		}
+		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+			cntrl_z = true;
+		}
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
 
+		static float sup;
 		ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.25f);
-		if (ImGui::DragFloat("Near Plane", &near_plane, 1, 0.1f, far_plane - 0.1f, "%.1f"))
+		sup = near_plane;
+		if (ImGui::DragFloat("Near Plane", &sup, 1, 0.1f, far_plane - 0.1f, "%.1f"))
 		{
+			if (cntrl_z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			cntrl_z = false;
+			near_plane = sup;
 			frustum.nearPlaneDistance = near_plane;
+			App->renderer3D->UpdateCameraMatrix();
 		}
-		
+		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+			cntrl_z = true;
+		}
 		ImGui::SameLine();
 
 		ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.25f);
-		if (ImGui::DragFloat("Far Plane", &far_plane, 1, near_plane + 0.1f, 1000, "%.1f"))
+		sup = far_plane;
+		if (ImGui::DragFloat("Far Plane", &sup, 1, near_plane + 0.1f, 1000, "%.1f"))
 		{
+			if (cntrl_z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			cntrl_z = false;
+			far_plane = sup;
 			frustum.farPlaneDistance = far_plane;
+			App->renderer3D->UpdateCameraMatrix();
 		}
-
+		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+			cntrl_z = true;
+		}
 		ImGui::Spacing();
 		ImGui::Spacing();
 		
 		if (is_fov_horizontal!=0)
 		{
 			ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
-			if (ImGui::DragFloat("FOV ", &horizontal_fov, 1, 1, 163, "%.1f"))
+			sup = horizontal_fov;
+			if (ImGui::DragFloat("FOV ", &sup, 1, 1, 163, "%.1f"))
 			{
+				if (cntrl_z)
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+				cntrl_z = false;
+				horizontal_fov = sup;
 				frustum.horizontalFov = horizontal_fov * DEGTORAD;
 				AspectRatio(16, 9, true);
 				vertical_fov = frustum.verticalFov * RADTODEG;
+				App->renderer3D->UpdateCameraMatrix();
+			}
+			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+				cntrl_z = true;
 			}
 		}
 		else
 		{
 			ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
-			if (ImGui::DragFloat("FOV", &vertical_fov, 1, 1, 150, "%.1f"))
+			sup = vertical_fov;
+			if (ImGui::DragFloat("FOV", &sup, 1, 1, 150, "%.1f"))
 			{
+				if (cntrl_z)
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+				cntrl_z = false;
+				vertical_fov = sup;
 				frustum.verticalFov = vertical_fov * DEGTORAD;
 				AspectRatio(16, 9);
 				horizontal_fov = frustum.horizontalFov * RADTODEG;
+				App->renderer3D->UpdateCameraMatrix();
+			}
+			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
+				cntrl_z = true;
 			}
 		}
 
@@ -129,7 +202,7 @@ void ComponentCamera::SetComponent(Component* component)
 
 void ComponentCamera::AspectRatio(int width_ratio, int height_ratio, bool fov_type)
 {
-	if (!fov_type)
+	if (fov_type == 0)
 	{
 		frustum.horizontalFov = (2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ((float)width_ratio / (float)height_ratio)));
 	}
@@ -162,6 +235,9 @@ float* ComponentCamera::GetViewMatrix() const
 
 void ComponentCamera::DrawFrustum()
 {
+
+
+
 	static float3 points[8];
 	frustum.GetCornerPoints(points);
 
@@ -207,4 +283,30 @@ void ComponentCamera::DrawFrustum()
 
 	glEnd();
 	glLineWidth(1);
+}
+
+void ComponentCamera::SaveComponent(JSONArraypack* to_save)
+{
+	to_save->SetNumber("Type", (int)type);
+	to_save->SetNumber("VerticalFov", vertical_fov);
+	to_save->SetNumber("HoritzontalFov", horizontal_fov);
+	to_save->SetColor("BackCol", camera_color_background);
+	to_save->SetNumber("FarPlane", far_plane);
+	to_save->SetNumber("NearPlane", near_plane);
+	to_save->SetNumber("isFovHori", is_fov_horizontal);
+}
+
+void ComponentCamera::LoadComponent(JSONArraypack* to_load)
+{
+	vertical_fov = to_load->GetNumber("VerticalFov");
+	horizontal_fov = to_load->GetNumber("HoritzontalFov");
+	far_plane = to_load->GetNumber("FarPlane");
+	near_plane = to_load->GetNumber("NearPlane");
+	is_fov_horizontal = to_load->GetNumber("isFovHori");
+	camera_color_background = to_load->GetColor("BackCol");
+
+	frustum.nearPlaneDistance = near_plane;
+	frustum.farPlaneDistance = far_plane;
+	frustum.verticalFov = vertical_fov * DEGTORAD;
+	frustum.horizontalFov = horizontal_fov * DEGTORAD;
 }

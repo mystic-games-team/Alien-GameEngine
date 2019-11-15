@@ -27,6 +27,10 @@ bool ModuleSceneIntro::Start()
 	App->camera->fake_camera->frustum.pos = { 4,3,5 };
 	App->camera->fake_camera->Look(float3(0, 0, 0));
 
+	GameObject* camera_1 = App->objects->CreateEmptyGameObject(App->objects->base_game_object);
+	App->objects->camera = new ComponentCamera(camera_1);
+	camera_1->AddComponent(App->objects->camera);
+
 	return ret;
 }
 

@@ -7,9 +7,11 @@
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
 #include "ComponentCamera.h"
+#include "ReturnZ.h"
 
 Component::Component(GameObject* attach)
 {
+	ID = App->resources->GetRandomID();
 	game_object_attached = attach;
 }
 
@@ -22,6 +24,11 @@ bool Component::IsEnabled()
 	return enabled;
 }
 
+void Component::SetEnable(bool enable)
+{
+	enabled = enable;
+}
+
 const ComponentType& Component::GetType() const
 {
 	return type;
@@ -31,8 +38,10 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 {
 	if (ImGui::BeginPopupContextItem(collapsing_header_name)) {
 
-		if (ImGui::MenuItem("Reset"))
+		if (ImGui::MenuItem("Reset")) {
+			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			Reset();
+		}
 
 		ImGui::Separator();
 		
@@ -67,8 +76,10 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 		if (App->objects->component_in_copy != nullptr && App->objects->component_in_copy->GetType() == type && App->objects->component_in_copy != this)
 			can_paste = true;
 
-		if (ImGui::MenuItem("Paste Component", nullptr, nullptr, can_paste))
+		if (ImGui::MenuItem("Paste Component", nullptr, nullptr, can_paste)) {
+			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			SetComponent(App->objects->component_in_copy);
+		}
 
 		if (type != ComponentType::TRANSFORM) {
 			ImGui::Separator();
@@ -83,7 +94,7 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 				OnDisable();
 			}
 
-			if (ImGui::MenuItem("Delete Component", nullptr, nullptr, enabled)) {
+			if (ImGui::MenuItem("Delete Component", nullptr, nullptr)) {
 				not_destroy = false;
 			}
 

@@ -3,7 +3,7 @@
 #include "imgui/imgui.h"
 #include "ModuleObjects.h"
 #include "Application.h"
-
+#include "ReturnZ.h"
 #include "ComponentMesh.h"
 
 ComponentTransform::ComponentTransform(GameObject* attach) : Component(attach)
@@ -184,13 +184,15 @@ void ComponentTransform::DrawInspector()
 
 	ImGui::SameLine();
 
-	if (ImGui::Checkbox("Static", &game_object_attached->is_static)) {
-		game_object_attached->ChangeStatic(game_object_attached->is_static);
-		if (game_object_attached->is_static) {
-			App->objects->octree.Insert(game_object_attached);
+	if (ImGui::Checkbox("Static", &game_object_attached->is_static)) {		
+		if (!game_object_attached->is_static && (game_object_attached->children.empty() || !game_object_attached->HasChildrenStatic())) {
+			App->objects->octree.Remove(game_object_attached);
+		}
+		else if (game_object_attached->is_static && game_object_attached->parent != nullptr && game_object_attached->parent->is_static && game_object_attached->children.empty()) {
+			App->objects->octree.Insert(game_object_attached, false);
 		}
 		else {
-			App->objects->octree.Remove(game_object_attached);
+			popup_static = true;
 		}
 	}
 
@@ -201,28 +203,51 @@ void ComponentTransform::DrawInspector()
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 		RightClickMenu("Transform");
-
+		static bool set_cntrl_Z = true;
 		ImGui::Spacing();
 		ImGui::Text("Position  ");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(1);
-		if (ImGui::DragFloat("X", &local_position.x, 0.5F)) {
+		static float3 view_pos;
+		view_pos = local_position;
+		if (ImGui::DragFloat("X", &view_pos.x, 0.5F)) {
+			if (set_cntrl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_cntrl_Z = false;
+			local_position = view_pos;
 			RecalculateTransform();
+		}
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(2);
-		if (ImGui::DragFloat("Y", &local_position.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &view_pos.y, 0.5F)) {
+			if (set_cntrl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_cntrl_Z = false;
+			local_position = view_pos;
 			RecalculateTransform();
+		}
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(3);
-		if (ImGui::DragFloat("Z", &local_position.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &view_pos.z, 0.5F)) {
+			if (set_cntrl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_cntrl_Z = false;
+			local_position = view_pos;
 			RecalculateTransform();
+		}
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::Spacing();
@@ -231,19 +256,32 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(4);
-		if (ImGui::DragFloat("X", &euler_rotation.x, 0.5F)) {
+		static float3 view_rot;
+		view_rot = euler_rotation;
+		if (ImGui::DragFloat("X", &view_rot.x, 0.5F)) {
+			if (set_cntrl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_cntrl_Z = false;
+			euler_rotation = view_rot;
 			float3 aux = euler_rotation;
 			aux.x = DegToRad(euler_rotation.x);
 			aux.y = DegToRad(euler_rotation.y);
 			aux.z = DegToRad(euler_rotation.z);
 			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
+		}
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(5);
-		if (ImGui::DragFloat("Y", &euler_rotation.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &view_rot.y, 0.5F)) {
+			if (set_cntrl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_cntrl_Z = false;
+			euler_rotation = view_rot;
 			float3 aux = euler_rotation;
 			aux.x = DegToRad(euler_rotation.x);
 			aux.y = DegToRad(euler_rotation.y);
@@ -251,17 +289,27 @@ void ComponentTransform::DrawInspector()
 			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
 		}
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
+		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(6);
-		if (ImGui::DragFloat("Z", &euler_rotation.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &view_rot.z, 0.5F)) {
+			if (set_cntrl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_cntrl_Z = false;
+			euler_rotation = view_rot;
 			float3 aux = euler_rotation;
 			aux.x = DegToRad(euler_rotation.x);
 			aux.y = DegToRad(euler_rotation.y);
 			aux.z = DegToRad(euler_rotation.z);
 			local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 			RecalculateTransform();
+		}
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::Spacing();
@@ -270,36 +318,165 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(7);
-		if (ImGui::DragFloat("X", &local_scale.x, 0.5F)) {
+		static float3 view_scale;
+		view_scale = local_scale;
+		if (ImGui::DragFloat("X", &view_scale.x, 0.5F)) {
+			if (set_cntrl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_cntrl_Z = false;
+			local_scale = view_scale;
 			LookScale();
 			RecalculateTransform();
+		}
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(8);
-		if (ImGui::DragFloat("Y", &local_scale.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &view_scale.y, 0.5F)) {
+			if (set_cntrl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_cntrl_Z = false;
+			local_scale = view_scale;
 			LookScale();
 			RecalculateTransform();
+		}
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(9);
-		if (ImGui::DragFloat("Z", &local_scale.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &view_scale.z, 0.5F)) {
+			if (set_cntrl_Z)
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			set_cntrl_Z = false;
+			local_scale = view_scale;
 			LookScale();
 			RecalculateTransform();
+		}
+		else if (!set_cntrl_Z && ImGui::IsMouseReleased(0)) {
+			set_cntrl_Z = true;
 		}
 		ImGui::PopID();
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-
-		
 	}
-	else 
-		RightClickMenu("Transform"); 
+	else {
+		RightClickMenu("Transform");
+	}
 
+	if (popup_static) {
+		if (game_object_attached->is_static) {
+			if (game_object_attached->parent != nullptr && !game_object_attached->parent->is_static) {
+				// if your parent is dynamic, you cant be static
+				ImGui::OpenPopup("Static Problems!");
+				ImGui::SetNextWindowSize({ 290,140 });
+				if (ImGui::BeginPopupModal("Static Problems!", &popup_static, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+				{
+					ImGui::Spacing();
+
+					ImGui::Text("Parent of selected object isn't static");
+					ImGui::Spacing();
+					ImGui::Text("GameObject: %s", game_object_attached->GetName());
+					ImGui::Spacing();
+					ImGui::Text("Parent: %s", game_object_attached->parent->GetName());
+
+					ImGui::Spacing();
+
+					ImGui::Text("Make parent static to set this static");
+					ImGui::SetCursorPosX(((ImGui::GetWindowWidth()) * 0.5f) - 50);
+
+					if (ImGui::Button("Accept", { 100,20 })) {
+						popup_static = false;
+						game_object_attached->is_static = false;
+					}
+					ImGui::EndPopup();
+				}
+				else {
+					popup_static = false;
+					game_object_attached->is_static = false;
+				}
+			}
+			else {
+				ImGui::OpenPopup("Static Question");
+				ImGui::SetNextWindowSize({ 270,120 });
+				if (ImGui::BeginPopupModal("Static Question", &popup_static, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+				{
+					ImGui::Spacing();
+					ImGui::SetCursorPosX(20);
+					ImGui::Text("Do you want to make all children\nstatic as well?");
+					ImGui::Spacing();
+
+					ImGui::SetCursorPosX(12);
+					if (ImGui::Button("Change children")) {
+						game_object_attached->ChangeStatic(game_object_attached->is_static);
+						App->objects->octree.Insert(game_object_attached, true);
+						popup_static = false;
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Only this object")) {
+						App->objects->octree.Insert(game_object_attached, false);
+						popup_static = false;
+					}
+					ImGui::Spacing();
+					ImGui::SetCursorPosX(((ImGui::GetWindowWidth()) * 0.5f) - 35);
+					if (ImGui::Button("Cancel")) {
+						game_object_attached->is_static = false;
+						popup_static = false;
+					}
+
+					ImGui::EndPopup();
+				}
+				else {
+					game_object_attached->is_static = false;
+					popup_static = false;
+				}
+			}
+		}
+		else {
+			// if you make a object dynamic, children will transform to dynamic
+
+			// TODO: popup if you make x object dynamic, all children will become dynamic too. Do you want this? 
+			ImGui::OpenPopup("Static Question");
+			ImGui::SetNextWindowSize({ 290,150 });
+			if (ImGui::BeginPopupModal("Static Question", &popup_static, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+			{
+				ImGui::Spacing();
+				ImGui::SetCursorPosX(20);
+				ImGui::Text("To set this object dynamic, you must\nset children dynamic too");
+				ImGui::SetCursorPosX(20);
+				ImGui::Text("Do you want to make all children\ndynamic as well?");
+				ImGui::Spacing();
+				ImGui::SetCursorPosX(20);
+				ImGui::Text("GameObject: %s", game_object_attached->GetName());
+
+				ImGui::Spacing();
+
+				ImGui::SetCursorPosX(37);
+
+				if (ImGui::Button("Yes, change children")) {
+					popup_static = false;
+					game_object_attached->ChangeStatic(game_object_attached->is_static);
+					App->objects->octree.Remove(game_object_attached);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel")) {
+					popup_static = false;
+					game_object_attached->is_static = true;
+				}
+				ImGui::EndPopup();
+			}
+			else {
+				popup_static = false;
+				game_object_attached->is_static = true;
+			}
+		}
+	}
 }
 
 void ComponentTransform::SetScaleNegative(const bool& negative)

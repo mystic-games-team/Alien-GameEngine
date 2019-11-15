@@ -44,7 +44,9 @@ bool ModuleRenderer3D::Init()
 
 	App->camera->fake_camera = new ComponentCamera(nullptr);
 	App->camera->fake_camera->frustum.farPlaneDistance = 1000.0F;
-	actual_camera = App->camera->fake_camera;
+	App->objects->camera = new ComponentCamera(nullptr);
+	scene_fake_camera = App->camera->fake_camera;
+	actual_game_camera = App->objects->camera;
 
 	if(ret == true)
 	{
@@ -81,7 +83,7 @@ bool ModuleRenderer3D::Init()
 		glClearDepth(1.0f);
 		
 		//Initialize clear color
-		glClearColor(actual_camera->camera_color_background.r, actual_camera->camera_color_background.g, actual_camera->camera_color_background.b, actual_camera->camera_color_background.a);
+		glClearColor(scene_fake_camera->camera_color_background.r, scene_fake_camera->camera_color_background.g, scene_fake_camera->camera_color_background.b, scene_fake_camera->camera_color_background.a);
 
 		//Check for error
 		error = glGetError();
@@ -103,7 +105,7 @@ bool ModuleRenderer3D::Init()
 
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
-		glClearColor(actual_camera->camera_color_background.r, actual_camera->camera_color_background.g, actual_camera->camera_color_background.b, actual_camera->camera_color_background.a);
+		glClearColor(scene_fake_camera->camera_color_background.r, scene_fake_camera->camera_color_background.g, scene_fake_camera->camera_color_background.b, scene_fake_camera->camera_color_background.a);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
@@ -122,16 +124,16 @@ bool ModuleRenderer3D::Init()
 	return ret;
 }
 
+bool ModuleRenderer3D::Start()
+{
+	actual_game_camera = App->objects->game_cameras.front();
+
+	return true;
+}
+
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearStencil(0);
-	glClearColor(actual_camera->camera_color_background.r, actual_camera->camera_color_background.g, actual_camera->camera_color_background.b, actual_camera->camera_color_background.a);
-	glLoadIdentity();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->fake_camera->GetViewMatrix());
 
 	return UPDATE_CONTINUE;
 }
@@ -160,35 +162,38 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	glViewport(0, 0, width, height);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	glLoadMatrixf(App->camera->fake_camera->GetProjectionMatrix());
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	glViewport(0, 0, App->window->width, App->window->height);
 
 	CreateRenderTexture();
 }
 
 void ModuleRenderer3D::CreateRenderTexture()
 {
-	if (tex != nullptr) {
-		delete tex;
-		tex = nullptr;
+	if (scene_tex != nullptr) 
+	{
+		delete scene_tex;
+		scene_tex = nullptr;
 
-		glDeleteFramebuffers(1, &frame_buffer);
-		glDeleteRenderbuffers(1, &depthrenderbuffer);
+		glDeleteFramebuffers(1, &scene_frame_buffer);
+		glDeleteRenderbuffers(1, &scene_depthrenderbuffer);
+		glDeleteFramebuffers(1, &z_framebuffer);
+	}
+
+	if (game_tex != nullptr)
+	{
+		delete game_tex;
+		game_tex = nullptr;
+
+		glDeleteFramebuffers(1, &game_frame_buffer);
+		glDeleteRenderbuffers(1, &game_depthrenderbuffer);
 		glDeleteFramebuffers(1, &z_framebuffer);
 	}
 
 	if (render_zbuffer) {
-		tex = new ResourceTexture();
+		scene_tex = new ResourceTexture();
 
-		glGenTextures(1, &tex->id);
-		glBindTexture(GL_TEXTURE_2D, tex->id);
+		glGenTextures(1, &scene_tex->id);
+		glBindTexture(GL_TEXTURE_2D, scene_tex->id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -198,7 +203,7 @@ void ModuleRenderer3D::CreateRenderTexture()
 
 		glGenFramebuffers(1, &z_framebuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, z_framebuffer);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->id, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, scene_tex->id, 0);
 		glDepthRange(1, 0);
 
 		//glDrawBuffer(GL_NONE);
@@ -207,31 +212,57 @@ void ModuleRenderer3D::CreateRenderTexture()
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 	else {
-		glGenFramebuffers(1, &frame_buffer);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer);
+		glGenFramebuffers(1, &scene_frame_buffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, scene_frame_buffer);
 		glDepthRange(0, 1);
-		glGenTextures(1, &render_texture);
-		glBindTexture(GL_TEXTURE_2D, render_texture);
+		glGenTextures(1, &scene_render_texture);
+		glBindTexture(GL_TEXTURE_2D, scene_render_texture);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, App->window->width, App->window->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		glGenRenderbuffers(1, &depthrenderbuffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
+		glGenRenderbuffers(1, &scene_depthrenderbuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, scene_depthrenderbuffer);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->width, App->window->height);
 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
-		glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
+		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, scene_render_texture, 0);
+		glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, scene_depthrenderbuffer);
 
 		if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 			LOG("Error creating frame buffer");
 		}
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-		tex = new ResourceTexture("RenderTexture", render_texture, App->window->width, App->window->height);
+		scene_tex = new ResourceTexture("RenderTexture", scene_render_texture, App->window->width, App->window->height);
+
+		glGenFramebuffers(1, &game_frame_buffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, game_frame_buffer);
+		glDepthRange(0, 1);
+		glGenTextures(1, &game_render_texture);
+		glBindTexture(GL_TEXTURE_2D, game_render_texture);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, App->window->width, App->window->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glGenRenderbuffers(1, &game_depthrenderbuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, game_depthrenderbuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->width, App->window->height);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, game_render_texture, 0);
+		glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, game_depthrenderbuffer);
+
+		if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			LOG("Error creating frame buffer");
+		}
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+		game_tex = new ResourceTexture("GameTexture", game_render_texture, App->window->width, App->window->height);
 	}
 }
 
@@ -255,4 +286,39 @@ void ModuleRenderer3D::ChangeDrawFrameBuffer(bool normal_frameBuffer)
 {
 	render_zbuffer = normal_frameBuffer;
 	CreateRenderTexture();
+}
+
+void ModuleRenderer3D::UpdateCameraMatrix()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glLoadMatrixf(actual_game_camera->GetProjectionMatrix());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+bool ModuleRenderer3D::SetCameraToDraw(const ComponentCamera * camera)
+{
+	if (camera == nullptr)
+		return false;
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearStencil(0);
+	glClearColor(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b, camera->camera_color_background.a);
+	glLoadIdentity();
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glLoadMatrixf(camera->GetProjectionMatrix());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(camera->GetViewMatrix());
+
+	return true;
 }

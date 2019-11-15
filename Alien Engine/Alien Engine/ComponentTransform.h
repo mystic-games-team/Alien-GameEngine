@@ -4,7 +4,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 
 class ComponentTransform : public Component {
-	
+	friend class CompZ;
 public:
 
 	ComponentTransform(GameObject* attach);
@@ -45,6 +45,9 @@ public:
 	float4x4 global_transformation = float4x4::identity;
 	float4x4 local_transformation = float4x4::identity;
 	
+
+	// to know if flip poly or not
+	bool is_scale_negative = false;
 private:
 
 	// position
@@ -56,6 +59,5 @@ private:
 	
 	float3 euler_rotation = { 0,0,0 };
 
-	// to know if flip poly or not
-	bool is_scale_negative = false;
+	bool popup_static = false;
 };

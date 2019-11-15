@@ -2,6 +2,7 @@
 
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include <vector>
+#include <list>
 #include "GameObject.h"
 
 class OctreeNode {
@@ -47,7 +48,7 @@ public:
 	~Octree();
 	
 	// insert a gameobject
-	void Insert(GameObject* object);
+	void Insert(GameObject* object, bool add_children);
 	// remove a gameobject
 	void Remove(GameObject* object);
 	// remove the hole octree
@@ -61,7 +62,7 @@ public:
 
 	// init the octree with min and max
 	void Init(const float3& min, const float3& max);
-
+	bool Exists(GameObject* object);
 	// create again the octree
 	void Recalculate(GameObject* new_object);
 
@@ -70,10 +71,13 @@ public:
 
 private:
 
+
 	void RemoveRecursively(GameObject* obj);
 
 private:
 
 	OctreeNode* root = nullptr;
+
+	std::list<GameObject*> all_objects;
 
 };

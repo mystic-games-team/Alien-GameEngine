@@ -8,7 +8,10 @@
 #include <map>
 #include <utility>
 #include "Octree.h"
+#include "ComponentCamera.h"
+#include <stack>
 
+class ReturnZ;
 
 struct Scene {
 
@@ -89,7 +92,7 @@ public:
 	GameObject* GetGameObjectByID(const u64& id);
 
 	//reparent object in the next preupdate
-	void ReparentGameObject(GameObject* object, GameObject* next_parent);
+	void ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ = true);
 
 	// scenes
 	void SaveScene(const char* path);
@@ -101,9 +104,11 @@ public:
 private:
 
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
+	void DeleteReturns();
 
 public:
 
+	ComponentCamera* camera = nullptr;
 	Scene current_scene;
 
 	// root
@@ -162,11 +167,15 @@ public:
 	bool need_to_delete_objects = false;
 	
 	Octree octree;
+	std::stack<ReturnZ*> return_actions;
+
+	bool in_cntrl_Z = false;
+
+	std::vector<ComponentCamera*> game_cameras;
 
 private:
 
 	GameObject* game_object_selected = nullptr;
 
-	std::map<GameObject*, GameObject*> to_reparent;
-
+	std::vector< std::tuple<GameObject*, GameObject*, bool>> to_reparent;
 };

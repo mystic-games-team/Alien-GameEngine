@@ -5,6 +5,7 @@
 #include "imgui/imgui_internal.h"
 #include "FileNode.h"
 #include "PanelSceneSelector.h"
+#include "ReturnZ.h"
 
 PanelScene::PanelScene(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -23,11 +24,6 @@ void PanelScene::PanelLogic()
 	}
 	else
 		ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-	
-	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr && ImGui::IsWindowFocused())
-	{
-		App->objects->GetSelectedObject()->ToDelete();
-	}
 
 	App->camera->is_scene_hovered = ImGui::IsWindowHovered();
 	App->camera->is_scene_focused = ImGui::IsWindowFocused();
@@ -59,7 +55,7 @@ void PanelScene::PanelLogic()
 	ImGui::SetCursorPosX((ImGui::GetWindowWidth() - width) * 0.5f);
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() - height) * 0.5f);
 	
-	ImGui::Image((ImTextureID)App->renderer3D->tex->id, { width,height }, { 0,1 }, { 1,0 });
+	ImGui::Image((ImTextureID)App->renderer3D->scene_tex->id, { width,height }, { 0,1 }, { 1,0 });
 
 	lastHeight = ImGui::GetWindowHeight();
 
@@ -90,6 +86,8 @@ void PanelScene::PanelLogic()
 				ResourceTexture* texture_dropped = (ResourceTexture*)App->resources->GetResourceWithID(ID);
 
 				if (texture_dropped != nullptr) {
+					if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
+						ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, App->objects->GetSelectedObject()->GetComponent(ComponentType::MATERIAL));
 					App->importer->ApplyTextureToSelectedObject(texture_dropped);
 				}
 			}

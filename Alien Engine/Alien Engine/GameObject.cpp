@@ -9,6 +9,7 @@
 #include "RandomHelper.h"
 #include "ModuleObjects.h"
 #include "ComponentCamera.h"
+#include "ReturnZ.h"
 
 GameObject::GameObject(GameObject* parent)
 {
@@ -28,6 +29,8 @@ GameObject::~GameObject()
 {
 	if (App->objects->GetSelectedObject() == this)
 		App->objects->DeselectObject();
+
+	App->objects->octree.Remove(this);
 
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
@@ -51,8 +54,9 @@ bool GameObject::IsEnabled()
 	return enabled;
 }
 
-void GameObject::Draw()
+void GameObject::DrawScene()
 {
+	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
@@ -90,12 +94,46 @@ void GameObject::Draw()
 
 	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) {
 		camera->DrawFrustum();
+		camera->frustum.pos = transform->GetGlobalPosition();
+		camera->frustum.front = transform->GetLocalRotation().WorldZ();
+		camera->frustum.up = transform->GetLocalRotation().WorldY();
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
-			(*child)->Draw();
+			(*child)->DrawScene();
+		}
+	}
+}
+
+void GameObject::DrawGame()
+{
+	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
+	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
+	{
+		material->BindTexture();
+	}
+
+	if (mesh != nullptr && mesh->IsEnabled())
+	{
+		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
+			glColor3f(1, 1, 1);
+			mesh->DrawPolygon();
+	}
+
+	if (light != nullptr && light->IsEnabled())
+	{
+		light->LightLogic();
+	}
+
+	std::vector<GameObject*>::iterator child = children.begin();
+	for (; child != children.end(); ++child) {
+		if (*child != nullptr && (*child)->IsEnabled()) {
+			(*child)->DrawGame();
 		}
 	}
 }
@@ -154,6 +192,17 @@ Component* GameObject::GetComponent(const ComponentType& type)
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
 		if (*item != nullptr && (*item)->GetType() == type) {
+			return *item;
+		}
+	}
+	return nullptr;
+}
+
+Component* GameObject::GetComponentWithID(const u64& compID)
+{
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr && (*item)->ID == compID) {
 			return *item;
 		}
 	}
@@ -314,6 +363,8 @@ void GameObject::ToDelete()
 {
 	to_delete = true;
 	App->objects->need_to_delete_objects = true;
+	if (!App->objects->in_cntrl_Z)
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, App->objects->GetSelectedObject());
 }
 
 void GameObject::SayChildrenParentIsEnabled(const bool& enabled)
@@ -538,9 +589,6 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	}
 	parent_selected = to_load->GetBoolean("ParentSelected");
 	is_static = to_load->GetBoolean("IsStatic");
-	if (is_static) {
-		// TODO: call something of the quadtree
-	}
 
 	if (parent != nullptr) {
 		this->parent = parent;
@@ -589,6 +637,10 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	if (selected)
 		App->objects->SetNewSelectedObject(this);
 
+	if (is_static) {
+		App->objects->octree.Insert(this, false);
+	}
+
 }
 
 void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_delete)
@@ -626,6 +678,31 @@ void GameObject::ChangeStatic(bool static_)
 			(*item)->ChangeStatic(static_);
 		}
 	}
+}
+
+bool GameObject::HasChildrenStatic() const 
+{
+	bool ret = false;
+
+	if (!children.empty()) {
+		std::vector<GameObject*>::const_iterator item = children.cbegin();
+		for (; item != children.cend(); ++item) {
+			if (*item != nullptr) {
+				if (ret)
+					break;
+
+				if ((*item)->is_static) {
+					ret = true;
+					break;
+				}
+				else {
+					ret = (*item)->HasChildrenStatic();
+				}
+			}
+		}
+
+	}
+	return ret;
 }
 
 void GameObject::SearchToDelete()

@@ -23,12 +23,14 @@ public:
 	bool IsEnabled();
 
 	// here we call Component Mesh, Material & light
-	void Draw();
+	void DrawScene();
+	void DrawGame();
 
 	// components
 	void AddComponent(Component* component);
 	bool HasComponent(ComponentType component);
 	Component* GetComponent(const ComponentType& type);
+	Component* GetComponentWithID(const u64& ID);
 
 	// children
 	void AddChild(GameObject* child);
@@ -81,6 +83,7 @@ public:
 
 	//static
 	void ChangeStatic(bool static_);
+	bool HasChildrenStatic() const;
 
 private:
 
@@ -95,13 +98,14 @@ public:
 	bool enabled = true;
 	bool is_static = false;
 	u64 ID = 0;
-
+	bool parent_enabled = true;
+	bool parent_selected = false;
 private:
 
 	bool to_delete = false; 
-	bool parent_selected = false;
+
 	bool selected = false;
-	bool parent_enabled = true;
+
 
 	std::string name = "UnNamed";
 };

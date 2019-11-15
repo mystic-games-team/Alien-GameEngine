@@ -3,7 +3,7 @@
         "Number": 3,
         "Layout1": {
             "Number": 1,
-            "Active": false,
+            "Active": true,
             "Name": "Default",
             "Path": "Configuration\/Layouts\/Default1.ini",
             "About Alien Engine": false,
@@ -15,7 +15,9 @@
             "Inspector": true,
             "Scene": true,
             "Layout Editor": false,
-            "Panel Project": true
+            "Panel Project": true,
+            "Save": true,
+            "Game": true
         },
         "Layout2": {
             "Number": 2,
@@ -31,7 +33,9 @@
             "Inspector": true,
             "Scene": true,
             "Layout Editor": false,
-            "Panel Project": true
+            "Panel Project": true,
+            "Save": true,
+            "Game": true
         },
         "Layout3": {
             "Number": 3,
@@ -47,7 +51,9 @@
             "Inspector": true,
             "Scene": true,
             "Layout Editor": false,
-            "Panel Project": true
+            "Panel Project": true,
+            "Save": true,
+            "Game": true
         }
     }
 }

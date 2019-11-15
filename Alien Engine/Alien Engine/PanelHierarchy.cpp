@@ -34,8 +34,8 @@ void PanelHierarchy::PanelLogic()
 	ImGui::Separator();
 	ImGui::Spacing();
 
+	object_hovered = nullptr;
 	if (!App->objects->base_game_object->children.empty()) {
-		object_hovered = nullptr;
 		std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
 		for (; item != App->objects->base_game_object->children.end(); ++item)
 		{
@@ -100,7 +100,12 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
-				App->objects->ReparentGameObject(obj, node);
+				if (obj->is_static) {
+					LOG("Objects static can not be reparented");
+				}
+				else {
+					App->objects->ReparentGameObject(obj, node);
+				}
 			}
 		}
 		ImGui::EndDragDropTarget();

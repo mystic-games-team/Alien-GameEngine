@@ -4,7 +4,7 @@ class GameObject;
 
 typedef unsigned int uint;
 class JSONArraypack;
-
+typedef unsigned long long u64;
 enum class ComponentType {
 	TRANSFORM = 0,
 	MESH,
@@ -16,6 +16,7 @@ enum class ComponentType {
 };
 
 class Component {
+
 public:
 
 	Component(GameObject* attach);
@@ -24,7 +25,8 @@ public:
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
 
-	virtual bool IsEnabled();
+	bool IsEnabled();
+	void SetEnable(bool enable);
 	virtual void DrawInspector() {}
 
 	virtual void Reset() {}
@@ -37,6 +39,7 @@ public:
 
 public:
 
+	u64 ID = 0;
 	GameObject* game_object_attached = nullptr;
 	bool not_destroy = true;
 

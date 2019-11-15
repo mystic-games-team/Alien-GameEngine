@@ -24,9 +24,9 @@ public:
 
 	ResourceTexture* texture = nullptr;
 	Color color{ 1,1,1,1 };
-
+	bool texture_activated = true;
 private:
 
 	bool change_texture_menu = false;
-	bool texture_activated = true;
+
 };

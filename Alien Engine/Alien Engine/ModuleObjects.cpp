@@ -9,6 +9,8 @@
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
+#include "ReturnZ.h"
+#include "ModuleRenderer3D.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {
@@ -17,12 +19,14 @@ ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 
 ModuleObjects::~ModuleObjects()
 {
+	DeleteReturns();
 }
 
 bool ModuleObjects::Init()
 {
-	base_game_object = new GameObject(nullptr);
+	base_game_object = new GameObject();
 	base_game_object->ID = 0;
+	base_game_object->is_static = true;
 	//base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
 
 	return true;
@@ -55,10 +59,12 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 	// change parent
 	if (!to_reparent.empty()) {
-		std::map<GameObject*, GameObject*>::iterator item = to_reparent.begin();
+		std::vector< std::tuple<GameObject*, GameObject*, bool>>::iterator item = to_reparent.begin();
 		for (; item != to_reparent.end(); ++item) {
-			if ((*item).first != nullptr && (*item).second != nullptr) {
-				(*item).first->SetNewParent((*item).second);
+			if (std::get<0>(*item) != nullptr && std::get<1>(*item) != nullptr) {
+				if (std::get<2>(*item))
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::REPARENT_HIERARCHY, std::get<0>(*item));
+				std::get<0>(*item)->SetNewParent(std::get<1>(*item));
 			}
 		}
 		to_reparent.clear();
@@ -69,33 +75,61 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 update_status ModuleObjects::Update(float dt)
 {
-
+	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
+		if (!return_actions.empty())
+			ReturnZ::GoBackOneAction();
+	}
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
-	if (App->renderer3D->render_zbuffer) {
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
-	}
-	else {
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->frame_buffer);
-	}
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearStencil(0);
-
-	if (allow_grid)
-		App->renderer3D->RenderGrid();
-
-	if (render_octree)
-		octree.Draw();
-
-	base_game_object->Draw();
-
 	
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	
+	if (App->renderer3D->SetCameraToDraw(App->camera->fake_camera)) {
+		// Scene Drawing
+		if (App->renderer3D->render_zbuffer) {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
+		}
+		else {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->scene_frame_buffer);
+		}
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearStencil(0);
+
+		if (allow_grid)
+			App->renderer3D->RenderGrid();
+
+		if (render_octree)
+			octree.Draw();
+
+		base_game_object->DrawScene();
+
+
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	}
+
+	if (App->renderer3D->SetCameraToDraw(App->renderer3D->actual_game_camera)) {
+
+		if (App->renderer3D->render_zbuffer) {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
+		}
+		else {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->game_frame_buffer);
+		}
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearStencil(0);
+
+		if (allow_grid)
+			App->renderer3D->RenderGrid();
+
+		base_game_object->DrawGame();
+
+
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -323,10 +357,10 @@ GameObject* ModuleObjects::GetGameObjectByID(const u64& id)
 	return base_game_object->GetGameObjectByID(id);
 }
 
-void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_parent)
+void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ)
 {
 	if (object != nullptr && next_parent != nullptr && !object->Exists(next_parent)) {
-		to_reparent.emplace(object, next_parent);
+		to_reparent.push_back({ object,next_parent,to_cntrlZ });
 	}
 }
 
@@ -383,10 +417,13 @@ void ModuleObjects::LoadScene(const char* path)
 
 	if (value != nullptr && object != nullptr)
 	{
+		octree.Clear();
+		DeleteReturns();
 		delete base_game_object;
 		game_object_selected = nullptr;
-		base_game_object = new GameObject(nullptr);
+		base_game_object = new GameObject();
 		base_game_object->ID = 0;
+		base_game_object->is_static = true;
 
 		JSONfilepack* scene = new JSONfilepack(path, object, value);
 
@@ -441,8 +478,9 @@ void ModuleObjects::CreateEmptyScene(const char* path)
 {
 	delete base_game_object;
 	game_object_selected = nullptr;
-	base_game_object = new GameObject(nullptr);
+	base_game_object = new GameObject();
 	base_game_object->ID = 0;
+	base_game_object->is_static = true;
 
 	// try to remove the file because the user might have selected a name that already exists
 	remove(path);
@@ -469,6 +507,17 @@ void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, cons
 		if (*item != nullptr) {
 			to_save->SetAnotherNode();
 			SaveGameObject(*item, to_save, family_number + 1);
+		}
+	}
+}
+
+void ModuleObjects::DeleteReturns()
+{
+	if (!return_actions.empty()) {
+		for (uint i = 0; i < return_actions.size(); ++i) {
+			ReturnZ* action = return_actions.top();
+			delete action;
+			return_actions.pop();
 		}
 	}
 }
@@ -566,38 +615,38 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 	par_shapes_mesh* par_mesh = nullptr;
 	
 	switch (type) {
-	case PrimitiveType::CUBE:
+	case PrimitiveType::CUBE: {
 		par_mesh = par_shapes_create_cube();
 		object->SetName("Cube");
-		break;
-	case PrimitiveType::DODECAHEDRON:
+		break; }
+	case PrimitiveType::DODECAHEDRON: {
 		par_mesh = par_shapes_create_dodecahedron();
 		object->SetName("Dodecahedron");
-		break;
-	case PrimitiveType::ICOSAHEDRON:
+		break; }
+	case PrimitiveType::ICOSAHEDRON: {
 		par_mesh = par_shapes_create_icosahedron();
 		object->SetName("Icosahedron");
-		break;
-	case PrimitiveType::OCTAHEDRON:
+		break; }
+	case PrimitiveType::OCTAHEDRON: {
 		par_mesh = par_shapes_create_octahedron();
 		object->SetName("Octahedron");
-		break;
-	case PrimitiveType::ROCK:
+		break; }
+	case PrimitiveType::ROCK: {
 		par_mesh = par_shapes_create_rock(5, 3);
 		object->SetName("Rock");
-		break;
-	case PrimitiveType::SPHERE_ALIEN:
+		break; }
+	case PrimitiveType::SPHERE_ALIEN: {
 		par_mesh = par_shapes_create_subdivided_sphere(4);
 		object->SetName("Sphere");
-		break;
-	case PrimitiveType::TORUS:
+		break; }
+	case PrimitiveType::TORUS: {
 		par_mesh = par_shapes_create_torus(3, 10, 0.5F);
 		object->SetName("Torus");
-		break;
-	case PrimitiveType::KLEIN_BOTTLE:
+		break; }
+	case PrimitiveType::KLEIN_BOTTLE: {
 		par_mesh = par_shapes_create_klein_bottle(10, 10);
 		object->SetName("Klein Bottle");
-		break;
+		break; }
 	default:
 		break;
 	}

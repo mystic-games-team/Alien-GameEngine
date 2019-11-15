@@ -7,6 +7,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "Color.h"
 #include "ResourceMesh.h"
+#include "ReturnZ.h"
 
 ComponentMesh::ComponentMesh(GameObject* attach) : Component(attach)
 {
@@ -19,6 +20,8 @@ ComponentMesh::~ComponentMesh()
 	{
 		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
 	}
+	if (mesh != nullptr)
+		mesh->DecreaseReferences();
 }
 
 void ComponentMesh::DrawPolygon()
@@ -207,9 +210,14 @@ void ComponentMesh::DrawFaceNormals()
 
 void ComponentMesh::DrawInspector()
 {
+	static bool check;
 
 	ImGui::PushID(this);
-	ImGui::Checkbox("##CmpActive", &enabled);
+	check = enabled;
+	if (ImGui::Checkbox("##CmpActive", &check)) {
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+		enabled = check;
+	}
 	ImGui::PopID();
 	ImGui::SameLine();
 
@@ -231,11 +239,40 @@ void ComponentMesh::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-		
-		ImGui::Checkbox("Active Mesh          ", &view_mesh); ImGui::SameLine(); ImGui::Checkbox("Active Wireframe", &wireframe);
-		ImGui::Checkbox("Active Vertex Normals", &view_vertex_normals);	ImGui::SameLine();ImGui::Checkbox("Active Face Normals", &view_face_normals);
-
-		ImGui::Checkbox("Draw AABB            ", &draw_AABB); ImGui::SameLine(); ImGui::Checkbox("Draw OBB", &draw_OBB);
+	
+		check = view_mesh;
+		if (ImGui::Checkbox("Active Mesh          ", &check)) {
+			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			view_mesh = check;
+		}
+		ImGui::SameLine(); 
+		check = wireframe;
+		if (ImGui::Checkbox("Active Wireframe", &check)) {
+			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			wireframe = check;
+		}
+		check = view_vertex_normals;
+		if (ImGui::Checkbox("Active Vertex Normals", &check)) {
+			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			view_vertex_normals = check;
+		}
+		ImGui::SameLine();
+		check = view_face_normals;
+		if (ImGui::Checkbox("Active Face Normals", &check)) {
+			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			view_face_normals = check;
+		}
+		check = draw_AABB;
+		if (ImGui::Checkbox("Draw AABB            ", &check)) {
+			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			draw_AABB = check;
+		}
+		ImGui::SameLine(); 
+		check = draw_OBB;
+		if (ImGui::Checkbox("Draw OBB", &check)) {
+			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			draw_OBB = check;
+		}
 		ImGui::Spacing();
 
 		
@@ -364,6 +401,12 @@ void ComponentMesh::SetComponent(Component* component)
 	if (component->GetType() == type) {
 
 		ComponentMesh* tmp = (ComponentMesh*)component;
+		if (tmp->mesh != nullptr) {
+			tmp->mesh->IncreaseReferences();
+		}
+		if (mesh != nullptr) {
+			mesh->DecreaseReferences();
+		}
 
 		mesh = tmp->mesh;
 
@@ -434,6 +477,8 @@ void ComponentMesh::LoadComponent(JSONArraypack* to_load)
 	if (to_load->GetBoolean("HasMesh")) {
 		u64 ID = std::stoull(to_load->GetString("MeshID"));
 		mesh = (ResourceMesh*)App->resources->GetResourceWithID(ID);
+		if (mesh != nullptr)
+			mesh->IncreaseReferences();
 	}
 	GenerateAABB();
 	RecalculateAABB_OBB();

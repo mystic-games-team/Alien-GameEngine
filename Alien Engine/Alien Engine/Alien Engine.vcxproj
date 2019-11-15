@@ -246,6 +246,7 @@
     <ClInclude Include="PanelConfig.h" />
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="PanelCreateObject.h" />
+    <ClInclude Include="PanelGame.h" />
     <ClInclude Include="PanelHierarchy.h" />
     <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="PanelLayout.h" />
@@ -263,6 +264,7 @@
     <ClInclude Include="ResourceModel.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Resource_.h" />
+    <ClInclude Include="ReturnZ.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
     <ClInclude Include="Timer.h" />
@@ -339,6 +341,7 @@
     <ClCompile Include="PanelConfig.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PanelCreateObject.cpp" />
+    <ClCompile Include="PanelGame.cpp" />
     <ClCompile Include="PanelHierarchy.cpp" />
     <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PanelLayout.cpp" />
@@ -351,6 +354,7 @@
     <ClCompile Include="ResourceModel.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="Resource_.cpp" />
+    <ClCompile Include="ReturnZ.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
     <ClCompile Include="Timer.cpp" />

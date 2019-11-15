@@ -11,25 +11,8 @@ ResourceMesh::ResourceMesh() : Resource()
 }
 
 ResourceMesh::~ResourceMesh()
-{
-	if (index != nullptr)
-		RELEASE_ARRAY(index);
-	if (vertex != nullptr)
-		RELEASE_ARRAY(vertex);
-	if (normals != nullptr)
-		RELEASE_ARRAY(normals);
-	if (uv_cords != nullptr)
-		RELEASE_ARRAY(uv_cords);
-	if (center_point_normal != nullptr)
-		RELEASE_ARRAY(center_point_normal);
-	if (center_point != nullptr)
-		RELEASE_ARRAY(center_point);
-
-	glDeleteBuffers(1, &id_vertex);
-	glDeleteBuffers(1, &id_index);
-	glDeleteBuffers(1, &id_normals);
-	glDeleteBuffers(1, &id_uv);
-
+{	
+	FreeMemory();
 }
 
 bool ResourceMesh::CreateMetaData()
@@ -118,43 +101,96 @@ bool ResourceMesh::CreateMetaData()
 	}
 }
 
-bool ResourceMesh::ReadMetaData(const char* path)
-{	
+bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
+{
 	bool ret = true;
 
-	ID = std::stoull(App->file_system->GetBaseFileName(path));
+	meta_data_path = std::string(meta_file_path);
+	ID = std::stoull(App->file_system->GetBaseFileName(meta_file_path));
 
-	JSON_Value* value = json_parse_file(path);
+	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* meta = new JSONfilepack(path, object, value);
-
-		meta_data_path = std::string(path); 
-
+		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
 		// names
 		parent_name = meta->GetString("Mesh.ParentName");
 		name = meta->GetString("Mesh.Name");
-
 		family_number = meta->GetNumber("Mesh.FamilyNumber");
-
 		// texture path
 		bool has_texture = meta->GetBoolean("Mesh.HasTexture");
-
-		if (has_texture) { // just save a string with the texture name and do GetResourceByName
-			texture = App->importer->LoadTextureFile(meta->GetString("Mesh.Texture"));
-		}
-
+		if (has_texture)
+			texture_name = meta->GetString("Mesh.Texture");
 		// transformations
 		// pos
 		pos = meta->GetFloat3("Mesh.Position");
-
 		// scale
 		scale = meta->GetFloat3("Mesh.Scale");
-
 		// rot
 		rot = meta->GetQuat("Mesh.Rotation");
+		delete meta;
+		App->resources->AddResource(this);
+	}
+	else {
+		ret = false;
+	}
+
+	return ret;
+}
+
+void ResourceMesh::FreeMemory()
+{
+	if (index != nullptr) {
+		RELEASE_ARRAY(index);
+		index = nullptr;
+	}
+	if (vertex != nullptr) {
+		RELEASE_ARRAY(vertex);
+		vertex = nullptr;
+	}
+	if (normals != nullptr) {
+		RELEASE_ARRAY(normals);
+		normals = nullptr;
+	}
+	if (uv_cords != nullptr) {
+		RELEASE_ARRAY(uv_cords);
+		uv_cords = nullptr;
+	}
+	if (center_point_normal != nullptr) {
+		RELEASE_ARRAY(center_point_normal);
+		center_point_normal = nullptr;
+	}
+	if (center_point != nullptr) {
+		RELEASE_ARRAY(center_point);
+		center_point = nullptr;
+	}
+
+	if (id_vertex != 0)
+		glDeleteBuffers(1, &id_vertex);
+	if (id_index != 0)
+		glDeleteBuffers(1, &id_index);
+	if (id_normals != 0)
+		glDeleteBuffers(1, &id_normals);
+	if (id_uv != 0)
+		glDeleteBuffers(1, &id_uv);
+
+	id_vertex = 0;
+	id_index = 0;
+	id_normals = 0;
+	id_uv = 0;
+
+	references = 0;
+}
+
+bool ResourceMesh::LoadMemory()
+{	
+	JSON_Value* value = json_parse_file(meta_data_path.data());
+	JSON_Object* object = json_value_get_object(value);
+
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
 
 		// ranges
 		num_vertex = meta->GetNumber("Mesh.NumVertex");
@@ -162,7 +198,7 @@ bool ResourceMesh::ReadMetaData(const char* path)
 		num_faces = meta->GetNumber("Mesh.NumFaces");
 
 		// vertex
-		vertex = (float*)meta->GetNumberArray("Mesh.Vertex");
+		vertex = meta->GetNumberArray("Mesh.Vertex");
 
 		// index
 		index = meta->GetUintArray("Mesh.Index");
@@ -172,33 +208,35 @@ bool ResourceMesh::ReadMetaData(const char* path)
 
 		if (has_normals) {
 			// normals
-			normals = (float*)meta->GetNumberArray("Mesh.Normals");
+			normals = meta->GetNumberArray("Mesh.Normals");
 
 			// center point
-			center_point = (float*)meta->GetNumberArray("Mesh.CenterPoint");
+			center_point = meta->GetNumberArray("Mesh.CenterPoint");
 
 			// center point normal
-			center_point_normal = (float*)meta->GetNumberArray("Mesh.CenterPointNormals");
+			center_point_normal = meta->GetNumberArray("Mesh.CenterPointNormals");
 		}
 
 		// uv
 		bool has_uv = meta->GetBoolean("Mesh.HasUV");
 
 		if (has_uv) {
-			uv_cords = (float*)meta->GetNumberArray("Mesh.UV");
+			uv_cords = meta->GetNumberArray("Mesh.UV");
+		}
+
+		if (!texture_name.empty()) {
+			texture = App->importer->LoadTextureFile(texture_name.data());
 		}
 
 		InitBuffers();
-		App->resources->AddResource(this);
 
 		delete meta;
 	}
 	else {
-		LOG("Error loading %s", path);
-		ret = false;
+		LOG("Error loading %s", meta_data_path.data());
 	}
 
-	return ret;
+	return true;
 }
 
 bool ResourceMesh::DeleteMetaData()
@@ -216,6 +254,9 @@ bool ResourceMesh::DeleteMetaData()
 
 void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created)
 {
+	// look if is loaded
+	IncreaseReferences();
+
 	// get the parent
 	GameObject* obj = nullptr;
 
@@ -223,7 +264,7 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 	if (!App->StringCmp(parent_name.data(), "null") && objects_created != nullptr) {
 		std::vector<GameObject*>::iterator item = objects_created->begin();
 		for (; item != objects_created->end(); ++item) {
-			if (*item != nullptr && App->StringCmp((*item)->GetName(), name.data())) {
+			if (*item != nullptr && App->StringCmp((*item)->GetName(), parent_name.data())) {
 				obj = new GameObject((*item));
 				break;
 			}
@@ -237,6 +278,7 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 	else { // if objects created == nullptr then parent must be the root
 		obj = new GameObject(App->objects->base_game_object);
 	}
+
 	obj->SetName(name.data());
 
 	obj->AddComponent(new ComponentTransform(obj, pos, rot, scale));
@@ -250,10 +292,11 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 
 	ComponentMaterial* material = new ComponentMaterial(obj);
 
-	material->texture = texture;
+	if (texture != nullptr) {
+		material->texture = texture;
+	}
 
 	obj->AddComponent(material);
-
 }
 
 void ResourceMesh::InitBuffers()

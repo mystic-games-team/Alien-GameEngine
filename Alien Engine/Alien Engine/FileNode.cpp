@@ -62,12 +62,13 @@ void FileNode::DeleteNodeData(bool delete_folder)
 		std::string meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + "_meta.alien";
 
 		u64 ID = App->resources->GetIDFromAlienPath(meta_path.data());
+		if (ID != 0) {
+			remove(meta_path.data());
 
-		remove(meta_path.data());
-
-		Resource* resource_to_delete = App->resources->GetResourceWithID(ID);
-		if (resource_to_delete != nullptr)
-			resource_to_delete->DeleteMetaData();
+			Resource* resource_to_delete = App->resources->GetResourceWithID(ID);
+			if (resource_to_delete != nullptr)
+				resource_to_delete->DeleteMetaData();
+		}
 	}
 	else {
 		std::vector<FileNode*>::iterator item = children.begin();
