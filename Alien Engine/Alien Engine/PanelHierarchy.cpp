@@ -63,6 +63,7 @@ void PanelHierarchy::PanelLogic()
 			if (obj != nullptr) {
 				App->objects->ReparentGameObject(obj, App->objects->base_game_object);
 			}
+			ImGui::ClearDragDrop();
 		}
 		ImGui::EndDragDropTarget();
 	}

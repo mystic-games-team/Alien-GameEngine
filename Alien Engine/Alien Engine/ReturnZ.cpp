@@ -110,38 +110,48 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 		ActionDeleteObject* object = (ActionDeleteObject*)action->action;
 		ReturnZ::CreateObject(object);
 
-		if (is_fordward) {
-			ReturnZ::AddNewAction(ReturnActions::ADD_OBJECT, App->objects->GetGameObjectByID(object->object->ID));
-		}
-		else {
-			ReturnZ::AddNewFordwarAction(ReturnActions::ADD_OBJECT, App->objects->GetGameObjectByID(object->object->ID));
+		GameObject* obj = App->objects->GetGameObjectByID(object->object->ID);
+
+		if (obj != nullptr) {
+			if (is_fordward) {
+				ReturnZ::AddNewAction(ReturnActions::ADD_OBJECT, obj);
+			}
+			else {
+				ReturnZ::AddNewFordwarAction(ReturnActions::ADD_OBJECT, obj);
+			}
 		}
 
 		break; }
 	case ReturnActions::ADD_OBJECT: {
 		ActionAddObject* object = (ActionAddObject*)action->action;
 		GameObject* to_delete = App->objects->GetGameObjectByID(object->objectID);
-		if (to_delete != nullptr)
+		if (to_delete != nullptr) {
 			to_delete->ToDelete();
-		
-		if (is_fordward) {
-			ReturnZ::AddNewAction(ReturnActions::DELETE_OBJECT, App->objects->GetGameObjectByID(object->objectID));
-		}
-		else {
-			ReturnZ::AddNewFordwarAction(ReturnActions::DELETE_OBJECT, App->objects->GetGameObjectByID(object->objectID));
-		}
 
+			if (is_fordward) {
+				ReturnZ::AddNewAction(ReturnActions::DELETE_OBJECT, App->objects->GetGameObjectByID(object->objectID));
+			}
+			else {
+				ReturnZ::AddNewFordwarAction(ReturnActions::DELETE_OBJECT, App->objects->GetGameObjectByID(object->objectID));
+			}
+		}
 		break; }
 	case ReturnActions::CHANGE_COMPONENT: {
 		ActionComponent* comp = (ActionComponent*)action->action;
 
-		if (is_fordward) {
-			ReturnZ::AddNewAction(ReturnActions::CHANGE_COMPONENT, App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID));
-		}
-		else {
-			ReturnZ::AddNewFordwarAction(ReturnActions::CHANGE_COMPONENT, App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID));
-		}
+		GameObject* obj = App->objects->GetGameObjectByID(comp->comp->objectID);
 
+		if (obj != nullptr) {
+			Component* component = obj->GetComponentWithID(comp->comp->compID);
+			if (component != nullptr) {
+				if (is_fordward) {
+					ReturnZ::AddNewAction(ReturnActions::CHANGE_COMPONENT, component);
+				}
+				else {
+					ReturnZ::AddNewFordwarAction(ReturnActions::CHANGE_COMPONENT, component);
+				}
+			}
+		}
 		switch (comp->comp->type) {
 		case ComponentType::TRANSFORM: {
 			ComponentTransform* transform = (ComponentTransform*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
@@ -172,13 +182,18 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 		ActionComponent* comp = (ActionComponent*)action->action;
 		CompZ::AttachCompZToGameObject(comp->comp);
 
-		if (is_fordward) {
-			ReturnZ::AddNewAction(ReturnActions::ADD_COMPONENT, App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID));
+		GameObject* obj = App->objects->GetGameObjectByID(comp->comp->objectID);
+		if (obj != nullptr) {
+			Component* component = obj->GetComponentWithID(comp->comp->compID);
+			if (component != nullptr) {
+				if (is_fordward) {
+					ReturnZ::AddNewAction(ReturnActions::ADD_COMPONENT, component);
+				}
+				else {
+					ReturnZ::AddNewFordwarAction(ReturnActions::ADD_COMPONENT, component);
+				}
+			}
 		}
-		else {
-			ReturnZ::AddNewFordwarAction(ReturnActions::ADD_COMPONENT, App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID));
-		}
-
 		break; }
 	case ReturnActions::ADD_COMPONENT: {
 		ActionAddComponent* comp = (ActionAddComponent*)action->action;
@@ -188,7 +203,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 			if (component != nullptr) {
 				std::vector<Component*>::iterator item = obj->components.begin();
 				for (; item != obj->components.end(); ++item) {
-					if (*item == component) {
+					if (*item != nullptr && *item == component) {
 
 						if (is_fordward) {
 							ReturnZ::AddNewAction(ReturnActions::DELETE_COMPONENT, component);
@@ -211,14 +226,13 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 		GameObject* obj = App->objects->GetGameObjectByID(reparent->objectID);
 		GameObject* parent = App->objects->GetGameObjectByID(reparent->parentID);
 
-		if (is_fordward) {
-			ReturnZ::AddNewAction(ReturnActions::REPARENT_HIERARCHY, obj);
-		}
-		else {
-			ReturnZ::AddNewFordwarAction(ReturnActions::REPARENT_HIERARCHY, obj);
-		}
-
 		if (obj != nullptr && parent != nullptr) {
+			if (is_fordward) {
+				ReturnZ::AddNewAction(ReturnActions::REPARENT_HIERARCHY, obj);
+			}
+			else {
+				ReturnZ::AddNewFordwarAction(ReturnActions::REPARENT_HIERARCHY, obj);
+			}
 			App->objects->ReparentGameObject(obj, parent, false);
 		}
 		break; }
