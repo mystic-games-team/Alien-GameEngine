@@ -84,6 +84,11 @@ void PanelHierarchy::PrintNode(GameObject* node)
 
 	ImGui::PushID(node);
 	
+	if (node->open_node) {
+		node->open_node = false;
+		ImGui::SetNextItemOpen(true);
+	}
+
 	bool is_tree_open = ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | 
 		ImGuiTreeNodeFlags_OpenOnDoubleClick | (node->IsSelected() ? ImGuiTreeNodeFlags_Selected : 0) | 
 		(node->children.empty() ? ImGuiTreeNodeFlags_Leaf : 0), (!node->IsEnabled() || !node->IsParentEnabled()));

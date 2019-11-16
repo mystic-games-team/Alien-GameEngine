@@ -75,7 +75,7 @@ public:
 
 	// Bounding Boxes
 	AABB GetBB(); // 0 = Local Bounding Box, 1 = Global Bounding Box
-
+	OBB GetGlobalOBB();
 	void SaveObject(JSONArraypack* to_save, const uint& family_number);
 	void LoadObject(JSONArraypack* to_save, GameObject* parent);
 
@@ -100,6 +100,7 @@ public:
 	u64 ID = 0;
 	bool parent_enabled = true;
 	bool parent_selected = false;
+	bool open_node = false;
 private:
 
 	bool to_delete = false; 

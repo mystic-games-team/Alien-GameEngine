@@ -161,7 +161,8 @@ bool ResourceModel::LoadMemory()
 bool ResourceModel::DeleteMetaData()
 {
 	// TODO: delete here the .alien
-	remove(meta_data_path.data());
+
+	remove(std::string(LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel").data());
 
 	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 	for (; item != meshes_attached.end(); ++item) {

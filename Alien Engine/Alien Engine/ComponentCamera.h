@@ -37,7 +37,10 @@ public:
 
 	Color camera_color_background{ 0.05f, 0.05f, 0.05f, 1.0f };
 
+	bool projection_changed = false;
+
 	float far_plane = 100.f;
+
 	float near_plane = 0.1f;
 
 	int is_fov_horizontal = 0;

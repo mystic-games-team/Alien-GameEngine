@@ -22,11 +22,13 @@ public:
 	ImGuizmo::OPERATION guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 	ImGuizmo::MODE guizmo_mode = ImGuizmo::MODE::WORLD;
 
-private:
+public:
 	float width = 960;
 	float height = 540;
 
 	float lastHeight = 540;
 
+	float posX = 0;
+	float posY = 0;
 };
 

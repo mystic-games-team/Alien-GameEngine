@@ -97,6 +97,18 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClearStencil(0);
 
+		if (App->camera->ray.IsFinite()) {
+			glColor3f(1, 0, 0);
+			glLineWidth(5);
+			glBegin(GL_LINES);
+
+			glVertex3f(App->camera->ray.a.x, App->camera->ray.a.y, App->camera->ray.a.z);
+			glVertex3f(App->camera->ray.b.x, App->camera->ray.b.y, App->camera->ray.b.z);
+
+			glEnd();
+			glLineWidth(1);
+		}
+
 		if (allow_grid)
 			App->renderer3D->RenderGrid();
 

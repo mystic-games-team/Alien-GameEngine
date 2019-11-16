@@ -93,7 +93,8 @@ void ReturnZ::GoBackOneAction()
 	case ReturnActions::ADD_OBJECT: {
 		ActionAddObject* object = (ActionAddObject*)to_return->action;
 		GameObject* to_delete = App->objects->GetGameObjectByID(object->objectID);
-		to_delete->ToDelete();
+		if (to_delete != nullptr)
+			to_delete->ToDelete();
 		break; }
 	case ReturnActions::CHANGE_COMPONENT: {
 		ActionComponent* comp = (ActionComponent*)to_return->action;
@@ -404,8 +405,12 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 	case ComponentType::MATERIAL: {
 		ComponentMaterial* material = (ComponentMaterial*)component;
 		CompMaterialZ* materialZ = (CompMaterialZ*)compZ;
-		if (materialZ->resourceID != 0)
+		if (materialZ->resourceID == 0) {
+			material->texture = nullptr;
+		}
+		else {
 			material->texture = (ResourceTexture*)App->resources->GetResourceWithID(materialZ->resourceID);
+		}
 		material->texture_activated = materialZ->texture_activated;
 		material->color = materialZ->color;
 		break; }

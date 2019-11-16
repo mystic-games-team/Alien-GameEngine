@@ -25,7 +25,6 @@ void PanelScene::PanelLogic()
 	else
 		ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-	App->camera->is_scene_hovered = ImGui::IsWindowHovered();
 	App->camera->is_scene_focused = ImGui::IsWindowFocused();
 
 	if (height > ImGui::GetWindowHeight())
@@ -54,8 +53,12 @@ void PanelScene::PanelLogic()
 
 	ImGui::SetCursorPosX((ImGui::GetWindowWidth() - width) * 0.5f);
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() - height) * 0.5f);
-	
+
+	posX = ImGui::GetWindowPos().x + ImGui::GetCursorPosX();
+	posY = ImGui::GetWindowPos().y + ImGui::GetCursorPosY();
+
 	ImGui::Image((ImTextureID)App->renderer3D->scene_tex->id, { width,height }, { 0,1 }, { 1,0 });
+	App->camera->is_scene_hovered = ImGui::IsItemHovered();
 
 	lastHeight = ImGui::GetWindowHeight();
 
@@ -86,6 +89,8 @@ void PanelScene::PanelLogic()
 				ResourceTexture* texture_dropped = (ResourceTexture*)App->resources->GetResourceWithID(ID);
 
 				if (texture_dropped != nullptr) {
+					if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
+						ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, App->objects->GetSelectedObject()->GetComponent(ComponentType::MATERIAL));
 					App->importer->ApplyTextureToSelectedObject(texture_dropped);
 				}
 			}

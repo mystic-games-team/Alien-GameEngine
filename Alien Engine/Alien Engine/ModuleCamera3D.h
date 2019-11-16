@@ -21,11 +21,17 @@ public:
 	void Focus();
 	void Zoom();
 
+	void CreateRay();
+
+	void CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, GameObject* go, const LineSegment &ray);
+	bool TestTrianglesIntersections(GameObject* object, const LineSegment& ray);
+	static bool SortByDistance(const std::pair<float, GameObject*> pair1, const std::pair<float, GameObject*> pair2);
+
 public:
 	
 	bool is_scene_hovered = false;
 	bool is_scene_focused = false;
-
+	LineSegment ray;
 	float camera_speed = 30.0f;
 	float camera_zoom_speed = 15.0f;
 	float camera_mouse_speed = 10.0f;

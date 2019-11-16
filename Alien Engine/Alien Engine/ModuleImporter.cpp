@@ -16,7 +16,7 @@
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
 #include "ResourceTexture.h"
-
+#include "ReturnZ.h"
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -148,6 +148,8 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 		for (uint i = 0; i < ai_mesh->mNumFaces; ++i)
 		{
 			if (ai_mesh->mFaces[i].mNumIndices != 3) {
+				uint zero[3] = { 0u,0u,0u };
+				memcpy(&ret->index[i * 3], zero, sizeof(uint) * 3);
 				LOG("WARNING, geometry face with != 3 indices!");
 			}
 			else {
@@ -210,7 +212,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	node->mTransformation.Decompose(scaling, rotation, translation);
 
 	// set the scale in value of 1 but keeping the dimensions
-	int max_ = max(scaling.x, scaling.y);
+	float max_ = max(scaling.x, scaling.y);
 	max_ = max(max_, scaling.z);
 
 	float3 pos(translation.x, translation.y, translation.z);
@@ -341,6 +343,7 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 			if (material == nullptr) {
 				material = new ComponentMaterial(selected);
 				selected->AddComponent(material);
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, material);
 			}
 			material->texture = texture;
 		}

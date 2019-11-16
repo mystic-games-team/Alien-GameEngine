@@ -485,7 +485,6 @@ bool GameObject::Exists(GameObject* object)
 AABB GameObject::GetBB()
 {
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 
 	if (HasChildren())
 	{
@@ -518,9 +517,38 @@ AABB GameObject::GetBB()
 		else
 		{
 			AABB aabb_null;
+			ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+			float3 pos = transform->GetGlobalPosition();
+			aabb_null.SetFromCenterAndSize(pos, { 2,2,2 });
+			return aabb_null;
+		}
+	}
+}
 
-			aabb_null.SetNegativeInfinity();
+OBB GameObject::GetGlobalOBB()
+{
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 
+	if (HasChildren())
+	{
+		OBB parent_obb = GetBB();
+		parent_obb.Transform(transform->global_transformation);
+		return parent_obb;
+	}
+
+	else
+	{
+		if (mesh != nullptr)
+		{
+			return mesh->GetOBB();
+		}
+		else
+		{
+			AABB aabb_null;
+			ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+			float3 pos = transform->GetGlobalPosition();
+			aabb_null.SetFromCenterAndSize(pos, { 2,2,2 });
 			return aabb_null;
 		}
 	}

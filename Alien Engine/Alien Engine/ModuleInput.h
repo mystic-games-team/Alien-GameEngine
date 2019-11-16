@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "imgui/imgui.h"
 #include "SDL/include/SDL_scancode.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 #define MAX_MOUSE_BUTTONS 5
 
@@ -66,6 +67,7 @@ public:
 		return mouse_pressed;
 	}
 
+	float3 GetMousePosition();
 private:
 
 	void AddInputBuff(const uint& key, const uint& state, const bool& is_mouse = false);
