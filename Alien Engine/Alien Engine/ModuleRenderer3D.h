@@ -32,6 +32,7 @@ public:
 
 	bool SetCameraToDraw(const ComponentCamera* camera);
 
+	bool FrustrumIntersection(const ComponentCamera* camera, GameObject* object);
 public:
 
 	// buffers to draw scene

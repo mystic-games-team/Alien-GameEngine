@@ -322,3 +322,21 @@ bool ModuleRenderer3D::SetCameraToDraw(const ComponentCamera * camera)
 
 	return true;
 }
+
+bool ModuleRenderer3D::FrustrumIntersection(const ComponentCamera* camera, GameObject* object)
+{
+	AABB aabb = object->GetBB();
+	float3 corners[8];
+	aabb.GetCornerPoints(corners);
+
+	Plane planes[6];
+	camera->frustum.GetPlanes(planes);
+
+	for (uint i = 0; i < 6; ++i) {
+		if (planes[i].Intersects(aabb)) {
+			return true;
+		}
+	}
+
+	return false;
+}

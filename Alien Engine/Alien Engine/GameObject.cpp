@@ -109,27 +109,28 @@ void GameObject::DrawScene()
 
 void GameObject::DrawGame()
 {
-	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
-	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	if (App->renderer3D->FrustrumIntersection(App->renderer3D->scene_fake_camera, this)) {
+		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
+		ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
+		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 
-	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
-	{
-		material->BindTexture();
-	}
+		if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
+		{
+			material->BindTexture();
+		}
 
-	if (mesh != nullptr && mesh->IsEnabled())
-	{
-		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
-			glColor3f(1, 1, 1);
+		if (mesh != nullptr && mesh->IsEnabled())
+		{
+			if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
+				glColor3f(1, 1, 1);
 			mesh->DrawPolygon();
-	}
+		}
 
-	if (light != nullptr && light->IsEnabled())
-	{
-		light->LightLogic();
+		if (light != nullptr && light->IsEnabled())
+		{
+			light->LightLogic();
+		}
 	}
-
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
