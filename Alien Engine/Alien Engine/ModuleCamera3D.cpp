@@ -250,7 +250,7 @@ void ModuleCamera3D::CreateRay()
 	std::vector<std::pair<float, GameObject*>> hits;
 	std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
 	for (; item != App->objects->base_game_object->children.end(); ++item) {
-		if (*item != nullptr) {
+		if (*item != nullptr && (*item)->IsEnabled()) {
 			CreateObjectsHitMap(&hits, (*item), ray);
 		}
 	}
@@ -262,61 +262,6 @@ void ModuleCamera3D::CreateRay()
 				break;
 		}
 	}
-
-
-
-
-
-
-
-	//std::map<float, GameObject*> objects_hit;
-
-	//// Create a map of the objects than intersect with the ray in order by distance
-	//for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
-	//{
-	//	CreateObjectsHitMap(objects_hit, (*iter), ray);
-	//}
-
-	//// Check every object hit by the ray
-	//for (std::map<float, GameObject*>::iterator iter = objects_hit.begin(); iter != objects_hit.end(); ++iter)
-	//{
-	//	ComponentMesh* mesh = (ComponentMesh*)(*iter).second->GetComponent(ComponentType::MESH);
-
-	//	if (mesh != nullptr)
-	//	{
-	//		ResourceMesh* r_mesh = mesh->mesh;
-
-	//		if (r_mesh != nullptr)
-	//		{
-	//			LineSegment transformed_ray = ray;
-	//			ComponentTransform* transform = (ComponentTransform*)(*iter).second->GetComponent(ComponentType::TRANSFORM);
-	//			transformed_ray.Transform(transform->global_transformation);
-
-	//			// Create every triangle in the mesh and check it versus the Ray
-	//			for (uint check_triangles = 0; check_triangles < mesh->mesh->num_index; check_triangles += 3)
-	//			{
-	//				uint index_a, index_b, index_c;
-
-	//				index_a = r_mesh->index[check_triangles] * 3;
-	//				float3 point_a(&r_mesh->vertex[index_a]);
-
-	//				index_b = r_mesh->index[check_triangles + 1] * 3;
-	//				float3 point_b(&r_mesh->vertex[index_b]);
-
-	//				index_c = r_mesh->index[check_triangles + 2] * 3;
-	//				float3 point_c(&r_mesh->vertex[index_c]);
-
-	//				Triangle triangle_to_check(point_a, point_b, point_c);
-
-	//				if (transformed_ray.Intersects(triangle_to_check, nullptr, nullptr))
-	//				{
-	//					App->objects->SetNewSelectedObject((*iter).second);
-	//					break;
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
 }
 
 void ModuleCamera3D::CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, GameObject* go, const LineSegment &ray)
@@ -331,7 +276,8 @@ void ModuleCamera3D::CreateObjectsHitMap(std::vector<std::pair<float, GameObject
 
 	for (std::vector<GameObject*>::iterator iter = go->children.begin(); iter != go->children.end(); ++iter)
 	{
-		CreateObjectsHitMap(hits, (*iter), ray);
+		if ((*iter) != nullptr && (*iter)->IsEnabled())
+			CreateObjectsHitMap(hits, (*iter), ray);
 	}
 }
 
