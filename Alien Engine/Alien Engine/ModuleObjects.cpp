@@ -76,8 +76,7 @@ update_status ModuleObjects::PreUpdate(float dt)
 update_status ModuleObjects::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
-		if (!return_actions.empty())
-			ReturnZ::GoBackOneAction();
+		ReturnZ::GoBackOneAction();
 	}
 	return UPDATE_CONTINUE;
 }

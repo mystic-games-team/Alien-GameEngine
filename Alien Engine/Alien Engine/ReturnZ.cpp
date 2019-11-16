@@ -81,6 +81,9 @@ void ReturnZ::AddNewAction(const ReturnActions& type, void* data)
 
 void ReturnZ::GoBackOneAction()
 {
+	if (App->objects->return_actions.empty())
+		return;
+
 	App->objects->in_cntrl_Z = true;
 	ReturnZ* to_return = App->objects->return_actions.top();
 	App->objects->return_actions.pop();

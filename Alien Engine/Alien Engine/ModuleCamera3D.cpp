@@ -58,11 +58,6 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 	else
 	{
-		if (is_scene_hovered && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-		{
-			CreateRay();
-		}
-
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		{
 			speed = camera_speed * 2 * dt;
@@ -75,10 +70,12 @@ update_status ModuleCamera3D::Update(float dt)
 			{
 				Rotation(dt);
 			}
-		}
-		if (is_scene_hovered || is_scene_focused)
-		{
-			Movement();
+			else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
+				CreateRay();
+			}
+
+			if (is_scene_focused)
+				Movement();
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
