@@ -78,6 +78,9 @@ update_status ModuleObjects::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
 		ReturnZ::GoBackOneAction();
 	}
+	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN) {
+		ReturnZ::GoFordwardOneAction();
+	}
 	return UPDATE_CONTINUE;
 }
 

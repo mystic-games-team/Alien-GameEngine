@@ -112,6 +112,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 					App->objects->ReparentGameObject(obj, node);
 				}
 			}
+			ImGui::ClearDragDrop();
 		}
 		ImGui::EndDragDropTarget();
 	}
