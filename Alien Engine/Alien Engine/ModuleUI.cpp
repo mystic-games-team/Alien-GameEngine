@@ -522,16 +522,19 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SameLine();
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.move_transform->id, ImVec2(30, 30)))
 	{
+		panel_scene->guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 	}
 	ImGui::SameLine();
 
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.rotate_transform->id, ImVec2(30, 30)))
 	{
+		panel_scene->guizmo_operation = ImGuizmo::OPERATION::ROTATE;
 	}
 	ImGui::SameLine();
 
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.scale_transform->id, ImVec2(30, 30)))
 	{
+		panel_scene->guizmo_operation = ImGuizmo::OPERATION::SCALE;
 	}
 	ImGui::PopStyleColor();
 

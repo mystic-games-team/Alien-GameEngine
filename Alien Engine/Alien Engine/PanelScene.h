@@ -17,13 +17,16 @@ private:
 	void GuizmosControls();
 	void GuizmosLogic();
 
+public:
+
+	ImGuizmo::OPERATION guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE guizmo_mode = ImGuizmo::MODE::WORLD;
+
 private:
 	float width = 960;
 	float height = 540;
 
 	float lastHeight = 540;
 
-	ImGuizmo::OPERATION guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
-	ImGuizmo::MODE guizmo_mode = ImGuizmo::MODE::WORLD;
 };
 
