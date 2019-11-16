@@ -69,12 +69,13 @@ update_status ModuleObjects::PreUpdate(float dt)
 		}
 		to_reparent.clear();
 	}
-
+	base_game_object->PreUpdate();
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleObjects::Update(float dt)
 {
+	base_game_object->Update();
 	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
 		ReturnZ::GoBackOneAction();
 	}
@@ -86,7 +87,7 @@ update_status ModuleObjects::Update(float dt)
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
-	
+	base_game_object->PostUpdate();
 	if (App->renderer3D->SetCameraToDraw(App->camera->fake_camera)) {
 		// Scene Drawing
 		if (App->renderer3D->render_zbuffer) {
@@ -135,11 +136,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClearStencil(0);
 
-		if (allow_grid)
-			App->renderer3D->RenderGrid();
-
 		base_game_object->DrawGame();
-
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
