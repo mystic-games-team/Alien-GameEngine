@@ -2061,7 +2061,7 @@ bool ImGui::DragBehavior(ImGuiID id, ImGuiDataType data_type, void* v, float v_s
     return false;
 }
 
-bool ImGui::DragScalar(const char* label, ImGuiDataType data_type, void* v, float v_speed, const void* v_min, const void* v_max, const char* format, float power)
+bool ImGui::DragScalar(const char* label, ImGuiDataType data_type, void* v, float v_speed, const void* v_min, const void* v_max, const char* format, float power, bool is_static)
 {
     ImGuiWindow* window = GetCurrentWindow();
     if (window->SkipItems)
@@ -2117,11 +2117,18 @@ bool ImGui::DragScalar(const char* label, ImGuiDataType data_type, void* v, floa
     const ImU32 frame_col = GetColorU32(g.ActiveId == id ? ImGuiCol_FrameBgActive : g.HoveredId == id ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
     RenderNavHighlight(frame_bb, id);
     RenderFrame(frame_bb.Min, frame_bb.Max, frame_col, true, style.FrameRounding);
-
+    float* num_ptr = (float*)v;
+    float num = *num_ptr;
     // Drag behavior
     const bool value_changed = DragBehavior(id, data_type, v, v_speed, v_min, v_max, format, power, ImGuiDragFlags_None);
-    if (value_changed)
-        MarkItemEdited(id);
+    if (!is_static) {
+        if (value_changed) {
+            MarkItemEdited(id);
+        }
+    }
+    else {
+        *num_ptr = num;
+    }
 
     // Display value using user-provided display format so user can add prefix/suffix/decorations to the value.
     char value_buf[64];
@@ -2170,9 +2177,14 @@ bool ImGui::DragScalarN(const char* label, ImGuiDataType data_type, void* v, int
     return value_changed;
 }
 
-bool ImGui::DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* format, float power)
+bool ImGui::DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* format, float power, bool is_static)
 {
-    return DragScalar(label, ImGuiDataType_Float, v, v_speed, &v_min, &v_max, format, power);
+    bool ret = DragScalar(label, ImGuiDataType_Float, v, v_speed, &v_min, &v_max, format, power, is_static);
+
+    if (ret && is_static)
+        ret = false;
+
+    return ret;
 }
 
 bool ImGui::DragFloat2(const char* label, float v[2], float v_speed, float v_min, float v_max, const char* format, float power)
