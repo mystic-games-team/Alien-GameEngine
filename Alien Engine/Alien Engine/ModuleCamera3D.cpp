@@ -58,11 +58,6 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 	else
 	{
-		if (is_scene_hovered && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-		{
-			CreateRay();
-		}
-
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		{
 			speed = camera_speed * 2 * dt;
@@ -75,10 +70,12 @@ update_status ModuleCamera3D::Update(float dt)
 			{
 				Rotation(dt);
 			}
-		}
-		if (is_scene_hovered || is_scene_focused)
-		{
-			Movement();
+			else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
+				CreateRay();
+			}
+
+			if (is_scene_focused)
+				Movement();
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
@@ -246,13 +243,20 @@ void ModuleCamera3D::CreateRay()
 	ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
 
 	std::vector<std::pair<float, GameObject*>> hits;
+
+	// with octree to static objects
+	CreateObjectsHitMap(&hits, App->objects->octree.root, ray);
+
+	// without octree for the dynamics
 	std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
 	for (; item != App->objects->base_game_object->children.end(); ++item) {
 		if (*item != nullptr && (*item)->IsEnabled()) {
 			CreateObjectsHitMap(&hits, (*item), ray);
 		}
 	}
+	// sort by pos
 	std::sort(hits.begin(), hits.end(), ModuleCamera3D::SortByDistance);
+	
 	std::vector<std::pair<float, GameObject*>>::iterator it = hits.begin();
 	for (; it != hits.end(); ++it) {
 		if ((*it).second != nullptr) {
@@ -267,15 +271,49 @@ void ModuleCamera3D::CreateObjectsHitMap(std::vector<std::pair<float, GameObject
 	float distance_out = 0.f;
 	float distance = 0.f;
 
-	if (ray.Intersects(go->GetBB(), distance, distance_out))
-	{
-		hits->push_back({ distance, go });
+	if (!go->is_static) {
+		if (ray.Intersects(go->GetBB(), distance, distance_out))
+		{
+			hits->push_back({ distance, go });
+		}
 	}
 
 	for (std::vector<GameObject*>::iterator iter = go->children.begin(); iter != go->children.end(); ++iter)
 	{
 		if ((*iter) != nullptr && (*iter)->IsEnabled())
 			CreateObjectsHitMap(hits, (*iter), ray);
+	}
+}
+
+void ModuleCamera3D::CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, OctreeNode* node, const LineSegment& ray)
+{
+	if (node != nullptr) {
+
+		float distance_out = 0.f;
+		float distance = 0.f;
+
+		if (ray.Intersects(node->section, distance, distance_out))
+		{
+			if (!node->game_objects.empty()) {
+				std::vector<GameObject*>::iterator item = node->game_objects.begin();
+				for (; item != node->game_objects.end(); ++item) {
+					if (*item != nullptr && (*item)->IsEnabled()) {
+						if (ray.Intersects((*item)->GetBB(), distance, distance_out)) {
+							hits->push_back({ distance, (*item) });
+						}
+					}
+				}
+			}
+
+			if (!node->children.empty()) {
+				std::vector<OctreeNode*>::iterator item = node->children.begin();
+				for (; item != node->children.end(); ++item) {
+					if (*item != nullptr) {
+						CreateObjectsHitMap(hits, (*item), ray);
+					}
+				}
+			}
+		}
 	}
 }
 

@@ -54,6 +54,69 @@ bool GameObject::IsEnabled()
 	return enabled;
 }
 
+void GameObject::PreUpdate()
+{
+	if (!components.empty()) {
+		std::vector<Component*>::iterator item = components.begin();
+		for (; item != components.end(); ++item) {
+			if (*item != nullptr && (*item)->IsEnabled()) {
+				(*item)->PreUpdate();
+			}
+		}
+	}
+
+	if (!children.empty()) {
+		std::vector<GameObject*>::iterator child = children.begin();
+		for (; child != children.end(); ++child) {
+			if (*child != nullptr && (*child)->IsEnabled()) {
+				(*child)->PreUpdate();
+			}
+		}
+	}
+}
+
+void GameObject::Update()
+{
+	if (!components.empty()) {
+		std::vector<Component*>::iterator item = components.begin();
+		for (; item != components.end(); ++item) {
+			if (*item != nullptr && (*item)->IsEnabled()) {
+				(*item)->Update();
+			}
+		}
+	}
+
+	if (!children.empty()) {
+		std::vector<GameObject*>::iterator child = children.begin();
+		for (; child != children.end(); ++child) {
+			if (*child != nullptr && (*child)->IsEnabled()) {
+				(*child)->Update();
+			}
+		}
+	}
+}
+
+void GameObject::PostUpdate()
+{
+	if (!components.empty()) {
+		std::vector<Component*>::iterator item = components.begin();
+		for (; item != components.end(); ++item) {
+			if (*item != nullptr && (*item)->IsEnabled()) {
+				(*item)->PostUpdate();
+			}
+		}
+	}
+
+	if (!children.empty()) {
+		std::vector<GameObject*>::iterator child = children.begin();
+		for (; child != children.end(); ++child) {
+			if (*child != nullptr && (*child)->IsEnabled()) {
+				(*child)->PostUpdate();
+			}
+		}
+	}
+}
+
 void GameObject::DrawScene()
 {
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);

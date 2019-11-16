@@ -63,6 +63,7 @@ void PanelHierarchy::PanelLogic()
 			if (obj != nullptr) {
 				App->objects->ReparentGameObject(obj, App->objects->base_game_object);
 			}
+			ImGui::ClearDragDrop();
 		}
 		ImGui::EndDragDropTarget();
 	}
@@ -112,6 +113,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 					App->objects->ReparentGameObject(obj, node);
 				}
 			}
+			ImGui::ClearDragDrop();
 		}
 		ImGui::EndDragDropTarget();
 	}

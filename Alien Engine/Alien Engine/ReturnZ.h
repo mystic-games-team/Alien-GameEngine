@@ -26,7 +26,12 @@ public:
 	~ReturnZ();
 
 	static void AddNewAction(const ReturnActions& type, void* data);
+	static void AddNewFordwarAction(const ReturnActions& type, void* data);
+
 	static void GoBackOneAction();
+	static void GoFordwardOneAction();
+
+	static void DoAction(ReturnZ* to_return, bool is_fordward);
 
 public:
 
@@ -114,7 +119,6 @@ public:
 	u64 objectID = 0;
 	u64 compID = 0;
 	bool enabled = true;
-	bool has_material = false; // sorry sucks D:
 };
 
 class CompMeshZ : public CompZ{

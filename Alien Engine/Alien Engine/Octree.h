@@ -68,15 +68,13 @@ public:
 
 
 	uint bucket = 2;
-
+	OctreeNode* root = nullptr;
 private:
 
 
 	void RemoveRecursively(GameObject* obj);
 
 private:
-
-	OctreeNode* root = nullptr;
 
 	std::list<GameObject*> all_objects;
 

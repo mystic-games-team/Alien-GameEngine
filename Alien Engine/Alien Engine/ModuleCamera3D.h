@@ -24,6 +24,7 @@ public:
 	void CreateRay();
 
 	void CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, GameObject* go, const LineSegment &ray);
+	void CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, OctreeNode* node, const LineSegment &ray);
 	bool TestTrianglesIntersections(GameObject* object, const LineSegment& ray);
 	static bool SortByDistance(const std::pair<float, GameObject*> pair1, const std::pair<float, GameObject*> pair2);
 

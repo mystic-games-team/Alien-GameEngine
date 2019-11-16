@@ -29,6 +29,10 @@ public:
 	void SetEnable(bool enable);
 	virtual void DrawInspector() {}
 
+	virtual void PreUpdate() {}
+	virtual void Update() {}
+	virtual void PostUpdate() {}
+
 	virtual void Reset() {}
 	virtual void SetComponent(Component* component) {}
 

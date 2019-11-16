@@ -211,7 +211,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::PushID(1);
 		static float3 view_pos;
 		view_pos = local_position;
-		if (ImGui::DragFloat("X", &view_pos.x, 0.5F)) {
+		if (ImGui::DragFloat("X", &view_pos.x, 0.5F,0,0,"%.3f",1, game_object_attached->is_static)) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;
@@ -225,7 +225,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(2);
-		if (ImGui::DragFloat("Y", &view_pos.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &view_pos.y, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static)) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;
@@ -239,7 +239,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(3);
-		if (ImGui::DragFloat("Z", &view_pos.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &view_pos.z, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static)) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;
@@ -258,7 +258,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::PushID(4);
 		static float3 view_rot;
 		view_rot = euler_rotation;
-		if (ImGui::DragFloat("X", &view_rot.x, 0.5F)) {
+		if (ImGui::DragFloat("X", &view_rot.x, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static)) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;
@@ -277,7 +277,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(5);
-		if (ImGui::DragFloat("Y", &view_rot.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &view_rot.y, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static)) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;
@@ -296,7 +296,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(6);
-		if (ImGui::DragFloat("Z", &view_rot.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &view_rot.z, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static)) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;
@@ -320,7 +320,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::PushID(7);
 		static float3 view_scale;
 		view_scale = local_scale;
-		if (ImGui::DragFloat("X", &view_scale.x, 0.5F)) {
+		if (ImGui::DragFloat("X", &view_scale.x, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static)) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;
@@ -335,7 +335,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(8);
-		if (ImGui::DragFloat("Y", &view_scale.y, 0.5F)) {
+		if (ImGui::DragFloat("Y", &view_scale.y, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static)) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;
@@ -350,7 +350,7 @@ void ComponentTransform::DrawInspector()
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(70);
 		ImGui::PushID(9);
-		if (ImGui::DragFloat("Z", &view_scale.z, 0.5F)) {
+		if (ImGui::DragFloat("Z", &view_scale.z, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static)) {
 			if (set_cntrl_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			set_cntrl_Z = false;

@@ -168,6 +168,7 @@ public:
 	
 	Octree octree;
 	std::stack<ReturnZ*> return_actions;
+	std::stack<ReturnZ*> fordward_actions;
 
 	bool in_cntrl_Z = false;
 
