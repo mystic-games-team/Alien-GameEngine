@@ -34,6 +34,8 @@ bool ModuleResources::Start()
 	icons.scale_transform = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/scales.png");
 	icons.redo = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/redo.png");
 	icons.undo = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/undo.png");
+	icons.global = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/global.png");
+	icons.local = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/local.png");
 
 
 	assets = new FileNode();

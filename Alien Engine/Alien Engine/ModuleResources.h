@@ -28,6 +28,8 @@ struct Icons {
 	ResourceTexture* scale_transform = nullptr;
 	ResourceTexture* undo = nullptr;
 	ResourceTexture* redo = nullptr;
+	ResourceTexture* global = nullptr;
+	ResourceTexture* local = nullptr;
 };
 
 
