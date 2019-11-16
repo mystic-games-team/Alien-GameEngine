@@ -245,8 +245,6 @@ void ModuleCamera3D::CreateRay()
 
 	ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
 
-
-
 	std::vector<std::pair<float, GameObject*>> hits;
 	std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
 	for (; item != App->objects->base_game_object->children.end(); ++item) {
@@ -311,6 +309,10 @@ bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSe
 				break;
 			}
 		}
+	}
+	else if (object->children.empty()){
+		App->objects->SetNewSelectedObject(object);
+		ret = true;
 	}
 	return ret;
 }
