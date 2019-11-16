@@ -539,8 +539,18 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SameLine();
 
 	// Transform Buttons
+
+	static ImVec4 button_background_color{ 0,0,0,1 };
+
+	if (panel_scene->guizmo_operation == ImGuizmo::OPERATION::TRANSLATE)
+	{
+		button_background_color = { 0.2F, 0.6F, 1, 1 };
+	}
+	else
+		button_background_color = { 0.2F, 0.6F, 1, 0 };
+
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
-	if (ImGui::ImageButton((ImTextureID)App->resources->icons.move_transform->id, ImVec2(30, 30)))
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.move_transform->id, ImVec2(30, 30), ImVec2(0, 0), ImVec2(1, 1), -1, button_background_color))
 	{
 		panel_scene->guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 	}
@@ -552,7 +562,14 @@ void ModuleUI::SecondMenuBar()
 	}
 	ImGui::SameLine();
 
-	if (ImGui::ImageButton((ImTextureID)App->resources->icons.rotate_transform->id, ImVec2(30, 30)))
+	if (panel_scene->guizmo_operation == ImGuizmo::OPERATION::ROTATE)
+	{
+		button_background_color = { 0.2F, 0.6F, 1, 1 };
+	}
+	else
+		button_background_color = { 0.2F, 0.6F, 1, 0 };
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.rotate_transform->id, ImVec2(30, 30), ImVec2(0, 0), ImVec2(1, 1), -1, button_background_color))
 	{
 		panel_scene->guizmo_operation = ImGuizmo::OPERATION::ROTATE;
 	}
@@ -564,7 +581,14 @@ void ModuleUI::SecondMenuBar()
 	}
 	ImGui::SameLine();
 
-	if (ImGui::ImageButton((ImTextureID)App->resources->icons.scale_transform->id, ImVec2(30, 30)))
+	if (panel_scene->guizmo_operation == ImGuizmo::OPERATION::SCALE)
+	{
+		button_background_color = { 0.2F, 0.6F, 1, 1 };
+	}
+	else
+		button_background_color = { 0.2F, 0.6F, 1, 0 };
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.scale_transform->id, ImVec2(30, 30), ImVec2(0, 0), ImVec2(1, 1), -1, button_background_color))
 	{
 		panel_scene->guizmo_operation = ImGuizmo::OPERATION::SCALE;
 	}
@@ -583,8 +607,18 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SameLine();
 
 	// Transform Modes
+
+	static ImVec4 mode_button_background_color{ 0,0,0,1 };
+
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
-	if (ImGui::ImageButton((ImTextureID)App->resources->icons.global->id, ImVec2(30, 30)))
+	if (panel_scene->guizmo_mode == ImGuizmo::MODE::WORLD)
+	{
+		mode_button_background_color = { 0.2F, 0.6F, 1, 1 };
+	}
+	else
+		mode_button_background_color = { 0.2F, 0.6F, 1, 0 };
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.global->id, ImVec2(30, 30), ImVec2(0, 0), ImVec2(1, 1), -1, mode_button_background_color))
 	{
 		panel_scene->guizmo_mode = ImGuizmo::MODE::WORLD;
 	}
@@ -594,10 +628,16 @@ void ModuleUI::SecondMenuBar()
 		ImGui::Text("World Mode (Shift+W)");
 		ImGui::EndTooltip();
 	}
-
 	ImGui::SameLine();
 
-	if (ImGui::ImageButton((ImTextureID)App->resources->icons.local->id, ImVec2(30, 30)))
+	if (panel_scene->guizmo_mode == ImGuizmo::MODE::LOCAL)
+	{
+		mode_button_background_color = { 0.2F, 0.6F, 1, 1 };
+	}
+	else
+		mode_button_background_color = { 0.2F, 0.6F, 1, 0 };
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.local->id, ImVec2(30, 30), ImVec2(0, 0), ImVec2(1, 1), -1, mode_button_background_color))
 	{
 		panel_scene->guizmo_mode = ImGuizmo::MODE::LOCAL;
 	}
