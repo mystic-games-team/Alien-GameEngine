@@ -132,23 +132,25 @@ void PanelScene::PanelLogic()
 
 void PanelScene::GuizmosLogic()
 {
-	ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
+	if (App->objects->GetSelectedObject() != nullptr) {
+		ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 
-	float4x4 view_transposed = App->camera->fake_camera->frustum.ViewMatrix();
-	view_transposed.Transpose();
-	float4x4 projection_transposed = App->camera->fake_camera->frustum.ProjectionMatrix();
-	projection_transposed.Transpose();
-	float4x4 object_transform_matrix = transform->global_transformation;
-	object_transform_matrix.Transpose();
-	float4x4 delta_matrix;
+		float4x4 view_transposed = App->camera->fake_camera->frustum.ViewMatrix();
+		view_transposed.Transpose();
+		float4x4 projection_transposed = App->camera->fake_camera->frustum.ProjectionMatrix();
+		projection_transposed.Transpose();
+		float4x4 object_transform_matrix = transform->global_transformation;
+		object_transform_matrix.Transpose();
+		float4x4 delta_matrix;
 
-	ImGuizmo::SetRect((ImGui::GetWindowWidth() - width) * 0.5f, (ImGui::GetWindowHeight() - height) * 0.5f, width, height);
-	ImGuizmo::SetDrawlist();
-	ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(),delta_matrix.ptr());
+		ImGuizmo::SetRect((ImGui::GetWindowWidth() - width) * 0.5f, (ImGui::GetWindowHeight() - height) * 0.5f, width, height);
+		ImGuizmo::SetDrawlist();
+		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
 
-	if (ImGuizmo::IsUsing())
-	{
-		transform->SetLocalTransform(object_transform_matrix.Transposed());
+		if (ImGuizmo::IsUsing())
+		{
+			transform->SetLocalTransform(object_transform_matrix.Transposed());
+		}
 	}
 }
 

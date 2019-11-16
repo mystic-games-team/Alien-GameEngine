@@ -524,6 +524,7 @@ void ModuleUI::SecondMenuBar()
 
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.redo->id, ImVec2(30, 30)))
 	{
+		ReturnZ::GoFordwardOneAction();
 	}
 	ImGui::PopStyleColor();
 	if (ImGui::IsItemHovered())
