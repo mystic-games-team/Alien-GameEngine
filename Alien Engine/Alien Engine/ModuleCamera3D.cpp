@@ -231,76 +231,141 @@ void ModuleCamera3D::Focus()
 
 void ModuleCamera3D::CreateRay()
 {
+	if (App->objects->base_game_object->children.empty())
+		return;
+
 	//App->renderer3D->SetCameraToDraw(fake_camera);
 	float2 origin = float2((App->input->GetMousePosition().x - App->ui->panel_scene->posX)/ App->ui->panel_scene->width, (App->input->GetMousePosition().y - App->ui->panel_scene->posY) / App->ui->panel_scene->height);
 
 	origin.x = (origin.x - 0.5F) * 2;
 	origin.y = -(origin.y - 0.5F) * 2;
 
+	if (origin.x > 1 || origin.x < -1 || origin.y > 1 || origin.y < -1)
+		return;
+
 	ray = fake_camera->frustum.UnProjectLineSegment(origin.x, origin.y);
-	std::map<float, GameObject*> objects_hit;
 
-	// Create a map of the objects than intersect with the ray in order by distance
-	for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
-	{
-		CreateObjectsHitMap(objects_hit, (*iter), ray);
-	}
 
-	// Check every object hit by the ray
-	for (std::map<float, GameObject*>::iterator iter = objects_hit.begin(); iter != objects_hit.end(); ++iter)
-	{
-		ComponentMesh* mesh = (ComponentMesh*)(*iter).second->GetComponent(ComponentType::MESH);
 
-		if (mesh != nullptr)
-		{
-			ResourceMesh* r_mesh = mesh->mesh;
-
-			if (r_mesh != nullptr)
-			{
-				LineSegment transformed_ray = ray;
-				ComponentTransform* transform = (ComponentTransform*)(*iter).second->GetComponent(ComponentType::TRANSFORM);
-				transformed_ray.Transform(transform->global_transformation);
-
-				// Create every triangle in the mesh and check it versus the Ray
-				for (uint check_triangles = 0; check_triangles < mesh->mesh->num_index; check_triangles += 3)
-				{
-					uint index_a, index_b, index_c;
-
-					index_a = r_mesh->index[check_triangles] * 3;
-					float3 point_a(&r_mesh->vertex[index_a]);
-
-					index_b = r_mesh->index[check_triangles + 1] * 3;
-					float3 point_b(&r_mesh->vertex[index_b]);
-
-					index_c = r_mesh->index[check_triangles + 2] * 3;
-					float3 point_c(&r_mesh->vertex[index_c]);
-
-					Triangle triangle_to_check(point_a, point_b, point_c);
-
-					if (transformed_ray.Intersects(triangle_to_check, nullptr, nullptr))
-					{
-						App->objects->SetNewSelectedObject((*iter).second);
-						break;
-					}
-				}
-			}
+	std::map<float, GameObject*> hits;
+	std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
+	for (; item != App->objects->base_game_object->children.end(); ++item) {
+		if (*item != nullptr) {
+			CreateObjectsHitMap(&hits, (*item), ray);
 		}
 	}
+
+	std::map<float, GameObject*>::iterator it = hits.begin();
+	for (; it != hits.end(); ++it) {
+		if ((*it).second != nullptr) {
+			if (TestTrianglesIntersections((*it).second, ray))
+				break;
+		}
+	}
+
+
+
+
+
+
+
+	//std::map<float, GameObject*> objects_hit;
+
+	//// Create a map of the objects than intersect with the ray in order by distance
+	//for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
+	//{
+	//	CreateObjectsHitMap(objects_hit, (*iter), ray);
+	//}
+
+	//// Check every object hit by the ray
+	//for (std::map<float, GameObject*>::iterator iter = objects_hit.begin(); iter != objects_hit.end(); ++iter)
+	//{
+	//	ComponentMesh* mesh = (ComponentMesh*)(*iter).second->GetComponent(ComponentType::MESH);
+
+	//	if (mesh != nullptr)
+	//	{
+	//		ResourceMesh* r_mesh = mesh->mesh;
+
+	//		if (r_mesh != nullptr)
+	//		{
+	//			LineSegment transformed_ray = ray;
+	//			ComponentTransform* transform = (ComponentTransform*)(*iter).second->GetComponent(ComponentType::TRANSFORM);
+	//			transformed_ray.Transform(transform->global_transformation);
+
+	//			// Create every triangle in the mesh and check it versus the Ray
+	//			for (uint check_triangles = 0; check_triangles < mesh->mesh->num_index; check_triangles += 3)
+	//			{
+	//				uint index_a, index_b, index_c;
+
+	//				index_a = r_mesh->index[check_triangles] * 3;
+	//				float3 point_a(&r_mesh->vertex[index_a]);
+
+	//				index_b = r_mesh->index[check_triangles + 1] * 3;
+	//				float3 point_b(&r_mesh->vertex[index_b]);
+
+	//				index_c = r_mesh->index[check_triangles + 2] * 3;
+	//				float3 point_c(&r_mesh->vertex[index_c]);
+
+	//				Triangle triangle_to_check(point_a, point_b, point_c);
+
+	//				if (transformed_ray.Intersects(triangle_to_check, nullptr, nullptr))
+	//				{
+	//					App->objects->SetNewSelectedObject((*iter).second);
+	//					break;
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }
 
-void ModuleCamera3D::CreateObjectsHitMap(std::map<float, GameObject*>& map, GameObject* go, LineSegment &ray)
+void ModuleCamera3D::CreateObjectsHitMap(std::map<float, GameObject*>* map, GameObject* go, const LineSegment &ray)
 {
 	float distance_out = 0.f;
 	float distance = 0.f;
 
 	if (ray.Intersects(go->GetBB(), distance, distance_out) && go->children.empty())
 	{
-		map[distance] = go;
+		map->emplace(distance, go);
 	}
 
 	for (std::vector<GameObject*>::iterator iter = go->children.begin(); iter != go->children.end(); ++iter)
 	{
 		CreateObjectsHitMap(map, (*iter), ray);
 	}
+}
+
+bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSegment& ray)
+{
+	bool ret = false;
+	ComponentMesh* mesh = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
+	// TODO: if obj doesnt have mesh, just set it selected because it might be camera or light
+	if (mesh != nullptr && mesh->mesh != nullptr)
+	{
+		ComponentTransform* transform = (ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM);
+		for (uint i = 0; i < mesh->mesh->num_index; i += 3)
+		{
+			uint index_a, index_b, index_c;
+
+			index_a = mesh->mesh->index[i] * 3;
+			float3 point_a(&mesh->mesh->vertex[index_a]);
+
+			index_b = mesh->mesh->index[i + 1] * 3;
+			float3 point_b(&mesh->mesh->vertex[index_b]);
+
+			index_c = mesh->mesh->index[i + 2] * 3;
+			float3 point_c(&mesh->mesh->vertex[index_c]);
+
+			Triangle triangle_to_check(point_a, point_b, point_c);
+			triangle_to_check.Transform(transform->global_transformation);
+			if (ray.Intersects(triangle_to_check, nullptr, nullptr))
+			{
+				App->objects->SetNewSelectedObject(object);
+				ret = true;
+				break;
+			}
+		}
+	}
+	return ret;
 }
 

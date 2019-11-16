@@ -22,7 +22,8 @@ public:
 
 	void CreateRay();
 
-	void CreateObjectsHitMap(std::map<float, GameObject*>& map, GameObject* go, LineSegment &ray);
+	void CreateObjectsHitMap(std::map<float, GameObject*>* map, GameObject* go, const LineSegment &ray);
+	bool TestTrianglesIntersections(GameObject* object, const LineSegment& ray);
 
 public:
 	
