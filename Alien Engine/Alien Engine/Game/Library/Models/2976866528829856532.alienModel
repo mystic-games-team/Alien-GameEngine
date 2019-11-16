@@ -1,0 +1,41 @@
+{
+    "Model": {
+        "Name": "Street environment_V01",
+        "NumMeshes": 33,
+        "PathMeshes": [
+            "Library\/Meshes\/7936980049436489588.alienMesh",
+            "Library\/Meshes\/6585533365185506226.alienMesh",
+            "Library\/Meshes\/11191962860686843672.alienMesh",
+            "Library\/Meshes\/4193541695365456176.alienMesh",
+            "Library\/Meshes\/9202100657053683064.alienMesh",
+            "Library\/Meshes\/9952288363956143011.alienMesh",
+            "Library\/Meshes\/11437741980424478831.alienMesh",
+            "Library\/Meshes\/12000733311721538277.alienMesh",
+            "Library\/Meshes\/5597735645761943374.alienMesh",
+            "Library\/Meshes\/6706656530175322934.alienMesh",
+            "Library\/Meshes\/9513361861782094076.alienMesh",
+            "Library\/Meshes\/16072554570968946983.alienMesh",
+            "Library\/Meshes\/15104408353828437432.alienMesh",
+            "Library\/Meshes\/4389057030263555026.alienMesh",
+            "Library\/Meshes\/6527646801096777171.alienMesh",
+            "Library\/Meshes\/8823740465027163260.alienMesh",
+            "Library\/Meshes\/9786576406608540925.alienMesh",
+            "Library\/Meshes\/5557041995640607680.alienMesh",
+            "Library\/Meshes\/986712505539639528.alienMesh",
+            "Library\/Meshes\/9051253329959489110.alienMesh",
+            "Library\/Meshes\/1959801730087890878.alienMesh",
+            "Library\/Meshes\/8601186454545071317.alienMesh",
+            "Library\/Meshes\/8867884821644634478.alienMesh",
+            "Library\/Meshes\/16050241329147310172.alienMesh",
+            "Library\/Meshes\/7544271639679290174.alienMesh",
+            "Library\/Meshes\/4498829349996137483.alienMesh",
+            "Library\/Meshes\/3397694951169554980.alienMesh",
+            "Library\/Meshes\/2292629626156193031.alienMesh",
+            "Library\/Meshes\/11322515936380629389.alienMesh",
+            "Library\/Meshes\/2648700272279504257.alienMesh",
+            "Library\/Meshes\/7826902385550483906.alienMesh",
+            "Library\/Meshes\/11077289376429149954.alienMesh",
+            "Library\/Meshes\/76268077116909498.alienMesh"
+        ]
+    }
+}

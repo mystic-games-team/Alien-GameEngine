@@ -212,7 +212,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	node->mTransformation.Decompose(scaling, rotation, translation);
 
 	// set the scale in value of 1 but keeping the dimensions
-	int max_ = max(scaling.x, scaling.y);
+	float max_ = max(scaling.x, scaling.y);
 	max_ = max(max_, scaling.z);
 
 	float3 pos(translation.x, translation.y, translation.z);
