@@ -247,15 +247,15 @@ void ModuleCamera3D::CreateRay()
 
 
 
-	std::map<float, GameObject*> hits;
+	std::vector<std::pair<float, GameObject*>> hits;
 	std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
 	for (; item != App->objects->base_game_object->children.end(); ++item) {
 		if (*item != nullptr) {
 			CreateObjectsHitMap(&hits, (*item), ray);
 		}
 	}
-
-	std::map<float, GameObject*>::iterator it = hits.begin();
+	std::sort(hits.begin(), hits.end(), ModuleCamera3D::SortByDistance);
+	std::vector<std::pair<float, GameObject*>>::iterator it = hits.begin();
 	for (; it != hits.end(); ++it) {
 		if ((*it).second != nullptr) {
 			if (TestTrianglesIntersections((*it).second, ray))
@@ -319,19 +319,19 @@ void ModuleCamera3D::CreateRay()
 	//}
 }
 
-void ModuleCamera3D::CreateObjectsHitMap(std::map<float, GameObject*>* map, GameObject* go, const LineSegment &ray)
+void ModuleCamera3D::CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, GameObject* go, const LineSegment &ray)
 {
 	float distance_out = 0.f;
 	float distance = 0.f;
 
-	if (ray.Intersects(go->GetBB(), distance, distance_out) && go->children.empty())
+	if (ray.Intersects(go->GetBB(), distance, distance_out))
 	{
-		map->emplace(distance, go);
+		hits->push_back({ distance, go });
 	}
 
 	for (std::vector<GameObject*>::iterator iter = go->children.begin(); iter != go->children.end(); ++iter)
 	{
-		CreateObjectsHitMap(map, (*iter), ray);
+		CreateObjectsHitMap(hits, (*iter), ray);
 	}
 }
 
@@ -367,5 +367,10 @@ bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSe
 		}
 	}
 	return ret;
+}
+
+bool ModuleCamera3D::SortByDistance(const std::pair<float, GameObject*> pair1, const std::pair<float, GameObject*> pair2)
+{
+	return pair1.first < pair2.first;
 }
 
