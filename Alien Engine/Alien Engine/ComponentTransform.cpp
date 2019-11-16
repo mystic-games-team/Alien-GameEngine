@@ -553,5 +553,10 @@ void ComponentTransform::LoadComponent(JSONArraypack* to_load)
 		global_transformation = local_transformation;
 }
 
+void ComponentTransform::SetLocalTransform(float4x4 &transform_matrix)
+{
+	transform_matrix.Decompose(local_position, local_rotation, local_scale);
+	RecalculateTransform();
+}
 
 

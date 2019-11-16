@@ -133,14 +133,19 @@ void PanelScene::GuizmosLogic()
 	projection_transposed.Transpose();
 	float4x4 object_transform_matrix = transform->global_transformation;
 	object_transform_matrix.Transpose();
+	float4x4 delta_matrix;
 
-	ImGuizmo::SetDrawlist();
 	ImGuizmo::SetRect((ImGui::GetWindowWidth() - width) * 0.5f, (ImGui::GetWindowHeight() - height) * 0.5f, width, height);
+	ImGuizmo::SetDrawlist();
 	ImGuizmo::MODE mode = ImGuizmo::MODE::WORLD;
 	if (guizmo_operation != ImGuizmo::OPERATION::SCALE)
 	{
 		ImGuizmo::MODE::LOCAL;
 	}
-	ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, mode, object_transform_matrix.ptr());
+	ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, mode, object_transform_matrix.ptr(),delta_matrix.ptr());
 
+	if (ImGuizmo::IsUsing())
+	{
+		transform->SetLocalTransform(object_transform_matrix.Transposed());
+	}
 }
