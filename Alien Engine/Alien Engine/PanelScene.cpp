@@ -25,7 +25,6 @@ void PanelScene::PanelLogic()
 	else
 		ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-	App->camera->is_scene_hovered = ImGui::IsWindowHovered();
 	App->camera->is_scene_focused = ImGui::IsWindowFocused();
 
 	if (height > ImGui::GetWindowHeight())
@@ -59,7 +58,7 @@ void PanelScene::PanelLogic()
 	posY = ImGui::GetWindowPos().y + ImGui::GetCursorPosY();
 
 	ImGui::Image((ImTextureID)App->renderer3D->scene_tex->id, { width,height }, { 0,1 }, { 1,0 });
-
+	App->camera->is_scene_hovered = ImGui::IsItemHovered();
 
 	lastHeight = ImGui::GetWindowHeight();
 

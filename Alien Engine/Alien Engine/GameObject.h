@@ -100,6 +100,7 @@ public:
 	u64 ID = 0;
 	bool parent_enabled = true;
 	bool parent_selected = false;
+	bool open_node = false;
 private:
 
 	bool to_delete = false; 
