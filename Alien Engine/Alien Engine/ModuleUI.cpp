@@ -20,6 +20,8 @@
 #include "PanelScene.h"
 #include "PanelGame.h"
 #include <string>
+#include "ResourceTexture.h"
+#include "ReturnZ.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -504,6 +506,39 @@ void ModuleUI::MainMenuBar()
 void ModuleUI::SecondMenuBar()
 {
 	ImGui::Begin("## Camera options", (bool*)false, ImGuiWindowFlags_NoDecoration);
+
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
+	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.undo->id, ImVec2(30, 30)))
+	{
+		ReturnZ::GoBackOneAction();
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.redo->id, ImVec2(30, 30)))
+	{
+	}
+	ImGui::SameLine();
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.move_transform->id, ImVec2(30, 30)))
+	{
+	}
+	ImGui::SameLine();
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.rotate_transform->id, ImVec2(30, 30)))
+	{
+	}
+	ImGui::SameLine();
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.scale_transform->id, ImVec2(30, 30)))
+	{
+	}
+	ImGui::PopStyleColor();
+
+	// Camera Combo
+	ImGui::SameLine();
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 7);
+
 	static int camera_combo = 0;
 	std::string combo_cameras_name;
 
@@ -534,6 +569,7 @@ void ModuleUI::SecondMenuBar()
 		}
 		ImGui::EndCombo();
 	}
+
 	ImGui::End();
 }
 
