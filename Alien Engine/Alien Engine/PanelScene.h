@@ -14,6 +14,7 @@ public:
 
 private:
 
+	void GuizmosControls();
 	void GuizmosLogic();
 
 private:
@@ -23,5 +24,6 @@ private:
 	float lastHeight = 540;
 
 	ImGuizmo::OPERATION guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE guizmo_mode = ImGuizmo::MODE::WORLD;
 };
 

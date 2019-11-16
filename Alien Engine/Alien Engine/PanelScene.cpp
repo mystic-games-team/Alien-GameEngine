@@ -118,6 +118,7 @@ void PanelScene::PanelLogic()
 		ImGui::EndDragDropTarget();
 	}
 
+	GuizmosControls();
 	GuizmosLogic();
 
 	ImGui::End();
@@ -137,15 +138,34 @@ void PanelScene::GuizmosLogic()
 
 	ImGuizmo::SetRect((ImGui::GetWindowWidth() - width) * 0.5f, (ImGui::GetWindowHeight() - height) * 0.5f, width, height);
 	ImGuizmo::SetDrawlist();
-	ImGuizmo::MODE mode = ImGuizmo::MODE::WORLD;
-	if (guizmo_operation != ImGuizmo::OPERATION::SCALE)
-	{
-		ImGuizmo::MODE::LOCAL;
-	}
-	ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, mode, object_transform_matrix.ptr(),delta_matrix.ptr());
+	ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(),delta_matrix.ptr());
 
 	if (ImGuizmo::IsUsing())
 	{
 		transform->SetLocalTransform(object_transform_matrix.Transposed());
+	}
+}
+
+void PanelScene::GuizmosControls()
+{
+	if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)&& (App->input->GetKey(SDL_SCANCODE_LSHIFT) != KEY_REPEAT))
+	{
+		guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		guizmo_operation = ImGuizmo::OPERATION::ROTATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		guizmo_operation = ImGuizmo::OPERATION::SCALE;
+	}
+	if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT))
+	{
+		guizmo_mode = ImGuizmo::MODE::WORLD;
+	}
+	if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN))
+	{
+		guizmo_mode = ImGuizmo::MODE::LOCAL;
 	}
 }
