@@ -30,6 +30,9 @@ struct Icons {
 	ResourceTexture* redo = nullptr;
 	ResourceTexture* global = nullptr;
 	ResourceTexture* local = nullptr;
+	ResourceTexture* play = nullptr;
+	ResourceTexture* pause = nullptr;
+	ResourceTexture* once = nullptr;
 };
 
 

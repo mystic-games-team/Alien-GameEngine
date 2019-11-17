@@ -36,6 +36,9 @@ bool ModuleResources::Start()
 	icons.undo = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/undo.png");
 	icons.global = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/global.png");
 	icons.local = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/local.png");
+	icons.play = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/play.png");
+	icons.pause = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/pause.png");
+	icons.once = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/once.png");
 
 
 	assets = new FileNode();

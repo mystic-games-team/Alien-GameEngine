@@ -526,10 +526,10 @@ void ModuleUI::MainMenuBar()
 
 void ModuleUI::SecondMenuBar()
 {
-	ImGui::Begin("## Camera options", (bool*)false, ImGuiWindowFlags_NoDecoration);
+	ImGui::Begin("## Camera options", (bool*)false, ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_NoScrollWithMouse);
 
 	// TODO: Update Control if we use shortcuts
-	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 17);
 	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.undo->id, ImVec2(30, 30)))
 	{
@@ -562,12 +562,13 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SameLine();
 
 	// Transform Buttons
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
 	if (panel_scene->guizmo_operation == ImGuizmo::OPERATION::TRANSLATE)
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
 	}
 	else
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
 
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.move_transform->id, ImVec2(30, 30)))
@@ -588,7 +589,7 @@ void ModuleUI::SecondMenuBar()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
 	}
 	else
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
 
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.rotate_transform->id, ImVec2(30, 30)))
 	{
@@ -608,7 +609,7 @@ void ModuleUI::SecondMenuBar()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
 	}
 	else
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
 
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.scale_transform->id, ImVec2(30, 30)))
 	{
@@ -636,7 +637,7 @@ void ModuleUI::SecondMenuBar()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
 	}
 	else
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
 
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.global->id, ImVec2(30, 30)))
 	{
@@ -656,7 +657,7 @@ void ModuleUI::SecondMenuBar()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
 	}
 	else
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
 
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.local->id, ImVec2(30, 30)))
 	{
@@ -676,7 +677,7 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SameLine();
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
 	ImGui::Text("|");
-	ImGui::SameLine();
+	ImGui::SameLine(0,40);
 
 	// Camera Combo
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 7);
@@ -712,30 +713,78 @@ void ModuleUI::SecondMenuBar()
 		ImGui::EndCombo();
 	}
 
+
+	// Vertical Separator
+
+	ImGui::SameLine(0,60);
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
+	ImGui::Text("|");
+	ImGui::SameLine();
+
+	// Play Buttons
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
+	if (change_game_state.second == Time::GameState::PLAY)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
+	}
+	else
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.play->id, ImVec2(30, 30)))
+	{
+		change_game_state.first = true;
+		change_game_state.second = Time::GameState::PLAY;
+	}
+	ImGui::PopStyleColor();
+
+	ImGui::SameLine();
+
+	if (change_game_state.second == Time::GameState::PAUSE)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
+	}
+	else
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.pause->id, ImVec2(30, 30)))
+	{
+		change_game_state.first = true;
+		change_game_state.second = Time::GameState::PAUSE;
+	}
+	ImGui::PopStyleColor();
+
+	ImGui::SameLine();
+
+	if (change_game_state.second == Time::GameState::PLAY_ONCE)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
+	}
+	else
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.once->id, ImVec2(30, 30)))
+	{
+		change_game_state.first = true;
+		change_game_state.second = Time::GameState::PLAY_ONCE;
+	}
+	ImGui::PopStyleColor();
+
+	// Vertical Separator
+
+	ImGui::SameLine();
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
+	ImGui::Text("|");
+	ImGui::SameLine();
+
 	//ImGui::SameLine();
 
 	//ImGui::Text("Time Since Start: %f", Time::time_since_start);
 	//ImGui::SameLine();
 	//ImGui::Text("Game Time: %f", Time::game_time);
 
-	ImGui::SameLine();
-
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) { 
-		change_game_state.first = true;
-		change_game_state.second = Time::GameState::PLAY;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
-		change_game_state.first = true;
-		change_game_state.second = Time::GameState::PAUSE;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
-		change_game_state.first = true;
-		change_game_state.second = Time::GameState::PLAY_ONCE;
-	}
-
-
 	static float scale = 1.0F;
-	if (ImGui::SliderFloat("Speed", &scale, 0.5F, 4.0F, "%.2f")) {
+	ImGui::PushItemWidth(75);
+	if (ImGui::SliderFloat("Game Speed", &scale, 0.5F, 4.0F, "%.2f")) {
 		Time::SetScaleTime(scale);
 	}
 
