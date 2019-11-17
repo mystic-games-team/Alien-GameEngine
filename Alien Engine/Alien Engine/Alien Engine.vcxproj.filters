@@ -55,6 +55,9 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{5f0a952e-f176-41f1-b8e3-f9623d43fa25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Guizmos">
+      <UniqueIdentifier>{72e23ff2-eba1-4b08-ad4f-1a745f5ff149}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -470,6 +473,18 @@
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Tools\OurClassHelpers</Filter>
+      </ClInclude>
+    <ClInclude Include="ImGuizmos\ImCurveEdit.h">
+      <Filter>Tools\Guizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuizmos\ImGradient.h">
+      <Filter>Tools\Guizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuizmos\ImGuizmo.h">
+      <Filter>Tools\Guizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuizmos\ImSequencer.h">
+      <Filter>Tools\Guizmos</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -739,6 +754,18 @@
     </ClCompile>
     <ClCompile Include="Time.cpp">
       <Filter>Tools\OurClassHelpers</Filter>
+       </ClCompile>
+    <ClCompile Include="ImGuizmos\ImCurveEdit.cpp">
+      <Filter>Tools\Guizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmos\ImGradient.cpp">
+      <Filter>Tools\Guizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmos\ImGuizmo.cpp">
+      <Filter>Tools\Guizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmos\ImSequencer.cpp">
+      <Filter>Tools\Guizmos</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

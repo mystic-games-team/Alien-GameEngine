@@ -29,6 +29,14 @@ bool ModuleResources::Start()
 	icons.model = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_model.png");
 	icons.return_icon = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_return.png");
 	icons.scene_file = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_scene.png");
+	icons.move_transform = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/move.png");
+	icons.rotate_transform = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/rotate.png");
+	icons.scale_transform = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/scales.png");
+	icons.redo = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/redo.png");
+	icons.undo = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/undo.png");
+	icons.global = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/global.png");
+	icons.local = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/local.png");
+
 
 	assets = new FileNode();
 	assets->is_file = false;

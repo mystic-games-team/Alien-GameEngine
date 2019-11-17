@@ -5,6 +5,7 @@
 #include "imgui/imgui_internal.h"
 #include "FileNode.h"
 #include "PanelSceneSelector.h"
+#include "ComponentTransform.h"
 #include "ReturnZ.h"
 
 PanelScene::PanelScene(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -123,5 +124,56 @@ void PanelScene::PanelLogic()
 		ImGui::EndDragDropTarget();
 	}
 
+	GuizmosControls();
+	GuizmosLogic();
+
 	ImGui::End();
+}
+
+void PanelScene::GuizmosLogic()
+{
+	if (App->objects->GetSelectedObject() != nullptr) {
+		ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
+
+		float4x4 view_transposed = App->camera->fake_camera->frustum.ViewMatrix();
+		view_transposed.Transpose();
+		float4x4 projection_transposed = App->camera->fake_camera->frustum.ProjectionMatrix();
+		projection_transposed.Transpose();
+		float4x4 object_transform_matrix = transform->global_transformation;
+		object_transform_matrix.Transpose();
+		float4x4 delta_matrix;
+
+		ImGuizmo::SetRect(posX, posY, width, height);
+		ImGuizmo::SetDrawlist();
+		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
+
+		if (ImGuizmo::IsUsing())
+		{
+			transform->SetLocalTransform(object_transform_matrix.Transposed());
+		}
+	}
+}
+
+void PanelScene::GuizmosControls()
+{
+	if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)&& (App->input->GetKey(SDL_SCANCODE_LSHIFT) != KEY_REPEAT))
+	{
+		guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		guizmo_operation = ImGuizmo::OPERATION::ROTATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		guizmo_operation = ImGuizmo::OPERATION::SCALE;
+	}
+	if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT))
+	{
+		guizmo_mode = ImGuizmo::MODE::WORLD;
+	}
+	if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN))
+	{
+		guizmo_mode = ImGuizmo::MODE::LOCAL;
+	}
 }
