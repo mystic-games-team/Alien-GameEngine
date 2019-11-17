@@ -210,6 +210,27 @@ void ModuleRenderer3D::CreateRenderTexture()
 		//glReadBuffer(GL_NONE);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		game_tex = new ResourceTexture();
+
+		glGenTextures(1, &game_tex->id);
+		glBindTexture(GL_TEXTURE_2D, game_tex->id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, App->window->width, App->window->height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glGenFramebuffers(1, &z_framebuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, z_framebuffer);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, game_tex->id, 0);
+		glDepthRange(1, 0);
+
+		//glDrawBuffer(GL_NONE);
+		//glReadBuffer(GL_NONE);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 	else {
 		glGenFramebuffers(1, &scene_frame_buffer);
