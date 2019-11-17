@@ -185,7 +185,12 @@ void Application::PrepareUpdate()
 	frame_count++;
 	last_sec_frame_count++;
 	dt = frame_time.ReadSec();
-	Time::SetDT(dt);
+	if (Time::IsPlaying()) {
+		Time::SetDT(dt);
+	}
+	else {
+		Time::SetDT(0);
+	}
 	frame_time.Start();
 	ptimer.Start();
 }
@@ -273,7 +278,6 @@ update_status Application::Update()
 		ret = (*item)->PreUpdate(dt);
 		++item;
 	}
-
 	item = list_modules.begin();
 
 	shortcut_manager->UpdateShortCuts();
@@ -294,6 +298,7 @@ update_status Application::Update()
 	if (quit)
 		ret = UPDATE_STOP;
 	FinishUpdate();
+
 	return ret;
 }
 

@@ -308,10 +308,30 @@ void ModuleUI::SaveLayoutsActive()
 
 update_status ModuleUI::PreUpdate(float dt)
 {
-
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
+
+	if (Time::state == Time::GameState::PLAY_ONCE)
+		Time::Pause();
+
+	if (change_game_state.first) {
+		switch (change_game_state.second) {
+		case Time::GameState::NONE: {
+			Time::Stop();
+			break; }
+		case Time::GameState::PLAY: {
+			Time::Play();
+			break; }
+		case Time::GameState::PLAY_ONCE: {
+			Time::PlayOnce();
+			break; }
+		case Time::GameState::PAUSE: {
+			Time::Pause();
+			break; }
+		}
+		change_game_state.first = false;
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -543,6 +563,20 @@ void ModuleUI::SecondMenuBar()
 	ImGui::Text("Game Time: %f", Time::game_time);
 
 	ImGui::SameLine();
+
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+		change_game_state.first = true;
+		change_game_state.second = Time::GameState::PLAY;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+		change_game_state.first = true;
+		change_game_state.second = Time::GameState::PAUSE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
+		change_game_state.first = true;
+		change_game_state.second = Time::GameState::PLAY_ONCE;
+	}
+
 
 	static int scale = 1;
 

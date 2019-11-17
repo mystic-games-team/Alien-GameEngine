@@ -16,12 +16,19 @@ public:
 
 	static void Start();
 	static void Update();
+
 	static void Play();
 	static void Pause();
 	static void PlayOnce();
+	static bool IsPlaying();
+	static void Stop();
+
 	static void CleanUp();
+
 	static void SetScaleTime(const float& scale);
+
 	static float GetDT();
+
 
 public:
 

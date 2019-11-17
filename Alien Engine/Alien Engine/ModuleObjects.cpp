@@ -72,18 +72,6 @@ update_status ModuleObjects::PreUpdate(float dt)
 	}
 	base_game_object->PreUpdate();
 
-
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
-		Time::Play();
-	}
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
-		Time::Pause();
-	}
-	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
-		Time::PlayOnce();
-	}
-
-
 	return UPDATE_CONTINUE;
 }
 

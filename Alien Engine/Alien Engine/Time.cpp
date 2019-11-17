@@ -46,7 +46,7 @@ void Time::Pause()
 	if (state == GameState::PAUSE) {
 		Time::Play();
 	}
-	else if (state == GameState::PLAY) {
+	else if (state == GameState::PLAY || state == GameState::PLAY_ONCE) {
 		state = GameState::PAUSE;
 		game_timer->Pause();
 	}
@@ -54,8 +54,13 @@ void Time::Pause()
 
 void Time::PlayOnce()
 {
-	game_timer->Resume();
-	state = GameState::PLAY_ONCE;
+	if (state == GameState::PAUSE) {
+		game_timer->Resume();
+		state = GameState::PLAY_ONCE;
+	}
+	else if (state == GameState::PLAY) {
+		state = GameState::PLAY_ONCE;
+	}
 }
 
 void Time::CleanUp()
@@ -79,4 +84,18 @@ void Time::SetDT(const float& dt)
 float Time::GetDT()
 {
 	return delta_time * scale_time;
+}
+
+bool Time::IsPlaying()
+{
+	if (state == GameState::PLAY || state == GameState::PLAY_ONCE)
+		return true;
+	else
+		return false;
+}
+
+void Time::Stop()
+{
+	game_time = 0.0F;
+	state = GameState::NONE;
 }

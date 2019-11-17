@@ -177,6 +177,5 @@ public:
 private:
 
 	GameObject* game_object_selected = nullptr;
-
 	std::vector< std::tuple<GameObject*, GameObject*, bool>> to_reparent;
 };

@@ -6,6 +6,8 @@
 #include "imgui/examples/imgui_impl_sdl.h"
 #include "imgui/examples/imgui_impl_opengl3.h"
 #include "Panel.h"
+#include "Time.h"
+#include <utility>
 
 class Panel;
 class PanelConfig;
@@ -157,6 +159,8 @@ private:
 	SDL_Scancode shortcut_AABB_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_OBB_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_octree_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+
+	std::pair<bool, Time::GameState> change_game_state;
 
 public:
 
