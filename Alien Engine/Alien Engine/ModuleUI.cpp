@@ -712,15 +712,15 @@ void ModuleUI::SecondMenuBar()
 		ImGui::EndCombo();
 	}
 
+	//ImGui::SameLine();
+
+	//ImGui::Text("Time Since Start: %f", Time::time_since_start);
+	//ImGui::SameLine();
+	//ImGui::Text("Game Time: %f", Time::game_time);
+
 	ImGui::SameLine();
 
-	ImGui::Text("Time Since Start: %f", Time::time_since_start);
-	ImGui::SameLine();
-	ImGui::Text("Game Time: %f", Time::game_time);
-
-	ImGui::SameLine();
-
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) { 
 		change_game_state.first = true;
 		change_game_state.second = Time::GameState::PLAY;
 	}
@@ -734,17 +734,9 @@ void ModuleUI::SecondMenuBar()
 	}
 
 
-	static int scale = 1;
-
-	if (ImGui::Combo("Select Scale Time", &scale, "x0.5\0Normal\0x1.5\0x2\0"))
-	{
-		switch (scale)
-		{
-		case 0: Time::SetScaleTime(0.5F); break;
-		case 1: Time::SetScaleTime(1); break;
-		case 2: Time::SetScaleTime(1.5F); break;
-		case 3: Time::SetScaleTime(2); break;
-		}
+	static float scale = 1.0F;
+	if (ImGui::SliderFloat("Speed", &scale, 0.5F, 4.0F, "%.2f")) {
+		Time::SetScaleTime(scale);
 	}
 
 	ImGui::End();

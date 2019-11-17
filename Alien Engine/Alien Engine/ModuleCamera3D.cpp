@@ -70,7 +70,7 @@ update_status ModuleCamera3D::Update(float dt)
 			{
 				Rotation(dt);
 			}
-			else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
+			else if (!ImGuizmo::IsOver() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
 				CreateRay();
 			}
 
