@@ -109,7 +109,7 @@ void GameObject::DrawScene()
 
 void GameObject::DrawGame()
 {
-	if (App->renderer3D->FrustrumIntersection(App->renderer3D->scene_fake_camera, this)) {
+	if (App->renderer3D->IsInsideFrustum(App->renderer3D->scene_fake_camera, this)) {
 		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 		ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
 		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
@@ -131,6 +131,7 @@ void GameObject::DrawGame()
 			light->LightLogic();
 		}
 	}
+
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
