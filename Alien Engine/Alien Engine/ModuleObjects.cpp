@@ -10,6 +10,7 @@
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
 #include "ReturnZ.h"
+#include "TimeManager.h"
 #include "ModuleRenderer3D.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
@@ -70,6 +71,19 @@ update_status ModuleObjects::PreUpdate(float dt)
 		to_reparent.clear();
 	}
 	base_game_object->PreUpdate();
+
+
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+		Time::Play();
+	}
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+		Time::Pause();
+	}
+	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
+		Time::PlayOnce();
+	}
+
+
 	return UPDATE_CONTINUE;
 }
 

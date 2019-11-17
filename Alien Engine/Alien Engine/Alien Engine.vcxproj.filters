@@ -464,9 +464,12 @@
     </ClInclude>
     <ClInclude Include="ReturnZ.h">
       <Filter>Tools\OurClassHelpers</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="PanelGame.h">
       <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Tools\OurClassHelpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -730,9 +733,12 @@
     </ClCompile>
     <ClCompile Include="ReturnZ.cpp">
       <Filter>Tools\OurClassHelpers</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="PanelGame.cpp">
       <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Tools\OurClassHelpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

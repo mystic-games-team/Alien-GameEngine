@@ -267,6 +267,7 @@
     <ClInclude Include="ReturnZ.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
+    <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -357,6 +358,7 @@
     <ClCompile Include="ReturnZ.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
+    <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
