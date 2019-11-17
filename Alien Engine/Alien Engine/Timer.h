@@ -20,7 +20,9 @@ public:
 
 private:
 	unsigned __int32	started_at;
+	unsigned __int32	time_pause;
 	unsigned __int32	offset = 0;
+	unsigned __int32	time_passed = 0;
 	bool is_pause = false;
 };
 

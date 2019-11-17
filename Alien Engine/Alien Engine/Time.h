@@ -1,7 +1,7 @@
-#ifndef _TIME_H
-#define _TIME_H
+#ifndef __TIME_H__
+#define __TIME_H__
 
-#include "Timer.h"
+class Timer;
 
 class Time {
 public:
@@ -18,6 +18,7 @@ public:
 	static void Play();
 	static void Pause();
 	static void PlayOnce();
+	static void CleanUp();
 
 public:
 
@@ -29,8 +30,8 @@ public:
 
 private:
 
-	static Timer game_timer;
-	static Timer start_timer;
+	static Timer* game_timer;
+	static Timer* start_timer;
 };
 
 #endif

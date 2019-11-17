@@ -11,6 +11,7 @@
 #include "PanelCreateObject.h"
 #include "PanelHierarchy.h"
 #include "PanelRender.h"
+#include "Time.h"
 #include "SDL/include/SDL_assert.h"
 #include "ModuleObjects.h"
 #include "PanelLayout.h"
@@ -534,6 +535,13 @@ void ModuleUI::SecondMenuBar()
 		}
 		ImGui::EndCombo();
 	}
+
+	ImGui::SameLine();
+
+	ImGui::Text("Time Since Start: %f", Time::time_since_start);
+	ImGui::SameLine();
+	ImGui::Text("Game Time: %f", Time::game_time);
+
 	ImGui::End();
 }
 

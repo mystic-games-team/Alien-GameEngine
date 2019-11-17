@@ -468,7 +468,7 @@
     <ClInclude Include="PanelGame.h">
       <Filter>Panels</Filter>
     </ClInclude>
-    <ClInclude Include="TimeManager.h">
+    <ClInclude Include="Time.h">
       <Filter>Tools\OurClassHelpers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -737,7 +737,7 @@
     <ClCompile Include="PanelGame.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
-    <ClCompile Include="TimeManager.cpp">
+    <ClCompile Include="Time.cpp">
       <Filter>Tools\OurClassHelpers</Filter>
     </ClCompile>
   </ItemGroup>

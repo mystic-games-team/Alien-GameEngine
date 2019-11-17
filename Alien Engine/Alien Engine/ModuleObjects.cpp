@@ -10,7 +10,7 @@
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
 #include "ReturnZ.h"
-#include "TimeManager.h"
+#include "Time.h"
 #include "ModuleRenderer3D.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)

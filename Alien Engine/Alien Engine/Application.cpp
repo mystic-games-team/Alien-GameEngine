@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "Parson/parson.h"
-
+#include "Time.h"
 
 Application::Application()
 {
@@ -168,7 +168,8 @@ bool Application::Init()
 	// After all Init calls we call Start() in all modules
 	LOG("Application Start --------------");
 	item = list_modules.begin();
-
+	
+	Time::Start();
 	while(item != list_modules.end() && ret == true)
 	{
 		ret = (*item)->Start();
@@ -210,7 +211,7 @@ void Application::FinishUpdate()
 		SDL_Delay(framerate_cap - last_frame_ms);
 		float delaytimefinish = time.ReadMs();
 	}
-
+	Time::Update();
 	ui->FramerateRegister((float)prev_last_sec_frame_count, (float)(framerate_cap));
 }
 
@@ -300,7 +301,7 @@ bool Application::CleanUp()
 	bool ret = true;
 
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
-
+	Time::CleanUp();
 	while(item != list_modules.rend() && ret == true)
 	{
 		ret = (*item)->CleanUp();
