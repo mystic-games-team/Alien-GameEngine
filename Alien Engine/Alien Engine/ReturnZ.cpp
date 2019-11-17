@@ -81,7 +81,7 @@ void ReturnZ::AddNewFordwarAction(const ReturnActions& type, void* data)
 
 void ReturnZ::GoBackOneAction()
 {
-	if (App->objects->return_actions.empty())
+	if (App->objects->return_actions.empty() || Time::IsPlaying())
 		return;
 
 	ReturnZ* to_return = App->objects->return_actions.top();
@@ -92,7 +92,7 @@ void ReturnZ::GoBackOneAction()
 
 void ReturnZ::GoFordwardOneAction()
 {
-	if (App->objects->fordward_actions.empty())
+	if (App->objects->fordward_actions.empty() || Time::IsPlaying())
 		return;
 
 	ReturnZ* to_return = App->objects->fordward_actions.top();
@@ -383,8 +383,6 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 			}
 		}
 	}
-
-
 }
 
 void CompZ::SetCompZ(Component* component, CompZ** compZ)
