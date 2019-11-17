@@ -553,5 +553,14 @@ void ComponentTransform::LoadComponent(JSONArraypack* to_load)
 		global_transformation = local_transformation;
 }
 
+void ComponentTransform::SetLocalTransform(float4x4 &transform_matrix)
+{
+	transform_matrix.Decompose(local_position, local_rotation, local_scale);
+	euler_rotation = local_rotation.ToEulerXYZ();
+	euler_rotation.x = RadToDeg(euler_rotation.x);
+	euler_rotation.y = RadToDeg(euler_rotation.y);
+	euler_rotation.z = RadToDeg(euler_rotation.z);
+	RecalculateTransform();
+}
 
 

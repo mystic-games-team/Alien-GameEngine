@@ -24,6 +24,8 @@ public:
 	const Quat& GetLocalRotation() const;
 	const Quat& GetGlobalRotation() const;
 
+	void SetLocalTransform(float4x4 &transform_matrix);
+
 	void DrawInspector();
 
 	void SetScaleNegative(const bool& negative);
@@ -34,6 +36,8 @@ public:
 
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
+
+
 
 private:
 

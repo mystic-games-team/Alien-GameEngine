@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Panel.h"
+#include "ImGuizmos/ImGuizmo.h"
 
 class PanelScene : public Panel {
 
@@ -10,6 +11,16 @@ public:
 	virtual ~PanelScene();
 
 	void PanelLogic();
+
+private:
+
+	void GuizmosControls();
+	void GuizmosLogic();
+
+public:
+
+	ImGuizmo::OPERATION guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE guizmo_mode = ImGuizmo::MODE::WORLD;
 
 public:
 	float width = 960;

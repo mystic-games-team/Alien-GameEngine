@@ -20,6 +20,8 @@
 #include "PanelScene.h"
 #include "PanelGame.h"
 #include <string>
+#include "ResourceTexture.h"
+#include "ReturnZ.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -504,6 +506,160 @@ void ModuleUI::MainMenuBar()
 void ModuleUI::SecondMenuBar()
 {
 	ImGui::Begin("## Camera options", (bool*)false, ImGuiWindowFlags_NoDecoration);
+
+	// TODO: Update Control if we use shortcuts
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
+	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.undo->id, ImVec2(30, 30)))
+	{
+		ReturnZ::GoBackOneAction();
+	}
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::Text("Undo (Control+Z)");
+		ImGui::EndTooltip();
+	}
+	ImGui::SameLine();
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.redo->id, ImVec2(30, 30)))
+	{
+		ReturnZ::GoFordwardOneAction();
+	}
+	ImGui::PopStyleColor();
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::Text("Redo (Control+Y)");
+		ImGui::EndTooltip();
+	}
+	// Vertical Separator
+
+	ImGui::SameLine();
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
+	ImGui::Text("|");
+	ImGui::SameLine();
+
+	// Transform Buttons
+	if (panel_scene->guizmo_operation == ImGuizmo::OPERATION::TRANSLATE)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
+	}
+	else
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.move_transform->id, ImVec2(30, 30)))
+	{
+		panel_scene->guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+	}
+	ImGui::PopStyleColor();
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::Text("Move (W)");
+		ImGui::EndTooltip();
+	}
+	ImGui::SameLine();
+
+	if (panel_scene->guizmo_operation == ImGuizmo::OPERATION::ROTATE)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
+	}
+	else
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.rotate_transform->id, ImVec2(30, 30)))
+	{
+		panel_scene->guizmo_operation = ImGuizmo::OPERATION::ROTATE;
+	}
+	ImGui::PopStyleColor();
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::Text("Rotate (E)");
+		ImGui::EndTooltip();
+	}
+	ImGui::SameLine();
+
+	if (panel_scene->guizmo_operation == ImGuizmo::OPERATION::SCALE)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
+	}
+	else
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.scale_transform->id, ImVec2(30, 30)))
+	{
+		panel_scene->guizmo_operation = ImGuizmo::OPERATION::SCALE;
+	}
+	ImGui::PopStyleColor();
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::Text("Scale (R)");
+		ImGui::EndTooltip();
+	}
+
+	// Vertical Separator
+
+	ImGui::SameLine();
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
+	ImGui::Text("|");
+	ImGui::SameLine();
+
+	// Transform Modes
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
+	if (panel_scene->guizmo_mode == ImGuizmo::MODE::WORLD)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
+	}
+	else
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.global->id, ImVec2(30, 30)))
+	{
+		panel_scene->guizmo_mode = ImGuizmo::MODE::WORLD;
+	}
+	ImGui::PopStyleColor();
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::Text("World Mode (Shift+W)");
+		ImGui::EndTooltip();
+	}
+	ImGui::SameLine();
+
+	if (panel_scene->guizmo_mode == ImGuizmo::MODE::LOCAL)
+	{
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
+	}
+	else
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 0 });
+
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.local->id, ImVec2(30, 30)))
+	{
+		panel_scene->guizmo_mode = ImGuizmo::MODE::LOCAL;
+	}
+	ImGui::PopStyleColor();
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::Text("Local Mode (Shift+L)");
+		ImGui::EndTooltip();
+	}
+
+
+	// Vertical Separator
+
+	ImGui::SameLine();
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
+	ImGui::Text("|");
+	ImGui::SameLine();
+
+	// Camera Combo
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 7);
+
 	static int camera_combo = 0;
 	std::string combo_cameras_name;
 
@@ -534,6 +690,7 @@ void ModuleUI::SecondMenuBar()
 		}
 		ImGui::EndCombo();
 	}
+
 	ImGui::End();
 }
 

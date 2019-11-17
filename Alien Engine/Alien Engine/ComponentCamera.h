@@ -29,7 +29,6 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
-
 public:
 	Frustum frustum;
 

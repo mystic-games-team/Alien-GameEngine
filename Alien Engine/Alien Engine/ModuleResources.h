@@ -23,7 +23,13 @@ struct Icons {
 	ResourceTexture* model = nullptr;
 	ResourceTexture* return_icon = nullptr;
 	ResourceTexture* scene_file = nullptr;
-
+	ResourceTexture* move_transform = nullptr;
+	ResourceTexture* rotate_transform = nullptr;
+	ResourceTexture* scale_transform = nullptr;
+	ResourceTexture* undo = nullptr;
+	ResourceTexture* redo = nullptr;
+	ResourceTexture* global = nullptr;
+	ResourceTexture* local = nullptr;
 };
 
 

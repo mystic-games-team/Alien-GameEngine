@@ -156,6 +156,10 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="gpudetect\DeviceId.h" />
     <ClInclude Include="gpudetect\dxgi1_4.h" />
+    <ClInclude Include="ImGuizmos\ImCurveEdit.h" />
+    <ClInclude Include="ImGuizmos\ImGradient.h" />
+    <ClInclude Include="ImGuizmos\ImGuizmo.h" />
+    <ClInclude Include="ImGuizmos\ImSequencer.h" />
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h" />
     <ClInclude Include="imgui\examples\imgui_impl_sdl.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -281,6 +285,10 @@
     <ClCompile Include="FileNode.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="gpudetect\DeviceId.cpp" />
+    <ClCompile Include="ImGuizmos\ImCurveEdit.cpp" />
+    <ClCompile Include="ImGuizmos\ImGradient.cpp" />
+    <ClCompile Include="ImGuizmos\ImGuizmo.cpp" />
+    <ClCompile Include="ImGuizmos\ImSequencer.cpp" />
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\examples\imgui_impl_sdl.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
