@@ -431,7 +431,7 @@ void ModuleObjects::LoadScene(const char* path, bool change_scene)
 	if (value != nullptr && object != nullptr)
 	{
 		octree.Clear();
-		DeleteReturns();
+
 		delete base_game_object;
 		game_object_selected = nullptr;
 		base_game_object = new GameObject();
@@ -481,6 +481,7 @@ void ModuleObjects::LoadScene(const char* path, bool change_scene)
 			current_scene.is_untitled = false;
 			current_scene.name_without_extension = App->file_system->GetBaseFileName(path_normalized.data());
 			current_scene.need_to_save = false;
+			DeleteReturns();
 		}
 	}
 	else {
