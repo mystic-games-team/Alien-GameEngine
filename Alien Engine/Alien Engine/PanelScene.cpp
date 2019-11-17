@@ -143,7 +143,7 @@ void PanelScene::GuizmosLogic()
 		object_transform_matrix.Transpose();
 		float4x4 delta_matrix;
 
-		ImGuizmo::SetRect((ImGui::GetWindowWidth() - width) * 0.5f, (ImGui::GetWindowHeight() - height) * 0.5f, width, height);
+		ImGuizmo::SetRect(posX, posY, width, height);
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
 
