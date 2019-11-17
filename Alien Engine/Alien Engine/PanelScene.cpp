@@ -146,10 +146,17 @@ void PanelScene::GuizmosLogic()
 		ImGuizmo::SetRect(posX, posY, width, height);
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
-
+		static bool guizmo_return = true;
 		if (ImGuizmo::IsUsing())
 		{
+			if (guizmo_return) {
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, transform);
+				guizmo_return = false;
+			}
 			transform->SetLocalTransform(object_transform_matrix.Transposed());
+		}
+		else if (!guizmo_return) {
+			guizmo_return = true;
 		}
 	}
 }
