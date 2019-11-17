@@ -1,5 +1,7 @@
 #include "Time.h"
 #include "Timer.h"
+#include "Application.h"
+#include "ModuleObjects.h"
 
 Time::GameState Time::state = Time::GameState::NONE;
 float Time::time_since_start = 0.0F;
@@ -27,6 +29,7 @@ void Time::Update()
 void Time::Play()
 {
 	if (state == GameState::NONE) {
+		App->objects->SaveScene("Library/play_scene.alienScene");
 		state = GameState::PLAY;
 		game_time = 0.0F;
 		game_timer->Start();
@@ -38,6 +41,8 @@ void Time::Play()
 	else if (state == GameState::PLAY) {
 		state = GameState::NONE;
 		game_time = 0.0F;
+		App->objects->LoadScene("Library/play_scene.alienScene");
+		remove("Library/play_scene.alienScene");
 	}
 }
 
