@@ -185,6 +185,7 @@ void Application::PrepareUpdate()
 	frame_count++;
 	last_sec_frame_count++;
 	dt = frame_time.ReadSec();
+	Time::SetDT(dt);
 	frame_time.Start();
 	ptimer.Start();
 }

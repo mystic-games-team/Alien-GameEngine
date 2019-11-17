@@ -15,6 +15,7 @@ public:
 	void Start();
 	unsigned __int32 Read() const;
 	float ReadSec() const;
+	float ReadSec(float scale);
 	void Pause();
 	void Resume();
 
@@ -23,6 +24,8 @@ private:
 	unsigned __int32	time_pause;
 	unsigned __int32	offset = 0;
 	unsigned __int32	time_passed = 0;
+	float	curr_time = 0;
+	float	time_last_update = 0;
 	bool is_pause = false;
 };
 

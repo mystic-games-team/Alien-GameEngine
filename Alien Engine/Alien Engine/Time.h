@@ -5,6 +5,7 @@ class Timer;
 
 class Time {
 public:
+	friend class Application;
 
 	enum class GameState {
 		NONE,
@@ -19,17 +20,21 @@ public:
 	static void Pause();
 	static void PlayOnce();
 	static void CleanUp();
+	static void SetScaleTime(const float& scale);
+	static float GetDT();
 
 public:
 
 	static GameState state;
 	static float time_since_start;
 	static float game_time;
-	static float delta_time;
 	static float scale_time;
 
 private:
 
+	static void SetDT(const float& dt);
+
+	static float delta_time;
 	static Timer* game_timer;
 	static Timer* start_timer;
 };

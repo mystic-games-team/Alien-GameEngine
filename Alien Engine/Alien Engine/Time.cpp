@@ -5,7 +5,7 @@ Time::GameState Time::state = Time::GameState::NONE;
 float Time::time_since_start = 0.0F;
 float Time::game_time = 0.0F;
 float Time::delta_time = 0.0F;
-float Time::scale_time = 0.0F;
+float Time::scale_time = 1.0F;
 Timer* Time::start_timer = new Timer();
 Timer* Time::game_timer = new Timer();
 
@@ -20,7 +20,7 @@ void Time::Update()
 	time_since_start = start_timer->ReadSec();
 
 	if (state == GameState::PLAY || state == GameState::PLAY_ONCE) {
-		game_time = game_timer->ReadSec();
+		game_time = game_timer->ReadSec(scale_time);
 	}
 }
 
@@ -64,4 +64,19 @@ void Time::CleanUp()
 		delete start_timer;
 	if (game_timer != nullptr)
 		delete game_timer;
+}
+
+void Time::SetScaleTime(const float& scale)
+{
+	scale_time = scale;
+}
+
+void Time::SetDT(const float& dt)
+{
+	delta_time = dt;
+}
+
+float Time::GetDT()
+{
+	return delta_time * scale_time;
 }

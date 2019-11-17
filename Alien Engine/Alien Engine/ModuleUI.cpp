@@ -542,6 +542,21 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SameLine();
 	ImGui::Text("Game Time: %f", Time::game_time);
 
+	ImGui::SameLine();
+
+	static int scale = 1;
+
+	if (ImGui::Combo("Select Scale Time", &scale, "x0.5\0Normal\0x1.5\0x2\0"))
+	{
+		switch (scale)
+		{
+		case 0: Time::SetScaleTime(0.5F); break;
+		case 1: Time::SetScaleTime(1); break;
+		case 2: Time::SetScaleTime(1.5F); break;
+		case 3: Time::SetScaleTime(2); break;
+		}
+	}
+
 	ImGui::End();
 }
 

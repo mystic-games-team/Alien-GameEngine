@@ -18,6 +18,9 @@ void Timer::Start()
 	started_at = SDL_GetTicks();
 	offset = 0;
 	is_pause = false;
+	time_passed = 0;
+	curr_time = 0;
+	time_last_update = 0;
 }
 
 // ---------------------------------------------
@@ -33,6 +36,16 @@ float Timer::ReadSec() const
 		return float((SDL_GetTicks() - started_at - offset) / 1000.0f);
 	else
 		return time_passed;
+}
+
+float Timer::ReadSec(float scale)
+{
+	float actual_time = float((SDL_GetTicks() - started_at - offset) / 1000.0f);
+	float time = actual_time - curr_time;
+
+	time_last_update = time_last_update + time * scale;
+	curr_time = actual_time;
+	return time_last_update;
 }
 
 void Timer::Pause()
