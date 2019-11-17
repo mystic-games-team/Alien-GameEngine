@@ -377,7 +377,7 @@ void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_pare
 	}
 }
 
-void ModuleObjects::SaveScene(const char* path)
+void ModuleObjects::SaveScene(const char* path, bool change_scene)
 {
 	// remove the last save and save the new
 	remove(path);
@@ -409,21 +409,21 @@ void ModuleObjects::SaveScene(const char* path)
 
 		scene->FinishSave();
 		delete scene;
-
-		std::string path_normalized = path;
-		App->file_system->NormalizePath(path_normalized);
-		current_scene.full_path = path;
-		current_scene.is_untitled = false;
-		current_scene.name_without_extension = App->file_system->GetBaseFileName(path_normalized.data());
-		current_scene.need_to_save = false;
-
+		if (change_scene) {
+			std::string path_normalized = path;
+			App->file_system->NormalizePath(path_normalized);
+			current_scene.full_path = path;
+			current_scene.is_untitled = false;
+			current_scene.name_without_extension = App->file_system->GetBaseFileName(path_normalized.data());
+			current_scene.need_to_save = false;
+		}
 	}
 	else {
 		LOG("Could not load scene, fail when creating the file");
 	}
 }
 
-void ModuleObjects::LoadScene(const char* path)
+void ModuleObjects::LoadScene(const char* path, bool change_scene)
 {
 	JSON_Value* value = json_parse_file(path);
 	JSON_Object* object = json_value_get_object(value);
@@ -474,13 +474,14 @@ void ModuleObjects::LoadScene(const char* path)
 			objects_created.push_back(obj);
 		}
 		delete scene;
-
-		std::string path_normalized = path;
-		App->file_system->NormalizePath(path_normalized);
-		current_scene.full_path = path;
-		current_scene.is_untitled = false;
-		current_scene.name_without_extension = App->file_system->GetBaseFileName(path_normalized.data());
-		current_scene.need_to_save = false;
+		if (change_scene) {
+			std::string path_normalized = path;
+			App->file_system->NormalizePath(path_normalized);
+			current_scene.full_path = path;
+			current_scene.is_untitled = false;
+			current_scene.name_without_extension = App->file_system->GetBaseFileName(path_normalized.data());
+			current_scene.need_to_save = false;
+		}
 	}
 	else {
 		LOG("Error loading scene %s", path);

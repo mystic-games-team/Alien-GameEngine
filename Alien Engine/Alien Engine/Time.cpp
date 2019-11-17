@@ -29,7 +29,7 @@ void Time::Update()
 void Time::Play()
 {
 	if (state == GameState::NONE) {
-		App->objects->SaveScene("Library/play_scene.alienScene");
+		App->objects->SaveScene("Library/play_scene.alienScene", false);
 		state = GameState::PLAY;
 		game_time = 0.0F;
 		game_timer->Start();
@@ -41,7 +41,7 @@ void Time::Play()
 	else if (state == GameState::PLAY) {
 		state = GameState::NONE;
 		game_time = 0.0F;
-		App->objects->LoadScene("Library/play_scene.alienScene");
+		App->objects->LoadScene("Library/play_scene.alienScene", false);
 		remove("Library/play_scene.alienScene");
 	}
 }
@@ -97,6 +97,11 @@ bool Time::IsPlaying()
 		return true;
 	else
 		return false;
+}
+
+bool Time::IsInGameState()
+{
+	return state != GameState::NONE;
 }
 
 void Time::Stop()

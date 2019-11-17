@@ -95,8 +95,8 @@ public:
 	void ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ = true);
 
 	// scenes
-	void SaveScene(const char* path);
-	void LoadScene(const char* path);
+	void SaveScene(const char* path, bool change_scene = true);
+	void LoadScene(const char* path, bool change_scene = true);
 	void CreateEmptyScene(const char* path);
 
 	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);

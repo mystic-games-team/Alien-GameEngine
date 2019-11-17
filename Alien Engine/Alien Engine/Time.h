@@ -21,6 +21,7 @@ public:
 	static void Pause();
 	static void PlayOnce();
 	static bool IsPlaying();
+	static bool IsInGameState();
 	static void Stop();
 
 	static void CleanUp();

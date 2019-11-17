@@ -723,7 +723,7 @@ void ModuleUI::SecondMenuBar()
 
 	// Play Buttons
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
-	if (change_game_state.second == Time::GameState::PLAY)
+	if (Time::state == Time::GameState::PLAY)
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
 	}
@@ -739,14 +739,14 @@ void ModuleUI::SecondMenuBar()
 
 	ImGui::SameLine();
 
-	if (change_game_state.second == Time::GameState::PAUSE)
+	if (Time::state == Time::GameState::PAUSE)
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
 	}
 	else
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
 
-	if (ImGui::ImageButton((ImTextureID)App->resources->icons.pause->id, ImVec2(30, 30)))
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.pause->id, ImVec2(30, 30)) && Time::IsInGameState())
 	{
 		change_game_state.first = true;
 		change_game_state.second = Time::GameState::PAUSE;
@@ -755,14 +755,14 @@ void ModuleUI::SecondMenuBar()
 
 	ImGui::SameLine();
 
-	if (change_game_state.second == Time::GameState::PLAY_ONCE)
+	if (Time::state == Time::GameState::PLAY_ONCE)
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
 	}
 	else
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
 
-	if (ImGui::ImageButton((ImTextureID)App->resources->icons.once->id, ImVec2(30, 30)))
+	if (ImGui::ImageButton((ImTextureID)App->resources->icons.once->id, ImVec2(30, 30)) && Time::IsInGameState())
 	{
 		change_game_state.first = true;
 		change_game_state.second = Time::GameState::PLAY_ONCE;
