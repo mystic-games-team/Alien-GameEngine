@@ -10,7 +10,6 @@ struct aiFileIO;
 #include "Bass/include/bass.h"
 //struct BASS_FILEPROCS;
 
-
 #define ASSETS_FOLDER "Assets/"
 #define LIBRARY_FOLDER "Library/"
 #define LIBRARY_MODELS_FOLDER "Library/Models/"
@@ -36,6 +35,7 @@ enum class FileDropType {
 	FOLDER,
 	SCRIPT,
 	SCENE,
+	PREFAB,
 
 	UNKNOWN
 };

@@ -8,6 +8,7 @@
 #include "ResourceTexture.h"
 #include "RandomHelper.h"
 #include "PanelProject.h"
+#include "ResourcePrefab.h"
 #include "FileNode.h"
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
@@ -284,6 +285,11 @@ void ModuleResources::ReadAllMetaData()
 	App->file_system->DiscoverFiles(MODELS_FOLDER, files, directories);
 
 	ReadModels(directories, files, MODELS_FOLDER);
+	files.clear();
+	directories.clear();
+	// Init Prefabs
+	App->file_system->DiscoverFiles(ASSETS_PREFAB_FOLDER, files, directories);
+	ReadPrefabs(directories, files, ASSETS_PREFAB_FOLDER);
 }
 
 void ModuleResources::ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
@@ -321,6 +327,27 @@ void ModuleResources::ReadModels(std::vector<std::string> directories, std::vect
 			std::string dir = current_folder + directories[i] + "/";
 			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
 			ReadModels(new_directories, new_files, dir);
+		}
+	}
+}
+
+void ModuleResources::ReadPrefabs(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
+{
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourcePrefab* model = new ResourcePrefab();
+		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
+			LOG("Error while loading %s because has not .alienfab", files[i]);
+			delete model;
+		}
+	}
+	if (!directories.empty()) {
+		std::vector<std::string> new_files;
+		std::vector<std::string> new_directories;
+
+		for (uint i = 0; i < directories.size(); ++i) {
+			std::string dir = current_folder + directories[i] + "/";
+			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
+			ReadPrefabs(new_directories, new_files, dir);
 		}
 	}
 }

@@ -5,6 +5,7 @@
 #include "imgui/imgui_internal.h"
 #include "FileNode.h"
 #include "PanelSceneSelector.h"
+#include "ResourcePrefab.h"
 #include "ComponentTransform.h"
 #include "ReturnZ.h"
 
@@ -93,6 +94,15 @@ void PanelScene::PanelLogic()
 					if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
 						ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, App->objects->GetSelectedObject()->GetComponent(ComponentType::MATERIAL));
 					App->importer->ApplyTextureToSelectedObject(texture_dropped);
+				}
+			}
+
+			if (node != nullptr && node->type == FileDropType::PREFAB) {
+				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name) + ".alienfab";
+				u64 ID = App->resources->GetIDFromAlienPath(path.data());
+				if (ID != 0) {
+					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
+					prefab->ConvertToGameObjects();
 				}
 			}
 

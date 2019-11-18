@@ -1,0 +1,215 @@
+{
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "watchtowerHigh",
+                "FamilyNumber": 1,
+                "ID": "978644254341741818",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -3.5,
+                            -2.5,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "18152851048967423190",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": false,
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "BakerHouse",
+                "FamilyNumber": 2,
+                "ID": "15636156243123063819",
+                "ParentID": "978644254341741818",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            6,
+                            2,
+                            2
+                        ],
+                        "Rotation": [
+                            0.079665012657642365,
+                            -0.99285322427749634,
+                            -0.088237956166267395,
+                            0.010495278984308243
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false
+                    }
+                ]
+            },
+            {
+                "Name": "Chimney",
+                "FamilyNumber": 3,
+                "ID": "14356057219355796358",
+                "ParentID": "15636156243123063819",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "9208057167443305774",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": true,
+                        "TextureID": "1302212642455179980",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Baker_house",
+                "FamilyNumber": 3,
+                "ID": "7656665019596727276",
+                "ParentID": "15636156243123063819",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "11638451959622749144",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": true,
+                        "TextureID": "1302212642455179980",
+                        "Enabled": true
+                    }
+                ]
+            }
+        ]
+    }
+}

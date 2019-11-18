@@ -4,6 +4,7 @@
 #include "PanelCreateObject.h"
 #include "ResourcePrefab.h"
 #include "imgui/imgui_internal.h"
+#include "PanelProject.h"
 
 PanelHierarchy::PanelHierarchy(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -182,6 +183,7 @@ void PanelHierarchy::RightClickMenu()
 			if (ImGui::MenuItem("Make it Pefab")) {
 				ResourcePrefab* prefab = new ResourcePrefab();
 				prefab->CreateMetaData(object_menu);
+				App->ui->panel_project->RefreshAllNodes();
 			}
 
 			ImGui::Separator();
