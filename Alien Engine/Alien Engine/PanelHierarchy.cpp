@@ -190,7 +190,8 @@ void PanelHierarchy::RightClickMenu()
 				ImGui::Separator();
 
 				if (ImGui::MenuItem("Select Prefab Root")) {
-
+					App->objects->SetNewSelectedObject(object_menu->FindPrefabRoot());
+					App->camera->Focus();
 				}
 
 				if (ImGui::MenuItem("Open Prefab")) {

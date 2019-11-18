@@ -89,6 +89,7 @@ public:
 	void SearchResourceToDelete(const ResourceType& type, Resource* to_delete);
 
 	// prefab
+	void SetPrefab();
 	void UnpackPrefab();
 	GameObject* FindPrefabRoot();
 

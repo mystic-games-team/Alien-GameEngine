@@ -734,6 +734,18 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 	}
 }
 
+void GameObject::SetPrefab()
+{
+	is_prefab = true;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->SetPrefab();
+		}
+	}
+}
+
 void GameObject::UnpackPrefab()
 {
 	if (!is_prefab)
