@@ -162,7 +162,9 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	glViewport(0, 0, App->window->width, App->window->height);
+	glViewport(0, 0, width, height);
+	App->window->width = width;
+	App->window->height = height;
 
 	CreateRenderTexture();
 }

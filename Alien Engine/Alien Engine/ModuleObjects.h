@@ -49,6 +49,7 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
+	void DrawRay();
 	bool CleanUp();
 
 	// config
@@ -162,6 +163,11 @@ public:
 	Color global_OBB_color{ 1,1,1 };
 	uint AABB_line_width = 1;
 	uint OBB_line_width = 1;
+
+	// Ray Options
+	bool draw_ray = false;
+	Color ray_color{ 1,0,0,1 };
+	uint ray_width = 5;
 
 	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;
