@@ -44,9 +44,7 @@ bool ModuleRenderer3D::Init()
 
 	App->camera->fake_camera = new ComponentCamera(nullptr);
 	App->camera->fake_camera->frustum.farPlaneDistance = 1000.0F;
-	App->objects->camera = new ComponentCamera(nullptr);
 	scene_fake_camera = App->camera->fake_camera;
-	actual_game_camera = App->objects->camera;
 
 	if(ret == true)
 	{
@@ -126,7 +124,6 @@ bool ModuleRenderer3D::Init()
 
 bool ModuleRenderer3D::Start()
 {
-	actual_game_camera = App->objects->game_cameras.front();
 
 	return true;
 }
