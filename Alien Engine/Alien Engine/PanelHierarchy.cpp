@@ -186,6 +186,28 @@ void PanelHierarchy::RightClickMenu()
 				App->ui->panel_project->RefreshAllNodes();
 			}
 
+			if (object_menu->is_prefab) {
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Select Prefab Root")) {
+
+				}
+
+				if (ImGui::MenuItem("Open Prefab")) {
+
+				}
+
+				if (ImGui::MenuItem("Select Prefab Asset")) {
+
+				}
+
+				if (ImGui::MenuItem("UnPack Prefab")) {
+					GameObject* obj = object_menu->FindPrefabRoot();
+					obj->UnpackPrefab();
+				}
+			}
+
+
 			ImGui::Separator();
 
 			if (ImGui::MenuItem("Create Empty Child"))

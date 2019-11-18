@@ -734,6 +734,40 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 	}
 }
 
+void GameObject::UnpackPrefab()
+{
+	if (!is_prefab)
+		return;
+
+	is_prefab = false;
+
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->UnpackPrefab();
+		}
+	}
+}
+
+GameObject* GameObject::FindPrefabRoot()
+{
+	if (!is_prefab)
+		return nullptr;
+
+	if (parent->is_prefab) {
+		GameObject* find_root = this;
+		for (;;) {
+			if (find_root->parent != nullptr && !find_root->parent->is_prefab) {
+				return find_root;
+			}
+			find_root = find_root->parent;
+		}
+	}
+	else {
+		return this;
+	}
+}
+
 void GameObject::ChangeStatic(bool static_)
 {
 	std::vector<GameObject*>::iterator item = children.begin();

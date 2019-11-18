@@ -57,7 +57,7 @@ bool ResourcePrefab::CreateMetaData(GameObject* object)
 
 			game_objects->SetAnotherNode();
 
-			App->objects->SaveGameObject(object, game_objects, 1);
+			App->objects->SaveGameObject(object, game_objects, 1, true);
 
 			prefab->FinishSave();
 			delete prefab;
@@ -133,6 +133,7 @@ void ResourcePrefab::ConvertToGameObjects()
 					}
 				}
 			}
+			obj->is_prefab = true;
 			objects_created.push_back(obj);
 		}
 		GameObject* obj = App->objects->base_game_object->children.back();

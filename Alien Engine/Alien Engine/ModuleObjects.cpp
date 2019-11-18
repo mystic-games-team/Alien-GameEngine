@@ -555,15 +555,18 @@ void ModuleObjects::CreateEmptyScene(const char* path)
 
 }
 
-void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number)
+void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number, bool as_prefab)
 {
+	if (as_prefab)
+		obj->is_prefab = true;
+
 	obj->SaveObject(to_save, family_number);
 
 	std::vector<GameObject*>::iterator item = obj->children.begin();
 	for (; item != obj->children.end(); ++item) {
 		if (*item != nullptr) {
 			to_save->SetAnotherNode();
-			SaveGameObject(*item, to_save, family_number + 1);
+			SaveGameObject(*item, to_save, family_number + 1, as_prefab);
 		}
 	}
 }
