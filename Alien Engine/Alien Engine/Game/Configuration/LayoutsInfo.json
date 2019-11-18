@@ -3,7 +3,7 @@
         "Number": 3,
         "Layout1": {
             "Number": 1,
-            "Active": true,
+            "Active": false,
             "Name": "Default",
             "Path": "Configuration\/Layouts\/Default1.ini",
             "About Alien Engine": false,
@@ -39,7 +39,7 @@
         },
         "Layout3": {
             "Number": 3,
-            "Active": false,
+            "Active": true,
             "Name": "Victor's Layout",
             "Path": "Configuration\/Layouts\/Victor's Layout3.ini",
             "About Alien Engine": false,

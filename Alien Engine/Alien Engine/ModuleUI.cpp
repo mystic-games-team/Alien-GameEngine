@@ -526,7 +526,8 @@ void ModuleUI::MainMenuBar()
 
 void ModuleUI::SecondMenuBar()
 {
-	ImGui::Begin("## Camera options", (bool*)false, ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_NoScrollWithMouse);
+	ImGui::SetNextWindowSize(ImVec2(App->window->width, 48.f), ImGuiCond_::ImGuiCond_Always);
+	ImGui::Begin("## Tools", (bool*)false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse);
 
 	// TODO: Update Control if we use shortcuts
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 17);
@@ -677,7 +678,8 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SameLine();
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
 	ImGui::Text("|");
-	ImGui::SameLine(0,40);
+	float separator = ((float)App->window->width * (1.f / 48.f));
+	ImGui::SameLine(0, separator);
 
 	// Camera Combo
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 7);
@@ -716,7 +718,8 @@ void ModuleUI::SecondMenuBar()
 
 	// Vertical Separator
 
-	ImGui::SameLine(0,60);
+	separator = ((float)App->window->width * (1.f / 32.f));
+	ImGui::SameLine(0, separator);
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
 	ImGui::Text("|");
 	ImGui::SameLine();
