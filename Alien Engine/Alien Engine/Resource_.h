@@ -28,7 +28,7 @@ public:
 
 	// name
 	const char* const GetName() const;
-
+	void SetName(const char* name);
 	// type
 	const ResourceType GetType() const;
 
