@@ -1,6 +1,8 @@
 #include "ResourcePrefab.h"
 #include "Application.h"
 #include "ModuleObjects.h"
+#include "ComponentTransform.h"
+
 
 ResourcePrefab::ResourcePrefab()
 {
@@ -14,6 +16,20 @@ bool ResourcePrefab::CreateMetaData(GameObject* object)
 {
 	path = std::string(ASSETS_PREFAB_FOLDER + std::string(object->GetName()) + ".alienfab");
 
+	std::vector<std::string> files;
+	std::vector<std::string> dir;
+	App->file_system->DiscoverFiles(ASSETS_PREFAB_FOLDER, files, dir);
+
+	if (!files.empty()) {
+		uint num_file = 0;
+		for (uint i = 0; i < files.size(); ++i) {
+			if (App->StringCmp(files[i].data(), App->file_system->GetBaseFileNameWithExtension(path.data()).data())) {
+				++num_file;
+				path = std::string(ASSETS_PREFAB_FOLDER + std::string(object->GetName()) + " (" + std::to_string(num_file) + ")" + ".alienfab");
+				i = -1;
+			}
+		}
+	}
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* json_object = json_value_get_object(value);
 	json_serialize_to_file_pretty(value, path.data());
@@ -118,6 +134,10 @@ void ResourcePrefab::ConvertToGameObjects()
 			}
 			objects_created.push_back(obj);
 		}
+		GameObject* obj = App->objects->base_game_object->children.back();
+		App->objects->SetNewSelectedObject(obj);
+		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
+		transform->SetLocalPosition(0, 0, 0);
 		delete prefab;
 	}
 	else {
