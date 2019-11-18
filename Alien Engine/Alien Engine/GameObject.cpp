@@ -62,32 +62,34 @@ void GameObject::DrawScene()
 	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
 	ComponentCamera* camera = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
 
-	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled()) 
+	if (App->renderer3D->IsInsideFrustum(App->camera->fake_camera, this))
 	{
-		material->BindTexture();
-	}
+		if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
+		{
+			material->BindTexture();
+		}
 
-	if (mesh != nullptr && mesh->IsEnabled()) 
-	{
-		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
-			glColor3f(1, 1, 1);
-		if (!mesh->wireframe)
-			mesh->DrawPolygon();
-		if ((selected || parent_selected) && App->objects->outline)
-			mesh->DrawOutLine();
-		if (mesh->view_mesh || mesh->wireframe)
-			mesh->DrawMesh();
-		if (mesh->view_vertex_normals)
-			mesh->DrawVertexNormals();
-		if (mesh->view_face_normals)
-			mesh->DrawFaceNormals();
-		if (mesh->draw_AABB)
-			mesh->DrawGlobalAABB();
-		if(mesh->draw_OBB)
-			mesh->DrawOBB();
+		if (mesh != nullptr && mesh->IsEnabled())
+		{
+			if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
+				glColor3f(1, 1, 1);
+			if (!mesh->wireframe)
+				mesh->DrawPolygon();
+			if ((selected || parent_selected) && App->objects->outline)
+				mesh->DrawOutLine();
+			if (mesh->view_mesh || mesh->wireframe)
+				mesh->DrawMesh();
+			if (mesh->view_vertex_normals)
+				mesh->DrawVertexNormals();
+			if (mesh->view_face_normals)
+				mesh->DrawFaceNormals();
+			if (mesh->draw_AABB)
+				mesh->DrawGlobalAABB();
+			if (mesh->draw_OBB)
+				mesh->DrawOBB();
+		}
 	}
-
-	if (light != nullptr && light->IsEnabled()) 
+	if (light != nullptr && light->IsEnabled())
 	{
 		light->LightLogic();
 	}
@@ -107,11 +109,12 @@ void GameObject::DrawScene()
 	}
 }
 
+
 void GameObject::DrawGame()
 {
-	if (App->renderer3D->IsInsideFrustum(App->renderer3D->scene_fake_camera, this)) {
+	if (App->renderer3D->IsInsideFrustum(App->renderer3D->actual_game_camera, this)) {
 		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-		ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
+	
 		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 
 		if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
@@ -125,11 +128,11 @@ void GameObject::DrawGame()
 				glColor3f(1, 1, 1);
 			mesh->DrawPolygon();
 		}
-
-		if (light != nullptr && light->IsEnabled())
-		{
-			light->LightLogic();
-		}
+	}
+	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
+	if (light != nullptr && light->IsEnabled())
+	{
+		light->LightLogic();
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();
