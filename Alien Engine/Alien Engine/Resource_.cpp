@@ -25,7 +25,7 @@ const char* const Resource::GetName() const
 
 void Resource::SetName(const char* name)
 {
-	name = std::string(name).data();
+	this->name = std::string(name);
 }
 
 const ResourceType Resource::GetType() const

@@ -130,6 +130,8 @@ public:
 	bool view_face_normals = false;
 	bool draw_AABB = true;
 	bool draw_OBB = true;
+	bool is_primitive = false;
+	PrimitiveType type = PrimitiveType::UNKONWN;
 };
 
 class CompMaterialZ : public CompZ {

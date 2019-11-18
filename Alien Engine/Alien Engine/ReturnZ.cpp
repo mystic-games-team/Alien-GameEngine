@@ -400,8 +400,39 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 		ComponentMesh* mesh = (ComponentMesh*)component;
 		CompMeshZ* meshZ = new CompMeshZ();
 		*compZ = meshZ;
-		if (mesh->mesh != nullptr)
-			meshZ->resourceID = mesh->mesh->GetID();
+		if (mesh->mesh != nullptr) {
+			if (mesh->mesh->GetID() != 0) {
+				meshZ->resourceID = mesh->mesh->GetID();
+			}
+			else if (mesh->mesh->is_primitive) {
+				meshZ->is_primitive = true;
+				if (App->StringCmp("Cube", mesh->mesh->GetName())) {
+					meshZ->type = PrimitiveType::CUBE;
+				}
+				else if (App->StringCmp("Sphere", mesh->mesh->GetName())) {
+					meshZ->type = PrimitiveType::SPHERE_ALIEN;
+				}
+				else if (App->StringCmp("Dodecahedron", mesh->mesh->GetName())) {
+					meshZ->type = PrimitiveType::DODECAHEDRON;
+				}
+				else if (App->StringCmp("Icosahedron", mesh->mesh->GetName())) {
+					meshZ->type = PrimitiveType::ICOSAHEDRON;
+				}
+				else if (App->StringCmp("Octahedron", mesh->mesh->GetName())) {
+					meshZ->type = PrimitiveType::OCTAHEDRON;
+				}
+				else if (App->StringCmp("Rock", mesh->mesh->GetName())) {
+					meshZ->type = PrimitiveType::ROCK;
+				}
+				else if (App->StringCmp("Torus", mesh->mesh->GetName())) {
+					meshZ->type = PrimitiveType::TORUS;
+				}
+				else if (App->StringCmp("Klein Bottle", mesh->mesh->GetName())) {
+					meshZ->type = PrimitiveType::KLEIN_BOTTLE;
+				}
+			}
+		}
+			
 		meshZ->objectID = mesh->game_object_attached->ID;
 		meshZ->draw_AABB = mesh->draw_AABB;
 		meshZ->draw_OBB = mesh->draw_OBB;
@@ -471,6 +502,34 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		CompMeshZ* meshZ = (CompMeshZ*)compZ;
 		if (meshZ->resourceID != 0)
 			mesh->mesh = (ResourceMesh*)App->resources->GetResourceWithID(meshZ->resourceID);
+		else if (meshZ->is_primitive) {
+			switch (meshZ->type) {
+			case PrimitiveType::CUBE: {
+				mesh->mesh = App->resources->cube;
+				break; }
+			case PrimitiveType::SPHERE_ALIEN: {
+				mesh->mesh = App->resources->sphere;
+				break; }
+			case PrimitiveType::DODECAHEDRON: {
+				mesh->mesh = App->resources->dodecahedron;
+				break; }
+			case PrimitiveType::ICOSAHEDRON: {
+				mesh->mesh = App->resources->icosahedron;
+				break; }
+			case PrimitiveType::KLEIN_BOTTLE: {
+				mesh->mesh = App->resources->klein_bottle;
+				break; }
+			case PrimitiveType::OCTAHEDRON: {
+				mesh->mesh = App->resources->octahedron;
+				break; }
+			case PrimitiveType::ROCK: {
+				mesh->mesh = App->resources->rock;
+				break; }
+			case PrimitiveType::TORUS: {
+				mesh->mesh = App->resources->torus;
+				break; }
+			}
+		}
 		mesh->draw_AABB = meshZ->draw_AABB;
 		mesh->draw_OBB = meshZ->draw_OBB;
 		mesh->wireframe = meshZ->wireframe;
