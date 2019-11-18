@@ -586,6 +586,9 @@ void ModuleObjects::LoadConfig(JSONfilepack*& config)
 	octree_line_color = config->GetColor("Configuration.Renderer.OctreeColor");
 	octree_line_width = config->GetNumber("Configuration.Renderer.OctreelineWidth");
 	render_octree = config->GetBoolean("Configuration.Renderer.RenderOctree");
+	draw_ray = config->GetBoolean("Configuration.Renderer.DrawRay");
+	ray_width = config->GetNumber("Configuration.Renderer.RayWidth");
+	ray_color = config->GetColor("Configuration.Renderer.RayColor");
 }
 
 void ModuleObjects::SaveConfig(JSONfilepack*& config)
@@ -625,6 +628,9 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 	config->SetNumber("Configuration.Renderer.OctreelineWidth", octree_line_width);
 	config->SetColor("Configuration.Renderer.OctreeColor", octree_line_color);
 	config->SetNumber("Configuration.Renderer.Octreebucket", octree.GetBucket());
+	config->SetBoolean("Configuration.Renderer.DrawRay", draw_ray);
+	config->SetNumber("Configuration.Renderer.RayWidth", ray_width);
+	config->SetColor("Configuration.Renderer.RayColor", ray_color);
 }
 
 void ModuleObjects::CreateBasePrimitive(PrimitiveType type)

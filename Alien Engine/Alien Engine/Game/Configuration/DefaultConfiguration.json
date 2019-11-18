@@ -231,6 +231,15 @@
           0,
           0,
           1
+        ],
+        "DrawRay": false,
+        "RayWidth": 5,
+        "RayColor": 
+        [
+          1,
+          0,
+          0,
+          1
         ]
       }
     }
