@@ -208,7 +208,7 @@ bool ModuleResources::Exists(const char * path, Resource** resource)
 ResourceMesh* ModuleResources::CreatePrimitive(const PrimitiveType& type)
 {
 	ResourceMesh* ret = new ResourceMesh();
-	
+	ret->is_primitive = true;
 	par_shapes_mesh* par_mesh = nullptr;
 
 	switch (type)

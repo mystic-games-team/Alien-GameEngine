@@ -48,6 +48,8 @@ public:
 	float* center_point_normal = nullptr;
 	float* center_point = nullptr;
 
+	bool is_primitive = false;
+
 private:
 
 	std::string parent_name;

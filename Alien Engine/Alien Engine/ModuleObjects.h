@@ -108,8 +108,6 @@ private:
 	void DeleteReturns();
 
 public:
-
-	ComponentCamera* camera = nullptr;
 	Scene current_scene;
 
 	// root

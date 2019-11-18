@@ -259,6 +259,7 @@ GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent, bool set_se
 	GameObject* object = nullptr;
 
 	if (parent != nullptr) {
+		parent->open_node = true;
 		object = new GameObject(parent);
 		object->SetName("Empty Child");
 	}
@@ -271,6 +272,8 @@ GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent, bool set_se
 	
 	if (set_selected)
 		SetNewSelectedObject(object);
+
+	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, object);
 
 	return object;
 }
