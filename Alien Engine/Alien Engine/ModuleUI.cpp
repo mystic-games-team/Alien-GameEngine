@@ -791,6 +791,14 @@ void ModuleUI::SecondMenuBar()
 		Time::SetScaleTime(scale);
 	}
 
+	ImGui::SameLine();
+
+	if (ImGui::Button("Reset Time"))
+	{
+		Time::SetScaleTime(1.f);
+		scale = 1.f;
+	}
+
 	ImGui::End();
 }
 
