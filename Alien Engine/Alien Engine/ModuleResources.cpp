@@ -48,7 +48,6 @@ bool ModuleResources::Start()
 	dodecahedron = CreatePrimitive(PrimitiveType::DODECAHEDRON);
 	icosahedron = CreatePrimitive(PrimitiveType::ICOSAHEDRON);
 	octahedron = CreatePrimitive(PrimitiveType::OCTAHEDRON);
-	klein_bottle = CreatePrimitive(PrimitiveType::KLEIN_BOTTLE);
 
 	assets = new FileNode();
 	assets->is_file = false;
@@ -88,7 +87,6 @@ bool ModuleResources::CleanUp()
 	delete dodecahedron;
 	delete icosahedron;
 	delete octahedron;
-	delete klein_bottle;
 
 	return true;
 }
@@ -240,10 +238,6 @@ ResourceMesh* ModuleResources::CreatePrimitive(const PrimitiveType& type)
 	case PrimitiveType::ICOSAHEDRON: {
 		par_mesh = par_shapes_create_icosahedron();
 		ret->SetName("Icosahedron");
-		break; }
-	case PrimitiveType::KLEIN_BOTTLE: {
-		par_mesh = par_shapes_create_klein_bottle(4, 4);
-		ret->SetName("Klein Bottle");
 		break; }
 	default: {
 		break; }

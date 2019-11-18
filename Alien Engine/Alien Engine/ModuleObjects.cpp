@@ -705,10 +705,6 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 		mesh->mesh = App->resources->torus;
 		object->SetName("Torus");
 		break; }
-	case PrimitiveType::KLEIN_BOTTLE: {
-		mesh->mesh = App->resources->klein_bottle;
-		object->SetName("Klein Bottle");
-		break; }
 	default:
 		break;
 	}

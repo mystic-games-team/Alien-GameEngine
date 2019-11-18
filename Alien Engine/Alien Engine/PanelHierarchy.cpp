@@ -224,10 +224,6 @@ void PanelHierarchy::RightClickMenu()
 			{
 				App->objects->CreateBasePrimitive(PrimitiveType::ICOSAHEDRON);
 			}
-			if (ImGui::MenuItem("Klein Bottle"))
-			{
-				App->objects->CreateBasePrimitive(PrimitiveType::KLEIN_BOTTLE);
-			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::MenuItem("Create..."))

@@ -75,38 +75,34 @@ void PanelCreateObject::PanelLogic()
 			ComponentMaterial* material = new ComponentMaterial(object);
 			switch (objects_combo)
 			{
-			case 0:
+			case 0: {
 				object->SetName("Cube");
 				mesh->mesh = App->resources->cube;
-				break;
-			case 1:
+				break; }
+			case 1: {
 				mesh->mesh = App->resources->sphere;
 				object->SetName("Sphere");
-				break;
-			case 2:
+				break; }
+			case 2: {
 				mesh->mesh = App->resources->rock;
 				object->SetName("Rock");
-				break;
-			case 3:
+				break; }
+			case 3: {
 				mesh->mesh = App->resources->dodecahedron;
 				object->SetName("Dodecahedron");
-				break;
-			case 4:
+				break; }
+			case 4: {
 				mesh->mesh = App->resources->icosahedron;
 				object->SetName("Icosahedron");
-				break;
-			case 5:
+				break; }
+			case 5: {
 				mesh->mesh = App->resources->octahedron;
 				object->SetName("Octahedron");
-				break;
-			case 6:
+				break; }
+			case 6: {
 				mesh->mesh = App->resources->torus;
 				object->SetName("Torus");
-				break;
-			case 7:
-				mesh->mesh = App->resources->klein_bottle;
-				object->SetName("Klein Bottle");
-				break;
+				break; }
 			}
 			x = y = z = 0;
 			material->color = create_color;

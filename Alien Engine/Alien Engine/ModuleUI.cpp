@@ -462,10 +462,6 @@ void ModuleUI::MainMenuBar()
 			{
 				App->objects->CreateBasePrimitive(PrimitiveType::ICOSAHEDRON);
 			}
-			if (ImGui::MenuItem("Klein Bottle"))
-			{
-				App->objects->CreateBasePrimitive(PrimitiveType::KLEIN_BOTTLE);
-			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::MenuItem("Create...", panel_create_object->shortcut->GetNameScancodes()))

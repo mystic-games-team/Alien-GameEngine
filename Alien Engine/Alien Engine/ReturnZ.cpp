@@ -427,9 +427,6 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 				else if (App->StringCmp("Torus", mesh->mesh->GetName())) {
 					meshZ->type = PrimitiveType::TORUS;
 				}
-				else if (App->StringCmp("Klein Bottle", mesh->mesh->GetName())) {
-					meshZ->type = PrimitiveType::KLEIN_BOTTLE;
-				}
 			}
 		}
 			
@@ -515,9 +512,6 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 				break; }
 			case PrimitiveType::ICOSAHEDRON: {
 				mesh->mesh = App->resources->icosahedron;
-				break; }
-			case PrimitiveType::KLEIN_BOTTLE: {
-				mesh->mesh = App->resources->klein_bottle;
 				break; }
 			case PrimitiveType::OCTAHEDRON: {
 				mesh->mesh = App->resources->octahedron;

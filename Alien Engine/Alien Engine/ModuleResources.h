@@ -82,7 +82,6 @@ public:
 	ResourceMesh* dodecahedron = nullptr;
 	ResourceMesh* icosahedron = nullptr;
 	ResourceMesh* octahedron = nullptr;
-	ResourceMesh* klein_bottle = nullptr;
 
 	FileNode* assets = nullptr;
 };

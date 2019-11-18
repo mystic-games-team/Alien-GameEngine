@@ -460,7 +460,32 @@ void ComponentMesh::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("DrawOBB", draw_OBB);
 	to_save->SetBoolean("HasMesh", (mesh != nullptr) ? true : false);
 	if (mesh != nullptr) {
-		to_save->SetString("MeshID", std::to_string(mesh->GetID()));
+		to_save->SetBoolean("IsPrimitive", mesh->is_primitive);
+		if (!mesh->is_primitive)
+			to_save->SetString("MeshID", std::to_string(mesh->GetID()));
+		else {
+			if (App->StringCmp("Cube", mesh->GetName())) {
+				to_save->SetNumber("PrimType", (int)PrimitiveType::CUBE);
+			}
+			else if (App->StringCmp("Sphere", mesh->GetName())) {
+				to_save->SetNumber("PrimType", (int)PrimitiveType::SPHERE_ALIEN);
+			}
+			else if (App->StringCmp("Dodecahedron", mesh->GetName())) {
+				to_save->SetNumber("PrimType", (int)PrimitiveType::DODECAHEDRON);
+			}
+			else if (App->StringCmp("Icosahedron", mesh->GetName())) {
+				to_save->SetNumber("PrimType", (int)PrimitiveType::ICOSAHEDRON);
+			}
+			else if (App->StringCmp("Octahedron", mesh->GetName())) {
+				to_save->SetNumber("PrimType", (int)PrimitiveType::OCTAHEDRON);
+			}
+			else if (App->StringCmp("Rock", mesh->GetName())) {
+				to_save->SetNumber("PrimType", (int)PrimitiveType::ROCK);
+			}
+			else if (App->StringCmp("Torus", mesh->GetName())) {
+				to_save->SetNumber("PrimType", (int)PrimitiveType::TORUS);
+			}
+		}
 	}
 	to_save->SetBoolean("Enabled", enabled);
 }
@@ -475,10 +500,37 @@ void ComponentMesh::LoadComponent(JSONArraypack* to_load)
 	draw_OBB = to_load->GetBoolean("DrawOBB");
 	enabled = to_load->GetBoolean("Enabled");
 	if (to_load->GetBoolean("HasMesh")) {
-		u64 ID = std::stoull(to_load->GetString("MeshID"));
-		mesh = (ResourceMesh*)App->resources->GetResourceWithID(ID);
-		if (mesh != nullptr)
-			mesh->IncreaseReferences();
+		if (!to_load->GetBoolean("IsPrimitive")) {
+			u64 ID = std::stoull(to_load->GetString("MeshID"));
+			mesh = (ResourceMesh*)App->resources->GetResourceWithID(ID);
+			if (mesh != nullptr)
+				mesh->IncreaseReferences();
+		}
+		else {
+			switch ((PrimitiveType)(int)to_load->GetNumber("PrimType")) {
+			case PrimitiveType::CUBE: {
+				mesh = App->resources->cube;
+				break; }
+			case PrimitiveType::SPHERE_ALIEN: {
+				mesh = App->resources->sphere;
+				break; }
+			case PrimitiveType::DODECAHEDRON: {
+				mesh = App->resources->dodecahedron;
+				break; }
+			case PrimitiveType::ICOSAHEDRON: {
+				mesh = App->resources->icosahedron;
+				break; }
+			case PrimitiveType::OCTAHEDRON: {
+				mesh = App->resources->octahedron;
+				break; }
+			case PrimitiveType::ROCK: {
+				mesh = App->resources->rock;
+				break; }
+			case PrimitiveType::TORUS: {
+				mesh = App->resources->torus;
+				break; }
+			}
+		}
 	}
 	GenerateAABB();
 	RecalculateAABB_OBB();
