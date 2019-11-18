@@ -23,6 +23,11 @@ const char* const Resource::GetName() const
 	return name.data();
 }
 
+void Resource::SetName(const char* name)
+{
+	name = std::string(name).data();
+}
+
 const ResourceType Resource::GetType() const
 {
 	return type;
@@ -40,6 +45,9 @@ const bool Resource::NeedToLoad() const
 
 void Resource::IncreaseReferences()
 {
+	if (ID == 0)
+		return;
+
 	if (references == 0)
 		LoadMemory();
 	++references;
@@ -47,6 +55,9 @@ void Resource::IncreaseReferences()
 
 void Resource::DecreaseReferences()
 {
+	if (ID == 0)
+		return;
+
 	--references;
 	if (references == 0)
 		FreeMemory();

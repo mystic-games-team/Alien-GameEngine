@@ -627,49 +627,49 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 	ComponentTransform* transform = new ComponentTransform(object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
 	ComponentMesh* mesh = new ComponentMesh(object);
 	ComponentMaterial* material = new ComponentMaterial(object);
-	par_shapes_mesh* par_mesh = nullptr;
 	
 	switch (type) {
 	case PrimitiveType::CUBE: {
-		par_mesh = par_shapes_create_cube();
+		mesh->mesh = App->resources->cube;
 		object->SetName("Cube");
 		break; }
 	case PrimitiveType::DODECAHEDRON: {
-		par_mesh = par_shapes_create_dodecahedron();
+		mesh->mesh = App->resources->dodecahedron;
 		object->SetName("Dodecahedron");
 		break; }
 	case PrimitiveType::ICOSAHEDRON: {
-		par_mesh = par_shapes_create_icosahedron();
+		mesh->mesh = App->resources->icosahedron;
 		object->SetName("Icosahedron");
 		break; }
 	case PrimitiveType::OCTAHEDRON: {
-		par_mesh = par_shapes_create_octahedron();
+		mesh->mesh = App->resources->octahedron;
 		object->SetName("Octahedron");
 		break; }
 	case PrimitiveType::ROCK: {
-		par_mesh = par_shapes_create_rock(5, 3);
+		mesh->mesh = App->resources->rock;
 		object->SetName("Rock");
 		break; }
 	case PrimitiveType::SPHERE_ALIEN: {
-		par_mesh = par_shapes_create_subdivided_sphere(4);
+		mesh->mesh = App->resources->sphere;
 		object->SetName("Sphere");
 		break; }
 	case PrimitiveType::TORUS: {
-		par_mesh = par_shapes_create_torus(3, 10, 0.5F);
+		mesh->mesh = App->resources->torus;
 		object->SetName("Torus");
 		break; }
 	case PrimitiveType::KLEIN_BOTTLE: {
-		par_mesh = par_shapes_create_klein_bottle(10, 10);
+		mesh->mesh = App->resources->klein_bottle;
 		object->SetName("Klein Bottle");
 		break; }
 	default:
 		break;
 	}
-	App->importer->LoadParShapesMesh(par_mesh, mesh);
+
 	object->AddComponent(transform);
 	object->AddComponent(mesh);
 	object->AddComponent(material);
+	mesh->RecalculateAABB_OBB();
 	SetNewSelectedObject(object);
-	par_shapes_free_mesh(par_mesh);
+	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, object);
 }
 

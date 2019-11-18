@@ -63,6 +63,7 @@ public:
 
 	bool Exists(const char* path, Resource** resource);
 
+	ResourceMesh* CreatePrimitive(const PrimitiveType& type);
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
 	void ReadAllMetaData();
@@ -74,6 +75,14 @@ public:
 	Icons icons;
 
 	std::vector<Resource*> resources;
+	ResourceMesh* cube = nullptr;
+	ResourceMesh* sphere = nullptr;
+	ResourceMesh* rock = nullptr;
+	ResourceMesh* torus = nullptr;
+	ResourceMesh* dodecahedron = nullptr;
+	ResourceMesh* icosahedron = nullptr;
+	ResourceMesh* octahedron = nullptr;
+	ResourceMesh* klein_bottle = nullptr;
 
 	FileNode* assets = nullptr;
 };

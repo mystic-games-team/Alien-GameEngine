@@ -40,6 +40,15 @@ bool ModuleResources::Start()
 	icons.pause = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/pause.png");
 	icons.once = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/once.png");
 
+	// Load Primitives as resource
+	cube = CreatePrimitive(PrimitiveType::CUBE);
+	sphere = CreatePrimitive(PrimitiveType::SPHERE_ALIEN);
+	rock = CreatePrimitive(PrimitiveType::ROCK);
+	torus = CreatePrimitive(PrimitiveType::TORUS);
+	dodecahedron = CreatePrimitive(PrimitiveType::DODECAHEDRON);
+	icosahedron = CreatePrimitive(PrimitiveType::ICOSAHEDRON);
+	octahedron = CreatePrimitive(PrimitiveType::OCTAHEDRON);
+	klein_bottle = CreatePrimitive(PrimitiveType::KLEIN_BOTTLE);
 
 	assets = new FileNode();
 	assets->is_file = false;
@@ -71,6 +80,15 @@ bool ModuleResources::CleanUp()
 		}
 	}
 	resources.clear();
+
+	delete cube;
+	delete sphere;
+	delete rock;
+	delete torus;
+	delete dodecahedron;
+	delete icosahedron;
+	delete octahedron;
+	delete klein_bottle;
 
 	return true;
 }
@@ -185,6 +203,55 @@ bool ModuleResources::Exists(const char * path, Resource** resource)
 	}
 
 	return exists;
+}
+
+ResourceMesh* ModuleResources::CreatePrimitive(const PrimitiveType& type)
+{
+	ResourceMesh* ret = new ResourceMesh();
+	
+	par_shapes_mesh* par_mesh = nullptr;
+
+	switch (type)
+	{
+	case PrimitiveType::CUBE: {
+		par_mesh = par_shapes_create_cube();
+		ret->SetName("Cube");
+		break; }
+	case PrimitiveType::SPHERE_ALIEN: {
+		par_mesh = par_shapes_create_subdivided_sphere(5);
+		ret->SetName("Sphere");
+		break; }
+	case PrimitiveType::ROCK: {
+		par_mesh = par_shapes_create_rock(3, 3);
+		ret->SetName("Rock");
+		break; }
+	case PrimitiveType::DODECAHEDRON: {
+		par_mesh = par_shapes_create_dodecahedron();
+		ret->SetName("Dodecahedron");
+		break; }
+	case PrimitiveType::OCTAHEDRON: {
+		par_mesh = par_shapes_create_octahedron();
+		ret->SetName("Octahedron");
+		break; }
+	case PrimitiveType::TORUS: {
+		par_mesh = par_shapes_create_torus(4, 4, 0.8F);
+		ret->SetName("Torus");
+		break; }
+	case PrimitiveType::ICOSAHEDRON: {
+		par_mesh = par_shapes_create_icosahedron();
+		ret->SetName("Icosahedron");
+		break; }
+	case PrimitiveType::KLEIN_BOTTLE: {
+		par_mesh = par_shapes_create_klein_bottle(4, 4);
+		ret->SetName("Klein Bottle");
+		break; }
+	default: {
+		break; }
+	}
+	
+	App->importer->LoadParShapesMesh(par_mesh, ret);
+
+	return ret;
 }
 
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)

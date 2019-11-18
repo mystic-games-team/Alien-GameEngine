@@ -353,10 +353,9 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 	
 }
 
-void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* mesh)
+void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ResourceMesh* mesh)
 {
-	// TODO ORIOL
-	/*par_shapes_unweld(shape, true);
+	par_shapes_unweld(shape, true);
 	par_shapes_compute_normals(shape);
 
 	mesh->num_vertex = shape->npoints;
@@ -406,8 +405,7 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ComponentMesh* me
 			mesh->center_point_normal[i + 2] = normalized.z;
 		}
 	}
-
-	InitMeshBuffers(mesh);*/
+	mesh->InitBuffers();
 }
 
 
