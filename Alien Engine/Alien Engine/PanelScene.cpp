@@ -135,17 +135,12 @@ void PanelScene::GuizmosLogic()
 	if (App->objects->GetSelectedObject() != nullptr) {
 		ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
 
-		float4x4 view_transposed = App->camera->fake_camera->frustum.ViewMatrix();
-		view_transposed.Transpose();
-		float4x4 projection_transposed = App->camera->fake_camera->frustum.ProjectionMatrix();
-		projection_transposed.Transpose();
 		float4x4 object_transform_matrix = transform->global_transformation;
 		object_transform_matrix.Transpose();
-		float4x4 delta_matrix;
 
 		ImGuizmo::SetRect(posX, posY, width, height);
 		ImGuizmo::SetDrawlist();
-		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
+		ImGuizmo::Manipulate(App->camera->fake_camera->frustum.ViewMatrix().Transposed3().ptr(), App->camera->fake_camera->frustum.ProjectionMatrix().Transposed().ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr());
 		static bool guizmo_return = true;
 		if (ImGuizmo::IsUsing() && !transform->game_object_attached->is_static)
 		{

@@ -266,6 +266,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="ResourceModel.h" />
+    <ClInclude Include="ResourcePrefab.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Resource_.h" />
     <ClInclude Include="ReturnZ.h" />
@@ -361,6 +362,7 @@
     <ClCompile Include="Parson\parson.c" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="ResourceModel.cpp" />
+    <ClCompile Include="ResourcePrefab.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="Resource_.cpp" />
     <ClCompile Include="ReturnZ.cpp" />

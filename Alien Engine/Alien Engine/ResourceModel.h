@@ -28,8 +28,6 @@ private:
 	// sort
 	static bool SortByFamilyNumber(const ResourceMesh* mesh1, const ResourceMesh* mesh2);
 
-	void Reimport();
-
 public:
 
 	std::vector<ResourceMesh*> meshes_attached;

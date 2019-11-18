@@ -473,7 +473,7 @@
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Tools\OurClassHelpers</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="ImGuizmos\ImCurveEdit.h">
       <Filter>Tools\Guizmos</Filter>
     </ClInclude>
@@ -485,6 +485,9 @@
     </ClInclude>
     <ClInclude Include="ImGuizmos\ImSequencer.h">
       <Filter>Tools\Guizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourcePrefab.h">
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -754,7 +757,7 @@
     </ClCompile>
     <ClCompile Include="Time.cpp">
       <Filter>Tools\OurClassHelpers</Filter>
-       </ClCompile>
+    </ClCompile>
     <ClCompile Include="ImGuizmos\ImCurveEdit.cpp">
       <Filter>Tools\Guizmos</Filter>
     </ClCompile>
@@ -766,6 +769,9 @@
     </ClCompile>
     <ClCompile Include="ImGuizmos\ImSequencer.cpp">
       <Filter>Tools\Guizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcePrefab.cpp">
+      <Filter>Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
