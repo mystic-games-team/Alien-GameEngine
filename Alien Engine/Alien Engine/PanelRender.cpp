@@ -129,5 +129,11 @@ void PanelRender::PanelLogic()
 		ImGui::ColorEdit3("Frustum Color", (float*)& App->objects->frustum_color, ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("Frustum Line Width", (int*)& App->objects->frustum_line_width, 1, 30);
 	}
+	if (ImGui::CollapsingHeader("Mouse Ray")) {
+		ImGui::Spacing();
+		ImGui::Checkbox("Draw Ray", &App->objects->draw_ray);
+		ImGui::ColorEdit3("Ray Color", (float*)&App->objects->ray_color, ImGuiColorEditFlags_Float);
+		ImGui::SliderInt("Ray Line Width", (int*)&App->objects->ray_width, 1, 30);
+	}
 	ImGui::End();
 }
