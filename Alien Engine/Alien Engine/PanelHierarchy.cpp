@@ -23,7 +23,7 @@ void PanelHierarchy::PanelLogic()
 		App->camera->is_scene_hovered = false;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr && ImGui::IsWindowFocused())
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr)
 	{
 		App->objects->GetSelectedObject()->ToDelete();
 	}
