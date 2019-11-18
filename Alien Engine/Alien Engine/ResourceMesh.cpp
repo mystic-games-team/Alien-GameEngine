@@ -141,31 +141,6 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 
 void ResourceMesh::FreeMemory()
 {
-	if (index != nullptr) {
-		RELEASE_ARRAY(index);
-		index = nullptr;
-	}
-	if (vertex != nullptr) {
-		RELEASE_ARRAY(vertex);
-		vertex = nullptr;
-	}
-	if (normals != nullptr) {
-		RELEASE_ARRAY(normals);
-		normals = nullptr;
-	}
-	if (uv_cords != nullptr) {
-		RELEASE_ARRAY(uv_cords);
-		uv_cords = nullptr;
-	}
-	if (center_point_normal != nullptr) {
-		RELEASE_ARRAY(center_point_normal);
-		center_point_normal = nullptr;
-	}
-	if (center_point != nullptr) {
-		RELEASE_ARRAY(center_point);
-		center_point = nullptr;
-	}
-
 	if (id_vertex != 0)
 		glDeleteBuffers(1, &id_vertex);
 	if (id_index != 0)
@@ -175,12 +150,41 @@ void ResourceMesh::FreeMemory()
 	if (id_uv != 0)
 		glDeleteBuffers(1, &id_uv);
 
+	if (index != nullptr) {
+		delete[] index;
+		index = nullptr;
+	}
+	if (vertex != nullptr) {
+		delete[] vertex;
+		vertex = nullptr;
+	}
+	if (normals != nullptr) {
+		delete[] normals;
+		normals = nullptr;
+	}
+	if (uv_cords != nullptr) {
+		delete[] uv_cords;
+		uv_cords = nullptr;
+	}
+	if (center_point_normal != nullptr) {
+		delete[] center_point_normal;
+		center_point_normal = nullptr;
+	}
+	if (center_point != nullptr) {
+		delete[] center_point;
+		center_point = nullptr;
+	}
+
 	id_vertex = 0;
 	id_index = 0;
 	id_normals = 0;
 	id_uv = 0;
 
 	references = 0;
+
+	num_vertex = 0;
+	num_index = 0;
+	num_faces = 0;
 }
 
 bool ResourceMesh::LoadMemory()
@@ -302,22 +306,22 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 void ResourceMesh::InitBuffers()
 {
 	glGenBuffers(1, &id_vertex);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) *num_vertex * 3,
-		&vertex[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vertex);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) *num_vertex * 3,
+		vertex, GL_STATIC_DRAW);
 
 	// index
 	glGenBuffers(1, &id_index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_index,
-		&index[0], GL_STATIC_DRAW);
+		index, GL_STATIC_DRAW);
 
 	if (uv_cords != nullptr) {
 		// UV
 		glGenBuffers(1, &id_uv);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_uv);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_vertex * 3,
-			&uv_cords[0], GL_STATIC_DRAW);
+			uv_cords, GL_STATIC_DRAW);
 	}
 
 	if (normals != nullptr) {
@@ -325,6 +329,6 @@ void ResourceMesh::InitBuffers()
 		glGenBuffers(1, &id_normals);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_normals);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_vertex * 3,
-			&normals[0], GL_STATIC_DRAW);
+			normals, GL_STATIC_DRAW);
 	}
 }
