@@ -332,50 +332,15 @@ bool ModuleRenderer3D::IsInsideFrustum(const ComponentCamera* camera, GameObject
 	Plane planes[6];
 	camera->frustum.GetPlanes(planes);
 
-	uint inside_planes = 0;
-
-	bool is_inside = false;
-
-	for (uint p = 0; p < 8; ++p)
-	{
-		if (camera->frustum.Contains(corners[p]))
-		{
-			is_inside = true;
-			break;
-		}
-	}
-
-	if (is_inside)
-	{
-		return true;
-	}
-
-	/*AABB aabb = object->GetBB();
-	float3 corners[8];
-	aabb.GetCornerPoints(corners);
-
-	for (uint i = 0; i < 8; ++i)
-	{
-		camera->frustum.Project(corners[i]);
-	}
-
-	Plane planes[6];
-	camera->frustum.GetPlanes(planes);
-
-	uint total_points_in = 0;
-
 	for (uint i = 0; i < 6; ++i)
 	{
 		uint point_inside_plane = 8;
-		bool is_in = false;
 
 		for (uint p = 0; p < 8; ++p)
 		{
-			if ((corners[p].Dot(planes[i].normal) + planes[i].d) <= 0)
+			if (planes[i].IsOnPositiveSide(corners[p]))
 			{
 				--point_inside_plane;
-				is_in = true;
-				break;
 			}
 		}
 
@@ -383,12 +348,7 @@ bool ModuleRenderer3D::IsInsideFrustum(const ComponentCamera* camera, GameObject
 		{
 			return false;
 		}
+	}
 
-		if (is_in)
-		{
-			++total_points_in;
-		}
-	}*/
-
-	//return true;
+	return true;
 }
