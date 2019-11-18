@@ -5,6 +5,8 @@
 #include <list>
 #include "GameObject.h"
 
+class ComponentCamera;
+
 class OctreeNode {
 
 	friend class Octree;
@@ -30,6 +32,7 @@ private:
 	void Regrup();
 	void SaveGameObjects(std::vector<GameObject*>* to_save, AABB* new_section);
 	bool AddToChildren(GameObject* obj, const AABB& sect);
+	void SetStaticDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera);
 
 public:
 
@@ -65,7 +68,7 @@ public:
 	bool Exists(GameObject* object);
 	// create again the octree
 	void Recalculate(GameObject* new_object);
-
+	void SetStaticDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera);
 
 	uint bucket = 2;
 

@@ -10,6 +10,8 @@
 enum class ResourceType;
 class Resource;
 
+class ComponentCamera;
+
 class GameObject
 {
 public:
@@ -25,6 +27,7 @@ public:
 	// here we call Component Mesh, Material & light
 	void DrawScene();
 	void DrawGame();
+	void SetDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera);
 
 	// components
 	void AddComponent(Component* component);

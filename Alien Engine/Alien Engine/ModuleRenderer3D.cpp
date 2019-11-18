@@ -323,9 +323,8 @@ bool ModuleRenderer3D::SetCameraToDraw(const ComponentCamera * camera)
 	return true;
 }
 
-bool ModuleRenderer3D::IsInsideFrustum(const ComponentCamera* camera, GameObject* object)
+bool ModuleRenderer3D::IsInsideFrustum(const ComponentCamera* camera, const AABB& aabb)
 {
-	AABB aabb = object->GetBB();
 	float3 corners[8];
 	aabb.GetCornerPoints(corners);
 
