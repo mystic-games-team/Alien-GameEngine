@@ -122,15 +122,13 @@ void GameObject::DrawScene()
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
-	ComponentCamera* camera = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
 
-	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled()) 
+	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
 	{
 		material->BindTexture();
 	}
 
-	if (mesh != nullptr && mesh->IsEnabled()) 
+	if (mesh != nullptr && mesh->IsEnabled())
 	{
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
@@ -146,34 +144,16 @@ void GameObject::DrawScene()
 			mesh->DrawFaceNormals();
 		if (mesh->draw_AABB)
 			mesh->DrawGlobalAABB();
-		if(mesh->draw_OBB)
+		if (mesh->draw_OBB)
 			mesh->DrawOBB();
 	}
-
-	if (light != nullptr && light->IsEnabled()) 
-	{
-		light->LightLogic();
-	}
-
-	if (camera != nullptr && camera->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) {
-		camera->DrawFrustum();
-		camera->frustum.pos = transform->GetGlobalPosition();
-		camera->frustum.front = transform->GetLocalRotation().WorldZ();
-		camera->frustum.up = transform->GetLocalRotation().WorldY();
-	}
-
-	std::vector<GameObject*>::iterator child = children.begin();
-	for (; child != children.end(); ++child) {
-		if (*child != nullptr && (*child)->IsEnabled()) {
-			(*child)->DrawScene();
-		}
-	}
 }
+
 
 void GameObject::DrawGame()
 {
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
+	
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 
 	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
@@ -185,18 +165,40 @@ void GameObject::DrawGame()
 	{
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
-			mesh->DrawPolygon();
+		mesh->DrawPolygon();
+	}
+}
+
+void GameObject::SetDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera)
+{
+	if (!is_static) {
+		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+
+		if (mesh != nullptr && mesh->mesh != nullptr) {
+			if (App->renderer3D->IsInsideFrustum(camera, mesh->GetGlobalAABB())) {
+				to_draw->push_back(this);
+			}
+		}
 	}
 
+	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
 	if (light != nullptr && light->IsEnabled())
 	{
 		light->LightLogic();
+	}
+	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
+	if (camera_ != nullptr && camera_->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) {
+		camera_->DrawFrustum();
+		camera_->frustum.pos = transform->GetGlobalPosition();
+		camera_->frustum.front = transform->GetLocalRotation().WorldZ();
+		camera_->frustum.up = transform->GetLocalRotation().WorldY();
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
-			(*child)->DrawGame();
+			(*child)->SetDrawList(to_draw, camera);
 		}
 	}
 }

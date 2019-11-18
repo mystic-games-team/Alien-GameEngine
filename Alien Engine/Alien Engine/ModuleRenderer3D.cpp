@@ -342,3 +342,32 @@ bool ModuleRenderer3D::SetCameraToDraw(const ComponentCamera * camera)
 
 	return true;
 }
+
+bool ModuleRenderer3D::IsInsideFrustum(const ComponentCamera* camera, const AABB& aabb)
+{
+	float3 corners[8];
+	aabb.GetCornerPoints(corners);
+
+	Plane planes[6];
+	camera->frustum.GetPlanes(planes);
+
+	for (uint i = 0; i < 6; ++i)
+	{
+		uint point_inside_plane = 8;
+
+		for (uint p = 0; p < 8; ++p)
+		{
+			if (planes[i].IsOnPositiveSide(corners[p]))
+			{
+				--point_inside_plane;
+			}
+		}
+
+		if (point_inside_plane == 0)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}

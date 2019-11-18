@@ -309,4 +309,12 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	frustum.farPlaneDistance = far_plane;
 	frustum.verticalFov = vertical_fov * DEGTORAD;
 	frustum.horizontalFov = horizontal_fov * DEGTORAD;
+
+	if (game_object_attached != nullptr) {
+		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+		frustum.pos = transform->GetGlobalPosition();
+		frustum.front = transform->GetLocalRotation().WorldZ();
+		frustum.up = transform->GetLocalRotation().WorldY();
+	}
 }
+

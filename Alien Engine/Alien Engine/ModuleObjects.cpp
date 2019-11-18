@@ -105,7 +105,25 @@ update_status ModuleObjects::PostUpdate(float dt)
 		if (render_octree)
 			octree.Draw();
 
-		base_game_object->DrawScene();
+		if (base_game_object->HasChildren()) {
+			std::vector<GameObject*> to_draw;
+
+			octree.SetStaticDrawList(&to_draw, App->camera->fake_camera);
+
+			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+			for (; item != base_game_object->children.end(); ++item) {
+				if (*item != nullptr && (*item)->IsEnabled()) {
+					(*item)->SetDrawList(&to_draw, App->camera->fake_camera);
+				}
+			}
+
+			item = to_draw.begin();
+			for (; item != to_draw.end(); ++item) {
+				if (*item != nullptr) {
+					(*item)->DrawScene();
+				}
+			}
+		}
 
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -123,8 +141,29 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClearStencil(0);
 
-		base_game_object->DrawGame();
+		if (allow_grid)
+			App->renderer3D->RenderGrid();
 
+		if (base_game_object->HasChildren()) {
+			std::vector<GameObject*> to_draw;
+
+			octree.SetStaticDrawList(&to_draw, App->renderer3D->actual_game_camera);
+
+			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+			for (; item != base_game_object->children.end(); ++item) {
+				if (*item != nullptr && (*item)->IsEnabled()) {
+					(*item)->SetDrawList(&to_draw, App->renderer3D->actual_game_camera);
+				}
+			}
+
+			item = to_draw.begin();
+			for (; item != to_draw.end(); ++item) {
+				if (*item != nullptr) {
+					(*item)->DrawGame();
+				}
+			}
+		}
+	
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 

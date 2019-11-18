@@ -197,6 +197,35 @@ bool OctreeNode::AddToChildren(GameObject * obj, const AABB& sect)
 	return ret;
 }
 
+void OctreeNode::SetStaticDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera)
+{
+	if (App->renderer3D->IsInsideFrustum(camera, section)) {
+		if (!game_objects.empty()) {
+			std::vector<GameObject*>::iterator item = game_objects.begin();
+			for (; item != game_objects.end(); ++item) {
+				if (*item != nullptr) {
+					ComponentMesh* mesh = (ComponentMesh*)(*item)->GetComponent(ComponentType::MESH);
+					if (mesh != nullptr && mesh->mesh != nullptr) {
+						if (App->renderer3D->IsInsideFrustum(camera, mesh->GetGlobalAABB())) {
+							to_draw->push_back((*item));
+						}
+					}
+				}
+			}
+		}
+		if (!children.empty()) {
+			std::vector<OctreeNode*>::iterator item = children.begin();
+			for (; item != children.end(); ++item) {
+				if (*item != nullptr) {
+					if (App->renderer3D->IsInsideFrustum(camera, (*item)->section)) {
+						(*item)->SetStaticDrawList(to_draw, camera);
+					}
+				}
+			}
+		}
+	}
+}
+
 void OctreeNode::Subdivide()
 {
 	float3 mid_point = section.minPoint + (section.maxPoint - section.minPoint) * 0.5F;
@@ -366,6 +395,14 @@ void Octree::Recalculate(GameObject* new_object)
 			Insert((*item), false);
 		}
 	}
+}
+
+void Octree::SetStaticDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera)
+{
+	if (root == nullptr)
+		return;
+
+	root->SetStaticDrawList(to_draw, camera);
 }
 
 bool Octree::Exists(GameObject* object)
