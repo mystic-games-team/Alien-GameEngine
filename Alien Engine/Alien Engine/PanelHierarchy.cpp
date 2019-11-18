@@ -2,6 +2,7 @@
 #include "ModuleObjects.h"
 #include "GameObject.h"
 #include "PanelCreateObject.h"
+#include "ResourcePrefab.h"
 #include "imgui/imgui_internal.h"
 
 PanelHierarchy::PanelHierarchy(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -176,6 +177,11 @@ void PanelHierarchy::RightClickMenu()
 			if (ImGui::MenuItem("Move On Bottom", nullptr, nullptr, !is_on_bottom))
 			{
 				App->objects->MoveObjectDown(object_menu, true);
+			}
+
+			if (ImGui::MenuItem("Make it Pefab")) {
+				ResourcePrefab* prefab = new ResourcePrefab();
+				prefab->CreateMetaData(object_menu);
 			}
 
 			ImGui::Separator();

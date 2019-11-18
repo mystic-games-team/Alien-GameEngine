@@ -33,7 +33,7 @@ bool ResourcePrefab::CreateMetaData(GameObject* object)
 		JSON_Object* prefab_object = json_value_get_object(prefab_value);
 		json_serialize_to_file_pretty(prefab_value, meta_data_path.data());
 
-		if (prefab_scene != nullptr || prefab_object != nullptr) {
+		if (prefab_value != nullptr && prefab_object != nullptr) {
 			JSONfilepack* prefab = new JSONfilepack(meta_data_path.data(), prefab_object, prefab_value);
 			prefab->StartSave();
 
@@ -45,6 +45,8 @@ bool ResourcePrefab::CreateMetaData(GameObject* object)
 
 			prefab->FinishSave();
 			delete prefab;
+
+			App->resources->AddResource(this);
 		}
 	}
 	else {
