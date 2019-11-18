@@ -89,6 +89,7 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 
 bool ResourcePrefab::DeleteMetaData()
 {
+	remove(meta_data_path.data());
 	return true;
 }
 

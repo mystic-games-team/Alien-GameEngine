@@ -57,10 +57,13 @@ void FileNode::DeleteNodeData(bool delete_folder)
 	if (is_file) {
 		std::string hole_path = std::string(path + name).data();
 
-		remove(hole_path.data());
-
-		std::string meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + "_meta.alien";
-
+		std::string meta_path;
+		if (type == FileDropType::PREFAB) {
+			meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + ".alienfab";
+		}
+		else {
+			meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + "_meta.alien";
+		}
 		u64 ID = App->resources->GetIDFromAlienPath(meta_path.data());
 		if (ID != 0) {
 			remove(meta_path.data());
@@ -69,6 +72,7 @@ void FileNode::DeleteNodeData(bool delete_folder)
 			if (resource_to_delete != nullptr)
 				resource_to_delete->DeleteMetaData();
 		}
+		remove(hole_path.data());
 	}
 	else {
 		std::vector<FileNode*>::iterator item = children.begin();
