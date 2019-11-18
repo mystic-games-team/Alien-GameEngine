@@ -66,15 +66,15 @@ update_status ModuleCamera3D::Update(float dt)
 		if (is_scene_hovered)
 		{
 			Zoom();
-			if (!ImGuizmo::IsOver() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+			if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 			{
 				Rotation(dt);
 			}
-			else if (!ImGuizmo::IsOver() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
+			else if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
 				CreateRay();
 			}
 
-			if (is_scene_focused)
+			if (!ImGuizmo::IsUsing() && is_scene_focused)
 				Movement();
 		}
 

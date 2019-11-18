@@ -131,7 +131,8 @@ private:
 	ShortCut* shortcut_AABB = nullptr;
 	ShortCut* shortcut_OBB = nullptr;
 	ShortCut* shortcut_octree = nullptr;
-	ShortCut* shortcut_game = nullptr;
+	ShortCut* shortcut_cntrlZ = nullptr;
+	ShortCut* shortcut_cntrlY = nullptr;
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_project_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -159,6 +160,8 @@ private:
 	SDL_Scancode shortcut_AABB_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_OBB_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_octree_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode shortcut_cntrlZ_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode shortcut_cntrlY_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 
 	std::pair<bool, Time::GameState> change_game_state;
 

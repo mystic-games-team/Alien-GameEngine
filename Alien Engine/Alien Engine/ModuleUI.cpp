@@ -128,6 +128,8 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	memcpy(shortcut_OBB_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.OBB"), size_of_codes);
 	memcpy(shortcut_octree_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ViewOctree"), size_of_codes);
 	memcpy(panel_game_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.Game"), size_of_codes);
+	memcpy(shortcut_cntrlZ_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.GoBack"), size_of_codes);
+	memcpy(shortcut_cntrlY_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.GoFordward"), size_of_codes);
 
 
 	if (panel_about != nullptr) {
@@ -157,6 +159,8 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		shortcut_AABB->SetShortcutKeys(shortcut_AABB_codes[0], shortcut_AABB_codes[1], shortcut_AABB_codes[2]);
 		shortcut_OBB->SetShortcutKeys(shortcut_OBB_codes[0], shortcut_OBB_codes[1], shortcut_OBB_codes[2]);
 		shortcut_octree->SetShortcutKeys(shortcut_octree_codes[0], shortcut_octree_codes[1], shortcut_octree_codes[2]);
+		shortcut_cntrlZ->SetShortcutKeys(shortcut_cntrlZ_codes[0], shortcut_cntrlZ_codes[1], shortcut_cntrlZ_codes[2]);
+		shortcut_cntrlY->SetShortcutKeys(shortcut_cntrlY_codes[0], shortcut_cntrlY_codes[1], shortcut_cntrlY_codes[2]);
 
 		// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 		App->shortcut_manager->OrderShortCuts();
@@ -190,7 +194,8 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.AABB", shortcut_AABB->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.OBB", shortcut_OBB->GetScancodesArray());
 	config->SetShortcutCodes("Configuration.UI.ShortCuts.ViewOctree", shortcut_octree->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.Game", shortcut_game->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.GoBack", shortcut_cntrlZ->GetScancodesArray());
+	config->SetShortcutCodes("Configuration.UI.ShortCuts.GoFordward", shortcut_cntrlY->GetScancodesArray());
 }
 void ModuleUI::LoadLayouts()
 {
@@ -944,6 +949,8 @@ void ModuleUI::InitShortCuts()
 	shortcut_AABB = App->shortcut_manager->AddShortCut("AABB", shortcut_AABB_codes[0], std::bind(&ModuleObjects::ChangeEnableAABB, App->objects), shortcut_AABB_codes[1], shortcut_AABB_codes[2]);
 	shortcut_OBB = App->shortcut_manager->AddShortCut("OBB", shortcut_OBB_codes[0], std::bind(&ModuleObjects::ChangeEnableOBB, App->objects), shortcut_OBB_codes[1], shortcut_OBB_codes[2]);
 	shortcut_octree = App->shortcut_manager->AddShortCut("Octree", shortcut_octree_codes[0], std::bind(&ModuleObjects::ChangeEnableOctree, App->objects), shortcut_octree_codes[1], shortcut_octree_codes[2]);
+	shortcut_cntrlZ = App->shortcut_manager->AddShortCut("Go Back", shortcut_cntrlZ_codes[0], ReturnZ::GoBackOneAction, shortcut_cntrlZ_codes[1], shortcut_cntrlZ_codes[2]);
+	shortcut_cntrlY = App->shortcut_manager->AddShortCut("Go Forward", shortcut_cntrlY_codes[0], ReturnZ::GoFordwardOneAction, shortcut_cntrlY_codes[1], shortcut_cntrlY_codes[2]);
 	
 	// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 	App->shortcut_manager->OrderShortCuts();
