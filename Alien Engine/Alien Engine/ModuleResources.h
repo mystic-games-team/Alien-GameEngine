@@ -20,6 +20,7 @@ struct Icons {
 	ResourceTexture* png_file = nullptr;
 	ResourceTexture* dds_file = nullptr;
 	ResourceTexture* folder = nullptr;
+	ResourceTexture* prefab_icon = nullptr;
 	ResourceTexture* model = nullptr;
 	ResourceTexture* return_icon = nullptr;
 	ResourceTexture* scene_file = nullptr;
