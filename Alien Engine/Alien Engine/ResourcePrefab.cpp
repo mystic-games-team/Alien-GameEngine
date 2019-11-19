@@ -48,7 +48,7 @@ bool ResourcePrefab::CreateMetaData(GameObject* object)
 		JSON_Value* prefab_value = json_value_init_object();
 		JSON_Object* prefab_object = json_value_get_object(prefab_value);
 		json_serialize_to_file_pretty(prefab_value, meta_data_path.data());
-		object->SetPrefab();
+		object->SetPrefab(ID);
 		if (prefab_value != nullptr && prefab_object != nullptr) {
 			JSONfilepack* prefab = new JSONfilepack(meta_data_path.data(), prefab_object, prefab_value);
 			prefab->StartSave();
@@ -133,7 +133,7 @@ void ResourcePrefab::ConvertToGameObjects()
 					}
 				}
 			}
-			obj->is_prefab = true;
+			obj->SetPrefab(ID);
 			objects_created.push_back(obj);
 		}
 		GameObject* obj = App->objects->base_game_object->children.back();

@@ -186,7 +186,7 @@ void PanelHierarchy::RightClickMenu()
 				App->ui->panel_project->RefreshAllNodes();
 			}
 
-			if (object_menu->is_prefab) {
+			if (object_menu->IsPrefab()) {
 				ImGui::Separator();
 
 				if (ImGui::MenuItem("Select Prefab Root")) {
@@ -200,6 +200,18 @@ void PanelHierarchy::RightClickMenu()
 
 				if (ImGui::MenuItem("Select Prefab Asset")) {
 
+				}
+
+				if (ImGui::MenuItem("Set Prefab as the Original")) {
+					GameObject* obj = object_menu->FindPrefabRoot();
+					if (obj != nullptr) {
+						std::vector<GameObject*>::iterator item = obj->parent->children.begin();
+						for (; item != obj->parent->children.end(); ++item) {
+							if (*item != nullptr && *item == obj) {
+
+							}
+						}
+					}
 				}
 
 				if (ImGui::MenuItem("UnPack Prefab")) {

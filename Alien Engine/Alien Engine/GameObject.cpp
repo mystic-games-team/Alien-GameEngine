@@ -734,42 +734,34 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 	}
 }
 
-void GameObject::SetPrefab()
+void GameObject::SetPrefab(const u64& prefabID)
 {
-	is_prefab = true;
-
 	std::vector<GameObject*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
-		if (*item != nullptr) {
-			(*item)->SetPrefab();
+		if (*item != nullptr && (prefabID != 0 || (*item)->prefabID == this->prefabID)) {
+			(*item)->SetPrefab(prefabID);
 		}
 	}
+	this->prefabID = prefabID;
 }
 
 void GameObject::UnpackPrefab()
 {
-	if (!is_prefab)
+	if (!IsPrefab())
 		return;
 
-	is_prefab = false;
-
-	std::vector<GameObject*>::iterator item = children.begin();
-	for (; item != children.end(); ++item) {
-		if (*item != nullptr) {
-			(*item)->UnpackPrefab();
-		}
-	}
+	SetPrefab(0);
 }
 
 GameObject* GameObject::FindPrefabRoot()
 {
-	if (!is_prefab)
+	if (!IsPrefab())
 		return nullptr;
 
-	if (parent->is_prefab) {
+	if (parent->IsPrefab()) {
 		GameObject* find_root = this;
 		for (;;) {
-			if (find_root->parent != nullptr && !find_root->parent->is_prefab) {
+			if (find_root->parent != nullptr && (!find_root->parent->IsPrefab() || find_root->parent->prefabID != find_root->prefabID)) {
 				return find_root;
 			}
 			find_root = find_root->parent;
@@ -778,6 +770,11 @@ GameObject* GameObject::FindPrefabRoot()
 	else {
 		return this;
 	}
+}
+
+bool GameObject::IsPrefab() const
+{
+	return prefabID != 0;
 }
 
 void GameObject::ChangeStatic(bool static_)

@@ -89,9 +89,10 @@ public:
 	void SearchResourceToDelete(const ResourceType& type, Resource* to_delete);
 
 	// prefab
-	void SetPrefab();
+	void SetPrefab(const u64& prefabID);
 	void UnpackPrefab();
 	GameObject* FindPrefabRoot();
+	bool IsPrefab() const;
 
 	//static
 	void ChangeStatic(bool static_);
@@ -113,12 +114,11 @@ public:
 	bool parent_enabled = true;
 	bool parent_selected = false;
 	bool open_node = false;
-	bool is_prefab = false;
 
 private:
 
 	bool to_delete = false; 
-
+	u64 prefabID = 0;
 	bool selected = false;
 
 
