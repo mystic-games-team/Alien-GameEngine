@@ -40,7 +40,7 @@ bool ModuleObjects::Start()
 
 	GameObject* light_test = new GameObject(base_game_object);
 	light_test->SetName("Light");
-	light_test->AddComponent(new ComponentTransform(light_test, { 0,0,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
+	light_test->AddComponent(new ComponentTransform(light_test, { 0,15,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
 	light_test->AddComponent(new ComponentLight(light_test));
 
 	current_scene.name_without_extension = "Untitled*";
@@ -108,12 +108,23 @@ update_status ModuleObjects::PostUpdate(float dt)
 		if (base_game_object->HasChildren()) {
 			std::vector<GameObject*> to_draw;
 
-			octree.SetStaticDrawList(&to_draw, App->camera->fake_camera);
+			ComponentCamera* frustum_camera = nullptr;
+
+			if (check_culling_in_scene)
+			{
+				frustum_camera = App->renderer3D->actual_game_camera;
+			}
+			else
+			{
+				frustum_camera = App->camera->fake_camera;
+			}
+
+			octree.SetStaticDrawList(&to_draw, frustum_camera);
 
 			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 			for (; item != base_game_object->children.end(); ++item) {
 				if (*item != nullptr && (*item)->IsEnabled()) {
-					(*item)->SetDrawList(&to_draw, App->camera->fake_camera);
+					(*item)->SetDrawList(&to_draw, frustum_camera);
 				}
 			}
 
