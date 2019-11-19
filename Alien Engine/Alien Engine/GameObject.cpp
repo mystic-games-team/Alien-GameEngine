@@ -630,6 +630,10 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 	to_save->SetBoolean("Selected", selected);
 	to_save->SetBoolean("ParentSelected", parent_selected);
 	to_save->SetBoolean("IsStatic", is_static);
+	to_save->SetBoolean("IsPrefab", IsPrefab());
+	if (IsPrefab()) {
+		to_save->SetString("PrefabID", std::to_string(prefabID));
+	}
 
 	JSONArraypack* components_to_save = to_save->InitNewArray("Components");
 
@@ -654,7 +658,12 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	}
 	parent_selected = to_load->GetBoolean("ParentSelected");
 	is_static = to_load->GetBoolean("IsStatic");
-
+	if (to_load->GetBoolean("IsPrefab")) {
+		u64 id = std::stoull(to_load->GetString("PrefabID"));
+		if (App->resources->GetResourceWithID(id) != nullptr) {
+			prefabID = id;
+		}
+	}
 	if (parent != nullptr) {
 		this->parent = parent;
 		parent->AddChild(this);
@@ -751,6 +760,19 @@ void GameObject::UnpackPrefab()
 		return;
 
 	SetPrefab(0);
+}
+
+void GameObject::UnpackAllPrefabsOf(const u64& prefabID)
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			if ((*item)->prefabID == prefabID) {
+				(*item)->prefabID = 0;
+			}
+			(*item)->UnpackAllPrefabsOf(prefabID);
+		}
+	}
 }
 
 GameObject* GameObject::FindPrefabRoot()

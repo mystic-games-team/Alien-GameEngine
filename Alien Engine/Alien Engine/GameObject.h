@@ -91,6 +91,7 @@ public:
 	// prefab
 	void SetPrefab(const u64& prefabID);
 	void UnpackPrefab();
+	void UnpackAllPrefabsOf(const u64& prefabID);
 	GameObject* FindPrefabRoot();
 	bool IsPrefab() const;
 	const u64 GetPrefabID() const;

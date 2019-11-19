@@ -90,6 +90,7 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 bool ResourcePrefab::DeleteMetaData()
 {
 	remove(meta_data_path.data());
+	App->objects->base_game_object->UnpackAllPrefabsOf(ID);
 	return true;
 }
 
