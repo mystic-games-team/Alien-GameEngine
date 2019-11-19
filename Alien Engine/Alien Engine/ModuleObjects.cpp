@@ -570,13 +570,23 @@ void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, cons
 
 void ModuleObjects::DeleteReturns()
 {
+	if (!fordward_actions.empty()) {
+		while (!fordward_actions.empty()) {
+			ReturnZ* act = fordward_actions.top();
+			delete act;
+			act = nullptr;
+			fordward_actions.pop();
+		}
+	}
 	if (!return_actions.empty()) {
-		for (uint i = 0; i < return_actions.size(); ++i) {
-			ReturnZ* action = return_actions.top();
-			delete action;
+		while (!return_actions.empty()) {
+			ReturnZ* act = return_actions.top();
+			delete act;
+			act = nullptr;
 			return_actions.pop();
 		}
 	}
+
 }
 
 bool ModuleObjects::SortByFamilyNumber(std::tuple<uint,u64, uint> tuple1, std::tuple<uint, u64, uint> tuple2)
