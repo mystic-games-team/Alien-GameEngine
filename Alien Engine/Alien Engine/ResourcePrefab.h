@@ -19,5 +19,5 @@ public:
 	bool DeleteMetaData();
 
 	// create GameObjects
-	void ConvertToGameObjects();
+	void ConvertToGameObjects(int list_num = -1);
 };

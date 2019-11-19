@@ -93,6 +93,7 @@ public:
 	void UnpackPrefab();
 	GameObject* FindPrefabRoot();
 	bool IsPrefab() const;
+	const u64 GetPrefabID() const;
 
 	//static
 	void ChangeStatic(bool static_);

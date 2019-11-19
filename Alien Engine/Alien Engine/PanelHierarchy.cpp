@@ -208,7 +208,12 @@ void PanelHierarchy::RightClickMenu()
 						std::vector<GameObject*>::iterator item = obj->parent->children.begin();
 						for (; item != obj->parent->children.end(); ++item) {
 							if (*item != nullptr && *item == obj) {
-
+								ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(obj->GetPrefabID());
+								if (prefab != nullptr) {
+									(*item)->ToDelete();
+									prefab->ConvertToGameObjects(item - obj->parent->children.begin());
+								}
+								break;
 							}
 						}
 					}

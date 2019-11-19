@@ -777,6 +777,11 @@ bool GameObject::IsPrefab() const
 	return prefabID != 0;
 }
 
+const u64 GameObject::GetPrefabID() const
+{
+	return prefabID;
+}
+
 void GameObject::ChangeStatic(bool static_)
 {
 	std::vector<GameObject*>::iterator item = children.begin();

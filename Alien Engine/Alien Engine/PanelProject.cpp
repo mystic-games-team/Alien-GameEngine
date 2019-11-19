@@ -23,9 +23,6 @@ PanelProject::PanelProject(const std::string& panel_name, const SDL_Scancode& ke
 	go_back_folder.is_file = false;
 	go_back_folder.icon = App->resources->icons.return_icon;
 	go_back_folder.path.clear();
-	
-
-	//std::rename("Assets/Models/BakerHouse.fbx", "Assets/BakerHouse.fbx");
 }
 PanelProject::~PanelProject()
 {

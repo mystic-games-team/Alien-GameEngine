@@ -93,7 +93,7 @@ bool ResourcePrefab::DeleteMetaData()
 	return true;
 }
 
-void ResourcePrefab::ConvertToGameObjects()
+void ResourcePrefab::ConvertToGameObjects(int list_num)
 {
 	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
@@ -137,8 +137,12 @@ void ResourcePrefab::ConvertToGameObjects()
 			objects_created.push_back(obj);
 		}
 		GameObject* obj = App->objects->base_game_object->children.back();
+		if (list_num != -1) {
+			App->objects->base_game_object->children.pop_back();
+			App->objects->base_game_object->children.insert(App->objects->base_game_object->children.begin() + list_num, obj);
+		}
 		App->objects->SetNewSelectedObject(obj);
-		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
+		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);
 		transform->SetLocalPosition(0, 0, 0);
 		delete prefab;
 	}
