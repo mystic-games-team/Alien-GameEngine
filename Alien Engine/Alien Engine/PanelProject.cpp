@@ -120,7 +120,7 @@ void PanelProject::SeeFiles()
 
 		ImGui::SetWindowFontScale(0.9F);
 
-		ImGui::Columns(int(colum_width[1] / 78), "##ColumnIcons", false);
+		ImGui::Columns(max(1, int(colum_width[1] / 78)), "##ColumnIcons", false);
 
 		ImVec4 color(0, 0, 0, 0);
 
