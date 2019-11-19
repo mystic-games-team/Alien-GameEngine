@@ -215,7 +215,7 @@ void ResourceModel::ConvertToGameObjects()
 		App->objects->SetNewSelectedObject(App->objects->base_game_object->children.back());
 		ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->base_game_object->children.back());
 	}
-	App->camera->Focus();
+	App->camera->fake_camera->Look(App->objects->base_game_object->children.back()->GetBB().CenterPoint());
 }
 
 bool ResourceModel::SortByFamilyNumber(const ResourceMesh* mesh1, const ResourceMesh* mesh2)
