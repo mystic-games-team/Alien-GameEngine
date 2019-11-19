@@ -23,23 +23,26 @@ ModuleResources::~ModuleResources()
 bool ModuleResources::Start()
 {
 	// Load Icons
-	icons.jpg_file = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_jpg.png");
-	icons.png_file = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_png.png");
-	icons.dds_file = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_dds.png");
-	icons.folder = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_folder.png");
-	icons.model = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_model.png");
-	icons.return_icon = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_return.png");
-	icons.scene_file = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/icon_scene.png");
-	icons.move_transform = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/move.png");
-	icons.rotate_transform = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/rotate.png");
-	icons.scale_transform = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/scales.png");
-	icons.redo = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/redo.png");
-	icons.undo = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/undo.png");
-	icons.global = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/global.png");
-	icons.local = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/local.png");
-	icons.play = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/play.png");
-	icons.pause = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/pause.png");
-	icons.once = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/once.png");
+	icons.jpg_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_jpg.png");
+	icons.png_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_png.png");
+	icons.dds_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_dds.png");
+	icons.folder = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_folder.png");
+	icons.prefab_icon = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_prefab.png");
+	icons.model = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_model.png");
+	icons.return_icon = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_return.png");
+	icons.scene_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_scene.png");
+	icons.move_transform = App->importer->LoadEngineTexture("Configuration/EngineTextures/move.png");
+	icons.rotate_transform = App->importer->LoadEngineTexture("Configuration/EngineTextures/rotate.png");
+	icons.scale_transform = App->importer->LoadEngineTexture("Configuration/EngineTextures/scales.png");
+	icons.redo = App->importer->LoadEngineTexture("Configuration/EngineTextures/redo.png");
+	icons.undo = App->importer->LoadEngineTexture("Configuration/EngineTextures/undo.png");
+	icons.global = App->importer->LoadEngineTexture("Configuration/EngineTextures/global.png");
+	icons.local = App->importer->LoadEngineTexture("Configuration/EngineTextures/local.png");
+	icons.play = App->importer->LoadEngineTexture("Configuration/EngineTextures/play.png");
+	icons.pause = App->importer->LoadEngineTexture("Configuration/EngineTextures/pause.png");
+	icons.once = App->importer->LoadEngineTexture("Configuration/EngineTextures/once.png");
+	icons.box = App->importer->LoadEngineTexture("Configuration/EngineTextures/box.png");
+	icons.prefab = App->importer->LoadEngineTexture("Configuration/EngineTextures/prefab.png");
 
 	// Load Primitives as resource
 	cube = CreatePrimitive(PrimitiveType::CUBE);

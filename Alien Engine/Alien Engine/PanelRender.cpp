@@ -128,6 +128,14 @@ void PanelRender::PanelLogic()
 		ImGui::Checkbox("Active Frustum", &App->objects->draw_frustum);
 		ImGui::ColorEdit3("Frustum Color", (float*)& App->objects->frustum_color, ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("Frustum Line Width", (int*)& App->objects->frustum_line_width, 1, 30);
+		ImGui::Spacing();
+		ImGui::Checkbox("Check Culling In Scene", &App->objects->check_culling_in_scene);
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("If Active, the culling in the scene is from the game camera. \nCheck PanelGame and control the active camera in the scene");
+			ImGui::EndTooltip();
+		}
 	}
 	if (ImGui::CollapsingHeader("Mouse Ray")) {
 		ImGui::Spacing();

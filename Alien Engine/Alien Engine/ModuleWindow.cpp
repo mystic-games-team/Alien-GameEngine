@@ -38,6 +38,10 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
+		if (start_maximized) {
+			flags |= SDL_WINDOW_MAXIMIZED;
+		}
+
 		if(fullscreen)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
@@ -57,7 +61,7 @@ bool ModuleWindow::Init()
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
-
+		
 		window = SDL_CreateWindow(window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width * SCREEN_SIZE, height * SCREEN_SIZE, flags);
 		if(window == NULL)
 		{
@@ -102,25 +106,29 @@ void ModuleWindow::LoadConfig(JSONfilepack*& config)
 	window_name = (char*)config->GetString("Configuration.Application.Name");
 	organitzation_name = (char*)config->GetString("Configuration.Application.Organitzation");
 	style = config->GetNumber("Configuration.Window.StyleType");
+	start_maximized = config->GetBoolean("Configuration.Window.StartMax");
 	if (ImGui::GetCurrentContext() != nullptr)
 		App->ui->ChangeStyle(style);
-	SDL_SetWindowTitle(window, window_name);
-	SDL_SetWindowSize(window, width, height);
-	if (fullscreen) {
-		SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN);
-	}
-	else {
-		SDL_SetWindowFullscreen(App->window->window, 0);
-	}
-	if (full_desktop) {
-		SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	}
-	else {
-		SDL_SetWindowFullscreen(App->window->window, 0);
-	}
-	SDL_SetWindowBordered(window, (SDL_bool)!borderless);
-	SDL_SetWindowResizable(window, (SDL_bool)resizable);
-	SDL_SetWindowBrightness(window, brightness);
+	//SDL_SetWindowTitle(window, window_name);
+	//SDL_SetWindowSize(window, width, height);
+	//if (fullscreen) {
+	//	SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN);
+	//}
+	//else {
+	//	SDL_SetWindowFullscreen(App->window->window, 0);
+	//}
+	//if (full_desktop) {
+	//	SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	//}
+	//else {
+	//	SDL_SetWindowFullscreen(App->window->window, 0);
+	//}
+	//SDL_SetWindowBordered(window, (SDL_bool)!borderless);
+	//SDL_SetWindowResizable(window, (SDL_bool)resizable);
+	//SDL_SetWindowBrightness(window, brightness);
+	//int x, y;
+	//SDL_GL_GetDrawableSize(window, &x, &y);
+	//SDL_SetWindowSize(window, x, y);
 }
 
 void ModuleWindow::SaveConfig(JSONfilepack*& config)
@@ -135,6 +143,7 @@ void ModuleWindow::SaveConfig(JSONfilepack*& config)
 	config->SetNumber("Configuration.Window.StyleType", style);
 	config->SetString("Configuration.Application.Name", window_name);
 	config->SetString("Configuration.Application.Organitzation", organitzation_name);
+	config->SetBoolean("Configuration.Window.StartMax", start_maximized);
 }
 
 void ModuleWindow::SetTitle(const char* title)

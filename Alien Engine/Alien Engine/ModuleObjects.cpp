@@ -40,7 +40,7 @@ bool ModuleObjects::Start()
 
 	GameObject* light_test = new GameObject(base_game_object);
 	light_test->SetName("Light");
-	light_test->AddComponent(new ComponentTransform(light_test, { 0,0,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
+	light_test->AddComponent(new ComponentTransform(light_test, { 0,15,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
 	light_test->AddComponent(new ComponentLight(light_test));
 
 	current_scene.name_without_extension = "Untitled*";
@@ -108,12 +108,23 @@ update_status ModuleObjects::PostUpdate(float dt)
 		if (base_game_object->HasChildren()) {
 			std::vector<GameObject*> to_draw;
 
-			octree.SetStaticDrawList(&to_draw, App->camera->fake_camera);
+			ComponentCamera* frustum_camera = nullptr;
+
+			if (check_culling_in_scene)
+			{
+				frustum_camera = App->renderer3D->actual_game_camera;
+			}
+			else
+			{
+				frustum_camera = App->camera->fake_camera;
+			}
+
+			octree.SetStaticDrawList(&to_draw, frustum_camera);
 
 			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 			for (; item != base_game_object->children.end(); ++item) {
 				if (*item != nullptr && (*item)->IsEnabled()) {
-					(*item)->SetDrawList(&to_draw, App->camera->fake_camera);
+					(*item)->SetDrawList(&to_draw, frustum_camera);
 				}
 			}
 
@@ -570,13 +581,23 @@ void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, cons
 
 void ModuleObjects::DeleteReturns()
 {
+	if (!fordward_actions.empty()) {
+		while (!fordward_actions.empty()) {
+			ReturnZ* act = fordward_actions.top();
+			delete act;
+			act = nullptr;
+			fordward_actions.pop();
+		}
+	}
 	if (!return_actions.empty()) {
-		for (uint i = 0; i < return_actions.size(); ++i) {
-			ReturnZ* action = return_actions.top();
-			delete action;
+		while (!return_actions.empty()) {
+			ReturnZ* act = return_actions.top();
+			delete act;
+			act = nullptr;
 			return_actions.pop();
 		}
 	}
+
 }
 
 bool ModuleObjects::SortByFamilyNumber(std::tuple<uint,u64, uint> tuple1, std::tuple<uint, u64, uint> tuple2)

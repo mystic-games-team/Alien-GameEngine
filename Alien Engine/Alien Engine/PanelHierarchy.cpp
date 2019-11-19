@@ -5,6 +5,8 @@
 #include "ResourcePrefab.h"
 #include "imgui/imgui_internal.h"
 #include "PanelProject.h"
+#include "ResourceTexture.h"
+
 
 PanelHierarchy::PanelHierarchy(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -82,6 +84,12 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		node->SayChildrenParentIsEnabled(node->enabled);
 	}
 	ImGui::PopID();
+
+	ImGui::SameLine();
+
+	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+	if (node->IsPrefab() && node->FindPrefabRoot() == node)  ImGui::Image((ImTextureID)App->resources->icons.prefab->id, ImVec2(15, 15));
+	else ImGui::Image((ImTextureID)App->resources->icons.box->id, ImVec2(15, 15));
 
 	ImGui::SameLine();
 
