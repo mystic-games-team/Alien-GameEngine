@@ -33,6 +33,8 @@ struct Icons {
 	ResourceTexture* play = nullptr;
 	ResourceTexture* pause = nullptr;
 	ResourceTexture* once = nullptr;
+	ResourceTexture* box = nullptr;
+	ResourceTexture* prefab = nullptr;
 };
 
 

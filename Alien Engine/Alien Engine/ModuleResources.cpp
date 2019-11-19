@@ -39,6 +39,8 @@ bool ModuleResources::Start()
 	icons.play = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/play.png");
 	icons.pause = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/pause.png");
 	icons.once = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/once.png");
+	icons.box = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/box.png");
+	icons.prefab = App->importer->LoadEngineTexture("Library/Textures/EngineTextures/prefab.png");
 
 	// Load Primitives as resource
 	cube = CreatePrimitive(PrimitiveType::CUBE);
