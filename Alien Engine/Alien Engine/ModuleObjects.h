@@ -117,6 +117,7 @@ public:
 	bool draw_frustum = true;
 	Color frustum_color{ 1,0,0,1 };
 	int frustum_line_width = 1;
+	bool check_culling_in_scene = false;
 
 	// wireframe
 	bool wireframe_mode = false;
