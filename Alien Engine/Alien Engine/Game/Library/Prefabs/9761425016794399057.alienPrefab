@@ -4,13 +4,15 @@
             {
                 "Name": "BakerHouse",
                 "FamilyNumber": 1,
-                "ID": "14295498927355685046",
+                "ID": "17674275071279671777",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabID": "9761425016794399057",
                 "Components": [
                     {
                         "Type": 0,
@@ -37,13 +39,15 @@
             {
                 "Name": "Chimney",
                 "FamilyNumber": 2,
-                "ID": "5388495520116681984",
-                "ParentID": "14295498927355685046",
+                "ID": "5927129558185980714",
+                "ParentID": "17674275071279671777",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": true,
                 "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabID": "9761425016794399057",
                 "Components": [
                     {
                         "Type": 0,
@@ -96,13 +100,15 @@
             {
                 "Name": "Baker_house",
                 "FamilyNumber": 2,
-                "ID": "8723788087824020674",
-                "ParentID": "14295498927355685046",
+                "ID": "7471530544225593882",
+                "ParentID": "17674275071279671777",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": true,
                 "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabID": "9761425016794399057",
                 "Components": [
                     {
                         "Type": 0,
