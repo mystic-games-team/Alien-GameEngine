@@ -8,6 +8,8 @@
 #include "ResourceTexture.h"
 #include "Octree.h"
 
+bool ReturnZ::eraseY = false;
+
 void ReturnZ::SetAction(const ReturnActions& type, void* data)
 {
 	switch (type)
@@ -65,8 +67,22 @@ ReturnZ::~ReturnZ()
 		delete action;
 }
 
-void ReturnZ::AddNewAction(const ReturnActions& type, void* data)
+void ReturnZ::AddNewAction(const ReturnActions& type, void* data, bool user)
 {
+	if (ReturnZ::eraseY && user) {
+		/*for (uint i = 0; i < App->objects->fordward_actions.size(); ++i) {
+			ReturnZ* act = App->objects->fordward_actions.top();
+			delete act;
+			act = nullptr;
+			App->objects->fordward_actions.pop();
+		}*/
+		while (!App->objects->fordward_actions.empty()) {
+			ReturnZ* act = App->objects->fordward_actions.top();
+			delete act;
+			act = nullptr;
+			App->objects->fordward_actions.pop();
+		}
+	}
 	ReturnZ* ret = new ReturnZ();
 	ret->SetAction(type, data);
 	App->objects->return_actions.push(ret);
@@ -83,7 +99,7 @@ void ReturnZ::GoBackOneAction()
 {
 	if (App->objects->return_actions.empty() || Time::IsPlaying())
 		return;
-
+	ReturnZ::eraseY = true;
 	ReturnZ* to_return = App->objects->return_actions.top();
 	App->objects->return_actions.pop();
 
@@ -114,7 +130,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 
 		if (obj != nullptr) {
 			if (is_fordward) {
-				ReturnZ::AddNewAction(ReturnActions::ADD_OBJECT, obj);
+				ReturnZ::AddNewAction(ReturnActions::ADD_OBJECT, obj, false);
 			}
 			else {
 				ReturnZ::AddNewFordwarAction(ReturnActions::ADD_OBJECT, obj);
@@ -129,7 +145,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 			to_delete->ToDelete();
 
 			if (is_fordward) {
-				ReturnZ::AddNewAction(ReturnActions::DELETE_OBJECT, App->objects->GetGameObjectByID(object->objectID));
+				ReturnZ::AddNewAction(ReturnActions::DELETE_OBJECT, App->objects->GetGameObjectByID(object->objectID), false);
 			}
 			else {
 				ReturnZ::AddNewFordwarAction(ReturnActions::DELETE_OBJECT, App->objects->GetGameObjectByID(object->objectID));
@@ -145,7 +161,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 			Component* component = obj->GetComponentWithID(comp->comp->compID);
 			if (component != nullptr) {
 				if (is_fordward) {
-					ReturnZ::AddNewAction(ReturnActions::CHANGE_COMPONENT, component);
+					ReturnZ::AddNewAction(ReturnActions::CHANGE_COMPONENT, component, false);
 				}
 				else {
 					ReturnZ::AddNewFordwarAction(ReturnActions::CHANGE_COMPONENT, component);
@@ -187,7 +203,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 			Component* component = obj->GetComponentWithID(comp->comp->compID);
 			if (component != nullptr) {
 				if (is_fordward) {
-					ReturnZ::AddNewAction(ReturnActions::ADD_COMPONENT, component);
+					ReturnZ::AddNewAction(ReturnActions::ADD_COMPONENT, component, false);
 				}
 				else {
 					ReturnZ::AddNewFordwarAction(ReturnActions::ADD_COMPONENT, component);
@@ -206,7 +222,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 					if (*item != nullptr && *item == component) {
 
 						if (is_fordward) {
-							ReturnZ::AddNewAction(ReturnActions::DELETE_COMPONENT, component);
+							ReturnZ::AddNewAction(ReturnActions::DELETE_COMPONENT, component, false);
 						}
 						else {
 							ReturnZ::AddNewFordwarAction(ReturnActions::DELETE_COMPONENT, component);
@@ -228,7 +244,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 
 		if (obj != nullptr && parent != nullptr) {
 			if (is_fordward) {
-				ReturnZ::AddNewAction(ReturnActions::REPARENT_HIERARCHY, obj);
+				ReturnZ::AddNewAction(ReturnActions::REPARENT_HIERARCHY, obj, false);
 			}
 			else {
 				ReturnZ::AddNewFordwarAction(ReturnActions::REPARENT_HIERARCHY, obj);

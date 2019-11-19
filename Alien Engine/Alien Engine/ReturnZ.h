@@ -25,7 +25,7 @@ public:
 	ReturnZ() {}
 	~ReturnZ();
 
-	static void AddNewAction(const ReturnActions& type, void* data);
+	static void AddNewAction(const ReturnActions& type, void* data, bool user = true);
 	static void AddNewFordwarAction(const ReturnActions& type, void* data);
 
 	static void GoBackOneAction();
@@ -36,6 +36,10 @@ public:
 public:
 
 	Action* action = nullptr;
+
+private:
+
+	static bool eraseY;
 
 private:
 
