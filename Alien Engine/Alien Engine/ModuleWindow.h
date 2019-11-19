@@ -39,6 +39,7 @@ public:
 	bool full_desktop = false;
 	bool borderless = false;
 	bool resizable = false;
+	bool start_maximized = false;
 	int style = 0;
 	char* window_name = nullptr;
 	char* organitzation_name = nullptr;
