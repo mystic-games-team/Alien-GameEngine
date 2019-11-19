@@ -1,0 +1,57 @@
+{
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "Light",
+                "FamilyNumber": 1,
+                "ID": "16949872747706655634",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabID": "2678725619760452700",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            15,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 3,
+                        "DiffuseColor": [
+                            0.75,
+                            0.75,
+                            0.75,
+                            1
+                        ],
+                        "AmbienColor": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ],
+                        "Enabled": true
+                    }
+                ]
+            }
+        ]
+    }
+}

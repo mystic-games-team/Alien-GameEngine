@@ -142,6 +142,9 @@ void FileNode::RemoveResourceOfGameObjects()
 				}
 			}
 			break; }
+		case FileDropType::PREFAB: {
+			// TODO: unpack all prefabs that have this one
+			break; }
 		}
 	}
 	else {
@@ -178,7 +181,7 @@ void FileNode::SetIcon()
 			type = FileDropType::SCENE;
 		}
 		else if (App->StringCmp(extension.data(), "alienfab")) {
-			icon = App->resources->icons.model;
+			icon = App->resources->icons.prefab_icon;
 			type = FileDropType::PREFAB;
 		}
 		else {

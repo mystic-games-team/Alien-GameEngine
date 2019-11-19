@@ -12,20 +12,30 @@ ResourcePrefab::~ResourcePrefab()
 {
 }
 
-bool ResourcePrefab::CreateMetaData(GameObject* object)
+bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder)
 {
-	path = std::string(ASSETS_PREFAB_FOLDER + std::string(object->GetName()) + ".alienfab");
+	if (folder == nullptr)
+		path = std::string(ASSETS_PREFAB_FOLDER + std::string(object->GetName()) + ".alienfab");
+	else
+		path = std::string(std::string(folder) + std::string(object->GetName()) + ".alienfab");
 
 	std::vector<std::string> files;
 	std::vector<std::string> dir;
-	App->file_system->DiscoverFiles(ASSETS_PREFAB_FOLDER, files, dir);
+
+	if (folder == nullptr)
+		App->file_system->DiscoverFiles(ASSETS_PREFAB_FOLDER, files, dir);
+	else
+		App->file_system->DiscoverFiles(folder, files, dir);
 
 	if (!files.empty()) {
 		uint num_file = 0;
 		for (uint i = 0; i < files.size(); ++i) {
 			if (App->StringCmp(files[i].data(), App->file_system->GetBaseFileNameWithExtension(path.data()).data())) {
 				++num_file;
-				path = std::string(ASSETS_PREFAB_FOLDER + std::string(object->GetName()) + " (" + std::to_string(num_file) + ")" + ".alienfab");
+				if (folder == nullptr)
+					path = std::string(ASSETS_PREFAB_FOLDER + std::string(object->GetName()) + " (" + std::to_string(num_file) + ")" + ".alienfab");
+				else
+					path = std::string(std::string(folder) + std::string(object->GetName()) + " (" + std::to_string(num_file) + ")" + ".alienfab");
 				i = -1;
 			}
 		}

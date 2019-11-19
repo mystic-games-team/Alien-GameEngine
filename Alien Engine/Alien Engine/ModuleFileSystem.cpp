@@ -174,7 +174,7 @@ void ModuleFileSystem::DiscoverEverythig(FileNode* node)
 	GetPreviousNames(previous_names, node);
 	node->path = previous_names;
 
-	if (App->StringCmp(node->path.data(), MODELS_FOLDER) || App->StringCmp(node->path.data(), SCENE_FOLDER) || App->StringCmp(node->path.data(), TEXTURES_FOLDER) || App->StringCmp(node->path.data(), SCRIPTS_FOLDER))
+	if (App->StringCmp(node->path.data(), MODELS_FOLDER) || App->StringCmp(node->path.data(), SCENE_FOLDER) || App->StringCmp(node->path.data(), TEXTURES_FOLDER) || App->StringCmp(node->path.data(), SCRIPTS_FOLDER) || App->StringCmp(node->path.data(), ASSETS_PREFAB_FOLDER))
 		node->is_base_file = true;
 
 	if (!node->is_file) {

@@ -5,7 +5,7 @@
 #include <filesystem>
 #include "imgui/imgui_internal.h"
 #include "ResourceModel.h"
-
+#include "ResourcePrefab.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 
@@ -112,6 +112,44 @@ void PanelProject::SeeFiles()
 	}
 	ImGui::EndChild();
 	if (ImGui::BeginChild("##ProjectChild")) {
+		
+		static FileNode* sup = nullptr;
+		static bool can_drop = false;
+		sup = current_active_folder;
+		for (;;) {
+			if (sup == nullptr || sup == assets) {
+				can_drop = false;
+				break;
+			}
+			else if (App->StringCmp(sup->name.data(), "Prefabs")) {
+				can_drop = true;
+				break;
+			}
+			sup = sup->parent;
+		}
+		if (can_drop) {
+			ImVec2 min_space = ImGui::GetWindowContentRegionMin();
+			ImVec2 max_space = ImGui::GetWindowContentRegionMax();
+
+			min_space.x += ImGui::GetWindowPos().x;
+			min_space.y += ImGui::GetWindowPos().y;
+			max_space.x += ImGui::GetWindowPos().x;
+			max_space.y += ImGui::GetWindowPos().y;
+
+			if (ImGui::BeginDragDropTargetCustom({ min_space.x,min_space.y, max_space.x,max_space.y }, ImGui::GetID("##ProjectChild"))) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+					GameObject* node = *(GameObject**)payload->Data;
+					if (node != nullptr) {
+						ResourcePrefab* prefab = new ResourcePrefab();
+						prefab->CreateMetaData(node, current_active_folder->path.data());
+						RefreshAllNodes();
+					}
+					ImGui::ClearDragDrop();
+				}
+				ImGui::EndDragDropTarget();
+			}
+		}
 
 		bool pop_up_item = false;
 

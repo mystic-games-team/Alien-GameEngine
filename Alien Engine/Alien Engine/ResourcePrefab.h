@@ -14,7 +14,7 @@ public:
 	virtual ~ResourcePrefab();
 
 	// meta data
-	bool CreateMetaData(GameObject* object);
+	bool CreateMetaData(GameObject* object, const char* folder = nullptr);
 	bool ReadBaseInfo(const char* assets_file_path);
 	bool DeleteMetaData();
 
