@@ -153,7 +153,11 @@ void PanelScene::GuizmosLogic()
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, transform);
 				guizmo_return = false;
 			}
-			transform->SetLocalTransform(object_transform_matrix.Transposed());
+			ComponentTransform* parent_transform = (ComponentTransform*)App->objects->GetSelectedObject()->parent->GetComponent(ComponentType::TRANSFORM);
+			if (App->objects->GetSelectedObject()->parent != App->objects->base_game_object)
+				transform->SetLocalTransform(object_transform_matrix.Transposed()* parent_transform->global_transformation.Inverted());
+			else
+				transform->SetLocalTransform(object_transform_matrix.Transposed());
 		}
 		else if (!guizmo_return) {
 			guizmo_return = true;

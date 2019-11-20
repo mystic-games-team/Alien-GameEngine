@@ -563,4 +563,15 @@ void ComponentTransform::SetLocalTransform(float4x4 &transform_matrix)
 	RecalculateTransform();
 }
 
+void ComponentTransform::SetGlobalTransform(float4x4& transform_matrix)
+{
+	float3 transform_position, transform_scale;
+	Quat transform_rotation;
+	transform_matrix.Decompose(transform_position, transform_rotation, transform_scale);
+
+	local_position = local_position + (transform_position - GetGlobalPosition());
+
+	RecalculateTransform();
+}
+
 
