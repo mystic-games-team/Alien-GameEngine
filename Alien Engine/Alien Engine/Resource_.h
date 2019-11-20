@@ -34,7 +34,7 @@ public:
 
 	virtual bool ReadBaseInfo(const char* assets_file_path) { return true; }
 
-	virtual bool CreateMetaData() { return true; } // when someting is dropped
+	virtual bool CreateMetaData(const u64& force_id = 0) { return true; } // when someting is dropped
 	virtual bool DeleteMetaData() { return true; } // this deletes the resource too
 	
 	virtual bool LoadMemory() { return true; }

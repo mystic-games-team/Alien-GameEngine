@@ -17,7 +17,7 @@ ResourceTexture::~ResourceTexture()
 	glDeleteTextures(1, &id);
 }
 
-bool ResourceTexture::CreateMetaData()
+bool ResourceTexture::CreateMetaData(const u64& force_id)
 {
 	bool ret = false;
 	if (ilLoadImage(path.data())) {

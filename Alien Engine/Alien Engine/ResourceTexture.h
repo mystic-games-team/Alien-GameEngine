@@ -13,7 +13,7 @@ public:
 	ResourceTexture(const char* path) { this->path = std::string(path); type = ResourceType::RESOURCE_TEXTURE; }
 	virtual ~ResourceTexture();
 
-	bool CreateMetaData();
+	bool CreateMetaData(const u64& force_id = 0);
 	bool LoadMemory(const char* library_file_path);
 	bool DeleteMetaData();
 

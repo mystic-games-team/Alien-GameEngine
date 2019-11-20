@@ -312,8 +312,7 @@ void ModuleResources::ReadModels(std::vector<std::string> directories, std::vect
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourceModel* model = new ResourceModel();
 		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
-			LOG("Error while loading %s because has not .alien", files[i]);
-			delete model;
+			App->importer->ReImportModel(model);
 		}
 	}
 	if (!directories.empty()) {

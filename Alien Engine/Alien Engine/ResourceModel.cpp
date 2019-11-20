@@ -23,10 +23,28 @@ ResourceModel::~ResourceModel()
 	meshes_attached.clear();
 }
 
-bool ResourceModel::CreateMetaData()
+bool ResourceModel::CreateMetaData(const u64& force_id)
 {	
-	ID = App->resources->GetRandomID();
+	if (force_id == 0)
+		ID = App->resources->GetRandomID();
+	else
+		ID = force_id;
 
+	std::string* paths = nullptr;
+
+	if (force_id != 0) {
+		JSON_Value* value = json_parse_file(meta_data_path.data());
+		JSON_Object* object = json_value_get_object(value);
+
+		if (value != nullptr && object != nullptr)
+		{
+			JSONfilepack* meta = new JSONfilepack(meta_data_path.data(), object, value);
+			paths = meta->GetArrayString("Meta.PathMeshes");
+			delete meta;
+
+		}
+		remove(meta_data_path.data());
+	}
 	std::string alien_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data();
 
 	JSON_Value* alien_value = json_value_init_object();
@@ -38,8 +56,7 @@ bool ResourceModel::CreateMetaData()
 		JSONfilepack* alien = new JSONfilepack(alien_path, alien_object, alien_value);
 		alien->StartSave();
 		alien->SetString("Meta.ID", std::to_string(ID));
-		alien->FinishSave();
-		delete alien;
+
 
 		meta_data_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(std::to_string(ID) + ".alienModel");
 
@@ -56,30 +73,42 @@ bool ResourceModel::CreateMetaData()
 			meta->SetString("Model.Name", name);
 
 			meta->SetNumber("Model.NumMeshes", meshes_attached.size());
+			alien->SetNumber("Meta.NumMeshes", meshes_attached.size());
 
 			std::string* meshes_paths = new std::string[meshes_attached.size()];
 
 			std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 			for (; item != meshes_attached.end(); ++item) {
 				if ((*item) != nullptr) {
-					(*item)->CreateMetaData();
+					if (paths != nullptr) {
+						(*item)->CreateMetaData(std::stoull(App->file_system->GetBaseFileName(paths[item - meshes_attached.begin()].data()).data()));
+					}
+					else {
+						(*item)->CreateMetaData();
+					}
 
 					meshes_paths[item - meshes_attached.begin()] = (*item)->GetLibraryPath();
 					LOG("Created alienMesh file %s", (*item)->GetLibraryPath());
 				}
 			}
 			meta->SetArrayString("Model.PathMeshes", meshes_paths, meshes_attached.size());
+			alien->SetArrayString("Meta.PathMeshes", meshes_paths, meshes_attached.size());
+			if (paths != nullptr)
+				delete[] paths;
 			delete[] meshes_paths;
 			// Create the file
 			LOG("Created alien file %s", meta_data_path.data());
-
+			
 			meta->FinishSave();
+			alien->FinishSave();
+			delete alien;
 			delete meta;
 			return true;
 		}
 		else {
 			return false;
 		}
+
 	}
 	else {
 		LOG("Error creating meta with path %s", meta_data_path.data());
@@ -102,7 +131,18 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
 
 		ID = std::stoull(meta->GetString("Meta.ID"));
-		
+		int num_meshes = meta->GetNumber("Meta.NumMeshes");
+		std::string* paths = meta->GetArrayString("Meta.PathMeshes");
+
+		for (uint i = 0; i < num_meshes; ++i) {
+			if (!App->file_system->Exists(paths[i].data())) {
+				delete[] paths;
+				delete meta;
+				return false;
+			}
+		}
+
+		delete[] paths;
 		delete meta;
 
 		// InitMeshes
@@ -114,7 +154,6 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 
 			JSONfilepack* model = new JSONfilepack(library_path, mesh_object, mesh_value);
 
-			int num_meshes = model->GetNumber("Model.NumMeshes");
 			name = model->GetString("Model.Name");
 			
 			std::string* mesh_path = model->GetArrayString("Model.PathMeshes");
@@ -133,12 +172,6 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 			delete model;
 			App->resources->AddResource(this);
 		}
-		else {
-			ret = false;
-		}
-	}
-	else {
-		ret = false;
 	}
 
 	return ret;

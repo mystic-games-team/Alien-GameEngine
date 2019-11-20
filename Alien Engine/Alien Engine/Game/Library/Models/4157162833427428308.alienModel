@@ -1,0 +1,12 @@
+{
+    "Model": {
+        "Name": "ApplyScale_FBX_UnitsScale",
+        "NumMeshes": 4,
+        "PathMeshes": [
+            "Library\/Meshes\/4952778671545694174.alienMesh",
+            "Library\/Meshes\/9621984271939306737.alienMesh",
+            "Library\/Meshes\/6939513465404636556.alienMesh",
+            "Library\/Meshes\/13955042877963135497.alienMesh"
+        ]
+    }
+}
