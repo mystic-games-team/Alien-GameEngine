@@ -299,7 +299,7 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 	ComponentMaterial* material = new ComponentMaterial(obj);
 
 	if (texture != nullptr) {
-		material->texture = texture;
+		material->SetTexture(texture);
 	}
 
 	obj->AddComponent(material);

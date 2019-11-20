@@ -41,7 +41,6 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 			JSONfilepack* meta = new JSONfilepack(meta_data_path.data(), object, value);
 			paths = meta->GetArrayString("Meta.PathMeshes");
 			delete meta;
-
 		}
 		remove(meta_data_path.data());
 	}
@@ -56,7 +55,6 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 		JSONfilepack* alien = new JSONfilepack(alien_path, alien_object, alien_value);
 		alien->StartSave();
 		alien->SetString("Meta.ID", std::to_string(ID));
-
 
 		meta_data_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(std::to_string(ID) + ".alienModel");
 

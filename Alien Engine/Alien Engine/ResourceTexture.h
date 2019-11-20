@@ -14,15 +14,17 @@ public:
 	virtual ~ResourceTexture();
 
 	bool CreateMetaData(const u64& force_id = 0);
-	bool LoadMemory(const char* library_file_path);
+	bool LoadMemory();
+	void FreeMemory();
+	bool ReadBaseInfo(const char* assets_path);
 	bool DeleteMetaData();
 
 public:
 
 	bool is_custom = true;
 
-	uint id = 0;
 	uint height = 0;
 	uint width = 0;
+	uint id = 0;
 
 };

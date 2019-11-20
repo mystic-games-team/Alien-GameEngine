@@ -343,7 +343,7 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 				selected->AddComponent(material);
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, material);
 			}
-			material->texture = texture;
+			material->SetTexture(texture);
 		}
 		else
 			LOG("Selected GameObject has no mesh");

@@ -4,7 +4,7 @@
             {
                 "Name": "Light",
                 "FamilyNumber": 1,
-                "ID": "11940182409263444688",
+                "ID": "15424085950564426480",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -15,8 +15,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            1,
                             0,
+                            15,
                             2.5
                         ],
                         "Rotation": [
@@ -53,7 +53,7 @@
             {
                 "Name": "BakerHouse",
                 "FamilyNumber": 1,
-                "ID": "6719646187255821152",
+                "ID": "14902188601802826986",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -64,7 +64,7 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
+                            -4.1373252868652344,
                             0,
                             0
                         ],
@@ -72,7 +72,7 @@
                             0,
                             0,
                             0,
-                            0
+                            1
                         ],
                         "Scale": [
                             1,
@@ -86,8 +86,8 @@
             {
                 "Name": "Chimney",
                 "FamilyNumber": 2,
-                "ID": "4920176427435051454",
-                "ParentID": "6719646187255821152",
+                "ID": "12219779764353726438",
+                "ParentID": "14902188601802826986",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -97,7 +97,7 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -5.9262080192565918,
+                            0,
                             0,
                             0
                         ],
@@ -109,8 +109,8 @@
                         ],
                         "Scale": [
                             1,
-                            0.99999463558197021,
-                            0.99999463558197021
+                            1,
+                            1
                         ],
                         "ScaleNegative": false
                     },
@@ -124,7 +124,7 @@
                         "DrawOBB": true,
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "16924123557182951915",
+                        "MeshID": "1725984740491238813",
                         "Enabled": true
                     },
                     {
@@ -137,7 +137,7 @@
                         ],
                         "TextureEnabled": true,
                         "HasTexture": true,
-                        "TextureID": "1302212642455179980",
+                        "TextureID": "2805827317221274553",
                         "Enabled": true
                     }
                 ]
@@ -145,31 +145,31 @@
             {
                 "Name": "Baker_house",
                 "FamilyNumber": 2,
-                "ID": "10808597126684880396",
-                "ParentID": "6719646187255821152",
+                "ID": "2380260517319061482",
+                "ParentID": "14902188601802826986",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -9.2782459259033203,
+                            0,
                             0,
                             0
                         ],
                         "Rotation": [
-                            -0.7071068286895752,
                             0,
                             0,
-                            0.70710670948028564
+                            0,
+                            0
                         ],
                         "Scale": [
                             1,
-                            0.99999773502349854,
-                            0.99999773502349854
+                            1,
+                            1
                         ],
                         "ScaleNegative": false
                     },
@@ -183,7 +183,7 @@
                         "DrawOBB": true,
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "3224761757245726238",
+                        "MeshID": "4759276479457591624",
                         "Enabled": true
                     },
                     {
@@ -196,16 +196,107 @@
                         ],
                         "TextureEnabled": true,
                         "HasTexture": true,
-                        "TextureID": "1302212642455179980",
+                        "TextureID": "2805827317221274553",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "ApplyScale_FBX_UnitsScale",
+                "FamilyNumber": 1,
+                "ID": "15683913489793397144",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.96469926834106445,
+                            0,
+                            -4.2862715721130371
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false
+                    }
+                ]
+            },
+            {
+                "Name": "Suzanne",
+                "FamilyNumber": 2,
+                "ID": "3477771095363030239",
+                "ParentID": "15683913489793397144",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999982118606567,
+                            0.99999982118606567
+                        ],
+                        "ScaleNegative": false
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "16605313325803730912",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "HasTexture": false,
                         "Enabled": true
                     }
                 ]
             },
             {
                 "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "11031113327809102686",
-                "ParentID": "0",
+                "FamilyNumber": 3,
+                "ID": "1340140224630999360",
+                "ParentID": "3477771095363030239",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -216,8 +307,8 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            0,
-                            -6.5317292213439941
+                            0.40664815902709961,
+                            -1.4577322006225586
                         ],
                         "Rotation": [
                             0,
@@ -226,8 +317,8 @@
                             1
                         ],
                         "Scale": [
-                            1,
-                            1,
+                            0.60000002384185791,
+                            0.40000000596046448,
                             1
                         ],
                         "ScaleNegative": false
@@ -241,124 +332,8 @@
                         "DrawAABB": true,
                         "DrawOBB": true,
                         "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Sphere",
-                "FamilyNumber": 1,
-                "ID": "15210220416859072466",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            -3.9960613250732422
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 1,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Rock",
-                "FamilyNumber": 1,
-                "ID": "13185463736994282520",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            2.6509881019592285,
-                            0,
-                            -6.4633331298828125
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 2,
+                        "IsPrimitive": false,
+                        "MeshID": "7704853583464440839",
                         "Enabled": true
                     },
                     {
@@ -377,9 +352,9 @@
             },
             {
                 "Name": "Torus",
-                "FamilyNumber": 1,
-                "ID": "6187968882954663244",
-                "ParentID": "0",
+                "FamilyNumber": 4,
+                "ID": "16393364473721926573",
+                "ParentID": "1340140224630999360",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -389,9 +364,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            2.8858864307403564,
-                            0,
-                            -4.5360856056213379
+                            1.3678592429332227e-28,
+                            -2.1824007034301758,
+                            0.48497453331947327
                         ],
                         "Rotation": [
                             0,
@@ -400,9 +375,9 @@
                             1
                         ],
                         "Scale": [
+                            0.66666662693023682,
                             1,
-                            1,
-                            1
+                            0.40000000596046448
                         ],
                         "ScaleNegative": false
                     },
@@ -415,8 +390,8 @@
                         "DrawAABB": true,
                         "DrawOBB": true,
                         "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 5,
+                        "IsPrimitive": false,
+                        "MeshID": "5579223318879290434",
                         "Enabled": true
                     },
                     {
@@ -434,10 +409,10 @@
                 ]
             },
             {
-                "Name": "Dodecahedron",
-                "FamilyNumber": 1,
-                "ID": "15517715057355003959",
-                "ParentID": "0",
+                "Name": "Cone",
+                "FamilyNumber": 2,
+                "ID": "13088534252535500145",
+                "ParentID": "15683913489793397144",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -448,19 +423,19 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            0,
-                            -1.2046315670013428
+                            0.93496304750442505,
+                            -0.36038744449615479
                         ],
                         "Rotation": [
+                            -0.78172636032104492,
                             0,
                             0,
-                            0,
-                            1
+                            0.62362164258956909
                         ],
                         "Scale": [
                             1,
-                            1,
-                            1
+                            0.9999997615814209,
+                            0.38366398215293884
                         ],
                         "ScaleNegative": false
                     },
@@ -473,8 +448,8 @@
                         "DrawAABB": true,
                         "DrawOBB": true,
                         "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 3,
+                        "IsPrimitive": false,
+                        "MeshID": "16508877712529668338",
                         "Enabled": true
                     },
                     {
@@ -492,9 +467,9 @@
                 ]
             },
             {
-                "Name": "Octahedron",
+                "Name": "watchtowerHigh",
                 "FamilyNumber": 1,
-                "ID": "985050409537376321",
+                "ID": "7668195280859325326",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -505,136 +480,20 @@
                     {
                         "Type": 0,
                         "Position": [
-                            2.1391210556030273,
-                            0,
-                            -0.77524363994598389
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 4,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Icosahedron",
-                "FamilyNumber": 1,
-                "ID": "14772345337645300650",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0.94202339649200439
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 6,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Klein Bottle",
-                "FamilyNumber": 1,
-                "ID": "5057002056877938027",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": true,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -2,
-                            0,
+                            -9,
+                            -1,
                             0
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
-                            0
+                            -0.62548744678497314,
+                            -0.2545924186706543,
+                            0.018650183454155922,
+                            0.7372925877571106
                         ],
                         "Scale": [
-                            0,
-                            0.5,
-                            0.5
+                            1,
+                            1,
+                            1
                         ],
                         "ScaleNegative": false
                     },
@@ -647,8 +506,8 @@
                         "DrawAABB": true,
                         "DrawOBB": true,
                         "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 7,
+                        "IsPrimitive": false,
+                        "MeshID": "2446199560832129741",
                         "Enabled": true
                     },
                     {
@@ -660,7 +519,8 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "HasTexture": false,
+                        "HasTexture": true,
+                        "TextureID": "12439335137623950963",
                         "Enabled": true
                     }
                 ]
