@@ -799,6 +799,10 @@ void ModuleUI::SecondMenuBar()
 		scale = 1.f;
 	}
 
+	ImGui::SameLine();
+	ImGui::Text("Time Since Start: %f", Time::time_since_start);
+	ImGui::SameLine();
+	ImGui::Text("Game Time: %f", Time::game_time);
 	ImGui::End();
 }
 
