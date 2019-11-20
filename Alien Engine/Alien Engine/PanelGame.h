@@ -11,6 +11,10 @@ public:
 
 	void PanelLogic();
 
+public:
+
+	bool game_focused = false;
+
 private:
 	float width = 960;
 	float height = 540;

@@ -26,6 +26,8 @@ public:
 
 	void SetLocalTransform(float4x4 &transform_matrix);
 
+	void SetGlobalTransform(float4x4& transform_matrix);
+
 	void DrawInspector();
 
 	void SetScaleNegative(const bool& negative);

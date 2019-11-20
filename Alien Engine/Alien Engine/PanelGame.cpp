@@ -10,6 +10,8 @@ PanelGame::PanelGame(const std::string& panel_name, const SDL_Scancode& key1_dow
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
 	shortcut = App->shortcut_manager->AddShortCut("Panel Game", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
+
+	game_focused = true;
 }
 
 PanelGame::~PanelGame()
@@ -60,6 +62,13 @@ void PanelGame::PanelLogic()
 	}
 
 	lastHeight = ImGui::GetWindowHeight();
+
+	if (ImGui::IsWindowFocused())
+	{
+		game_focused = true;
+	}
+	else
+		game_focused = false;
 
 	ImGui::End();
 }

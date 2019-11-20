@@ -283,6 +283,32 @@ void ModuleRenderer3D::CreateRenderTexture()
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 		game_tex = new ResourceTexture("GameTexture", game_render_texture, App->window->width, App->window->height);
+
+		glGenFramebuffers(1, &sc_game_frame_buffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, sc_game_frame_buffer);
+		glDepthRange(0, 1);
+		glGenTextures(1, &sc_game_render_texture);
+		glBindTexture(GL_TEXTURE_2D, sc_game_render_texture);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, App->window->width, App->window->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glGenRenderbuffers(1, &sc_game_depthrenderbuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, sc_game_depthrenderbuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->width, App->window->height);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sc_game_render_texture, 0);
+		glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, sc_game_depthrenderbuffer);
+
+		if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			LOG("Error creating frame buffer");
+		}
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+		sc_game_tex = new ResourceTexture("SelectedCameraTexture", sc_game_render_texture, App->window->width, App->window->height);
 	}
 }
 
@@ -308,12 +334,12 @@ void ModuleRenderer3D::ChangeDrawFrameBuffer(bool normal_frameBuffer)
 	CreateRenderTexture();
 }
 
-void ModuleRenderer3D::UpdateCameraMatrix()
+void ModuleRenderer3D::UpdateCameraMatrix(ComponentCamera* camera)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	glLoadMatrixf(actual_game_camera->GetProjectionMatrix());
+	glLoadMatrixf(camera->GetProjectionMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
