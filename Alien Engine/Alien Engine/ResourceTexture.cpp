@@ -76,13 +76,14 @@ bool ResourceTexture::CreateMetaData(const u64& force_id)
 		ret = true;
 		glBindTexture(GL_TEXTURE_2D, 0);
 		App->resources->AddResource(this);
+		FreeMemory();
 	}
 	else {
 		delete this;
 		ret = false;
 	}
 
-	FreeMemory();
+
 
 	return ret;
 }
