@@ -17,7 +17,7 @@
             "Layout Editor": false,
             "Panel Project": true,
             "Save": true,
-            "Game": true
+            "Game": false
         },
         "Layout2": {
             "Number": 2,
