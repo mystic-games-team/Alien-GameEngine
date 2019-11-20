@@ -35,7 +35,10 @@ void PanelHierarchy::PanelLogic()
 	}
 	
 	ImGui::Spacing();
-	ImGui::Text(std::string("Current Scene: " + App->objects->current_scene.name_without_extension).data());
+	if (App->objects->prefab_scene)
+		ImGui::Text(std::string("Prefab Scene: " + std::string(App->objects->GetRoot(false)->GetName())).data());
+	else
+		ImGui::Text(std::string("Current Scene: " + App->objects->current_scene.name_without_extension).data());
 	ImGui::Spacing();
 	ImGui::Separator();
 	ImGui::Spacing();
@@ -227,15 +230,17 @@ void PanelHierarchy::RightClickMenu()
 					App->camera->Focus();
 				}
 
-				if (ImGui::MenuItem("Open Prefab")) {
-					// TODO:
+				if (ImGui::MenuItem("Open Prefab", nullptr, nullptr, !App->objects->prefab_scene)) {
+					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(object_menu->GetPrefabID());
+					if (prefab != nullptr)
+						prefab->OpenPrefabScene();
 				}
 
 				if (ImGui::MenuItem("Select Prefab Asset")) {
 					// TODO:
 				}
 
-				if (ImGui::MenuItem("Set Prefab as the Original")) {
+				if (ImGui::MenuItem("Set Prefab as the Original", nullptr, nullptr, !App->objects->prefab_scene)) {
 					GameObject* obj = object_menu->FindPrefabRoot();
 					if (obj != nullptr) {
 						std::vector<GameObject*>::iterator item = obj->parent->children.begin();
@@ -252,7 +257,7 @@ void PanelHierarchy::RightClickMenu()
 					}
 				}
 
-				if (ImGui::MenuItem("UnPack Prefab")) {
+				if (ImGui::MenuItem("UnPack Prefab", nullptr, nullptr, !App->objects->prefab_scene)) {
 					GameObject* obj = object_menu->FindPrefabRoot();
 					obj->UnpackPrefab();
 				}
