@@ -101,6 +101,7 @@ public:
 
 	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
+
 private:
 
 
@@ -177,7 +178,7 @@ public:
 	bool in_cntrl_Z = false;
 
 	std::vector<ComponentCamera*> game_cameras;
-
+	bool enable_instancies = true;
 private:
 
 	GameObject* game_object_selected = nullptr;

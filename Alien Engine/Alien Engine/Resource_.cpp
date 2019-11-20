@@ -1,4 +1,6 @@
 #include "Resource_.h"
+#include "ModuleObjects.h"
+#include "Application.h"
 
 Resource::Resource()
 {
@@ -47,18 +49,21 @@ void Resource::IncreaseReferences()
 {
 	if (ID == 0)
 		return;
-
+	
 	if (references == 0)
 		LoadMemory();
-	++references;
+	if (App->objects->enable_instancies) {
+		++references;
+	}
 }
 
 void Resource::DecreaseReferences()
 {
 	if (ID == 0)
 		return;
-
+	if (App->objects->enable_instancies) {
 	--references;
+	}
 	if (references == 0)
 		FreeMemory();
 }

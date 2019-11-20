@@ -294,8 +294,10 @@ GameObject* ModuleObjects::GetSelectedObject()
 
 void ModuleObjects::DeselectObject()
 {
-	game_object_selected->ChangeSelected(false);
-	game_object_selected = nullptr;
+	if (game_object_selected != nullptr) {
+		game_object_selected->ChangeSelected(false);
+		game_object_selected = nullptr;
+	}
 }
 
 GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent, bool set_selected)

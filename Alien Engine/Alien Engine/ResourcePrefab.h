@@ -18,6 +18,8 @@ public:
 	bool ReadBaseInfo(const char* assets_file_path);
 	bool DeleteMetaData();
 
+	void OpenPrefabScene();
+
 	// create GameObjects
 	void ConvertToGameObjects(int list_num = -1);
 };

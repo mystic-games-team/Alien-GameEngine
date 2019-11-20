@@ -104,6 +104,18 @@ bool ResourcePrefab::DeleteMetaData()
 	return true;
 }
 
+void ResourcePrefab::OpenPrefabScene()
+{
+	App->objects->SaveScene("Library/save_prefab_scene.alienScene", false);
+	App->objects->DeselectObject();
+	delete App->objects->base_game_object;
+	App->objects->base_game_object = new GameObject();
+	App->objects->base_game_object->ID = 0;
+	App->objects->base_game_object->is_static = true;
+
+	ConvertToGameObjects();
+}
+
 void ResourcePrefab::ConvertToGameObjects(int list_num)
 {
 	JSON_Value* value = json_parse_file(meta_data_path.data());
