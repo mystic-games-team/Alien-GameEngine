@@ -41,9 +41,9 @@ void PanelHierarchy::PanelLogic()
 	ImGui::Spacing();
 
 	object_hovered = nullptr;
-	if (!App->objects->base_game_object->children.empty()) {
-		std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
-		for (; item != App->objects->base_game_object->children.end(); ++item)
+	if (!App->objects->GetRoot(true)->children.empty()) {
+		std::vector<GameObject*>::iterator item = App->objects->GetRoot(true)->children.begin();
+		for (; item != App->objects->GetRoot(true)->children.end(); ++item)
 		{
 			if (*item != nullptr)
 			{
@@ -70,7 +70,7 @@ void PanelHierarchy::PanelLogic()
 				if (obj->IsPrefab() && obj->FindPrefabRoot() != obj)
 					popup_prefab_reparent = true;
 				else if (!obj->is_static)
-					App->objects->ReparentGameObject(obj, App->objects->base_game_object);
+					App->objects->ReparentGameObject(obj, App->objects->GetRoot(false));
 				else
 					LOG("Objects static can not be reparented");
 			}

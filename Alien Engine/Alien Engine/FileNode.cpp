@@ -126,7 +126,7 @@ void FileNode::RemoveResourceOfGameObjects()
 			u64 ID = App->resources->GetIDFromAlienPath(path_.data());
 			ResourceTexture* texture_to_delete = (ResourceTexture*)App->resources->GetResourceWithID(ID);
 			if (texture_to_delete != nullptr) {
-				App->objects->base_game_object->SearchResourceToDelete(ResourceType::RESOURCE_TEXTURE, (Resource*)texture_to_delete);
+				App->objects->GetRoot(true)->SearchResourceToDelete(ResourceType::RESOURCE_TEXTURE, (Resource*)texture_to_delete);
 			}
 			break; }
 		case FileDropType::MODEL3D: {
@@ -137,7 +137,7 @@ void FileNode::RemoveResourceOfGameObjects()
 			if (model_to_delete != nullptr) {
 				for (uint i = 0; i < model_to_delete->meshes_attached.size(); ++i) {
 					if (model_to_delete->meshes_attached[i] != nullptr) {
-						App->objects->base_game_object->SearchResourceToDelete(ResourceType::RESOURCE_MESH, (Resource*)model_to_delete->meshes_attached[i]);
+						App->objects->GetRoot(true)->SearchResourceToDelete(ResourceType::RESOURCE_MESH, (Resource*)model_to_delete->meshes_attached[i]);
 					}
 				}
 			}

@@ -102,6 +102,9 @@ public:
 	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
 
+	GameObject* GetRoot(bool ignore_prefab);
+	void CreateRoot();
+
 private:
 
 
@@ -110,9 +113,9 @@ private:
 public:
 	Scene current_scene;
 
-	// root
-	GameObject* base_game_object = nullptr;
 	Component* component_in_copy = nullptr;
+
+	bool prefab_scene = false;
 
 	// Frustum
 	bool draw_frustum = true;
@@ -180,7 +183,8 @@ public:
 	std::vector<ComponentCamera*> game_cameras;
 	bool enable_instancies = true;
 private:
-
+	// root
+	GameObject* base_game_object = nullptr;
 	GameObject* game_object_selected = nullptr;
 	std::vector< std::tuple<GameObject*, GameObject*, bool>> to_reparent;
 };

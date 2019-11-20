@@ -228,7 +228,7 @@ void ModuleCamera3D::Focus()
 
 void ModuleCamera3D::CreateRay()
 {
-	if (App->objects->base_game_object->children.empty())
+	if (App->objects->GetRoot(true)->children.empty())
 		return;
 
 	//App->renderer3D->SetCameraToDraw(fake_camera);
@@ -248,8 +248,8 @@ void ModuleCamera3D::CreateRay()
 	CreateObjectsHitMap(&hits, App->objects->octree.root, ray);
 
 	// without octree for the dynamics
-	std::vector<GameObject*>::iterator item = App->objects->base_game_object->children.begin();
-	for (; item != App->objects->base_game_object->children.end(); ++item) {
+	std::vector<GameObject*>::iterator item = App->objects->GetRoot(true)->children.begin();
+	for (; item != App->objects->GetRoot(true)->children.end(); ++item) {
 		if (*item != nullptr && (*item)->IsEnabled()) {
 			CreateObjectsHitMap(&hits, (*item), ray);
 		}

@@ -276,11 +276,11 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 		objects_created->push_back(obj);
 	}
 	else if (objects_created != nullptr) { // parent name == null so, the parent must be the one created before
-		obj = new GameObject(App->objects->base_game_object->children.back());
+		obj = new GameObject(App->objects->GetRoot(false)->children.back());
 		objects_created->push_back(obj);
 	}
 	else { // if objects created == nullptr then parent must be the root
-		obj = new GameObject(App->objects->base_game_object);
+		obj = new GameObject(App->objects->GetRoot(false));
 	}
 
 	obj->SetName(name.data());

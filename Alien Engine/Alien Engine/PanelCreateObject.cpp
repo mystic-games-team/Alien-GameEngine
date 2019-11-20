@@ -69,7 +69,7 @@ void PanelCreateObject::PanelLogic()
 
 		if (ImGui::Button("Create", { ImGui::GetWindowWidth()-16,25 }))
 		{
-			GameObject* object = new GameObject(App->objects->base_game_object);
+			GameObject* object = new GameObject(App->objects->GetRoot(false));
 			ComponentTransform* transform = new ComponentTransform(object, { x,y,z }, { 0,0,0,0 }, { 1,1,1 });
 			ComponentMesh* mesh = new ComponentMesh(object);
 			ComponentMaterial* material = new ComponentMaterial(object);

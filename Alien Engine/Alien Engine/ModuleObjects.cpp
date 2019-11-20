@@ -310,7 +310,7 @@ GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent, bool set_se
 		object->SetName("Empty Child");
 	}
 	else {
-		object = new GameObject(base_game_object);
+		object = new GameObject(GetRoot(false));
 		object->SetName("Empty GameObject");
 	}
 
@@ -581,6 +581,23 @@ void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, cons
 	}
 }
 
+GameObject* ModuleObjects::GetRoot(bool ignore_prefab) 
+{
+	if (prefab_scene && !ignore_prefab)
+		return base_game_object->children.back();
+	else
+		return base_game_object;
+}
+
+void ModuleObjects::CreateRoot()
+{
+	delete base_game_object;
+	game_object_selected = nullptr;
+	base_game_object = new GameObject();
+	base_game_object->ID = 0;
+	base_game_object->is_static = true;
+}
+
 void ModuleObjects::DeleteReturns()
 {
 	if (!fordward_actions.empty()) {
@@ -694,7 +711,7 @@ void ModuleObjects::SaveConfig(JSONfilepack*& config)
 
 void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 {
-	GameObject* object = new GameObject(App->objects->base_game_object);
+	GameObject* object = new GameObject(GetRoot(false));
 	ComponentTransform* transform = new ComponentTransform(object, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
 	ComponentMesh* mesh = new ComponentMesh(object);
 	ComponentMaterial* material = new ComponentMaterial(object);

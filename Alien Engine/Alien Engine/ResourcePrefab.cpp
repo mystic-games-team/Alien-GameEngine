@@ -100,18 +100,16 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 bool ResourcePrefab::DeleteMetaData()
 {
 	remove(meta_data_path.data());
-	App->objects->base_game_object->UnpackAllPrefabsOf(ID);
+	App->objects->GetRoot(true)->UnpackAllPrefabsOf(ID);
 	return true;
 }
 
 void ResourcePrefab::OpenPrefabScene()
 {
+	App->objects->prefab_scene = true;
 	App->objects->SaveScene("Library/save_prefab_scene.alienScene", false);
 	App->objects->DeselectObject();
-	delete App->objects->base_game_object;
-	App->objects->base_game_object = new GameObject();
-	App->objects->base_game_object->ID = 0;
-	App->objects->base_game_object->is_static = true;
+	App->objects->CreateRoot();
 
 	ConvertToGameObjects();
 }
@@ -145,7 +143,7 @@ void ResourcePrefab::ConvertToGameObjects(int list_num)
 			game_objects->GetNode(std::get<2>(*item));
 			GameObject* obj = new GameObject();
 			if (std::get<0>(*item) == 1) { // family number == 1 so parent is the base game object
-				obj->LoadObject(game_objects, App->objects->base_game_object);
+				obj->LoadObject(game_objects, App->objects->GetRoot(true));
 			}
 			else { // search parent
 				std::vector<GameObject*>::iterator objects = objects_created.begin();
@@ -159,10 +157,10 @@ void ResourcePrefab::ConvertToGameObjects(int list_num)
 			obj->SetPrefab(ID);
 			objects_created.push_back(obj);
 		}
-		GameObject* obj = App->objects->base_game_object->children.back();
+		GameObject* obj = App->objects->GetRoot(true)->children.back();
 		if (list_num != -1) {
-			App->objects->base_game_object->children.pop_back();
-			App->objects->base_game_object->children.insert(App->objects->base_game_object->children.begin() + list_num, obj);
+			App->objects->GetRoot(true)->children.pop_back();
+			App->objects->GetRoot(true)->children.insert(App->objects->GetRoot(true)->children.begin() + list_num, obj);
 		}
 		App->objects->SetNewSelectedObject(obj);
 		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);
