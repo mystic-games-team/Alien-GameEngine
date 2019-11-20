@@ -23,4 +23,6 @@ private:
 	GameObject* object_menu = nullptr;
 	bool in_menu = false;
 
+	bool popup_prefab_reparent = false;
+
 };

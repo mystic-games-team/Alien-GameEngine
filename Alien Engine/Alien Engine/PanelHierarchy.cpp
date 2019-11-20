@@ -29,7 +29,9 @@ void PanelHierarchy::PanelLogic()
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr)
 	{
-		App->objects->GetSelectedObject()->ToDelete();
+		if (App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() != App->objects->GetSelectedObject())
+			popup_prefab_reparent = true;
+		else App->objects->GetSelectedObject()->ToDelete();
 	}
 	
 	ImGui::Spacing();
@@ -50,7 +52,7 @@ void PanelHierarchy::PanelLogic()
 		}
 	}
 	RightClickMenu();
-	
+
 	// drop a node in the window, parent is base_game_object
 	ImVec2 min_space = ImGui::GetWindowContentRegionMin();
 	ImVec2 max_space = ImGui::GetWindowContentRegionMax();
@@ -65,13 +67,36 @@ void PanelHierarchy::PanelLogic()
 		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
-				App->objects->ReparentGameObject(obj, App->objects->base_game_object);
+				if (obj->IsPrefab() && obj->FindPrefabRoot() != obj)
+					popup_prefab_reparent = true;
+				else if (!obj->is_static)
+					App->objects->ReparentGameObject(obj, App->objects->base_game_object);
+				else
+					LOG("Objects static can not be reparented");
 			}
 			ImGui::ClearDragDrop();
 		}
 		ImGui::EndDragDropTarget();
 	}
-
+	if (popup_prefab_reparent) {
+		ImGui::OpenPopup("Can not change prefab instance");
+		ImGui::SetNextWindowSize({ 240,130 });
+		if (ImGui::BeginPopupModal("Can not change prefab instance", &popup_prefab_reparent, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::SetCursorPosX(30);
+			ImGui::Text("You can unpack the Prefab");
+			ImGui::Text("instance to remove its conexion");
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(35);
+			ImGui::Text("Children of a Prefab can\nnot be deleted or moved.");
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(95);
+			if (ImGui::Button("Ok", {50,0})) {
+				popup_prefab_reparent = false;
+			}
+			ImGui::EndPopup();
+		}
+	}
 	ImGui::End();
 	
 }
@@ -116,12 +141,12 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
-				if (obj->is_static) {
-					LOG("Objects static can not be reparented");
-				}
-				else {
+				if (obj->IsPrefab() && obj->FindPrefabRoot() != obj)
+					popup_prefab_reparent = true;
+				else if (!obj->is_static)
 					App->objects->ReparentGameObject(obj, node);
-				}
+				else
+					LOG("Objects static can not be reparented");
 			}
 			ImGui::ClearDragDrop();
 		}
