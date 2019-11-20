@@ -127,14 +127,17 @@ void PanelScene::PanelLogic()
 	GuizmosControls();
 	GuizmosLogic();
 
-	if (!ImGui::IsWindowCollapsed() && (App->renderer3D->actual_game_camera != nullptr) && App->objects->GetSelectedObject()->GetComponent(ComponentType::CAMERA) == App->renderer3D->actual_game_camera)
+	if ((App->renderer3D->selected_game_camera != nullptr))
 	{
 		ImGui::SetNextWindowPos(ImVec2(max_space.x - 212, max_space.y - 154));
 		ImGui::SetNextWindowSize(ImVec2(192, 134));
-		std::string title = "Camera Preview: " + std::string(App->renderer3D->actual_game_camera->game_object_attached->GetName());
+		std::string title = "Camera Preview: " + std::string(App->renderer3D->selected_game_camera->game_object_attached->GetName());
 		ImGui::Begin(title.data(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing);
 
-		ImGui::Image((ImTextureID)App->renderer3D->game_tex->id, { 176,99 }, { 0,1 }, { 1,0 });
+		if (App->renderer3D->actual_game_camera != App->renderer3D->selected_game_camera)
+			ImGui::Image((ImTextureID)App->renderer3D->sc_game_tex->id, { 176,99 }, { 0,1 }, { 1,0 });
+		else
+			ImGui::Image((ImTextureID)App->renderer3D->game_tex->id, { 176,99 }, { 0,1 }, { 1,0 });
 
 		ImGui::End();
 	}

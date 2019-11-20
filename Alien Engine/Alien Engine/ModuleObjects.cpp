@@ -175,8 +175,48 @@ update_status ModuleObjects::PostUpdate(float dt)
 			}
 		}
 	
+
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
+
+	if (App->renderer3D->selected_game_camera != nullptr && (App->renderer3D->actual_game_camera != App->objects->GetSelectedObject()->GetComponent(ComponentType::CAMERA) && App->renderer3D->SetCameraToDraw(App->renderer3D->selected_game_camera)))
+	{
+		if (App->renderer3D->render_zbuffer) {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
+		}
+		else {
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->sc_game_frame_buffer);
+		}
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearStencil(0);
+
+		if (allow_grid)
+			App->renderer3D->RenderGrid();
+
+		if (base_game_object->HasChildren()) {
+			std::vector<GameObject*> to_draw;
+
+			octree.SetStaticDrawList(&to_draw, App->renderer3D->selected_game_camera);
+
+			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+			for (; item != base_game_object->children.end(); ++item) {
+				if (*item != nullptr && (*item)->IsEnabled()) {
+					(*item)->SetDrawList(&to_draw, App->renderer3D->selected_game_camera);
+				}
+			}
+
+			item = to_draw.begin();
+			for (; item != to_draw.end(); ++item) {
+				if (*item != nullptr) {
+					(*item)->DrawGame();
+				}
+			}
+		}
+
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	}
+
 
 	return UPDATE_CONTINUE;
 }
@@ -284,6 +324,8 @@ void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)
 			object_selected->ChangeSelected(true);
 			game_object_selected = object_selected;
 		}
+
+		App->renderer3D->selected_game_camera = (ComponentCamera*)object_selected->GetComponent(ComponentType::CAMERA);
 	}
 }
 

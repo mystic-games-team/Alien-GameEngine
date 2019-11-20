@@ -28,7 +28,7 @@ public:
 
 	void ChangeDrawFrameBuffer(bool normal_frameBuffer);
 
-	void UpdateCameraMatrix();
+	void UpdateCameraMatrix(ComponentCamera* camera);
 
 	bool SetCameraToDraw(const ComponentCamera* camera);
 
@@ -45,12 +45,17 @@ public:
 	uint game_render_texture = 0;
 	uint game_depthrenderbuffer = 0;
 
+	// buffers to draw game inside selected camera
+	uint sc_game_frame_buffer = 0;
+	uint sc_game_render_texture = 0;
+	uint sc_game_depthrenderbuffer = 0;
 
 	// scene texture
 	ResourceTexture* scene_tex = nullptr;
 
 	// Game texture
 	ResourceTexture* game_tex = nullptr;
+	ResourceTexture* sc_game_tex = nullptr;
 
 	uint z_framebuffer;
 
@@ -64,6 +69,7 @@ public:
 
 	ComponentCamera* scene_fake_camera = nullptr;
 	ComponentCamera* actual_game_camera = nullptr;
+	ComponentCamera* selected_game_camera = nullptr;
 
 	// grid
 	int length_grid = 20;

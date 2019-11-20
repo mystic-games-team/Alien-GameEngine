@@ -35,6 +35,7 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 		{
 			App->renderer3D->actual_game_camera = this;
 		}
+		App->renderer3D->selected_game_camera = this;
 		App->objects->game_cameras.push_back(this);
 	}
 }
@@ -108,7 +109,7 @@ void ComponentCamera::DrawInspector()
 			cntrl_z = false;
 			near_plane = sup;
 			frustum.nearPlaneDistance = near_plane;
-			App->renderer3D->UpdateCameraMatrix();
+			App->renderer3D->UpdateCameraMatrix(this);
 		}
 		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 			cntrl_z = true;
@@ -124,7 +125,7 @@ void ComponentCamera::DrawInspector()
 			cntrl_z = false;
 			far_plane = sup;
 			frustum.farPlaneDistance = far_plane;
-			App->renderer3D->UpdateCameraMatrix();
+			App->renderer3D->UpdateCameraMatrix(this);
 		}
 		else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 			cntrl_z = true;
@@ -145,7 +146,7 @@ void ComponentCamera::DrawInspector()
 				frustum.horizontalFov = horizontal_fov * DEGTORAD;
 				AspectRatio(16, 9, true);
 				vertical_fov = frustum.verticalFov * RADTODEG;
-				App->renderer3D->UpdateCameraMatrix();
+				App->renderer3D->UpdateCameraMatrix(this);
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 				cntrl_z = true;
@@ -164,7 +165,7 @@ void ComponentCamera::DrawInspector()
 				frustum.verticalFov = vertical_fov * DEGTORAD;
 				AspectRatio(16, 9);
 				horizontal_fov = frustum.horizontalFov * RADTODEG;
-				App->renderer3D->UpdateCameraMatrix();
+				App->renderer3D->UpdateCameraMatrix(this);
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
 				cntrl_z = true;
