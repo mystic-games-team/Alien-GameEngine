@@ -29,7 +29,7 @@ void PanelHierarchy::PanelLogic()
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr)
 	{
-		if (App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() != App->objects->GetSelectedObject())
+		if (!App->objects->prefab_scene && App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() != App->objects->GetSelectedObject())
 			popup_prefab_reparent = true;
 		else App->objects->GetSelectedObject()->ToDelete();
 	}
@@ -50,6 +50,7 @@ void PanelHierarchy::PanelLogic()
 		if (ImGui::Button("Return Scene")) {
 			App->objects->prefab_scene = false;
 			App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
+			remove("Library/save_prefab_scene.alienScene");
 		}
 	}
 
@@ -158,7 +159,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
-				if (obj->IsPrefab() && obj->FindPrefabRoot() != obj)
+				if (!App->objects->prefab_scene && obj->IsPrefab() && obj->FindPrefabRoot() != obj)
 					popup_prefab_reparent = true;
 				else if (!obj->is_static)
 					App->objects->ReparentGameObject(obj, node);

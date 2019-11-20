@@ -179,7 +179,7 @@ void PanelScene::GuizmosLogic()
 				guizmo_return = false;
 			}
 			ComponentTransform* parent_transform = (ComponentTransform*)App->objects->GetSelectedObject()->parent->GetComponent(ComponentType::TRANSFORM);
-			if (App->objects->GetSelectedObject()->parent != App->objects->base_game_object)
+			if (App->objects->GetSelectedObject()->parent != App->objects->GetRoot(true))
 				transform->SetLocalTransform(object_transform_matrix.Transposed()* parent_transform->global_transformation.Inverted());
 			else
 				transform->SetLocalTransform(object_transform_matrix.Transposed());
