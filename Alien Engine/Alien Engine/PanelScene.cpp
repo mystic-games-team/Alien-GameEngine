@@ -7,6 +7,7 @@
 #include "PanelSceneSelector.h"
 #include "ComponentTransform.h"
 #include "ReturnZ.h"
+#include "PanelGame.h"
 
 PanelScene::PanelScene(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -127,13 +128,11 @@ void PanelScene::PanelLogic()
 	GuizmosControls();
 	GuizmosLogic();
 
-	
-	if (App->renderer3D->selected_game_camera != nullptr)
+	if (App->renderer3D->selected_game_camera != nullptr && !App->ui->panel_game->game_focused)
 	{
 		ImGui::SetNextWindowPos(ImVec2(max_space.x - 212, max_space.y - 154));
 		ImGui::SetNextWindowSize(ImVec2(192, 134));
-		std::string title = "Camera Preview: " + std::string(App->renderer3D->selected_game_camera->game_object_attached->GetName());
-		ImGui::Begin(title.data(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing);
+		ImGui::Begin("Camera Selected Preview", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing);
 
 		if (App->renderer3D->actual_game_camera != App->renderer3D->selected_game_camera)
 			ImGui::Image((ImTextureID)App->renderer3D->sc_game_tex->id, { 176,99 }, { 0,1 }, { 1,0 });

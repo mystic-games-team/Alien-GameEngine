@@ -114,7 +114,6 @@ private:
 	PanelInspector* panel_inspector = nullptr;
 
 	PanelLayout* panel_layout = nullptr;
-	PanelGame* panel_game = nullptr;
 
 	// ShortCuts
 	ShortCut* shortcut_demo = nullptr;
@@ -173,7 +172,7 @@ public:
 	PanelProject* panel_project = nullptr;
 	PanelSceneSelector* panel_scene_selector = nullptr;
 	PanelScene* panel_scene = nullptr;
-
+	PanelGame* panel_game = nullptr;
 	// layouts
 	std::vector<Layout*> layouts;
 	Layout* active_layout = nullptr;
