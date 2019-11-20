@@ -527,11 +527,11 @@ void ModuleUI::MainMenuBar()
 
 void ModuleUI::SecondMenuBar()
 {
-	ImGui::SetNextWindowSize(ImVec2(App->window->width, 48.f), ImGuiCond_::ImGuiCond_Always);
+	ImGui::SetNextWindowSize(ImVec2(App->window->width,52));
 	ImGui::Begin("## Tools", (bool*)false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse);
 
 	// TODO: Update Control if we use shortcuts
-	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 17);
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 18);
 	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.undo->id, ImVec2(30, 30)))
 	{
@@ -564,7 +564,6 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SameLine();
 
 	// Transform Buttons
-	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
 	if (panel_scene->guizmo_operation == ImGuizmo::OPERATION::TRANSLATE)
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
@@ -572,7 +571,7 @@ void ModuleUI::SecondMenuBar()
 	else
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.15F, 0.15F, 0.15F, 1 });
 
-	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 17);
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.move_transform->id, ImVec2(30, 30)))
 	{
 		panel_scene->guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
@@ -633,7 +632,7 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SameLine();
 
 	// Transform Modes
-	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 17);
 	if (panel_scene->guizmo_mode == ImGuizmo::MODE::WORLD)
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
@@ -721,12 +720,12 @@ void ModuleUI::SecondMenuBar()
 
 	separator = ((float)App->window->width * (1.f / 32.f));
 	ImGui::SameLine(0, separator);
-	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 7);
 	ImGui::Text("|");
 	ImGui::SameLine();
 
 	// Play Buttons
-	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 15);
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 17);
 	if (Time::state == Time::GameState::PLAY)
 	{
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2F, 0.6F, 1, 1 });
@@ -776,7 +775,7 @@ void ModuleUI::SecondMenuBar()
 	// Vertical Separator
 
 	ImGui::SameLine();
-	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 5);
+	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 7);
 	ImGui::Text("|");
 	ImGui::SameLine();
 

@@ -45,10 +45,11 @@ void PanelProject::PanelLogic()
 
 	ImGui::Columns(2,"##ProjectColums", true);
 
-	static bool first = true;
-	if (first) {
+	static uint first = 0;
+	if (first <= 1) 
+	{
 		ImGui::SetColumnWidth(0, 160);
-		first = false;
+		++first;
 	}
 
 
