@@ -127,7 +127,8 @@ void PanelScene::PanelLogic()
 	GuizmosControls();
 	GuizmosLogic();
 
-	if ((App->renderer3D->selected_game_camera != nullptr))
+	
+	if (App->renderer3D->selected_game_camera != nullptr)
 	{
 		ImGui::SetNextWindowPos(ImVec2(max_space.x - 212, max_space.y - 154));
 		ImGui::SetNextWindowSize(ImVec2(192, 134));

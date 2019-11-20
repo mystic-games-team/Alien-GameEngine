@@ -39,7 +39,7 @@ public:
 
 	bool projection_changed = false;
 
-	float far_plane = 100.f;
+	float far_plane = 200.f;
 
 	float near_plane = 0.1f;
 

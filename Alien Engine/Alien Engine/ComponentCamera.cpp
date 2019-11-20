@@ -188,7 +188,17 @@ void ComponentCamera::DrawInspector()
 
 void ComponentCamera::Reset()
 {
-	camera_color_background = { 0.0f, 0.0f, 0.0f, 1.0f };
+	camera_color_background = { 0.05f, 0.05f, 0.05f, 1.0f };
+
+	near_plane = 0.1f;
+	far_plane = 200.f;
+	frustum.nearPlaneDistance = near_plane;
+	frustum.farPlaneDistance = far_plane;
+
+	vertical_fov = 60.0f;
+	frustum.verticalFov = DEGTORAD * vertical_fov;
+	AspectRatio(16, 9);
+	horizontal_fov = frustum.horizontalFov * RADTODEG;
 }
 
 void ComponentCamera::SetComponent(Component* component)
