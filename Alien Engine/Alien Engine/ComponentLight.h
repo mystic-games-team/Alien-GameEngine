@@ -25,11 +25,11 @@ public:
 public:
 	Color ambient{ 0.5f, 0.5f, 0.5f, 1.0f };
 	Color diffuse{ 0.75f, 0.75f, 0.75f, 1.0f };
-
+	ComponentMesh* bulb = nullptr;
 private:
 
 	bool print_icon = true;
 	Color bulb_icon_color = { 1,1,1,0.5 };
-	ComponentMesh* bulb = nullptr;
+
 	uint light_id=0;
 };

@@ -46,11 +46,14 @@ public:
 	float near_plane = 0.1f;
 
 	int is_fov_horizontal = 0;
+
+	ComponentMesh* mesh_camera = nullptr;
+
 private:
 
 	bool print_icon = true;
 	Color camera_icon_color = { 0.85f,0.85f,0.85f,0.5 };
-	ComponentMesh* mesh_camera = nullptr;
+
 
 	float4x4 ViewMatrix = float4x4::identity;
 	float4x4 ViewMatrixInverse = float4x4::identity;
