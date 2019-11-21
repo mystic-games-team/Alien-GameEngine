@@ -2,9 +2,11 @@
 
 #include "Resource_.h"
 #include <vector>
+#include "MathGeoLib/include/Math/float3.h"
 
 class ResourceMesh;
 class GameObject;
+
 
 class ResourcePrefab : public Resource {
 
@@ -21,6 +23,6 @@ public:
 	void OpenPrefabScene();
 
 	// create GameObjects
-	void ConvertToGameObjects(GameObject* parent, int list_num = -1);
+	void ConvertToGameObjects(GameObject* parent, int list_num = -1, float3 pos = { 0,0,0 });
 
 };

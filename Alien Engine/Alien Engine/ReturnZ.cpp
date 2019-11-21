@@ -69,6 +69,8 @@ ReturnZ::~ReturnZ()
 
 void ReturnZ::AddNewAction(const ReturnActions& type, void* data, bool user)
 {
+	if (App->objects->ignore_cntrlZ)
+		return;
 	if (ReturnZ::eraseY && user) {
 		/*for (uint i = 0; i < App->objects->fordward_actions.size(); ++i) {
 			ReturnZ* act = App->objects->fordward_actions.top();
@@ -90,6 +92,8 @@ void ReturnZ::AddNewAction(const ReturnActions& type, void* data, bool user)
 
 void ReturnZ::AddNewFordwarAction(const ReturnActions& type, void* data)
 {
+	if (App->objects->ignore_cntrlZ)
+		return;
 	ReturnZ* ret = new ReturnZ();
 	ret->SetAction(type, data);
 	App->objects->fordward_actions.push(ret);

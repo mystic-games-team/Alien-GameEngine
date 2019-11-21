@@ -188,6 +188,7 @@ public:
 	std::vector<ComponentCamera*> game_cameras;
 	bool enable_instancies = true;
 	ResourcePrefab* prefab_opened = nullptr;
+	bool ignore_cntrlZ = false;
 private:
 	// root
 	GameObject* base_game_object = nullptr;
