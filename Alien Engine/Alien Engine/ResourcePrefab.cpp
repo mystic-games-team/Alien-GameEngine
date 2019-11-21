@@ -115,7 +115,7 @@ void ResourcePrefab::Save()
 	if (prefab_value != nullptr && prefab_object != nullptr) {
 		JSONfilepack* prefab = new JSONfilepack(meta_data_path.data(), prefab_object, prefab_value);
 		prefab->StartSave();
-
+		prefab->SetString("Meta.ID", std::to_string(ID));
 		JSONArraypack* game_objects = prefab->InitNewArray("Prefab.GameObjects");
 
 		game_objects->SetAnotherNode();
