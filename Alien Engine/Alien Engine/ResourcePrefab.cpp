@@ -106,6 +106,7 @@ bool ResourcePrefab::DeleteMetaData()
 
 void ResourcePrefab::OpenPrefabScene()
 {
+	App->objects->enable_instancies = false;
 	App->objects->SwapReturnZ(false, false);
 	App->objects->prefab_scene = true;
 	App->objects->SaveScene("Library/save_prefab_scene.alienScene", false);
@@ -158,10 +159,10 @@ void ResourcePrefab::ConvertToGameObjects(int list_num)
 			obj->SetPrefab(ID);
 			objects_created.push_back(obj);
 		}
-		GameObject* obj = App->objects->GetRoot(false)->children.back();
+		GameObject* obj = App->objects->GetRoot(true)->children.back();
 		if (list_num != -1) {
-			App->objects->GetRoot(false)->children.pop_back();
-			App->objects->GetRoot(false)->children.insert(App->objects->GetRoot(false)->children.begin() + list_num, obj);
+			App->objects->GetRoot(true)->children.pop_back();
+			App->objects->GetRoot(true)->children.insert(App->objects->GetRoot(true)->children.begin() + list_num, obj);
 		}
 		App->objects->SetNewSelectedObject(obj);
 		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);

@@ -44,10 +44,6 @@ void PanelHierarchy::PanelLogic()
 		ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.5f - 45,ImGui::GetCursorPosY() });
 		if (ImGui::Button("Return Scene")) {
 			popup_leave_prefab_view = true;
-			//App->objects->prefab_scene = false;
-			//App->objects->SwapReturnZ(true, true);
-			//App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
-			//remove("Library/save_prefab_scene.alienScene");
 		}
 	}
 	else {
@@ -118,7 +114,7 @@ void PanelHierarchy::PanelLogic()
 
 	if (popup_leave_prefab_view) {
 		ImGui::OpenPopup("Edit Prefab Options");
-		ImGui::SetNextWindowSize({ 170,80 });
+		ImGui::SetNextWindowSize({ 170,100 });
 		if (ImGui::BeginPopupModal("Edit Prefab Options", &popup_leave_prefab_view, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 		{
 			ImGui::SetCursorPosX(25);
@@ -127,11 +123,21 @@ void PanelHierarchy::PanelLogic()
 			ImGui::SetCursorPosX(12);
 			// TODO: posar el dont save vermell
 			if (ImGui::Button("Don't save")) {
-
+				popup_leave_prefab_view = false;
+				App->objects->prefab_scene = false;
+				App->objects->enable_instancies = true;
+				App->objects->SwapReturnZ(true, true);
+				App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
+				remove("Library/save_prefab_scene.alienScene");
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("Save", { 60,20 })) {
+			if (ImGui::Button("Save", { 60,0 })) {
 
+			}
+			//ImGui::Spacing();
+			ImGui::SetCursorPosX(12);
+			if (ImGui::Button("Cancel", { 145,0 })) {
+				popup_leave_prefab_view = false;
 			}
 
 			ImGui::EndPopup();
