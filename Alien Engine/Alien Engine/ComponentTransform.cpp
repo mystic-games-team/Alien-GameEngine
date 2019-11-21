@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "ReturnZ.h"
 #include "ComponentMesh.h"
+#include "ResourcePrefab.h"
 
 ComponentTransform::ComponentTransform(GameObject* attach) : Component(attach)
 {
@@ -199,6 +200,72 @@ void ComponentTransform::DrawInspector()
 	ImGui::Spacing();
 	ImGui::Separator();
 	ImGui::Spacing();
+
+	if (game_object_attached->IsPrefab() && !App->objects->prefab_scene)
+	{
+		if (ImGui::CollapsingHeader("Prefab Options", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Spacing();
+
+			GameObject* game_object = game_object_attached->FindPrefabRoot();
+			ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(game_object->GetPrefabID());
+			if (ImGui::Button("Open Prefab"))
+			{
+				//if (prefab != nullptr)
+				//{
+				//	prefab->OpenPrefabScene();
+				//	ImGui::End();
+				//	return;
+				/*}*/
+				
+			}
+
+			ImGui::Spacing();
+
+			if (ImGui::Checkbox("Prefab Locked", &game_object->prefab_locked))
+			{
+				game_object->LockPrefab(game_object->prefab_locked);
+			}
+
+			ImGui::Spacing();
+
+			if (ImGui::Button("Unpack Prefab"))
+			{
+				game_object->UnpackPrefab();
+			}
+
+			ImGui::Spacing();
+
+			if (ImGui::Button("Set Prefab as the Original "))
+			{
+				//if (game_object != nullptr) {
+				//	std::vector<GameObject*>::iterator item = game_object->parent->children.begin();
+				//	for (; item != game_object->parent->children.end(); ++item) 
+				//	{
+				//		if (*item != nullptr && *item == game_object) 
+				//		{
+				//			ResourcePrefab* prefab_ = (ResourcePrefab*)App->resources->GetResourceWithID(game_object->GetPrefabID());
+				//			if (prefab_ != nullptr) 
+				//			{
+				//				(*item)->ToDelete();
+				//				prefab_->ConvertToGameObjects(game_object->parent, item - game_object->parent->children.begin());
+				//			}
+				//			break;
+				//		}
+				//	}
+				//}
+			}
+
+			if (ImGui::Button("Save Prefab as the Original"))
+			{
+
+			}
+
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+		}
+	}
 
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
 
