@@ -99,6 +99,13 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 
 bool ResourcePrefab::DeleteMetaData()
 {
+	if (App->objects->prefab_scene && App->objects->prefab_opened == this) {
+		App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
+		App->objects->prefab_opened = nullptr;
+		App->objects->prefab_scene = false;
+		App->objects->enable_instancies = true;
+		App->objects->SwapReturnZ(true, true);
+	}
 	remove(meta_data_path.data());
 	App->objects->GetRoot(true)->UnpackAllPrefabsOf(ID);
 	return true;
