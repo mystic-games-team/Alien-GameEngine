@@ -30,7 +30,7 @@ void PanelHierarchy::PanelLogic()
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr)
 	{
 		if (!App->objects->prefab_scene && App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() != App->objects->GetSelectedObject())
-			popup_prefab_reparent = true;
+			popup_prefab_restructurate = true;
 		else App->objects->GetSelectedObject()->ToDelete();
 	}
 	
@@ -43,10 +43,11 @@ void PanelHierarchy::PanelLogic()
 		ImGui::Spacing();
 		ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.5f - 45,ImGui::GetCursorPosY() });
 		if (ImGui::Button("Return Scene")) {
-			App->objects->prefab_scene = false;
-			App->objects->SwapReturnZ(true, true);
-			App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
-			remove("Library/save_prefab_scene.alienScene");
+			popup_leave_prefab_view = true;
+			//App->objects->prefab_scene = false;
+			//App->objects->SwapReturnZ(true, true);
+			//App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
+			//remove("Library/save_prefab_scene.alienScene");
 		}
 	}
 	else {
@@ -85,7 +86,7 @@ void PanelHierarchy::PanelLogic()
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
 				if (obj->IsPrefab() && obj->FindPrefabRoot() != obj)
-					popup_prefab_reparent = true;
+					popup_prefab_restructurate = true;
 				else if (!obj->is_static)
 					App->objects->ReparentGameObject(obj, App->objects->GetRoot(false));
 				else
@@ -95,10 +96,10 @@ void PanelHierarchy::PanelLogic()
 		}
 		ImGui::EndDragDropTarget();
 	}
-	if (popup_prefab_reparent) {
+	if (popup_prefab_restructurate) {
 		ImGui::OpenPopup("Can not change prefab instance");
 		ImGui::SetNextWindowSize({ 240,130 });
-		if (ImGui::BeginPopupModal("Can not change prefab instance", &popup_prefab_reparent, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		if (ImGui::BeginPopupModal("Can not change prefab instance", &popup_prefab_restructurate, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 		{
 			ImGui::SetCursorPosX(30);
 			ImGui::Text("You can unpack the Prefab");
@@ -109,11 +110,34 @@ void PanelHierarchy::PanelLogic()
 			ImGui::Spacing();
 			ImGui::SetCursorPosX(95);
 			if (ImGui::Button("Ok", {50,0})) {
-				popup_prefab_reparent = false;
+				popup_prefab_restructurate = false;
 			}
 			ImGui::EndPopup();
 		}
 	}
+
+	if (popup_leave_prefab_view) {
+		ImGui::OpenPopup("Edit Prefab Options");
+		ImGui::SetNextWindowSize({ 170,80 });
+		if (ImGui::BeginPopupModal("Edit Prefab Options", &popup_leave_prefab_view, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::SetCursorPosX(25);
+			ImGui::Text("Save new changes?");
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(12);
+			// TODO: posar el dont save vermell
+			if (ImGui::Button("Don't save")) {
+
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Save", { 60,20 })) {
+
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
 	ImGui::End();
 	
 }
@@ -159,7 +183,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
 				if (!App->objects->prefab_scene && obj->IsPrefab() && obj->FindPrefabRoot() != obj)
-					popup_prefab_reparent = true;
+					popup_prefab_restructurate = true;
 				else if (!obj->is_static)
 					App->objects->ReparentGameObject(obj, node);
 				else

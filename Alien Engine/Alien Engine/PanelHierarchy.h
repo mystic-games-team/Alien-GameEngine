@@ -23,6 +23,7 @@ private:
 	GameObject* object_menu = nullptr;
 	bool in_menu = false;
 
-	bool popup_prefab_reparent = false;
+	bool popup_prefab_restructurate = false;
+	bool popup_leave_prefab_view = false;
 
 };
