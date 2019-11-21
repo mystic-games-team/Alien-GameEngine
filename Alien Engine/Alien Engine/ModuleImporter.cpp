@@ -219,7 +219,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	ret->pos = pos;
-	ret->scale = { 1,1,1 };
+	ret->scale = scale;
 	ret->rot = rot;
 	ret->name = std::string(node->mName.C_Str());
 

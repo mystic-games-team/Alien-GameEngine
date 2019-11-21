@@ -1,9 +1,0 @@
-{
-    "Model": {
-        "Name": "camera",
-        "NumMeshes": 1,
-        "PathMeshes": [
-            "Library\/Meshes\/16713967239326743741.alienMesh"
-        ]
-    }
-}
