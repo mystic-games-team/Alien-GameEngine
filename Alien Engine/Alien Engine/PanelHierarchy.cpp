@@ -309,12 +309,12 @@ void PanelHierarchy::RightClickMenu()
 
 				if (object_menu->prefab_locked) {
 					if (ImGui::MenuItem("Unlock Prefab")) {
-						object_menu->prefab_locked = false;
+						object_menu->FindPrefabRoot()->LockPrefab(false);
 					}
 				}
 				else {
 					if (ImGui::MenuItem("Lock Prefab")) {
-						object_menu->prefab_locked = true;
+						object_menu->FindPrefabRoot()->LockPrefab(true);
 					}
 				}
 

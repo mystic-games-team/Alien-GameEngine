@@ -820,6 +820,20 @@ void GameObject::GetObjectWithPrefabID(const u64& prefID, std::vector<GameObject
 	}
 }
 
+void GameObject::LockPrefab(bool lock)
+{
+	if (!IsPrefab())
+		return;
+
+	prefab_locked = lock;
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->LockPrefab(lock);
+		}
+	}
+}
+
 void GameObject::ResetIDs()
 {
 	ID = App->resources->GetRandomID();

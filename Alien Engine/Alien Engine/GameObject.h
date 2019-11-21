@@ -96,6 +96,7 @@ public:
 	bool IsPrefab() const;
 	const u64 GetPrefabID() const;
 	void GetObjectWithPrefabID(const u64& prefabID, std::vector<GameObject*>* objs);
+	void LockPrefab(bool lock);
 
 	void ResetIDs();
 
