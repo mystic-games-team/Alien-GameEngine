@@ -625,8 +625,12 @@ void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, cons
 
 GameObject* ModuleObjects::GetRoot(bool ignore_prefab) 
 {
-	if (prefab_scene && !ignore_prefab)
-		return base_game_object->children.back();
+	if (prefab_scene && !ignore_prefab) {
+		if (base_game_object->children.size() == 0)
+			return base_game_object;
+		else
+			return base_game_object->children.back();
+	}
 	else
 		return base_game_object;
 }

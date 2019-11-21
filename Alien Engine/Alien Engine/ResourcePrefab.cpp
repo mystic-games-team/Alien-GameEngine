@@ -144,7 +144,7 @@ void ResourcePrefab::ConvertToGameObjects(int list_num)
 			game_objects->GetNode(std::get<2>(*item));
 			GameObject* obj = new GameObject();
 			if (std::get<0>(*item) == 1) { // family number == 1 so parent is the base game object
-				obj->LoadObject(game_objects, App->objects->GetRoot(true));
+				obj->LoadObject(game_objects, App->objects->GetRoot(false));
 			}
 			else { // search parent
 				std::vector<GameObject*>::iterator objects = objects_created.begin();
@@ -158,10 +158,10 @@ void ResourcePrefab::ConvertToGameObjects(int list_num)
 			obj->SetPrefab(ID);
 			objects_created.push_back(obj);
 		}
-		GameObject* obj = App->objects->GetRoot(true)->children.back();
+		GameObject* obj = App->objects->GetRoot(false)->children.back();
 		if (list_num != -1) {
-			App->objects->GetRoot(true)->children.pop_back();
-			App->objects->GetRoot(true)->children.insert(App->objects->GetRoot(true)->children.begin() + list_num, obj);
+			App->objects->GetRoot(false)->children.pop_back();
+			App->objects->GetRoot(false)->children.insert(App->objects->GetRoot(false)->children.begin() + list_num, obj);
 		}
 		App->objects->SetNewSelectedObject(obj);
 		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);
