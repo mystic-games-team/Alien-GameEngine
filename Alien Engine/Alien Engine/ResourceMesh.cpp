@@ -15,13 +15,15 @@ ResourceMesh::~ResourceMesh()
 	FreeMemory();
 }
 
-bool ResourceMesh::CreateMetaData()
+bool ResourceMesh::CreateMetaData(const u64& force_id)
 {
 	if (parent_name.empty()) {
 		parent_name.assign("null");
 	}
-
-	ID = App->resources->GetRandomID();
+	if (force_id == 0)
+		ID = App->resources->GetRandomID();
+	else
+		ID = force_id;
 
 	meta_data_path = std::string(LIBRARY_MESHES_FOLDER + std::to_string(ID) + ".alienMesh");
 
@@ -297,7 +299,7 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 	ComponentMaterial* material = new ComponentMaterial(obj);
 
 	if (texture != nullptr) {
-		material->texture = texture;
+		material->SetTexture(texture);
 	}
 
 	obj->AddComponent(material);

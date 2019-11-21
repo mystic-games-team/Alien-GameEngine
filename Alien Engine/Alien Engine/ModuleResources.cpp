@@ -296,7 +296,10 @@ void ModuleResources::ReadTextures(std::vector<std::string> directories, std::ve
 {
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourceTexture* texture = new ResourceTexture();
-		texture->LoadMemory(std::string(current_folder + files[i]).data());
+		if (!texture->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
+			u64 id = texture->GetID();
+			texture->CreateMetaData(id);
+		}
 	}
 	if (!directories.empty()) {
 		std::vector<std::string> new_files;
@@ -315,8 +318,7 @@ void ModuleResources::ReadModels(std::vector<std::string> directories, std::vect
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourceModel* model = new ResourceModel();
 		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
-			LOG("Error while loading %s because has not .alien", files[i]);
-			delete model;
+			App->importer->ReImportModel(model);
 		}
 	}
 	if (!directories.empty()) {

@@ -728,8 +728,8 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 	switch (type) {
 	case ResourceType::RESOURCE_TEXTURE: {
 		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-		if (material != nullptr && material->texture == (ResourceTexture*)to_delete) {
-			material->texture = nullptr;
+		if (material != nullptr && material->GetTexture() == (ResourceTexture*)to_delete) {
+			material->SetTexture(nullptr);
 		}
 		break; }
 	case ResourceType::RESOURCE_MESH: {
