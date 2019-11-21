@@ -106,6 +106,9 @@ bool ResourcePrefab::DeleteMetaData()
 
 void ResourcePrefab::OpenPrefabScene()
 {
+	if (App->objects->prefab_scene)
+		return;
+
 	App->objects->enable_instancies = false;
 	App->objects->SwapReturnZ(false, false);
 	App->objects->prefab_scene = true;

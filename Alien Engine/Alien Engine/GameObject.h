@@ -115,12 +115,13 @@ public:
 	u64 ID = 0;
 	bool parent_enabled = true;
 	bool parent_selected = false;
-	bool open_node = false;
-
+	bool open_node = false;	
+	bool prefab_locked = false;
 private:
 
 	bool to_delete = false; 
 	u64 prefabID = 0;
+
 	bool selected = false;
 
 

@@ -121,7 +121,11 @@ void PanelHierarchy::PanelLogic()
 			ImGui::Text("Save new changes?");
 			ImGui::Spacing();
 			ImGui::SetCursorPosX(12);
-			// TODO: posar el dont save vermell
+			
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+
 			if (ImGui::Button("Don't save")) {
 				popup_leave_prefab_view = false;
 				App->objects->prefab_scene = false;
@@ -130,6 +134,9 @@ void PanelHierarchy::PanelLogic()
 				App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
 				remove("Library/save_prefab_scene.alienScene");
 			}
+			ImGui::PopStyleColor();
+			ImGui::PopStyleColor();
+			ImGui::PopStyleColor();
 			ImGui::SameLine();
 			if (ImGui::Button("Save", { 60,0 })) {
 
@@ -284,6 +291,17 @@ void PanelHierarchy::RightClickMenu()
 					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(object_menu->GetPrefabID());
 					if (prefab != nullptr)
 						App->ui->panel_project->SelectFile(prefab->GetAssetsPath(), App->resources->assets);
+				}
+
+				if (object_menu->prefab_locked) {
+					if (ImGui::MenuItem("Unlock Prefab")) {
+						object_menu->prefab_locked = false;
+					}
+				}
+				else {
+					if (ImGui::MenuItem("Lock Prefab")) {
+						object_menu->prefab_locked = true;
+					}
 				}
 
 				if (ImGui::MenuItem("Set Prefab as the Original", nullptr, nullptr, !App->objects->prefab_scene)) {
