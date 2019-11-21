@@ -303,6 +303,8 @@ void ComponentCamera::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("NearPlane", near_plane);
 	to_save->SetNumber("isFovHori", is_fov_horizontal);
 	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetBoolean("IsGameCamera", (App->renderer3D->actual_game_camera == this) ? true : false);
+	to_save->SetBoolean("IsSelectedCamera", (game_object_attached->IsSelected()) ? true : false);
 }
 
 void ComponentCamera::LoadComponent(JSONArraypack* to_load)
@@ -314,6 +316,14 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	is_fov_horizontal = to_load->GetNumber("isFovHori");
 	camera_color_background = to_load->GetColor("BackCol");
 	ID = std::stoull(to_load->GetString("ID"));
+
+	if (to_load->GetBoolean("IsGameCamera")) {
+		App->renderer3D->actual_game_camera = this;
+	}
+	if (to_load->GetBoolean("IsSelectedCamera")) {
+		App->renderer3D->selected_game_camera = this;
+	}
+
 	frustum.nearPlaneDistance = near_plane;
 	frustum.farPlaneDistance = far_plane;
 	frustum.verticalFov = vertical_fov * DEGTORAD;
