@@ -75,6 +75,15 @@ void ComponentLight::DrawInspector()
 		else if (!cntl_Z && ImGui::IsMouseReleased(0)) {
 			cntl_Z = true;
 		}
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		ImGui::Checkbox("Print Icon", &print_icon);
+		ImGui::SameLine();
+		ImGui::Text("|");
+		ImGui::SameLine();
+		ImGui::ColorEdit3("Icon Color", &bulb_icon_color, ImGuiColorEditFlags_Float);
+
 		ImGui::Spacing();
 		ImGui::Separator();
 	}
@@ -122,8 +131,18 @@ void ComponentLight::LoadComponent(JSONArraypack* to_load)
 
 void ComponentLight::DrawIconLight()
 {
-	if (bulb != nullptr)
+	if (bulb != nullptr && print_icon == true)
 	{
+		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+		float3 pos = transform->GetLocalPosition();
+		float3 scale = transform->GetLocalScale();
+		transform->SetLocalScale(0.2f, 0.18f, 0.2f);
+		transform->SetLocalPosition(pos.x - 0.133f, pos.y, pos.z);
+		glDisable(GL_LIGHTING);
+		glColor3f(bulb_icon_color.r, bulb_icon_color.g, bulb_icon_color.b);
 		bulb->DrawPolygon();
+		glEnable(GL_LIGHTING);
+		transform->SetLocalScale(scale.x, scale.y, scale.z);
+		transform->SetLocalPosition(pos.x, pos.y, pos.z);
 	}
 }

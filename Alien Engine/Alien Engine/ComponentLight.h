@@ -28,6 +28,8 @@ public:
 
 private:
 
+	bool print_icon = true;
+	Color bulb_icon_color = { 1,1,1,0.5 };
 	ComponentMesh* bulb = nullptr;
 	uint light_id=0;
 };
