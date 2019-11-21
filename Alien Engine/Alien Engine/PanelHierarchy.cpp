@@ -281,7 +281,7 @@ void PanelHierarchy::RightClickMenu()
 				App->objects->MoveObjectDown(object_menu, true);
 			}
 
-			if (ImGui::MenuItem("Make it Pefab")) {
+			if (ImGui::MenuItem("Make it Pefab", nullptr, nullptr, !App->objects->prefab_scene)) {
 				ResourcePrefab* prefab = new ResourcePrefab();
 				prefab->CreateMetaData(object_menu);
 				App->ui->panel_project->RefreshAllNodes();
@@ -308,12 +308,12 @@ void PanelHierarchy::RightClickMenu()
 				}
 
 				if (object_menu->prefab_locked) {
-					if (ImGui::MenuItem("Unlock Prefab")) {
+					if (ImGui::MenuItem("Unlock Prefab", nullptr, nullptr, !App->objects->prefab_scene)) {
 						object_menu->FindPrefabRoot()->LockPrefab(false);
 					}
 				}
 				else {
-					if (ImGui::MenuItem("Lock Prefab")) {
+					if (ImGui::MenuItem("Lock Prefab", nullptr, nullptr, !App->objects->prefab_scene)) {
 						object_menu->FindPrefabRoot()->LockPrefab(true);
 					}
 				}
