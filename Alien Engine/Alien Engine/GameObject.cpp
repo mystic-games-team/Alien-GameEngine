@@ -122,6 +122,8 @@ void GameObject::DrawScene()
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	ComponentCamera* camera = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
+	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
 
 	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
 	{
@@ -146,6 +148,16 @@ void GameObject::DrawScene()
 			mesh->DrawGlobalAABB();
 		if (mesh->draw_OBB)
 			mesh->DrawOBB();
+	}
+
+	if (camera != nullptr && camera->IsEnabled())
+	{
+		camera->DrawIconCamera();
+	}
+
+	if (light != nullptr && light->IsEnabled())
+	{
+		light->DrawIconLight();
 	}
 }
 

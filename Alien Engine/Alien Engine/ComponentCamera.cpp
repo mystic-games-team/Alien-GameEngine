@@ -11,6 +11,7 @@
 #include "imgui/imgui.h"
 #include "ReturnZ.h"
 #include "ModuleRenderer3D.h"
+#include "ComponentMesh.h"
 
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
@@ -38,6 +39,10 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 		App->renderer3D->selected_game_camera = this;
 		App->objects->game_cameras.push_back(this);
 	}
+	
+	mesh_camera = new ComponentMesh(game_object_attached);
+
+	mesh_camera->mesh = App->resources->camera_mesh;
 }
 
 ComponentCamera::~ComponentCamera()
@@ -59,6 +64,8 @@ ComponentCamera::~ComponentCamera()
 			break;
 		}
 	}
+
+	delete mesh_camera;
 }
 
 void ComponentCamera::DrawInspector()
@@ -294,6 +301,14 @@ void ComponentCamera::DrawFrustum()
 
 	glEnd();
 	glLineWidth(1);
+}
+
+void ComponentCamera::DrawIconCamera()
+{
+	if (mesh_camera != nullptr)
+	{
+		mesh_camera->DrawPolygon();
+	}
 }
 
 void ComponentCamera::SaveComponent(JSONArraypack* to_save)

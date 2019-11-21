@@ -85,7 +85,8 @@ public:
 	ResourceMesh* dodecahedron = nullptr;
 	ResourceMesh* icosahedron = nullptr;
 	ResourceMesh* octahedron = nullptr;
-
+	ResourceMesh* camera_mesh = nullptr;
+	ResourceMesh* light_mesh = nullptr; 
 	FileNode* assets = nullptr;
 };
 

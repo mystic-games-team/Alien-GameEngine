@@ -5,10 +5,14 @@
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ReturnZ.h"
+#include "ComponentMesh.h"
 
 ComponentLight::ComponentLight(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::LIGHT;
+
+	bulb = new ComponentMesh(game_object_attached);
+	bulb->mesh = App->resources->light_mesh;
 }
 
 ComponentLight::~ComponentLight()
@@ -114,4 +118,12 @@ void ComponentLight::LoadComponent(JSONArraypack* to_load)
 	diffuse = to_load->GetColor("DiffuseColor");
 	ambient = to_load->GetColor("AmbienColor");
 	enabled = to_load->GetBoolean("Enabled");
+}
+
+void ComponentLight::DrawIconLight()
+{
+	if (bulb != nullptr)
+	{
+		bulb->DrawPolygon();
+	}
 }

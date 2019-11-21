@@ -42,6 +42,7 @@ public:
 	// models
 	bool LoadModelFile(const char* path); // when dropped
 	void LoadParShapesMesh(par_shapes_mesh* p_mesh, ResourceMesh* mesh);
+	ResourceMesh* LoadEngineModels(const char* path);
 
 	// textures
 	ResourceTexture* LoadTextureFile(const char* path, bool has_been_dropped = false, bool is_custom = true); // when dropped

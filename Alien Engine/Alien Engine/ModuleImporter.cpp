@@ -406,5 +406,19 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ResourceMesh* mes
 	mesh->InitBuffers();
 }
 
+ResourceMesh* ModuleImporter::LoadEngineModels(const char* path)
+{
+	ResourceMesh* r_mesh = nullptr;
+
+	const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
+		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
+
+	r_mesh = LoadNodeMesh(scene, scene->mRootNode->mChildren[0], scene->mMeshes[0], nullptr);
+
+	aiReleaseImport(scene);
+
+	return r_mesh;
+}
+
 
 
