@@ -31,6 +31,8 @@ void PanelHierarchy::PanelLogic()
 	{
 		if (!App->objects->prefab_scene && App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() != App->objects->GetSelectedObject())
 			popup_prefab_restructurate = true;
+		else if (App->objects->prefab_scene && App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() == App->objects->GetSelectedObject())
+			popup_delete_root_prefab_scene = true;
 		else App->objects->GetSelectedObject()->ToDelete();
 	}
 	
@@ -131,6 +133,22 @@ void PanelHierarchy::PanelLogic()
 			ImGui::SetCursorPosX(95);
 			if (ImGui::Button("Ok", { 50,0 })) {
 				popup_move_child_outof_root_prefab_scene = false;
+			}
+			ImGui::EndPopup();
+		}
+	}
+
+	if (popup_delete_root_prefab_scene) {
+		ImGui::OpenPopup("Respect Prefab Root");
+		ImGui::SetNextWindowSize({ 240,80 });
+		if (ImGui::BeginPopupModal("Respect Prefab Root", &popup_delete_root_prefab_scene, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::SetCursorPosX(15);
+			ImGui::Text("Prefab Root can not be deleted");
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(95);
+			if (ImGui::Button("Ok", { 50,0 })) {
+				popup_delete_root_prefab_scene = false;
 			}
 			ImGui::EndPopup();
 		}
@@ -374,7 +392,11 @@ void PanelHierarchy::RightClickMenu()
 			}
 			if (ImGui::MenuItem("Remove Object"))
 			{
-				object_menu->ToDelete();
+				if (!App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() != object_menu)
+					popup_prefab_restructurate = true;
+				else if (App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() == object_menu)
+					popup_delete_root_prefab_scene = true;
+				else object_menu->ToDelete();
 			}
 			ImGui::Separator();
 		}
