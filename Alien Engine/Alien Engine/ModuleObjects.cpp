@@ -85,6 +85,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 {
 	base_game_object->PostUpdate();
 	if (App->renderer3D->SetCameraToDraw(App->camera->fake_camera)) {
+		printing_scene = true;
 		// Scene Drawing
 		if (App->renderer3D->render_zbuffer) {
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
@@ -141,7 +142,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 	}
 
 	if (App->renderer3D->SetCameraToDraw(App->renderer3D->actual_game_camera)) {
-
+		printing_scene = false;
 		if (App->renderer3D->render_zbuffer) {
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
 		}
@@ -181,6 +182,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 	if (App->renderer3D->selected_game_camera != nullptr && (App->renderer3D->actual_game_camera != App->objects->GetSelectedObject()->GetComponent(ComponentType::CAMERA) && App->renderer3D->SetCameraToDraw(App->renderer3D->selected_game_camera)))
 	{
+		printing_scene = false;
 		if (App->renderer3D->render_zbuffer) {
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
 		}

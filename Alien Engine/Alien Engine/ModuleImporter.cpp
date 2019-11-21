@@ -219,7 +219,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	ret->pos = pos;
-	ret->scale = scale;
+	ret->scale = { 1,1,1 };
 	ret->rot = rot;
 	ret->name = std::string(node->mName.C_Str());
 
@@ -343,7 +343,7 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 				selected->AddComponent(material);
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, material);
 			}
-			material->texture = texture;
+			material->SetTexture(texture);
 		}
 		else
 			LOG("Selected GameObject has no mesh");
@@ -404,6 +404,53 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ResourceMesh* mes
 		}
 	}
 	mesh->InitBuffers();
+}
+
+ResourceMesh* ModuleImporter::LoadEngineModels(const char* path)
+{
+	ResourceMesh* r_mesh = nullptr;
+
+	const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
+		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
+
+	for (uint i = 0; i < scene->mNumMeshes; ++i)
+	{
+		r_mesh = LoadNodeMesh(scene, scene->mRootNode, scene->mMeshes[i], nullptr);
+	}
+
+	aiReleaseImport(scene);
+
+	return r_mesh;
+}
+
+bool ModuleImporter::ReImportModel(ResourceModel* model)
+{
+	bool ret = true;
+	
+	const aiScene* scene = aiImportFile(model->GetAssetsPath(), aiProcess_Triangulate | aiProcess_GenSmoothNormals |
+		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
+
+	if (scene != nullptr) {
+		model->name = App->file_system->GetBaseFileName(model->GetAssetsPath());
+		this->model = model;
+		// start recursive function to all nodes
+		LoadSceneNode(scene->mRootNode, scene, nullptr, 1);
+
+		// create the meta data files like .alien
+		if (model->CreateMetaData(model->ID)) {
+			App->resources->AddResource(model);
+		}
+
+		this->model = nullptr;
+	}
+	else {
+		ret = false;
+		LOG("Error loading model %s", model->GetAssetsPath());
+		LOG("Error type: %s", aiGetErrorString());
+	}
+	aiReleaseImport(scene);
+
+	return ret;
 }
 
 

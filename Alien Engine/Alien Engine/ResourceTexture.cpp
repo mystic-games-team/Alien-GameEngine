@@ -17,11 +17,15 @@ ResourceTexture::~ResourceTexture()
 	glDeleteTextures(1, &id);
 }
 
-bool ResourceTexture::CreateMetaData()
+bool ResourceTexture::CreateMetaData(const u64& force_id)
 {
 	bool ret = false;
 	if (ilLoadImage(path.data())) {
-		ID = App->resources->GetRandomID();
+		if (force_id == 0)
+			ID = App->resources->GetRandomID();
+		else
+			ID = force_id;
+
 		iluFlipImage();
 		std::string alien_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data();
 
@@ -72,19 +76,40 @@ bool ResourceTexture::CreateMetaData()
 		ret = true;
 		glBindTexture(GL_TEXTURE_2D, 0);
 		App->resources->AddResource(this);
+		FreeMemory();
 	}
 	else {
 		delete this;
 		ret = false;
 	}
+
+
+
 	return ret;
 }
 
-bool ResourceTexture::LoadMemory(const char* library_file_path)
+bool ResourceTexture::LoadMemory()
 {
 	bool ret = true;
 
-	this->path = library_file_path;
+	App->importer->LoadTextureToResource(meta_data_path.data(), this);
+
+	return ret;
+}
+
+void ResourceTexture::FreeMemory()
+{
+	glDeleteTextures(1, &id);
+	width = 0;
+	height = 0;
+	id = 0;
+}
+
+bool ResourceTexture::ReadBaseInfo(const char* assets_path)
+{
+	bool ret = true;
+
+	this->path = assets_path;
 	std::string alien_path = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
 
 	JSON_Value* value = json_parse_file(alien_path.data());
@@ -101,7 +126,9 @@ bool ResourceTexture::LoadMemory(const char* library_file_path)
 
 	meta_data_path = LIBRARY_TEXTURES_FOLDER + std::to_string(ID) + ".dds";
 
-	App->importer->LoadTextureToResource(meta_data_path.data(), this);
+	if (!App->file_system->Exists(meta_data_path.data())) {
+		return false;
+	}
 
 	App->resources->AddResource(this);
 
@@ -120,4 +147,5 @@ bool ResourceTexture::DeleteMetaData()
 
 	return true;
 }
+
 

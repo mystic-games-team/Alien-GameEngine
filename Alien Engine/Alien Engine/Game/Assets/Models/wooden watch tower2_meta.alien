@@ -1,5 +1,9 @@
 {
     "Meta": {
-        "ID": "6366406251904805798"
+        "ID": "1376986500173070442",
+        "NumMeshes": 1,
+        "PathMeshes": [
+            "Library\/Meshes\/2446199560832129741.alienMesh"
+        ]
     }
 }

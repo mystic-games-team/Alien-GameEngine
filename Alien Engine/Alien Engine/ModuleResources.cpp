@@ -45,6 +45,11 @@ bool ModuleResources::Start()
 	icons.prefab = App->importer->LoadEngineTexture("Configuration/EngineTextures/prefab.png");
 	icons.prefab_lock = App->importer->LoadEngineTexture("Configuration/EngineTextures/prefab_lock.png");
 
+	
+	camera_mesh = App->importer->LoadEngineModels("Configuration/Engine Models/camera.FBX");
+	light_mesh = App->importer->LoadEngineModels("Configuration/Engine Models/bulb.fbx");
+
+
 	// Load Primitives as resource
 	cube = CreatePrimitive(PrimitiveType::CUBE);
 	sphere = CreatePrimitive(PrimitiveType::SPHERE_ALIEN);
@@ -300,7 +305,10 @@ void ModuleResources::ReadTextures(std::vector<std::string> directories, std::ve
 {
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourceTexture* texture = new ResourceTexture();
-		texture->LoadMemory(std::string(current_folder + files[i]).data());
+		if (!texture->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
+			u64 id = texture->GetID();
+			texture->CreateMetaData(id);
+		}
 	}
 	if (!directories.empty()) {
 		std::vector<std::string> new_files;
@@ -319,8 +327,7 @@ void ModuleResources::ReadModels(std::vector<std::string> directories, std::vect
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourceModel* model = new ResourceModel();
 		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
-			LOG("Error while loading %s because has not .alien", files[i]);
-			delete model;
+			App->importer->ReImportModel(model);
 		}
 	}
 	if (!directories.empty()) {

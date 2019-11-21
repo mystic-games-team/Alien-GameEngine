@@ -108,6 +108,8 @@ public:
 
 	void SwapReturnZ(bool get_save, bool delete_current);
 
+	bool printing_scene = true;
+
 private:
 
 

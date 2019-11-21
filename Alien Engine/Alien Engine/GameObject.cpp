@@ -122,6 +122,8 @@ void GameObject::DrawScene()
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	ComponentCamera* camera = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
+	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
 
 	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
 	{
@@ -195,6 +197,18 @@ void GameObject::SetDrawList(std::vector<GameObject*>* to_draw, const ComponentC
 		camera_->frustum.up = transform->GetLocalRotation().WorldY();
 	}
 
+	if (App->objects->printing_scene)
+	{
+		if (camera_ != nullptr && camera_->IsEnabled())
+		{
+			camera_->DrawIconCamera();
+		}
+
+		if (light != nullptr && light->IsEnabled())
+		{
+			light->DrawIconLight();
+		}
+	}
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
@@ -725,8 +739,8 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 	switch (type) {
 	case ResourceType::RESOURCE_TEXTURE: {
 		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-		if (material != nullptr && material->texture == (ResourceTexture*)to_delete) {
-			material->texture = nullptr;
+		if (material != nullptr && material->GetTexture() == (ResourceTexture*)to_delete) {
+			material->SetTexture(nullptr);
 		}
 		break; }
 	case ResourceType::RESOURCE_MESH: {

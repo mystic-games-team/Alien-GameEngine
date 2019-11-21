@@ -196,6 +196,8 @@ void ComponentMaterial::DrawInspector()
 void ComponentMaterial::Reset()
 {
 	color = { 1,1,1,1 };
+	if (texture != nullptr)
+		texture->DecreaseReferences();
 	texture = nullptr;
 }
 
@@ -204,8 +206,12 @@ void ComponentMaterial::SetComponent(Component* component)
 	if (component->GetType() == type) {
 
 		ComponentMaterial* material = (ComponentMaterial*)component;
-
+		if (texture != nullptr)
+			texture->DecreaseReferences();
 		texture = material->texture;
+		if (texture != nullptr)
+			texture->IncreaseReferences();
+
 		color = material->color;
 	}
 }
@@ -231,6 +237,22 @@ void ComponentMaterial::LoadComponent(JSONArraypack* to_load)
 	if (to_load->GetBoolean("HasTexture")) {
 		u64 ID = std::stoull(to_load->GetString("TextureID"));
 		texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+		if (texture != nullptr)
+			texture->IncreaseReferences();
 	}
 	ID = std::stoull(to_load->GetString("ID"));
+}
+
+void ComponentMaterial::SetTexture(ResourceTexture* tex)
+{
+	if (texture != nullptr)
+		texture->DecreaseReferences();
+	texture = tex;
+	if (texture != nullptr)
+		texture->IncreaseReferences();
+}
+
+const ResourceTexture* ComponentMaterial::GetTexture() const
+{
+	return texture;
 }

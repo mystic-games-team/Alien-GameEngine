@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MathGeoLib/include/MathBuildConfig.h"
+#include "ComponentMesh.h"
 
 class ComponentCamera : public Component {
 public:
@@ -25,6 +26,7 @@ public:
 	float* GetViewMatrix() const;
 
 	void DrawFrustum();
+	void DrawIconCamera();
 
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
@@ -45,6 +47,10 @@ public:
 
 	int is_fov_horizontal = 0;
 private:
+
+	bool print_icon = true;
+	Color camera_icon_color = { 0.85f,0.85f,0.85f,0.5 };
+	ComponentMesh* mesh_camera = nullptr;
 
 	float4x4 ViewMatrix = float4x4::identity;
 	float4x4 ViewMatrixInverse = float4x4::identity;
