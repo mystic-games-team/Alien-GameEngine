@@ -188,13 +188,15 @@ void ComponentCamera::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-
+		ImGui::PushID("vcnsdbiobsdifnidsofnionew");
 		ImGui::Checkbox("Print Icon", &print_icon);
+		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::Text("|");
 		ImGui::SameLine();
+		ImGui::PushID("fdgdfdgdgserwfew");
 		ImGui::ColorEdit3("Icon Color", &camera_icon_color, ImGuiColorEditFlags_Float);
-
+		ImGui::PopID();
 		ImGui::Spacing();
 		ImGui::Separator();
 	}

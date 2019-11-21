@@ -347,7 +347,7 @@ void ModuleResources::ReadPrefabs(std::vector<std::string> directories, std::vec
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourcePrefab* model = new ResourcePrefab();
 		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
-			LOG("Error while loading %s because has not .alienfab", files[i]);
+			LOG("Error while loading %s because has not .alienPrefab", files[i]);
 			delete model;
 		}
 	}

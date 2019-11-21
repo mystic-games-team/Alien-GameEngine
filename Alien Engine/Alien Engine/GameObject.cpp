@@ -595,6 +595,31 @@ AABB GameObject::GetBB()
 		}
 		else
 		{
+			ComponentCamera* camera = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
+			ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
+
+			if (camera != nullptr && light != nullptr) {
+				camera->mesh_camera->RecalculateAABB_OBB();
+				light->bulb->RecalculateAABB_OBB();
+				float3 min;
+				min.x = min(camera->mesh_camera->GetGlobalAABB().minPoint.x, light->bulb->GetGlobalAABB().minPoint.x);
+				min.y = min(camera->mesh_camera->GetGlobalAABB().minPoint.y, light->bulb->GetGlobalAABB().minPoint.y);
+				min.z = min(camera->mesh_camera->GetGlobalAABB().minPoint.z, light->bulb->GetGlobalAABB().minPoint.z);
+				float3 max;
+				max.x = max(camera->mesh_camera->GetGlobalAABB().maxPoint.x, light->bulb->GetGlobalAABB().maxPoint.x);
+				max.y = max(camera->mesh_camera->GetGlobalAABB().maxPoint.y, light->bulb->GetGlobalAABB().maxPoint.y);
+				max.z = max(camera->mesh_camera->GetGlobalAABB().maxPoint.z, light->bulb->GetGlobalAABB().maxPoint.z);
+				return AABB(min, max);
+			}
+			else if (camera != nullptr) {
+				camera->mesh_camera->RecalculateAABB_OBB();
+				return camera->mesh_camera->GetGlobalAABB();
+			}
+			else if (light != nullptr) {
+				light->bulb->RecalculateAABB_OBB();
+				return light->bulb->GetGlobalAABB();
+			}
+
 			AABB aabb_null;
 			ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 			float3 pos = transform->GetGlobalPosition();

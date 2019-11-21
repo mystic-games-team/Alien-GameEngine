@@ -77,13 +77,15 @@ void ComponentLight::DrawInspector()
 		}
 		ImGui::Separator();
 		ImGui::Spacing();
-
+		ImGui::PushID("fnjshdfoiwnec`q");
 		ImGui::Checkbox("Print Icon", &print_icon);
+		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::Text("|");
 		ImGui::SameLine();
+		ImGui::PushID("kfdsifqnpw");
 		ImGui::ColorEdit3("Icon Color", &bulb_icon_color, ImGuiColorEditFlags_Float);
-
+		ImGui::PopID();
 		ImGui::Spacing();
 		ImGui::Separator();
 	}

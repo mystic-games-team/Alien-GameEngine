@@ -99,7 +99,7 @@ void PanelScene::PanelLogic()
 			}
 
 			if (node != nullptr && node->type == FileDropType::PREFAB) {
-				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name) + ".alienfab";
+				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name) + ".alienPrefab";
 				u64 ID = App->resources->GetIDFromAlienPath(path.data());
 				if (ID != 0) {
 					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);

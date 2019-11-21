@@ -1,0 +1,176 @@
+{
+    "Meta": {
+        "ID": "18249488892053240240"
+    },
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "BakerHouse",
+                "FamilyNumber": 1,
+                "ID": "727086691311266313",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "PrefabID": "18249488892053240240",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7487875109989968615"
+                    }
+                ]
+            },
+            {
+                "Name": "Chimney",
+                "FamilyNumber": 2,
+                "ID": "2628002074777905878",
+                "ParentID": "727086691311266313",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "PrefabID": "18249488892053240240",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17773837176246606927"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "12374122407512235706",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "92593667473536269",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "11883637782783846167",
+                        "HasTexture": true,
+                        "TextureID": "2805827317221274553",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Baker_house",
+                "FamilyNumber": 2,
+                "ID": "14650267933221126011",
+                "ParentID": "727086691311266313",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "PrefabID": "18249488892053240240",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8202994992060521909"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "9330072768265318417",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "18121283302919221305",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "18162125908779205238",
+                        "HasTexture": true,
+                        "TextureID": "2805827317221274553",
+                        "Enabled": true
+                    }
+                ]
+            }
+        ]
+    }
+}
