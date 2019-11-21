@@ -631,6 +631,7 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 	to_save->SetBoolean("ParentSelected", parent_selected);
 	to_save->SetBoolean("IsStatic", is_static);
 	to_save->SetBoolean("IsPrefab", IsPrefab());
+	to_save->SetBoolean("PrefabLocked", prefab_locked);
 	if (IsPrefab()) {
 		to_save->SetString("PrefabID", std::to_string(prefabID));
 	}
@@ -656,6 +657,7 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	if (to_load->GetBoolean("Selected")) {
 		App->objects->SetNewSelectedObject(this);
 	}
+	prefab_locked = to_load->GetBoolean("PrefabLocked");
 	parent_selected = to_load->GetBoolean("ParentSelected");
 	is_static = to_load->GetBoolean("IsStatic");
 	if (to_load->GetBoolean("IsPrefab")) {
