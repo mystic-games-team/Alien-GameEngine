@@ -139,8 +139,14 @@ void ResourcePrefab::Save()
 		for (; item != objs.end(); ++item) {
 			if (*item != nullptr && !(*item)->prefab_locked) {
 				GameObject* parent = (*item)->parent;
-				(*item)->ToDelete();
-				ConvertToGameObjects(parent);
+				std::vector<GameObject*>::iterator iter = parent->children.begin();
+				for (; iter != parent->children.end(); ++iter) {
+					if (*iter == (*item)) {
+						(*item)->ToDelete();
+						ConvertToGameObjects(parent, iter - parent->children.begin());
+						break;
+					}
+				}
 			}
 		}
 	}

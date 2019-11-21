@@ -179,11 +179,13 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		node->open_node = false;
 		ImGui::SetNextItemOpen(true);
 	}
-
+	if (node->IsPrefab() && node->FindPrefabRoot() != node)
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, { (float)222 / 255,(float)100 / 255,1,1 });
 	bool is_tree_open = ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | 
 		ImGuiTreeNodeFlags_OpenOnDoubleClick | (node->IsSelected() ? ImGuiTreeNodeFlags_Selected : 0) | 
 		(node->children.empty() ? ImGuiTreeNodeFlags_Leaf : 0), (!node->IsEnabled() || !node->IsParentEnabled()));
-
+	if (node->IsPrefab() && node->FindPrefabRoot() != node)
+		ImGui::PopStyleColor();
 	if (ImGui::IsItemClicked()) {
 		App->objects->SetNewSelectedObject(node);
 	}
