@@ -241,7 +241,7 @@ bool ModuleObjects::CleanUp()
 
 	delete base_game_object;
 	base_game_object = nullptr;
-
+	// TODO: clean up returnZ both
 	return true;
 }
 
@@ -638,6 +638,36 @@ void ModuleObjects::CreateRoot()
 	base_game_object = new GameObject();
 	base_game_object->ID = 0;
 	base_game_object->is_static = true;
+}
+
+void ModuleObjects::SwapReturnZ(bool get_save, bool delete_current)
+{
+	if (delete_current) {
+		DeleteReturns();
+	}
+
+	if (get_save) {
+		return_actions = save_return_actions;
+		fordward_actions = save_fordward_actions;
+
+		while (!save_return_actions.empty()) {
+			save_return_actions.pop();
+		}
+		while (!save_fordward_actions.empty()) {
+			save_fordward_actions.pop();
+		}
+	}
+	else {
+		save_return_actions = return_actions;
+		save_fordward_actions = fordward_actions;
+
+		while (!return_actions.empty()) {
+			return_actions.pop();
+		}
+		while (!fordward_actions.empty()) {
+			fordward_actions.pop();
+		}
+	}
 }
 
 void ModuleObjects::DeleteReturns()

@@ -458,6 +458,7 @@ void ComponentMesh::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("ViewFaceNormals", view_face_normals);
 	to_save->SetBoolean("DrawAABB", draw_AABB);
 	to_save->SetBoolean("DrawOBB", draw_OBB);
+	to_save->SetString("ID", std::to_string(ID));
 	to_save->SetBoolean("HasMesh", (mesh != nullptr) ? true : false);
 	if (mesh != nullptr) {
 		to_save->SetBoolean("IsPrimitive", mesh->is_primitive);
@@ -499,6 +500,7 @@ void ComponentMesh::LoadComponent(JSONArraypack* to_load)
 	draw_AABB = to_load->GetBoolean("DrawAABB");
 	draw_OBB = to_load->GetBoolean("DrawOBB");
 	enabled = to_load->GetBoolean("Enabled");
+	ID = std::stoull(to_load->GetString("ID"));
 	if (to_load->GetBoolean("HasMesh")) {
 		if (!to_load->GetBoolean("IsPrimitive")) {
 			u64 ID = std::stoull(to_load->GetString("MeshID"));

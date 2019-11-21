@@ -105,6 +105,8 @@ public:
 	GameObject* GetRoot(bool ignore_prefab);
 	void CreateRoot();
 
+	void SwapReturnZ(bool get_save, bool delete_current);
+
 private:
 
 
@@ -187,4 +189,8 @@ private:
 	GameObject* base_game_object = nullptr;
 	GameObject* game_object_selected = nullptr;
 	std::vector< std::tuple<GameObject*, GameObject*, bool>> to_reparent;
+
+	std::stack<ReturnZ*> save_return_actions;
+	std::stack<ReturnZ*> save_fordward_actions;
+
 };

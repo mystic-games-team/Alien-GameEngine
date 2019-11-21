@@ -215,6 +215,7 @@ void ComponentMaterial::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetColor("Color", color);
 	to_save->SetBoolean("TextureEnabled", texture_activated);
+	to_save->SetString("ID", std::to_string(ID));
 	to_save->SetBoolean("HasTexture", (texture != nullptr) ? true : false);
 	if (texture != nullptr) {
 		to_save->SetString("TextureID", std::to_string(texture->GetID()));
@@ -231,4 +232,5 @@ void ComponentMaterial::LoadComponent(JSONArraypack* to_load)
 		u64 ID = std::stoull(to_load->GetString("TextureID"));
 		texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
 	}
+	ID = std::stoull(to_load->GetString("ID"));
 }

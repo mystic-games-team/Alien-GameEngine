@@ -40,18 +40,17 @@ void PanelHierarchy::PanelLogic()
 		ImVec2 size = ImGui::CalcTextSize(name.data());
 		ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.5f - size.x * 0.5f ,ImGui::GetCursorPosY() });
 		ImGui::Text(name.data());
-	}
-	else
-		ImGui::Text(std::string("Current Scene: " + App->objects->current_scene.name_without_extension).data());
-	ImGui::Spacing();
-	
-	if (App->objects->prefab_scene) {
+		ImGui::Spacing();
 		ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.5f - 45,ImGui::GetCursorPosY() });
 		if (ImGui::Button("Return Scene")) {
 			App->objects->prefab_scene = false;
+			App->objects->SwapReturnZ(true, true);
 			App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
 			remove("Library/save_prefab_scene.alienScene");
 		}
+	}
+	else {
+		ImGui::Text(std::string("Current Scene: " + App->objects->current_scene.name_without_extension).data());
 	}
 
 	ImGui::Spacing();

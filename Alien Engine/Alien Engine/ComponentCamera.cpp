@@ -246,9 +246,6 @@ float* ComponentCamera::GetViewMatrix() const
 
 void ComponentCamera::DrawFrustum()
 {
-
-
-
 	static float3 points[8];
 	frustum.GetCornerPoints(points);
 
@@ -305,6 +302,7 @@ void ComponentCamera::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("FarPlane", far_plane);
 	to_save->SetNumber("NearPlane", near_plane);
 	to_save->SetNumber("isFovHori", is_fov_horizontal);
+	to_save->SetString("ID", std::to_string(ID));
 }
 
 void ComponentCamera::LoadComponent(JSONArraypack* to_load)
@@ -315,7 +313,7 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	near_plane = to_load->GetNumber("NearPlane");
 	is_fov_horizontal = to_load->GetNumber("isFovHori");
 	camera_color_background = to_load->GetColor("BackCol");
-
+	ID = std::stoull(to_load->GetString("ID"));
 	frustum.nearPlaneDistance = near_plane;
 	frustum.farPlaneDistance = far_plane;
 	frustum.verticalFov = vertical_fov * DEGTORAD;

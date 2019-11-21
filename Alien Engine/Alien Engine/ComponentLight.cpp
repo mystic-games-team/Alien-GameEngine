@@ -107,6 +107,7 @@ void ComponentLight::SaveComponent(JSONArraypack* to_save)
 	to_save->SetColor("DiffuseColor", diffuse);
 	to_save->SetColor("AmbienColor", ambient);
 	to_save->SetBoolean("Enabled", enabled);
+	to_save->SetString("ID", std::to_string(ID));
 }
 
 void ComponentLight::LoadComponent(JSONArraypack* to_load)
@@ -114,4 +115,5 @@ void ComponentLight::LoadComponent(JSONArraypack* to_load)
 	diffuse = to_load->GetColor("DiffuseColor");
 	ambient = to_load->GetColor("AmbienColor");
 	enabled = to_load->GetBoolean("Enabled");
+	ID = std::stoull(to_load->GetString("ID"));
 }

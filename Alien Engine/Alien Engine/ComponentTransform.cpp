@@ -528,6 +528,7 @@ void ComponentTransform::SaveComponent(JSONArraypack* to_save)
 	to_save->SetQuat("Rotation", local_rotation);
 	to_save->SetFloat3("Scale", local_scale);
 	to_save->SetBoolean("ScaleNegative", is_scale_negative);
+	to_save->SetString("ID", std::to_string(ID));
 }
 
 void ComponentTransform::LoadComponent(JSONArraypack* to_load)
@@ -536,7 +537,7 @@ void ComponentTransform::LoadComponent(JSONArraypack* to_load)
 	local_rotation = to_load->GetQuat("Rotation");
 	local_scale = to_load->GetFloat3("Scale");
 	is_scale_negative = to_load->GetBoolean("ScaleNegative");
-
+	ID = std::stoull(to_load->GetString("ID"));
 	euler_rotation = local_rotation.ToEulerXYZ();
 	euler_rotation.x = RadToDeg(euler_rotation.x);
 	euler_rotation.y = RadToDeg(euler_rotation.y);
