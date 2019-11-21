@@ -168,7 +168,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 	ImGui::SameLine();
 
 	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
-	if (node->IsPrefab() && node->FindPrefabRoot() == node)  ImGui::Image((ImTextureID)App->resources->icons.prefab->id, ImVec2(15, 15));
+	if (node->IsPrefab() && node->FindPrefabRoot() == node)  ImGui::Image((ImTextureID)App->resources->icons.prefab_lock->id, ImVec2(15, 15));
 	else ImGui::Image((ImTextureID)App->resources->icons.box->id, ImVec2(15, 15));
 
 	ImGui::SameLine();

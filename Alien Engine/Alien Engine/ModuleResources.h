@@ -36,6 +36,7 @@ struct Icons {
 	ResourceTexture* once = nullptr;
 	ResourceTexture* box = nullptr;
 	ResourceTexture* prefab = nullptr;
+	ResourceTexture* prefab_lock = nullptr;
 };
 
 
