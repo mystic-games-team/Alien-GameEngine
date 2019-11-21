@@ -4,7 +4,7 @@
             {
                 "Name": "BakerHouse",
                 "FamilyNumber": 1,
-                "ID": "6301639340806550487",
+                "ID": "3408460304444394491",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -24,25 +24,25 @@
                         ],
                         "Rotation": [
                             0,
+                            -0.38268345594406128,
                             0,
-                            0,
-                            0
+                            0.92387950420379639
                         ],
                         "Scale": [
                             1,
-                            9,
+                            -1,
                             12
                         ],
-                        "ScaleNegative": false,
-                        "ID": "17971769459809525090"
+                        "ScaleNegative": true,
+                        "ID": "9936377612984026226"
                     }
                 ]
             },
             {
                 "Name": "Chimney",
                 "FamilyNumber": 2,
-                "ID": "16240980538020177098",
-                "ParentID": "6301639340806550487",
+                "ID": "17620600873619480373",
+                "ParentID": "3408460304444394491",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -70,8 +70,8 @@
                             1,
                             1
                         ],
-                        "ScaleNegative": false,
-                        "ID": "15983674658344118135"
+                        "ScaleNegative": true,
+                        "ID": "17372044497209152385"
                     },
                     {
                         "Type": 1,
@@ -81,7 +81,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "3506692611215399808",
+                        "ID": "11903075838242594430",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9208057167443305774",
@@ -96,7 +96,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "1188303852616691409",
+                        "ID": "13473621244558361083",
                         "HasTexture": true,
                         "TextureID": "1302212642455179980",
                         "Enabled": true
@@ -106,8 +106,8 @@
             {
                 "Name": "Baker_house",
                 "FamilyNumber": 2,
-                "ID": "1031429885260221353",
-                "ParentID": "6301639340806550487",
+                "ID": "18067427079009293866",
+                "ParentID": "3408460304444394491",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -135,8 +135,8 @@
                             1,
                             1
                         ],
-                        "ScaleNegative": false,
-                        "ID": "8976156538602009868"
+                        "ScaleNegative": true,
+                        "ID": "2701592415032599063"
                     },
                     {
                         "Type": 1,
@@ -146,7 +146,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "16244632189893799721",
+                        "ID": "5735840185993872641",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "11638451959622749144",
@@ -161,7 +161,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "16592091077867840443",
+                        "ID": "3045919812347988526",
                         "HasTexture": true,
                         "TextureID": "1302212642455179980",
                         "Enabled": true
