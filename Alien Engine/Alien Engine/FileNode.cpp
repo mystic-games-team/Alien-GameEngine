@@ -59,7 +59,7 @@ void FileNode::DeleteNodeData(bool delete_folder)
 
 		std::string meta_path;
 		if (type == FileDropType::PREFAB) {
-			meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + ".alienfab";
+			meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + ".alienPrefab";
 		}
 		else {
 			meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + "_meta.alien";
@@ -180,7 +180,7 @@ void FileNode::SetIcon()
 			icon = App->resources->icons.scene_file;
 			type = FileDropType::SCENE;
 		}
-		else if (App->StringCmp(extension.data(), "alienfab")) {
+		else if (App->StringCmp(extension.data(), "alienPrefab")) {
 			icon = App->resources->icons.prefab_icon;
 			type = FileDropType::PREFAB;
 		}
