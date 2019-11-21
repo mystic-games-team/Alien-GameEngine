@@ -81,8 +81,14 @@ void PanelHierarchy::PanelLogic()
 		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
 			if (obj != nullptr) {
-				if (obj->IsPrefab() && obj->FindPrefabRoot() != obj)
-					popup_prefab_restructurate = true;
+				if (obj->IsPrefab() && obj->FindPrefabRoot() != obj) {
+					if (!App->objects->prefab_scene) {
+						popup_prefab_restructurate = true;
+					}
+					else {
+						popup_move_child_outof_root_prefab_scene = true;
+					}
+				}
 				else if (!obj->is_static)
 					App->objects->ReparentGameObject(obj, App->objects->GetRoot(false));
 				else
@@ -107,6 +113,24 @@ void PanelHierarchy::PanelLogic()
 			ImGui::SetCursorPosX(95);
 			if (ImGui::Button("Ok", {50,0})) {
 				popup_prefab_restructurate = false;
+			}
+			ImGui::EndPopup();
+		}
+	}
+
+	if (popup_move_child_outof_root_prefab_scene) {
+		ImGui::OpenPopup("Respect Prefab Root");
+		ImGui::SetNextWindowSize({ 240,100 });
+		if (ImGui::BeginPopupModal("Respect Prefab Root", &popup_move_child_outof_root_prefab_scene, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::SetCursorPosX(15);
+			ImGui::Text("GameObjects can not be outside");
+			ImGui::SetCursorPosX(70);
+			ImGui::Text("the Prefab root");
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(95);
+			if (ImGui::Button("Ok", { 50,0 })) {
+				popup_move_child_outof_root_prefab_scene = false;
 			}
 			ImGui::EndPopup();
 		}

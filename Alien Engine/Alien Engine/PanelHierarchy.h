@@ -25,5 +25,7 @@ private:
 
 	bool popup_prefab_restructurate = false;
 	bool popup_leave_prefab_view = false;
+	bool popup_delete_root_prefab_scene = false;
+	bool popup_move_child_outof_root_prefab_scene = false;
 
 };
