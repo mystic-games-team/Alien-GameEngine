@@ -208,7 +208,7 @@ void PanelProject::SeeFiles()
 
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && current_active_folder->children[i]->type == FileDropType::PREFAB) {
 				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name).data()));
-				if (prefab != nullptr)
+				if (prefab != nullptr) 
 					prefab->OpenPrefabScene();
 			}
 

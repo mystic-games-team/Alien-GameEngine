@@ -103,7 +103,7 @@ void PanelScene::PanelLogic()
 				u64 ID = App->resources->GetIDFromAlienPath(path.data());
 				if (ID != 0) {
 					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
-					prefab->ConvertToGameObjects();
+					prefab->ConvertToGameObjects(App->objects->GetRoot(false));
 				}
 			}
 

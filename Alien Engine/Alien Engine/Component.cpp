@@ -29,6 +29,11 @@ void Component::SetEnable(bool enable)
 	enabled = enable;
 }
 
+void Component::ResetIDs()
+{
+	ID = App->resources->GetRandomID();
+}
+
 const ComponentType& Component::GetType() const
 {
 	return type;

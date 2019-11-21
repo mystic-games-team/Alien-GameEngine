@@ -17,9 +17,10 @@ public:
 	bool CreateMetaData(GameObject* object, const char* folder = nullptr);
 	bool ReadBaseInfo(const char* assets_file_path);
 	bool DeleteMetaData();
-
+	void Save();
 	void OpenPrefabScene();
 
 	// create GameObjects
-	void ConvertToGameObjects(int list_num = -1);
+	void ConvertToGameObjects(GameObject* parent, int list_num = -1);
+
 };

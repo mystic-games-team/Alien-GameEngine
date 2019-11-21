@@ -12,6 +12,7 @@
 #include <stack>
 
 class ReturnZ;
+class ResourcePrefab;
 
 struct Scene {
 
@@ -184,6 +185,7 @@ public:
 
 	std::vector<ComponentCamera*> game_cameras;
 	bool enable_instancies = true;
+	ResourcePrefab* prefab_opened = nullptr;
 private:
 	// root
 	GameObject* base_game_object = nullptr;

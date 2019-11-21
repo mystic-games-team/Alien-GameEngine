@@ -39,6 +39,8 @@ public:
 	virtual void SaveComponent(JSONArraypack* to_save) {}
 	virtual void LoadComponent(JSONArraypack* to_load) {}
 
+	void ResetIDs();
+
 	const ComponentType& GetType() const;
 
 public:

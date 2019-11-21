@@ -139,7 +139,8 @@ void PanelHierarchy::PanelLogic()
 			ImGui::PopStyleColor();
 			ImGui::SameLine();
 			if (ImGui::Button("Save", { 60,0 })) {
-
+				popup_leave_prefab_view = false;
+				App->objects->prefab_opened->Save();
 			}
 			//ImGui::Spacing();
 			ImGui::SetCursorPosX(12);
@@ -313,7 +314,7 @@ void PanelHierarchy::RightClickMenu()
 								ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(obj->GetPrefabID());
 								if (prefab != nullptr) {
 									(*item)->ToDelete();
-									prefab->ConvertToGameObjects(item - obj->parent->children.begin());
+									prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin());
 								}
 								break;
 							}

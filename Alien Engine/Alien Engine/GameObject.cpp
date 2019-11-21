@@ -804,6 +804,42 @@ const u64 GameObject::GetPrefabID() const
 	return prefabID;
 }
 
+void GameObject::GetObjectWithPrefabID(const u64& prefID, std::vector<GameObject*>* objs)
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			if ((*item)->IsPrefab() && (*item)->prefabID == prefID && (*item)->FindPrefabRoot() == (*item)) {
+				objs->push_back((*item));
+			}
+			else
+				(*item)->GetObjectWithPrefabID(prefID, objs);
+		}
+	}
+}
+
+void GameObject::ResetIDs()
+{
+	ID = App->resources->GetRandomID();
+
+	if (!components.empty()) {
+		std::vector<Component*>::iterator item = components.begin();
+		for (; item != components.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->ResetIDs();
+			}
+		}
+	}
+	if (!children.empty()) {
+		std::vector<GameObject*>::iterator item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->ResetIDs();
+			}
+		}
+	}
+}
+
 void GameObject::ChangeStatic(bool static_)
 {
 	std::vector<GameObject*>::iterator item = children.begin();

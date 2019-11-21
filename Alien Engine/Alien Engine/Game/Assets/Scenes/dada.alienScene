@@ -4,7 +4,7 @@
             {
                 "Name": "Light",
                 "FamilyNumber": 1,
-                "ID": "3212722836221104694",
+                "ID": "8934915254766100576",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -32,7 +32,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "16197229420147324306"
+                        "ID": "6084687546900661048"
                     },
                     {
                         "Type": 3,
@@ -49,35 +49,35 @@
                             1
                         ],
                         "Enabled": true,
-                        "ID": "17620579685416475154"
+                        "ID": "10938847696966664895"
                     }
                 ]
             },
             {
-                "Name": "ApplyScale_FBX_UnitsScale",
+                "Name": "BakerHouse",
                 "FamilyNumber": 1,
-                "ID": "17539308215234458072",
+                "ID": "18382821774351235746",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
-                "PrefabID": "16810497214806842657",
+                "PrefabID": "2611544133941303818",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
                             0,
                             0,
-                            1.3286832571029663
+                            0
                         ],
                         "Rotation": [
                             0,
                             0,
                             0,
-                            1
+                            0
                         ],
                         "Scale": [
                             1,
@@ -85,22 +85,22 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8640653648137146228"
+                        "ID": "5057284377179664750"
                     }
                 ]
             },
             {
-                "Name": "Suzanne",
+                "Name": "Chimney",
                 "FamilyNumber": 2,
-                "ID": "2517511683141453520",
-                "ParentID": "17539308215234458072",
+                "ID": "16144681885904662609",
+                "ParentID": "18382821774351235746",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
-                "PrefabID": "16810497214806842657",
+                "PrefabID": "2611544133941303818",
                 "Components": [
                     {
                         "Type": 0,
@@ -121,7 +121,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3711291765992998986"
+                        "ID": "1058607450445004267"
                     },
                     {
                         "Type": 1,
@@ -131,10 +131,10 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "716739992557825217",
+                        "ID": "1473961156258873020",
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "11858410246722425251",
+                        "MeshID": "9208057167443305774",
                         "Enabled": true
                     },
                     {
@@ -146,171 +146,46 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "12683300222101049864",
-                        "HasTexture": false,
+                        "ID": "15363563120209496252",
+                        "HasTexture": true,
+                        "TextureID": "1302212642455179980",
                         "Enabled": true
                     }
                 ]
             },
             {
-                "Name": "Cube",
-                "FamilyNumber": 3,
-                "ID": "3141722498470160148",
-                "ParentID": "2517511683141453520",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabID": "16810497214806842657",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0.40664815902709961,
-                            -1.4577322006225586
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            0.60000002384185791,
-                            0.40000000596046448,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "1182062282984505654"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "11818088036530528443",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "592836776156539174",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "4900811186958833007",
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Torus",
-                "FamilyNumber": 4,
-                "ID": "5980772515570204711",
-                "ParentID": "3141722498470160148",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabID": "16810497214806842657",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            1.3678592429332227e-28,
-                            -2.1824007034301758,
-                            0.48497453331947327
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            0.83333331346511841,
-                            1.25,
-                            0.5
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "2484271432007095363"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "15465445912060065702",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "7984396266273484062",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "1515205505089553385",
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Cone",
+                "Name": "Baker_house",
                 "FamilyNumber": 2,
-                "ID": "10671659662296978618",
-                "ParentID": "17539308215234458072",
+                "ID": "7003134561722432133",
+                "ParentID": "18382821774351235746",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
-                "PrefabID": "16810497214806842657",
+                "PrefabID": "2611544133941303818",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
                             0,
-                            0.93496304750442505,
-                            -0.36038744449615479
+                            0,
+                            0
                         ],
                         "Rotation": [
-                            -0.78172636032104492,
+                            -0.7071068286895752,
                             0,
                             0,
-                            0.62362164258956909
+                            0.70710670948028564
                         ],
                         "Scale": [
                             1,
-                            0.9999997615814209,
-                            0.38366398215293884
+                            1,
+                            1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14498095574639037062"
+                        "ID": "3861205765738363243"
                     },
                     {
                         "Type": 1,
@@ -320,10 +195,10 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "11878159859244641248",
+                        "ID": "7957445919567354292",
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "9923453711337269228",
+                        "MeshID": "11638451959622749144",
                         "Enabled": true
                     },
                     {
@@ -335,8 +210,173 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "1539449330256133194",
-                        "HasTexture": false,
+                        "ID": "5027612565279247073",
+                        "HasTexture": true,
+                        "TextureID": "1302212642455179980",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "BakerHouse",
+                "FamilyNumber": 1,
+                "ID": "18382821774351235746",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabID": "2611544133941303818",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            4.255516529083252,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5057284377179664750"
+                    }
+                ]
+            },
+            {
+                "Name": "Chimney",
+                "FamilyNumber": 2,
+                "ID": "16144681885904662609",
+                "ParentID": "18382821774351235746",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabID": "2611544133941303818",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1058607450445004267"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "1473961156258873020",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "9208057167443305774",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "15363563120209496252",
+                        "HasTexture": true,
+                        "TextureID": "1302212642455179980",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Baker_house",
+                "FamilyNumber": 2,
+                "ID": "7003134561722432133",
+                "ParentID": "18382821774351235746",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabID": "2611544133941303818",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3861205765738363243"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "7957445919567354292",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "11638451959622749144",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "5027612565279247073",
+                        "HasTexture": true,
+                        "TextureID": "1302212642455179980",
                         "Enabled": true
                     }
                 ]

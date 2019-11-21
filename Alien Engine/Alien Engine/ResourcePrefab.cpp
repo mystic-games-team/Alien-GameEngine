@@ -104,11 +104,55 @@ bool ResourcePrefab::DeleteMetaData()
 	return true;
 }
 
+void ResourcePrefab::Save()
+{
+	remove(meta_data_path.data());
+	JSON_Value* prefab_value = json_value_init_object();
+	JSON_Object* prefab_object = json_value_get_object(prefab_value);
+	json_serialize_to_file_pretty(prefab_value, meta_data_path.data());
+	App->objects->GetRoot(false)->SetPrefab(ID);
+	if (prefab_value != nullptr && prefab_object != nullptr) {
+		JSONfilepack* prefab = new JSONfilepack(meta_data_path.data(), prefab_object, prefab_value);
+		prefab->StartSave();
+
+		JSONArraypack* game_objects = prefab->InitNewArray("Prefab.GameObjects");
+
+		game_objects->SetAnotherNode();
+
+		App->objects->SaveGameObject(App->objects->GetRoot(false), game_objects, 1);
+
+		prefab->FinishSave();
+		delete prefab;
+	}
+
+	App->objects->prefab_opened = nullptr;
+	App->objects->prefab_scene = false;
+	App->objects->enable_instancies = true;
+	App->objects->SwapReturnZ(true, true);
+	App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
+	remove("Library/save_prefab_scene.alienScene");
+
+	std::vector<GameObject*> objs;
+	App->objects->GetRoot(true)->GetObjectWithPrefabID(ID, &objs);
+	if (!objs.empty()) {
+		std::vector<GameObject*>::iterator item = objs.begin();
+		for (; item != objs.end(); ++item) {
+			if (*item != nullptr && !(*item)->prefab_locked) {
+				GameObject* parent = (*item)->parent;
+				(*item)->ToDelete();
+				ConvertToGameObjects(parent);
+			}
+		}
+	}
+
+
+}
+
 void ResourcePrefab::OpenPrefabScene()
 {
 	if (App->objects->prefab_scene)
 		return;
-
+	App->objects->prefab_opened = this;
 	App->objects->enable_instancies = false;
 	App->objects->SwapReturnZ(false, false);
 	App->objects->prefab_scene = true;
@@ -116,10 +160,10 @@ void ResourcePrefab::OpenPrefabScene()
 	App->objects->DeselectObject();
 	App->objects->CreateRoot();
 
-	ConvertToGameObjects();
+	ConvertToGameObjects(App->objects->GetRoot(true));
 }
 
-void ResourcePrefab::ConvertToGameObjects(int list_num)
+void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num)
 {
 	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
@@ -147,8 +191,8 @@ void ResourcePrefab::ConvertToGameObjects(int list_num)
 		for (; item != objects_to_create.end(); ++item) {
 			game_objects->GetNode(std::get<2>(*item));
 			GameObject* obj = new GameObject();
-			if (std::get<0>(*item) == 1) { // family number == 1 so parent is the base game object
-				obj->LoadObject(game_objects, App->objects->GetRoot(false));
+			if (std::get<0>(*item) == 1) { 
+				obj->LoadObject(game_objects, parent);
 			}
 			else { // search parent
 				std::vector<GameObject*>::iterator objects = objects_created.begin();
@@ -159,14 +203,15 @@ void ResourcePrefab::ConvertToGameObjects(int list_num)
 					}
 				}
 			}
-			obj->SetPrefab(ID);
 			objects_created.push_back(obj);
 		}
-		GameObject* obj = App->objects->GetRoot(true)->children.back();
+		GameObject* obj = parent->children.back();
 		if (list_num != -1) {
-			App->objects->GetRoot(true)->children.pop_back();
-			App->objects->GetRoot(true)->children.insert(App->objects->GetRoot(true)->children.begin() + list_num, obj);
+			parent->children.pop_back();
+			parent->children.insert(parent->children.begin() + list_num, obj);
 		}
+		obj->ResetIDs();
+		obj->SetPrefab(ID);
 		App->objects->SetNewSelectedObject(obj);
 		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);
 		transform->SetLocalPosition(0, 0, 0);
