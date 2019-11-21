@@ -101,6 +101,8 @@ public:
 
 	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);
 
+	bool printing_scene = true;
+
 private:
 
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);

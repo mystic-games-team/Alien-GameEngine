@@ -43,7 +43,7 @@ bool ModuleResources::Start()
 	icons.box = App->importer->LoadEngineTexture("Configuration/EngineTextures/box.png");
 	icons.prefab = App->importer->LoadEngineTexture("Configuration/EngineTextures/prefab.png");
 	
-	//camera_mesh = App->importer->LoadEngineModels("Configuration/Engine Models/filmCamera.fbx");
+	camera_mesh = App->importer->LoadEngineModels("Configuration/Engine Models/camera.FBX");
 	//light_mesh = App->importer->LoadEngineModels("Configuration/Engine Models/Bulb.fbx");
 
 	// Load Primitives as resource

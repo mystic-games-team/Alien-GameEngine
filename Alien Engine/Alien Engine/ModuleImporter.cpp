@@ -219,7 +219,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	ret->pos = pos;
-	ret->scale = scale;
+	ret->scale = { 1,1,1 };
 	ret->rot = rot;
 	ret->name = std::string(node->mName.C_Str());
 
@@ -413,7 +413,10 @@ ResourceMesh* ModuleImporter::LoadEngineModels(const char* path)
 	const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
 		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
 
-	r_mesh = LoadNodeMesh(scene, scene->mRootNode->mChildren[0], scene->mMeshes[0], nullptr);
+	for (uint i = 0; i < scene->mNumMeshes; ++i)
+	{
+		r_mesh = LoadNodeMesh(scene, scene->mRootNode, scene->mMeshes[i], nullptr);
+	}
 
 	aiReleaseImport(scene);
 

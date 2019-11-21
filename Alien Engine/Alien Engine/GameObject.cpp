@@ -149,16 +149,6 @@ void GameObject::DrawScene()
 		if (mesh->draw_OBB)
 			mesh->DrawOBB();
 	}
-
-	if (camera != nullptr && camera->IsEnabled())
-	{
-		camera->DrawIconCamera();
-	}
-
-	if (light != nullptr && light->IsEnabled())
-	{
-		light->DrawIconLight();
-	}
 }
 
 
@@ -207,6 +197,18 @@ void GameObject::SetDrawList(std::vector<GameObject*>* to_draw, const ComponentC
 		camera_->frustum.up = transform->GetLocalRotation().WorldY();
 	}
 
+	if (App->objects->printing_scene)
+	{
+		if (camera_ != nullptr && camera_->IsEnabled())
+		{
+			camera_->DrawIconCamera();
+		}
+
+		if (light != nullptr && light->IsEnabled())
+		{
+			light->DrawIconLight();
+		}
+	}
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
