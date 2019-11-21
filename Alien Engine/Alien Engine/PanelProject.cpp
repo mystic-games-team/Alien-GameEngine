@@ -535,6 +535,28 @@ void PanelProject::DeleteNodes(FileNode* node)
 	delete node;
 }
 
+bool PanelProject::SelectFile(const char* path, FileNode* node)
+{
+	bool ret = false;
+	std::vector<FileNode*>::iterator item = node->children.begin();
+	for (; item != node->children.end(); ++item) {
+		if (*item != nullptr) {
+			if (ret)
+				return ret;
+			if ((*item)->is_file) {
+				if (App->StringCmp(std::string((*item)->path + (*item)->name).data(), path)) {
+					current_active_folder = node;
+					current_active_file = (*item);
+					ret = true;
+				}
+			}
+			else
+				ret = SelectFile(path, *item);
+		}
+	}
+	return ret;
+}
+
 void PanelProject::RefreshAllNodes()
 {
 	std::string current_folder_path = current_active_folder->path;

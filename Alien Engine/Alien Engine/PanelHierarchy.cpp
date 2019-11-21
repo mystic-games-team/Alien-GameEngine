@@ -251,7 +251,9 @@ void PanelHierarchy::RightClickMenu()
 				}
 
 				if (ImGui::MenuItem("Select Prefab Asset")) {
-					// TODO:
+					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(object_menu->GetPrefabID());
+					if (prefab != nullptr)
+						App->ui->panel_project->SelectFile(prefab->GetAssetsPath(), App->resources->assets);
 				}
 
 				if (ImGui::MenuItem("Set Prefab as the Original", nullptr, nullptr, !App->objects->prefab_scene)) {

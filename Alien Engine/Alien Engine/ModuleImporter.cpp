@@ -68,7 +68,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 		
 		const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
 			aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
-
+		
 		if (scene != nullptr) {
 			InitScene(path, scene);
 			LOG("Succesfully loaded %s", path);

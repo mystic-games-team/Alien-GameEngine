@@ -13,6 +13,7 @@ public:
 	virtual ~PanelProject();
 	void PanelLogic();
 
+	bool SelectFile(const char* path, FileNode* node);
 	void RefreshAllNodes();
 public:
 
