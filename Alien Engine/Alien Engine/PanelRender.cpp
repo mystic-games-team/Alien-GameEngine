@@ -57,7 +57,14 @@ void PanelRender::PanelLogic()
 	if (ImGui::CollapsingHeader("Background")) 
 	{
 		ImGui::Spacing();
-		ImGui::ColorEdit3("Scene Background Color", (float*)&App->camera->fake_camera->camera_color_background, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
+		if (App->objects->prefab_scene)
+		{
+			ImGui::ColorEdit3("Prefab Background Color", (float*)&App->objects->prefab_color_background, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
+		}
+		else
+		{
+			ImGui::ColorEdit3("Scene Background Color", (float*)&App->camera->fake_camera->camera_color_background, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
+		}
 		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Render Z-Buffer")) {

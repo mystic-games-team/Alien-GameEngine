@@ -367,7 +367,14 @@ bool ModuleRenderer3D::SetCameraToDraw(const ComponentCamera * camera)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearStencil(0);
-	glClearColor(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b, camera->camera_color_background.a);
+	if (App->objects->prefab_scene)
+	{
+		glClearColor(App->objects->prefab_color_background.r, App->objects->prefab_color_background.g, App->objects->prefab_color_background.b, App->objects->prefab_color_background.a);
+	}
+	else
+	{
+		glClearColor(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b, camera->camera_color_background.a);
+	}
 	glLoadIdentity();
 
 	glMatrixMode(GL_PROJECTION);

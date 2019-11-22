@@ -122,6 +122,9 @@ public:
 
 	bool prefab_scene = false;
 
+	// Prefab Scene
+	Color prefab_color_background{ 0.2f, 0.4f, 0.6f, 1.0f };
+
 	// Frustum
 	bool draw_frustum = true;
 	Color frustum_color{ 1,0,0,1 };
