@@ -180,6 +180,10 @@ void FileNode::SetIcon()
 			icon = App->resources->icons.png_file;
 			type = FileDropType::TEXTURE;;
 		}
+		else if (App->StringCmp(extension.data(), "tga")) {
+			icon = App->resources->icons.png_file;
+			type = FileDropType::TEXTURE;;
+		}
 		else if (App->StringCmp(extension.data(), "fbx")) {
 			icon = App->resources->icons.model;
 			type = FileDropType::MODEL3D;

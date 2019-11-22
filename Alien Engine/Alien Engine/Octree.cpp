@@ -203,7 +203,7 @@ void OctreeNode::SetStaticDrawList(std::vector<GameObject*>* to_draw, const Comp
 		if (!game_objects.empty()) {
 			std::vector<GameObject*>::iterator item = game_objects.begin();
 			for (; item != game_objects.end(); ++item) {
-				if (*item != nullptr) {
+				if (*item != nullptr && (*item)->IsParentEnabled()) {
 					ComponentMesh* mesh = (ComponentMesh*)(*item)->GetComponent(ComponentType::MESH);
 					if (mesh != nullptr && mesh->mesh != nullptr) {
 						if (App->renderer3D->IsInsideFrustum(camera, mesh->GetGlobalAABB())) {

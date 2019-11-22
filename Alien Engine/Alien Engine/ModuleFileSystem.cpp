@@ -566,6 +566,8 @@ const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_
 		ext_type = FileDropType::TEXTURE;
 	else if (App->StringCmp(extension.data(), "jpg"))
 		ext_type = FileDropType::TEXTURE;
+	else if (App->StringCmp(extension.data(), "tga"))
+		ext_type = FileDropType::TEXTURE;
 	else
 		LOG("Extension unknown!");
 

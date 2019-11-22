@@ -148,6 +148,8 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 		for (uint i = 0; i < ai_mesh->mNumFaces; ++i)
 		{
 			if (ai_mesh->mFaces[i].mNumIndices != 3) {
+				uint non[3] = { 0,0,0 };
+				memcpy(&ret->index[i * 3], non, 3 * sizeof(uint));
 				LOG("WARNING, geometry face with != 3 indices!");
 			}
 			else {
@@ -164,7 +166,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 		ret->center_point_normal = new float[ai_mesh->mNumFaces * 3];
 		ret->center_point = new float[ai_mesh->mNumFaces * 3];
 		ret->num_faces = ai_mesh->mNumFaces;
-		for (uint i = 0; i < ret->num_index; i += 3)
+		for (uint i = 0; i < ret->num_index; i+=3)
 		{
 			uint index1 = ret->index[i] * 3;
 			uint index2 = ret->index[i + 1] * 3;
@@ -254,6 +256,10 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 
 		texture->CreateMetaData();
 		App->resources->AddNewFileNode(path, true);
+
+		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+			ApplyTextureToSelectedObject(texture);
+		}
 	}
 	
 	return texture;
