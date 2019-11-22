@@ -254,7 +254,12 @@ bool ComponentTransform::DrawInspector()
 
 			if (ImGui::Button("Save Prefab as the Original"))
 			{
-
+				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(game_object_attached->GetPrefabID());
+				if (prefab != nullptr) {
+					prefab->Save(game_object_attached->FindPrefabRoot());
+					App->objects->SetNewSelectedObject(game_object_attached);
+					return false;
+				}
 			}
 
 			ImGui::Spacing();

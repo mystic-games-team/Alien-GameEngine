@@ -182,7 +182,7 @@ void PanelHierarchy::PanelLogic()
 			ImGui::SameLine();
 			if (ImGui::Button("Save", { 60,0 })) {
 				popup_leave_prefab_view = false;
-				App->objects->prefab_opened->Save();
+				App->objects->prefab_opened->Save(App->objects->GetRoot(false));
 			}
 			//ImGui::Spacing();
 			ImGui::SetCursorPosX(12);

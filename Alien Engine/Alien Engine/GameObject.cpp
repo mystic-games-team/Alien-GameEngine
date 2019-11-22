@@ -749,8 +749,6 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 			components_to_load->GetAnotherNode();
 		}
 	}
-	if (selected)
-		App->objects->SetNewSelectedObject(this);
 
 	if (is_static) {
 		App->objects->octree.Insert(this, false);

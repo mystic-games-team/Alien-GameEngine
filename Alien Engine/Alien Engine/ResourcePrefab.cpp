@@ -106,13 +106,13 @@ bool ResourcePrefab::DeleteMetaData()
 	return true;
 }
 
-void ResourcePrefab::Save()
+void ResourcePrefab::Save(GameObject* prefab_root)
 {
 	remove(meta_data_path.data());
 	JSON_Value* prefab_value = json_value_init_object();
 	JSON_Object* prefab_object = json_value_get_object(prefab_value);
 	json_serialize_to_file_pretty(prefab_value, meta_data_path.data());
-	App->objects->GetRoot(false)->SetPrefab(ID);
+	prefab_root->SetPrefab(ID);
 	if (prefab_value != nullptr && prefab_object != nullptr) {
 		JSONfilepack* prefab = new JSONfilepack(meta_data_path.data(), prefab_object, prefab_value);
 		prefab->StartSave();
@@ -121,32 +121,33 @@ void ResourcePrefab::Save()
 
 		game_objects->SetAnotherNode();
 
-		App->objects->SaveGameObject(App->objects->GetRoot(false), game_objects, 1);
+		App->objects->SaveGameObject(prefab_root, game_objects, 1);
 
 		prefab->FinishSave();
 		delete prefab;
 	}
-
-	App->objects->prefab_opened = nullptr;
-	App->objects->prefab_scene = false;
-	App->objects->enable_instancies = true;
-	App->objects->SwapReturnZ(true, true);
-	App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
-	remove("Library/save_prefab_scene.alienScene");
+	if (App->objects->prefab_scene) {
+		App->objects->prefab_opened = nullptr;
+		App->objects->prefab_scene = false;
+		App->objects->enable_instancies = true;
+		App->objects->SwapReturnZ(true, true);
+		App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
+		remove("Library/save_prefab_scene.alienScene");
+	}
 	App->objects->ignore_cntrlZ = true;
 	std::vector<GameObject*> objs;
 	App->objects->GetRoot(true)->GetObjectWithPrefabID(ID, &objs);
 	if (!objs.empty()) {
 		std::vector<GameObject*>::iterator item = objs.begin();
 		for (; item != objs.end(); ++item) {
-			if (*item != nullptr && !(*item)->prefab_locked) {
+			if (*item != nullptr && !(*item)->prefab_locked && (*item) != prefab_root) {
 				GameObject* parent = (*item)->parent;
 				std::vector<GameObject*>::iterator iter = parent->children.begin();
 				for (; iter != parent->children.end(); ++iter) {
 					if (*iter == (*item)) {
 						(*item)->ToDelete();
 						float3 pos = static_cast<ComponentTransform*>((*item)->GetComponent(ComponentType::TRANSFORM))->GetLocalPosition();
-						ConvertToGameObjects(parent, iter - parent->children.begin(), pos);
+						ConvertToGameObjects(parent, iter - parent->children.begin(), pos, false);
 						break;
 					}
 				}
@@ -154,7 +155,6 @@ void ResourcePrefab::Save()
 		}
 	}
 	App->objects->ignore_cntrlZ = false;
-
 }
 
 void ResourcePrefab::OpenPrefabScene()
@@ -171,7 +171,7 @@ void ResourcePrefab::OpenPrefabScene()
 	ConvertToGameObjects(App->objects->GetRoot(true));
 }
 
-void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, float3 pos)
+void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, float3 pos, bool set_selected)
 {
 	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
@@ -220,7 +220,8 @@ void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, floa
 		}
 		obj->ResetIDs();
 		obj->SetPrefab(ID);
-		App->objects->SetNewSelectedObject(obj);
+		if (set_selected)
+			App->objects->SetNewSelectedObject(obj);
 		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);
 		transform->SetLocalPosition(pos.x, pos.y, pos.z);
 		delete prefab;
