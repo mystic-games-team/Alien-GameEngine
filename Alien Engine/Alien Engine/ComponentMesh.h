@@ -19,7 +19,7 @@ public:
 	void DrawMesh();
 	void DrawVertexNormals();
 	void DrawFaceNormals();
-	void DrawInspector();
+	bool DrawInspector();
 	void DrawGlobalAABB();
 	void DrawOBB();
 

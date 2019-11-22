@@ -72,7 +72,7 @@ ComponentCamera::~ComponentCamera()
 	delete mesh_camera;
 }
 
-void ComponentCamera::DrawInspector()
+bool ComponentCamera::DrawInspector()
 {
 	static bool en;
 	ImGui::PushID(this);
@@ -207,6 +207,8 @@ void ComponentCamera::DrawInspector()
 
 	else
 		RightClickMenu("Camera");
+
+	return true;
 }
 
 void ComponentCamera::Reset()

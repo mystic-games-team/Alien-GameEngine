@@ -27,7 +27,7 @@ public:
 
 	bool IsEnabled();
 	void SetEnable(bool enable);
-	virtual void DrawInspector() {}
+	virtual bool DrawInspector() { return true; }
 
 	virtual void PreUpdate() {}
 	virtual void Update() {}

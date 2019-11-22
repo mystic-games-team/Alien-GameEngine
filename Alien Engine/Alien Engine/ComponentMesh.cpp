@@ -208,7 +208,7 @@ void ComponentMesh::DrawFaceNormals()
 	}
 }
 
-void ComponentMesh::DrawInspector()
+bool ComponentMesh::DrawInspector()
 {
 	static bool check;
 
@@ -282,6 +282,8 @@ void ComponentMesh::DrawInspector()
 	}
 	else
 		RightClickMenu("Mesh");
+
+	return true;
 }
 
 void ComponentMesh::DrawGlobalAABB()

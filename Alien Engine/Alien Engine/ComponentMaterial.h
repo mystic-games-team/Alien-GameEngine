@@ -12,7 +12,7 @@ public:
 	virtual ~ComponentMaterial();
 	
 	void BindTexture();
-	void DrawInspector();
+	bool DrawInspector();
 
 	void Reset();
 	void SetComponent(Component* component);

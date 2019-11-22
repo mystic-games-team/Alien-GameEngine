@@ -33,7 +33,7 @@ void ComponentLight::LightLogic()
 	glLightfv(light_id, GL_DIFFUSE, &diffuse);
 }
 
-void ComponentLight::DrawInspector()
+bool ComponentLight::DrawInspector()
 {
 	static bool en;
 	ImGui::PushID(this);
@@ -91,6 +91,8 @@ void ComponentLight::DrawInspector()
 	}
 	else
 		RightClickMenu("Light");
+
+	return true;
 }
 
 void ComponentLight::OnDisable()

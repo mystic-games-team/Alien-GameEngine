@@ -11,7 +11,7 @@ public:
 
 	void LightLogic();
 
-	void DrawInspector();
+	bool DrawInspector();
 	void OnDisable();
 
 	void Reset();

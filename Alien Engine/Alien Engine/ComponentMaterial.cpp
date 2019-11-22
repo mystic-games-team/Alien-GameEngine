@@ -29,7 +29,7 @@ void ComponentMaterial::BindTexture()
 	
 }
 
-void ComponentMaterial::DrawInspector()
+bool ComponentMaterial::DrawInspector()
 {
 	static bool en;
 	ImGui::PushID(this);
@@ -97,7 +97,7 @@ void ComponentMaterial::DrawInspector()
 				ImGui::PopStyleColor();
 				ImGui::PopStyleColor();
 				ImGui::PopStyleColor();
-				return;
+				return true;
 			}
 
 			ImGui::PopStyleColor();
@@ -191,6 +191,7 @@ void ComponentMaterial::DrawInspector()
 	else
 		RightClickMenu("Material");
 
+	return true;
 }
 
 void ComponentMaterial::Reset()

@@ -31,12 +31,15 @@ void PanelInspector::PanelLogic()
 		{
 			if (*item != nullptr)
 			{
-				(*item)->DrawInspector();
-				if (!(*item)->not_destroy) {
-					to_destroy = (*item);
-					delete_panel = &(*item)->not_destroy;
-					*delete_panel = !(*delete_panel);
+				if ((*item)->DrawInspector()) {
+					if (!(*item)->not_destroy) {
+						to_destroy = (*item);
+						delete_panel = &(*item)->not_destroy;
+						*delete_panel = !(*delete_panel);
+					}
 				}
+				else 
+					break;
 			}
 		}
 		ButtonAddComponent();

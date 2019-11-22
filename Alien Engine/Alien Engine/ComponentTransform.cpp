@@ -167,7 +167,7 @@ void ComponentTransform::RecalculateTransform()
 }
 
 
-void ComponentTransform::DrawInspector()
+bool ComponentTransform::DrawInspector()
 {
 	ImGui::Spacing();
 
@@ -209,31 +209,28 @@ void ComponentTransform::DrawInspector()
 		{
 			ImGui::Spacing();
 
-			GameObject* game_object = game_object_attached->FindPrefabRoot();
-			ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(game_object->GetPrefabID());
 			if (ImGui::Button("Open Prefab"))
 			{
-				//if (prefab != nullptr)
-				//{
-				//	prefab->OpenPrefabScene();
-				//	ImGui::End();
-				//	return;
-				/*}*/
+				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(game_object_attached->GetPrefabID());
+				if (prefab != nullptr) {
+					prefab->OpenPrefabScene();
+					return false;
+				}
 				
 			}
 
 			ImGui::Spacing();
 
-			if (ImGui::Checkbox("Prefab Locked", &game_object->prefab_locked))
+			if (ImGui::Checkbox("Prefab Locked", &game_object_attached->prefab_locked))
 			{
-				game_object->LockPrefab(game_object->prefab_locked);
+				game_object_attached->FindPrefabRoot()->LockPrefab(game_object_attached->prefab_locked);
 			}
 
 			ImGui::Spacing();
 
 			if (ImGui::Button("Unpack Prefab"))
 			{
-				game_object->UnpackPrefab();
+				game_object_attached->FindPrefabRoot()->UnpackPrefab();
 			}
 
 			ImGui::Spacing();
@@ -546,6 +543,7 @@ void ComponentTransform::DrawInspector()
 			}
 		}
 	}
+	return true;
 }
 
 void ComponentTransform::SetScaleNegative(const bool& negative)

@@ -12,7 +12,7 @@ public:
 	ComponentCamera(GameObject* attach);
 	virtual ~ComponentCamera();
 
-	void DrawInspector();
+	bool DrawInspector();
 
 	void Reset();
 	void SetComponent(Component* component);
