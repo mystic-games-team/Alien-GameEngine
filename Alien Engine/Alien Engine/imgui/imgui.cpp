@@ -8181,6 +8181,12 @@ bool ImGui::IsPopupOpen(ImGuiID id)
     return g.OpenPopupStack.Size > g.BeginPopupStack.Size && g.OpenPopupStack[g.BeginPopupStack.Size].PopupId == id;
 }
 
+bool ImGui::IsAnyPopupActive()
+{
+    ImGuiContext& g = *GImGui;
+    return g.OpenPopupStack.Size > g.BeginPopupStack.Size;
+}
+
 bool ImGui::IsPopupOpen(const char* str_id)
 {
     ImGuiContext& g = *GImGui;
