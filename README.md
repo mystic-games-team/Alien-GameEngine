@@ -22,18 +22,29 @@ Alien Engine is a Game Engine made by Víctor Segura Blanco and Oriol Capdevila 
 * R: Scale Mode
 * Shift + W: GLOBAL TRANSFORM MODE
 * Shift + L: LOCAL TRANSFORM MODE
+
 ## Shortcuts
 
 * Left Ctrl / Rigth Ctrl + A: Panel About
+* Left Ctrl / Rigth Ctrl + I: Panel Project
 * Left Ctrl / Rigth Ctrl + O: Panel Config
 * Left Ctrl / Rigth Ctrl + T: Panel Console
 * Left Ctrl / Rigth Ctrl + R: Panel Render
-* Left Ctrl / Rigth Ctrl + S: Panel Scene
 * Left Ctrl / Rigth Ctrl + U: Panel Hierarchy
 * Left Ctrl / Rigth Ctrl + P: Panel Create Object
 * Left Ctrl / Rigth Ctrl + M: Panel Inspector
+* Left Ctrl / Rigth Ctrl + E: Panel Scene
 * Left Ctrl / Rigth Ctrl + D: Panel ImGui Demo
 * Left Ctrl / Rigth Ctrl + B: Edit Layouts
+* Left Ctrl / Rigth Ctrl + G: Panel Game
+
+* Left Ctrl / Rigth Ctrl + S: Save Scene
+* Left Ctrl / Rigth Ctrl + N: New Scene
+* Left Ctrl / Rigth Ctrl + L: Load Scene
+* Left Alt / Rigth Alt + S: Save Scene as...
+
+* Left Ctrl / Rigth Ctrl + Z: Reverse Action
+* Left Ctrl / Rigth Ctrl + Y: Advance Action
 
 * Left Alt / Rigth Alt + F1: Report Bug
 

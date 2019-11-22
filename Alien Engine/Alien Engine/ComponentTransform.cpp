@@ -262,7 +262,6 @@ bool ComponentTransform::DrawInspector()
 			}
 
 			ImGui::Spacing();
-			//ImGui::Separator();
 			ImGui::Spacing();
 
 			ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.06f);
