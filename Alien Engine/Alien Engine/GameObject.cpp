@@ -190,8 +190,10 @@ void GameObject::SetDrawList(std::vector<GameObject*>* to_draw, const ComponentC
 	}
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
-	if (camera_ != nullptr && camera_->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) {
-		camera_->DrawFrustum();
+	if (camera_ != nullptr && camera_->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) 
+	{
+		if (App->objects->printing_scene)
+			camera_->DrawFrustum();
 		camera_->frustum.pos = transform->GetGlobalPosition();
 		camera_->frustum.front = transform->GetLocalRotation().WorldZ();
 		camera_->frustum.up = transform->GetLocalRotation().WorldY();
