@@ -19,6 +19,7 @@ struct Icons {
 	ResourceTexture* jpg_file = nullptr;
 	ResourceTexture* png_file = nullptr;
 	ResourceTexture* dds_file = nullptr;
+	ResourceTexture* tga_file = nullptr;
 	ResourceTexture* folder = nullptr;
 	ResourceTexture* prefab_icon = nullptr;
 	ResourceTexture* model = nullptr;

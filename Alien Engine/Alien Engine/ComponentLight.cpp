@@ -79,16 +79,11 @@ bool ComponentLight::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
+
 		ImGui::PushID("printiconlight");
 		ImGui::Checkbox("Print Icon", &print_icon);
 		ImGui::PopID();
-		ImGui::SameLine();
-		ImGui::Text("|");
-		ImGui::SameLine();
-		ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.42f);
-		ImGui::PushID("iconcolorlight");
-		ImGui::ColorEdit3("Icon Color", &bulb_icon_color, ImGuiColorEditFlags_Float);
-		ImGui::PopID();
+
 		ImGui::Spacing();
 		ImGui::Separator();
 	}
@@ -129,7 +124,6 @@ void ComponentLight::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetString("ID", std::to_string(ID));
 	to_save->SetBoolean("PrintIcon", print_icon);
-	to_save->SetColor("IconColor", bulb_icon_color);
 }
 
 void ComponentLight::LoadComponent(JSONArraypack* to_load)
@@ -139,7 +133,6 @@ void ComponentLight::LoadComponent(JSONArraypack* to_load)
 	enabled = to_load->GetBoolean("Enabled");
 	ID = std::stoull(to_load->GetString("ID"));
 	print_icon = to_load->GetBoolean("PrintIcon");
-	bulb_icon_color = to_load->GetColor("IconColor");
 }
 
 void ComponentLight::DrawIconLight()
@@ -152,7 +145,7 @@ void ComponentLight::DrawIconLight()
 		transform->SetLocalScale(0.2f, 0.18f, 0.2f);
 		transform->SetLocalPosition(pos.x - 0.133f, pos.y, pos.z);
 		glDisable(GL_LIGHTING);
-		glColor3f(bulb_icon_color.r, bulb_icon_color.g, bulb_icon_color.b);
+		glColor3f(ambient.r, ambient.g, ambient.b);
 		bulb->DrawPolygon();
 		glEnable(GL_LIGHTING);
 		transform->SetLocalScale(scale.x, scale.y, scale.z);

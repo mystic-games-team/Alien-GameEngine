@@ -181,7 +181,7 @@ void FileNode::SetIcon()
 			type = FileDropType::TEXTURE;;
 		}
 		else if (App->StringCmp(extension.data(), "tga")) {
-			icon = App->resources->icons.png_file;
+			icon = App->resources->icons.tga_file;
 			type = FileDropType::TEXTURE;;
 		}
 		else if (App->StringCmp(extension.data(), "fbx")) {

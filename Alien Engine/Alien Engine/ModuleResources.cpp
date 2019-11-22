@@ -26,6 +26,7 @@ bool ModuleResources::Start()
 	icons.jpg_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_jpg.png");
 	icons.png_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_png.png");
 	icons.dds_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_dds.png");
+	icons.tga_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_tga.png");
 	icons.folder = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_folder.png");
 	icons.prefab_icon = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_prefab.png");
 	icons.model = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_model.png");
