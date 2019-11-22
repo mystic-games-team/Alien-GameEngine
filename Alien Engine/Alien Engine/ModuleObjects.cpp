@@ -29,6 +29,7 @@ bool ModuleObjects::Init()
 	base_game_object->ID = 0;
 	base_game_object->is_static = true;
 	//base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
+	LoadScene("Assets/Scenes/Assigment2_scene.alienScene");
 
 	return true;
 }
