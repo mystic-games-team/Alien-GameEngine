@@ -22,7 +22,7 @@ PanelScene::~PanelScene()
 
 void PanelScene::PanelLogic()
 {
-	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
+	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || ImGuizmo::IsOver()) {
 		ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove);
 	}
 	else
