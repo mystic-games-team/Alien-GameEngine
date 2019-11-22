@@ -75,15 +75,18 @@ bool ComponentLight::DrawInspector()
 		else if (!cntl_Z && ImGui::IsMouseReleased(0)) {
 			cntl_Z = true;
 		}
+
+		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-		ImGui::PushID("fnjshdfoiwnec`q");
+		ImGui::PushID("printiconlight");
 		ImGui::Checkbox("Print Icon", &print_icon);
 		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::Text("|");
 		ImGui::SameLine();
-		ImGui::PushID("kfdsifqnpw");
+		ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.42f);
+		ImGui::PushID("iconcolorlight");
 		ImGui::ColorEdit3("Icon Color", &bulb_icon_color, ImGuiColorEditFlags_Float);
 		ImGui::PopID();
 		ImGui::Spacing();
