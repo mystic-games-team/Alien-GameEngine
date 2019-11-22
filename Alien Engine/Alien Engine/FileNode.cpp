@@ -115,7 +115,15 @@ void FileNode::RemoveResourceOfGameObjects()
 		SDL_assert((uint)FileDropType::UNKNOWN == 5);
 		switch (type) {
 		case FileDropType::SCENE:
-			// I think nothing should happen with scene
+			static char curr_dir[MAX_PATH];
+			GetCurrentDirectoryA(MAX_PATH, curr_dir);
+			if (App->StringCmp(App->objects->current_scene.full_path.data(), std::string(curr_dir + std::string("/") + path + name).data())) {
+				App->objects->CreateRoot();
+				App->objects->current_scene.name_without_extension = "Untitled*";
+				App->objects->current_scene.full_path = "Untitled*";
+				App->objects->current_scene.need_to_save = false;
+				App->objects->current_scene.is_untitled = true;
+			}
 			break;
 		case FileDropType::SCRIPT:
 			// TODO:
