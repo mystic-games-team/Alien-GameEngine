@@ -61,6 +61,10 @@ ComponentCamera::~ComponentCamera()
 				else
 					App->renderer3D->actual_game_camera = nullptr;
 			}
+			if (App->renderer3D->selected_game_camera == this)
+			{
+				App->renderer3D->selected_game_camera = nullptr;
+			}
 			break;
 		}
 	}
