@@ -91,7 +91,7 @@ The user can check the editor options activating them in the renderer window.
 
 * Light and Camera Icons in Scene: Icons that show where this components are and help in the mousepicking of them.
 
-* Octree: Optimizing method for engine frunctions.
+* Octree: To view octree, check box in the panel renderer in the octree options must be active and at least one gameobject with mesh must be static. 
 
 ## Panels
 
