@@ -26,6 +26,7 @@ void PanelInspector::PanelLogic()
 		App->camera->is_scene_hovered = false;
 	if (App->objects->GetSelectedObject() != nullptr)
 	{
+		static bool draw_add = true;
 		std::vector<Component*>::iterator item = App->objects->GetSelectedObject()->components.begin();
 		for (; item != App->objects->GetSelectedObject()->components.end(); ++item)
 		{
@@ -38,11 +39,16 @@ void PanelInspector::PanelLogic()
 						*delete_panel = !(*delete_panel);
 					}
 				}
-				else 
+				else {
+					draw_add = false;
 					break;
+				}
 			}
 		}
-		ButtonAddComponent();
+		if (draw_add)
+			ButtonAddComponent();
+		else
+			draw_add = true;
 	}
 
 	ImGui::End();

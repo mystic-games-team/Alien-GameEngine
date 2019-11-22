@@ -216,7 +216,6 @@ bool ComponentTransform::DrawInspector()
 					prefab->OpenPrefabScene();
 					return false;
 				}
-				
 			}
 
 			ImGui::Spacing();
@@ -237,22 +236,20 @@ bool ComponentTransform::DrawInspector()
 
 			if (ImGui::Button("Set Prefab as the Original "))
 			{
-				//if (game_object != nullptr) {
-				//	std::vector<GameObject*>::iterator item = game_object->parent->children.begin();
-				//	for (; item != game_object->parent->children.end(); ++item) 
-				//	{
-				//		if (*item != nullptr && *item == game_object) 
-				//		{
-				//			ResourcePrefab* prefab_ = (ResourcePrefab*)App->resources->GetResourceWithID(game_object->GetPrefabID());
-				//			if (prefab_ != nullptr) 
-				//			{
-				//				(*item)->ToDelete();
-				//				prefab_->ConvertToGameObjects(game_object->parent, item - game_object->parent->children.begin());
-				//			}
-				//			break;
-				//		}
-				//	}
-				//}
+				GameObject* obj =game_object_attached->FindPrefabRoot();
+				if (obj != nullptr) {
+					std::vector<GameObject*>::iterator item = obj->parent->children.begin();
+					for (; item != obj->parent->children.end(); ++item) {
+						if (*item != nullptr && *item == obj) {
+							ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(obj->GetPrefabID());
+							if (prefab != nullptr) {
+								(*item)->ToDelete();
+								prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin());
+							}
+							return false;
+						}
+					}
+				}
 			}
 
 			if (ImGui::Button("Save Prefab as the Original"))
