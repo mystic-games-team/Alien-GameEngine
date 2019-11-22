@@ -6,6 +6,7 @@
 #include "ReturnZ.h"
 #include "ComponentMesh.h"
 #include "ResourcePrefab.h"
+#include "PanelProject.h"
 
 ComponentTransform::ComponentTransform(GameObject* attach) : Component(attach)
 {
@@ -208,6 +209,7 @@ bool ComponentTransform::DrawInspector()
 		if (ImGui::CollapsingHeader("Prefab Options", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Spacing();
+			ImGui::Spacing();
 
 			if (ImGui::Button("Open Prefab"))
 			{
@@ -218,7 +220,18 @@ bool ComponentTransform::DrawInspector()
 				}
 			}
 
-			ImGui::Spacing();
+			ImGui::SameLine();
+			ImGui::Text("|");
+			ImGui::SameLine();
+
+			if (ImGui::Button("Unpack Prefab"))
+			{
+				game_object_attached->FindPrefabRoot()->UnpackPrefab();
+			}
+
+			ImGui::SameLine();
+			ImGui::Text("|");
+			ImGui::SameLine();
 
 			if (ImGui::Checkbox("Prefab Locked", &game_object_attached->prefab_locked))
 			{
@@ -226,15 +239,34 @@ bool ComponentTransform::DrawInspector()
 			}
 
 			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
 
-			if (ImGui::Button("Unpack Prefab"))
+			ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.1f);
+			if (ImGui::Button("Select Prefab Root"))
 			{
-				game_object_attached->FindPrefabRoot()->UnpackPrefab();
+				App->objects->SetNewSelectedObject(game_object_attached->FindPrefabRoot());
+				App->camera->Focus();
+				return false;
+			}
+
+			ImGui::SameLine();
+			ImGui::Text("|");
+			ImGui::SameLine();
+
+			if (ImGui::Button("Select Prefab Asset"))
+			{
+				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(game_object_attached->GetPrefabID());
+				if (prefab != nullptr)
+					App->ui->panel_project->SelectFile(prefab->GetAssetsPath(), App->resources->assets);
 			}
 
 			ImGui::Spacing();
+			//ImGui::Separator();
+			ImGui::Spacing();
 
-			if (ImGui::Button("Set Prefab as the Original "))
+			ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.06f);
+			if (ImGui::Button("Set as the Original "))
 			{
 				GameObject* obj =game_object_attached->FindPrefabRoot();
 				if (obj != nullptr) {
@@ -252,7 +284,12 @@ bool ComponentTransform::DrawInspector()
 				}
 			}
 
-			if (ImGui::Button("Save Prefab as the Original"))
+			ImGui::SameLine();
+			ImGui::Text("|");
+			ImGui::SameLine();
+
+			/*ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.25);*/
+			if (ImGui::Button("Save as the Original"))
 			{
 				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(game_object_attached->GetPrefabID());
 				if (prefab != nullptr) {
