@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "ReturnZ.h"
 #include "ComponentMesh.h"
+#include "PanelScene.h"
 #include "ResourcePrefab.h"
 
 ComponentTransform::ComponentTransform(GameObject* attach) : Component(attach)
@@ -630,15 +631,23 @@ void ComponentTransform::SetLocalTransform(float4x4 &transform_matrix)
 	RecalculateTransform();
 }
 
-void ComponentTransform::SetGlobalTransformation(const float4x4& global_transformation)
+void ComponentTransform::SetGlobalTransformation(float4x4 global_transformation)
 {
 	float3 position, scale;
 	Quat rotation;
 	global_transformation.Decompose(position, rotation, scale);
 	
-	this->local_position = position;
-	this->local_rotation = rotation;
-	this->local_scale = scale;
+	if (App->ui->panel_scene->guizmo_operation == ImGuizmo::OPERATION::SCALE) { // why... i would like to know it...
+		this->local_scale = scale;
+	}
+	else {
+		this->local_position = position;
+		this->local_rotation = rotation;
+		euler_rotation = local_rotation.ToEulerXYZ();
+		euler_rotation.x = RadToDeg(euler_rotation.x);
+		euler_rotation.y = RadToDeg(euler_rotation.y);
+		euler_rotation.z = RadToDeg(euler_rotation.z);
+	}
 
 	RecalculateTransform();
 }

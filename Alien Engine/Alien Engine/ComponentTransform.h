@@ -26,7 +26,7 @@ public:
 	const Quat& GetGlobalRotation() const;
 	
 	void SetLocalTransform(float4x4 &transform_matrix);
-	void SetGlobalTransformation(const float4x4& global_transformation);
+	void SetGlobalTransformation(float4x4 global_transformation);
 
 	bool DrawInspector();
 
