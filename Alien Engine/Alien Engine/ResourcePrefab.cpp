@@ -1,6 +1,7 @@
 #include "ResourcePrefab.h"
 #include "Application.h"
 #include "ModuleObjects.h"
+#include "ComponentLight.h"
 #include "ComponentTransform.h"
 
 
@@ -167,7 +168,6 @@ void ResourcePrefab::OpenPrefabScene()
 	App->objects->SaveScene("Library/save_prefab_scene.alienScene", false);
 	App->objects->DeselectObject();
 	App->objects->CreateRoot();
-
 	ConvertToGameObjects(App->objects->GetRoot(true));
 }
 

@@ -128,7 +128,12 @@ update_status ModuleObjects::PostUpdate(float dt)
 					(*item)->SetDrawList(&to_draw, frustum_camera);
 				}
 			}
-
+			
+			if (prefab_scene) {
+				glEnable(GL_LIGHT0);
+				static GLfloat f[4] = { 1,1,1,1 };
+				glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, f);
+			}
 			item = to_draw.begin();
 			for (; item != to_draw.end(); ++item) {
 				if (*item != nullptr) {
