@@ -138,6 +138,7 @@ can remove or rename layouts).
 	* Panel Preview Camera
 	* Scene Guizmos
 	* Engine Icons
+	* Camera and Light 3D icons in scene
 
 ## License
 
