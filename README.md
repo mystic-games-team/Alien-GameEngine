@@ -1,6 +1,7 @@
 # ALIEN ENGINE
 
 Alien Engine is a Game Engine made by Víctor Segura Blanco and Oriol Capdevila Salinas, two studens from CITM University, Terrassa.
+The user can check the editor options activating them in the renderer window.
 
 ## Github Links
 
@@ -106,6 +107,21 @@ can change parents.
 * Panel Layout: Two types of panels, one to create a new layout and the other with info about all layouts (here you
 can remove or rename layouts).
 * Panel About: Base info about creators of this software and libraries used.
+
+## Tasks by Member Assigment 2
+
+* Oriol Capdevila:
+
+* Víctor Segura:
+
+	* AABB and OBB
+	* Camera as component
+	* Frustum 
+	* Frustum Culling
+	* Panel Game
+	* Panel Preview Camera
+	* Scene Guizmos
+	* Scene Icons
 
 ## License
 
