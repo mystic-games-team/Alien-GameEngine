@@ -522,25 +522,25 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		else if (meshZ->is_primitive) {
 			switch (meshZ->type) {
 			case PrimitiveType::CUBE: {
-				mesh->mesh = App->resources->cube;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::CUBE);
 				break; }
 			case PrimitiveType::SPHERE_ALIEN: {
-				mesh->mesh = App->resources->sphere;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::SPHERE_ALIEN);
 				break; }
 			case PrimitiveType::DODECAHEDRON: {
-				mesh->mesh = App->resources->dodecahedron;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::DODECAHEDRON);
 				break; }
 			case PrimitiveType::ICOSAHEDRON: {
-				mesh->mesh = App->resources->icosahedron;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::ICOSAHEDRON);
 				break; }
 			case PrimitiveType::OCTAHEDRON: {
-				mesh->mesh = App->resources->octahedron;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::OCTAHEDRON);
 				break; }
 			case PrimitiveType::ROCK: {
-				mesh->mesh = App->resources->rock;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::ROCK);
 				break; }
 			case PrimitiveType::TORUS: {
-				mesh->mesh = App->resources->torus;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::TORUS);
 				break; }
 			}
 		}

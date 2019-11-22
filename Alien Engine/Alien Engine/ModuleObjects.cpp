@@ -801,31 +801,31 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 	
 	switch (type) {
 	case PrimitiveType::CUBE: {
-		mesh->mesh = App->resources->cube;
+		mesh->mesh = App->resources->GetPrimitive(PrimitiveType::CUBE);
 		object->SetName("Cube");
 		break; }
 	case PrimitiveType::DODECAHEDRON: {
-		mesh->mesh = App->resources->dodecahedron;
+		mesh->mesh = App->resources->GetPrimitive(PrimitiveType::DODECAHEDRON);
 		object->SetName("Dodecahedron");
 		break; }
 	case PrimitiveType::ICOSAHEDRON: {
-		mesh->mesh = App->resources->icosahedron;
+		mesh->mesh = App->resources->GetPrimitive(PrimitiveType::ICOSAHEDRON);
 		object->SetName("Icosahedron");
 		break; }
 	case PrimitiveType::OCTAHEDRON: {
-		mesh->mesh = App->resources->octahedron;
+		mesh->mesh = App->resources->GetPrimitive(PrimitiveType::OCTAHEDRON);
 		object->SetName("Octahedron");
 		break; }
 	case PrimitiveType::ROCK: {
-		mesh->mesh = App->resources->rock;
+		mesh->mesh = App->resources->GetPrimitive(PrimitiveType::ROCK);
 		object->SetName("Rock");
 		break; }
 	case PrimitiveType::SPHERE_ALIEN: {
-		mesh->mesh = App->resources->sphere;
+		mesh->mesh = App->resources->GetPrimitive(PrimitiveType::SPHERE_ALIEN);
 		object->SetName("Sphere");
 		break; }
 	case PrimitiveType::TORUS: {
-		mesh->mesh = App->resources->torus;
+		mesh->mesh = App->resources->GetPrimitive(PrimitiveType::TORUS);
 		object->SetName("Torus");
 		break; }
 	default:

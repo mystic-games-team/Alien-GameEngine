@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "ReturnZ.h"
 #include "ComponentMesh.h"
+#include "PanelScene.h"
 #include "ResourcePrefab.h"
 #include "PanelProject.h"
 
@@ -672,9 +673,36 @@ void ComponentTransform::SetGlobalTransformation(const float4x4& global_transfor
 	Quat rotation;
 	global_transformation.Decompose(position, rotation, scale);
 	
+	if (App->ui->panel_scene->guizmo_operation == ImGuizmo::OPERATION::SCALE) { // why... i would like to know it...
+		this->local_scale = scale;
+		LookScale();
+	}
+	else {
+		this->local_position = position;
+		this->local_rotation = rotation;
+		euler_rotation = local_rotation.ToEulerXYZ();
+		euler_rotation.x = RadToDeg(euler_rotation.x);
+		euler_rotation.y = RadToDeg(euler_rotation.y);
+		euler_rotation.z = RadToDeg(euler_rotation.z);
+	}
+
+	RecalculateTransform();
+}
+
+void ComponentTransform::Reparent(const float4x4& transform)
+{
+	float3 position, scale;
+	Quat rotation;
+	transform.Decompose(position, rotation, scale);
+
+	this->local_scale = scale;
+	LookScale();
 	this->local_position = position;
 	this->local_rotation = rotation;
-	this->local_scale = scale;
+	euler_rotation = local_rotation.ToEulerXYZ();
+	euler_rotation.x = RadToDeg(euler_rotation.x);
+	euler_rotation.y = RadToDeg(euler_rotation.y);
+	euler_rotation.z = RadToDeg(euler_rotation.z);
 
 	RecalculateTransform();
 }

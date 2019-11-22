@@ -46,6 +46,10 @@ public:
 	void IncreaseReferences();
 	void DecreaseReferences();
 
+public:
+
+	uint references = 0u;
+
 protected:
 
 	ResourceType type = ResourceType::RESOURCE_NONE;
@@ -53,7 +57,7 @@ protected:
 	std::string path;
 	std::string meta_data_path;
 	std::string name;
-	uint references = 0u;
+
 	u64 ID = 0;
 
 };

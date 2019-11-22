@@ -64,10 +64,10 @@ public:
 	u64 GetRandomID();
 
 	ResourceTexture* GetTextureByName(const char* name);
-
+	ResourceMesh* GetPrimitive(const PrimitiveType& type);
 	bool Exists(const char* path, Resource** resource);
 
-	ResourceMesh* CreatePrimitive(const PrimitiveType& type);
+	void CreatePrimitive(const PrimitiveType& type, ResourceMesh** mesh);
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
 	void ReadAllMetaData();
@@ -81,6 +81,12 @@ public:
 	Icons icons;
 
 	std::vector<Resource*> resources;
+
+	ResourceMesh* camera_mesh = nullptr;
+	ResourceMesh* light_mesh = nullptr; 
+	FileNode* assets = nullptr;
+
+private:
 	ResourceMesh* cube = nullptr;
 	ResourceMesh* sphere = nullptr;
 	ResourceMesh* rock = nullptr;
@@ -88,9 +94,6 @@ public:
 	ResourceMesh* dodecahedron = nullptr;
 	ResourceMesh* icosahedron = nullptr;
 	ResourceMesh* octahedron = nullptr;
-	ResourceMesh* camera_mesh = nullptr;
-	ResourceMesh* light_mesh = nullptr; 
-	FileNode* assets = nullptr;
 };
 
 
