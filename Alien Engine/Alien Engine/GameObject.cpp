@@ -598,25 +598,32 @@ AABB GameObject::GetBB()
 			ComponentCamera* camera = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
 			ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
 
-			if (camera != nullptr && light != nullptr) {
+			if (camera != nullptr) {
+				ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+				float3 pos = transform->GetLocalPosition();
+				Quat rot = transform->GetLocalRotation();
+				float3 scale = transform->GetLocalScale();
+				float3 rot_ = rot.ToEulerXYZ();
+				Quat rotated = Quat::FromEulerXYZ(rot_.x, rot_.y - 89.5, rot_.z);
+				transform->SetLocalScale(0.1f, 0.1f, 0.1f);
+				float3 position = pos - camera->frustum.front.Normalized() * 2;
+				transform->SetLocalPosition(position.x, position.y, position.z);
+				transform->SetLocalRotation(rotated.x, rotated.y, rotated.z, rotated.w);
 				camera->mesh_camera->RecalculateAABB_OBB();
-				light->bulb->RecalculateAABB_OBB();
-				float3 min;
-				min.x = min(camera->mesh_camera->GetGlobalAABB().minPoint.x, light->bulb->GetGlobalAABB().minPoint.x);
-				min.y = min(camera->mesh_camera->GetGlobalAABB().minPoint.y, light->bulb->GetGlobalAABB().minPoint.y);
-				min.z = min(camera->mesh_camera->GetGlobalAABB().minPoint.z, light->bulb->GetGlobalAABB().minPoint.z);
-				float3 max;
-				max.x = max(camera->mesh_camera->GetGlobalAABB().maxPoint.x, light->bulb->GetGlobalAABB().maxPoint.x);
-				max.y = max(camera->mesh_camera->GetGlobalAABB().maxPoint.y, light->bulb->GetGlobalAABB().maxPoint.y);
-				max.z = max(camera->mesh_camera->GetGlobalAABB().maxPoint.z, light->bulb->GetGlobalAABB().maxPoint.z);
-				return AABB(min, max);
-			}
-			else if (camera != nullptr) {
-				camera->mesh_camera->RecalculateAABB_OBB();
+				transform->SetLocalScale(scale.x, scale.y, scale.z);
+				transform->SetLocalPosition(pos.x, pos.y, pos.z);
+				transform->SetLocalRotation(rot.x, rot.y, rot.z, rot.w);
 				return camera->mesh_camera->GetGlobalAABB();
 			}
 			else if (light != nullptr) {
+				ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+				float3 pos = transform->GetLocalPosition();
+				float3 scale = transform->GetLocalScale();
+				transform->SetLocalScale(0.2f, 0.18f, 0.2f);
+				transform->SetLocalPosition(pos.x - 0.133f, pos.y, pos.z);
 				light->bulb->RecalculateAABB_OBB();
+				transform->SetLocalScale(scale.x, scale.y, scale.z);
+				transform->SetLocalPosition(pos.x, pos.y, pos.z);
 				return light->bulb->GetGlobalAABB();
 			}
 
