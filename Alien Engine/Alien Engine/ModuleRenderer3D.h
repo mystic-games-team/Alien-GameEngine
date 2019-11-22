@@ -24,6 +24,8 @@ public:
 
 	void CreateRenderTexture();
 
+	void DeleteFrameBuffers();
+
 	void RenderGrid();
 
 	void ChangeDrawFrameBuffer(bool normal_frameBuffer);

@@ -150,7 +150,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
-
+	DeleteFrameBuffers();
 	SDL_GL_DeleteContext(context);
 
 	return true;
@@ -168,25 +168,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::CreateRenderTexture()
 {
-	if (scene_tex != nullptr) 
-	{
-		delete scene_tex;
-		scene_tex = nullptr;
-
-		glDeleteFramebuffers(1, &scene_frame_buffer);
-		glDeleteRenderbuffers(1, &scene_depthrenderbuffer);
-		glDeleteFramebuffers(1, &z_framebuffer);
-	}
-
-	if (game_tex != nullptr)
-	{
-		delete game_tex;
-		game_tex = nullptr;
-
-		glDeleteFramebuffers(1, &game_frame_buffer);
-		glDeleteRenderbuffers(1, &game_depthrenderbuffer);
-		glDeleteFramebuffers(1, &z_framebuffer);
-	}
+	DeleteFrameBuffers();
 
 	if (render_zbuffer) {
 		scene_tex = new ResourceTexture();
@@ -309,6 +291,39 @@ void ModuleRenderer3D::CreateRenderTexture()
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 		sc_game_tex = new ResourceTexture("SelectedCameraTexture", sc_game_render_texture, App->window->width, App->window->height);
+	}
+}
+
+void ModuleRenderer3D::DeleteFrameBuffers()
+{
+	if (scene_tex != nullptr)
+	{
+		delete scene_tex;
+		scene_tex = nullptr;
+
+		glDeleteFramebuffers(1, &scene_frame_buffer);
+		glDeleteRenderbuffers(1, &scene_depthrenderbuffer);
+		glDeleteFramebuffers(1, &z_framebuffer);
+	}
+
+	if (game_tex != nullptr)
+	{
+		delete game_tex;
+		game_tex = nullptr;
+
+		glDeleteFramebuffers(1, &game_frame_buffer);
+		glDeleteRenderbuffers(1, &game_depthrenderbuffer);
+		glDeleteFramebuffers(1, &z_framebuffer);
+	}
+
+	if (sc_game_tex != nullptr) {
+		delete sc_game_tex;
+		sc_game_tex = nullptr;
+
+		glDeleteFramebuffers(1, &sc_game_frame_buffer);
+		glDeleteRenderbuffers(1, &sc_game_depthrenderbuffer);
+		glDeleteRenderbuffers(1, &sc_game_render_texture);
+		glDeleteFramebuffers(1, &z_framebuffer);
 	}
 }
 
