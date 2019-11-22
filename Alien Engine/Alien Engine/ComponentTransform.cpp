@@ -668,7 +668,7 @@ void ComponentTransform::SetLocalTransform(float4x4 &transform_matrix)
 	RecalculateTransform();
 }
 
-void ComponentTransform::SetGlobalTransformation(float4x4 global_transformation)
+void ComponentTransform::SetGlobalTransformation(const float4x4& global_transformation)
 {
 	float3 position, scale;
 	Quat rotation;
@@ -676,6 +676,7 @@ void ComponentTransform::SetGlobalTransformation(float4x4 global_transformation)
 	
 	if (App->ui->panel_scene->guizmo_operation == ImGuizmo::OPERATION::SCALE) { // why... i would like to know it...
 		this->local_scale = scale;
+		LookScale();
 	}
 	else {
 		this->local_position = position;
@@ -685,6 +686,24 @@ void ComponentTransform::SetGlobalTransformation(float4x4 global_transformation)
 		euler_rotation.y = RadToDeg(euler_rotation.y);
 		euler_rotation.z = RadToDeg(euler_rotation.z);
 	}
+
+	RecalculateTransform();
+}
+
+void ComponentTransform::Reparent(const float4x4& transform)
+{
+	float3 position, scale;
+	Quat rotation;
+	transform.Decompose(position, rotation, scale);
+
+	this->local_scale = scale;
+	LookScale();
+	this->local_position = position;
+	this->local_rotation = rotation;
+	euler_rotation = local_rotation.ToEulerXYZ();
+	euler_rotation.x = RadToDeg(euler_rotation.x);
+	euler_rotation.y = RadToDeg(euler_rotation.y);
+	euler_rotation.z = RadToDeg(euler_rotation.z);
 
 	RecalculateTransform();
 }
