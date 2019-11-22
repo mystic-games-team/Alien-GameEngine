@@ -112,6 +112,22 @@ can remove or rename layouts).
 
 * Oriol Capdevila:
 
+	* Mouse Picking
+	* Octree, octree in camera culling & in mouse picking
+	* Resource Manager
+	* The Explorer
+	* Hierarchy and reparent
+	* Components system
+	* Control Z & Control Y (in almost every action)
+	* Prefabs
+	* Serialize scene 
+	* Changing between scenes (with engin explorer or window explorer)
+	* Library created again if it doesn't exists
+	* Start, pause and tick 
+	* Primitives as resource
+	* All right click menus
+	* Static options in gameobjects and alert popups
+
 * Víctor Segura:
 
 	* AABB and OBB
@@ -121,7 +137,7 @@ can remove or rename layouts).
 	* Panel Game
 	* Panel Preview Camera
 	* Scene Guizmos
-	* Scene Icons
+	* Engine Icons
 
 ## License
 
