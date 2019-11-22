@@ -1,0 +1,90 @@
+{
+    "Scene": {
+        "GameObjects": [
+            {
+                "Name": "Light",
+                "FamilyNumber": 1,
+                "ID": "9880722894488684414",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            15,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "130875184314456267"
+                    },
+                    {
+                        "Type": 3,
+                        "DiffuseColor": [
+                            0.75,
+                            0.75,
+                            0.75,
+                            1
+                        ],
+                        "AmbienColor": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ],
+                        "Enabled": true,
+                        "ID": "16608853660084972063",
+                        "PrintIcon": false,
+                        "IconColor": [
+                            0.61764705181121826,
+                            0.18166089057922363,
+                            0.18166089057922363,
+                            0.5
+                        ]
+                    },
+                    {
+                        "Type": 4,
+                        "VerticalFov": 60,
+                        "HoritzontalFov": 91,
+                        "BackCol": [
+                            0.51470589637756348,
+                            0.31286045908927917,
+                            0.31286045908927917,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "5134254732634613130",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": true,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.49019604921340942,
+                            0.22827756404876709,
+                            0.22827756404876709,
+                            0.5
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

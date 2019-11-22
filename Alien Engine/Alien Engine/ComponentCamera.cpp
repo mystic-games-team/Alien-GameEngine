@@ -320,7 +320,7 @@ void ComponentCamera::DrawFrustum()
 
 void ComponentCamera::DrawIconCamera()
 {
-	if (mesh_camera != nullptr && print_icon == true)
+	if (mesh_camera != nullptr && print_icon)
 	{
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 		float3 pos = transform->GetLocalPosition();
@@ -354,6 +354,9 @@ void ComponentCamera::SaveComponent(JSONArraypack* to_save)
 	to_save->SetString("ID", std::to_string(ID));
 	to_save->SetBoolean("IsGameCamera", (App->renderer3D->actual_game_camera == this) ? true : false);
 	to_save->SetBoolean("IsSelectedCamera", (game_object_attached->IsSelected()) ? true : false);
+	to_save->SetBoolean("PrintIcon", print_icon);
+	to_save->SetColor("IconColor", camera_icon_color);
+
 }
 
 void ComponentCamera::LoadComponent(JSONArraypack* to_load)
@@ -365,7 +368,8 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	is_fov_horizontal = to_load->GetNumber("isFovHori");
 	camera_color_background = to_load->GetColor("BackCol");
 	ID = std::stoull(to_load->GetString("ID"));
-
+	print_icon = to_load->GetBoolean("PrintIcon");
+	camera_icon_color = to_load->GetColor("IconColor");
 	if (to_load->GetBoolean("IsGameCamera")) {
 		App->renderer3D->actual_game_camera = this;
 	}

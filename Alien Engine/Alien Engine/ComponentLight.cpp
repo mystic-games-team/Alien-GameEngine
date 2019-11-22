@@ -128,6 +128,8 @@ void ComponentLight::SaveComponent(JSONArraypack* to_save)
 	to_save->SetColor("AmbienColor", ambient);
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetBoolean("PrintIcon", print_icon);
+	to_save->SetColor("IconColor", bulb_icon_color);
 }
 
 void ComponentLight::LoadComponent(JSONArraypack* to_load)
@@ -136,11 +138,13 @@ void ComponentLight::LoadComponent(JSONArraypack* to_load)
 	ambient = to_load->GetColor("AmbienColor");
 	enabled = to_load->GetBoolean("Enabled");
 	ID = std::stoull(to_load->GetString("ID"));
+	print_icon = to_load->GetBoolean("PrintIcon");
+	bulb_icon_color = to_load->GetColor("IconColor");
 }
 
 void ComponentLight::DrawIconLight()
 {
-	if (bulb != nullptr && print_icon == true)
+	if (bulb != nullptr && print_icon)
 	{
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 		float3 pos = transform->GetLocalPosition();
