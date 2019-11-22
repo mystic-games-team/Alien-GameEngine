@@ -77,30 +77,30 @@ void PanelCreateObject::PanelLogic()
 			{
 			case 0: {
 				object->SetName("Cube");
-				mesh->mesh = App->resources->cube;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::CUBE);
 				break; }
 			case 1: {
-				mesh->mesh = App->resources->sphere;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::SPHERE_ALIEN);
 				object->SetName("Sphere");
 				break; }
 			case 2: {
-				mesh->mesh = App->resources->rock;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::ROCK);
 				object->SetName("Rock");
 				break; }
 			case 3: {
-				mesh->mesh = App->resources->dodecahedron;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::DODECAHEDRON);
 				object->SetName("Dodecahedron");
 				break; }
 			case 4: {
-				mesh->mesh = App->resources->icosahedron;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::ICOSAHEDRON);
 				object->SetName("Icosahedron");
 				break; }
 			case 5: {
-				mesh->mesh = App->resources->octahedron;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::OCTAHEDRON);
 				object->SetName("Octahedron");
 				break; }
 			case 6: {
-				mesh->mesh = App->resources->torus;
+				mesh->mesh = App->resources->GetPrimitive(PrimitiveType::TORUS);
 				object->SetName("Torus");
 				break; }
 			}

@@ -513,25 +513,25 @@ void ComponentMesh::LoadComponent(JSONArraypack* to_load)
 		else {
 			switch ((PrimitiveType)(int)to_load->GetNumber("PrimType")) {
 			case PrimitiveType::CUBE: {
-				mesh = App->resources->cube;
+				mesh = App->resources->GetPrimitive(PrimitiveType::CUBE);
 				break; }
 			case PrimitiveType::SPHERE_ALIEN: {
-				mesh = App->resources->sphere;
+				mesh = App->resources->GetPrimitive(PrimitiveType::SPHERE_ALIEN);
 				break; }
 			case PrimitiveType::DODECAHEDRON: {
-				mesh = App->resources->dodecahedron;
+				mesh = App->resources->GetPrimitive(PrimitiveType::DODECAHEDRON);
 				break; }
 			case PrimitiveType::ICOSAHEDRON: {
-				mesh = App->resources->icosahedron;
+				mesh = App->resources->GetPrimitive(PrimitiveType::ICOSAHEDRON);
 				break; }
 			case PrimitiveType::OCTAHEDRON: {
-				mesh = App->resources->octahedron;
+				mesh = App->resources->GetPrimitive(PrimitiveType::OCTAHEDRON);
 				break; }
 			case PrimitiveType::ROCK: {
-				mesh = App->resources->rock;
+				mesh = App->resources->GetPrimitive(PrimitiveType::ROCK);
 				break; }
 			case PrimitiveType::TORUS: {
-				mesh = App->resources->torus;
+				mesh = App->resources->GetPrimitive(PrimitiveType::TORUS);
 				break; }
 			}
 		}
