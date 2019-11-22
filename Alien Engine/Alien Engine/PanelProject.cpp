@@ -365,6 +365,16 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 				else {
 					current_active_folder->children[i]->path = current_active_folder->children[i]->parent->path + name_before_rename + "/";
 				}
+
+				if (current_active_folder->children[i]->type == FileDropType::SCENE) {
+					static char curr_dir[MAX_PATH];
+					GetCurrentDirectoryA(MAX_PATH, curr_dir);
+					if (App->StringCmp(App->objects->current_scene.full_path.data(), std::string(curr_dir + std::string("/") + current_active_folder->path + current_active_folder->children[i]->name).data())) {
+						App->objects->current_scene.full_path = std::string(curr_dir + current_active_folder->path + std::string("/") + name_before_rename).data();
+						App->objects->current_scene.name_without_extension = App->file_system->GetBaseFileName(App->objects->current_scene.full_path.data());
+					}
+				}
+
 				current_active_folder->children[i]->name = name_before_rename;
 
 				LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
