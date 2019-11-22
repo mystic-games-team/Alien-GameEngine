@@ -21,12 +21,12 @@ public:
 	const float3& GetGlobalScale() const;
 
 	void SetLocalRotation(const float& x, const float& y, const float& z, const float& angle);
+	
 	const Quat& GetLocalRotation() const;
 	const Quat& GetGlobalRotation() const;
-
+	
 	void SetLocalTransform(float4x4 &transform_matrix);
-
-	void SetGlobalTransform(float4x4& transform_matrix);
+	void SetGlobalTransformation(const float4x4& global_transformation);
 
 	void DrawInspector();
 

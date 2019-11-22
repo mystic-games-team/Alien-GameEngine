@@ -116,6 +116,8 @@ void ComponentTransform::SetLocalRotation(const float& x, const float& y, const 
 	RecalculateTransform();
 }
 
+
+
 const Quat& ComponentTransform::GetLocalRotation() const
 {
 	return local_rotation;
@@ -623,23 +625,20 @@ void ComponentTransform::LoadComponent(JSONArraypack* to_load)
 
 void ComponentTransform::SetLocalTransform(float4x4 &transform_matrix)
 {
-	transform_matrix.Decompose(local_position, local_rotation, local_scale);
-	euler_rotation = local_rotation.ToEulerXYZ();
-	euler_rotation.x = RadToDeg(euler_rotation.x);
-	euler_rotation.y = RadToDeg(euler_rotation.y);
-	euler_rotation.z = RadToDeg(euler_rotation.z);
+	local_transformation = transform_matrix;
+	local_transformation.Decompose(local_position, local_rotation, local_scale);
 	RecalculateTransform();
 }
 
-void ComponentTransform::SetGlobalTransform(float4x4& transform_matrix)
+void ComponentTransform::SetGlobalTransformation(const float4x4& global_transformation)
 {
-	float3 transform_position, transform_scale;
-	Quat transform_rotation;
-	transform_matrix.Decompose(transform_position, transform_rotation, transform_scale);
-
-	local_position = local_position + (transform_position - GetGlobalPosition());
+	float3 position, scale;
+	Quat rotation;
+	global_transformation.Decompose(position, rotation, scale);
+	
+	this->local_position = position;
+	this->local_rotation = rotation;
+	this->local_scale = scale;
 
 	RecalculateTransform();
 }
-
-
