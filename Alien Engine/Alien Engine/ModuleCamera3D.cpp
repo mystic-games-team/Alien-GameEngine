@@ -80,6 +80,14 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 			Focus();
+
+		if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		{
+			if (App->objects->GetSelectedObject() != nullptr)
+			{
+				fake_camera->Look(App->objects->GetSelectedObject()->GetBB().CenterPoint());
+			}
+		}
 	}
 
 	return UPDATE_CONTINUE;
