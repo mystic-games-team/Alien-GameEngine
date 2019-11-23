@@ -25,10 +25,10 @@ ModuleObjects::~ModuleObjects()
 
 bool ModuleObjects::Init()
 {
-	base_game_object = new GameObject();
-	base_game_object->ID = 0;
-	base_game_object->is_static = true;
-	//base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
+	//base_game_object = new GameObject();
+	//base_game_object->ID = 0;
+	//base_game_object->is_static = true;
+	////base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
 	
 
 	return true;
@@ -39,10 +39,10 @@ bool ModuleObjects::Start()
 	LOG("Starting Module Objects");
 	bool ret = true;
 
-	GameObject* light_test = new GameObject(base_game_object);
-	light_test->SetName("Light");
-	light_test->AddComponent(new ComponentTransform(light_test, { 0,15,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
-	light_test->AddComponent(new ComponentLight(light_test));
+	//GameObject* light_test = new GameObject(base_game_object);
+	//light_test->SetName("Light");
+	//light_test->AddComponent(new ComponentTransform(light_test, { 0,15,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
+	//light_test->AddComponent(new ComponentLight(light_test));
 
 	//current_scene.name_without_extension = "Untitled*";
 	//current_scene.full_path = "Untitled*";
@@ -186,7 +186,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 
-	if (App->renderer3D->selected_game_camera != nullptr && (App->renderer3D->actual_game_camera != App->objects->GetSelectedObject()->GetComponent(ComponentType::CAMERA) && App->renderer3D->SetCameraToDraw(App->renderer3D->selected_game_camera)))
+	if (App->renderer3D->selected_game_camera != nullptr && (App->objects->GetSelectedObject() != nullptr && App->renderer3D->actual_game_camera != App->objects->GetSelectedObject()->GetComponent(ComponentType::CAMERA) && App->renderer3D->SetCameraToDraw(App->renderer3D->selected_game_camera)))
 	{
 		printing_scene = false;
 		if (App->renderer3D->render_zbuffer) {
@@ -345,6 +345,9 @@ GameObject* ModuleObjects::GetSelectedObject()
 void ModuleObjects::DeselectObject()
 {
 	if (game_object_selected != nullptr) {
+		if (game_object_selected->GetComponent(ComponentType::CAMERA) == App->renderer3D->selected_game_camera) {
+			App->renderer3D->selected_game_camera = nullptr;
+		}
 		game_object_selected->ChangeSelected(false);
 		game_object_selected = nullptr;
 	}

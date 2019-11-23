@@ -256,14 +256,23 @@ void ModuleCamera3D::CreateRay()
 	}
 	// sort by pos
 	std::sort(hits.begin(), hits.end(), ModuleCamera3D::SortByDistance);
-	
+	static bool hit = false;
 	std::vector<std::pair<float, GameObject*>>::iterator it = hits.begin();
 	for (; it != hits.end(); ++it) {
 		if ((*it).second != nullptr) {
-			if (TestTrianglesIntersections((*it).second, ray))
+			if (TestTrianglesIntersections((*it).second, ray)) {
+				hit = true;
 				break;
+			}
 		}
 	}
+
+	if (!hit) {
+		App->objects->DeselectObject();
+	}
+
+	hit = false;
+
 }
 
 void ModuleCamera3D::CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, GameObject* go, const LineSegment &ray)
