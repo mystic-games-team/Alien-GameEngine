@@ -153,6 +153,7 @@ void PanelInspector::ButtonAddComponent()
 			{
 				comp = new ComponentCamera(App->objects->GetSelectedObject());
 				App->objects->GetSelectedObject()->AddComponent(comp);
+				App->renderer3D->selected_game_camera = (ComponentCamera*)comp;
 			}
 
 			else

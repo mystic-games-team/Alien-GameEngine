@@ -18,7 +18,7 @@ private:
 	void GuizmosLogic();
 
 public:
-
+	bool is_window_being_rendered = true;
 	ImGuizmo::OPERATION guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 	ImGuizmo::MODE guizmo_mode = ImGuizmo::MODE::WORLD;
 

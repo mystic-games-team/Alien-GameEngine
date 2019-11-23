@@ -69,6 +69,6 @@ void PanelGame::PanelLogic()
 	}
 	else
 		game_focused = false;
-
+	
 	ImGui::End();
 }

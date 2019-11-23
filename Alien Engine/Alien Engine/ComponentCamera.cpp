@@ -36,7 +36,6 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 		{
 			App->renderer3D->actual_game_camera = this;
 		}
-		App->renderer3D->selected_game_camera = this;
 		App->objects->game_cameras.push_back(this);
 	}
 	

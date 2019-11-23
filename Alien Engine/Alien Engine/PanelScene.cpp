@@ -140,7 +140,13 @@ void PanelScene::PanelLogic()
 	GuizmosControls();
 	GuizmosLogic();
 
-	if (App->renderer3D->selected_game_camera != nullptr && !App->ui->panel_game->game_focused)
+	ImDrawList* list = ImGui::GetWindowDrawList();
+	if (list != nullptr && list->CmdBuffer.size() > 1)
+		is_window_being_rendered = true;
+	else
+		is_window_being_rendered = false;
+
+	if (App->renderer3D->selected_game_camera != nullptr && is_window_being_rendered)
 	{
 		ImGui::SetNextWindowPos(ImVec2(max_space.x - 212, max_space.y - 154));
 		ImGui::SetNextWindowSize(ImVec2(192, 134));
@@ -153,6 +159,8 @@ void PanelScene::PanelLogic()
 
 		ImGui::End();
 	}
+
+	
 
 	ImGui::End();
 }
