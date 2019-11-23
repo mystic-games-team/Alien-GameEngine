@@ -94,7 +94,7 @@ void PanelSceneSelector::SaveSceneAsNew()
 	to_save.nMaxFile = MAX_PATH;
 	to_save.lpstrTitle = "Save As New .alienScene"; 
 	to_save.lpstrInitialDir = dir.data();
-	to_save.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER; 
+	to_save.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_OVERWRITEPROMPT;
 	if (GetSaveFileNameA(&to_save)) 
 	{	
 		SetCurrentDirectoryA(curr_dir);
@@ -178,7 +178,7 @@ void PanelSceneSelector::CreateNewScene()
 	to_save.nMaxFile = MAX_PATH;
 	to_save.lpstrTitle = "Create a new .alienScene";
 	to_save.lpstrInitialDir = dir.data();
-	to_save.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	to_save.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_OVERWRITEPROMPT;
 	if (GetSaveFileNameA(&to_save))
 	{
 		SetCurrentDirectoryA(curr_dir);
