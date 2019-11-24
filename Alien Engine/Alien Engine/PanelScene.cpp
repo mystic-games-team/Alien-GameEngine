@@ -184,7 +184,7 @@ void PanelScene::GuizmosLogic()
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
 		static bool guizmo_return = true;
-
+		
 		if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && !transform->game_object_attached->is_static)
 		{
 			if (guizmo_return) {

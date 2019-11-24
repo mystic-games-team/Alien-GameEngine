@@ -66,7 +66,7 @@ update_status ModuleCamera3D::Update(float dt)
 		if (is_scene_hovered)
 		{
 			Zoom();
-			if (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
+			if ((App->objects->GetSelectedObject() == nullptr || (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver())) && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
 				CreateRay();
 			}
 
