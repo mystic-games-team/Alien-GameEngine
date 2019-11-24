@@ -45,6 +45,8 @@ public:
 	SDL_Scancode* GetShortcutCodes(const std::string& name);
 
 	void SetArrayString(const std::string& name, std::string* strings, uint size);
+	void SetArrayNumber(const std::string& name, const double& number);
+	double GetArrayNumber(const std::string& name, const uint& index);
 	std::string* GetArrayString(const std::string& name);
 
 	void SetString(const std::string& name, const std::string& string_parameter);

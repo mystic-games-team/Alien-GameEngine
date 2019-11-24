@@ -22,26 +22,7 @@ enum class ShortCutStateChange {
 };
 struct ShortCut {
 
-	ShortCut(const char* order_name, const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN) {
-		this->key1_down = key1_down;
-		this->key2_repeat = key2_repeat;
-		this->key3_repeat_extra = key3_repeat_extra;
-		this->funct = funct;
-		this->order_name = order_name;
-
-		if (key3_repeat_extra != SDL_SCANCODE_UNKNOWN)
-			type = ShortCutType::COMPLETE;
-		else if (key2_repeat != SDL_SCANCODE_UNKNOWN)
-			type = ShortCutType::TWO_KEYS;
-		else
-			type = ShortCutType::ONE_KEY;
-
-		codes[0] = key1_down;
-		codes[1] = key2_repeat;
-		codes[2] = key3_repeat_extra;
-
-		name = GetShortcutName();
-	}
+	ShortCut(const char* order_name, const SDL_Scancode& key1_down, std::function<void()> funct, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN);
 
 	// functions
 	void SetShortcutKeys(const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat = SDL_SCANCODE_UNKNOWN, const SDL_Scancode& key3_repeat_extra = SDL_SCANCODE_UNKNOWN);

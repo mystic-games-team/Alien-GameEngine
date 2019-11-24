@@ -227,10 +227,10 @@ SDL_Scancode* JSONfilepack::GetShortcutCodes(const std::string& name)
 
 	uint size = json_array_get_count(arr);
 
-	SDL_Scancode codes[3];
+	SDL_Scancode codes[3] = { SDL_SCANCODE_UNKNOWN,SDL_SCANCODE_UNKNOWN,SDL_SCANCODE_UNKNOWN };
 
 	for (uint i = 0; i < 3; ++i) {
-		codes[i] = (SDL_Scancode)(uint)json_array_get_number(arr, i);
+		codes[i] = static_cast<SDL_Scancode>(static_cast<int>(json_array_get_number(arr, i)));
 	}
 
 	return codes;
@@ -250,6 +250,24 @@ void JSONfilepack::SetArrayString(const std::string& name, std::string* strings,
 	for (uint i = 0; i < size; ++i) {
 		json_array_append_string(arr, strings[i].data());
 	}
+}
+
+void JSONfilepack::SetArrayNumber(const std::string& name, const double& number)
+{
+	JSON_Array* arr = json_object_dotget_array(save_object, name.data());
+	if (arr == nullptr) {
+		JSON_Value* new_val = json_value_init_array();
+		arr = json_value_get_array(new_val);
+
+		json_object_dotset_value(save_object, name.data(), new_val);
+	}
+	json_array_append_number(arr, number);
+}
+
+double JSONfilepack::GetArrayNumber(const std::string& name, const uint& index)
+{
+	JSON_Array* arr = json_object_dotget_array(object, name.data());
+	return json_array_get_number(arr, index);
 }
 
 std::string* JSONfilepack::GetArrayString(const std::string& name)

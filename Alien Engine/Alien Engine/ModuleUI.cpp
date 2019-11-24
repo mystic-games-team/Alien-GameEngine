@@ -101,37 +101,36 @@ bool ModuleUI::CleanUp()
 
 void ModuleUI::LoadConfig(JSONfilepack*& config)
 {
-	uint size_of_codes = sizeof(panel_config_codes);
-	memcpy(panel_config_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelConfig"), size_of_codes);
-	memcpy(panel_about_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelAbout"), size_of_codes);
-	memcpy(panel_create_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate"), size_of_codes);
-	memcpy(panel_project_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelProject"), size_of_codes);
-	memcpy(panel_hierarchy_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelHierarchy"), size_of_codes);
-	memcpy(panel_console_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelConsole"), size_of_codes);
-	memcpy(panel_scene_selector_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelSceneSelector"), size_of_codes);
-	memcpy(panel_inspector_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelInspector"), size_of_codes);
-	memcpy(panel_layout_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelLayout"), size_of_codes);
-	memcpy(panel_render_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelRender"), size_of_codes);
-	memcpy(panel_scene_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.PanelScene"), size_of_codes);
-	memcpy(shortcut_demo_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ImGuiDemo"), size_of_codes);
-	memcpy(shortcut_report_bug_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ReportBug"), size_of_codes);
-	memcpy(shortcut_view_mesh_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ViewMesh"), size_of_codes);
-	memcpy(shortcut_wireframe_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.WireframeMode"), size_of_codes);
-	memcpy(shortcut_view_grid_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ShowGrid"), size_of_codes);
-	memcpy(shortcut_view_normal_vertex_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalVertex"), size_of_codes);
-	memcpy(shortcut_view_normal_face_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalFace"), size_of_codes);
-	memcpy(shortcut_save_scene_as_new_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.SaveSceneAsNew"), size_of_codes);
-	memcpy(shortcut_load_scene_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.LoadScene"), size_of_codes);
-	memcpy(shortcut_new_scene_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.NewScene"), size_of_codes);
-	memcpy(shortcut_outline_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.EnableOutline"), size_of_codes);
-	memcpy(shortcut_AABB_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.AABB"), size_of_codes);
-	memcpy(shortcut_OBB_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.OBB"), size_of_codes);
-	memcpy(shortcut_octree_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.ViewOctree"), size_of_codes);
-	memcpy(panel_game_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.Game"), size_of_codes);
-	memcpy(shortcut_cntrlZ_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.GoBack"), size_of_codes);
-	memcpy(shortcut_cntrlY_codes, config->GetShortcutCodes("Configuration.UI.ShortCuts.GoFordward"), size_of_codes);
-
-
+	for (uint i = 0; i < 3; ++i) {
+		panel_config_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", i);
+		panel_about_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", i);
+		panel_create_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
+		panel_project_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
+		panel_hierarchy_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelProject", i);
+		panel_console_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", i);
+		panel_inspector_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelInspector", i);
+		panel_layout_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelLayout", i);
+		panel_render_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelRender", i);
+		panel_game_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.Game", i);
+		panel_scene_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelScene", i);
+		panel_scene_selector_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelSceneSelector", i);
+		shortcut_demo_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ImGuiDemo", i);
+		shortcut_report_bug_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ReportBug", i);
+		shortcut_view_mesh_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ViewMesh", i);
+		shortcut_wireframe_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.WireframeMode", i);
+		shortcut_view_grid_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ShowGrid", i);
+		shortcut_view_normal_vertex_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ShowNormalVertex", i);
+		shortcut_view_normal_face_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ShowNormalFace", i);
+		shortcut_save_scene_as_new_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.SaveSceneAsNew", i);
+		shortcut_load_scene_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.LoadScene", i);
+		shortcut_new_scene_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.NewScene", i);
+		shortcut_outline_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.EnableOutline", i);
+		shortcut_AABB_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.AABB", i);
+		shortcut_OBB_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.OBB", i);
+		shortcut_octree_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ViewOctree", i);
+		shortcut_cntrlZ_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.GoBack", i);
+		shortcut_cntrlY_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.GoFordward", i);
+	}
 	if (panel_about != nullptr) {
 		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
 		panel_config->shortcut->SetShortcutKeys(panel_config_codes[0], panel_config_codes[1], panel_config_codes[2]);
@@ -169,33 +168,35 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 
 void ModuleUI::SaveConfig(JSONfilepack*& config)
 {
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelConfig", panel_config->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelProject", panel_project->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelAbout", panel_about->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelHierarchy", panel_hierarchy->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelRender", panel_render->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelInspector", panel_inspector->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelConsole", panel_console->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelCreate", panel_create_object->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelScene", panel_scene->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelSceneSelector", panel_scene_selector->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.PanelLayout", panel_layout->shortcut->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.WireframeMode", shortcut_wireframe->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ViewMesh", shortcut_view_mesh->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ReportBug", shortcut_report_bug->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ImGuiDemo", shortcut_demo->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowGrid", shortcut_view_grid->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalVertex", shortcut_view_normal_vertex->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ShowNormalFace", shortcut_view_normal_face->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.LoadScene", shortcut_load_scene->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.SaveSceneAsNew", shortcut_save_scene_as_new->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.NewScene", shortcut_new_scene->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.EnableOutline", shortcut_outline->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.AABB", shortcut_AABB->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.OBB", shortcut_OBB->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.ViewOctree", shortcut_octree->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.GoBack", shortcut_cntrlZ->GetScancodesArray());
-	config->SetShortcutCodes("Configuration.UI.ShortCuts.GoFordward", shortcut_cntrlY->GetScancodesArray());
+	for (uint i = 0; i < 3; ++i) {
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_config->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelProject", (uint)panel_project->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelHierarchy", (uint)panel_hierarchy->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelRender", (uint)panel_render->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelInspector", (uint)panel_inspector->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", (uint)panel_console->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", (uint)panel_create_object->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelScene", (uint)panel_scene->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelLayout", (uint)panel_layout->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.WireframeMode", (uint)shortcut_wireframe->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ViewMesh", (uint)shortcut_view_mesh->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ReportBug", (uint)shortcut_report_bug->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ImGuiDemo", (uint)shortcut_demo->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowGrid", (uint)shortcut_view_grid->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowNormalVertex", (uint)shortcut_view_normal_vertex->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ShowNormalFace", (uint)shortcut_view_normal_face->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.LoadScene", (uint)shortcut_load_scene->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelSceneSelector", (uint)panel_scene_selector->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.SaveSceneAsNew", (uint)shortcut_save_scene_as_new->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.NewScene", (uint)shortcut_new_scene->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.EnableOutline", (uint)shortcut_outline->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.AABB", (uint)shortcut_AABB->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.OBB", (uint)shortcut_OBB->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.ViewOctree", (uint)shortcut_octree->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.GoBack", (uint)shortcut_cntrlZ->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.GoFordward", (uint)shortcut_cntrlY->GetScancode(i));
+	}
 }
 void ModuleUI::LoadLayouts()
 {
