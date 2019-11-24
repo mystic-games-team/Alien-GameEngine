@@ -98,12 +98,14 @@ void PanelScene::PanelLogic()
 				}
 			}
 
+			// drop prefab
 			if (node != nullptr && node->type == FileDropType::PREFAB) {
 				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name) + ".alienPrefab";
 				u64 ID = App->resources->GetIDFromAlienPath(path.data());
 				if (ID != 0) {
 					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
 					prefab->ConvertToGameObjects(App->objects->GetRoot(false));
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
 				}
 			}
 

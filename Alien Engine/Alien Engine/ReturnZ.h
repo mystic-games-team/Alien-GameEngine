@@ -19,7 +19,9 @@ public:
 		DELETE_COMPONENT,
 		ADD_COMPONENT,
 		CHANGE_COMPONENT,
-		REPARENT_HIERARCHY
+		REPARENT_HIERARCHY,
+		ADD_PREFAB,
+		DELETE_PREFAB
 	};
 
 	ReturnZ() {}
@@ -103,7 +105,8 @@ public:
 	bool parent_selected = false;
 	bool selected = false;
 	bool parent_enabled = false;
-
+	u64 prefabID = 0;
+	bool prefab_locked = false;
 	std::string name = "UnNamed";
 
 	std::vector<ActionDeleteObject*> children;

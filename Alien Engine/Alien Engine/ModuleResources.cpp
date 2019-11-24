@@ -284,7 +284,7 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 		(*ret)->SetName("Octahedron");
 		break; }
 	case PrimitiveType::TORUS: {
-		par_mesh = par_shapes_create_torus(4, 4, 0.8F);
+		par_mesh = par_shapes_create_torus(12, 12, 0.5F);
 		(*ret)->SetName("Torus");
 		break; }
 	case PrimitiveType::ICOSAHEDRON: {

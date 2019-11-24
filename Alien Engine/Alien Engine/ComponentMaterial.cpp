@@ -83,8 +83,8 @@ bool ComponentMaterial::DrawInspector()
 		{
 			ImGui::SameLine(220, 15);
 			if (ImGui::Button("Change Texture", { 120,20 })) {
-				change_texture_menu = true;
-				selected_texture = texture;
+				/*change_texture_menu = true;
+				selected_texture = texture;*/
 			}
 
 			ImGui::SameLine(140, 15);
@@ -121,8 +121,8 @@ bool ComponentMaterial::DrawInspector()
 		else {
 			ImGui::SameLine(220, 15);
 			if (ImGui::Button("Add Texture", { 120,20 })) {
-				change_texture_menu = true;
-				selected_texture = texture;
+				/*change_texture_menu = true;
+				selected_texture = texture;*/
 			}
 		}
 

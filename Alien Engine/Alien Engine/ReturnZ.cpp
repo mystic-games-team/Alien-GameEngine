@@ -264,7 +264,8 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 {
 	to_fill->object = new ObjZ();
-
+	to_fill->object->prefabID = obj->GetPrefabID();
+	to_fill->object->prefab_locked = obj->prefab_locked;
 	to_fill->object->enabled = obj->enabled;
 	to_fill->object->is_static = obj->is_static;
 	to_fill->object->ID = obj->ID;
@@ -341,6 +342,8 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 	if (new_obj->is_static) {
 		App->objects->octree.Insert(new_obj, false);
 	}
+	new_obj->prefab_locked = obj->object->prefab_locked;
+	new_obj->SetPrefab(obj->object->prefabID);
 	new_obj->ID = obj->object->ID;
 	new_obj->SetName(obj->object->name.data());
 	if (obj->object->selected) {

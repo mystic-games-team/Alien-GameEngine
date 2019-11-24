@@ -775,10 +775,12 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 
 void GameObject::SetPrefab(const u64& prefabID)
 {
-	std::vector<GameObject*>::iterator item = children.begin();
-	for (; item != children.end(); ++item) {
-		if (*item != nullptr && (prefabID != 0 || (*item)->prefabID == this->prefabID)) {
-			(*item)->SetPrefab(prefabID);
+	if (!children.empty()) {
+		std::vector<GameObject*>::iterator item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr && (prefabID != 0 || (*item)->prefabID == this->prefabID)) {
+				(*item)->SetPrefab(prefabID);
+			}
 		}
 	}
 	this->prefabID = prefabID;
