@@ -59,7 +59,7 @@ private:
 	ResourceTexture* texture = nullptr;
 
 	float3 pos = { 0,0,0 };
-	float3 scale = { 0,0,0 };
+	float3 scale = { 1,1,1 };
 	Quat rot = { 0,0,0,0 };
 
 };

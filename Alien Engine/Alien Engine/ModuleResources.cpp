@@ -245,7 +245,7 @@ bool ModuleResources::Exists(const char * path, Resource** resource)
 
 	std::vector<Resource*>::iterator item = resources.begin();
 	for (; item != resources.end(); ++item) {
-		if (*item != nullptr && App->StringCmp(App->file_system->GetBaseFileName(path).data(), App->file_system->GetBaseFileName((*item)->GetAssetsPath()).data())) {
+		if (*item != nullptr && App->StringCmp(path, (*item)->GetAssetsPath())) {
 			exists = true;
 			if (resource != nullptr)
 				*resource = (*item);
