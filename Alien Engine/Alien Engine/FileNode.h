@@ -34,7 +34,7 @@ public:
 
 	void DeleteChildren();
 	void DeleteNodeData(bool delete_folder = true);
-
+	void ResetPaths();
 	FileNode* FindChildrenByPath(const std::string& path); 
 	void RemoveResourceOfGameObjects();
 

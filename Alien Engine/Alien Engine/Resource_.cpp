@@ -20,6 +20,11 @@ const char* const Resource::GetLibraryPath() const
 	return meta_data_path.data();
 }
 
+void Resource::SetAssetsPath(const char* path)
+{
+	this->path = std::string(path);
+}
+
 const char* const Resource::GetName() const
 {
 	return name.data();

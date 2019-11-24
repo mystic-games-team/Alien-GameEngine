@@ -377,6 +377,8 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 
 				current_active_folder->children[i]->name = name_before_rename;
 
+				current_active_folder->children[i]->ResetPaths();
+
 				LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
 			}
 			else {

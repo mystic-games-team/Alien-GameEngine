@@ -1,6 +1,7 @@
 #include "FileNode.h"
 #include "Application.h"
 #include "ResourceModel.h"
+#include "ResourceTexture.h"
 
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
@@ -89,6 +90,44 @@ void FileNode::DeleteNodeData(bool delete_folder)
 				LOG("Could not remove folder %s", path.data());
 			}
 		}
+	}
+}
+
+void FileNode::ResetPaths()
+{
+	switch (type)
+	{
+	case FileDropType::MODEL3D: {
+		std::string path = App->file_system->GetPathWithoutExtension(this->path + name);
+		path += "_meta.alien";
+		u64 ID = App->resources->GetIDFromAlienPath(path.data());
+		ResourceModel* model = (ResourceModel*)App->resources->GetResourceWithID(ID);
+		if (model != nullptr) {
+			model->SetAssetsPath(std::string(this->path + name).data());
+		}
+		break; }
+	case FileDropType::TEXTURE: {
+		std::string path = App->file_system->GetPathWithoutExtension(this->path + name);
+		path += "_meta.alien";
+		u64 ID = App->resources->GetIDFromAlienPath(path.data());
+		ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+		if (texture != nullptr) {
+			texture->SetAssetsPath(std::string(this->path + name).data());
+		}
+		break; }
+	case FileDropType::PREFAB: {
+		std::string path = App->file_system->GetPathWithoutExtension(this->path + name);
+		path += "_meta.alienPrefab";
+		u64 ID = App->resources->GetIDFromAlienPath(path.data());
+		Resource* prefab = App->resources->GetResourceWithID(ID);
+		if (prefab != nullptr) {
+			prefab->SetAssetsPath(std::string(this->path + name).data());
+		}
+		break; }
+
+	default: {
+		LOG("Type in reset paths not added");
+		break; }
 	}
 }
 

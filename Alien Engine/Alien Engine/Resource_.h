@@ -25,6 +25,7 @@ public:
 	// meta data path
 	const char* const GetAssetsPath() const;
 	const char* const GetLibraryPath() const;
+	void SetAssetsPath(const char* path);
 
 	// name
 	const char* const GetName() const;
