@@ -74,7 +74,7 @@ update_status ModuleCamera3D::Update(float dt)
 				CreateRay();
 			}
 
-			if (!ImGuizmo::IsUsing() && is_scene_focused)
+			if (!ImGuizmo::IsUsing())
 				Movement();
 		}
 
