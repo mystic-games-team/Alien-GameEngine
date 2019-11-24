@@ -30,6 +30,7 @@ void Time::Play()
 {
 	if (state == GameState::NONE) {
 		App->objects->SaveScene("Library/play_scene.alienScene", false);
+		App->objects->ignore_cntrlZ = true;
 		state = GameState::PLAY;
 		game_time = 0.0F;
 		game_timer->Start();
@@ -42,6 +43,7 @@ void Time::Play()
 		state = GameState::NONE;
 		game_time = 0.0F;
 		App->objects->LoadScene("Library/play_scene.alienScene", false);
+		App->objects->ignore_cntrlZ = false;
 		remove("Library/play_scene.alienScene");
 	}
 }
