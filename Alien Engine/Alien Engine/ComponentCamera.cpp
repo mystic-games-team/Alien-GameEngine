@@ -325,10 +325,11 @@ void ComponentCamera::DrawIconCamera()
 		float3 pos = transform->GetLocalPosition();
 		Quat rot = transform->GetLocalRotation();
 		float3 scale = transform->GetLocalScale();
-		float3 rot_ = rot.ToEulerXYZ();
-		Quat rotated = Quat::FromEulerXYZ(rot_.x, rot_.y-89.5, rot_.z);
 		transform->SetLocalScale(0.1f, 0.1f, 0.1f);
 		float3 position = pos - frustum.front.Normalized() * 2;
+		Quat right_rot = { 0.7071,0,0.7071,0 };
+		Quat rotation= { 0,0,1,0 };
+		Quat rotated = rot* (rotation*right_rot);
 		transform->SetLocalPosition(position.x, position.y, position.z);
 		transform->SetLocalRotation(rotated.x, rotated.y, rotated.z, rotated.w);
 		glDisable(GL_LIGHTING);

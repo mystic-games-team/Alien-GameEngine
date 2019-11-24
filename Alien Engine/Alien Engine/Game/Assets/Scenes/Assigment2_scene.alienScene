@@ -8,7 +8,7 @@
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -50,7 +50,7 @@
                         "isFovHori": 0,
                         "ID": "5204042893379258528",
                         "IsGameCamera": false,
-                        "IsSelectedCamera": false,
+                        "IsSelectedCamera": true,
                         "PrintIcon": true,
                         "IconColor": [
                             0.85000002384185791,
@@ -128,7 +128,7 @@
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -170,7 +170,7 @@
                         "isFovHori": 0,
                         "ID": "5367846572498592553",
                         "IsGameCamera": false,
-                        "IsSelectedCamera": true,
+                        "IsSelectedCamera": false,
                         "PrintIcon": true,
                         "IconColor": [
                             0.85000002384185791,
@@ -791,6 +791,134 @@
                 ]
             },
             {
+                "Name": "City_building_030",
+                "FamilyNumber": 2,
+                "ID": "9388615377983224797",
+                "ParentID": "14132789465841021775",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -42.807239532470703,
+                            -41.835563659667969,
+                            -9.3834518111179932e-07
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            -0.70710676908493042,
+                            0.70710676908493042
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17750902446376802069"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "11369890219951981027",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "12906893153706662476",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "433364642312516913",
+                        "HasTexture": true,
+                        "TextureID": "6966809976564136011",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "City_building_031",
+                "FamilyNumber": 2,
+                "ID": "5834010757372672382",
+                "ParentID": "14132789465841021775",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -34.679481506347656,
+                            -41.835563659667969,
+                            -9.3834518111179932e-07
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            -0.70710676908493042,
+                            0.70710676908493042
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16977260486912879198"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "9730437781025650959",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "728497579659107380",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "15755811771060213469",
+                        "HasTexture": true,
+                        "TextureID": "6966809976564136011",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
                 "Name": "City_building_033",
                 "FamilyNumber": 2,
                 "ID": "1901260743289214514",
@@ -1232,6 +1360,70 @@
                         ],
                         "TextureEnabled": true,
                         "ID": "12335632043742847406",
+                        "HasTexture": true,
+                        "TextureID": "16062728515270306180",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "City_building_032",
+                "FamilyNumber": 2,
+                "ID": "15382617790084276787",
+                "ParentID": "14132789465841021775",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -29.478403091430664,
+                            21.01409912109375,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "243061396397703433"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "9019666417892625503",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "11729507568468650193",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "17345519880965372490",
                         "HasTexture": true,
                         "TextureID": "16062728515270306180",
                         "Enabled": true
@@ -2319,198 +2511,6 @@
                         "TextureEnabled": true,
                         "ID": "3633857978860084774",
                         "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "City_building_030",
-                "FamilyNumber": 2,
-                "ID": "9388615377983224797",
-                "ParentID": "14132789465841021775",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -42.807239532470703,
-                            -41.835563659667969,
-                            -9.3834518111179932e-07
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            -0.70710676908493042,
-                            0.70710676908493042
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "17750902446376802069"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "11369890219951981027",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "12906893153706662476",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "433364642312516913",
-                        "HasTexture": true,
-                        "TextureID": "6966809976564136011",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "City_building_031",
-                "FamilyNumber": 2,
-                "ID": "5834010757372672382",
-                "ParentID": "14132789465841021775",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -34.679481506347656,
-                            -41.835563659667969,
-                            -9.3834518111179932e-07
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            -0.70710676908493042,
-                            0.70710676908493042
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "16977260486912879198"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "9730437781025650959",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "728497579659107380",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "15755811771060213469",
-                        "HasTexture": true,
-                        "TextureID": "6966809976564136011",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "City_building_032",
-                "FamilyNumber": 2,
-                "ID": "15382617790084276787",
-                "ParentID": "14132789465841021775",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -29.478403091430664,
-                            21.01409912109375,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "243061396397703433"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "9019666417892625503",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "11729507568468650193",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            1,
-                            1,
-                            1,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "17345519880965372490",
-                        "HasTexture": true,
-                        "TextureID": "16062728515270306180",
                         "Enabled": true
                     }
                 ]
