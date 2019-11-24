@@ -67,12 +67,12 @@ void PanelRender::PanelLogic()
 		}
 		ImGui::Spacing();
 	}
-	if (ImGui::CollapsingHeader("Render Z-Buffer")) {
+	/*if (ImGui::CollapsingHeader("Render Z-Buffer")) {
 		ImGui::Spacing();
 		if (ImGui::Checkbox("View Z-Buffer", &App->renderer3D->render_zbuffer)) {
 			App->renderer3D->ChangeDrawFrameBuffer(App->renderer3D->render_zbuffer);
 		}
-	}
+	}*/
 	if (ImGui::CollapsingHeader("Personalize Grid")) 
 	{
 		ImGui::Spacing();
