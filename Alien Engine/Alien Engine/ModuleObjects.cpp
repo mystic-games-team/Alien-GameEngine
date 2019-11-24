@@ -25,11 +25,9 @@ ModuleObjects::~ModuleObjects()
 
 bool ModuleObjects::Init()
 {
-	//base_game_object = new GameObject();
-	//base_game_object->ID = 0;
-	//base_game_object->is_static = true;
-	////base_game_object->AddComponent(new ComponentTransform(base_game_object, { 0,0,0 }, { 0,0,0,0 }, { 1000,1000,1000 }));
-	
+	base_game_object = new GameObject();
+	base_game_object->ID = 0;
+	base_game_object->is_static = true;
 
 	return true;
 }
@@ -39,14 +37,14 @@ bool ModuleObjects::Start()
 	LOG("Starting Module Objects");
 	bool ret = true;
 
-	//GameObject* light_test = new GameObject(base_game_object);
-	//light_test->SetName("Light");
-	//light_test->AddComponent(new ComponentTransform(light_test, { 0,15,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
-	//light_test->AddComponent(new ComponentLight(light_test));
+	GameObject* light_test = new GameObject(base_game_object);
+	light_test->SetName("Light");
+	light_test->AddComponent(new ComponentTransform(light_test, { 0,15,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
+	light_test->AddComponent(new ComponentLight(light_test));
 
-	//current_scene.name_without_extension = "Untitled*";
-	//current_scene.full_path = "Untitled*";
-	//current_scene.is_untitled = true;
+	current_scene.name_without_extension = "Untitled*";
+	current_scene.full_path = "Untitled*";
+	current_scene.is_untitled = true;
 	LoadScene("Assets/Scenes/Assigment2_scene.alienScene");
 
 	return ret;
