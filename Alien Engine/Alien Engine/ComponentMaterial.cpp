@@ -14,6 +14,8 @@ ComponentMaterial::ComponentMaterial(GameObject* attach) : Component(attach)
 
 ComponentMaterial::~ComponentMaterial()
 {
+	if (texture != nullptr)
+		texture->DecreaseReferences();
 }
 
 void ComponentMaterial::BindTexture()
@@ -44,7 +46,9 @@ bool ComponentMaterial::DrawInspector()
 	if (ImGui::CollapsingHeader("Material", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		RightClickMenu("Material");
-
+		ImGui::Spacing();
+		if (texture != nullptr)
+			ImGui::Text("Texture References: %i", texture->references);
 		ImGui::Spacing();
 		static bool set_Z = true;
 		ImGui::Spacing();

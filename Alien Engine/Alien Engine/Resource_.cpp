@@ -62,7 +62,7 @@ void Resource::IncreaseReferences()
 void Resource::DecreaseReferences()
 {
 	if (App->objects->enable_instancies) {
-	--references;
+		--references;
 	}
 	if (references == 0)
 		FreeMemory();

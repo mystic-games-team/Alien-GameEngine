@@ -224,7 +224,9 @@ bool ComponentMesh::DrawInspector()
 	if (ImGui::CollapsingHeader("Mesh", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		RightClickMenu("Mesh");
-
+		ImGui::Spacing();
+		if (mesh != nullptr)
+			ImGui::Text("Mesh References: %i", mesh->references);
 		ImGui::Spacing();
 
 		ImGui::Text("Geometry Information");
