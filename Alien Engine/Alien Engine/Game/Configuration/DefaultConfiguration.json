@@ -14,7 +14,7 @@
             "Fulldesktop": false,
             "Resizable": true,
             "Borderless": false,
-			      "StartMax": false,
+			      "StartMax": true,
             "StyleType": 1
         },
         "UI": {
