@@ -101,7 +101,7 @@ public:
 	void ResetIDs();
 
 	//static
-	void ChangeStatic(bool static_);
+	void ChangeStatic(bool static_, AABB* aabb = nullptr);
 	bool HasChildrenStatic() const;
 
 private:

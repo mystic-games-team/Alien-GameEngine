@@ -234,7 +234,8 @@ bool ResourceMesh::LoadMemory()
 			texture = App->importer->LoadTextureFile(texture_name.data());
 		}
 
-		InitBuffers();
+		if (num_vertex != 0)
+			InitBuffers();
 
 		delete meta;
 	}
@@ -289,20 +290,22 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 
 	obj->AddComponent(new ComponentTransform(obj, pos, rot, scale));
 
-	ComponentMesh* mesh = new ComponentMesh(obj);
-		
-	mesh->mesh = this;
-	mesh->RecalculateAABB_OBB();
+	if (num_vertex != 0) {
+		ComponentMesh* mesh = new ComponentMesh(obj);
 
-	obj->AddComponent(mesh);
+		mesh->mesh = this;
+		mesh->RecalculateAABB_OBB();
 
-	ComponentMaterial* material = new ComponentMaterial(obj);
+		obj->AddComponent(mesh);
 
-	if (texture != nullptr) {
-		material->SetTexture(texture);
+		ComponentMaterial* material = new ComponentMaterial(obj);
+
+		if (texture != nullptr) {
+			material->SetTexture(texture);
+		}
+
+		obj->AddComponent(material);
 	}
-
-	obj->AddComponent(material);
 }
 
 void ResourceMesh::InitBuffers()

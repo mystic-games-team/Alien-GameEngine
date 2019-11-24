@@ -519,7 +519,10 @@ bool ComponentTransform::DrawInspector()
 
 					ImGui::SetCursorPosX(12);
 					if (ImGui::Button("Change children")) {
-						game_object_attached->ChangeStatic(game_object_attached->is_static);
+						AABB aabb;
+						aabb.SetNegativeInfinity();
+						game_object_attached->ChangeStatic(game_object_attached->is_static, &aabb);
+						App->objects->octree.MakeBigLimits(aabb);
 						App->objects->octree.Insert(game_object_attached, true);
 						popup_static = false;
 					}

@@ -48,6 +48,7 @@ bool ModuleObjects::Start()
 	//current_scene.full_path = "Untitled*";
 	//current_scene.is_untitled = true;
 	LoadScene("Assets/Scenes/Assigment2_scene.alienScene");
+
 	return ret;
 }
 

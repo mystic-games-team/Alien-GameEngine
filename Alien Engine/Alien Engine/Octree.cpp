@@ -301,6 +301,7 @@ Octree::~Octree()
 void Octree::Insert(GameObject* object, bool add_children)
 {
 	ComponentMesh* mesh_parent = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
+
 	if (mesh_parent != nullptr && mesh_parent->mesh != nullptr) {
 		if (root == nullptr) {
 			Init(mesh_parent->GetGlobalAABB().minPoint, mesh_parent->GetGlobalAABB().maxPoint);
@@ -372,14 +373,15 @@ void Octree::Recalculate(GameObject* new_object)
 	std::vector<GameObject*> to_save;
 
 	AABB new_section;
+	new_section.minPoint = root->section.minPoint;
+	new_section.maxPoint = root->section.maxPoint;
 
 	if (new_object != nullptr) {
 		to_save.push_back(new_object);
 		ComponentMesh* mesh = (ComponentMesh*)new_object->GetComponent(ComponentType::MESH);
-		new_section = mesh->GetGlobalAABB();
-	}
-	else {
-		new_section.SetNegativeInfinity();
+		AABB obj_aabb = mesh->GetGlobalAABB();
+		new_section.minPoint = { min(new_section.minPoint.x, obj_aabb.minPoint.x), min(new_section.minPoint.y, obj_aabb.minPoint.y), min(new_section.minPoint.z, obj_aabb.minPoint.z) };
+		new_section.maxPoint = { max(new_section.maxPoint.x, obj_aabb.maxPoint.x), max(new_section.maxPoint.y, obj_aabb.maxPoint.y), max(new_section.maxPoint.z, obj_aabb.maxPoint.z) };
 	}
 
 	// get all gameobjects in octree and get the min & max points
@@ -394,6 +396,17 @@ void Octree::Recalculate(GameObject* new_object)
 		if (*item != nullptr) {
 			Insert((*item), false);
 		}
+	}
+	to_save.clear();
+}
+
+void Octree::MakeBigLimits(AABB aabb)
+{
+	if (root == nullptr) {
+		Init(aabb.minPoint, aabb.maxPoint);
+	}
+	else {
+
 	}
 }
 
