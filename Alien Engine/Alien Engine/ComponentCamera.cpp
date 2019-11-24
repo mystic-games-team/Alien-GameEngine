@@ -323,21 +323,16 @@ void ComponentCamera::DrawIconCamera()
 	{
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 		float3 pos = transform->GetLocalPosition();
-		Quat rot = transform->GetLocalRotation();
 		float3 scale = transform->GetLocalScale();
-		float3 rot_ = rot.ToEulerXYZ();
-		Quat rotated = Quat::FromEulerXYZ(rot_.x, rot_.y-89.5, rot_.z);
 		transform->SetLocalScale(0.1f, 0.1f, 0.1f);
 		float3 position = pos - frustum.front.Normalized() * 2;
 		transform->SetLocalPosition(position.x, position.y, position.z);
-		transform->SetLocalRotation(rotated.x, rotated.y, rotated.z, rotated.w);
 		glDisable(GL_LIGHTING);
 		glColor3f(camera_icon_color.r, camera_icon_color.g, camera_icon_color.b);
 		mesh_camera->DrawPolygon();
 		glEnable(GL_LIGHTING);
 		transform->SetLocalScale(scale.x, scale.y, scale.z);
 		transform->SetLocalPosition(pos.x, pos.y, pos.z);
-		transform->SetLocalRotation(rot.x, rot.y, rot.z, rot.w);
 	}
 }
 
