@@ -34,25 +34,9 @@ void OctreeNode::Insert(GameObject* object, const AABB& sect)
 			}
 			else {
 				Subdivide();
-				bool fits = false;
-				std::vector<GameObject*>::iterator item = game_objects.begin();
-				for (; item != game_objects.end(); ++item) {
-					if (AddToChildren(*item, static_cast<ComponentMesh*>((*item)->GetComponent(ComponentType::MESH))->GetGlobalAABB())) {
-						game_objects.erase(item);
-						fits = true;
-						if (!game_objects.empty()) {
-							item = game_objects.begin();
-						}
-						else {
-							break;
-						}
-					}
-				}
 				if (!AddToChildren(object, sect)) { // after the subdivision test if gameobject fits in children, if not delete childrena and object belogns to parent
-					if (!fits) {
-						Regrup();
-						AddGameObject(object);
-					}
+					Regrup();
+					AddGameObject(object);
 				}
 			}
 		}

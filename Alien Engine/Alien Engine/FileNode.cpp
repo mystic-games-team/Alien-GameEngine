@@ -150,9 +150,6 @@ void FileNode::RemoveResourceOfGameObjects()
 				}
 			}
 			break; }
-		case FileDropType::PREFAB: {
-			// TODO: unpack all prefabs that have this one
-			break; }
 		}
 	}
 	else {
