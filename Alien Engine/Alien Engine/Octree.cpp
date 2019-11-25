@@ -329,7 +329,12 @@ void Octree::Remove(GameObject* object)
 
 	RemoveRecursively(object);
 
-	App->objects->octree.Recalculate(nullptr);
+	if (all_objects.empty()) {
+		Clear();
+	}
+	else {
+		App->objects->octree.Recalculate(nullptr);
+	}
 }
 
 void Octree::Clear()
@@ -373,15 +378,12 @@ void Octree::Recalculate(GameObject* new_object)
 	std::vector<GameObject*> to_save;
 
 	AABB new_section;
-	new_section.minPoint = root->section.minPoint;
-	new_section.maxPoint = root->section.maxPoint;
+	new_section.SetNegativeInfinity();
 
 	if (new_object != nullptr) {
 		to_save.push_back(new_object);
 		ComponentMesh* mesh = (ComponentMesh*)new_object->GetComponent(ComponentType::MESH);
-		AABB obj_aabb = mesh->GetGlobalAABB();
-		new_section.minPoint = { min(new_section.minPoint.x, obj_aabb.minPoint.x), min(new_section.minPoint.y, obj_aabb.minPoint.y), min(new_section.minPoint.z, obj_aabb.minPoint.z) };
-		new_section.maxPoint = { max(new_section.maxPoint.x, obj_aabb.maxPoint.x), max(new_section.maxPoint.y, obj_aabb.maxPoint.y), max(new_section.maxPoint.z, obj_aabb.maxPoint.z) };
+		new_section = mesh->GetGlobalAABB();
 	}
 
 	// get all gameobjects in octree and get the min & max points
@@ -398,16 +400,6 @@ void Octree::Recalculate(GameObject* new_object)
 		}
 	}
 	to_save.clear();
-}
-
-void Octree::MakeBigLimits(AABB aabb)
-{
-	if (root == nullptr) {
-		Init(aabb.minPoint, aabb.maxPoint);
-	}
-	else {
-
-	}
 }
 
 void Octree::SetStaticDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera)
@@ -431,8 +423,8 @@ void Octree::RemoveRecursively(GameObject* obj)
 {
 	ComponentMesh* mesh_parent = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
 	if (mesh_parent != nullptr && mesh_parent->mesh != nullptr) {
-		root->Remove(obj);
-		all_objects.remove(obj);
+		if (root->Remove(obj))
+			all_objects.remove(obj);
 	}
 
 	if (!obj->children.empty()) {

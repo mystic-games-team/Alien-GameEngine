@@ -887,22 +887,13 @@ void GameObject::ResetIDs()
 	}
 }
 
-void GameObject::ChangeStatic(bool static_, AABB* aabb)
+void GameObject::ChangeStatic(bool static_)
 {
-	if (aabb != nullptr) {
-		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-		if (mesh != nullptr && mesh->mesh != nullptr) {
-			AABB obj_aabb = mesh->GetGlobalAABB();
-			aabb->minPoint = { min(aabb->minPoint.x, obj_aabb.minPoint.x), min(aabb->minPoint.y, obj_aabb.minPoint.y), min(aabb->minPoint.z, obj_aabb.minPoint.z) };
-			aabb->maxPoint = { max(aabb->maxPoint.x, obj_aabb.maxPoint.x), max(aabb->maxPoint.y, obj_aabb.maxPoint.y), max(aabb->maxPoint.z, obj_aabb.maxPoint.z) };
-		}
-	}
-
 	std::vector<GameObject*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
 			(*item)->is_static = static_;
-			(*item)->ChangeStatic(static_, aabb);
+			(*item)->ChangeStatic(static_);
 		}
 	}
 }

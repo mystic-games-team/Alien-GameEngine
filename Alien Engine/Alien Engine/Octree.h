@@ -68,7 +68,7 @@ public:
 	bool Exists(GameObject* object);
 	// create again the octree
 	void Recalculate(GameObject* new_object);
-	void MakeBigLimits(AABB aabb);
+
 	void SetStaticDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera);
 
 	uint bucket = 2;
