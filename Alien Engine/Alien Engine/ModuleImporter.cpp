@@ -112,35 +112,44 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Res
 	LOG("Loading node with name %s", node->mName.C_Str());
 	ResourceMesh* next_parent = nullptr;
 
-	if (node->mNumMeshes == 1) {
-		const aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
-		next_parent = LoadNodeMesh(scene, node, mesh, parent);
-		next_parent->family_number = family_number;
-		App->resources->AddResource(next_parent);
-		model->meshes_attached.push_back(next_parent);
-	}
-	else if (node->mNumMeshes > 1) {
-		ResourceMesh* parent_node = new ResourceMesh();
-		parent_node->family_number = family_number;
-		App->resources->AddResource(parent_node);
-		model->meshes_attached.push_back(parent_node);
-		parent_node->SetName(node->mName.C_Str());
-		if (parent != nullptr)
-			parent_node->parent_name = parent->name;
-		else
-			//parent_node->parent_name = "null";
-
-		for (uint i = 0; i < node->mNumMeshes; ++i) {
-			const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			next_parent = LoadNodeMesh(scene, node, mesh, parent_node);
-			next_parent->name += std::to_string(i);
-			next_parent->family_number = family_number + 1;
+	std::string node_name = node->mName.C_Str();
+	if (node_name.find("_$AssimpFbx$_") == std::string::npos && node_name.find("RootNode") == std::string::npos) {
+		if (node->mNumMeshes == 1) {
+			const aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
+			next_parent = LoadNodeMesh(scene, node, mesh, parent);
+			next_parent->family_number = family_number;
 			App->resources->AddResource(next_parent);
 			model->meshes_attached.push_back(next_parent);
 		}
-		next_parent = parent_node;
+		else if (node->mNumMeshes > 1) {
+			ResourceMesh* parent_node = new ResourceMesh();
+			parent_node->family_number = family_number;
+			App->resources->AddResource(parent_node);
+			model->meshes_attached.push_back(parent_node);
+			parent_node->SetName(node->mName.C_Str());
+			if (parent != nullptr)
+				parent_node->parent_name = parent->name;
+
+			for (uint i = 0; i < node->mNumMeshes; ++i) {
+				const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+				next_parent = LoadNodeMesh(scene, node, mesh, parent_node);
+				next_parent->name += std::to_string(i);
+				next_parent->family_number = family_number + 1;
+				App->resources->AddResource(next_parent);
+				model->meshes_attached.push_back(next_parent);
+			}
+			next_parent = parent_node;
+		}
+		else if (node->mNumMeshes == 0) {
+			next_parent = new ResourceMesh();
+			next_parent->family_number = family_number;
+			App->resources->AddResource(next_parent);
+			model->meshes_attached.push_back(next_parent);
+			next_parent->SetName(node->mName.C_Str());
+			if (parent != nullptr)
+				next_parent->parent_name = parent->name;
+		}
 	}
-	
 	for (uint i = 0; i < node->mNumChildren; ++i) {
 		LOG("Loading children of node %s", node->mName.C_Str());
 		uint fam_num = 1;

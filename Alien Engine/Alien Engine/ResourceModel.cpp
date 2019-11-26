@@ -79,7 +79,8 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 			for (; item != meshes_attached.end(); ++item) {
 				if ((*item) != nullptr) {
 					if (paths != nullptr) {
-						(*item)->CreateMetaData(std::stoull(App->file_system->GetBaseFileName(paths[item - meshes_attached.begin()].data()).data()));
+						std::string path_ = App->file_system->GetBaseFileName(paths[item - meshes_attached.begin()].data()); //std::stoull().data());
+						(*item)->CreateMetaData(std::stoull(path_));
 					}
 					else {
 						(*item)->CreateMetaData();
