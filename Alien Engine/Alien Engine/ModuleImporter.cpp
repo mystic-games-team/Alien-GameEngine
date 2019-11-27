@@ -80,6 +80,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 		}
 		aiReleaseImport(scene);
 		App->resources->AddNewFileNode(path, true);
+		
 	}
 	else {
 		App->resources->CreateNewModelInstanceOf(model->GetLibraryPath());
@@ -101,6 +102,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 	if (model->CreateMetaData()) {
 		App->resources->AddResource(model);
 		model->ConvertToGameObjects();
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
 	}
 
 	model = nullptr;
@@ -244,12 +246,12 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	node->mTransformation.Decompose(scaling, rotation, translation);
 
 	// set the scale in value of 1 but keeping the dimensions
-	float max_ = max(scaling.x, scaling.y);
-	max_ = max(max_, scaling.z);
+	//float max_ = max(scaling.x, scaling.y);
+	//max_ = max(max_, scaling.z);
 
 	float3 pos(translation.x, translation.y, translation.z);
-	float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
-	//float3 scale(scaling.x, scaling.y, scaling.z);
+	//float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
+	float3 scale(scaling.x, scaling.y, scaling.z);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	ret->pos = pos;
