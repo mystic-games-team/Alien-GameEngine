@@ -145,7 +145,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 
-	/*if (App->renderer3D->SetCameraToDraw(App->renderer3D->actual_game_camera)) {
+	if (App->renderer3D->SetCameraToDraw(App->renderer3D->actual_game_camera)) {
 		printing_scene = false;
 		if (App->renderer3D->render_zbuffer) {
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
@@ -161,7 +161,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			App->renderer3D->RenderGrid();
 
 		if (base_game_object->HasChildren()) {
-			std::vector<GameObject*> to_draw;
+			std::map<float, GameObject*> to_draw;
 
 			octree.SetStaticDrawList(&to_draw, App->renderer3D->actual_game_camera);
 
@@ -172,10 +172,10 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 
-			item = to_draw.begin();
-			for (; item != to_draw.end(); ++item) {
-				if (*item != nullptr) {
-					(*item)->DrawGame();
+			std::map<float, GameObject*>::reverse_iterator it = to_draw.rbegin();
+			for (; it != to_draw.rend(); ++it) {
+				if ((*it).second != nullptr) {
+					(*it).second->DrawGame();
 				}
 			}
 		}
@@ -201,7 +201,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			App->renderer3D->RenderGrid();
 
 		if (base_game_object->HasChildren()) {
-			std::vector<GameObject*> to_draw;
+			std::map<float, GameObject*> to_draw;
 
 			octree.SetStaticDrawList(&to_draw, App->renderer3D->selected_game_camera);
 
@@ -212,16 +212,16 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 
-			item = to_draw.begin();
-			for (; item != to_draw.end(); ++item) {
-				if (*item != nullptr) {
-					(*item)->DrawGame();
+			std::map<float, GameObject*>::reverse_iterator it = to_draw.rbegin();
+			for (; it != to_draw.rend(); ++it) {
+				if ((*it).second != nullptr) {
+					(*it).second->DrawGame();
 				}
 			}
 		}
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	}*/
+	}
 
 
 	return UPDATE_CONTINUE;
