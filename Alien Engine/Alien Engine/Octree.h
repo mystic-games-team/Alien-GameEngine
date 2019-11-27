@@ -3,6 +3,7 @@
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include <vector>
 #include <list>
+#include <map>
 #include "GameObject.h"
 
 class ComponentCamera;
@@ -32,7 +33,7 @@ private:
 	void Regrup();
 	void SaveGameObjects(std::vector<GameObject*>* to_save, AABB* new_section);
 	bool AddToChildren(GameObject* obj, const AABB& sect);
-	void SetStaticDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera);
+	void SetStaticDrawList(std::map<float, GameObject*>* to_draw, const ComponentCamera* camera);
 
 public:
 
@@ -69,7 +70,7 @@ public:
 	// create again the octree
 	void Recalculate(GameObject* new_object);
 
-	void SetStaticDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera);
+	void SetStaticDrawList(std::map<float, GameObject*>* to_draw, const ComponentCamera* camera);
 
 	uint bucket = 2;
 	OctreeNode* root = nullptr;

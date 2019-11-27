@@ -106,7 +106,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			octree.Draw();
 
 		if (base_game_object->HasChildren()) {
-			std::vector<GameObject*> to_draw;
+			std::map<float, GameObject*> to_draw;
 
 			ComponentCamera* frustum_camera = nullptr;
 
@@ -133,10 +133,10 @@ update_status ModuleObjects::PostUpdate(float dt)
 				static GLfloat f[4] = { 1,1,1,1 };
 				glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, f);
 			}
-			item = to_draw.begin();
-			for (; item != to_draw.end(); ++item) {
-				if (*item != nullptr) {
-					(*item)->DrawScene();
+			std::map<float, GameObject*>::reverse_iterator it = to_draw.rbegin();
+			for (; it != to_draw.rend(); ++it) {
+				if ((*it).second != nullptr) {
+					(*it).second->DrawScene();
 				}
 			}
 		}
@@ -145,7 +145,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 
-	if (App->renderer3D->SetCameraToDraw(App->renderer3D->actual_game_camera)) {
+	/*if (App->renderer3D->SetCameraToDraw(App->renderer3D->actual_game_camera)) {
 		printing_scene = false;
 		if (App->renderer3D->render_zbuffer) {
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, App->renderer3D->z_framebuffer);
@@ -221,7 +221,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		}
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	}
+	}*/
 
 
 	return UPDATE_CONTINUE;

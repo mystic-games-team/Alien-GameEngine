@@ -6,6 +6,7 @@
 #include <string>
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "JSONfilepack.h"
+#include <map>
 
 enum class ResourceType;
 class Resource;
@@ -31,7 +32,7 @@ public:
 	// here we call Component Mesh, Material & light
 	void DrawScene();
 	void DrawGame();
-	void SetDrawList(std::vector<GameObject*>* to_draw, const ComponentCamera* camera);
+	void SetDrawList(std::map<float, GameObject*>* to_draw, const ComponentCamera* camera);
 
 	// components
 	void AddComponent(Component* component);
