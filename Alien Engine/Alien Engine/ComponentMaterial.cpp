@@ -20,7 +20,7 @@ ComponentMaterial::~ComponentMaterial()
 
 void ComponentMaterial::BindTexture()
 {
-	ComponentMesh* mesh = (ComponentMesh*)game_object_attached->GetComponent(ComponentType::MESH);
+	ComponentMesh* mesh = game_object_attached->GetComponent<ComponentMesh>();
 	if (texture != nullptr && texture->id > 0 && texture_activated && mesh != nullptr && mesh->mesh != nullptr) {
 		// enable textures
 		glEnable(GL_TEXTURE_2D);

@@ -40,6 +40,9 @@ public:
 	Component* GetComponent(const ComponentType& type);
 	Component* GetComponentWithID(const u64& ID);
 
+	template <class Comp>
+	Comp* GetComponent();
+
 	// children
 	void AddChild(GameObject* child);
 	bool HasChildren();
@@ -132,3 +135,15 @@ private:
 
 	std::string name = "UnNamed";
 };
+
+template<class Comp>
+inline Comp* GameObject::GetComponent()
+{
+	for (uint i = 0; i < components.size(); ++i) {
+		Comp* component = dynamic_cast<Comp*>(components[i]);
+		if (component != nullptr) {
+			return component;
+		}
+	}
+	return nullptr;
+}
