@@ -1,9 +1,11 @@
 #include "Application.h"
 #include "Parson/parson.h"
 #include "Time.h"
-
+#include "AlienEngineCore.h"
 Application::Application()
 {
+	scripts_dll = LoadLibrary("AlienEngineScripts");
+	
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	scene_intro = new ModuleSceneIntro();
@@ -59,6 +61,8 @@ Application::~Application()
 
 	if (shortcut_manager != nullptr)
 		delete shortcut_manager;
+
+	FreeLibrary(scripts_dll);
 }
 
 void Application::LoadDefaultConfig()

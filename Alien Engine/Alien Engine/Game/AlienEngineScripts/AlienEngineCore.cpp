@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "AlienEngineCore.h"
-#include "Globals.h"
+//#include "Globals.h"
 
-void LogToConsole()
+const char* LogToConsole()
 {
-	LOG("AAAAAAAAAAAAAAAA");
+	//LOG("AAAAAAAAAAAAAAAA");
+	return "AAAAAAAAA";
 }

@@ -7,4 +7,4 @@
 #endif
 
 
-ALIEN_ENGINE_API void LogToConsole();
+ALIEN_ENGINE_API const char* LogToConsole();

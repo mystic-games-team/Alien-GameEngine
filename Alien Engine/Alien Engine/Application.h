@@ -42,7 +42,7 @@ public:
 private:
 	JSONfilepack* config = nullptr;
 	JSONfilepack* layout = nullptr;
-
+	HINSTANCE scripts_dll = nullptr;
 	std::list<JSONfilepack*> json_files;
 
 	std::list<Module*> list_modules;
