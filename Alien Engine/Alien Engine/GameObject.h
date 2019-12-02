@@ -13,7 +13,7 @@ class Resource;
 
 class ComponentCamera;
 
-class GameObject
+class __declspec(dllexport) GameObject
 {
 public:
 	GameObject(GameObject* parent);

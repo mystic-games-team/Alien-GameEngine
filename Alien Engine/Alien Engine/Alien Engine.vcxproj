@@ -399,6 +399,11 @@
   <ItemGroup>
     <Image Include="Game\Assets\alienYellow.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Game\AlienEngineScripts\AlienEngineScripts.vcxproj">
+      <Project>{d1458ca6-efcc-4203-b301-a36df20e9172}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

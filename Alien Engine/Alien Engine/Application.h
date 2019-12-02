@@ -37,12 +37,12 @@ public:
 	uint16_t framerate_cap;
 	int fps_limit = 30;
 	ImGuiTextBuffer log_string; 
-	
+	HINSTANCE scripts_dll = nullptr;
 
 private:
 	JSONfilepack* config = nullptr;
 	JSONfilepack* layout = nullptr;
-	HINSTANCE scripts_dll = nullptr;
+	
 	std::list<JSONfilepack*> json_files;
 
 	std::list<Module*> list_modules;

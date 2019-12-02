@@ -241,6 +241,8 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		ImGui::PopStyleColor();
 	if (ImGui::IsItemClicked()) {
 		App->objects->SetNewSelectedObject(node);
+		void (*DeleteObject)(GameObject*) = (void(*)(GameObject*))GetProcAddress(App->scripts_dll, "DeleteGameObject");
+		DeleteObject(node);
 	}
 	if (ImGui::IsItemHovered()) {
 		object_hovered = node;
