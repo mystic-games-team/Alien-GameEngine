@@ -180,6 +180,8 @@ bool Application::Init()
 		++item;
 	}
 	
+
+
 	return ret;
 }
 
@@ -197,6 +199,8 @@ void Application::PrepareUpdate()
 	}
 	frame_time.Start();
 	ptimer.Start();
+	const char* (*Console)() = (const char* (*)())GetProcAddress(scripts_dll, "LogToConsole");
+	LOG(Console());
 }
 
 // ---------------------------------------------

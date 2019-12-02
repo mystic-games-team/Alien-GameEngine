@@ -6,5 +6,7 @@
 #define ALIEN_ENGINE_API __declspec(dllimport)
 #endif
 
+extern "C" {
 
-ALIEN_ENGINE_API const char* LogToConsole();
+	ALIEN_ENGINE_API const char* LogToConsole();
+}
