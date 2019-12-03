@@ -5,7 +5,7 @@
 Application::Application()
 {
 	scripts_dll = LoadLibrary("AlienEngineScripts");
-	
+
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	scene_intro = new ModuleSceneIntro();
@@ -227,6 +227,9 @@ void Application::FinishUpdate()
 	}
 	Time::Update();
 	ui->FramerateRegister((float)prev_last_sec_frame_count, (float)(framerate_cap));
+
+	
+
 }
 
 JSONfilepack* Application::LoadJSONFile(const std::string& path)

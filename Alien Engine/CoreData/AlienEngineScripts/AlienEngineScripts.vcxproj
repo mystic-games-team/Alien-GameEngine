@@ -168,11 +168,6 @@
     <ClCompile Include="AlienScripts.cpp" />
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Alien Engine\Alien Engine.vcxproj">
-      <Project>{2b733336-2a33-407b-93d6-a179c84ab569}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
