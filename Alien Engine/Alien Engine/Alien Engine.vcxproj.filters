@@ -58,6 +58,9 @@
     <Filter Include="Tools\Guizmos">
       <UniqueIdentifier>{72e23ff2-eba1-4b08-ad4f-1a745f5ff149}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ScriptHelpers">
+      <UniqueIdentifier>{79de4d46-5e7a-45c2-b497-3c132db2193d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -492,6 +495,9 @@
     <ClInclude Include="ComponentScript.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="StaticInput.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -778,6 +784,9 @@
     </ClCompile>
     <ClCompile Include="ComponentScript.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticInput.cpp">
+      <Filter>ScriptHelpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

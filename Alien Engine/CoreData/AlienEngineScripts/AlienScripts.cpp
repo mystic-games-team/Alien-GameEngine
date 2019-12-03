@@ -1,6 +1,6 @@
 #include "AlienScripts.h"
 #include "..\..\Alien Engine\GameObject.h"
-
+#include "..\..\Alien Engine\StaticInput.h"
 const char* LogToConsole()
 {
 	//LOG("AAAAAAAAAAAAAAAA");
@@ -9,7 +9,9 @@ const char* LogToConsole()
 
 void DeleteGameObject(GameObject* obj)
 {
-	if (obj != nullptr) {
-		obj->ToDelete();
+	if (Input::GetKey(SDL_SCANCODE_D) == Input::KEY_REPEAT) {
+		if (obj != nullptr) {
+			obj->ToDelete();
+		}
 	}
 }
