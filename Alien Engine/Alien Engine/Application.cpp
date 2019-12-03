@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "Parson/parson.h"
 #include "Time.h"
-#include "AlienEngineCore.h"
+
 Application::Application()
 {
 	scripts_dll = LoadLibrary("AlienEngineScripts");

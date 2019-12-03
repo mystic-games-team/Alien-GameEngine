@@ -1,6 +1,5 @@
-#include "pch.h"
-#include "AlienEngineCore.h"
-#include "GameObject.h"
+#include "AlienScripts.h"
+#include "..\..\Alien Engine\GameObject.h"
 
 const char* LogToConsole()
 {
