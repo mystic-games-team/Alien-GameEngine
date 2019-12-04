@@ -1,12 +1,12 @@
 #ifndef _JUMP_H_
 #define _JUMP_H_
 
-#include "AlienScripts.h"
+#include "Macros/AlienScripts.h"
 #include "..\..\Alien Engine\Alien.h"
 
 ALIEN_INIT_HEADER
 
-class ALIEN_ENGINE_CLASS_API Jump : Alien {
+class ALIEN_ENGINE_CLASS_API Jump : public Alien {
 
 public:
 
@@ -16,7 +16,10 @@ public:
 	void Start();
 
 };
-ALIEN_INIT_CLASS Jump* CreateJump(std::vector<std::pair<std::string, void*>>* ins) { return new Jump(); }
+ALIEN_INIT_CLASS Jump* CreateJump() { 
+	Jump* jump = new Jump();
+	return jump;
+}
 
 ALIEN_END_HEADER
 

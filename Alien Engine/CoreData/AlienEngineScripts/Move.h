@@ -2,14 +2,14 @@
 #define _MOVE_H_
 
 #include "..\..\Alien Engine\Alien.h"
-#include "AlienScripts.h"
+#include "Macros/AlienScripts.h"
 
 #include <iostream>
 #include <utility>
 
 ALIEN_INIT_HEADER
 
-class ALIEN_ENGINE_CLASS_API Move : Alien {
+class ALIEN_ENGINE_CLASS_API Move : public Alien {
 
 public:
 
