@@ -504,6 +504,9 @@
     <ClInclude Include="Alien.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceScript.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -795,6 +798,9 @@
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
     <ClCompile Include="Alien.cpp" />
+    <ClCompile Include="ResourceScript.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

@@ -21,6 +21,9 @@ public:
 
 public:
 
+
+private:
+
 	// TODO: change to touple and next option is for personaliing ImGui inspector, like drag int text int bla bla
 	// enum for types of imgui to show variables
 	// change to struct, need variable name

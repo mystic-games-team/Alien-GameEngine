@@ -10,6 +10,8 @@
 #include "PanelProject.h"
 #include "ResourcePrefab.h"
 #include "FileNode.h"
+#include "ResourceScript.h"
+
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 {
@@ -298,6 +300,22 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 	App->importer->LoadParShapesMesh(par_mesh, *ret);
 }
 
+void ModuleResources::ReadHeaderFile(const char* path, std::vector<std::string> current_scripts)
+{
+	ResourceScript* script = new ResourceScript();
+	for (uint i = 0; i < current_scripts.size(); ++i) {
+		if (App->StringCmp(App->file_system->GetBaseFileName(path).data(), App->file_system->GetBaseFileName(current_scripts[i].data()).data())) {
+
+			// TODO:
+			return;
+		}
+	}
+	// if it goes here it is because it doesnt exist
+	script->SetName(App->file_system->GetBaseFileName(path).data());
+	script->SetAssetsPath(path);
+	script->CreateMetaData();
+}
+
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)
 {
 	FileNode* to_search = nullptr;
@@ -334,11 +352,19 @@ void ModuleResources::ReadAllMetaData()
 	App->file_system->DiscoverFiles(MODELS_FOLDER, files, directories);
 
 	ReadModels(directories, files, MODELS_FOLDER);
+
 	files.clear();
 	directories.clear();
+
 	// Init Prefabs
 	App->file_system->DiscoverFiles(ASSETS_PREFAB_FOLDER, files, directories);
 	ReadPrefabs(directories, files, ASSETS_PREFAB_FOLDER);
+
+	files.clear();
+	directories.clear();
+
+	// Init Scripts
+	ReadScripts();
 }
 
 void ModuleResources::ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
@@ -402,5 +428,43 @@ void ModuleResources::ReadPrefabs(std::vector<std::string> directories, std::vec
 		}
 	}
 }
+
+void ModuleResources::ReadScripts()
+{
+	std::vector<std::string> files;
+	std::vector<std::string> directories;
+	std::vector<std::string> scripts;
+
+	App->file_system->DiscoverFiles(SCRIPTS_FOLDER, files, directories);
+	GetAllScriptsPath(directories, files, SCRIPTS_FOLDER, &scripts);
+
+	files.clear();
+	directories.clear();
+
+	App->file_system->DiscoverFiles(HEADER_SCRIPTS_FILE, files, directories);
+
+	for (uint i = 0; i < files.size(); ++i) {
+		if (files[i].back() == 'h') { // header file found
+			ReadHeaderFile(std::string(HEADER_SCRIPTS_FILE + files[i]).data(), scripts);
+		}
+	}
+}
+
+void ModuleResources::GetAllScriptsPath(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder, std::vector<std::string>* scripts)
+{
+	if (!files.empty())
+		scripts->assign(files.begin(), files.end());
+	if (!directories.empty()) {
+		std::vector<std::string> new_files;
+		std::vector<std::string> new_directories;
+
+		for (uint i = 0; i < directories.size(); ++i) {
+			std::string dir = current_folder + directories[i] + "/";
+			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
+			GetAllScriptsPath(new_directories, new_files, dir, scripts);
+		}
+	}
+}
+
 
 

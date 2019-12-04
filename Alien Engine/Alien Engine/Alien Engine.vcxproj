@@ -281,6 +281,7 @@
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="ResourceModel.h" />
     <ClInclude Include="ResourcePrefab.h" />
+    <ClInclude Include="ResourceScript.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Resource_.h" />
     <ClInclude Include="ReturnZ.h" />
@@ -381,6 +382,7 @@
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="ResourceModel.cpp" />
     <ClCompile Include="ResourcePrefab.cpp" />
+    <ClCompile Include="ResourceScript.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="Resource_.cpp" />
     <ClCompile Include="ReturnZ.cpp" />
