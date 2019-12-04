@@ -13,6 +13,8 @@
 #include "Time.h"
 #include "ModuleRenderer3D.h"
 
+#include "Alien.h"
+
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {
 	name.assign("ModuleObject");
@@ -45,6 +47,20 @@ bool ModuleObjects::Start()
 	current_scene.name_without_extension = "Untitled*";
 	current_scene.full_path = "Untitled*";
 	current_scene.is_untitled = true;
+
+	//void* (*Creator)(std::vector<std::pair<std::string, void*>>*) = (void* (*)(std::vector<std::pair<std::string, void*>>*))GetProcAddress(App->scripts_dll, "CreateJump");
+	std::vector<std::pair<std::string, void*>>* ins = nullptr;
+	//void* new_class = Creator(&ins);
+
+	//static_cast<Alien*>(new_class)->Start();
+	int* ptr = nullptr;
+	void*(*Creator)() = (void*(*)())GetProcAddress(App->scripts_dll, "CreateMove");
+	void* to_create = nullptr;
+	to_create = Creator();
+	Alien* alien = static_cast<Alien*>(to_create);
+	//alien->transform = base_game_object->children.back()->GetComponent<ComponentTransform>();
+	alien->Start();
+
 
 	return ret;
 }

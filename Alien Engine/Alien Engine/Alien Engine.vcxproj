@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Alien.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
@@ -283,6 +284,7 @@
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Resource_.h" />
     <ClInclude Include="ReturnZ.h" />
+    <ClInclude Include="ScriptMacros.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
     <ClInclude Include="StaticInput.h" />
@@ -290,6 +292,7 @@
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Alien.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />

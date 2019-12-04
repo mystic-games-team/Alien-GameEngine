@@ -13,6 +13,7 @@
 
 class ReturnZ;
 class ResourcePrefab;
+class ComponentScript;
 
 struct Scene {
 
@@ -189,6 +190,9 @@ public:
 	bool enable_instancies = true;
 	ResourcePrefab* prefab_opened = nullptr;
 	bool ignore_cntrlZ = false;
+
+	ComponentScript* actual_script_loading = nullptr;
+
 private:
 	// root
 	GameObject* base_game_object = nullptr;

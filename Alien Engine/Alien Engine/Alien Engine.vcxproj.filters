@@ -498,6 +498,12 @@
     <ClInclude Include="StaticInput.h">
       <Filter>ScriptHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="ScriptMacros.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Alien.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -788,6 +794,7 @@
     <ClCompile Include="StaticInput.cpp">
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
+    <ClCompile Include="Alien.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

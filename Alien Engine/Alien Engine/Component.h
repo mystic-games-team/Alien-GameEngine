@@ -16,7 +16,7 @@ enum class ComponentType {
 	UNKNOWN
 };
 
-class Component {
+class __declspec(dllexport) Component {
 
 public:
 

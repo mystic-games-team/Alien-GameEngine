@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Component.h"
+#include <vector>
+#include <string>
 
-class ComponentScript : public Component {
+class __declspec(dllexport) ComponentScript : public Component {
 public:
 	ComponentScript(GameObject* attach);
 	virtual ~ComponentScript();
@@ -14,4 +16,13 @@ public:
 
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
+
+	static void LoadInspector(int* ptr);
+
+public:
+
+	// TODO: change to touple and next option is for personaliing ImGui inspector, like drag int text int bla bla
+	// change to struct, need variable name
+	std::vector<std::pair<std::string, void*>> inspector_variables;
+
 };
