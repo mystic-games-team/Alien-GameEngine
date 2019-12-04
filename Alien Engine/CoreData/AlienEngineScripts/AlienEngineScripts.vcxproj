@@ -163,14 +163,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AlienScripts.h" />
     <ClInclude Include="Jump.h" />
+    <ClInclude Include="Macros\AlienScripts.h" />
     <ClInclude Include="Move.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AlienScripts.cpp" />
-    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Jump.cpp" />
+    <ClCompile Include="Macros\dllmain.cpp" />
     <ClCompile Include="Move.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
