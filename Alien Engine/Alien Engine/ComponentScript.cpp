@@ -61,14 +61,18 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 
 void ComponentScript::InspectorInputInt(int* ptr)
 {
+	std::string name = typeid(*ptr).name();
+	if (!App->StringCmp(name.data(), "int"))
+		return;
+
 	ComponentScript* script = App->objects->actual_script_loading;
 	if (script != nullptr) {
-		script->inspector_variables.push_back({std::string(typeid(*ptr).name()), ptr});
+		script->inspector_variables.push_back({name.data(), ptr});
 	}
 	else {
 		script = new ComponentScript(App->objects->GetRoot(true)->children.back());
 		script->game_object_attached->AddComponent(script);
-		script->inspector_variables.push_back({ std::string(typeid(*ptr).name()), ptr });
+		script->inspector_variables.push_back({ name.data(), ptr });
 		App->objects->actual_script_loading = script;
 	}
 }
