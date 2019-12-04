@@ -20,9 +20,10 @@ public:
 
 	int num = 0;
 };
+
 ALIEN_INIT_CLASS Move* CreateMove() {
 	Move* move = new Move();
-	ComponentScript::LoadInspector(&move->num);
+	SHOW_IN_INSPECTOR_AS_INPUT_INT(move->num)
 	return move;
 } 
 

@@ -17,11 +17,12 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
-	static void LoadInspector(int* ptr);
+	static void InspectorInputInt(int* ptr);
 
 public:
 
 	// TODO: change to touple and next option is for personaliing ImGui inspector, like drag int text int bla bla
+	// enum for types of imgui to show variables
 	// change to struct, need variable name
 	std::vector<std::pair<std::string, void*>> inspector_variables;
 
