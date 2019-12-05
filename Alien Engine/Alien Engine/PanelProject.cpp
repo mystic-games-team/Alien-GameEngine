@@ -6,6 +6,7 @@
 #include "imgui/imgui_internal.h"
 #include "ResourceModel.h"
 #include "ResourcePrefab.h"
+#include "ResourceScript.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 
@@ -206,9 +207,21 @@ void PanelProject::SeeFiles()
 				current_active_file = current_active_folder->children[i];
 			}
 
-			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && current_active_folder->children[i]->type == FileDropType::PREFAB) {
+			// double click script
+			if (current_active_folder->children[i]->type == FileDropType::SCRIPT && ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
+				ResourceScript* script = (ResourceScript*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name).data()));
+				if (script != nullptr) {
+					static char curr_dir[MAX_PATH];
+					GetCurrentDirectoryA(MAX_PATH, curr_dir);
+					std::string path_ = curr_dir + std::string("/") + std::string(script->GetLibraryPath());
+					App->file_system->NormalizePath(path_);
+					ShellExecute(NULL, NULL, path_.data(), NULL, NULL, SW_SHOW);
+				}
+			}
+			// double click prefab
+			if (current_active_folder->children[i]->type == FileDropType::PREFAB && ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
 				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name).data()));
-				if (prefab != nullptr) 
+				if (prefab != nullptr)
 					prefab->OpenPrefabScene();
 			}
 
