@@ -1,0 +1,11 @@
+{
+    "Meta": {
+        "ID": "8012768810569452604"
+    },
+    "DataStructure": [
+        {
+            "DataName": "Move",
+            "UsesAlien": true
+        }
+    ]
+}

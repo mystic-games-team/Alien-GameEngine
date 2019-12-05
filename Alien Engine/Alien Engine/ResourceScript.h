@@ -11,6 +11,7 @@ public:
 	virtual ~ResourceScript();
 
 	bool CreateMetaData(const u64& force_id = 0);
+	bool ReadBaseInfo(const char* assets_file_path);
 
 private:
 

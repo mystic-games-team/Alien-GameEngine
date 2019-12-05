@@ -1,0 +1,15 @@
+{
+    "Meta": {
+        "ID": "7876759707151618026"
+    },
+    "DataStructure": [
+        {
+            "DataName": "Jump",
+            "UsesAlien": true
+        },
+        {
+            "DataName": "TestStruct",
+            "UsesAlien": false
+        }
+    ]
+}

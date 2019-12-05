@@ -21,21 +21,19 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 	else
 		ID = App->resources->GetRandomID();
 
+	meta_data_path = std::string(path.data());
+
 	std::ifstream file(path);
 	if (file.is_open()) {
 		std::string line;
 		while (std::getline(file, line)) {
-			if (line.find("ALIEN_ENGINE_CLASS_API") != std::string::npos) {
+			if (line.find("ALIEN_ENGINE_API") != std::string::npos) {
 				bool alien = false;
 				if (line.find("Alien") != std::string::npos) {
 					alien = true;
 				}
-				std::string class_name = GetDataStructure(line, "ALIEN_ENGINE_CLASS_API");
+				std::string class_name = GetDataStructure(line, "ALIEN_ENGINE_API");
 				data_structures.push_back({ class_name, alien });
-			}
-			else if (line.find("ALIEN_ENGINE_STRUCT_API") != std::string::npos) {
-				std::string class_name = GetDataStructure(line, "ALIEN_ENGINE_STRUCT_API");
-				data_structures.push_back({ class_name, false });
 			}
 		}
 		file.close();
@@ -43,7 +41,54 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 
 	path = std::string(SCRIPTS_FOLDER + name + ".alienScript").data();
 
+	JSON_Value* value = json_value_init_object();
+	JSON_Object* json_object = json_value_get_object(value);
+	json_serialize_to_file_pretty(value, path.data());
+
+	if (value != nullptr && json_object != nullptr) {
+		JSONfilepack* script = new JSONfilepack(path.data(), json_object, value);
+		script->StartSave();
+
+		script->SetString("Meta.ID", std::to_string(ID));
+
+		JSONArraypack* structures = script->InitNewArray("DataStructure");
+
+		for (uint i = 0; i < data_structures.size(); ++i) {
+			structures->SetAnotherNode();
+			structures->SetString("DataName", data_structures[i].first);
+			structures->SetBoolean("UsesAlien", data_structures[i].second);
+		}
+		script->FinishSave();
+		delete script;
+		App->resources->AddResource(this);
+	}
+
 	return ret;
+}
+
+bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
+{
+	meta_data_path = std::string(path.data());
+	path = std::string(assets_file_path);
+
+	JSON_Value* value = json_parse_file(path.data());
+	JSON_Object* object = json_value_get_object(value);
+
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* script = new JSONfilepack(path, object, value);
+
+		ID = std::stoull(script->GetString("Meta.ID"));
+
+		JSONArraypack* structures = script->GetArray("DataStructure");
+
+		for (uint i = 0; i < structures->GetArraySize(); ++i) {
+			data_structures.push_back({ structures->GetString("DataName") ,structures->GetBoolean("UsesAlien") });
+			structures->GetAnotherNode();
+		}
+		delete script;
+	}
+	return true;
 }
 
 std::string ResourceScript::GetDataStructure(const std::string& line, const std::string& api)

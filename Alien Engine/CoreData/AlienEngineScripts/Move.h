@@ -9,7 +9,7 @@
 
 ALIEN_INIT_HEADER
 
-class ALIEN_ENGINE_CLASS_API Move : public Alien {
+class ALIEN_ENGINE_API Move : public Alien {
 
 public:
 
@@ -21,7 +21,7 @@ public:
 	int num = 0;
 };
 
-ALIEN_INIT_CLASS Move* CreateMove() {
+ALIEN_INIT_DATA Move* CreateMove() {
 	Move* move = new Move();
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(move->num)
 	return move;

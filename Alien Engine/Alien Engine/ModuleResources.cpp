@@ -67,10 +67,12 @@ bool ModuleResources::Start()
 	assets->is_base_file = true;
 	assets->name = "Assets";
 
-	App->file_system->DiscoverEverythig(assets);
+
 	// TODO: look if all meta data has its fbx or texture if not remove meta data
 
 	ReadAllMetaData();
+
+	App->file_system->DiscoverEverythig(assets);
 
 	return true;
 }
@@ -303,16 +305,15 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 void ModuleResources::ReadHeaderFile(const char* path, std::vector<std::string> current_scripts)
 {
 	ResourceScript* script = new ResourceScript();
+	script->SetAssetsPath(path);
+	script->SetName(App->file_system->GetBaseFileName(path).data());
 	for (uint i = 0; i < current_scripts.size(); ++i) {
 		if (App->StringCmp(App->file_system->GetBaseFileName(path).data(), App->file_system->GetBaseFileName(current_scripts[i].data()).data())) {
-
-			// TODO:
+			script->ReadBaseInfo(current_scripts[i].data());
 			return;
 		}
 	}
 	// if it goes here it is because it doesnt exist
-	script->SetName(App->file_system->GetBaseFileName(path).data());
-	script->SetAssetsPath(path);
 	script->CreateMetaData();
 }
 
@@ -435,7 +436,7 @@ void ModuleResources::ReadScripts()
 	std::vector<std::string> directories;
 	std::vector<std::string> scripts;
 
-	App->file_system->DiscoverFiles(SCRIPTS_FOLDER, files, directories);
+	App->file_system->DiscoverFiles(SCRIPTS_FOLDER, files, directories, true);
 	GetAllScriptsPath(directories, files, SCRIPTS_FOLDER, &scripts);
 
 	files.clear();

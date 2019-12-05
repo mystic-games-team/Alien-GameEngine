@@ -6,7 +6,7 @@
 
 ALIEN_INIT_HEADER
 
-class				ALIEN_ENGINE_CLASS_API			Jump : public	Alien {
+class ALIEN_ENGINE_API Jump : public Alien {
 
 public:
 
@@ -16,16 +16,16 @@ public:
 	void Start();
 
 };
-ALIEN_INIT_CLASS Jump* CreateJump() { 
+ALIEN_INIT_DATA Jump* CreateJump() { 
 	Jump* jump = new Jump();
 	return jump;
 }
 
 
-struct ALIEN_ENGINE_STRUCT_API TestStruct {
+struct ALIEN_ENGINE_API TestStruct {
 	int x = 0;
 };
-ALIEN_INIT_STRUCT TestStruct* CreateTestStruct() {
+ALIEN_INIT_DATA TestStruct* CreateTestStruct() {
 	TestStruct* test_struct = new TestStruct();
 	return test_struct;
 }

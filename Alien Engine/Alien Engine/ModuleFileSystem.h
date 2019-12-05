@@ -62,7 +62,7 @@ public:
 	bool ExistsInFolderRecursive(const char* folder, const char* file_name);
 	bool IsDirectory(const char* file) const;
 	void CreateDirectory(const char* directory);
-	void DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list) const;
+	void DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool files_hole_path = false) const;
 	void DiscoverEverythig(FileNode* node);
 	void DiscoverFolders(FileNode* node);
 	bool CopyFromOutsideFS(const char* full_path, const char* destination);

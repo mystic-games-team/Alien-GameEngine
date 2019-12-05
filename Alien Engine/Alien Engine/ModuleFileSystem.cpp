@@ -143,7 +143,7 @@ void ModuleFileSystem::CreateDirectory(const char* directory)
 	PHYSFS_mkdir(directory);
 }
 
-void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file_list, vector<string>& dir_list) const
+void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file_list, vector<string>& dir_list, bool files_hole_path) const
 {
 
 	char** rc = PHYSFS_enumerateFiles(directory);
@@ -159,8 +159,14 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string>& file
 			/*JUST TEMPORARLY CHANGE LATER D:*/
 			std::string ext;
 			SplitFilePath(*i, nullptr, nullptr, &ext);
-			if (!App->StringCmp(ext.data(),"alien"))
-				file_list.push_back(*i);
+			if (!App->StringCmp(ext.data(), "alien")) {
+				if (files_hole_path) {
+					file_list.push_back(std::string(directory + std::string(*i)));
+				}
+				else {
+					file_list.push_back(*i);
+				}
+			}
 			/*JUST TEMPORARLY CHANGE LATER D:*/
 		}
 	}
