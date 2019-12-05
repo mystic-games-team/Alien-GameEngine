@@ -207,6 +207,7 @@ bool ComponentCamera::DrawInspector()
 	else
 		RightClickMenu("Camera");
 
+	
 	return true;
 }
 

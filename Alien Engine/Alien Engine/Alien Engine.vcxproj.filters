@@ -797,9 +797,11 @@
     <ClCompile Include="StaticInput.cpp">
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
-    <ClCompile Include="Alien.cpp" />
     <ClCompile Include="ResourceScript.cpp">
       <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Alien.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

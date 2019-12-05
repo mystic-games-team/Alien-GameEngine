@@ -25,6 +25,8 @@ public:
 		GetComponentsInChildren();
 		GetComponentsInParent();
 		TryGetComponent();
+		
+		AddComponent(); ???????????????
 
 		GetInstanceID();
 

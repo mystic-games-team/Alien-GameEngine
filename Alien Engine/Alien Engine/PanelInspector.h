@@ -16,6 +16,8 @@ public:
 
 private:
 
+	std::pair<const char*, bool> script_info = { "Return To Components", false };
+
 	int component = 0;
 	bool* delete_panel = nullptr;
 	Component* to_destroy = nullptr;

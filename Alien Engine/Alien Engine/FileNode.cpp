@@ -232,6 +232,10 @@ void FileNode::SetIcon()
 			icon = App->resources->icons.prefab_icon;
 			type = FileDropType::PREFAB;
 		}
+		else if (App->StringCmp(extension.data(), "alienScript")) {
+			icon = App->resources->icons.prefab_icon;
+			type = FileDropType::SCRIPT;
+		}
 		else {
 			// TODO: fer un icon que sigui unknown
 			icon = App->resources->icons.model;

@@ -1,12 +1,13 @@
 #include "PanelInspector.h"
 #include "ModuleObjects.h"
 #include "ModuleRenderer3D.h"
-
+#include "ResourceScript.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentLight.h"
 #include "ReturnZ.h"
+#include "ComponentScript.h"
 
 PanelInspector::PanelInspector(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -45,10 +46,12 @@ void PanelInspector::PanelLogic()
 				}
 			}
 		}
-		if (draw_add)
+		if (draw_add) {
 			ButtonAddComponent();
-		else
+		}
+		else {
 			draw_add = true;
+		}
 	}
 
 	ImGui::End();
@@ -88,83 +91,129 @@ void PanelInspector::ButtonAddComponent()
 {
 	ImGui::Spacing();
 
-	ImGui::Combo("##choose component", &component, "Select Component\0Mesh\0Material\0Light\0Camera\0");
-
-	ImGui::SameLine();
-
-	if (ImGui::Button("Add Component"))
-	{
-		Component* comp = nullptr;
-		switch (component)
+	// SCRIPT MUST BE THE LAST ONE 
+	if (component == 5) { SDL_assert((uint)ComponentType::UNKNOWN == 6); // component == 5 must be changed for the number of script
+		if (ImGui::BeginCombo("##Scriptss", script_info.first))
 		{
-
-		case 0:
-			LOG("Select a Component!");
-			break;
-
-		case 1:
-
-			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
+			bool sel = App->StringCmp("Return To Components", script_info.first);
+			ImGui::Selectable("Return To Components", sel);
+			if (ImGui::IsItemClicked())
 			{
-				comp = new ComponentMesh(App->objects->GetSelectedObject());
-				App->objects->GetSelectedObject()->AddComponent(comp);
+				script_info.first = "Return To Components";
+				component = 0;
 			}
 
-			else
-				LOG("The selected object already has this component!");
-
-			break;
-
-		case 2:
-
-			if ((!App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL)) &&
-				App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
-			{
-				comp = new ComponentMaterial(App->objects->GetSelectedObject());
-				App->objects->GetSelectedObject()->AddComponent(comp);
+			std::vector<Resource*>::iterator item = App->resources->resources.begin();
+			for (; item != App->resources->resources.end(); ++item) {
+				if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_SCRIPT) {
+					ResourceScript* script = (ResourceScript*)(*item);
+					if (!script->data_structures.empty()) {
+						for (uint i = 0; i < script->data_structures.size(); ++i) {
+							bool is_selected = (script_info.first == script->data_structures[i].first.data());
+							if (ImGui::Selectable(script->data_structures[i].first.data(), is_selected))
+							{
+								script_info.first = script->data_structures[i].first.data();
+							}
+						}
+					}
+				}
 			}
-
-			else if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
-			{
-				LOG("The selected object already has this component!");
-			}
-
-			else
-				LOG("The object needs a mesh to have a material!");
-
-			break;
-
-		case 3:
-
-			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::LIGHT))
-			{
-				comp = new ComponentLight(App->objects->GetSelectedObject());
-				App->objects->GetSelectedObject()->AddComponent(comp);
-			}
-
-			else
-				LOG("The selected object already has this component!");
-
-			break;
-
-		case 4:
-
-			if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::CAMERA))
-			{
-				comp = new ComponentCamera(App->objects->GetSelectedObject());
-				App->objects->GetSelectedObject()->AddComponent(comp);
-				App->renderer3D->selected_game_camera = (ComponentCamera*)comp;
-			}
-
-			else
-				LOG("The selected object already has this component!");
-
-			break;
+			ImGui::EndCombo();
 		}
+		ImGui::SameLine();
 
-		if (comp != nullptr) {
-			ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, comp);
+		if (ImGui::Button("Add Component")) {
+			if (!App->StringCmp("Return To Components", script_info.first)) {
+				ComponentScript* comp_script = new ComponentScript(App->objects->GetSelectedObject());
+				comp_script->LoadData(script_info.first, script_info.second);
+				component = 0;
+			}
+			else {
+				LOG("Select a script");
+			}
 		}
-		component = 0;
+	}
+
+	else {
+		ImGui::Combo("##choose component", &component, "Select Component\0Mesh\0Material\0Light\0Camera\0Script\0"); // SCRIPT MUST BE THE LAST ONE
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Add Component"))
+		{
+			Component* comp = nullptr;
+			switch (component)
+			{
+
+			case 0: {
+				LOG("Select a Component!");
+				break; }
+
+			case 1: {
+
+				if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
+				{
+					comp = new ComponentMesh(App->objects->GetSelectedObject());
+					App->objects->GetSelectedObject()->AddComponent(comp);
+				}
+
+				else
+					LOG("The selected object already has this component!");
+
+				break; }
+
+			case 2: {
+
+				if ((!App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL)) &&
+					App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
+				{
+					comp = new ComponentMaterial(App->objects->GetSelectedObject());
+					App->objects->GetSelectedObject()->AddComponent(comp);
+				}
+
+				else if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
+				{
+					LOG("The selected object already has this component!");
+				}
+
+				else
+					LOG("The object needs a mesh to have a material!");
+
+				break; }
+
+			case 3: {
+
+				if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::LIGHT))
+				{
+					comp = new ComponentLight(App->objects->GetSelectedObject());
+					App->objects->GetSelectedObject()->AddComponent(comp);
+				}
+
+				else
+					LOG("The selected object already has this component!");
+
+				break; }
+
+			case 4: {
+
+				if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::CAMERA))
+				{
+					comp = new ComponentCamera(App->objects->GetSelectedObject());
+					App->objects->GetSelectedObject()->AddComponent(comp);
+					App->renderer3D->selected_game_camera = (ComponentCamera*)comp;
+				}
+
+				else
+					LOG("The selected object already has this component!");
+
+				break; }
+			}
+
+			if (comp != nullptr) {
+				ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, comp);
+			}
+			component = 0;
+		}
 	}
 }
+

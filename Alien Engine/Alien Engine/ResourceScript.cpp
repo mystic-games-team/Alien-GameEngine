@@ -87,6 +87,7 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 			structures->GetAnotherNode();
 		}
 		delete script;
+		App->resources->AddResource(this);
 	}
 	return true;
 }

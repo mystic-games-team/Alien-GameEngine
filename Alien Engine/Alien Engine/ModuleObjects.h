@@ -14,6 +14,7 @@
 class ReturnZ;
 class ResourcePrefab;
 class ComponentScript;
+class Alien;
 
 struct Scene {
 
@@ -115,6 +116,8 @@ private:
 
 public:
 	Scene current_scene;
+
+	std::vector<Alien*> current_scripts;
 
 	Component* component_in_copy = nullptr;
 

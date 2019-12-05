@@ -10,6 +10,16 @@ ComponentScript::ComponentScript(GameObject* attach) : Component(attach)
 
 ComponentScript::~ComponentScript()
 {
+	if (data_ptr != nullptr) {
+		if (need_alien) {
+			Alien* alien = (Alien*)data_ptr;
+			delete alien;
+		}
+		else {
+			void (*Deleter)(void*) = (void (*)(void*))GetProcAddress(App->scripts_dll, std::string("Destroy" + std::string(data_name)).data());
+			Deleter(data_ptr);
+		}
+	}
 }
 
 void ComponentScript::Reset()
@@ -38,12 +48,12 @@ bool ComponentScript::DrawInspector()
 	ImGui::PopID();
 	ImGui::SameLine();
 
-	if (ImGui::CollapsingHeader("Script", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader(data_name.data(), &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!inspector_variables.empty()) {
 			for (uint i = 0; i < inspector_variables.size(); ++i) {
-				if (App->StringCmp(inspector_variables[i].first.data(), "int")) {
-					ImGui::InputInt("Test",(int*)inspector_variables[i].second);
+				if (App->StringCmp(inspector_variables[i].variable_type.data(), "int")) {
+					ImGui::InputInt(inspector_variables[i].variable_name.data(),(int*)inspector_variables[i].ptr);
 				}
 			}
 		}
@@ -59,20 +69,43 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 {
 }
 
-void ComponentScript::InspectorInputInt(int* ptr)
+void ComponentScript::InspectorInputInt(int* ptr, const char* ptr_name)
 {
 	std::string name = typeid(*ptr).name();
 	if (!App->StringCmp(name.data(), "int"))
 		return;
+	
+	std::string variable_name = GetVariableName(ptr_name);
 
 	ComponentScript* script = App->objects->actual_script_loading;
 	if (script != nullptr) {
-		script->inspector_variables.push_back({name.data(), ptr});
+		script->inspector_variables.push_back(InspectorScriptData(variable_name, "int", ptr));
 	}
-	else {
-		script = new ComponentScript(App->objects->GetRoot(true)->children.back());
-		script->game_object_attached->AddComponent(script);
-		script->inspector_variables.push_back({ name.data(), ptr });
-		App->objects->actual_script_loading = script;
+}
+
+void ComponentScript::LoadData(const char* name, bool is_alien)
+{
+	need_alien = is_alien;
+	void* (*Creator)() = (void* (*)())GetProcAddress(App->scripts_dll, std::string("Create" + std::string(name)).data());
+	if (Creator != nullptr) {
+		data_name = std::string(name);
+		App->objects->actual_script_loading = this;
+		data_ptr = Creator();
+		game_object_attached->components.push_back(this);
+		if (need_alien) {
+			App->objects->current_scripts.push_back((Alien*)data_ptr);
+		}
 	}
+}
+
+std::string ComponentScript::GetVariableName(const char* ptr_name)
+{
+	std::string ptr_strg(ptr_name);
+	std::string variable_name;
+	for (uint i = ptr_strg.size() - 1; i >= 0; --i) {
+		if (ptr_strg[i] == '&' || ptr_strg[i] == '*' || ptr_strg[i] == '>' || ptr_strg[i] == '.')
+			break;
+		variable_name = ptr_strg[i] + variable_name;
+	}
+	return variable_name;
 }
