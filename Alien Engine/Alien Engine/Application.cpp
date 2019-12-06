@@ -4,8 +4,6 @@
 
 Application::Application()
 {
-	scripts_dll = LoadLibrary("AlienEngineScripts");
-
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	scene_intro = new ModuleSceneIntro();
@@ -21,6 +19,11 @@ Application::Application()
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
 
+	static char curr_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, curr_dir);
+	std::string path_ = std::string(curr_dir + std::string("/") + "AlienEngineScripts.dll");
+	file_system->NormalizePath(path_);
+	scripts_dll = LoadLibrary(path_.data());
 	// Main Modules
 	AddModule(window);
 	AddModule(camera);
