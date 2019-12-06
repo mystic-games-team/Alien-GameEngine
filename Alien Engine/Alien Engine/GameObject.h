@@ -39,9 +39,12 @@ public:
 	bool HasComponent(ComponentType component);
 	Component* GetComponent(const ComponentType& type);
 	Component* GetComponentWithID(const u64& ID);
+	
 
 	template <class Comp>
 	Comp* GetComponent();
+	template <class Comp>
+	std::vector<Comp*> GetComponents();
 
 	// children
 	void AddChild(GameObject* child);
@@ -146,4 +149,17 @@ inline Comp* GameObject::GetComponent()
 		}
 	}
 	return nullptr;
+}
+
+template<class Comp>
+inline std::vector<Comp*> GameObject::GetComponents()
+{
+	std::vector<Comp*> comps;
+	for (uint i = 0; i < components.size(); ++i) {
+		Comp* component = dynamic_cast<Comp*>(components[i]);
+		if (component != nullptr) {
+			comps.push_back(component);
+		}
+	}
+	return comps;
 }

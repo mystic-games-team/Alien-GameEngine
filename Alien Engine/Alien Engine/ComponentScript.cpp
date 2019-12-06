@@ -55,10 +55,15 @@ bool ComponentScript::DrawInspector()
 	{
 		if (!inspector_variables.empty()) {
 			for (uint i = 0; i < inspector_variables.size(); ++i) {
-				if (App->StringCmp(inspector_variables[i].variable_type.data(), "int")) {
+				switch (inspector_variables[i].variable_type)
+				{
+				case InspectorScriptData::DataType::INT: {
 					ImGui::PushID(inspector_variables[i].ptr);
-					ImGui::InputInt(inspector_variables[i].variable_name.data(),(int*)inspector_variables[i].ptr);
+					ImGui::InputInt(inspector_variables[i].variable_name.data(), (int*)inspector_variables[i].ptr);
 					ImGui::PopID();
+					break; }
+				default:
+					break;
 				}
 			}
 		}
@@ -84,7 +89,7 @@ void ComponentScript::InspectorInputInt(int* ptr, const char* ptr_name)
 
 	ComponentScript* script = App->objects->actual_script_loading;
 	if (script != nullptr) {
-		script->inspector_variables.push_back(InspectorScriptData(variable_name, "int", ptr));
+		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::INT, ptr));
 	}
 }
 
@@ -98,7 +103,9 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 		data_ptr = Creator();
 		game_object_attached->components.push_back(this);
 		if (need_alien) {
-			App->objects->current_scripts.push_back((Alien*)data_ptr);
+			Alien* alien = (Alien*)data_ptr;
+			App->objects->current_scripts.push_back(alien);
+			alien->game_object = game_object_attached;
 		}
 	}
 }

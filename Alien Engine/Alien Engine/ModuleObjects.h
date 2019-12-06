@@ -114,6 +114,8 @@ public:
 
 private:
 
+	void CreateJsonScript(GameObject* obj, JSONArraypack* to_save);
+	void ReAssignScripts(JSONArraypack* to_load);
 	void DeleteReturns();
 
 public:

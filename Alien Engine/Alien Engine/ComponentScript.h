@@ -6,14 +6,24 @@
 
 struct __declspec(dllexport) InspectorScriptData {
 
-	InspectorScriptData(const std::string& variable_name, const std::string& variable_type, void* ptr) {
+	enum DataType { // TODO: what about uint
+		INT,
+		INT2,
+		INT3,
+		FLOAT,
+		FLOAT2,
+		FLOAT3,
+		STRING,
+	};
+
+	InspectorScriptData(const std::string& variable_name, const DataType& variable_type, void* ptr) {
 		this->variable_name = variable_name;
 		this->variable_type = variable_type;
 		this->ptr = ptr;
 	}
 
 	std::string variable_name;
-	std::string variable_type;
+	DataType variable_type;
 	void* ptr = nullptr;
 };
 
@@ -41,16 +51,15 @@ private:
 public:
 
 	u64 resourceID = 0;
-
-private:
-
 	// TODO: change to touple and next option is for personaliing ImGui inspector, like drag int text int bla bla
 	// enum for types of imgui to show variables
 	// change to struct, need variable name
 	std::vector<InspectorScriptData> inspector_variables;
+	std::string data_name;
+private:
 
 	bool need_alien = false;
 	void* data_ptr = nullptr;
-	std::string data_name;
+
 
 };

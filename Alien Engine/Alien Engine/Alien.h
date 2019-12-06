@@ -1,6 +1,7 @@
 #pragma once
 
 class ComponentTransform;
+class GameObject;
 
 class __declspec(dllexport) Alien {
 public:
@@ -90,6 +91,7 @@ public:
 public:
 
 	ComponentTransform* transform = nullptr;
+	GameObject* game_object = nullptr;
 
 	// TODO:
 	/*

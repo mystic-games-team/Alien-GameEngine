@@ -223,20 +223,7 @@ void GameObject::SetDrawList(std::map<float, GameObject*>* to_draw, const Compon
 
 void GameObject::AddComponent(Component* component)
 {
-	bool exists = false;
-	std::vector<Component*>::iterator item = components.begin();
-	for (; item != components.end(); ++item) {
-		if (*item != nullptr && (*item)->GetType() == component->GetType())
-		{
-			exists = true;
-			break;
-		}
-	}
-
-	if (!exists)
-	{
-		components.push_back(component);
-	}
+	components.push_back(component);
 }
 
 bool GameObject::HasComponent(ComponentType component)
