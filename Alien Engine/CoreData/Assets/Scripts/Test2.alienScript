@@ -1,0 +1,12 @@
+{
+    "Meta": {
+        "ID": "7138706866911849531",
+        "LastMod": 1575656237
+    },
+    "DataStructure": [
+        {
+            "DataName": "TestClass2",
+            "UsesAlien": true
+        }
+    ]
+}

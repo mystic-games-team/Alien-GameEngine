@@ -24,6 +24,8 @@ struct aiFileIO;
 #define ASSETS_PREFAB_FOLDER "Assets/Prefabs/"
 #define HEADER_SCRIPTS_FILE "AlienEngineScripts/"
 #define SCRIPTS_DLL_OUTPUT "AlienEngineScripts/OutPut/"
+#define DLL_WORKING_PATH "AlienEngineScripts.dll"
+#define DLL_CREATION_PATH "AlienEngineScripts/OutPut/AlienEngineScripts.dll"
 
 #include "Resource_.h"
 
@@ -53,7 +55,7 @@ public:
 
 	// Called before render is available
 	bool Init();
-
+	update_status PreUpdate(float dt);
 	// Called before quitting
 	bool CleanUp() override;
 
@@ -105,10 +107,11 @@ private:
 	void CreateAssimpIO();
 	void CreateBassIO();
 
-
 private:
 
 	aiFileIO* AssimpIO = nullptr;
 	BASS_FILEPROCS* BassIO = nullptr;
+
+	time_t last_mod_dll = 0;
 };
 

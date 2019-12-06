@@ -71,6 +71,7 @@ public:
 	void CreatePrimitive(const PrimitiveType& type, ResourceMesh** mesh);
 
 	void ReadHeaderFile(const char* path, std::vector<std::string> current_scripts);
+	void ReloadScripts();
 
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);

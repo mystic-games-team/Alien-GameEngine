@@ -14,6 +14,8 @@
 #include "ModuleRenderer3D.h"
 #include "ComponentScript.h"
 #include "Alien.h"
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include <experimental/filesystem>
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {
@@ -60,6 +62,12 @@ bool ModuleObjects::Start()
 	//Alien* alien = static_cast<Alien*>(to_create);
 	////alien->transform = base_game_object->children.back()->GetComponent<ComponentTransform>();
 	//alien->Start();
+
+	static char curr_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, curr_dir);
+
+	out_path = std::string(curr_dir + std::string("/") + SCRIPTS_DLL_OUTPUT + std::string("AlienEngineScripts.dll"));
+	App->file_system->NormalizePath(out_path);
 
 	return ret;
 }
@@ -717,15 +725,45 @@ void ModuleObjects::HotReload()
 	}
 	current_scripts.erase(current_scripts.begin());
 
-	FreeLibrary(App->scripts_dll);
-	remove(App->dll.data());
-	rename(std::string(SCRIPTS_DLL_OUTPUT + std::string("AlienEngineScripts.dll")).data(), App->dll.data());
-	App->scripts_dll = LoadLibrary(App->dll.data());
-
-	ComponentScript* script = new ComponentScript(obj);
-	script->LoadData("Move", true);
+	if (FreeLibrary(App->scripts_dll)) {
+		LOG("Dll correctly unloaded");
+		if (remove(DLL_WORKING_PATH) == 0) {
+			LOG("Dll correctly removed");
+			App->resources->ReloadScripts();
+			//SDL_Delay(500); // if this change is done without waiting, we cant move the file because creating dll proces hasn't finished
+			while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG("FAIL"); }
+			LOG("New Dll correctly moved");
+			App->scripts_dll = nullptr;
+			App->scripts_dll = LoadLibrary(App->dll.data());
+			if (App->scripts_dll != nullptr) {
+				ComponentScript* script = new ComponentScript(obj);
+				script->LoadData("Move", true);
+			}
+			else {
+				LOG(GetLastErrorAsString().data());
+			}
+		}
+	}
 }
 
+std::string ModuleObjects::GetLastErrorAsString()
+{
+	//Get the error message, if any.
+	DWORD errorMessageID = ::GetLastError();
+	if (errorMessageID == 0)
+		return std::string(); //No error message has been recorded
+
+	LPSTR messageBuffer = nullptr;
+	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+
+	std::string message(messageBuffer, size);
+
+	//Free the buffer.
+	LocalFree(messageBuffer);
+
+	return message;
+}
 void ModuleObjects::DeleteReturns()
 {
 	if (!fordward_actions.empty()) {

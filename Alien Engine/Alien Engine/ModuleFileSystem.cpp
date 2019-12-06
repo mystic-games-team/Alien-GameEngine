@@ -73,11 +73,35 @@ bool ModuleFileSystem::Init()
 	// Trun this on while in game mode
 	//if(PHYSFS_setWriteDir(write_path) == 0)
 		//LOG("File System error while creating write dir: %s\n", PHYSFS_getLastError());
-
+	static std::string dll_path(std::string(SCRIPTS_DLL_OUTPUT + std::string("AlienEngineScripts.dll")));
+	if (Exists(dll_path.data())) {
+		struct stat file;
+		if (stat(dll_path.c_str(), &file) == 0)
+		{
+			last_mod_dll = file.st_mtime;
+		}
+	}
 
 	SDL_free(write_path);
 
 	return ret;
+}
+
+update_status ModuleFileSystem::PreUpdate(float dt)
+{
+	static std::string dll_path(std::string(SCRIPTS_DLL_OUTPUT + std::string("AlienEngineScripts.dll")));
+	if (Exists(dll_path.data())) {
+		struct stat file;
+		if (stat(dll_path.c_str(), &file) == 0)
+		{
+			if (last_mod_dll != file.st_mtime) {
+				last_mod_dll = file.st_mtime;
+				App->objects->HotReload();
+			}
+		}
+	}
+
+	return UPDATE_CONTINUE;
 }
 
 // Called before quitting

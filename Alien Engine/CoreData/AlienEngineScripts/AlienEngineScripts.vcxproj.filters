@@ -24,6 +24,15 @@
     <ClInclude Include="Macros\AlienScripts.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
+    <ClInclude Include="TestClass.h">
+      <Filter>Archivos de recursos</Filter>
+    </ClInclude>
+    <ClInclude Include="Test2.h">
+      <Filter>Archivos de recursos</Filter>
+    </ClInclude>
+    <ClInclude Include="AAAAAAAAAA.h">
+      <Filter>Archivos de recursos</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Move.cpp">
@@ -33,6 +42,15 @@
       <Filter>Archivos de recursos</Filter>
     </ClCompile>
     <ClCompile Include="Macros\dllmain.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="TestClass.cpp">
+      <Filter>Archivos de recursos</Filter>
+    </ClCompile>
+    <ClCompile Include="Test2.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="AAAAAAAAAA.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

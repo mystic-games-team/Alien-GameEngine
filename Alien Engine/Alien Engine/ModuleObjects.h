@@ -114,6 +114,8 @@ public:
 
 private:
 
+	std::string GetLastErrorAsString();
+
 	void DeleteReturns();
 
 public:
@@ -206,5 +208,6 @@ private:
 
 	std::stack<ReturnZ*> save_return_actions;
 	std::stack<ReturnZ*> save_fordward_actions;
+	std::string out_path;
 
 };

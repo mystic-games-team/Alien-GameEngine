@@ -56,7 +56,9 @@ bool ComponentScript::DrawInspector()
 		if (!inspector_variables.empty()) {
 			for (uint i = 0; i < inspector_variables.size(); ++i) {
 				if (App->StringCmp(inspector_variables[i].variable_type.data(), "int")) {
+					ImGui::PushID(inspector_variables[i].ptr);
 					ImGui::InputInt(inspector_variables[i].variable_name.data(),(int*)inspector_variables[i].ptr);
+					ImGui::PopID();
 				}
 			}
 		}

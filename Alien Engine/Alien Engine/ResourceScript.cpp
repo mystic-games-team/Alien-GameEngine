@@ -51,6 +51,13 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 
 		script->SetString("Meta.ID", std::to_string(ID));
 
+		struct stat file;
+		if (stat(meta_data_path.c_str(), &file) == 0)
+		{
+			last_time_mod = file.st_mtime;
+		}
+		script->SetNumber("Meta.LastMod", last_time_mod);
+
 		JSONArraypack* structures = script->InitNewArray("DataStructure");
 
 		for (uint i = 0; i < data_structures.size(); ++i) {
@@ -79,7 +86,7 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 		JSONfilepack* script = new JSONfilepack(path, object, value);
 
 		ID = std::stoull(script->GetString("Meta.ID"));
-
+		last_time_mod = script->GetNumber("Meta.LastMod");
 		JSONArraypack* structures = script->GetArray("DataStructure");
 
 		for (uint i = 0; i < structures->GetArraySize(); ++i) {
@@ -90,6 +97,20 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 		App->resources->AddResource(this);
 	}
 	return true;
+}
+
+bool ResourceScript::NeedReload() const
+{
+	bool ret = false;
+
+	struct stat file;
+	if (stat(meta_data_path.c_str(), &file) == 0)
+	{
+		if (file.st_mtime != last_time_mod)
+			ret = true;
+	}
+
+	return ret;
 }
 
 std::string ResourceScript::GetDataStructure(const std::string& line, const std::string& api)

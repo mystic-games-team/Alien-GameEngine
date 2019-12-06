@@ -1,6 +1,5 @@
 #include "Move.h"
 
-
 Move::Move() : Alien()
 {
 
@@ -18,5 +17,5 @@ void Move::Start()
 
 void Move::Update()
 {
-	test++;
+	test = 321;
 }

@@ -317,6 +317,42 @@ void ModuleResources::ReadHeaderFile(const char* path, std::vector<std::string> 
 	script->CreateMetaData();
 }
 
+void ModuleResources::ReloadScripts()
+{
+	std::vector<std::string> files;
+	std::vector<std::string> directories;
+
+	App->file_system->DiscoverFiles(HEADER_SCRIPTS_FILE, files, directories, true);
+
+	for (uint i = 0; i < files.size(); ++i) {
+		if (files[i].back() == 'h') { // header file found
+			bool exists = false;
+			std::vector<Resource*>::iterator item = resources.begin();
+			for (; item != resources.end(); ++item) {
+				if ((*item) != nullptr && (*item)->GetType() == ResourceType::RESOURCE_SCRIPT) {
+					if (App->StringCmp((*item)->GetLibraryPath(), files[i].data())) {
+						ResourceScript* script = (ResourceScript*)*item;
+						if (script->NeedReload()) {
+							remove(script->GetAssetsPath());
+							script->SetAssetsPath(script->GetAssetsPath());
+							script->CreateMetaData(script->GetID());
+						}
+						exists = true;
+						break;
+					}
+				}
+			}
+			if (!exists) {
+				ResourceScript* script = new ResourceScript();
+				script->SetAssetsPath(files[i].data());
+				script->SetName(App->file_system->GetBaseFileName(files[i].data()).data());
+				script->CreateMetaData();
+			}
+		}
+	}
+	App->ui->panel_project->RefreshAllNodes();
+}
+
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)
 {
 	FileNode* to_search = nullptr;
