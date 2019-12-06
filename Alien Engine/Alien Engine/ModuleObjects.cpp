@@ -91,7 +91,6 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 update_status ModuleObjects::Update(float dt)
 {
-
 	return UPDATE_CONTINUE;
 }
 

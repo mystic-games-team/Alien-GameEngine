@@ -13,6 +13,7 @@ Jump::~Jump()
 void Jump::Start()
 {
 	int i = 0;
+	int i3 = 0;
 	
 }
 
