@@ -7,7 +7,7 @@
 #else
 #define ALIEN_ENGINE_API __declspec(dllimport)
 #endif
-
+//#define ALIEN_ENGINE_API __declspec(dllexport)
 // define it next to the CreateClass/StructFunct to be able to use the class/struct
 #define ALIEN_INIT_DATA ALIEN_ENGINE_API
 #define ALIEN_DESTROY_DATA ALIEN_ENGINE_API

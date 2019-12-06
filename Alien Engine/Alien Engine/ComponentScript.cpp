@@ -2,6 +2,7 @@
 #include "ModuleObjects.h"
 #include "Application.h"
 #include "ReturnZ.h"
+#include "Alien.h"
 
 ComponentScript::ComponentScript(GameObject* attach) : Component(attach)
 {
@@ -13,7 +14,9 @@ ComponentScript::~ComponentScript()
 	if (data_ptr != nullptr) {
 		if (need_alien) {
 			Alien* alien = (Alien*)data_ptr;
-			delete alien;
+			if (alien != nullptr) {
+				delete alien;
+			}
 		}
 		else {
 			void (*Deleter)(void*) = (void (*)(void*))GetProcAddress(App->scripts_dll, std::string("Destroy" + std::string(data_name)).data());

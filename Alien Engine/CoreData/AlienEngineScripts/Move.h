@@ -12,7 +12,7 @@ public:
 
 	Move();
 
-	~Move();
+	virtual ~Move();
 
 
 	void Start();

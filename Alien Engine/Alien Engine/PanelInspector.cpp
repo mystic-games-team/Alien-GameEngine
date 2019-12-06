@@ -113,6 +113,7 @@ void PanelInspector::ButtonAddComponent()
 							if (ImGui::Selectable(script->data_structures[i].first.data(), is_selected))
 							{
 								script_info.first = script->data_structures[i].first.data();
+								script_info.second = script->data_structures[i].second;
 							}
 						}
 					}
