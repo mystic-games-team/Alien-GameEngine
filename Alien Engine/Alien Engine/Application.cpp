@@ -21,9 +21,9 @@ Application::Application()
 
 	static char curr_dir[MAX_PATH];
 	GetCurrentDirectoryA(MAX_PATH, curr_dir);
-	std::string path_ = std::string(curr_dir + std::string("/") + "AlienEngineScripts.dll");
-	file_system->NormalizePath(path_);
-	scripts_dll = LoadLibrary(path_.data());
+	dll = std::string(curr_dir + std::string("/") + "AlienEngineScripts.dll");
+	file_system->NormalizePath(dll);
+	scripts_dll = LoadLibrary(dll.data());
 	// Main Modules
 	AddModule(window);
 	AddModule(camera);

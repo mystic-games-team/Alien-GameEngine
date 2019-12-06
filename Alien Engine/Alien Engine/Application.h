@@ -38,7 +38,7 @@ public:
 	int fps_limit = 30;
 	ImGuiTextBuffer log_string; 
 	HINSTANCE scripts_dll = nullptr;
-
+	std::string dll;
 private:
 	JSONfilepack* config = nullptr;
 	JSONfilepack* layout = nullptr;

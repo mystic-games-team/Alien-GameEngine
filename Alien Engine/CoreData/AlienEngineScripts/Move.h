@@ -16,6 +16,7 @@ public:
 
 
 	void Start();
+	void Update();
 
 	int test = 0;
 };

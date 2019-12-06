@@ -12,7 +12,7 @@
 #include "ReturnZ.h"
 #include "Time.h"
 #include "ModuleRenderer3D.h"
-
+#include "ComponentScript.h"
 #include "Alien.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
@@ -91,6 +91,12 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 update_status ModuleObjects::Update(float dt)
 {
+	if (!current_scripts.empty()) {
+		current_scripts[0]->Update();
+	}
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+		HotReload();
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -695,6 +701,29 @@ void ModuleObjects::SwapReturnZ(bool get_save, bool delete_current)
 			fordward_actions.pop();
 		}
 	}
+}
+
+void ModuleObjects::HotReload()
+{
+	GameObject* obj = base_game_object->children.back();
+	std::vector<Component*>::iterator item = obj->components.begin();
+	for (; item != obj->components.end(); ++item) {
+		if ((*item)->GetType() == ComponentType::SCRIPT) {
+			delete (*item);
+			*item = nullptr;
+			obj->components.erase(item);
+			break;
+		}
+	}
+	current_scripts.erase(current_scripts.begin());
+
+	FreeLibrary(App->scripts_dll);
+	remove(App->dll.data());
+	rename(std::string(SCRIPTS_DLL_OUTPUT + std::string("AlienEngineScripts.dll")).data(), App->dll.data());
+	App->scripts_dll = LoadLibrary(App->dll.data());
+
+	ComponentScript* script = new ComponentScript(obj);
+	script->LoadData("Move", true);
 }
 
 void ModuleObjects::DeleteReturns()

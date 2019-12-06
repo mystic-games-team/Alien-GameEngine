@@ -109,6 +109,8 @@ public:
 	void CreateRoot();
 
 	void SwapReturnZ(bool get_save, bool delete_current);
+	
+	void HotReload();
 
 private:
 
