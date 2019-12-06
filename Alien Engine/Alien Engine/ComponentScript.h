@@ -38,6 +38,10 @@ private:
 
 	static std::string GetVariableName(const char* ptr_name);
 
+public:
+
+	u64 resourceID = 0;
+
 private:
 
 	// TODO: change to touple and next option is for personaliing ImGui inspector, like drag int text int bla bla

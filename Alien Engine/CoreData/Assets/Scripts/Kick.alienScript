@@ -1,0 +1,12 @@
+{
+    "Meta": {
+        "ID": "4562641267984318977",
+        "LastMod": 1575660252
+    },
+    "DataStructure": [
+        {
+            "DataName": "Kick",
+            "UsesAlien": true
+        }
+    ]
+}

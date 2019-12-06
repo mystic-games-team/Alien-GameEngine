@@ -1,0 +1,12 @@
+{
+    "Meta": {
+        "ID": "10697595659412285014",
+        "LastMod": 1575659787
+    },
+    "DataStructure": [
+        {
+            "DataName": "Hit",
+            "UsesAlien": true
+        }
+    ]
+}

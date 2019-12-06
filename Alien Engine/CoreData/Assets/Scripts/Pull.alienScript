@@ -1,0 +1,12 @@
+{
+    "Meta": {
+        "ID": "17804728851129461921",
+        "LastMod": 1575659300
+    },
+    "DataStructure": [
+        {
+            "DataName": "PULL",
+            "UsesAlien": true
+        }
+    ]
+}

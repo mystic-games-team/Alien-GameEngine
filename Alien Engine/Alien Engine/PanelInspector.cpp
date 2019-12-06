@@ -93,13 +93,13 @@ void PanelInspector::ButtonAddComponent()
 
 	// SCRIPT MUST BE THE LAST ONE 
 	if (component == 5) { SDL_assert((uint)ComponentType::UNKNOWN == 6); // component == 5 must be changed for the number of script
-		if (ImGui::BeginCombo("##Scriptss", script_info.first))
+		if (ImGui::BeginCombo("##Scriptss", std::get<0>(script_info)))
 		{
-			bool sel = App->StringCmp("Return To Components", script_info.first);
+			bool sel = App->StringCmp("Return To Components", std::get<0>(script_info));
 			ImGui::Selectable("Return To Components", sel);
 			if (ImGui::IsItemClicked())
 			{
-				script_info.first = "Return To Components";
+				std::get<0>(script_info) = "Return To Components";
 				component = 0;
 			}
 
@@ -109,11 +109,12 @@ void PanelInspector::ButtonAddComponent()
 					ResourceScript* script = (ResourceScript*)(*item);
 					if (!script->data_structures.empty()) {
 						for (uint i = 0; i < script->data_structures.size(); ++i) {
-							bool is_selected = (script_info.first == script->data_structures[i].first.data());
+							bool is_selected = (std::get<0>(script_info) == script->data_structures[i].first.data());
 							if (ImGui::Selectable(script->data_structures[i].first.data(), is_selected))
 							{
-								script_info.first = script->data_structures[i].first.data();
-								script_info.second = script->data_structures[i].second;
+								std::get<0>(script_info) = script->data_structures[i].first.data();
+								std::get<1>(script_info) = script->data_structures[i].second;
+								std::get<2>(script_info) = script->GetID();
 							}
 						}
 					}
@@ -124,9 +125,10 @@ void PanelInspector::ButtonAddComponent()
 		ImGui::SameLine();
 
 		if (ImGui::Button("Add Component")) {
-			if (!App->StringCmp("Return To Components", script_info.first)) {
+			if (!App->StringCmp("Return To Components", std::get<0>(script_info))) {
 				ComponentScript* comp_script = new ComponentScript(App->objects->GetSelectedObject());
-				comp_script->LoadData(script_info.first, script_info.second);
+				comp_script->resourceID = std::get<2>(script_info);
+				comp_script->LoadData(std::get<0>(script_info), std::get<1>(script_info));
 				component = 0;
 			}
 			else {

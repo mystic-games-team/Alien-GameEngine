@@ -1,0 +1,12 @@
+{
+    "Meta": {
+        "ID": "6502939106172446839",
+        "LastMod": 1575661059
+    },
+    "DataStructure": [
+        {
+            "DataName": "SWIM",
+            "UsesAlien": true
+        }
+    ]
+}

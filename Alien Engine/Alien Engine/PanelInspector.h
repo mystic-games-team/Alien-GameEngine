@@ -16,7 +16,7 @@ public:
 
 private:
 
-	std::pair<const char*, bool> script_info = { "Return To Components", false };
+	std::tuple<const char*, bool, u64> script_info = { "Return To Components", false, 0 };
 
 	int component = 0;
 	bool* delete_panel = nullptr;

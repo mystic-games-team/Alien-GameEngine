@@ -164,17 +164,29 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AAAAAAAAAA.h" />
+    <ClInclude Include="Hit.h" />
     <ClInclude Include="Jump.h" />
+    <ClInclude Include="Kick.h" />
     <ClInclude Include="Macros\AlienScripts.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="NoImport.h" />
+    <ClInclude Include="Pull.h" />
+    <ClInclude Include="Punch.h" />
+    <ClInclude Include="Swim.h" />
     <ClInclude Include="Test2.h" />
     <ClInclude Include="TestClass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AAAAAAAAAA.cpp" />
+    <ClCompile Include="Hit.cpp" />
     <ClCompile Include="Jump.cpp" />
+    <ClCompile Include="Kick.cpp" />
     <ClCompile Include="Macros\dllmain.cpp" />
     <ClCompile Include="Move.cpp" />
+    <ClCompile Include="NoImport.cpp" />
+    <ClCompile Include="Pull.cpp" />
+    <ClCompile Include="Punch.cpp" />
+    <ClCompile Include="Swim.cpp" />
     <ClCompile Include="Test2.cpp" />
     <ClCompile Include="TestClass.cpp" />
   </ItemGroup>

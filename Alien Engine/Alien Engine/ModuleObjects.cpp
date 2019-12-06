@@ -730,8 +730,10 @@ void ModuleObjects::HotReload()
 		if (remove(DLL_WORKING_PATH) == 0) {
 			LOG("Dll correctly removed");
 			App->resources->ReloadScripts();
-			//SDL_Delay(500); // if this change is done without waiting, we cant move the file because creating dll proces hasn't finished
-			while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG("FAIL"); }
+			// if this change is done without waiting, we cant move the file because the creating dll process hasn't finished
+			// so I just wait until MoveFileA succed. 
+			// If someone knows how to know when an extern process finishes with a file, tell me please contrasnya@gmail.com
+			while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG("Visual Studio is creating the new DLL"); }
 			LOG("New Dll correctly moved");
 			App->scripts_dll = nullptr;
 			App->scripts_dll = LoadLibrary(App->dll.data());
@@ -739,31 +741,10 @@ void ModuleObjects::HotReload()
 				ComponentScript* script = new ComponentScript(obj);
 				script->LoadData("Move", true);
 			}
-			else {
-				LOG(GetLastErrorAsString().data());
-			}
 		}
 	}
 }
 
-std::string ModuleObjects::GetLastErrorAsString()
-{
-	//Get the error message, if any.
-	DWORD errorMessageID = ::GetLastError();
-	if (errorMessageID == 0)
-		return std::string(); //No error message has been recorded
-
-	LPSTR messageBuffer = nullptr;
-	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
-
-	std::string message(messageBuffer, size);
-
-	//Free the buffer.
-	LocalFree(messageBuffer);
-
-	return message;
-}
 void ModuleObjects::DeleteReturns()
 {
 	if (!fordward_actions.empty()) {
@@ -782,7 +763,6 @@ void ModuleObjects::DeleteReturns()
 			return_actions.pop();
 		}
 	}
-
 }
 
 bool ModuleObjects::SortByFamilyNumber(std::tuple<uint,u64, uint> tuple1, std::tuple<uint, u64, uint> tuple2)

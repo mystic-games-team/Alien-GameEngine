@@ -114,8 +114,6 @@ public:
 
 private:
 
-	std::string GetLastErrorAsString();
-
 	void DeleteReturns();
 
 public:
