@@ -39,7 +39,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 	const char* dirs[] = {
 		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER, TEXTURES_FOLDER,
 		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER, SCRIPTS_FOLDER, SCENE_FOLDER,
-		ASSETS_PREFAB_FOLDER
+		ASSETS_PREFAB_FOLDER, SCRIPTS_DLL_OUTPUT
 	};
 
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)

@@ -13,7 +13,6 @@ public:
 	Jump();
 	~Jump();
 
-
 	void Start();
 
 };
