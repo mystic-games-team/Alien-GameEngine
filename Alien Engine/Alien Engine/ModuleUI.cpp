@@ -347,13 +347,16 @@ update_status ModuleUI::PreUpdate(float dt)
 void ModuleUI::Draw() {
 
 
-	if (show_demo_wndow)
+	if (show_demo_wndow) {
 		ImGui::ShowDemoWindow(&show_demo_wndow);
-
+	}
 	MainMenuBar();
 	BackgroundDockspace();
 	SecondMenuBar();
 	UpdatePanels();
+	if (creating_script) {
+		CreateNewScriptPopUp();
+	}
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -856,6 +859,53 @@ void ModuleUI::ChangeStyle(const int& style_number)
 void ModuleUI::ChangeEnableDemo()
 {
 	show_demo_wndow = !show_demo_wndow;
+}
+
+void ModuleUI::CreateNewScriptPopUp()
+{
+	static int type = 0;
+	static char _name[MAX_PATH] = "Data Name";
+	static bool _export = true;
+
+	ImGui::OpenPopup("Create New Script");
+	ImGui::SetNextWindowSize({ 320,120 });
+	if (ImGui::BeginPopupModal("Create New Script", &creating_script, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
+		ImGui::PushItemWidth(135);
+		ImGui::SetCursorPosX(28);
+		if (ImGui::Combo("Select Script Type", &type, "Script Type\0Class\0Struct\0"))
+		{
+			switch (type)
+			{
+			case 1: { // class
+				
+				break; }
+			case 2: { // struct
+
+				break; }
+			default:
+				break;
+			}
+		}
+
+		ImGui::Spacing();
+		ImGui::SetCursorPosX(15);
+		ImGui::InputText("Name", _name, MAX_PATH, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue);
+		ImGui::SameLine();
+		ImGui::Checkbox("Export Script", &_export);
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::SetCursorPosX(90);
+		if (ImGui::Button("Create Script", { 130,25 })) {
+
+		}
+
+		ImGui::EndPopup();
+	}
+	else {
+		type = 0;
+		strcpy(_name, "Data Name");
+		_export = true;
+	}
 }
 
 void ModuleUI::DeleteLayout(Layout* layout)

@@ -419,6 +419,10 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 void PanelProject::RightClickToWindow(bool pop_up_item)
 {
 	if (!pop_up_item && ImGui::BeginPopupContextWindow()) {
+		if (ImGui::MenuItem("Create New Script")) {
+			App->ui->creating_script = true;
+		}
+		ImGui::Separator();
 		if (ImGui::MenuItem("Create New Folder")) {
 			int folder_number = 0;
 			std::string folder_name = "NewFolder" + std::to_string(folder_number);

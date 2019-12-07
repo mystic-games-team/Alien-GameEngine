@@ -67,6 +67,8 @@ public:
 	void ReportBug();
 	void ChangeEnableDemo();
 
+	void CreateNewScriptPopUp();
+
 	// style
 	void ChangeStyle(const int& style_number);
 
@@ -178,7 +180,7 @@ public:
 	Layout* active_layout = nullptr;
 	bool need_to_save_layouts = false;
 	uint number_of_layouts = 0;
-	
+	bool creating_script = false;
 	const char* actual_name="";
 };
 

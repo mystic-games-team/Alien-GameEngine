@@ -132,6 +132,7 @@ void PanelInspector::ButtonAddComponent()
 				for (uint i = 0; i < scripts.size(); ++i) {
 					if (App->StringCmp(scripts[i]->data_name.data(), std::get<0>(script_info))) {
 						exists = true;
+						break;
 					}
 				}
 				if (!exists) {

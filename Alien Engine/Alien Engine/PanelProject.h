@@ -15,6 +15,7 @@ public:
 
 	bool SelectFile(const char* path, FileNode* node);
 	void RefreshAllNodes();
+
 public:
 
 	FileNode* current_active_folder = nullptr;
