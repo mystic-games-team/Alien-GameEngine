@@ -916,7 +916,7 @@ void ModuleUI::CreateNewScriptPopUp()
 	static bool _export = true;
 
 	ImGui::OpenPopup("Create New Script");
-	ImGui::SetNextWindowSize({ 320,120 });
+	ImGui::SetNextWindowSize({ 320,155 });
 	if (ImGui::BeginPopupModal("Create New Script", &creating_script, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
 		ImGui::PushItemWidth(135);
 		ImGui::SetCursorPosX(28);
@@ -928,14 +928,20 @@ void ModuleUI::CreateNewScriptPopUp()
 		ImGui::SameLine();
 		ImGui::Checkbox("Export Script", &_export);
 		ImGui::Spacing();
+		ImGui::SetCursorPosX(42);
+		ImGui::Text("Header and Cpp will be genereated,");
+		ImGui::SetCursorPosX(33);
+		ImGui::Text("just add them as an existing element.");
 		ImGui::Spacing();
 		ImGui::SetCursorPosX(90);
 		if (ImGui::Button("Create Script", { 130,25 })) {
-			CreateScriptFile(type, _export, _name);
-			type = 0;
-			strcpy(_name, "Data Name");
-			_export = true;
-			creating_script = false;
+			if (!App->StringCmp("Data Name", _name) && type != 0) {
+				CreateScriptFile(type, _export, _name);
+				type = 0;
+				strcpy(_name, "Data Name");
+				_export = true;
+				creating_script = false;
+			}
 		}
 
 		ImGui::EndPopup();
