@@ -92,6 +92,8 @@ private:
 	void SaveAllLayouts(); // save all layout info again to json
 	void SaveLayoutsActive(); // when closing, save which layout was active
 
+	void CreateScriptFile(const int& type, bool to_export, const char* name);
+
 public:
 
 	// framerate

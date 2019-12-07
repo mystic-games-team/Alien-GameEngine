@@ -23,6 +23,7 @@
 #include <string>
 #include "ResourceTexture.h"
 #include "ReturnZ.h"
+#include <fstream>
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -312,6 +313,53 @@ void ModuleUI::SaveLayoutsActive()
 	}
 
 	json_layout->FinishSave();
+}
+
+void ModuleUI::CreateScriptFile(const int& type, bool to_export, const char* name)
+{
+	std::string file_output;
+	switch (type) {
+	case 1: { // class
+		if (to_export) {
+			file_output = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".h"));
+			App->file_system->Copy(EXPORT_CLASS_TEMPLATE, file_output.data());
+			
+		}
+		else {
+
+		}
+		break; }
+	case 2: { // struct
+		if (to_export) {
+
+		}
+		else {
+
+		}
+		break; }
+	default:
+		break;
+	}
+	
+	std::ifstream file(file_output);
+	std::string file_str;
+	if (file.is_open()) {
+		std::string line;
+		while (std::getline(file, line)) {
+			while (line.find("DataAlienTypeName") != std::string::npos) {
+				line.replace(line.find("DataAlienTypeName"), 17, std::string(name));
+			}
+			if (file_str.empty()) {
+				file_str = line;
+			}
+			else {
+				file_str += std::string("\r") + line;
+			}
+		}
+		file.close();
+	}
+	App->file_system->Save(file_output.data(), file_str.data(), file_str.size());
+
 }
 
 update_status ModuleUI::PreUpdate(float dt)
@@ -872,20 +920,7 @@ void ModuleUI::CreateNewScriptPopUp()
 	if (ImGui::BeginPopupModal("Create New Script", &creating_script, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
 		ImGui::PushItemWidth(135);
 		ImGui::SetCursorPosX(28);
-		if (ImGui::Combo("Select Script Type", &type, "Script Type\0Class\0Struct\0"))
-		{
-			switch (type)
-			{
-			case 1: { // class
-				
-				break; }
-			case 2: { // struct
-
-				break; }
-			default:
-				break;
-			}
-		}
+		ImGui::Combo("Select Script Type", &type, "Script Type\0Class\0Struct\0");
 
 		ImGui::Spacing();
 		ImGui::SetCursorPosX(15);
@@ -896,7 +931,11 @@ void ModuleUI::CreateNewScriptPopUp()
 		ImGui::Spacing();
 		ImGui::SetCursorPosX(90);
 		if (ImGui::Button("Create Script", { 130,25 })) {
-
+			CreateScriptFile(type, _export, _name);
+			type = 0;
+			strcpy(_name, "Data Name");
+			_export = true;
+			creating_script = false;
 		}
 
 		ImGui::EndPopup();

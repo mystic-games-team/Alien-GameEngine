@@ -1,0 +1,13 @@
+{
+    "Meta": {
+        "ID": "10487697703224530620",
+        "LastMod": 1575737335
+    },
+    "HasData": true,
+    "DataStructure": [
+        {
+            "DataName": "DataAlienTypeName",
+            "UsesAlien": true
+        }
+    ]
+}
