@@ -279,6 +279,19 @@ Component* GameObject::GetComponentWithID(const u64& compID)
 	return nullptr;
 }
 
+void GameObject::RemoveComponent(Component* component)
+{
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr && *item == component) {
+			delete* item;
+			(*item) = nullptr;
+			components.erase(item);
+			break;
+		}
+	}
+}
+
 bool GameObject::IsSelected()
 {
 	return selected;

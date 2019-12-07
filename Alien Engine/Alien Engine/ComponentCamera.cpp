@@ -93,7 +93,6 @@ bool ComponentCamera::DrawInspector()
 		RightClickMenu("Camera");
 		static bool cntrl_z = true;
 		ImGui::Spacing();
-		ImGui::Spacing();
 		static Color col;
 		col = camera_color_background;
 		if (ImGui::ColorEdit3("Background Color", &col, ImGuiColorEditFlags_Float)) {
@@ -202,6 +201,7 @@ bool ComponentCamera::DrawInspector()
 		ImGui::PopID();
 		ImGui::Spacing();
 		ImGui::Separator();
+		ImGui::Spacing();
 	}
 
 	else

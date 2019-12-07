@@ -46,9 +46,10 @@ bool ComponentMaterial::DrawInspector()
 	if (ImGui::CollapsingHeader("Material", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		RightClickMenu("Material");
-		ImGui::Spacing();
-		if (texture != nullptr)
+		if (texture != nullptr) {
+			ImGui::Spacing();
 			ImGui::Text("Texture References: %i", texture->references);
+		}
 		ImGui::Spacing();
 		static bool set_Z = true;
 		ImGui::Spacing();
@@ -191,6 +192,7 @@ bool ComponentMaterial::DrawInspector()
 		}
 		ImGui::Spacing();
 		ImGui::Separator();
+		ImGui::Spacing();
 	}
 	else
 		RightClickMenu("Material");

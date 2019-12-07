@@ -86,6 +86,7 @@ bool ComponentLight::DrawInspector()
 
 		ImGui::Spacing();
 		ImGui::Separator();
+		ImGui::Spacing();
 	}
 	else
 		RightClickMenu("Light");

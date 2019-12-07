@@ -54,12 +54,14 @@ bool ComponentScript::DrawInspector()
 	if (ImGui::CollapsingHeader(data_name.data(), &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		if (!inspector_variables.empty()) {
+			ImGui::Spacing();
 			for (uint i = 0; i < inspector_variables.size(); ++i) {
 				switch (inspector_variables[i].variable_type)
 				{
 				case InspectorScriptData::DataType::INT: {
 					ImGui::PushID(inspector_variables[i].ptr);
-					ImGui::InputInt(inspector_variables[i].variable_name.data(), (int*)inspector_variables[i].ptr);
+					int* ptr = (int*)inspector_variables[i].ptr;
+					ImGui::InputInt(inspector_variables[i].variable_name.data(), ptr);
 					ImGui::PopID();
 					break; }
 				default:
@@ -67,6 +69,9 @@ bool ComponentScript::DrawInspector()
 				}
 			}
 		}
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
 	}
 	return true;
 }

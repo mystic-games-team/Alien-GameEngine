@@ -20,7 +20,6 @@ public:
 
 ALIEN_INIT_DATA PULL* CreatePULL() {
 	PULL* test = new PULL();
-	SHOW_IN_INSPECTOR_AS_INPUT_INT(test->classss)
 		return test;
 }
 ALIEN_DESTROY_DATA void DestroyPULL(PULL* test) { delete test; }

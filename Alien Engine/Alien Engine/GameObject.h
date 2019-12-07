@@ -39,7 +39,7 @@ public:
 	bool HasComponent(ComponentType component);
 	Component* GetComponent(const ComponentType& type);
 	Component* GetComponentWithID(const u64& ID);
-	
+	void RemoveComponent(Component* component);
 
 	template <class Comp>
 	Comp* GetComponent();

@@ -57,13 +57,18 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 			last_time_mod = file.st_mtime;
 		}
 		script->SetNumber("Meta.LastMod", last_time_mod);
+		if (!data_structures.empty()) {
+			script->SetBoolean("HasData", true);
+			JSONArraypack* structures = script->InitNewArray("DataStructure");
 
-		JSONArraypack* structures = script->InitNewArray("DataStructure");
-
-		for (uint i = 0; i < data_structures.size(); ++i) {
-			structures->SetAnotherNode();
-			structures->SetString("DataName", data_structures[i].first);
-			structures->SetBoolean("UsesAlien", data_structures[i].second);
+			for (uint i = 0; i < data_structures.size(); ++i) {
+				structures->SetAnotherNode();
+				structures->SetString("DataName", data_structures[i].first);
+				structures->SetBoolean("UsesAlien", data_structures[i].second);
+			}
+		}
+		else {
+			script->SetBoolean("HasData", false);
 		}
 		script->FinishSave();
 		delete script;
@@ -87,11 +92,12 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 
 		ID = std::stoull(script->GetString("Meta.ID"));
 		last_time_mod = script->GetNumber("Meta.LastMod");
-		JSONArraypack* structures = script->GetArray("DataStructure");
-
-		for (uint i = 0; i < structures->GetArraySize(); ++i) {
-			data_structures.push_back({ structures->GetString("DataName") ,structures->GetBoolean("UsesAlien") });
-			structures->GetAnotherNode();
+		if (script->GetBoolean("HasData")) {
+			JSONArraypack* structures = script->GetArray("DataStructure");
+			for (uint i = 0; i < structures->GetArraySize(); ++i) {
+				data_structures.push_back({ structures->GetString("DataName") ,structures->GetBoolean("UsesAlien") });
+				structures->GetAnotherNode();
+			}
 		}
 		delete script;
 		App->resources->AddResource(this);

@@ -210,7 +210,6 @@ bool ComponentTransform::DrawInspector()
 		if (ImGui::CollapsingHeader("Prefab Options", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Spacing();
-			ImGui::Spacing();
 
 			if (ImGui::Button("Open Prefab"))
 			{

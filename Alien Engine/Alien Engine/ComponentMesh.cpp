@@ -275,8 +275,6 @@ bool ComponentMesh::DrawInspector()
 			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			draw_OBB = check;
 		}
-		ImGui::Spacing();
-
 		
 		ImGui::Spacing();
 		ImGui::Separator();

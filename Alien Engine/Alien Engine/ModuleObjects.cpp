@@ -731,7 +731,7 @@ void ModuleObjects::HotReload()
 		}
 		else {
 			to_save->SetBoolean("AreScripts", true);
-			JSONArraypack* scripts = to_save->InitNewArray("Scripts");
+			JSONArraypack* scripts = to_save->InitNewArray("Arr.Scripts");
 			CreateJsonScript(base_game_object, scripts);
 		}
 		to_save->FinishSave();
@@ -751,15 +751,16 @@ void ModuleObjects::HotReload()
 			App->scripts_dll = nullptr;
 			App->scripts_dll = LoadLibrary(App->dll.data());
 			if (App->scripts_dll != nullptr) {
-				JSON_Value* value_load = json_value_init_object();
-				JSON_Object* json_object_load = json_value_get_object(value);
+				JSON_Value* value_load = json_parse_file("Library/ScriptsTEMP.alien");
+				JSON_Object* json_object_load = json_value_get_object(value_load);
 
 				if (value_load != nullptr && json_object_load != nullptr) {
 					JSONfilepack* to_load = new JSONfilepack("Library/ScriptsTEMP.alien", json_object_load, value_load);
 					if (to_load->GetBoolean("AreScripts")) {
-						JSONArraypack* scripts_to_load = to_load->GetArray("Scripts");
+						JSONArraypack* scripts_to_load = to_load->GetArray("Arr.Scripts");
 						ReAssignScripts(scripts_to_load);
 					}
+					remove("Library/ScriptsTEMP.alien");
 					delete to_load;
 				}
 			}
@@ -808,6 +809,7 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 									}
 								}
 							}
+							(*item)->RemoveComponent(*script);
 						}
 					}
 				}
@@ -835,6 +837,7 @@ void ModuleObjects::ReAssignScripts(JSONArraypack* to_load)
 			if (App->StringCmp(data_name.data(), r_script->data_structures[k].first.data())) {
 				ComponentScript* script = new ComponentScript(obj);
 				script->ID = std::stoull(to_load->GetString("CompScriptID"));
+				script->resourceID = r_script->GetID();
 				script->LoadData(data_name.data(), r_script->data_structures[k].second);
 				if (to_load->GetBoolean("HasInspector")) {
 					JSONArraypack* inspector = to_load->GetArray("Inspector");
@@ -845,7 +848,7 @@ void ModuleObjects::ReAssignScripts(JSONArraypack* to_load)
 						}
 						std::vector<InspectorScriptData>::iterator item = script->inspector_variables.begin();
 						std::string var_name = inspector->GetString("Name");
-						InspectorScriptData::DataType type = (InspectorScriptData::DataType)inspector->GetNumber("Type");
+						InspectorScriptData::DataType type = (InspectorScriptData::DataType)(uint)inspector->GetNumber("Type");
 						for (; item != script->inspector_variables.end(); ++item) {
 							if (App->StringCmp((*item).variable_name.data(), var_name.data())) {
 								if (type == (*item).variable_type) {

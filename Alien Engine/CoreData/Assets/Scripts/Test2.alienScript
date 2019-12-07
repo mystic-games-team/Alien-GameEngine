@@ -1,8 +1,9 @@
 {
     "Meta": {
-        "ID": "7138706866911849531",
+        "ID": "2802263735606557415",
         "LastMod": 1575656237
     },
+    "HasData": true,
     "DataStructure": [
         {
             "DataName": "TestClass2",
