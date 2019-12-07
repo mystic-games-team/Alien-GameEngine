@@ -170,7 +170,6 @@
     <ClInclude Include="Move.h" />
     <ClInclude Include="NoImport.h" />
     <ClInclude Include="Pull.h" />
-    <ClInclude Include="Punch.h" />
     <ClInclude Include="Swim.h" />
     <ClInclude Include="Test2.h" />
   </ItemGroup>
@@ -182,7 +181,6 @@
     <ClCompile Include="Move.cpp" />
     <ClCompile Include="NoImport.cpp" />
     <ClCompile Include="Pull.cpp" />
-    <ClCompile Include="Punch.cpp" />
     <ClCompile Include="Swim.cpp" />
     <ClCompile Include="Test2.cpp" />
   </ItemGroup>

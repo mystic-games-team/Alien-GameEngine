@@ -126,10 +126,24 @@ void PanelInspector::ButtonAddComponent()
 
 		if (ImGui::Button("Add Component")) {
 			if (!App->StringCmp("Return To Components", std::get<0>(script_info))) {
-				ComponentScript* comp_script = new ComponentScript(App->objects->GetSelectedObject());
-				comp_script->resourceID = std::get<2>(script_info);
-				comp_script->LoadData(std::get<0>(script_info), std::get<1>(script_info));
-				component = 0;
+				GameObject* obj = App->objects->GetSelectedObject();
+				bool exists = false;
+				std::vector<ComponentScript*> scripts = obj->GetComponents<ComponentScript>();
+				for (uint i = 0; i < scripts.size(); ++i) {
+					if (App->StringCmp(scripts[i]->data_name.data(), std::get<0>(script_info))) {
+						exists = true;
+					}
+				}
+				if (!exists) {
+					ComponentScript* comp_script = new ComponentScript(obj);
+					comp_script->resourceID = std::get<2>(script_info);
+					comp_script->LoadData(std::get<0>(script_info), std::get<1>(script_info));
+					std::get<0>(script_info) = "Return To Components";
+					component = 0;
+				}
+				else {
+					LOG("This script is already attached!");
+				}
 			}
 			else {
 				LOG("Select a script");

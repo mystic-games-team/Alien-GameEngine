@@ -61,6 +61,7 @@ private:
 public:
 
 	Application();
+	void LoadDll();
 	~Application();
 
 	void LoadDefaultConfig();

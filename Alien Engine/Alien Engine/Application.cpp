@@ -19,11 +19,8 @@ Application::Application()
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
 
-	static char curr_dir[MAX_PATH];
-	GetCurrentDirectoryA(MAX_PATH, curr_dir);
-	dll = std::string(curr_dir + std::string("/") + "AlienEngineScripts.dll");
-	file_system->NormalizePath(dll);
-	scripts_dll = LoadLibrary(dll.data());
+	LoadDll();
+
 	// Main Modules
 	AddModule(window);
 	AddModule(camera);
@@ -39,6 +36,20 @@ Application::Application()
 	// Renderer last!
 	AddModule(renderer3D);
 
+}
+
+void Application::LoadDll()
+{
+	static char curr_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, curr_dir);
+	dll = std::string(curr_dir + std::string("/") + "AlienEngineScripts.dll");
+	file_system->NormalizePath(dll);
+
+	if (file_system->Exists(DLL_CREATION_PATH)) {
+		remove(DLL_WORKING_PATH);
+		while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG("Visual Studio is creating the new DLL"); }
+	}
+	scripts_dll = LoadLibrary(dll.data());
 }
 
 Application::~Application()

@@ -17,5 +17,5 @@ void Move::Start()
 
 void Move::Update()
 {
-	test++;
+	test = 32;
 }
