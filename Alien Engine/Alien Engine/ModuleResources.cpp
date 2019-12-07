@@ -339,6 +339,7 @@ void ModuleResources::ReloadScripts()
 							script->CreateMetaData(script->GetID());
 						}
 						exists = true;
+						script->reload_completed = true;
 						break;
 					}
 				}
@@ -351,6 +352,25 @@ void ModuleResources::ReloadScripts()
 			}
 		}
 	}
+
+	std::vector<Resource*>::iterator item = resources.begin();
+	while (item != resources.end()) {
+		if ((*item) != nullptr && (*item)->GetType() == ResourceType::RESOURCE_SCRIPT) {
+			ResourceScript* script = (ResourceScript*)*item;
+			if (script->reload_completed) {
+				script->reload_completed = false;
+			}
+			else {
+				remove((*item)->GetAssetsPath());
+				delete* item;
+				(*item) = nullptr;
+				item = resources.erase(item);
+				continue;
+			}
+		}
+		++item;
+	}
+
 	App->ui->panel_project->RefreshAllNodes();
 }
 

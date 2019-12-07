@@ -22,6 +22,6 @@ private:
 	time_t last_time_mod = 0;
 
 public:
-
+	bool reload_completed = false;
 	std::vector<std::pair<std::string, bool>> data_structures;
 };

@@ -173,7 +173,6 @@
     <ClInclude Include="Punch.h" />
     <ClInclude Include="Swim.h" />
     <ClInclude Include="Test2.h" />
-    <ClInclude Include="TestClass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Hit.cpp" />
@@ -186,7 +185,6 @@
     <ClCompile Include="Punch.cpp" />
     <ClCompile Include="Swim.cpp" />
     <ClCompile Include="Test2.cpp" />
-    <ClCompile Include="TestClass.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
