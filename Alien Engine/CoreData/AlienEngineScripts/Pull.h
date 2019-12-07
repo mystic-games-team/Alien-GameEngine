@@ -4,9 +4,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-ALIEN_INIT_HEADER
-
-class ALIEN_ENGINE_API PULL : public Alien {
+class PULL : public Alien {
 
 public:
 
@@ -18,13 +16,6 @@ public:
 	int classss = 0;
 };
 
-ALIEN_INIT_DATA PULL* CreatePULL() {
-	PULL* test = new PULL();
-		return test;
-}
-ALIEN_DESTROY_DATA void DestroyPULL(PULL* test) { delete test; }
-
-ALIEN_END_HEADER
 
 #endif // !_MOVE_H_
 

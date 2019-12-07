@@ -19,13 +19,12 @@ public:
 	void Update();
 
 	int test = 0;
-	int velocity = 2;
+
 };
 
 ALIEN_INIT_DATA Move* CreateMove() {
 	Move* move = new Move();
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(move->test)
-	SHOW_IN_INSPECTOR_AS_INPUT_INT(move->velocity)
 	return move;
 } 
 ALIEN_DESTROY_DATA void DestroyMove(Move* move) { delete move; }

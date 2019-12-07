@@ -1,13 +1,7 @@
 {
     "Meta": {
         "ID": "2802263735606557415",
-        "LastMod": 1575656237
+        "LastMod": 1575720915
     },
-    "HasData": true,
-    "DataStructure": [
-        {
-            "DataName": "TestClass2",
-            "UsesAlien": true
-        }
-    ]
+    "HasData": false
 }

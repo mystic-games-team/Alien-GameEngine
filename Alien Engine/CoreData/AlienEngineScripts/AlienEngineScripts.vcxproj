@@ -163,7 +163,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AAAAAAAAAA.h" />
     <ClInclude Include="Hit.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Kick.h" />
@@ -177,7 +176,6 @@
     <ClInclude Include="TestClass.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AAAAAAAAAA.cpp" />
     <ClCompile Include="Hit.cpp" />
     <ClCompile Include="Jump.cpp" />
     <ClCompile Include="Kick.cpp" />

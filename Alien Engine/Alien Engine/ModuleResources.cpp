@@ -334,7 +334,8 @@ void ModuleResources::ReloadScripts()
 						ResourceScript* script = (ResourceScript*)*item;
 						if (script->NeedReload()) {
 							remove(script->GetAssetsPath());
-							script->SetAssetsPath(script->GetAssetsPath());
+							script->data_structures.clear();
+							script->SetAssetsPath(script->GetLibraryPath());
 							script->CreateMetaData(script->GetID());
 						}
 						exists = true;
