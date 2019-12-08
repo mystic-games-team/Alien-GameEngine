@@ -10,6 +10,7 @@ struct aiFileIO;
 #include "Bass/include/bass.h"
 //struct BASS_FILEPROCS;
 
+// -------Foldres Paths--------
 #define ASSETS_FOLDER "Assets/"
 #define LIBRARY_FOLDER "Library/"
 #define LIBRARY_MODELS_FOLDER "Library/Models/"
@@ -23,14 +24,21 @@ struct aiFileIO;
 #define SCENE_FOLDER "Assets/Scenes/"
 #define ASSETS_PREFAB_FOLDER "Assets/Prefabs/"
 #define HEADER_SCRIPTS_FILE "AlienEngineScripts/"
+// -------Foldres Paths--------
+
+// -------DLL Paths--------
 #define SCRIPTS_DLL_OUTPUT "AlienEngineScripts/OutPut/"
 #define DLL_WORKING_PATH "AlienEngineScripts.dll"
 #define DLL_CREATION_PATH "AlienEngineScripts/OutPut/AlienEngineScripts.dll"
+// -------DLL Paths--------
+
+// -------Templates--------
 #define EXPORT_FILE_CLASS_TEMPLATE "Configuration/Script Templates/ExportClass.alienTemplate"
 #define CLASS_FILE_TEMPLATE "Configuration/Script Templates/Class.alienTemplate"
 #define EXPORT_FILE_STRUCT_TEMPLATE "Configuration/Script Templates/ExportStruct.alienTemplate"
 #define STRUCT_FILE_TEMPLATE "Configuration/Script Templates/Struct.alienTemplate"
 #define CPP_FILE_TEMPLATE "Configuration/Script Templates/BaseCPP.alienTemplate"
+// -------Templates--------
 
 #include "Resource_.h"
 

@@ -957,7 +957,7 @@ void ModuleUI::CreateNewScriptPopUp()
 		ImGui::Spacing();
 		ImGui::SetCursorPosX(90);
 		if (ImGui::Button("Create Script", { 130,25 })) {
-			if (!App->StringCmp("Data Name", _name) && type != 0) {
+			if (std::string(_name).find(" ") == std::string::npos && type != 0) {
 				CreateScriptFile(type, _export, _name);
 				type = 0;
 				strcpy(_name, "Data Name");
