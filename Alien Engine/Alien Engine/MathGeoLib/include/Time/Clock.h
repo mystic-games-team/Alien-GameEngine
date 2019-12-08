@@ -35,7 +35,7 @@ typedef unsigned long long tick_t;
 
 	Gives out timing information in various forms. Use this rather than
 	any platform-dependent perf-counters or rdtsc or whatever.*/
-class Clock
+class __declspec(dllexport) Clock
 {
 public:
 	Clock();

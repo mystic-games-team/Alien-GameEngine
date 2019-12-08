@@ -27,7 +27,7 @@
 MATH_BEGIN_NAMESPACE
 
 /// A ray in 3D space is a line that starts from an origin point and extends to infinity in one direction.
-class Ray
+class __declspec(dllexport) Ray
 {
 public:
 	/// Specifies the origin of this ray.

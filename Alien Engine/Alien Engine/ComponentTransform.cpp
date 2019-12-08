@@ -40,6 +40,13 @@ ComponentTransform::~ComponentTransform()
 {
 }
 
+void ComponentTransform::SetLocalPosition(const float3& new_local_pos)
+{
+	local_position = new_local_pos;
+
+	RecalculateTransform();
+}
+
 void ComponentTransform::SetLocalPosition(const float& x, const float& y, const float& z)
 {
 	local_position.x = x;
@@ -49,12 +56,12 @@ void ComponentTransform::SetLocalPosition(const float& x, const float& y, const 
 	RecalculateTransform();
 }
 
-const float3& ComponentTransform::GetLocalPosition() const
+const float3 ComponentTransform::GetLocalPosition() const
 {
 	return local_position;
 }
 
-const float3& ComponentTransform::GetGlobalPosition() const
+const float3 ComponentTransform::GetGlobalPosition() const
 {
 	float3 pos, scale;
 	Quat rot;
@@ -62,6 +69,15 @@ const float3& ComponentTransform::GetGlobalPosition() const
 	global_transformation.Decompose(pos, rot, scale);
 
 	return pos;
+}
+
+void ComponentTransform::SetLocalScale(const float3& new_local_scale)
+{
+	local_scale = new_local_scale;
+
+	LookScale();
+
+	RecalculateTransform();
 }
 
 void ComponentTransform::SetLocalScale(const float& x, const float& y, const float& z)
@@ -88,12 +104,12 @@ void ComponentTransform::LookScale()
 		game_object_attached->ScaleNegative(is_scale_negative);
 }
 
-const float3& ComponentTransform::GetLocalScale() const
+const float3 ComponentTransform::GetLocalScale() const
 {
 	return local_scale;
 }
 
-const float3& ComponentTransform::GetGlobalScale() const
+const float3 ComponentTransform::GetGlobalScale() const
 {
 	float3 pos, scale;
 	Quat rot;
@@ -101,6 +117,18 @@ const float3& ComponentTransform::GetGlobalScale() const
 	global_transformation.Decompose(pos, rot, scale);
 
 	return scale;
+}
+
+void ComponentTransform::SetLocalRotation(const Quat& new_local_rotation)
+{
+	local_rotation = new_local_rotation;
+
+	euler_rotation = local_rotation.ToEulerXYZ();
+	euler_rotation.x = RadToDeg(euler_rotation.x);
+	euler_rotation.y = RadToDeg(euler_rotation.y);
+	euler_rotation.z = RadToDeg(euler_rotation.z);
+
+	RecalculateTransform();
 }
 
 void ComponentTransform::SetLocalRotation(const float& x, const float& y, const float& z, const float& angle)
@@ -120,12 +148,12 @@ void ComponentTransform::SetLocalRotation(const float& x, const float& y, const 
 
 
 
-const Quat& ComponentTransform::GetLocalRotation() const
+const Quat ComponentTransform::GetLocalRotation() const
 {
 	return local_rotation;
 }
 
-const Quat& ComponentTransform::GetGlobalRotation() const
+const Quat ComponentTransform::GetGlobalRotation() const
 {
 	float3 pos, scale;
 	Quat rot;
@@ -185,7 +213,6 @@ bool ComponentTransform::DrawInspector()
 	if (ImGui::InputText("##ObjectName", name, 30, ImGuiInputTextFlags_AutoSelectAll)) {
 		game_object_attached->SetName(name);
 	}
-
 
 	ImGui::SameLine();
 

@@ -44,7 +44,7 @@
 MATH_BEGIN_NAMESPACE
 
 /// Represents a rotation or an orientation of a 3D object.
-class ALIGN16 Quat
+class ALIGN16 __declspec(dllexport) Quat
 {
 public:
 

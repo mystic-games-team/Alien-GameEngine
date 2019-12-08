@@ -2,6 +2,7 @@
 #include "ModuleObjects.h"
 #include "Application.h"
 #include "ReturnZ.h"
+#include "ComponentTransform.h"
 #include "Alien.h"
 
 ComponentScript::ComponentScript(GameObject* attach) : Component(attach)
@@ -111,6 +112,7 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 			Alien* alien = (Alien*)data_ptr;
 			App->objects->current_scripts.push_back(alien);
 			alien->game_object = game_object_attached;
+			alien->transform = game_object_attached->GetComponent<ComponentTransform>();
 		}
 	}
 }

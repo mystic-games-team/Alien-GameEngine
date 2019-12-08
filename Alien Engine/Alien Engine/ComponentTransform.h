@@ -11,19 +11,23 @@ public:
 	ComponentTransform(GameObject* attach, const float3& pos, const Quat& rot, const float3& scale);
 	virtual ~ComponentTransform();
 
+	void SetLocalPosition(const float3& new_local_pos);
 	void SetLocalPosition(const float& x, const float& y, const float& z);
-	const float3& GetLocalPosition() const;
-	const float3& GetGlobalPosition() const;
 
+	const float3 GetLocalPosition() const;
+	const float3 GetGlobalPosition() const;
+
+	void SetLocalScale(const float3& new_local_scale);
 	void SetLocalScale(const float& x, const float& y, const float& z);
 	
-	const float3& GetLocalScale() const;
-	const float3& GetGlobalScale() const;
+	const float3 GetLocalScale() const;
+	const float3 GetGlobalScale() const;
 
+	void SetLocalRotation(const Quat& new_local_rotation);
 	void SetLocalRotation(const float& x, const float& y, const float& z, const float& angle);
 	
-	const Quat& GetLocalRotation() const;
-	const Quat& GetGlobalRotation() const;
+	const Quat GetLocalRotation() const;
+	const Quat GetGlobalRotation() const;
 	
 	void SetLocalTransform(float4x4 &transform_matrix);
 	void SetGlobalTransformation(const float4x4& global_transformation);
@@ -41,8 +45,6 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
-
-
 private:
 
 	void LookScale();
@@ -53,7 +55,6 @@ public:
 	float4x4 global_transformation = float4x4::identity;
 	float4x4 local_transformation = float4x4::identity;
 	
-
 	// to know if flip poly or not
 	bool is_scale_negative = false;
 private:

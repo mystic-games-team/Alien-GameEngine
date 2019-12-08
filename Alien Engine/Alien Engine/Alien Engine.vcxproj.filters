@@ -516,6 +516,9 @@
     <ClInclude Include="PanelTextEditor.h">
       <Filter>Panels</Filter>
     </ClInclude>
+    <ClInclude Include="Maths.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -817,6 +820,9 @@
     </ClCompile>
     <ClCompile Include="PanelTextEditor.cpp">
       <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="Maths.cpp">
+      <Filter>ScriptHelpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

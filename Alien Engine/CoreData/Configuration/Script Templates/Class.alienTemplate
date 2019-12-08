@@ -1,6 +1,8 @@
 #ifndef _DataAlienTypeName_H_
 #define _DataAlienTypeName_H_
 
+#include "Macros/AlienScripts.h"
+
 class DataAlienTypeName {
 
 public:

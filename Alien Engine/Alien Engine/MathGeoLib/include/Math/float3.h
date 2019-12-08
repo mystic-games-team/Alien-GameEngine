@@ -44,7 +44,7 @@
 MATH_BEGIN_NAMESPACE
 
 /// A vector of form (x,y,z).
-class float3
+class __declspec(dllexport) float3
 {
 public:
 	enum

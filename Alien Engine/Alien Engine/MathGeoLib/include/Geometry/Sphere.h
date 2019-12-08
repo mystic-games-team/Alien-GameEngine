@@ -23,7 +23,7 @@
 MATH_BEGIN_NAMESPACE
 
 /// A 3D sphere.
-class Sphere
+class __declspec(dllexport) Sphere
 {
 public:
 	/// The center point of this sphere.

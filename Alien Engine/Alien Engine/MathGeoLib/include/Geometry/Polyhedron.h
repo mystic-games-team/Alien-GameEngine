@@ -28,7 +28,7 @@
 MATH_BEGIN_NAMESPACE
 
 /// Represents a three-dimensional closed geometric solid defined by flat polygonal faces.
-class Polyhedron
+class __declspec(dllexport) Polyhedron
 {
 public:
 	/// Stores a list of indices of a single face of a Polyhedron.

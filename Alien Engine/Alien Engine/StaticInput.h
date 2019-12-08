@@ -13,4 +13,5 @@ public:
 	};
 
 	static KEY_STATE GetKey(const SDL_Scancode& code);
+
 };

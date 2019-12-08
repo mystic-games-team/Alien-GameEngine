@@ -28,7 +28,7 @@ MATH_BEGIN_NAMESPACE
 
 /// Specifies a plane in 3D space. This plane is an affine 2D subspace of the 3D space, meaning
 /// that its sides extend to infinity, and it does not necessarily pass through the origin.
-class Plane
+class __declspec(dllexport) Plane
 {
 public:
 	/// The direction this plane is facing at.

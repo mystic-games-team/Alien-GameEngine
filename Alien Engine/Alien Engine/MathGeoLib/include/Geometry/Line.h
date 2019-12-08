@@ -23,7 +23,7 @@
 MATH_BEGIN_NAMESPACE
 
 /// A line in 3D space is defined by an origin point and a direction, and extends to infinity in two directions.
-class Line
+class __declspec(dllexport) Line
 {
 public:
 	/// Specifies the origin of this line.

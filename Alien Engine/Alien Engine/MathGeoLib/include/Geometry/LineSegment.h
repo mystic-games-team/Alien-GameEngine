@@ -23,7 +23,7 @@
 MATH_BEGIN_NAMESPACE
 
 /// A line segment in 3D space is a finite line with a start and end point.
-class LineSegment
+class __declspec(dllexport) LineSegment
 {
 public:
 	/// The starting point of this line segment.

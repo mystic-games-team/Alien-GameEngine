@@ -37,7 +37,7 @@ MATH_BEGIN_NAMESPACE
 	be arbitrarily oriented in the space with respect to each other.
 
 	If you need to represent a box in 3D space with arbitrary orientation, see the class OBB. */
-class ALIGN16 AABB
+class ALIGN16 __declspec(dllexport) AABB
 {
 public:
 
