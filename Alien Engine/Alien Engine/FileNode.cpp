@@ -214,11 +214,11 @@ void FileNode::SetIcon()
 		}
 		else if (App->StringCmp(extension.data(), "png")) {
 			icon = App->resources->icons.png_file;
-			type = FileDropType::TEXTURE;;
+			type = FileDropType::TEXTURE;
 		}
 		else if (App->StringCmp(extension.data(), "tga")) {
 			icon = App->resources->icons.tga_file;
-			type = FileDropType::TEXTURE;;
+			type = FileDropType::TEXTURE;
 		}
 		else if (App->StringCmp(extension.data(), "fbx")) {
 			icon = App->resources->icons.model;
@@ -233,7 +233,7 @@ void FileNode::SetIcon()
 			type = FileDropType::PREFAB;
 		}
 		else if (App->StringCmp(extension.data(), "alienScript")) {
-			icon = App->resources->icons.prefab_icon;
+			icon = App->resources->icons.script_file;
 			type = FileDropType::SCRIPT;
 		}
 		else {
