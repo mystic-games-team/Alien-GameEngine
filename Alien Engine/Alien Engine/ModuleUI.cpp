@@ -491,6 +491,10 @@ void ModuleUI::MainMenuBar()
 		{
 			panel_hierarchy->ChangeEnable();
 		}
+		if (ImGui::MenuItem("TextEditor", panel_text_editor->shortcut->GetNameScancodes()))
+		{
+			panel_text_editor->ChangeEnable();
+		}
 		if (ImGui::MenuItem("Panel Project", panel_project->shortcut->GetNameScancodes()))
 		{
 			panel_project->ChangeEnable();

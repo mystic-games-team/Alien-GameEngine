@@ -13,10 +13,13 @@ PanelTextEditor::PanelTextEditor(const std::string& panel_name, const SDL_Scanco
 
 	// set your own known preprocessor symbols...
 	{
-		static const char* ppnames[] = { "NULL" };
+		static const char* ppnames[] = { "NULL", "ALIEN_ENGINE_API", "ALIEN_INIT_DATA", "ALIEN_DESTROY_DATA", "ALIEN_INIT_HEADER",
+			"ALIEN_END_HEADER", "ALIENENGINESCRIPTS_EXPORTS"
+		};
 		// ... and their corresponding values
 		static const char* ppvalues[] = {
-			"#define NULL 0"
+			"#define NULL 0", "#define ALIEN_ENGINE_API __declspec(dllexport)", "#define ALIEN_INIT_DATA ALIEN_ENGINE_API", "#define ALIEN_DESTROY_DATA ALIEN_ENGINE_API",
+			"#define ALIEN_INIT_HEADER extern 'C' {", "#define ALIEN_END_HEADER }", "#define ALIENENGINESCRIPTS_EXPORTS", 
 		};
 
 		for (int i = 0; i < sizeof(ppnames) / sizeof(ppnames[0]); ++i)
@@ -30,11 +33,11 @@ PanelTextEditor::PanelTextEditor(const std::string& panel_name, const SDL_Scanco
 	// set your own identifiers
 	{
 		static const char* identifiers[] = {
-			"u64"
+			"u64", "uint", "GameObject", "Alien", "Input"
 		};
 		static const char* idecls[] =
 		{
-			"typedef unsigned long long u64"
+			"typedef unsigned long long u64", "typedef unsigned int uint", "none", "none", "none"
 		};
 		for (int i = 0; i < sizeof(identifiers) / sizeof(identifiers[0]); ++i)
 		{
@@ -119,7 +122,7 @@ void PanelTextEditor::PanelLogic()
 	ImGui::Text("%6d/%-6d %6d lines  | %s | %s | %s | %s", cpos.mLine + 1, cpos.mColumn + 1, text_editor.GetTotalLines(),
 		text_editor.IsOverwrite() ? "Ovr" : "Ins",
 		text_editor.CanUndo() ? "*" : " ",
-		text_editor.GetLanguageDefinition().mName.c_str(), "AlienEngineScripts/Hit.h");
+		text_editor.GetLanguageDefinition().mName.c_str(), file_name.data());
 
 	text_editor.Render("TextEditor");
 
@@ -131,6 +134,7 @@ void PanelTextEditor::PanelLogic()
 void PanelTextEditor::SetFile(const char* file)
 {
 	file_to_edit = std::string(file);
+	file_name = App->file_system->GetBaseFileNameWithExtension(file);
 
 	std::ifstream t(file);
 	if (t.good()) {

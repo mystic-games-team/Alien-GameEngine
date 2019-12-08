@@ -19,6 +19,7 @@ public:
 
 	TextEditor text_editor;
 	std::string file_to_edit;
+	std::string file_name;
 
 private:
 

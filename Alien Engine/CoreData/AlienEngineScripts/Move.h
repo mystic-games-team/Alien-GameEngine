@@ -34,4 +34,3 @@ ALIEN_END_HEADER
 #endif // !_MOVE_H_
 
 
-
