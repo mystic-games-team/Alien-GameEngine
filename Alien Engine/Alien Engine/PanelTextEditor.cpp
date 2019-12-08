@@ -67,6 +67,27 @@ void PanelTextEditor::PanelLogic()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::BeginMenu("Open")) {
+				if (all_scripts_files.empty()) {
+					GetAllFiles();
+				}
+				std::vector<std::string>::iterator item = all_scripts_files.begin();
+				for (; item != all_scripts_files.end(); ++item) {
+					std::string extension;
+					App->file_system->SplitFilePath((*item).data(), nullptr, nullptr, &extension);
+					if (App->StringCmp(extension.data(), "cpp") || App->StringCmp(extension.data(), "h")) {
+						if (ImGui::MenuItem((*item).data(), nullptr, nullptr, !App->StringCmp((*item).data(), file_name.data()))) {
+							SetFile(std::string(HEADER_SCRIPTS_FILE + (*item)).data());
+						}
+					}
+				}
+
+				ImGui::EndMenu();
+			}
+			else if (!all_scripts_files.empty()) {
+				all_scripts_files.clear();
+			}
+
 			if (ImGui::MenuItem("Save"))
 			{
 				std::string to_save = text_editor.GetText();
@@ -149,4 +170,9 @@ bool PanelTextEditor::IsFocused() const
 		return true;
 	}
 	return false;
+}
+
+void PanelTextEditor::GetAllFiles()
+{
+	App->file_system->DiscoverFiles(HEADER_SCRIPTS_FILE, all_scripts_files, std::vector<std::string>());
 }

@@ -15,14 +15,20 @@ public:
 	void SetFile(const char* file);
 
 	bool IsFocused() const;
+
+private:
+
+	void GetAllFiles();
+
 public:
 
 	TextEditor text_editor;
 	std::string file_to_edit;
 	std::string file_name;
-
+	
 private:
 
+	std::vector<std::string> all_scripts_files;
 	bool is_focused = false;
 };
 
