@@ -68,6 +68,8 @@
     <ClCompile Include="Test2.cpp">
       <Filter>Archivos de recursos</Filter>
     </ClCompile>
-    <ClCompile Include="Hit.cpp" />
+    <ClCompile Include="Hit.cpp">
+      <Filter>Archivos de recursos</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,0 +1,11 @@
+#ifndef _DataAlienTypeName_H_
+#define _DataAlienTypeName_H_
+
+struct DataAlienTypeName {
+
+	DataAlienTypeName();
+	~DataAlienTypeName();
+
+};
+
+#endif 

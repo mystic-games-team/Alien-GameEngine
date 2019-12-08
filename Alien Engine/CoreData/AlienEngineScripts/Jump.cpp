@@ -17,3 +17,10 @@ void Jump::Start()
 	
 }
 
+TestStruct::TestStruct()
+{
+}
+
+TestStruct::~TestStruct()
+{
+}

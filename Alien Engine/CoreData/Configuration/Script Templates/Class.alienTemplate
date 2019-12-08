@@ -1,0 +1,13 @@
+#ifndef _DataAlienTypeName_H_
+#define _DataAlienTypeName_H_
+
+class DataAlienTypeName {
+
+public:
+
+	DataAlienTypeName();
+	virtual ~DataAlienTypeName();
+
+};
+
+#endif 

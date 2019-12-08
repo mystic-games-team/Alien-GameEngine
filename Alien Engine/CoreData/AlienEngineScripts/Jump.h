@@ -23,6 +23,8 @@ ALIEN_INIT_DATA Jump* CreateJump() {
 ALIEN_DESTROY_DATA void DestroyJump(Jump* jump) { delete jump; }
 
 struct ALIEN_ENGINE_API TestStruct {
+	TestStruct();
+	~TestStruct();
 	int x = 0;
 };
 ALIEN_INIT_DATA TestStruct* CreateTestStruct() {

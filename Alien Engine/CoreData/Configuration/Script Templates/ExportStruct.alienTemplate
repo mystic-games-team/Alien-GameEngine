@@ -1,0 +1,26 @@
+#ifndef _DataAlienTypeName_H_
+#define _DataAlienTypeName_H_
+
+#include "Macros/AlienScripts.h"
+#include "..\..\Alien Engine\Alien.h"
+
+ALIEN_INIT_HEADER
+
+struct ALIEN_ENGINE_API DataAlienTypeName {
+
+	DataAlienTypeName();
+	~DataAlienTypeName();
+
+};
+
+ALIEN_INIT_DATA DataAlienTypeName* CreateDataAlienTypeName() {
+	DataAlienTypeName* alien = new DataAlienTypeName();
+	// To show in inspector here
+	
+	return alien;
+}
+ALIEN_DESTROY_DATA void DestroyDataAlienTypeName(DataAlienTypeName* alien) { delete alien; }
+
+ALIEN_END_HEADER
+
+#endif 

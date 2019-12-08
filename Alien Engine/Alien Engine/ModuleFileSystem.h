@@ -26,7 +26,11 @@ struct aiFileIO;
 #define SCRIPTS_DLL_OUTPUT "AlienEngineScripts/OutPut/"
 #define DLL_WORKING_PATH "AlienEngineScripts.dll"
 #define DLL_CREATION_PATH "AlienEngineScripts/OutPut/AlienEngineScripts.dll"
-#define EXPORT_CLASS_TEMPLATE "Configuration/Script Templates/ExportClass.alienTemplate"
+#define EXPORT_FILE_CLASS_TEMPLATE "Configuration/Script Templates/ExportClass.alienTemplate"
+#define CLASS_FILE_TEMPLATE "Configuration/Script Templates/Class.alienTemplate"
+#define EXPORT_FILE_STRUCT_TEMPLATE "Configuration/Script Templates/ExportStruct.alienTemplate"
+#define STRUCT_FILE_TEMPLATE "Configuration/Script Templates/Struct.alienTemplate"
+#define CPP_FILE_TEMPLATE "Configuration/Script Templates/BaseCPP.alienTemplate"
 
 #include "Resource_.h"
 

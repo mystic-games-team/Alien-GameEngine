@@ -108,7 +108,7 @@ update_status ModuleObjects::Update(float dt)
 			}
 		}
 	}
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) {
 		HotReload();
 	}
 	return UPDATE_CONTINUE;

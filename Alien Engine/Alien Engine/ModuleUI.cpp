@@ -317,30 +317,29 @@ void ModuleUI::SaveLayoutsActive()
 
 void ModuleUI::CreateScriptFile(const int& type, bool to_export, const char* name)
 {
-	std::string file_output;
+	std::string file_output = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".h"));
 	switch (type) {
 	case 1: { // class
 		if (to_export) {
-			file_output = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".h"));
-			App->file_system->Copy(EXPORT_CLASS_TEMPLATE, file_output.data());
-			
+			App->file_system->Copy(EXPORT_FILE_CLASS_TEMPLATE, file_output.data());
 		}
 		else {
-
+			App->file_system->Copy(CLASS_FILE_TEMPLATE, file_output.data());
 		}
 		break; }
 	case 2: { // struct
 		if (to_export) {
-
+			App->file_system->Copy(EXPORT_FILE_STRUCT_TEMPLATE, file_output.data());
 		}
 		else {
-
+			App->file_system->Copy(STRUCT_FILE_TEMPLATE, file_output.data());
 		}
 		break; }
 	default:
 		break;
 	}
 	
+	// change de .h
 	std::ifstream file(file_output);
 	std::string file_str;
 	if (file.is_open()) {
@@ -359,6 +358,29 @@ void ModuleUI::CreateScriptFile(const int& type, bool to_export, const char* nam
 		file.close();
 	}
 	App->file_system->Save(file_output.data(), file_str.data(), file_str.size());
+
+	// change the cpp
+	std::string cpp_path = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".cpp"));
+	App->file_system->Copy(CPP_FILE_TEMPLATE, cpp_path.data());
+
+	std::ifstream cpp(cpp_path);
+	std::string cpp_str;
+	if (cpp.is_open()) {
+		std::string line;
+		while (std::getline(cpp, line)) {
+			while (line.find("DataAlienTypeName") != std::string::npos) {
+				line.replace(line.find("DataAlienTypeName"), 17, std::string(name));
+			}
+			if (cpp_str.empty()) {
+				cpp_str = line;
+			}
+			else {
+				cpp_str += std::string("\r") + line;
+			}
+		}
+		cpp.close();
+	}
+	App->file_system->Save(cpp_path.data(), cpp_str.data(), cpp_str.size());
 
 }
 
