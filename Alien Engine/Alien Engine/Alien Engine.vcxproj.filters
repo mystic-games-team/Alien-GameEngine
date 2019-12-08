@@ -61,6 +61,9 @@
     <Filter Include="ScriptHelpers">
       <UniqueIdentifier>{79de4d46-5e7a-45c2-b497-3c132db2193d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\TextEdit">
+      <UniqueIdentifier>{987d3c13-1318-45bd-80aa-53653a15e71f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleSceneIntro.h">
@@ -507,6 +510,12 @@
     <ClInclude Include="ResourceScript.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="TextEdit\TextEditor.h">
+      <Filter>Tools\TextEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelTextEditor.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -803,6 +812,12 @@
     <ClCompile Include="Alien.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="TextEdit\TextEditor.cpp">
+      <Filter>Tools\TextEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelTextEditor.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
@@ -823,10 +838,10 @@
     <None Include="MathGeoLib\include\Math\Matrix.inl">
       <Filter>Tools\Math</Filter>
     </None>
-    <None Include="Game\Configuration\DefaultConfiguration.json">
+    <None Include="Game\Configuration\LayoutsInfo.json">
       <Filter>JSON</Filter>
     </None>
-    <None Include="Game\Configuration\LayoutsInfo.json">
+    <None Include="..\CoreData\Configuration\DefaultConfiguration.json">
       <Filter>JSON</Filter>
     </None>
   </ItemGroup>

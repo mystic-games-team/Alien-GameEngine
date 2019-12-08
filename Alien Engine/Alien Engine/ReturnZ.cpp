@@ -7,6 +7,7 @@
 #include "ComponentLight.h"
 #include "ResourceTexture.h"
 #include "Octree.h"
+#include "PanelTextEditor.h"
 
 bool ReturnZ::eraseY = false;
 
@@ -69,7 +70,7 @@ ReturnZ::~ReturnZ()
 
 void ReturnZ::AddNewAction(const ReturnActions& type, void* data, bool user)
 {
-	if (App->objects->ignore_cntrlZ)
+	if (App->objects->ignore_cntrlZ || App->ui->panel_text_editor->IsFocused())
 		return;
 	if (ReturnZ::eraseY && user) {
 		/*for (uint i = 0; i < App->objects->fordward_actions.size(); ++i) {
@@ -92,7 +93,7 @@ void ReturnZ::AddNewAction(const ReturnActions& type, void* data, bool user)
 
 void ReturnZ::AddNewFordwarAction(const ReturnActions& type, void* data)
 {
-	if (App->objects->ignore_cntrlZ)
+	if (App->objects->ignore_cntrlZ || App->ui->panel_text_editor->IsFocused())
 		return;
 	ReturnZ* ret = new ReturnZ();
 	ret->SetAction(type, data);
@@ -101,7 +102,7 @@ void ReturnZ::AddNewFordwarAction(const ReturnActions& type, void* data)
 
 void ReturnZ::GoBackOneAction()
 {
-	if (App->objects->return_actions.empty() || Time::IsPlaying())
+	if (App->objects->return_actions.empty() || Time::IsPlaying() || App->ui->panel_text_editor->IsFocused())
 		return;
 	ReturnZ::eraseY = true;
 	ReturnZ* to_return = App->objects->return_actions.top();
@@ -112,7 +113,7 @@ void ReturnZ::GoBackOneAction()
 
 void ReturnZ::GoFordwardOneAction()
 {
-	if (App->objects->fordward_actions.empty() || Time::IsPlaying())
+	if (App->objects->fordward_actions.empty() || Time::IsPlaying() || App->ui->panel_text_editor->IsFocused())
 		return;
 
 	ReturnZ* to_return = App->objects->fordward_actions.top();

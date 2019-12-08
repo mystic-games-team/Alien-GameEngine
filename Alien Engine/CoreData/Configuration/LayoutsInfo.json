@@ -17,7 +17,8 @@
             "Layout Editor": false,
             "Panel Project": true,
             "Save": true,
-            "Game": false
+            "Game": true,
+            "Text Editor": true
         },
         "Layout2": {
             "Number": 2,
@@ -35,7 +36,8 @@
             "Layout Editor": false,
             "Panel Project": true,
             "Save": true,
-            "Game": true
+            "Game": true,
+            "Text Editor": true
         },
         "Layout3": {
             "Number": 3,
@@ -53,7 +55,8 @@
             "Layout Editor": false,
             "Panel Project": true,
             "Save": true,
-            "Game": true
+            "Game": true,
+            "Text Editor": false
         }
     }
 }

@@ -272,6 +272,7 @@
     <ClInclude Include="PanelRender.h" />
     <ClInclude Include="PanelScene.h" />
     <ClInclude Include="PanelSceneSelector.h" />
+    <ClInclude Include="PanelTextEditor.h" />
     <ClInclude Include="Parson\parson.h" />
     <ClInclude Include="PCG\pcg_extras.hpp" />
     <ClInclude Include="PCG\pcg_random.hpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
     <ClInclude Include="StaticInput.h" />
+    <ClInclude Include="TextEdit\TextEditor.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
@@ -378,6 +380,7 @@
     <ClCompile Include="PanelRender.cpp" />
     <ClCompile Include="PanelScene.cpp" />
     <ClCompile Include="PanelSceneSelector.cpp" />
+    <ClCompile Include="PanelTextEditor.cpp" />
     <ClCompile Include="Parson\parson.c" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="ResourceModel.cpp" />
@@ -389,11 +392,12 @@
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
     <ClCompile Include="StaticInput.cpp" />
+    <ClCompile Include="TextEdit\TextEditor.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Game\Configuration\DefaultConfiguration.json" />
+    <None Include="..\CoreData\Configuration\DefaultConfiguration.json" />
     <None Include="Game\Configuration\LayoutsInfo.json" />
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />
     <None Include="MathGeoLib\include\Geometry\QuadTree.inl" />

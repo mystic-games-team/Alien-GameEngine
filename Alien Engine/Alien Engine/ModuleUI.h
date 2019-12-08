@@ -7,6 +7,7 @@
 #include "imgui/examples/imgui_impl_opengl3.h"
 #include "Panel.h"
 #include "Time.h"
+#include "TextEdit/TextEditor.h"
 #include <utility>
 
 class Panel;
@@ -22,6 +23,7 @@ class PanelLayout;
 class PanelProject;
 class PanelSceneSelector;
 class PanelGame;
+class PanelTextEditor;
 
 struct ShortCut;
 
@@ -103,7 +105,7 @@ public:
 	void BackgroundDockspace();
 
 private:
-
+	TextEditor edit;
 	// demo
 	bool show_demo_wndow = false;
 
@@ -146,6 +148,7 @@ private:
 	SDL_Scancode panel_create_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_inspector_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_console_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_text_edit_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_render_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_scene_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_game_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -177,11 +180,14 @@ public:
 	PanelSceneSelector* panel_scene_selector = nullptr;
 	PanelScene* panel_scene = nullptr;
 	PanelGame* panel_game = nullptr;
+	PanelTextEditor* panel_text_editor = nullptr;
+
 	// layouts
 	std::vector<Layout*> layouts;
 	Layout* active_layout = nullptr;
 	bool need_to_save_layouts = false;
 	uint number_of_layouts = 0;
+
 	bool creating_script = false;
 	const char* actual_name="";
 };
