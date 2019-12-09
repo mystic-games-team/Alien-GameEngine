@@ -501,9 +501,6 @@
     <ClInclude Include="StaticInput.h">
       <Filter>ScriptHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="ScriptMacros.h">
-      <Filter>ScriptHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="Alien.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -517,6 +514,9 @@
       <Filter>Panels</Filter>
     </ClInclude>
     <ClInclude Include="Maths.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
       <Filter>ScriptHelpers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -824,6 +824,7 @@
     <ClCompile Include="Maths.cpp">
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
+    <ClCompile Include="Debug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

@@ -7,6 +7,7 @@
 
 #include "..\..\..\Alien Engine\StaticInput.h"
 #include "..\..\..\Alien Engine\Maths.h"
+#include "..\..\..\Alien Engine\Debug.h"
 
 #ifdef ALIENENGINESCRIPTS_EXPORTS
 #define ALIEN_ENGINE_API __declspec(dllexport)

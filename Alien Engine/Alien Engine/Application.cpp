@@ -339,13 +339,12 @@ bool Application::CleanUp()
 
 bool Application::StringCmp(const char* str1, const char* str2)
 {
-	if (strlen(str1) != strlen(str2))
+	size_t size = strlen(str1);
+	if (size != strlen(str2))
 		return false;
 
-	for (uint i = 0; i < strlen(str1); ++i) {
-		if (std::tolower(str1[i]) == std::tolower(str2[i]))
-			continue;
-		else
+	for (uint i = 0; i < size; ++i) {
+		if (std::tolower(str1[i]) != std::tolower(str2[i]))
 			return false;
 	}
 	return true;
