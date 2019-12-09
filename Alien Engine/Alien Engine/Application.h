@@ -36,7 +36,8 @@ public:
 	bool fps_cap = true;
 	uint16_t framerate_cap;
 	int fps_limit = 30;
-	ImGuiTextBuffer log_string; 
+	ImGuiTextBuffer engine_logs; 
+	ImGuiTextBuffer game_logs; 
 	HINSTANCE scripts_dll = nullptr;
 	std::string dll;
 private:

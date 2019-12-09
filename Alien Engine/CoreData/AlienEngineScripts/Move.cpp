@@ -25,5 +25,7 @@ void Move::Update()
 		test = 14;
 	if (Input::GetMouseButton(Input::MOUSE_LEFT_BUTTON) == Input::KEY_DOWN)
 		test = 15;
-	Debug::Log("fdsf %i", 10);
+
+	Debug::Log("%i", Random::GetRandomIntBetweenTwo(1, 5));
+	Debug::Log("%f", Random::GetRandomFloatBetweenTwo(1, 5));
 }

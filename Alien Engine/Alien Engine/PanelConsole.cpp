@@ -16,27 +16,40 @@ void PanelConsole::PanelLogic()
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
 	
 	ImGui::BeginChild("#console buttons", { ImGui::GetWindowWidth(),30 });
-	if (ImGui::Button("Engine Console")) {
+	if (!game_console) ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.06F, 0.53F,0.98F,1 });
+	if (ImGui::Button("Engine Console") && game_console) {
 		game_console = false;
 	}
+	else if (!game_console) ImGui::PopStyleColor();
 	ImGui::SameLine();
-	if (ImGui::Button("Game Console")) {
+	if (game_console) ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.06F, 0.53F,0.98F,1 });
+	if (ImGui::Button("Game Console") && !game_console) {
 		game_console = true;
 	}
+	else if (game_console) ImGui::PopStyleColor();
 	ImGui::SameLine();
 	ImGui::Text("|");
 	ImGui::SameLine();
 	if (ImGui::Button("Clear")) {
-
+		if (game_console) App->game_logs.clear();
+		else App->engine_logs.clear();
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Clear On Play")) {
 
+	if (clear_on_play) ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.06F, 0.53F,0.98F,1 });
+	if (ImGui::Button("Clear On Play")) {
+		if (clear_on_play) ImGui::PopStyleColor();
+		clear_on_play = !clear_on_play;
 	}
+	else if (clear_on_play) ImGui::PopStyleColor();
+
 	ImGui::Separator();
 	ImGui::EndChild();
 	ImGui::BeginChild("#console logs", { 0,0 },false, ImGuiWindowFlags_HorizontalScrollbar);
-	ImGui::TextUnformatted(App->log_string.begin());
+
+	if (game_console) ImGui::TextUnformatted(App->game_logs.begin());
+	else ImGui::TextUnformatted(App->engine_logs.begin());
+	
 
 	if (scroll_x) {
 		scroll_x = false;
@@ -56,8 +69,6 @@ void PanelConsole::PanelLogic()
 	ImGui::EndChild();
 
 	ImGui::End();
-
-	
 }
 
 void PanelConsole::OnPanelDesactive()

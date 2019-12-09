@@ -14,9 +14,15 @@ void Debug::Log(const char* message, ...)
 	sprintf_s(tmp_string2, 4096, "\n%s", tmp_string);
 	OutputDebugString(tmp_string2);
 	if (App != nullptr)
-		App->log_string.appendf(tmp_string2);
+		App->game_logs.appendf(tmp_string2);
 }
 
-//void Debug::LogToEngine(const char* message, ...)
-//{
-//}
+void Debug::ClearGameConsole()
+{
+	App->game_logs.clear();
+}
+
+void Debug::ClearEngineConsole()
+{
+	App->engine_logs.clear();
+}

@@ -114,7 +114,6 @@ private:
 	std::vector<Panel*> panels;
 
 	PanelAbout* panel_about = nullptr;
-	PanelConsole* panel_console = nullptr;
 	PanelRender* panel_render = nullptr;
 	PanelHierarchy* panel_hierarchy = nullptr;
 	PanelInspector* panel_inspector = nullptr;
@@ -175,6 +174,7 @@ public:
 
 	// public panels
 	PanelConfig* panel_config = nullptr;
+	PanelConsole* panel_console = nullptr;
 	PanelCreateObject* panel_create_object = nullptr;
 	PanelProject* panel_project = nullptr;
 	PanelSceneSelector* panel_scene_selector = nullptr;

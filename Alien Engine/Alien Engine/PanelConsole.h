@@ -12,6 +12,10 @@ public:
 	void PanelLogic();
 	void OnPanelDesactive();
 
+public:
+
+	bool clear_on_play = true;
+
 private:
 
 	bool game_console = true;
