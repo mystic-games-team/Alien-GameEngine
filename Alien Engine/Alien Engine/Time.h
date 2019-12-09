@@ -3,9 +3,11 @@
 
 class Timer;
 
-class Time {
-public:
+class __declspec(dllexport) Time {
+private:
 	friend class Application;
+	friend class ModuleUI;
+	friend class ReturnZ;
 
 	enum class GameState {
 		NONE,
@@ -26,25 +28,28 @@ public:
 
 	static void CleanUp();
 
-	static void SetScaleTime(const float& scale);
-
-	static float GetDT();
-
-
-public:
-
-	static GameState state;
-	static float time_since_start;
-	static float game_time;
-	static float scale_time;
+	static void SetDT(const float& dt);
 
 private:
-
-	static void SetDT(const float& dt);
 
 	static float delta_time;
 	static Timer* game_timer;
 	static Timer* start_timer;
+
+	static GameState state;
+
+	static float time_since_start;
+	static float game_time;
+	static float scale_time;
+
+public:
+
+	static void SetScaleTime(const float& scale);
+	static float GetDT();
+	static float GetTimeSinceStart();
+	static float GetGameTime();
+	static float GetScaleTime();
+
 };
 
 #endif

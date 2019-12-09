@@ -28,4 +28,9 @@ void Move::Update()
 
 	Debug::Log("%i", Random::GetRandomIntBetweenTwo(1, 5));
 	Debug::Log("%f", Random::GetRandomFloatBetweenTwo(1, 5));
+
+	if (Time::GetGameTime() != Time::GetTimeSinceStart()) {
+		Time::GetDT();
+	}
+	Debug::Log("Time: %f", Time::GetTimeSinceStart());
 }

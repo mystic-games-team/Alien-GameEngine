@@ -98,6 +98,21 @@ float Time::GetDT()
 	return delta_time * scale_time;
 }
 
+float Time::GetTimeSinceStart()
+{
+	return time_since_start;
+}
+
+float Time::GetGameTime()
+{
+	return game_time;
+}
+
+float Time::GetScaleTime()
+{
+	return scale_time;
+}
+
 bool Time::IsPlaying()
 {
 	if (state == GameState::PLAY || state == GameState::PLAY_ONCE)
