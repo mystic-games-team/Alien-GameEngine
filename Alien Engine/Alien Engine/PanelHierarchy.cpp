@@ -293,6 +293,10 @@ void PanelHierarchy::RightClickMenu()
 				App->objects->SetNewSelectedObject(object_menu);
 			}
 		}
+		if (ImGui::MenuItem("Create New Script")) {
+			App->ui->creating_script = true;
+		}
+		ImGui::Separator();
 		if (object_menu != nullptr) {
 
 			bool is_on_top = false;
