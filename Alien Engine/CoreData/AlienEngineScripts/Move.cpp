@@ -33,4 +33,7 @@ void Move::Update()
 		Time::GetDT();
 	}
 	Debug::Log("Time: %f", Time::GetTimeSinceStart());
+	Camera::GetAllCameras();
+	Camera::GetCurrentCamera();
+	Camera::GetNumCameras();
 }

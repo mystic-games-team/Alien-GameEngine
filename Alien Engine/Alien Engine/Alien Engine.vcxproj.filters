@@ -519,6 +519,9 @@
     <ClInclude Include="Debug.h">
       <Filter>ScriptHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -824,7 +827,12 @@
     <ClCompile Include="Maths.cpp">
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
-    <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="Debug.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
