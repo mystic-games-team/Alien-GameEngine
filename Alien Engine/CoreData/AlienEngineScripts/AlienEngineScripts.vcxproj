@@ -164,7 +164,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Hit.h" />
-    <ClInclude Include="Jump.h" />
     <ClInclude Include="Macros\AlienScripts.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="NoImport.h" />
@@ -174,7 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Hit.cpp" />
-    <ClCompile Include="Jump.cpp" />
     <ClCompile Include="Macros\dllmain.cpp" />
     <ClCompile Include="Move.cpp" />
     <ClCompile Include="NoImport.cpp" />

@@ -744,6 +744,7 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 			case (int)ComponentType::SCRIPT: {
 				ComponentScript* script = new ComponentScript(this);
 				script->LoadComponent(components_to_load);
+				// dont need to addcomponent, load script does it
 				break; }
 			default:
 				LOG("Unknown component type while loading");

@@ -303,14 +303,15 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 	App->importer->LoadParShapesMesh(par_mesh, *ret);
 }
 
-void ModuleResources::ReadHeaderFile(const char* path, std::vector<std::string> current_scripts)
+void ModuleResources::ReadHeaderFile(const char* path, std::vector<std::string>& current_scripts)
 {
 	ResourceScript* script = new ResourceScript();
 	script->SetAssetsPath(path);
 	script->SetName(App->file_system->GetBaseFileName(path).data());
-	for (uint i = 0; i < current_scripts.size(); ++i) {
-		if (App->StringCmp(App->file_system->GetBaseFileName(path).data(), App->file_system->GetBaseFileName(current_scripts[i].data()).data())) {
-			script->ReadBaseInfo(current_scripts[i].data());
+	for (auto item = current_scripts.begin(); item != current_scripts.end(); ++item) {
+		if (App->StringCmp(App->file_system->GetBaseFileName(path).data(), App->file_system->GetBaseFileName((*item).data()).data())) {
+			script->ReadBaseInfo((*item).data());
+			current_scripts.erase(item);
 			return;
 		}
 	}
@@ -506,6 +507,14 @@ void ModuleResources::ReadScripts()
 		if (files[i].back() == 'h') { // header file found
 			ReadHeaderFile(std::string(HEADER_SCRIPTS_FILE + files[i]).data(), scripts);
 		}
+	}
+	
+	// if there are still scripts, remove them because it doesnt exists in the project
+	if (!scripts.empty()) {
+		for (uint i = 0; i < scripts.size(); ++i) {
+			remove(scripts[i].data());
+		}
+		scripts.clear();
 	}
 }
 
