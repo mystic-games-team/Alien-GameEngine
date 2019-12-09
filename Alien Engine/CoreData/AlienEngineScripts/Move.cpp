@@ -32,6 +32,7 @@ void Move::Update()
 	if (Time::GetGameTime() != Time::GetTimeSinceStart()) {
 		Time::GetDT();
 	}
+
 	Debug::Log("Time: %f", Time::GetTimeSinceStart());
 	Camera::GetAllCameras();
 	Camera::GetCurrentCamera();

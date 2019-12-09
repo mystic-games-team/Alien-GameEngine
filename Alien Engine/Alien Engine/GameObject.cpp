@@ -9,6 +9,7 @@
 #include "RandomHelper.h"
 #include "ModuleObjects.h"
 #include "ComponentCamera.h"
+#include "ComponentScript.h"
 #include "ReturnZ.h"
 
 GameObject::GameObject(GameObject* parent)
@@ -223,6 +224,11 @@ void GameObject::SetDrawList(std::map<float, GameObject*>* to_draw, const Compon
 
 void GameObject::AddComponent(Component* component)
 {
+	for (auto item = components.begin(); item != components.end(); ++item) {
+		if (*item != nullptr && *item == component) {
+			return;
+		}
+	}
 	components.push_back(component);
 }
 
@@ -734,6 +740,10 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 				ComponentCamera* camera = new ComponentCamera(this);
 				camera->LoadComponent(components_to_load);
 				AddComponent(camera);
+				break; }
+			case (int)ComponentType::SCRIPT: {
+				ComponentScript* script = new ComponentScript(this);
+				script->LoadComponent(components_to_load);
 				break; }
 			default:
 				LOG("Unknown component type while loading");

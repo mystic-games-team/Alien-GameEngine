@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "ReturnZ.h"
 #include "ComponentTransform.h"
+#include "ResourceScript.h"
 #include "Alien.h"
 
 ComponentScript::ComponentScript(GameObject* attach) : Component(attach)
@@ -79,10 +80,71 @@ bool ComponentScript::DrawInspector()
 
 void ComponentScript::SaveComponent(JSONArraypack* to_save)
 {
+	to_save->SetNumber("Type", (int)type);
+	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ResourceID", std::to_string(resourceID));
+	to_save->SetString("DataName", data_name);
+	if (inspector_variables.empty()) {
+		to_save->SetBoolean("HasInspector", false);
+	}
+	else {
+		to_save->SetBoolean("HasInspector", true);
+		JSONArraypack* inspector = to_save->InitNewArray("Inspector");
+		for (uint i = 0; i < inspector_variables.size(); ++i) {
+			inspector->SetAnotherNode();
+			inspector->SetNumber("VarType", inspector_variables[i].variable_type);
+			inspector->SetString("Name", inspector_variables[i].variable_name);
+			switch (inspector_variables[i].variable_type) {
+			case InspectorScriptData::DataType::INT: {
+				int value = *(int*)inspector_variables[i].ptr;
+				inspector->SetNumber("int", value);
+				break; }
+			default:
+				break;
+			}
+		}
+	}
 }
 
 void ComponentScript::LoadComponent(JSONArraypack* to_load)
 {
+	type = (ComponentType)(int)to_load->GetNumber("Type");
+	ID = std::stoull(to_load->GetString("ID"));
+	resourceID = std::stoull(to_load->GetString("ResourceID"));
+	data_name = to_load->GetString("DataName");
+	ResourceScript* script = dynamic_cast<ResourceScript*>(App->resources->GetResourceWithID(resourceID));
+	if (resourceID != 0 && script != nullptr) {
+		for (uint i = 0; i < script->data_structures.size(); ++i) {
+			if (App->StringCmp(data_name.data(), script->data_structures[i].first.data())) {
+				LoadData(data_name.data(), script->data_structures[i].second);
+				break;
+			}
+		}
+		if (!inspector_variables.empty() && to_load->GetBoolean("HasInspector")) {
+			JSONArraypack* inspector = to_load->GetArray("Inspector");
+			for (uint i = 0; i < inspector_variables.size(); ++i) {
+				for (uint j = 0; j < inspector->GetArraySize(); ++j) {
+					std::string val_name = inspector->GetString("Name");
+					int val_type = inspector->GetNumber("VarType");
+					if (App->StringCmp(inspector_variables[i].variable_name.data(), val_name.data()) && inspector_variables[i].variable_type == val_type) {
+						switch (inspector_variables[i].variable_type) {
+						case InspectorScriptData::DataType::INT: {
+							int* value = (int*)inspector_variables[i].ptr;
+							*value = inspector->GetNumber("int");
+							break; }
+						default:
+							break;
+						}
+					}
+					inspector->GetAnotherNode();
+				}
+				inspector->GetFirstNode();
+			}
+		}
+	}
+	else {
+		delete this;
+	}
 }
 
 void ComponentScript::InspectorInputInt(int* ptr, const char* ptr_name)
@@ -107,7 +169,7 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 		data_name = std::string(name);
 		App->objects->actual_script_loading = this;
 		data_ptr = Creator();
-		game_object_attached->components.push_back(this);
+		game_object_attached->AddComponent(this);
 		if (need_alien) {
 			Alien* alien = (Alien*)data_ptr;
 			App->objects->current_scripts.push_back(alien);

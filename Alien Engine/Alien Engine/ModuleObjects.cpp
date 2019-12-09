@@ -578,6 +578,8 @@ void ModuleObjects::LoadScene(const char* path, bool change_scene)
 		base_game_object->ID = 0;
 		base_game_object->is_static = true;
 
+		current_scripts.clear();
+
 		JSONfilepack* scene = new JSONfilepack(path, object, value);
 
 		JSONArraypack* game_objects = scene->GetArray("Scene.GameObjects");
