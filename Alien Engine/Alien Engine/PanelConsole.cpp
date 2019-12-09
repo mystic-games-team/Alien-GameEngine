@@ -13,9 +13,29 @@ PanelConsole::~PanelConsole()
 void PanelConsole::PanelLogic()
 {
 
-	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_HorizontalScrollbar);
-	if (ImGui::IsWindowHovered())
-		App->camera->is_scene_hovered = false;
+	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
+	
+	ImGui::BeginChild("#console buttons", { ImGui::GetWindowWidth(),30 });
+	if (ImGui::Button("Engine Console")) {
+		game_console = false;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Game Console")) {
+		game_console = true;
+	}
+	ImGui::SameLine();
+	ImGui::Text("|");
+	ImGui::SameLine();
+	if (ImGui::Button("Clear")) {
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Clear On Play")) {
+
+	}
+	ImGui::Separator();
+	ImGui::EndChild();
+	ImGui::BeginChild("#console logs", { 0,0 },false, ImGuiWindowFlags_HorizontalScrollbar);
 	ImGui::TextUnformatted(App->log_string.begin());
 
 	if (scroll_x) {
@@ -30,6 +50,10 @@ void PanelConsole::PanelLogic()
 	if (ImGui::GetScrollY() / ImGui::GetScrollMaxY() >= 0.95F) {
 		ImGui::SetScrollHereY(1.0F);
 	}
+
+	if (ImGui::IsWindowHovered())
+		App->camera->is_scene_hovered = false;
+	ImGui::EndChild();
 
 	ImGui::End();
 

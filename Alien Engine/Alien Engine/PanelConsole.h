@@ -14,6 +14,7 @@ public:
 
 private:
 
+	bool game_console = true;
 	bool scroll_x = true;
 	bool scroll_y = true;
 
