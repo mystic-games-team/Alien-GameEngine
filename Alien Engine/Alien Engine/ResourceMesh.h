@@ -4,6 +4,7 @@
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/Quat.h"
 #include "GameObject.h"
+#include "Color.h"
 
 class ResourceTexture;
 
@@ -61,5 +62,7 @@ private:
 	float3 pos = { 0,0,0 };
 	float3 scale = { 1,1,1 };
 	Quat rot = { 0,0,0,0 };
+
+	Color material_color;
 
 };

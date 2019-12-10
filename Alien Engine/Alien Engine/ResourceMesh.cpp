@@ -303,6 +303,7 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 		if (texture != nullptr) {
 			material->SetTexture(texture);
 		}
+		material->color = material_color;
 
 		obj->AddComponent(material);
 	}

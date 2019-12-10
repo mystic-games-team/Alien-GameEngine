@@ -230,11 +230,18 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	}
 
 	ret->InitBuffers();
-
+	
 	// set the material
 	aiMaterial* ai_material = scene->mMaterials[ai_mesh->mMaterialIndex];
 	aiString path;
 	ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+	aiColor4D col;
+	if (AI_SUCCESS == aiGetMaterialColor(ai_material, AI_MATKEY_COLOR_DIFFUSE, &col)) {
+		ret->material_color.r = col.r;
+		ret->material_color.g = col.g;
+		ret->material_color.b = col.b;
+		ret->material_color.a = col.a;
+	}
 	std::string normal_path = path.C_Str();
 	App->file_system->NormalizePath(normal_path);
 	ret->texture = App->resources->GetTextureByName(normal_path.data());
