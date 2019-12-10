@@ -93,17 +93,27 @@ update_status ModuleObjects::PreUpdate(float dt)
 		}
 		to_reparent.clear();
 	}
-	base_game_object->PreUpdate();
+
+	// scripts preupdate
+	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
+		std::vector<Alien*>::iterator item = current_scripts.begin();
+		for (; item != current_scripts.end(); ++item) {
+			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
+				(*item)->PreUpdate();
+			}
+		}
+	}
 
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleObjects::Update(float dt)
 {
-	if (!current_scripts.empty()) {
+	// scripts update
+	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
 		std::vector<Alien*>::iterator item = current_scripts.begin();
 		for (; item != current_scripts.end(); ++item) {
-			if (*item != nullptr) {
+			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
 				(*item)->Update();
 			}
 		}
@@ -116,7 +126,16 @@ update_status ModuleObjects::Update(float dt)
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
-	base_game_object->PostUpdate();
+	// scripts postupdate
+	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
+		std::vector<Alien*>::iterator item = current_scripts.begin();
+		for (; item != current_scripts.end(); ++item) {
+			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
+				(*item)->PostUpdate();
+			}
+		}
+	}
+
 	if (App->renderer3D->SetCameraToDraw(App->camera->fake_camera)) {
 		printing_scene = true;
 		// Scene Drawing

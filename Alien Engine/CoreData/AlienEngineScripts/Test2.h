@@ -4,7 +4,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-class TestClass2 : public Alien {
+class TestClass2 {
 
 public:
 

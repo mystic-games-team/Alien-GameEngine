@@ -8,6 +8,7 @@ private:
 	friend class Application;
 	friend class ModuleUI;
 	friend class ReturnZ;
+	friend class ModuleObjects;
 
 	enum class GameState {
 		NONE,

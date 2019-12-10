@@ -4,7 +4,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-class PULL : public Alien {
+class PULL {
 
 public:
 

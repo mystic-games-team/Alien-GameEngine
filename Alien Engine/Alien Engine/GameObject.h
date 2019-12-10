@@ -25,10 +25,6 @@ public:
 	void OnDisable();
 	bool IsEnabled();
 
-	void PreUpdate();
-	void Update();
-	void PostUpdate();
-
 	// here we call Component Mesh, Material & light
 	void DrawScene();
 	void DrawGame();

@@ -37,4 +37,5 @@ void Move::Update()
 	Camera::GetAllCameras();
 	Camera::GetCurrentCamera();
 	Camera::GetNumCameras();
+
 }

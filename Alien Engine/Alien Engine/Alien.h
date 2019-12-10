@@ -8,13 +8,13 @@ public:
 	Alien();
 	virtual ~Alien();
 
-	virtual void Awake() {}
-	virtual void Start() {}
+	virtual void Awake() {} // TODO
+	virtual void Start() {} // TODO
 	virtual void PreUpdate() {}
 	virtual void Update() {}
 	virtual void PostUpdate() {}
-	virtual void OnDisable() {}
-	virtual void OnEnable() {}
+	virtual void OnDisable() {} // TODO
+	virtual void OnEnable() {} // TODO
 
 	// Need
 	// TODO:
