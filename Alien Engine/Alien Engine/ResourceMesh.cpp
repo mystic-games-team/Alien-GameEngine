@@ -47,7 +47,7 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 
 		if (texture != nullptr)
 			meta->SetString("Mesh.Texture", texture->GetAssetsPath());
-
+		meta->SetColor("Mesh.MatColor", material_color);
 		// transformations
 		// pos
 		meta->SetFloat3("Mesh.Position", pos);
@@ -124,6 +124,7 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 		bool has_texture = meta->GetBoolean("Mesh.HasTexture");
 		if (has_texture)
 			texture_name = meta->GetString("Mesh.Texture");
+		material_color = meta->GetColor("Mesh.MatColor");
 		// transformations
 		// pos
 		pos = meta->GetFloat3("Mesh.Position");
