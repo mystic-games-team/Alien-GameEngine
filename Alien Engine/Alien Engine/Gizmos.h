@@ -34,6 +34,11 @@ private:
 
 private:
 	struct Gizmo {
+		Gizmo(ResourceMesh* mesh, bool control, PrimitiveType type) {
+			this->mesh = mesh;
+			controller = control;
+			this->type = type;
+		}
 		ResourceMesh* mesh = nullptr;
 		bool controller = true;
 		PrimitiveType type = PrimitiveType::UNKONWN;
