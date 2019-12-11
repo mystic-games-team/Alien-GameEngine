@@ -195,7 +195,6 @@ update_status ModuleObjects::PostUpdate(float dt)
 			OnDrawGizmos();
 		}
 
-
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 

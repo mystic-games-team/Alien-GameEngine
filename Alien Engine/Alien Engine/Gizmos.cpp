@@ -6,10 +6,11 @@ std::vector<Gizmos::Gizmo> Gizmos::active_gizmos;
 
 void Gizmos::DrawCube(float3 position, float3 size, Color color)
 {
+	float3 centered_pos = { position.x - size.x / 2 ,  position.y - size.y / 2 ,  position.z - size.z / 2 };
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
 		if (Gizmos::active_gizmos[i].type == PrimitiveType::CUBE) {
 			float4x4 matrix = float4x4::identity;
-			matrix = matrix.FromTRS(position, Quat::identity, size);
+			matrix = matrix.FromTRS(centered_pos, Quat::identity, size);
 			DrawPoly(Gizmos::active_gizmos[i].mesh, matrix, color);
 			Gizmos::active_gizmos[i].is_in_use = true;
 			return;
@@ -18,7 +19,7 @@ void Gizmos::DrawCube(float3 position, float3 size, Color color)
 	ResourceMesh* mesh = App->resources->GetPrimitive(PrimitiveType::CUBE);
 	Gizmos::active_gizmos.push_back({ mesh, true, PrimitiveType::CUBE });
 	float4x4 matrix = float4x4::identity;
-	matrix = matrix.FromTRS(position, Quat::identity, size);
+	matrix = matrix.FromTRS(centered_pos, Quat::identity, size);
 	DrawPoly(mesh, matrix, color);
 }
 
