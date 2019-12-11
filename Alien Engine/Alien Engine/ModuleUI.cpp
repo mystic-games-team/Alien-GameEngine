@@ -365,8 +365,15 @@ void ModuleUI::CreateScriptFile(const int& type, bool to_export, const char* nam
 	App->file_system->Save(file_output.data(), file_str.data(), file_str.size());
 
 	// change the cpp
-	std::string cpp_path = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".cpp"));
-	App->file_system->Copy(CPP_FILE_TEMPLATE, cpp_path.data());
+	std::string cpp_path; 
+	if (type == 1 && to_export) {
+		cpp_path = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".cpp"));
+		App->file_system->Copy(CPP_ALIEN_FILE_TEMPLATE, cpp_path.data());
+	}
+	else {
+		cpp_path = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".cpp"));
+		App->file_system->Copy(CPP_FILE_TEMPLATE, cpp_path.data());
+	}
 
 	std::ifstream cpp(cpp_path);
 	std::string cpp_str;

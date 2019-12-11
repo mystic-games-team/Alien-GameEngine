@@ -48,6 +48,9 @@
     <ClInclude Include="b.h">
       <Filter>Archivos de recursos</Filter>
     </ClInclude>
+    <ClInclude Include="c.h">
+      <Filter>Archivos de recursos</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Move.cpp">
@@ -81,6 +84,9 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="b.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="c.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

@@ -38,6 +38,7 @@ struct aiFileIO;
 #define EXPORT_FILE_STRUCT_TEMPLATE "Configuration/Script Templates/ExportStruct.alienTemplate"
 #define STRUCT_FILE_TEMPLATE "Configuration/Script Templates/Struct.alienTemplate"
 #define CPP_FILE_TEMPLATE "Configuration/Script Templates/BaseCPP.alienTemplate"
+#define CPP_ALIEN_FILE_TEMPLATE "Configuration/Script Templates/AlienCPP.alienTemplate"
 // -------Templates--------
 
 #include "Resource_.h"

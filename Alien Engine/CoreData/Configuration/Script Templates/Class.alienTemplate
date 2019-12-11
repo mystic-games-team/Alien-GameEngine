@@ -1,5 +1,4 @@
-#ifndef _DataAlienTypeName_H_
-#define _DataAlienTypeName_H_
+#pragma once
 
 #include "Macros/AlienScripts.h"
 
@@ -11,5 +10,3 @@ public:
 	virtual ~DataAlienTypeName();
 
 };
-
-#endif 

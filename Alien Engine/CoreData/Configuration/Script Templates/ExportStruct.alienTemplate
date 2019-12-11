@@ -1,5 +1,4 @@
-#ifndef _DataAlienTypeName_H_
-#define _DataAlienTypeName_H_
+#pragma once
 
 #include "Macros/AlienScripts.h"
 #include "..\..\Alien Engine\Alien.h"
@@ -22,5 +21,3 @@ ALIEN_INIT_DATA DataAlienTypeName* CreateDataAlienTypeName() {
 ALIEN_DESTROY_DATA void DestroyDataAlienTypeName(DataAlienTypeName* alien) { delete alien; }
 
 ALIEN_END_HEADER
-
-#endif 
