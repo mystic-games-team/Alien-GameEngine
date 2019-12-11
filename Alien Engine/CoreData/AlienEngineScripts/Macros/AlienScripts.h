@@ -12,6 +12,7 @@
 #include "..\..\..\Alien Engine\Time.h"
 #include "..\..\..\Alien Engine\Camera.h"
 #include "..\..\..\Alien Engine\Gizmos.h"
+#include "..\..\..\Alien Engine\Color.h"
 
 #ifdef ALIENENGINESCRIPTS_EXPORTS
 #define ALIEN_ENGINE_API __declspec(dllexport)

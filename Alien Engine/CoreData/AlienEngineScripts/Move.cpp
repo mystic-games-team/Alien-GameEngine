@@ -42,5 +42,5 @@ void Move::Update()
 
 void Move::OnDrawGizmos()
 {
-	Gizmos::DrawCube(transform->GetGlobalPosition(), { 4,2,3 }, { 1,0.5F,0.75F,0.75F });
+	Gizmos::DrawCube(transform->GetGlobalPosition(), { 4,2,3 }, Color::Yellow());
 }

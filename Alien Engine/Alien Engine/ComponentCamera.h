@@ -6,7 +6,7 @@
 #include "MathGeoLib/include/MathBuildConfig.h"
 #include "ComponentMesh.h"
 
-class ComponentCamera : public Component {
+class __declspec(dllexport) ComponentCamera : public Component {
 public:
 
 	ComponentCamera(GameObject* attach);

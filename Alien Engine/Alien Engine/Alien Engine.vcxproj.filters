@@ -117,9 +117,6 @@
     <ClInclude Include="Globals.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h">
       <Filter>Tools\ImGui</Filter>
     </ClInclude>
@@ -525,6 +522,9 @@
     <ClInclude Include="Gizmos.h">
       <Filter>ScriptHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -568,9 +568,6 @@
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp">
       <Filter>Tools\ImGui</Filter>
@@ -837,6 +834,9 @@
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
     <ClCompile Include="Gizmos.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
   </ItemGroup>
