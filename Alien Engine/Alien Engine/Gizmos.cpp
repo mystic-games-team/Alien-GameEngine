@@ -90,6 +90,16 @@ void Gizmos::DrawLine(float3 from, float3 to, Color color, float line_width)
 	glLineWidth(1);
 }
 
+void Gizmos::DrawWireMesh(ComponentMesh* mesh, float4x4 global_transform, Color color, float line_width)
+{
+	if (mesh != nullptr && mesh->mesh != nullptr) {
+		DrawWire(mesh->mesh, global_transform, color, line_width);
+	}
+	else {
+		LOG("DrawWireMesh: Mesh is nullptr or has no mesh attached!");
+	}
+}
+
 void Gizmos::DrawPoly(ResourceMesh* mesh, const float4x4& matrix, const Color& color)
 {
 	glColor4f(color.r, color.g, color.b, color.a);

@@ -8,7 +8,7 @@
 
 class ResourceMesh;
 
-class ComponentMesh : public Component {
+class __declspec(dllexport) ComponentMesh : public Component {
 public:
 
 	ComponentMesh(GameObject* attach);

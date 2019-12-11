@@ -7,6 +7,7 @@
 #include <tuple>
 #include "ModuleObjects.h"
 
+class ComponentMesh;
 class ResourceMesh;
 enum class PrimitiveType;
 
@@ -20,6 +21,9 @@ public:
 	static void DrawSphere(float3 position, float radius, Color color);
 	static void DrawWireSphere(float3 position, float radius, Color color, float line_width = 2.0F);
 	static void DrawLine(float3 from, float3 to, Color color, float line_width = 3.0F);
+	static void DrawWireMesh(ComponentMesh* mesh, float4x4 global_transform, Color color, float line_width = 2.0F);
+	// TODO: when UI available
+	// static void DrawGUITexture();
 
 private:
 
