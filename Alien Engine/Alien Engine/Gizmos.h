@@ -15,10 +15,8 @@ class __declspec(dllexport) Gizmos {
 	friend class ModuleObjects;
 public:
 
-
-	// TODO: after calling all scripts OnDrawGizmos && OnDrawGizmosSelected, iterate and look for the bool to erase
-	// TODO: clear gizmos in change scene
 	static void DrawCube(float3 position, float3 size, Color color);
+	static void DrawSphere(float3 position, float radius, Color color);
 
 private:
 
