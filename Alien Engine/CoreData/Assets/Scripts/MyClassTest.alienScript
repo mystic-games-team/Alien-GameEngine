@@ -1,12 +1,12 @@
 {
     "Meta": {
-        "ID": "5410909361000620259",
-        "LastMod": 1576076587
+        "ID": "11163672839764118823",
+        "LastMod": 1576077164
     },
     "HasData": true,
     "DataStructure": [
         {
-            "DataName": "Move",
+            "DataName": "MyClassTest",
             "UsesAlien": true
         }
     ]

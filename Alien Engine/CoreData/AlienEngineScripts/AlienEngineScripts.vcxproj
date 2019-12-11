@@ -163,18 +163,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="a.h" />
+    <ClInclude Include="b.h" />
+    <ClInclude Include="Fix.h" />
     <ClInclude Include="Hit.h" />
     <ClInclude Include="Macros\AlienScripts.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="MyClassTest.h" />
     <ClInclude Include="NoImport.h" />
     <ClInclude Include="Pull.h" />
     <ClInclude Include="Swim.h" />
     <ClInclude Include="Test2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="a.cpp" />
+    <ClCompile Include="b.cpp" />
+    <ClCompile Include="Fix.cpp" />
     <ClCompile Include="Hit.cpp" />
     <ClCompile Include="Macros\dllmain.cpp" />
     <ClCompile Include="Move.cpp" />
+    <ClCompile Include="MyClassTest.cpp" />
     <ClCompile Include="NoImport.cpp" />
     <ClCompile Include="Pull.cpp" />
     <ClCompile Include="Swim.cpp" />
