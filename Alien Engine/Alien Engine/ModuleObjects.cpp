@@ -404,6 +404,35 @@ void ModuleObjects::DeselectObject()
 	}
 }
 
+void ModuleObjects::InitScriptsOnPlay() const
+{
+	// scripts awake
+	std::vector<Alien*>::const_iterator item = current_scripts.cbegin();
+	for (; item != current_scripts.cend(); ++item) {
+		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
+			(*item)->Awake();
+		}
+	}
+	// scripts start
+	item = current_scripts.cbegin();
+	for (; item != current_scripts.cend(); ++item) {
+		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
+			(*item)->Start();
+		}
+	}
+}
+
+void ModuleObjects::CleanUpScriptsOnStop() const
+{
+	// scripts cleanup
+	std::vector<Alien*>::const_iterator item = current_scripts.cbegin();
+	for (; item != current_scripts.cend(); ++item) {
+		if (*item != nullptr && (*item)->game_object != nullptr) {
+			(*item)->CleanUp();
+		}
+	}
+}
+
 GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent, bool set_selected)
 {
 	GameObject* object = nullptr;

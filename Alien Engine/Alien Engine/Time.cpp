@@ -37,6 +37,7 @@ void Time::Play()
 			App->engine_logs.clear();
 		}
 		state = GameState::PLAY;
+		App->objects->InitScriptsOnPlay();
 		game_time = 0.0F;
 		game_timer->Start();
 	}
@@ -45,6 +46,7 @@ void Time::Play()
 		game_timer->Resume();
 	}
 	else if (state == GameState::PLAY) {
+		App->objects->CleanUpScriptsOnStop();
 		state = GameState::NONE;
 		game_time = 0.0F;
 		App->objects->LoadScene("Library/play_scene.alienScene", false);
