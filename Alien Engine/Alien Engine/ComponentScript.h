@@ -55,11 +55,7 @@ public:
 	// enum for types of imgui to show variables
 	// change to struct, need variable name
 	std::vector<InspectorScriptData> inspector_variables;
-	std::string data_name;
-private:
-
 	bool need_alien = false;
+	std::string data_name;
 	void* data_ptr = nullptr;
-
-
 };

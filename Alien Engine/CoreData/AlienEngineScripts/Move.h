@@ -17,7 +17,7 @@ public:
 
 	void Start();
 	void Update();
-
+	void OnDrawGizmos();
 	int test = 0;
 
 };

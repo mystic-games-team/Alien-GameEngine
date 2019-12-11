@@ -85,6 +85,7 @@ public:
 	/*---------Scripts Calls-----------*/
 	void InitScriptsOnPlay() const;
 	void CleanUpScriptsOnStop() const;
+	void OnDrawGizmos() const;
 	/*---------Scripts Calls-----------*/
 
 	// if parent is nullptr, parent will be the invisible game object

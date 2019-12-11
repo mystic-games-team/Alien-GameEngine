@@ -522,6 +522,9 @@
     <ClInclude Include="Camera.h">
       <Filter>ScriptHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="Gizmos.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -831,6 +834,9 @@
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmos.cpp">
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
   </ItemGroup>

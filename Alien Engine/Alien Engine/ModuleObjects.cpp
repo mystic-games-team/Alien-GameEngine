@@ -98,7 +98,7 @@ update_status ModuleObjects::PreUpdate(float dt)
 	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
 		std::vector<Alien*>::iterator item = current_scripts.begin();
 		for (; item != current_scripts.end(); ++item) {
-			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
+			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 				(*item)->PreUpdate();
 			}
 		}
@@ -113,7 +113,7 @@ update_status ModuleObjects::Update(float dt)
 	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
 		std::vector<Alien*>::iterator item = current_scripts.begin();
 		for (; item != current_scripts.end(); ++item) {
-			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
+			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 				(*item)->Update();
 			}
 		}
@@ -130,7 +130,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
 		std::vector<Alien*>::iterator item = current_scripts.begin();
 		for (; item != current_scripts.end(); ++item) {
-			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
+			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 				(*item)->PostUpdate();
 			}
 		}
@@ -192,6 +192,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 					(*it).second->DrawScene();
 				}
 			}
+			OnDrawGizmos();
 		}
 
 
@@ -409,14 +410,14 @@ void ModuleObjects::InitScriptsOnPlay() const
 	// scripts awake
 	std::vector<Alien*>::const_iterator item = current_scripts.cbegin();
 	for (; item != current_scripts.cend(); ++item) {
-		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
+		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 			(*item)->Awake();
 		}
 	}
 	// scripts start
 	item = current_scripts.cbegin();
 	for (; item != current_scripts.cend(); ++item) {
-		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled) {
+		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 			(*item)->Start();
 		}
 	}
@@ -429,6 +430,29 @@ void ModuleObjects::CleanUpScriptsOnStop() const
 	for (; item != current_scripts.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr) {
 			(*item)->CleanUp();
+		}
+	}
+}
+
+void ModuleObjects::OnDrawGizmos() const
+{
+	// scripts OnDrawGizmos
+	std::vector<Alien*>::const_iterator item = current_scripts.cbegin();
+	for (; item != current_scripts.cend(); ++item) {
+		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
+			(*item)->OnDrawGizmos();
+		}
+	}
+	// scripts OnDrawGizmosSelected
+	if (game_object_selected != nullptr && game_object_selected->parent_enabled && game_object_selected->enabled) {
+		std::vector<ComponentScript*> scripts = game_object_selected->GetComponents<ComponentScript>();
+		for (uint i = 0; i < scripts.size(); ++i) {
+			if (scripts[i] != nullptr && scripts[i]->IsEnabled() && scripts[i]->need_alien) {
+				Alien* alien = (Alien*)scripts[i]->data_ptr;
+				if (alien != nullptr) {
+					alien->OnDrawGizmosSelected();
+				}
+			}
 		}
 	}
 }

@@ -4,6 +4,7 @@ class ComponentTransform;
 class GameObject;
 
 class __declspec(dllexport) Alien {
+	friend class ComponentScript;
 public:
 	Alien();
 	virtual ~Alien();
@@ -18,7 +19,14 @@ public:
 	virtual void OnDisable() {} // TODO
 	virtual void OnEnable() {} // TODO
 
+	virtual void OnDrawGizmos() {}
+	virtual void OnDrawGizmosSelected() {}
+
 	virtual void CleanUp() {}
+
+	bool IsScriptEnabled() const;
+	void SetScriptEnable(const bool& enable);
+
 	// Need
 	// TODO:
 	/*
@@ -71,9 +79,6 @@ public:
 
 		OnDestroy();
 
-		OnDrawGizmos();
-		OnDrawGizmosSelected();
-
 		OnGUI();
 
 		OnMouseDown();
@@ -103,5 +108,8 @@ public:
 		tag?????
 		name
 	*/
+private:
+
+	bool* enabled = nullptr;
 
 };

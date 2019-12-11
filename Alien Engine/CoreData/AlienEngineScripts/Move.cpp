@@ -39,3 +39,8 @@ void Move::Update()
 	Camera::GetNumCameras();
 
 }
+
+void Move::OnDrawGizmos()
+{
+	Gizmos::DrawCube(transform->GetGlobalPosition(), { 10,4,4 }, { 1,0,1,1 });
+}

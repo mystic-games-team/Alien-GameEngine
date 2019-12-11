@@ -164,6 +164,7 @@
     <ClInclude Include="Devil\include\ilu_region.h" />
     <ClInclude Include="Devil\include\il_wrap.h" />
     <ClInclude Include="FileNode.h" />
+    <ClInclude Include="Gizmos.h" />
     <ClInclude Include="glew\include\eglew.h" />
     <ClInclude Include="glew\include\glew.h" />
     <ClInclude Include="glew\include\glxew.h" />
@@ -310,6 +311,7 @@
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="FileNode.cpp" />
+    <ClCompile Include="Gizmos.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="gpudetect\DeviceId.cpp" />
     <ClCompile Include="ImGuizmos\ImCurveEdit.cpp" />

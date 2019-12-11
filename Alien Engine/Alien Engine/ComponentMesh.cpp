@@ -77,7 +77,6 @@ void ComponentMesh::DrawPolygon()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();
-
 }
 
 void ComponentMesh::DrawOutLine()

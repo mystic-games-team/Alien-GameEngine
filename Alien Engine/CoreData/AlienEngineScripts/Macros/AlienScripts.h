@@ -11,6 +11,7 @@
 #include "..\..\..\Alien Engine\RandomHelper.h"
 #include "..\..\..\Alien Engine\Time.h"
 #include "..\..\..\Alien Engine\Camera.h"
+#include "..\..\..\Alien Engine\Gizmos.h"
 
 #ifdef ALIENENGINESCRIPTS_EXPORTS
 #define ALIEN_ENGINE_API __declspec(dllexport)

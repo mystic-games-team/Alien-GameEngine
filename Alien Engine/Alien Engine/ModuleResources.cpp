@@ -240,7 +240,6 @@ ResourceMesh* ModuleResources::GetPrimitive(const PrimitiveType& type)
 			++ret->references;
 		}
 	}
-
 	return ret;
 }
 

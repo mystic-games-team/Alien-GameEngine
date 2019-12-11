@@ -7,3 +7,13 @@ Alien::Alien()
 Alien::~Alien()
 {
 }
+
+bool Alien::IsScriptEnabled() const
+{
+	return (enabled == nullptr) ? false : *enabled;
+}
+
+void Alien::SetScriptEnable(const bool& enable)
+{
+	*enabled = enable;
+}
