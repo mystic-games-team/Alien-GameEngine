@@ -16,12 +16,14 @@ class __declspec(dllexport) Gizmos {
 public:
 
 	static void DrawCube(float3 position, float3 size, Color color);
+	static void DrawWireCube(float3 position, float3 size, Color color, float line_width = 2.0F);
 	static void DrawSphere(float3 position, float radius, Color color);
 	static void DrawLine(float3 from, float3 to, Color color, float line_width = 3.0F);
 
 private:
 
 	static void DrawPoly(ResourceMesh* mesh, const float4x4& matrix, const Color& color);
+	static void DrawWire(ResourceMesh* mesh, const float4x4& matrix, const Color& color, float line_width);
 	static void RemoveGizmos();
 	static void ClearAllCurrentGizmos();
 

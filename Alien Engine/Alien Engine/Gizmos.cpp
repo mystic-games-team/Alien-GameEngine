@@ -24,6 +24,25 @@ void Gizmos::DrawCube(float3 position, float3 size, Color color)
 	DrawPoly(mesh, matrix, color);
 }
 
+void Gizmos::DrawWireCube(float3 position, float3 size, Color color, float line_width)
+{
+	float3 centered_pos = { position.x - size.x / 2 ,  position.y - size.y / 2 ,  position.z - size.z / 2 };
+	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
+		if (Gizmos::active_gizmos[i].type == PrimitiveType::CUBE) {
+			float4x4 matrix = float4x4::identity;
+			matrix = matrix.FromTRS(centered_pos, Quat::identity, size);
+			DrawWire(Gizmos::active_gizmos[i].mesh, matrix, color, line_width);
+			Gizmos::active_gizmos[i].controller = controller;
+			return;
+		}
+	}
+	ResourceMesh* mesh = App->resources->GetPrimitive(PrimitiveType::CUBE);
+	Gizmos::active_gizmos.push_back({ mesh, true, PrimitiveType::CUBE });
+	float4x4 matrix = float4x4::identity;
+	matrix = matrix.FromTRS(centered_pos, Quat::identity, size);
+	DrawWire(mesh, matrix, color, line_width);
+}
+
 void Gizmos::DrawSphere(float3 position, float radius, Color color)
 {
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
@@ -81,6 +100,31 @@ void Gizmos::DrawPoly(ResourceMesh* mesh, const float4x4& matrix, const Color& c
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glPopMatrix();
+}
+
+void Gizmos::DrawWire(ResourceMesh* mesh, const float4x4& matrix, const Color& color, float line_width)
+{
+	glPushMatrix();
+	glMultMatrixf(matrix.Transposed().ptr());
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glLineWidth(line_width);
+	glColor4f(color.r, color.g, color.b, color.a);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, NULL);
+
+	glLineWidth(1);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glPopMatrix();
 }
