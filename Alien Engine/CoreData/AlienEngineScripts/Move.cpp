@@ -42,5 +42,5 @@ void Move::Update()
 
 void Move::OnDrawGizmos()
 {
-	Gizmos::DrawWireCube(transform->GetGlobalPosition(), { 6,7,10 }, { 1,1,0,1 }, 6);
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), 4, { 0,1,0,1 }, 3);
 }

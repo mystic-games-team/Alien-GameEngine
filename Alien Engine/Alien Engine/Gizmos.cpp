@@ -61,6 +61,24 @@ void Gizmos::DrawSphere(float3 position, float radius, Color color)
 	DrawPoly(mesh, matrix, color);
 }
 
+void Gizmos::DrawWireSphere(float3 position, float radius, Color color, float line_width)
+{
+	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
+		if (Gizmos::active_gizmos[i].type == PrimitiveType::SPHERE_ALIEN) {
+			float4x4 matrix = float4x4::identity;
+			matrix = matrix.FromTRS(position, Quat::identity, { radius * 2, radius * 2, radius * 2 });
+			DrawWire(Gizmos::active_gizmos[i].mesh, matrix, color, line_width);
+			Gizmos::active_gizmos[i].controller = controller;
+			return;
+		}
+	}
+	ResourceMesh* mesh = App->resources->GetPrimitive(PrimitiveType::SPHERE_ALIEN);
+	Gizmos::active_gizmos.push_back({ mesh, true, PrimitiveType::SPHERE_ALIEN });
+	float4x4 matrix = float4x4::identity;
+	matrix = matrix.FromTRS(position, Quat::identity, { radius * 2, radius * 2, radius * 2 });
+	DrawWire(mesh, matrix, color, line_width);
+}
+
 void Gizmos::DrawLine(float3 from, float3 to, Color color, float line_width)
 {
 	glColor4f(color.r, color.g, color.b, color.a);
