@@ -42,5 +42,5 @@ void Move::Update()
 
 void Move::OnDrawGizmos()
 {
-	Gizmos::DrawSphere(transform->GetGlobalPosition(), 1, { 1,0,1,1 });
+	Gizmos::DrawLine(transform->GetGlobalPosition(), transform->GetGlobalPosition() + float3(10, 0, 0), { 1,0,0 }, 10);
 }

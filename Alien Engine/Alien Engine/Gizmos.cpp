@@ -42,6 +42,17 @@ void Gizmos::DrawSphere(float3 position, float radius, Color color)
 	DrawPoly(mesh, matrix, color);
 }
 
+void Gizmos::DrawLine(float3 from, float3 to, Color color, float line_width)
+{
+	glColor4f(color.r, color.g, color.b, color.a);
+	glLineWidth(line_width);
+	glBegin(GL_LINES);
+	glVertex3f(from.x, from.y, from.z);
+	glVertex3f(to.x, to.y, to.z);
+	glEnd();
+	glLineWidth(1);
+}
+
 void Gizmos::DrawPoly(ResourceMesh* mesh, const float4x4& matrix, const Color& color)
 {
 	glColor4f(color.r, color.g, color.b, color.a);

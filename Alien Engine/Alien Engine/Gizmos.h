@@ -17,6 +17,7 @@ public:
 
 	static void DrawCube(float3 position, float3 size, Color color);
 	static void DrawSphere(float3 position, float radius, Color color);
+	static void DrawLine(float3 from, float3 to, Color color, float line_width = 3.0F);
 
 private:
 
