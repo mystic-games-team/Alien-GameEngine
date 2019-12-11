@@ -5,7 +5,7 @@
 std::vector<Gizmos::Gizmo> Gizmos::active_gizmos;
 bool Gizmos::controller = false;
 
-void Gizmos::DrawCube(float3 position, float3 size, Color color)
+void Gizmos::DrawCube(const float3& position, const float3& size, const Color& color)
 {
 	float3 centered_pos = { position.x - size.x / 2 ,  position.y - size.y / 2 ,  position.z - size.z / 2 };
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
@@ -24,7 +24,7 @@ void Gizmos::DrawCube(float3 position, float3 size, Color color)
 	DrawPoly(mesh, matrix, color);
 }
 
-void Gizmos::DrawWireCube(float3 position, float3 size, Color color, float line_width)
+void Gizmos::DrawWireCube(const float3& position, const float3& size, const Color& color, float line_width)
 {
 	float3 centered_pos = { position.x - size.x / 2 ,  position.y - size.y / 2 ,  position.z - size.z / 2 };
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
@@ -43,7 +43,7 @@ void Gizmos::DrawWireCube(float3 position, float3 size, Color color, float line_
 	DrawWire(mesh, matrix, color, line_width);
 }
 
-void Gizmos::DrawSphere(float3 position, float radius, Color color)
+void Gizmos::DrawSphere(const float3& position, const float& radius, const Color& color)
 {
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
 		if (Gizmos::active_gizmos[i].type == PrimitiveType::SPHERE_ALIEN) {
@@ -61,7 +61,7 @@ void Gizmos::DrawSphere(float3 position, float radius, Color color)
 	DrawPoly(mesh, matrix, color);
 }
 
-void Gizmos::DrawWireSphere(float3 position, float radius, Color color, float line_width)
+void Gizmos::DrawWireSphere(const float3& position, const float& radius, const Color& color, float line_width)
 {
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
 		if (Gizmos::active_gizmos[i].type == PrimitiveType::SPHERE_ALIEN) {
@@ -79,7 +79,7 @@ void Gizmos::DrawWireSphere(float3 position, float radius, Color color, float li
 	DrawWire(mesh, matrix, color, line_width);
 }
 
-void Gizmos::DrawLine(float3 from, float3 to, Color color, float line_width)
+void Gizmos::DrawLine(const float3& from, const float3& to, const Color& color, float line_width)
 {
 	glColor4f(color.r, color.g, color.b, color.a);
 	glLineWidth(line_width);
@@ -90,7 +90,7 @@ void Gizmos::DrawLine(float3 from, float3 to, Color color, float line_width)
 	glLineWidth(1);
 }
 
-void Gizmos::DrawWireMesh(ComponentMesh* mesh, float4x4 global_transform, Color color, float line_width)
+void Gizmos::DrawWireMesh(const ComponentMesh * mesh, const float4x4& global_transform, const Color& color, float line_width)
 {
 	if (mesh != nullptr && mesh->mesh != nullptr) {
 		DrawWire(mesh->mesh, global_transform, color, line_width);
@@ -100,7 +100,7 @@ void Gizmos::DrawWireMesh(ComponentMesh* mesh, float4x4 global_transform, Color 
 	}
 }
 
-void Gizmos::DrawPoly(ResourceMesh* mesh, const float4x4& matrix, const Color& color)
+void Gizmos::DrawPoly(const ResourceMesh * mesh, const float4x4& matrix, const Color& color)
 {
 	glColor4f(color.r, color.g, color.b, color.a);
 	glPushMatrix();
@@ -132,7 +132,7 @@ void Gizmos::DrawPoly(ResourceMesh* mesh, const float4x4& matrix, const Color& c
 	glPopMatrix();
 }
 
-void Gizmos::DrawWire(ResourceMesh* mesh, const float4x4& matrix, const Color& color, float line_width)
+void Gizmos::DrawWire(const ResourceMesh * mesh, const float4x4& matrix, const Color& color, const float& line_width)
 {
 	glPushMatrix();
 	glMultMatrixf(matrix.Transposed().ptr());
