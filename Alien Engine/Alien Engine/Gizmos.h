@@ -12,6 +12,7 @@ enum class PrimitiveType;
 
 class __declspec(dllexport) Gizmos {
 	friend class Gizmos;
+	friend class ModuleObjects;
 public:
 
 
@@ -22,12 +23,15 @@ public:
 private:
 
 	static void DrawPoly(ResourceMesh* mesh, const float4x4& matrix, const Color& color);
+	static void RemoveGizmos();
+	static void ClearAllCurrentGizmos();
 
 private:
 	struct Gizmo {
 		ResourceMesh* mesh = nullptr;
-		bool is_in_use = false;
+		bool controller = true;
 		PrimitiveType type = PrimitiveType::UNKONWN;
 	};
 	static std::vector<Gizmo> active_gizmos;
+	static bool controller;
 };

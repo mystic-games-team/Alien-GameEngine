@@ -13,6 +13,7 @@
 #include "Time.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentScript.h"
+#include "Gizmos.h"
 #include "Alien.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
@@ -297,9 +298,14 @@ void ModuleObjects::DrawRay()
 
 bool ModuleObjects::CleanUp()
 {
-
+	Gizmos::ClearAllCurrentGizmos();
 	delete base_game_object;
 	base_game_object = nullptr;
+	
+	if (octree.root != nullptr) {
+		delete octree.root;
+		octree.root = nullptr;
+	}
 	// TODO: clean up returnZ both
 	return true;
 }
@@ -435,6 +441,7 @@ void ModuleObjects::CleanUpScriptsOnStop() const
 
 void ModuleObjects::OnDrawGizmos() const
 {
+	Gizmos::controller = !Gizmos::controller;
 	// scripts OnDrawGizmos
 	std::vector<Alien*>::const_iterator item = current_scripts.cbegin();
 	for (; item != current_scripts.cend(); ++item) {
@@ -454,6 +461,7 @@ void ModuleObjects::OnDrawGizmos() const
 			}
 		}
 	}
+	Gizmos::RemoveGizmos();
 }
 
 GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent, bool set_selected)
@@ -642,7 +650,7 @@ void ModuleObjects::LoadScene(const char* path, bool change_scene)
 	if (value != nullptr && object != nullptr)
 	{
 		octree.Clear();
-
+		Gizmos::ClearAllCurrentGizmos();
 		delete base_game_object;
 		game_object_selected = nullptr;
 		base_game_object = new GameObject();

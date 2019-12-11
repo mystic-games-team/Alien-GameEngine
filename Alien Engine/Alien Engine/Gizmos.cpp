@@ -3,6 +3,7 @@
 #include "ResourceMesh.h"
 
 std::vector<Gizmos::Gizmo> Gizmos::active_gizmos;
+bool Gizmos::controller = false;
 
 void Gizmos::DrawCube(float3 position, float3 size, Color color)
 {
@@ -12,7 +13,7 @@ void Gizmos::DrawCube(float3 position, float3 size, Color color)
 			float4x4 matrix = float4x4::identity;
 			matrix = matrix.FromTRS(centered_pos, Quat::identity, size);
 			DrawPoly(Gizmos::active_gizmos[i].mesh, matrix, color);
-			Gizmos::active_gizmos[i].is_in_use = true;
+			Gizmos::active_gizmos[i].controller = controller;
 			return;
 		}
 	}
@@ -53,4 +54,32 @@ void Gizmos::DrawPoly(ResourceMesh* mesh, const float4x4& matrix, const Color& c
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glPopMatrix();
+}
+
+void Gizmos::RemoveGizmos()
+{
+	std::vector<Gizmo>::iterator item = active_gizmos.begin();
+	while (item != active_gizmos.end()) {
+		if ((*item).controller != controller) {
+			if ((*item).mesh != nullptr) {
+				(*item).mesh->DecreaseReferences();
+			}
+			item = active_gizmos.erase(item);
+		}
+		else {
+			++item;
+		}
+	}
+}
+
+void Gizmos::ClearAllCurrentGizmos()
+{
+	std::vector<Gizmo>::iterator item = active_gizmos.begin();
+	while (item != active_gizmos.end()) {
+		if ((*item).mesh != nullptr) {
+			(*item).mesh->DecreaseReferences();
+		}
+		item = active_gizmos.erase(item);
+	}
+	active_gizmos.clear();
 }
