@@ -176,9 +176,12 @@ private:
 	// parent selected
 	void SayChildrenParentIsSelected(const bool& selected);
 
+	void ReTag(const std::string& from, const std::string& to);
+
 public:
 
 	GameObject* parent = nullptr;
+	std::string tag = "UnTagged";
 
 private:
 

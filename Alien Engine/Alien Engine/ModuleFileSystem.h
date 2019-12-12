@@ -32,6 +32,8 @@ struct aiFileIO;
 #define DLL_CREATION_PATH "AlienEngineScripts/OutPut/AlienEngineScripts.dll"
 // -------DLL Paths--------
 
+#define FILE_TAGS "Configuration/Tags/tags.alienTags"
+
 // -------Templates--------
 #define EXPORT_FILE_CLASS_TEMPLATE "Configuration/Script Templates/ExportClass.alienTemplate"
 #define CLASS_FILE_TEMPLATE "Configuration/Script Templates/Class.alienTemplate"

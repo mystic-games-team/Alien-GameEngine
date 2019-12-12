@@ -227,6 +227,23 @@ bool ComponentTransform::DrawInspector()
 			popup_static = true;
 		}
 	}
+	ImGui::Spacing();
+	ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.6F);
+	if (ImGui::BeginCombo("Tag", game_object_attached->tag.data()))
+	{
+		std::vector<std::string>::iterator item = App->objects->tags.begin();
+		for (; item != App->objects->tags.end(); ++item) {
+			bool is_selected = App->StringCmp(game_object_attached->tag.data(), (*item).data());
+			if (ImGui::Selectable((*item).data(), is_selected)) {
+				game_object_attached->tag = (*item);
+			}
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Custom Tags")) {
+		popup_tags = true;
+	}
 
 	ImGui::Spacing();
 	ImGui::Separator();
@@ -501,6 +518,89 @@ bool ComponentTransform::DrawInspector()
 		RightClickMenu("Transform");
 	}
 
+	if (popup_tags) {
+		ImGui::OpenPopup("Customize Tags");
+		ImGui::SetNextWindowSize({ 315,281 });
+		static std::list<std::vector<std::string>::iterator> selected;
+		if (ImGui::BeginPopupModal("Customize Tags", &popup_tags, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
+			static char new_tag[MAX_PATH] = "New Tag Name";
+			if (ImGui::InputText("##New Tag", new_tag, MAX_PATH, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue)) {
+				if (AddNewTagClicked(new_tag)) {
+					strcpy(new_tag, "New Tag Name");
+				}
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Add New Tag")) {
+				if (AddNewTagClicked(new_tag)) {
+					strcpy(new_tag, "New Tag Name");
+				}
+			}
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(115);
+			ImGui::Text("Current Tags");
+			ImGui::Spacing();
+			ImGui::BeginChild("##CurrentTagss", { 0,170 }, true);
+
+			std::vector<std::string>::iterator item = App->objects->tags.begin() + 1;
+			for (; item != App->objects->tags.end(); ++item) {
+				bool exists = (std::find(selected.begin(), selected.end(), item) != selected.end());
+				ImGui::Selectable(std::string("##" + (*item)).data(), exists, ImGuiSelectableFlags_AllowItemOverlap);
+				if (ImGui::IsItemClicked()) {
+					if (exists) { 
+						selected.remove(item);
+					}
+					else {
+						selected.push_back(item);
+					}
+				}
+				ImGui::SameLine();
+				ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.5F - ImGui::CalcTextSize((*item).data()).x * 0.5F);
+				ImGui::Text((*item).data());
+			}
+
+			ImGui::EndChild();
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(193);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.6F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+			if (ImGui::Button("Delete Selected")) {
+				std::list<std::vector<std::string>::iterator>::iterator item = selected.begin();
+				uint i = 0;
+				for (; item != selected.end(); ++item) {
+					App->objects->GetRoot(true)->ReTag(*(*item), "UnTagged");
+					App->objects->tags.erase((*item) - i);
+					++i;
+				}
+				selected.clear();
+
+				remove(FILE_TAGS);
+				JSON_Value* alien_value = json_value_init_object();
+				JSON_Object* alien_object = json_value_get_object(alien_value);
+				json_serialize_to_file_pretty(alien_value, FILE_TAGS);
+
+				if (alien_value != nullptr && alien_object != nullptr) {
+
+					JSONfilepack* alien = new JSONfilepack(FILE_TAGS, alien_object, alien_value);
+					alien->StartSave();
+					JSONArraypack* new_tags = alien->InitNewArray("Tags");
+					auto item = App->objects->tags.begin();
+					for (; item != App->objects->tags.end(); ++item) {
+						new_tags->SetAnotherNode();
+						new_tags->SetString("Tag", *item);
+					}
+					alien->FinishSave();
+					delete alien;
+				}
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::EndPopup();
+		}
+		else {
+			selected.clear();
+		}
+	}
+
 	if (popup_static) {
 		if (game_object_attached->is_static) {
 			if (game_object_attached->parent != nullptr && !game_object_attached->parent->is_static) {
@@ -571,8 +671,6 @@ bool ComponentTransform::DrawInspector()
 		}
 		else {
 			// if you make a object dynamic, children will transform to dynamic
-
-			// TODO: popup if you make x object dynamic, all children will become dynamic too. Do you want this? 
 			ImGui::OpenPopup("Static Question");
 			ImGui::SetNextWindowSize({ 290,150 });
 			if (ImGui::BeginPopupModal("Static Question", &popup_static, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
@@ -607,6 +705,37 @@ bool ComponentTransform::DrawInspector()
 				game_object_attached->is_static = true;
 			}
 		}
+	}
+	return true;
+}
+
+bool ComponentTransform::AddNewTagClicked(const char* new_tag)
+{
+	std::vector<std::string>::iterator item = App->objects->tags.begin();
+	for (; item != App->objects->tags.end(); ++item) {
+		if (App->StringCmp((*item).data(), new_tag)) {
+			return false;
+		}
+	}
+
+	App->objects->tags.push_back(new_tag);
+	remove(FILE_TAGS);
+	JSON_Value* alien_value = json_value_init_object();
+	JSON_Object* alien_object = json_value_get_object(alien_value);
+	json_serialize_to_file_pretty(alien_value, FILE_TAGS);
+
+	if (alien_value != nullptr && alien_object != nullptr) {
+
+		JSONfilepack* alien = new JSONfilepack(FILE_TAGS, alien_object, alien_value);
+		alien->StartSave();
+		JSONArraypack* new_tags = alien->InitNewArray("Tags");
+		auto item = App->objects->tags.begin();
+		for (; item != App->objects->tags.end(); ++item) {
+			new_tags->SetAnotherNode();
+			new_tags->SetString("Tag", *item);
+		}
+		alien->FinishSave();
+		delete alien;
 	}
 	return true;
 }

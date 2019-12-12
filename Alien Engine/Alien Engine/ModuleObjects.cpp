@@ -31,6 +31,8 @@ ModuleObjects::~ModuleObjects()
 
 bool ModuleObjects::Init()
 {
+	tags.push_back(std::string("UnTagged"));
+
 	base_game_object = new GameObject();
 	base_game_object->ID = 0;
 	base_game_object->is_static = true;
@@ -42,6 +44,22 @@ bool ModuleObjects::Start()
 {
 	LOG("Starting Module Objects");
 	bool ret = true;
+
+	if (App->file_system->Exists(FILE_TAGS)) {
+		JSON_Value* value = json_parse_file(FILE_TAGS);
+		JSON_Object* object = json_value_get_object(value);
+
+		if (value != nullptr && object != nullptr)
+		{
+			JSONfilepack* json_tags = new JSONfilepack(FILE_TAGS, object, value);
+			JSONArraypack* curr_tags = json_tags->GetArray("Tags");
+			for (uint i = 0; i < curr_tags->GetArraySize(); ++i) {
+				tags.push_back(curr_tags->GetString("Tag"));
+				curr_tags->GetAnotherNode();
+			}
+			delete json_tags;
+		}
+	}
 
 	GameObject* light_test = new GameObject(base_game_object);
 	light_test->SetName("Light");

@@ -44,6 +44,8 @@ private:
 
 	bool DrawInspector();
 
+	bool AddNewTagClicked(const char* new_tag);
+
 	void SetScaleNegative(const bool& negative);
 	bool IsScaleNegative();
 
@@ -74,4 +76,5 @@ private:
 	float3 euler_rotation = { 0,0,0 };
 
 	bool popup_static = false;
+	bool popup_tags = false;
 };

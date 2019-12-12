@@ -486,6 +486,18 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 	}
 }
 
+void GameObject::ReTag(const std::string& from, const std::string& to)
+{
+	if (tag == from) {
+		tag = to;
+	}
+	for (uint i = 0; i < children.size(); ++i) {
+		if (children[i] != nullptr) {
+			children[i]->ReTag(from, to);
+		}
+	}
+}
+
 GameObject* GameObject::GetGameObjectByID(const u64 & id)
 {
 	GameObject* ret = nullptr;

@@ -206,6 +206,8 @@ public:
 
 	ComponentScript* actual_script_loading = nullptr;
 
+	std::vector<std::string> tags;
+
 private:
 	// root
 	GameObject* base_game_object = nullptr;
