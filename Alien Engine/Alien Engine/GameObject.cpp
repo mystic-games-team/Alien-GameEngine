@@ -50,6 +50,11 @@ GameObject::~GameObject()
 	}
 }
 
+void GameObject::SetEnable(bool enable)
+{
+	enabled = enable;
+}
+
 bool GameObject::IsEnabled()
 {
 	return enabled;
@@ -396,6 +401,16 @@ bool GameObject::IsParentEnabled()
 	return parent_enabled;
 }
 
+void GameObject::Destroy(GameObject* object)
+{
+	object->ToDelete();
+}
+
+GameObject* GameObject::FindWithName(const std::string& name)
+{
+	return App->objects->GetRoot(true)->Find(name);
+}
+
 void GameObject::OnEnable()
 {
 	std::vector<Component*>::iterator item = components.begin();
@@ -441,6 +456,23 @@ void GameObject::ScaleNegative(const bool& is_negative)
 			(*item)->ScaleNegative(is_negative);
 		}
 	}
+}
+
+GameObject* GameObject::Find(const std::string name)
+{
+	GameObject* ret = nullptr;
+	if (App->StringCmp(name.data(), this->name.data())) {
+		return this;
+	}
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			ret = (*item)->Find(name);
+			if (ret != nullptr)
+				break;
+		}
+	}
+	return ret;
 }
 
 void GameObject::SayChildrenParentIsSelected(const bool& selected)

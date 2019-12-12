@@ -15,25 +15,71 @@ class ComponentCamera;
 
 class __declspec(dllexport) GameObject
 {
+	friend class Component;
+	friend class ComponentCamera;
+	friend class ComponentLight;
+	friend class ComponentMaterial;
+	friend class ComponentTransform;
+	friend class ComponentMesh;
+	friend class ComponentMaterial;
+	friend class ComponentScript;
+	friend class GameObject;
+	friend class ReturnZ;
+	friend class CompZ;
+	friend class ModuleCamera3D;
+	friend class Octree;
+	friend class OctreeNode;
+	friend class FileNode;
+	friend class ModuleImporter;
+	friend class PanelHierarchy;
+	friend class PanelScene;
+	friend class ModuleRenderer3D;
+	friend class PanelInspector;
+	friend class ResourceModel;
+	friend class ResourceMesh;
+	friend class ResourcePrefab;
+	friend class ResourceTexture;
+	friend class ModuleObjects;
+	friend class ModuleUI;
 public:
 	GameObject(GameObject* parent);
 	GameObject(); // just for loading objects, dont use it
 	virtual ~GameObject();
 
+public:
+
+	static void Destroy(GameObject* object);
+	static GameObject* FindWithName(const std::string& name);
+	// TODO: 
+	// static GameObject* Instantiate();
+	// static GameObject* FindWithTag();
+	// static std::vector<GameObject*> FindGameObjectsWithTag();
+
+	void SetEnable(bool enable);
+	bool IsEnabled();
+
+	// components
+	bool HasComponent(ComponentType component);
+	void AddComponent(Component* component);
+	Component* GetComponent(const ComponentType& type);
+
+	// children
+	void AddChild(GameObject* child);
+	bool HasChildren();
+
+	// GameObject name
+	void SetName(const char* name);
+	const char* GetName();
+private:
 	// OnEnable/Disable
 	void OnEnable();
 	void OnDisable();
-	bool IsEnabled();
 
 	// here we call Component Mesh, Material & light
 	void DrawScene();
 	void DrawGame();
 	void SetDrawList(std::map<float, GameObject*>* to_draw, const ComponentCamera* camera);
 
-	// components
-	void AddComponent(Component* component);
-	bool HasComponent(ComponentType component);
-	Component* GetComponent(const ComponentType& type);
 	Component* GetComponentWithID(const u64& ID);
 	void RemoveComponent(Component* component);
 
@@ -42,16 +88,8 @@ public:
 	template <class Comp>
 	std::vector<Comp*> GetComponents();
 
-	// children
-	void AddChild(GameObject* child);
-	bool HasChildren();
-
 	// parent
 	void SetNewParent(GameObject* new_parent);
-
-	// GameObject name
-	void SetName(const char* name);
-	const char* GetName();
 
 	// selected object
 	bool IsSelected();
@@ -107,23 +145,16 @@ public:
 	void ChangeStatic(bool static_);
 	bool HasChildrenStatic() const;
 
-private:
+	// find
+	GameObject* Find(const std::string name);
 
 	// parent selected
 	void SayChildrenParentIsSelected(const bool& selected);
 
 public:
 
-	std::vector<Component*> components;
-	std::vector<GameObject*> children;
 	GameObject* parent = nullptr;
-	bool enabled = true;
-	bool is_static = false;
-	u64 ID = 0;
-	bool parent_enabled = true;
-	bool parent_selected = false;
-	bool open_node = false;	
-	bool prefab_locked = false;
+
 private:
 
 	bool to_delete = false; 
@@ -131,8 +162,18 @@ private:
 
 	bool selected = false;
 
+	std::vector<Component*> components;
+	std::vector<GameObject*> children;
 
 	std::string name = "UnNamed";
+
+	bool enabled = true;
+	bool is_static = false;
+	u64 ID = 0;
+	bool parent_enabled = true;
+	bool parent_selected = false;
+	bool open_node = false;
+	bool prefab_locked = false;
 };
 
 template<class Comp>
