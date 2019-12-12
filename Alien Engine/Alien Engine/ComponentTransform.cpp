@@ -584,7 +584,7 @@ bool ComponentTransform::DrawInspector()
 					JSONfilepack* alien = new JSONfilepack(FILE_TAGS, alien_object, alien_value);
 					alien->StartSave();
 					JSONArraypack* new_tags = alien->InitNewArray("Tags");
-					auto item = App->objects->tags.begin();
+					auto item = App->objects->tags.begin() + 1;
 					for (; item != App->objects->tags.end(); ++item) {
 						new_tags->SetAnotherNode();
 						new_tags->SetString("Tag", *item);
@@ -729,7 +729,7 @@ bool ComponentTransform::AddNewTagClicked(const char* new_tag)
 		JSONfilepack* alien = new JSONfilepack(FILE_TAGS, alien_object, alien_value);
 		alien->StartSave();
 		JSONArraypack* new_tags = alien->InitNewArray("Tags");
-		auto item = App->objects->tags.begin();
+		auto item = App->objects->tags.begin() + 1;
 		for (; item != App->objects->tags.end(); ++item) {
 			new_tags->SetAnotherNode();
 			new_tags->SetString("Tag", *item);
