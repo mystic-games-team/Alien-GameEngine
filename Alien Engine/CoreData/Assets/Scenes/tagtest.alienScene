@@ -4,7 +4,7 @@
             {
                 "Name": "Light",
                 "FamilyNumber": 1,
-                "ID": "6661856869782518947",
+                "ID": "16922549271685838116",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -13,6 +13,7 @@
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
+                "Tag": "Player",
                 "Components": [
                     {
                         "Type": 0,
@@ -33,7 +34,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9475985477208262949"
+                        "ID": "4739251055417808049"
                     },
                     {
                         "Type": 3,
@@ -50,43 +51,8 @@
                             1
                         ],
                         "Enabled": true,
-                        "ID": "5246317984419947871",
+                        "ID": "7413811135556744752",
                         "PrintIcon": true
-                    },
-                    {
-                        "Type": 5,
-                        "ID": "7498512752022959797",
-                        "ResourceID": "13752237613238528020",
-                        "DataName": "Jump",
-                        "HasInspector": false
-                    },
-                    {
-                        "Type": 5,
-                        "ID": "7759720710348443540",
-                        "ResourceID": "9263321597540505114",
-                        "DataName": "Kick",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 0,
-                                "Name": "classss",
-                                "int": 432
-                            }
-                        ]
-                    },
-                    {
-                        "Type": 5,
-                        "ID": "13528914687073025504",
-                        "ResourceID": "5410909361000620259",
-                        "DataName": "Move",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 0,
-                                "Name": "test",
-                                "int": 15
-                            }
-                        ]
                     }
                 ]
             }

@@ -652,6 +652,7 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 	to_save->SetBoolean("IsStatic", is_static);
 	to_save->SetBoolean("IsPrefab", IsPrefab());
 	to_save->SetBoolean("PrefabLocked", prefab_locked);
+	to_save->SetString("Tag", tag);
 	if (IsPrefab()) {
 		to_save->SetString("PrefabID", std::to_string(prefabID));
 	}
@@ -680,6 +681,10 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	prefab_locked = to_load->GetBoolean("PrefabLocked");
 	parent_selected = to_load->GetBoolean("ParentSelected");
 	is_static = to_load->GetBoolean("IsStatic");
+	std::string tag_ = to_load->GetString("Tag");
+	if (std::find(App->objects->tags.begin(), App->objects->tags.end(), tag_) != App->objects->tags.end()) {
+		tag = tag_;
+	}
 	if (to_load->GetBoolean("IsPrefab")) {
 		u64 id = std::stoull(to_load->GetString("PrefabID"));
 		if (App->resources->GetResourceWithID(id) != nullptr) {
