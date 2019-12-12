@@ -5,6 +5,12 @@
 
 class __declspec(dllexport) ComponentTransform : public Component {
 	friend class CompZ;
+	friend class PanelScene;
+	friend class GameObject;
+	friend class ComponentMesh;
+	friend class ModuleCamera3D;
+	friend class ModuleObjects;
+	friend class ModuleUI;
 public:
 
 	ComponentTransform(GameObject* attach);
@@ -28,9 +34,11 @@ public:
 	
 	const Quat GetLocalRotation() const;
 	const Quat GetGlobalRotation() const;
-	
-	void SetLocalTransform(float4x4 &transform_matrix);
-	void SetGlobalTransformation(const float4x4& global_transformation);
+
+private:
+
+	void LookScale();
+	void RecalculateTransform();
 
 	void Reparent(const float4x4& transform);
 
@@ -45,12 +53,9 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
+	void SetGlobalTransformation(const float4x4& global_transformation);
+
 private:
-
-	void LookScale();
-	void RecalculateTransform();
-
-public:
 
 	float4x4 global_transformation = float4x4::identity;
 	float4x4 local_transformation = float4x4::identity;

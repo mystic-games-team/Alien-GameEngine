@@ -231,7 +231,7 @@ void ComponentCamera::SetComponent(Component* component)
 	if (component->GetType() == type) {
 
 		ComponentCamera* camera = (ComponentCamera*)component;
-
+		
 		camera_color_background = camera->camera_color_background;
 	}
 }
@@ -267,6 +267,62 @@ float* ComponentCamera::GetProjectionMatrix() const
 float* ComponentCamera::GetViewMatrix() const
 {
 	return (float*)static_cast<float4x4>(frustum.ViewMatrix()).Transposed().v;
+}
+
+void ComponentCamera::SetVerticalFov(const float& vertical_fov)
+{
+	this->vertical_fov = vertical_fov;
+	frustum.verticalFov = DEGTORAD * vertical_fov;
+	AspectRatio(16, 9);
+}
+
+float ComponentCamera::GetVerticalFov() const
+{
+	return vertical_fov;
+}
+
+void ComponentCamera::SetHorizontalFov(const float& horizontal_fov)
+{
+	this->horizontal_fov = horizontal_fov;
+	frustum.horizontalFov = DEGTORAD * horizontal_fov;
+	AspectRatio(16, 9, true);
+}
+
+float ComponentCamera::GetHorizontalFov() const
+{
+	return horizontal_fov;
+}
+
+void ComponentCamera::SetFarPlane(const float& far_plane)
+{
+	this->far_plane = far_plane;
+	frustum.farPlaneDistance = far_plane;
+}
+
+void ComponentCamera::SetNearPlane(const float& near_plane)
+{
+	this->near_plane = near_plane;
+	frustum.nearPlaneDistance = near_plane;
+}
+
+float ComponentCamera::GetFarPlane() const
+{
+	return far_plane;
+}
+
+float ComponentCamera::GetNearPlane() const
+{
+	return near_plane;
+}
+
+void ComponentCamera::SetCameraPosition(const float3& position)
+{
+	frustum.pos = position;
+}
+
+float3 ComponentCamera::GetCameraPosition() const
+{
+	return frustum.pos;
 }
 
 void ComponentCamera::DrawFrustum()

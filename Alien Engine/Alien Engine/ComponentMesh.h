@@ -9,10 +9,27 @@
 class ResourceMesh;
 
 class __declspec(dllexport) ComponentMesh : public Component {
+	friend class ReturnZ;
+	friend class CompZ;
+	friend class ResourceMesh;
+	friend class ComponentLight;
+	friend class ComponentMaterial;
+	friend class ComponentTransform;
+	friend class ComponentCamera;
+	friend class GameObject;
+	friend class ModuleCamera3D;
+	friend class ModuleObjects;
+	friend class Gizmos;
+	friend class Octree;
+	friend class OctreeNode;
+	friend class PanelCreateObject;
+	friend class PanelRender;
 public:
 
 	ComponentMesh(GameObject* attach);
 	virtual ~ComponentMesh();
+
+private:
 
 	void DrawPolygon();
 	void DrawOutLine();
@@ -33,11 +50,9 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
-private:
-
 	AABB GenerateAABB();
 
-public:
+private:
 	
 	ResourceMesh* mesh = nullptr;
 
@@ -48,8 +63,6 @@ public:
 
 	bool draw_AABB = true;
 	bool draw_OBB = true;
-
-private:
 
 	AABB local_aabb;
 	OBB obb;

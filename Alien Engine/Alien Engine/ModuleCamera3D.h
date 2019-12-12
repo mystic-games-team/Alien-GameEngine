@@ -1,9 +1,10 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-
-#include "ComponentCamera.h"
 #include "ImGuizmos/ImGuizmo.h"
+
+class ComponentCamera;
+class OctreeNode;
 
 class ModuleCamera3D : public Module
 {

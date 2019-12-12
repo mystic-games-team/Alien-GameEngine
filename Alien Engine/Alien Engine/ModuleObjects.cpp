@@ -71,6 +71,9 @@ bool ModuleObjects::Start()
 	out_path = std::string(curr_dir + std::string("/") + SCRIPTS_DLL_OUTPUT + std::string("AlienEngineScripts.dll"));
 	App->file_system->NormalizePath(out_path);
 
+	App->camera->fake_camera->frustum.pos = { 25,25,25 };
+	App->camera->fake_camera->Look(float3(0, 0, 0));
+
 	return ret;
 }
 

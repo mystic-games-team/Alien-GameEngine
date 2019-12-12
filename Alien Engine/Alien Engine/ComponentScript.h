@@ -28,9 +28,16 @@ struct __declspec(dllexport) InspectorScriptData {
 };
 
 class __declspec(dllexport) ComponentScript : public Component {
+	friend class ReturnZ;
+	friend class CompZ;
+	friend class PanelInspector;
+	friend class ModuleObjects;
+	friend class GameObject;
 public:
 	ComponentScript(GameObject* attach);
 	virtual ~ComponentScript();
+
+private:
 
 	void Reset();
 	void SetComponent(Component* component);
@@ -40,15 +47,13 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
-	static void InspectorInputInt(int* ptr, const char* name);
-
 	void LoadData(const char* name, bool is_alien);
 
-private:
-
 	static std::string GetVariableName(const char* ptr_name);
-
 public:
+	static void InspectorInputInt(int* ptr, const char* name);
+
+private:
 
 	u64 resourceID = 0;
 	// TODO: change to touple and next option is for personaliing ImGui inspector, like drag int text int bla bla

@@ -686,19 +686,12 @@ void ComponentTransform::LoadComponent(JSONArraypack* to_load)
 		global_transformation = local_transformation;
 }
 
-void ComponentTransform::SetLocalTransform(float4x4 &transform_matrix)
-{
-	local_transformation = transform_matrix;
-	local_transformation.Decompose(local_position, local_rotation, local_scale);
-	RecalculateTransform();
-}
-
 void ComponentTransform::SetGlobalTransformation(const float4x4& global_transformation)
 {
 	float3 position, scale;
 	Quat rotation;
 	global_transformation.Decompose(position, rotation, scale);
-	
+
 	if (App->ui->panel_scene->guizmo_operation == ImGuizmo::OPERATION::SCALE) { // why... i would like to know it...
 		this->local_scale = scale;
 		LookScale();

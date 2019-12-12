@@ -3,6 +3,7 @@
 #include "ModuleObjects.h"
 #include "Application.h"
 #include "ComponentTransform.h"
+#include "ComponentCamera.h"
 
 OctreeNode::OctreeNode(const float3& min, const float3& max)
 {

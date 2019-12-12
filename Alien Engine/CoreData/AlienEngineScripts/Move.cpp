@@ -38,6 +38,14 @@ void Move::Update()
 	Camera::GetCurrentCamera();
 	Camera::GetNumCameras();
 
+	ComponentLight* light = new ComponentLight(NULL);
+	light->ambient = Color::Yellow();
+
+	ComponentMesh* mesh = new ComponentMesh(nullptr);
+	mesh->IsEnabled();
+
+	ComponentScript* script = new ComponentScript(nullptr);
+	script->SetEnable(false);
 }
 
 void Move::OnDrawGizmos()

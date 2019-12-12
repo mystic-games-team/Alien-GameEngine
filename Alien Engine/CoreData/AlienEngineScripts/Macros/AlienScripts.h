@@ -1,10 +1,21 @@
 #pragma once
 
+/*-----------------COMPONENTS-------------------*/
 #include "..\..\..\Alien Engine\ComponentScript.h"
 #include "..\..\..\Alien Engine\ComponentTransform.h"
+#include "..\..\..\Alien Engine\ComponentCamera.h"
+#include "..\..\..\Alien Engine\ComponentLight.h"
+#include "..\..\..\Alien Engine\ComponentMaterial.h"
+#include "..\..\..\Alien Engine\ComponentMesh.h"
+/*-----------------COMPONENTS-------------------*/
+
+/*-----------------MATH-------------------*/
 #include "..\..\..\Alien Engine\MathGeoLib\include\Math\float3.h"
 #include "..\..\..\Alien Engine\MathGeoLib\include\Math\Quat.h"
+#include "..\..\..\Alien Engine\MathGeoLib\include\Math\float4x4.h"
+/*-----------------MATH-------------------*/
 
+/*-----------------HELPERS-------------------*/
 #include "..\..\..\Alien Engine\StaticInput.h"
 #include "..\..\..\Alien Engine\Maths.h"
 #include "..\..\..\Alien Engine\Debug.h"
@@ -13,6 +24,7 @@
 #include "..\..\..\Alien Engine\Camera.h"
 #include "..\..\..\Alien Engine\Gizmos.h"
 #include "..\..\..\Alien Engine\Color.h"
+/*-----------------HELPERS-------------------*/
 
 #ifdef ALIENENGINESCRIPTS_EXPORTS
 #define ALIEN_ENGINE_API __declspec(dllexport)

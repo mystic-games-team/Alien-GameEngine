@@ -6,7 +6,6 @@ Application::Application()
 {
 	window = new ModuleWindow();
 	input = new ModuleInput();
-	scene_intro = new ModuleSceneIntro();
 	renderer3D = new ModuleRenderer3D();
 	camera = new ModuleCamera3D();
 	ui = new ModuleUI();
@@ -29,7 +28,6 @@ Application::Application()
 	AddModule(resources);
 	AddModule(importer);
 	// Scenes
-	AddModule(scene_intro);
 	AddModule(objects);
 	AddModule(ui);
 	

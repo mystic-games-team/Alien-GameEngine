@@ -8,7 +8,6 @@
 
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
-#include "ComponentMesh.h"
 #include "GameObject.h"
 #include "ModuleCamera3D.h"
 

@@ -17,18 +17,27 @@ enum class ComponentType {
 };
 
 class __declspec(dllexport) Component {
-
+	friend class ComponentCamera;
+	friend class ComponentLight;
+	friend class ComponentMaterial;
+	friend class ComponentTransform;
+	friend class ComponentMesh;
+	friend class ComponentMaterial;
+	friend class ComponentScript;
+	friend class GameObject;
+	friend class ReturnZ;
+	friend class CompZ;
+	friend class PanelInspector;
+	friend class ModuleObjects;
+	friend class ModuleUI;
 public:
-
 	Component(GameObject* attach);
 	virtual ~Component();
 
-	virtual void OnEnable() {}
-	virtual void OnDisable() {}
-
 	bool IsEnabled();
 	void SetEnable(bool enable);
-	virtual bool DrawInspector() { return true; }
+
+protected:
 
 	virtual void Reset() {}
 	virtual void SetComponent(Component* component) {}
@@ -40,11 +49,10 @@ public:
 
 	const ComponentType& GetType() const;
 
-public:
+	virtual void OnEnable() {}
+	virtual void OnDisable() {}
 
-	u64 ID = 0;
-	GameObject* game_object_attached = nullptr;
-	bool not_destroy = true;
+	virtual bool DrawInspector() { return true; }
 
 protected:
 
@@ -54,6 +62,8 @@ protected:
 
 	ComponentType type = ComponentType::UNKNOWN;
 	bool enabled = true;
-	
+	u64 ID = 0;
+	GameObject* game_object_attached = nullptr;
+	bool not_destroy = true;
 
 };
