@@ -5,9 +5,11 @@
 #include "ResourceMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentLight.h"
+#include "ResourceScript.h"
 #include "ResourceTexture.h"
 #include "Octree.h"
 #include "PanelTextEditor.h"
+#include "ComponentScript.h"
 
 bool ReturnZ::eraseY = false;
 
@@ -480,6 +482,14 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 		lightZ->ambient = light->ambient;
 		lightZ->objectID = light->game_object_attached->ID;
 		break; }
+	case ComponentType::SCRIPT: {
+		ComponentScript* script = (ComponentScript*)component;
+		CompScriptZ* scriptZ = new CompScriptZ();
+		*compZ = scriptZ;
+		scriptZ->resourceID = script->resourceID;
+		scriptZ->data_name = script->data_name;
+		scriptZ->need_alien = script->need_alien;
+		break; }
 	case ComponentType::CAMERA: {
 		ComponentCamera* camera = (ComponentCamera*)component;
 		CompCameraZ* cameraZ = new CompCameraZ();
@@ -574,6 +584,20 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		light->ambient = lightZ->ambient;
 		light->diffuse = lightZ->diffuse;
 		break; }
+	case ComponentType::SCRIPT: {
+		ComponentScript* script = (ComponentScript*)component;
+		CompScriptZ* scriptZ = (CompScriptZ*)compZ;
+		ResourceScript* r_script = (ResourceScript*)App->resources->GetResourceWithID(scriptZ->resourceID);
+		if (r_script != nullptr) {
+			for (uint i = 0; i < r_script->data_structures.size(); ++i) {
+				if (App->StringCmp(r_script->data_structures[i].first.data(), scriptZ->data_name.data())) {
+					script->LoadData(scriptZ->data_name.data(), r_script->data_structures[i].second);
+					script->resourceID = scriptZ->resourceID;
+					break;
+				}
+			}
+		}
+		break; }
 	case ComponentType::CAMERA: {
 		ComponentCamera* camera = (ComponentCamera*)component;
 		CompCameraZ* cameraZ = (CompCameraZ*)compZ;
@@ -622,6 +646,10 @@ void CompZ::AttachCompZToGameObject(CompZ* compZ)
 		ComponentCamera* camera = new ComponentCamera(obj);
 		CompZ::SetComponent(camera, compZ);
 		obj->AddComponent(camera);
+		break; }
+	case ComponentType::SCRIPT: {
+		ComponentScript* script = new ComponentScript(obj);
+		CompZ::SetComponent(script, compZ);
 		break; }
 	}
 }

@@ -141,6 +141,7 @@ void PanelInspector::ButtonAddComponent()
 					comp_script->LoadData(std::get<0>(script_info), std::get<1>(script_info));
 					std::get<0>(script_info) = "Return To Components";
 					component = 0;
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, comp_script);
 				}
 				else {
 					LOG("This script is already attached!");

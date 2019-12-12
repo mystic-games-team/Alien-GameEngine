@@ -16,6 +16,13 @@ ComponentScript::~ComponentScript()
 	if (data_ptr != nullptr) {
 		if (need_alien) {
 			Alien* alien = (Alien*)data_ptr;
+			std::vector<Alien*>::iterator item = App->objects->current_scripts.begin();
+			for (; item != App->objects->current_scripts.end(); ++item) {
+				if (*item != nullptr && *item == alien) {
+					App->objects->current_scripts.erase(item);
+					break;
+				}
+			}
 			if (alien != nullptr) {
 				delete alien;
 			}

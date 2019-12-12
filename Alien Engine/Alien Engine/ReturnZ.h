@@ -161,6 +161,13 @@ public:
 	Color diffuse{ 0.75f, 0.75f, 0.75f, 1.0f };
 };
 
+class CompScriptZ : public CompZ {
+public:
+	std::string data_name;
+	u64 resourceID = 0;
+	bool need_alien = false;
+};
+
 class CompCameraZ : public CompZ {
 public:
 	float vertical_fov = 0.f;
