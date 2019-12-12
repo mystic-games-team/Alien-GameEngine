@@ -55,6 +55,31 @@ public:
 	// static GameObject* FindWithTag();
 	// static std::vector<GameObject*> FindGameObjectsWithTag();
 
+		// TODO:
+	/*
+		GetComponent();
+		GetComponentInChildren();
+		GetComponentInParent();
+		GetComponents();
+		GetComponentsInChildren();
+		GetComponentsInParent();
+		TryGetComponent();
+
+		AddComponent(); ???????????????
+
+		GetInstanceID();
+
+		ToString(); // returns gameobject name
+
+		Destroy();
+		DestroyComponent();
+		Destroyimmediate();
+		DontDestroyOnLoad();
+
+		Function to create prefab or someting xd
+
+	*/
+
 	void SetEnable(bool enable);
 	bool IsEnabled();
 

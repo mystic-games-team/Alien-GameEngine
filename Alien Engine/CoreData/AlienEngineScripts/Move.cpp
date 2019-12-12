@@ -46,6 +46,8 @@ void Move::Update()
 
 	ComponentScript* script = new ComponentScript(nullptr);
 	script->SetEnable(false);
+
+	
 }
 
 void Move::OnDrawGizmos()

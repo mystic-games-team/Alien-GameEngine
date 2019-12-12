@@ -28,8 +28,9 @@ void PanelInspector::PanelLogic()
 	if (App->objects->GetSelectedObject() != nullptr)
 	{
 		static bool draw_add = true;
-		std::vector<Component*>::iterator item = App->objects->GetSelectedObject()->components.begin();
-		for (; item != App->objects->GetSelectedObject()->components.end(); ++item)
+		GameObject* obj = App->objects->GetSelectedObject();
+		std::vector<Component*>::iterator item = obj->components.begin();
+		for (; item != obj->components.end(); ++item)
 		{
 			if (*item != nullptr)
 			{

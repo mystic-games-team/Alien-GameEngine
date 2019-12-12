@@ -46,6 +46,7 @@ public:
 
 		Destroy();
 		Destroyimmediate();
+		DestroyComponent();
 		DontDestroyOnLoad();
 
 		Function to create prefab or someting xd
