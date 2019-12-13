@@ -50,10 +50,12 @@ public:
 
 	static void Destroy(GameObject* object);
 	static GameObject* FindWithName(const std::string& name);
+	static GameObject* FindWithTag(const char* tag_to_find);
+	static std::vector<GameObject*> FindGameObjectsWithTag(const std::string& tag_to_find);
 	// TODO: 
 	// static GameObject* Instantiate();
-	// static GameObject* FindWithTag();
-	// static std::vector<GameObject*> FindGameObjectsWithTag();
+
+	// TODO: change static, is static... 
 
 		// TODO:
 	/*
@@ -140,9 +142,6 @@ private:
 	void ToDelete(); // delete it at the begining of the next frame
 	void SearchToDelete();
 
-	// id's
-	GameObject* GetGameObjectByID(const u64 & id);
-
 	// search and return true if exists in its children or children of children bla bla
 	bool Exists(GameObject* object);
 
@@ -172,6 +171,9 @@ private:
 
 	// find
 	GameObject* Find(const std::string name);
+	GameObject* GetGameObjectByID(const u64& id);
+	GameObject* FindTag(const std::string& tag_to_find);
+	void FindTags(const std::string& tag_to_find, std::vector<GameObject*>& objects);
 
 	// parent selected
 	void SayChildrenParentIsSelected(const bool& selected);

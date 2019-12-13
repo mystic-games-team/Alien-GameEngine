@@ -92,6 +92,8 @@ bool ModuleObjects::Start()
 	App->camera->fake_camera->frustum.pos = { 25,25,25 };
 	App->camera->fake_camera->Look(float3(0, 0, 0));
 
+	GameObject* test = GameObject::FindWithName("Light");
+
 	return ret;
 }
 

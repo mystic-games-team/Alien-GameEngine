@@ -1,5 +1,6 @@
 #pragma once
 
+#include "..\..\..\Alien Engine\GameObject.h"
 /*-----------------COMPONENTS-------------------*/
 #include "..\..\..\Alien Engine\ComponentScript.h"
 #include "..\..\..\Alien Engine\ComponentTransform.h"

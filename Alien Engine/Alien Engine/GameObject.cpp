@@ -202,7 +202,7 @@ void GameObject::SetName(const char* name)
 
 const char* GameObject::GetName()
 {
-	return name.c_str();
+	return name.data();
 }
 
 Component* GameObject::GetComponent(const ComponentType& type)
@@ -411,6 +411,18 @@ GameObject* GameObject::FindWithName(const std::string& name)
 	return App->objects->GetRoot(true)->Find(name);
 }
 
+GameObject* GameObject::FindWithTag(const char* tag_to_find)
+{
+	return App->objects->GetRoot(true)->FindTag(tag_to_find);
+}
+
+std::vector<GameObject*> GameObject::FindGameObjectsWithTag(const std::string& tag_to_find)
+{
+	std::vector<GameObject*> found;
+	App->objects->GetRoot(true)->FindTags(tag_to_find, found);
+	return found;
+}
+
 void GameObject::OnEnable()
 {
 	std::vector<Component*>::iterator item = components.begin();
@@ -513,6 +525,36 @@ GameObject* GameObject::GetGameObjectByID(const u64 & id)
 		}
 	}
 	return ret;
+}
+
+GameObject* GameObject::FindTag(const std::string& tag_to_find)
+{
+	GameObject* ret = nullptr;
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			if (App->StringCmp((*item)->tag.data(), tag_to_find.data())) {
+				return this;
+			}
+			ret = (*item)->FindTag(tag_to_find);
+			if (ret != nullptr)
+				break;
+		}
+	}
+	return ret;
+}
+
+void GameObject::FindTags(const std::string& tag_to_find, std::vector<GameObject*>& objects)
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			if (App->StringCmp((*item)->tag.data(), tag_to_find.data())) {
+				objects.push_back(this);
+			}
+			(*item)->FindTags(tag_to_find, objects);
+		}
+	}
 }
 
 bool GameObject::Exists(GameObject* object)
