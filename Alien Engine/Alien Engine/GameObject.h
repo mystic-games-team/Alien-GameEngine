@@ -195,7 +195,7 @@ private:
 	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 
-	std::string name = "UnNamed";
+	char name[MAX_PATH] = "UnNamed";
 
 	bool enabled = true;
 	bool is_static = false;

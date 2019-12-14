@@ -197,12 +197,12 @@ void GameObject::AddChild(GameObject* child)
 
 void GameObject::SetName(const char* name)
 {
-	this->name = std::string(name);
+	strcpy(this->name, name);
 }
 
 const char* GameObject::GetName()
 {
-	return name.data();
+	return name;
 }
 
 Component* GameObject::GetComponent(const ComponentType& type)
@@ -473,7 +473,7 @@ void GameObject::ScaleNegative(const bool& is_negative)
 GameObject* GameObject::Find(const std::string name)
 {
 	GameObject* ret = nullptr;
-	if (App->StringCmp(name.data(), this->name.data())) {
+	if (App->StringCmp(name.data(), this->name)) {
 		return this;
 	}
 	std::vector<GameObject*>::iterator item = children.begin();
@@ -713,7 +713,7 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 
 void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 {
-	name = to_load->GetString("Name");
+	strcpy(name, to_load->GetString("Name"));
 	ID = std::stoull(to_load->GetString("ID"));
 	enabled = to_load->GetBoolean("Enabled");
 	parent_enabled = to_load->GetBoolean("ParentEnabled");

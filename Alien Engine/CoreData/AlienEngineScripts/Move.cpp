@@ -47,15 +47,15 @@ void Move::Update()
 	//ComponentScript* script = new ComponentScript(nullptr);
 	//script->SetEnable(false);
 
-	GameObject* pl = GameObject::FindWithTag("Player");
-	std::string nam = pl->GetName();
-	Debug::Log(nam.data());
-	Debug::Log(pl->tag.data());
-	GameObject* en = GameObject::FindWithTag("Enemy");
-	//GameObject* namee = GameObject::FindWithName("Light");
-	std::vector<GameObject*> untag = GameObject::FindGameObjectsWithTag("UnTagged");
-	std::vector<GameObject*> players = GameObject::FindGameObjectsWithTag("Player");
-	std::vector<GameObject*> enemies = GameObject::FindGameObjectsWithTag("Enemy");
+	//GameObject* pl = GameObject::FindWithTag("Player");
+	game_object->SetName("NewNAME");
+	Debug::Log(game_object->GetName());
+	//Debug::Log(pl->tag.data());
+	//GameObject* en = GameObject::FindWithTag("Enemy");
+	////GameObject* namee = GameObject::FindWithName("Light");
+	//std::vector<GameObject*> untag = GameObject::FindGameObjectsWithTag("UnTagged");
+	//std::vector<GameObject*> players = GameObject::FindGameObjectsWithTag("Player");
+	//std::vector<GameObject*> enemies = GameObject::FindGameObjectsWithTag("Enemy");
 
 }
 
