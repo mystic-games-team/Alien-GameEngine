@@ -53,6 +53,20 @@
                         "Enabled": true,
                         "ID": "7413811135556744752",
                         "PrintIcon": true
+                    },
+                    {
+                        "Type": 5,
+                        "ID": "14943109345450766577",
+                        "ResourceID": "5410909361000620259",
+                        "DataName": "Move",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "test",
+                                "int": 0
+                            }
+                        ]
                     }
                 ]
             },

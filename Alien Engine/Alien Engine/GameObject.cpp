@@ -416,7 +416,7 @@ void GameObject::Destroy(GameObject* object)
 	object->ToDelete();
 }
 
-GameObject* GameObject::FindWithName(const std::string& name)
+GameObject* GameObject::FindWithName(const char* name)
 {
 	return App->objects->GetRoot(true)->Find(name);
 }
@@ -426,11 +426,19 @@ GameObject* GameObject::FindWithTag(const char* tag_to_find)
 	return App->objects->GetRoot(true)->FindTag(tag_to_find);
 }
 
-std::vector<GameObject*> GameObject::FindGameObjectsWithTag(const std::string& tag_to_find)
+uint GameObject::FindGameObjectsWithTag(const char* tag_to_find, GameObject*** objects)
 {
 	std::vector<GameObject*> found;
-	App->objects->GetRoot(true)->FindTags(tag_to_find, found);
-	return found;
+	App->objects->GetRoot(true)->FindTags(tag_to_find, &found);
+
+	if (found.size() > 0) {
+		(*objects) = new GameObject*[found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*objects)[i] = found[i];
+		}
+	}
+
+	return found.size();
 }
 
 void GameObject::OnEnable()
@@ -480,10 +488,10 @@ void GameObject::ScaleNegative(const bool& is_negative)
 	}
 }
 
-GameObject* GameObject::Find(const std::string name)
+GameObject* GameObject::Find(const char* name)
 {
 	GameObject* ret = nullptr;
-	if (App->StringCmp(name.data(), this->name)) {
+	if (App->StringCmp(name, this->name)) {
 		return this;
 	}
 	std::vector<GameObject*>::iterator item = children.begin();
@@ -508,10 +516,10 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 	}
 }
 
-void GameObject::ReTag(const std::string& from, const std::string& to)
+void GameObject::ReTag(const char* from, const char* to)
 {
-	if (App->StringCmp(tag, from.data())) {
-		strcpy(tag, to.data());
+	if (App->StringCmp(tag, from)) {
+		strcpy(tag, to);
 	}
 	for (uint i = 0; i < children.size(); ++i) {
 		if (children[i] != nullptr) {
@@ -537,13 +545,13 @@ GameObject* GameObject::GetGameObjectByID(const u64 & id)
 	return ret;
 }
 
-GameObject* GameObject::FindTag(const std::string& tag_to_find)
+GameObject* GameObject::FindTag(const char* tag_to_find)
 {
 	GameObject* ret = nullptr;
 	std::vector<GameObject*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
-			if (App->StringCmp((*item)->tag, tag_to_find.data())) {
+			if (App->StringCmp((*item)->tag, tag_to_find)) {
 				return this;
 			}
 			ret = (*item)->FindTag(tag_to_find);
@@ -554,13 +562,13 @@ GameObject* GameObject::FindTag(const std::string& tag_to_find)
 	return ret;
 }
 
-void GameObject::FindTags(const std::string& tag_to_find, std::vector<GameObject*>& objects)
+void GameObject::FindTags(const char* tag_to_find, std::vector<GameObject*>* objects)
 {
 	std::vector<GameObject*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
-			if (App->StringCmp((*item)->tag, tag_to_find.data())) {
-				objects.push_back(this);
+			if (App->StringCmp((*item)->tag, tag_to_find)) {
+				objects->push_back(this);
 			}
 			(*item)->FindTags(tag_to_find, objects);
 		}

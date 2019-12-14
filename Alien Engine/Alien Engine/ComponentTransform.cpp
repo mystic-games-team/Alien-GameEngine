@@ -568,7 +568,7 @@ bool ComponentTransform::DrawInspector()
 				std::list<std::vector<std::string>::iterator>::iterator item = selected.begin();
 				uint i = 0;
 				for (; item != selected.end(); ++item) {
-					App->objects->GetRoot(true)->ReTag(*(*item), "UnTagged");
+					App->objects->GetRoot(true)->ReTag((*(*item)).data(), "UnTagged");
 					App->objects->tags.erase((*item) - i);
 					++i;
 				}

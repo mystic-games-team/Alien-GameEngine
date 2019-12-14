@@ -47,15 +47,28 @@ void Move::Update()
 	//ComponentScript* script = new ComponentScript(nullptr);
 	//script->SetEnable(false);
 
-	//GameObject* pl = GameObject::FindWithTag("Player");
-	//game_object->SetName("NewNAME");
+	GameObject* pl = GameObject::FindWithTag("Player");
+	game_object->SetName("NewNAME");
 	Debug::Log(game_object->GetTag());
-	//Debug::Log(pl->tag.data());
-	//GameObject* en = GameObject::FindWithTag("Enemy");
-	////GameObject* namee = GameObject::FindWithName("Light");
-	//std::vector<GameObject*> untag = GameObject::FindGameObjectsWithTag("UnTagged");
-	//std::vector<GameObject*> players = GameObject::FindGameObjectsWithTag("Player");
-	//std::vector<GameObject*> enemies = GameObject::FindGameObjectsWithTag("Enemy");
+
+	GameObject* en = GameObject::FindWithTag("Enemy");
+	if (en->IsEnabled()) {
+		int i = 0;
+	}
+	//GameObject* namee = GameObject::FindWithName("Light");
+
+	GameObject** untags = nullptr;
+	GameObject** players = nullptr;
+	GameObject** enemies = nullptr;
+	uint s_untags = GameObject::FindGameObjectsWithTag("UnTagged", &untags);
+	uint s_players = GameObject::FindGameObjectsWithTag("Player", &players);
+	uint s_enemies = GameObject::FindGameObjectsWithTag("Enemy", &enemies);
+
+	for (uint i = 0; i < s_untags; ++i) {
+		if (untags[i] != nullptr && untags[i]->IsEnabled()) {
+			int j = 0;
+		}
+	}
 
 }
 

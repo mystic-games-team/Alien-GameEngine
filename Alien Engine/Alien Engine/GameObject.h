@@ -49,9 +49,10 @@ public:
 public:
 
 	static void Destroy(GameObject* object);
-	static GameObject* FindWithName(const std::string& name);
+	static GameObject* FindWithName(const char* name);
 	static GameObject* FindWithTag(const char* tag_to_find);
-	static std::vector<GameObject*> FindGameObjectsWithTag(const std::string& tag_to_find);
+	// return the sie of the array of gameobjects found, pass a GameObject** nullptr with &. Remember to delete it!!!
+	static uint FindGameObjectsWithTag(const char* tag_to_find, GameObject*** objects);
 	// TODO: 
 	// static GameObject* Instantiate();
 
@@ -174,15 +175,15 @@ private:
 	bool HasChildrenStatic() const;
 
 	// find
-	GameObject* Find(const std::string name);
+	GameObject* Find(const char* name);
 	GameObject* GetGameObjectByID(const u64& id);
-	GameObject* FindTag(const std::string& tag_to_find);
-	void FindTags(const std::string& tag_to_find, std::vector<GameObject*>& objects);
+	GameObject* FindTag(const char* tag_to_find);
+	void FindTags(const char* tag_to_find, std::vector<GameObject*>* objects);
 
 	// parent selected
 	void SayChildrenParentIsSelected(const bool& selected);
 
-	void ReTag(const std::string& from, const std::string& to);
+	void ReTag(const char* from, const char* to);
 
 public:
 
