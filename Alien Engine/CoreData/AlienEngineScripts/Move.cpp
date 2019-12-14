@@ -48,8 +48,8 @@ void Move::Update()
 	//script->SetEnable(false);
 
 	//GameObject* pl = GameObject::FindWithTag("Player");
-	game_object->SetName("NewNAME");
-	Debug::Log(game_object->GetName());
+	//game_object->SetName("NewNAME");
+	Debug::Log(game_object->GetTag());
 	//Debug::Log(pl->tag.data());
 	//GameObject* en = GameObject::FindWithTag("Enemy");
 	////GameObject* namee = GameObject::FindWithName("Light");

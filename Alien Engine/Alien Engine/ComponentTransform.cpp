@@ -229,13 +229,13 @@ bool ComponentTransform::DrawInspector()
 	}
 	ImGui::Spacing();
 	ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.6F);
-	if (ImGui::BeginCombo("Tag", game_object_attached->tag.data()))
+	if (ImGui::BeginCombo("Tag", game_object_attached->tag))
 	{
 		std::vector<std::string>::iterator item = App->objects->tags.begin();
 		for (; item != App->objects->tags.end(); ++item) {
-			bool is_selected = App->StringCmp(game_object_attached->tag.data(), (*item).data());
+			bool is_selected = App->StringCmp(game_object_attached->tag, (*item).data());
 			if (ImGui::Selectable((*item).data(), is_selected)) {
-				game_object_attached->tag = (*item);
+				strcpy(game_object_attached->tag, (*item).data());
 			}
 		}
 		ImGui::EndCombo();

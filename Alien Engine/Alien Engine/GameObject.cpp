@@ -205,6 +205,16 @@ const char* GameObject::GetName()
 	return name;
 }
 
+void GameObject::SetTag(const char* tag)
+{
+	strcpy(this->tag, tag);
+}
+
+const char* GameObject::GetTag()
+{
+	return tag;
+}
+
 Component* GameObject::GetComponent(const ComponentType& type)
 {
 	std::vector<Component*>::iterator item = components.begin();
@@ -500,8 +510,8 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 
 void GameObject::ReTag(const std::string& from, const std::string& to)
 {
-	if (tag == from) {
-		tag = to;
+	if (App->StringCmp(tag, from.data())) {
+		strcpy(tag, to.data());
 	}
 	for (uint i = 0; i < children.size(); ++i) {
 		if (children[i] != nullptr) {
@@ -533,7 +543,7 @@ GameObject* GameObject::FindTag(const std::string& tag_to_find)
 	std::vector<GameObject*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
-			if (App->StringCmp((*item)->tag.data(), tag_to_find.data())) {
+			if (App->StringCmp((*item)->tag, tag_to_find.data())) {
 				return this;
 			}
 			ret = (*item)->FindTag(tag_to_find);
@@ -549,7 +559,7 @@ void GameObject::FindTags(const std::string& tag_to_find, std::vector<GameObject
 	std::vector<GameObject*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
-			if (App->StringCmp((*item)->tag.data(), tag_to_find.data())) {
+			if (App->StringCmp((*item)->tag, tag_to_find.data())) {
 				objects.push_back(this);
 			}
 			(*item)->FindTags(tag_to_find, objects);
@@ -725,7 +735,7 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 	is_static = to_load->GetBoolean("IsStatic");
 	std::string tag_ = to_load->GetString("Tag");
 	if (std::find(App->objects->tags.begin(), App->objects->tags.end(), tag_) != App->objects->tags.end()) {
-		tag = tag_;
+		strcpy(tag, tag_.data());
 	}
 	if (to_load->GetBoolean("IsPrefab")) {
 		u64 id = std::stoull(to_load->GetString("PrefabID"));

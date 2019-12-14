@@ -97,6 +97,10 @@ public:
 	// GameObject name
 	void SetName(const char* name);
 	const char* GetName();
+
+	// GameObject tag
+	void SetTag(const char* tag);
+	const char* GetTag();
 private:
 	// OnEnable/Disable
 	void OnEnable();
@@ -183,7 +187,6 @@ private:
 public:
 
 	GameObject* parent = nullptr;
-	std::string tag = "UnTagged";
 
 private:
 
@@ -196,6 +199,7 @@ private:
 	std::vector<GameObject*> children;
 
 	char name[MAX_PATH] = "UnNamed";
+	char tag[MAX_PATH] = "UnTagged";
 
 	bool enabled = true;
 	bool is_static = false;
