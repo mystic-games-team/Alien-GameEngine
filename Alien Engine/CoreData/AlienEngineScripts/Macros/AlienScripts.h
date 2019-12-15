@@ -40,8 +40,15 @@
 #define ALIEN_INIT_HEADER extern "C" {
 #define ALIEN_END_HEADER }
 
-// ------------INSPECTOR MACROS----------------
-#define SHOW_IN_INSPECTOR_AS_INPUT_INT(INT_) ComponentScript::InspectorInputInt(&INT_, #INT_);
-// ------------INSPECTOR MACROS----------------
+// ------------INSPECTOR MACROS----------------\\
+/*--------------------int--------------------*/
+#define SHOW_IN_INSPECTOR_AS_INPUT_INT(INT_) ComponentScript::InspectorInputInt(&INT_, #INT_)
+#define SHOW_IN_INSPECTOR_AS_DRAGABLE_INT(INT_) ComponentScript::InspectorDragableInt(&INT_, #INT_)
+#define SHOW_IN_INSPECTOR_AS_SLIDER_INT(INT_, MIN_, MAX_) ComponentScript::InspectorSliderInt(&INT_, #INT_, MIN_, MAX_)
+/*--------------------float--------------------*/
+#define SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(FLOAT_) ComponentScript::InspectorInputFloat(&FLOAT_, #FLOAT_)
+#define SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(FLOAT_) ComponentScript::InspectorDragableFloat(&FLOAT_, #FLOAT_)
+#define SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(FLOAT_, MIN_, MAX_) ComponentScript::InspectorSliderFloat(&FLOAT_, #FLOAT_, MIN_, MAX_)
+// ------------INSPECTOR MACROS----------------\\
 
 // TODO: Macro SliderInt bla bla inspector typeid(variable) == int go ahead

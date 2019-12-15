@@ -68,10 +68,52 @@ bool ComponentScript::DrawInspector()
 				switch (inspector_variables[i].variable_type)
 				{
 				case InspectorScriptData::DataType::INT: {
-					ImGui::PushID(inspector_variables[i].ptr);
-					int* ptr = (int*)inspector_variables[i].ptr;
-					ImGui::InputInt(inspector_variables[i].variable_name.data(), ptr);
-					ImGui::PopID();
+					switch (inspector_variables[i].show_as) {
+					case InspectorScriptData::ShowMode::INPUT_INT: {
+						ImGui::PushID(inspector_variables[i].ptr);
+						int* ptr = (int*)inspector_variables[i].ptr;
+						ImGui::InputInt(inspector_variables[i].variable_name.data(), ptr);
+						ImGui::PopID();
+						break; }
+					case InspectorScriptData::ShowMode::DRAGABLE_INT: {
+						ImGui::PushID(inspector_variables[i].ptr);
+						int* ptr = (int*)inspector_variables[i].ptr;
+						ImGui::DragInt(inspector_variables[i].variable_name.data(), ptr);
+						ImGui::PopID();
+						break; }
+					case InspectorScriptData::ShowMode::SLIDER_INT: {
+						ImGui::PushID(inspector_variables[i].ptr);
+						int* ptr = (int*)inspector_variables[i].ptr;
+						ImGui::SliderInt(inspector_variables[i].variable_name.data(), ptr, inspector_variables[i].min_slider, inspector_variables[i].max_slider);
+						ImGui::PopID();
+						break; }
+					default:
+						break;
+					}
+					break; }
+				case InspectorScriptData::DataType::FLOAT: {
+					switch (inspector_variables[i].show_as) {
+					case InspectorScriptData::ShowMode::INPUT_FLOAT: {
+						ImGui::PushID(inspector_variables[i].ptr);
+						float* ptr = (float*)inspector_variables[i].ptr;
+						ImGui::InputFloat(inspector_variables[i].variable_name.data(), ptr, 0.5F, 100);
+						ImGui::PopID();
+						break; }
+					case InspectorScriptData::ShowMode::DRAGABLE_FLOAT: {
+						ImGui::PushID(inspector_variables[i].ptr);
+						float* ptr = (float*)inspector_variables[i].ptr;
+						ImGui::DragFloat(inspector_variables[i].variable_name.data(), ptr, 0.5F);
+						ImGui::PopID();
+						break; }
+					case InspectorScriptData::ShowMode::SLIDER_FLOAT: {
+						ImGui::PushID(inspector_variables[i].ptr);
+						float* ptr = (float*)inspector_variables[i].ptr;
+						ImGui::SliderFloat(inspector_variables[i].variable_name.data(), ptr, inspector_variables[i].min_slider, inspector_variables[i].max_slider);
+						ImGui::PopID();
+						break; }
+					default:
+						break;
+					}
 					break; }
 				default:
 					break;
@@ -164,7 +206,83 @@ void ComponentScript::InspectorInputInt(int* ptr, const char* ptr_name)
 
 	ComponentScript* script = App->objects->actual_script_loading;
 	if (script != nullptr) {
-		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::INT, ptr));
+		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::INT, ptr, InspectorScriptData::INPUT_INT));
+	}
+}
+
+void ComponentScript::InspectorDragableInt(int* ptr, const char* ptr_name)
+{
+	std::string name = typeid(*ptr).name();
+	if (!App->StringCmp(name.data(), "int"))
+		return;
+
+	std::string variable_name = GetVariableName(ptr_name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::INT, ptr, InspectorScriptData::DRAGABLE_INT));
+	}
+}
+
+void ComponentScript::InspectorSliderInt(int* ptr, const char* ptr_name, const int& min_value, const int& max_value)
+{
+	std::string name = typeid(*ptr).name();
+	if (!App->StringCmp(name.data(), "int"))
+		return;
+
+	std::string variable_name = GetVariableName(ptr_name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		InspectorScriptData inspector(variable_name, InspectorScriptData::DataType::INT, ptr, InspectorScriptData::SLIDER_INT);
+		inspector.min_slider = min_value;
+		inspector.max_slider = max_value;
+		script->inspector_variables.push_back(inspector);
+	}
+}
+
+void ComponentScript::InspectorInputFloat(float* ptr, const char* ptr_name)
+{
+	std::string name = typeid(*ptr).name();
+	if (!App->StringCmp(name.data(), "float"))
+		return;
+
+	std::string variable_name = GetVariableName(ptr_name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::FLOAT, ptr, InspectorScriptData::INPUT_FLOAT));
+	}
+}
+
+void ComponentScript::InspectorDragableFloat(float* ptr, const char* ptr_name)
+{
+	std::string name = typeid(*ptr).name();
+	if (!App->StringCmp(name.data(), "float"))
+		return;
+
+	std::string variable_name = GetVariableName(ptr_name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::FLOAT, ptr, InspectorScriptData::DRAGABLE_FLOAT));
+	}
+}
+
+void ComponentScript::InspectorSliderFloat(float* ptr, const char* ptr_name, const float& min_value, const float& max_value)
+{
+	std::string name = typeid(*ptr).name();
+	if (!App->StringCmp(name.data(), "float"))
+		return;
+
+	std::string variable_name = GetVariableName(ptr_name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		InspectorScriptData inspector(variable_name, InspectorScriptData::DataType::FLOAT, ptr, InspectorScriptData::SLIDER_FLOAT);
+		inspector.min_slider = min_value;
+		inspector.max_slider = max_value;
+		script->inspector_variables.push_back(inspector);
 	}
 }
 

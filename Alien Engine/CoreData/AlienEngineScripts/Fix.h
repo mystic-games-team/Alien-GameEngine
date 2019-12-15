@@ -23,7 +23,7 @@ public:
 
 ALIEN_INIT_DATA Fix* CreateFix() {
 	Fix* move = new Fix();
-	SHOW_IN_INSPECTOR_AS_INPUT_INT(move->test)
+	SHOW_IN_INSPECTOR_AS_INPUT_INT(move->test);
 		return move;
 }
 ALIEN_DESTROY_DATA void DestroyFix(Fix* move) { delete move; }
