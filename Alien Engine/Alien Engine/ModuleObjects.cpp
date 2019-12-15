@@ -908,6 +908,9 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 									case InspectorScriptData::DataType::INT: {
 										inspector->SetNumber("int", (*(int*)((*script)->inspector_variables[i].ptr)));
 										break; }
+									case InspectorScriptData::DataType::FLOAT: {
+										inspector->SetNumber("float", (*(float*)((*script)->inspector_variables[i].ptr)));
+										break; }
 									default:
 										break;
 									}
@@ -959,6 +962,9 @@ void ModuleObjects::ReAssignScripts(JSONArraypack* to_load)
 									switch (type) {
 									case InspectorScriptData::DataType::INT: {
 										*(int*)(*item).ptr = inspector->GetNumber("int");
+										break; }
+									case InspectorScriptData::DataType::FLOAT: {
+										*(float*)(*item).ptr = inspector->GetNumber("float");
 										break; }
 									default:
 										break;

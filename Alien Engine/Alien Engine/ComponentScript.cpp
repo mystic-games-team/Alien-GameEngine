@@ -148,6 +148,10 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 				int value = *(int*)inspector_variables[i].ptr;
 				inspector->SetNumber("int", value);
 				break; }
+			case InspectorScriptData::DataType::FLOAT: {
+				float value = *(float*)inspector_variables[i].ptr;
+				inspector->SetNumber("float", value);
+				break; }
 			default:
 				break;
 			}
@@ -180,6 +184,10 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 						case InspectorScriptData::DataType::INT: {
 							int* value = (int*)inspector_variables[i].ptr;
 							*value = inspector->GetNumber("int");
+							break; }
+						case InspectorScriptData::DataType::FLOAT: {
+							float* value = (float*)inspector_variables[i].ptr;
+							*value = inspector->GetNumber("float");
 							break; }
 						default:
 							break;

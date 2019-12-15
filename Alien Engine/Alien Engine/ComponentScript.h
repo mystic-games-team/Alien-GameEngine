@@ -6,11 +6,11 @@
 
 struct __declspec(dllexport) InspectorScriptData {
 	friend class ComponentScript;
-	enum DataType { // TODO: what about uint
-		INT,
+	enum DataType { 
+		INT, // DONE
 		INT2,
 		INT3,
-		FLOAT,
+		FLOAT, // DONE
 		FLOAT2,
 		FLOAT3,
 		STRING,
