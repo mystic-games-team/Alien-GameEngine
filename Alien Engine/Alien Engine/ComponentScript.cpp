@@ -115,6 +115,18 @@ bool ComponentScript::DrawInspector()
 						break;
 					}
 					break; }
+				case InspectorScriptData::DataType::BOOL: {
+					switch (inspector_variables[i].show_as) {
+					case InspectorScriptData::ShowMode::CHECKBOX: {
+						ImGui::PushID(inspector_variables[i].ptr);
+						bool* ptr = (bool*)inspector_variables[i].ptr;
+						ImGui::Checkbox(inspector_variables[i].variable_name.data(), ptr);
+						ImGui::PopID();
+						break; }
+					default:
+						break;
+					}
+					break; }
 				default:
 					break;
 				}
@@ -152,6 +164,10 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 				float value = *(float*)inspector_variables[i].ptr;
 				inspector->SetNumber("float", value);
 				break; }
+			case InspectorScriptData::DataType::BOOL: {
+				bool value = *(bool*)inspector_variables[i].ptr;
+				inspector->SetNumber("bool", value);
+				break; }
 			default:
 				break;
 			}
@@ -188,6 +204,10 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 						case InspectorScriptData::DataType::FLOAT: {
 							float* value = (float*)inspector_variables[i].ptr;
 							*value = inspector->GetNumber("float");
+							break; }
+						case InspectorScriptData::DataType::BOOL: {
+							bool* value = (bool*)inspector_variables[i].ptr;
+							*value = inspector->GetNumber("bool");
 							break; }
 						default:
 							break;
@@ -291,6 +311,20 @@ void ComponentScript::InspectorSliderFloat(float* ptr, const char* ptr_name, con
 		inspector.min_slider = min_value;
 		inspector.max_slider = max_value;
 		script->inspector_variables.push_back(inspector);
+	}
+}
+
+void ComponentScript::InspectorBool(bool* ptr, const char* ptr_name)
+{
+	std::string name = typeid(*ptr).name();
+	if (!App->StringCmp(name.data(), "bool"))
+		return;
+
+	std::string variable_name = GetVariableName(ptr_name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::BOOL, ptr, InspectorScriptData::CHECKBOX));
 	}
 }
 

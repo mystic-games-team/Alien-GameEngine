@@ -24,6 +24,7 @@ public:
 	float drag_float_test = 10.4F;
 	int slider_int_test = 10;
 	float slider_float_test = 10.5F;
+	bool jump = false;
 };
 
 ALIEN_INIT_DATA Move* CreateMove() {
@@ -34,6 +35,7 @@ ALIEN_INIT_DATA Move* CreateMove() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(move->drag_float_test);
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(move->slider_int_test, 0, 20);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(move->slider_float_test, 1.5F, 13.5F);
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(move->jump);
 	return move;
 } 
 ALIEN_DESTROY_DATA void DestroyMove(Move* move) { delete move; }

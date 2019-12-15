@@ -14,6 +14,7 @@ struct __declspec(dllexport) InspectorScriptData {
 		FLOAT2,
 		FLOAT3,
 		STRING,
+		BOOL,
 	};
 
 	enum ShowMode {
@@ -23,6 +24,7 @@ struct __declspec(dllexport) InspectorScriptData {
 		INPUT_FLOAT,
 		DRAGABLE_FLOAT,
 		SLIDER_FLOAT,
+		CHECKBOX,
 	};
 
 	InspectorScriptData(const std::string& variable_name, const DataType& variable_type, void* ptr, const ShowMode& mode) {
@@ -67,12 +69,16 @@ private:
 
 	static std::string GetVariableName(const char* ptr_name);
 public:
+	/*--------------------INT-----------------------*/
 	static void InspectorInputInt(int* ptr, const char* ptr_name);
 	static void InspectorDragableInt(int* ptr, const char* ptr_name);
 	static void InspectorSliderInt(int* ptr, const char* ptr_name, const int& min_value, const int& max_value);
+	/*--------------------FLOAT-----------------------*/
 	static void InspectorInputFloat(float* ptr, const char* ptr_name);
 	static void InspectorDragableFloat(float* ptr, const char* ptr_name);
 	static void InspectorSliderFloat(float* ptr, const char* ptr_name, const float& min_value, const float& max_value);
+	/*--------------------BOOL-----------------------*/
+	static void InspectorBool(bool* ptr, const char* ptr_name);
 
 private:
 
