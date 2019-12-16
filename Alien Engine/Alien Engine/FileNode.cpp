@@ -122,6 +122,7 @@ void FileNode::ResetPaths()
 		ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
 		if (prefab != nullptr) {
 			prefab->SetAssetsPath(std::string(this->path + name).data());
+			prefab->SetLibraryPath(std::string(this->path + name).data());
 			prefab->SetName(App->file_system->GetBaseFileName(path.data()).data());
 			auto item = prefab->prefab_references.begin();
 			for (; item != prefab->prefab_references.end(); ++item) {

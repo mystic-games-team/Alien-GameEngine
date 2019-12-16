@@ -110,7 +110,7 @@ private:
 	// here we call Component Mesh, Material & light
 	void DrawScene();
 	void DrawGame();
-	void SetDrawList(std::map<float, GameObject*>* to_draw, const ComponentCamera* camera);
+	void SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera);
 
 	Component* GetComponentWithID(const u64& ID);
 	void RemoveComponent(Component* component);

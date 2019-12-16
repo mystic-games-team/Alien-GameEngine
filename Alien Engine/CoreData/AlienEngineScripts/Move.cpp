@@ -57,6 +57,7 @@ void Move::Update()
 	//}
 	////GameObject* namee = GameObject::FindWithName("Light");
 
+
 	GameObject** untags = nullptr;
 	GameObject** players = nullptr;
 	GameObject** enemies = nullptr;

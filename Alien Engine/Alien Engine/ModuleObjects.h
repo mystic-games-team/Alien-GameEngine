@@ -118,6 +118,8 @@ public:
 	
 	void HotReload();
 
+	static bool SortGameObjectToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last);
+
 private:
 
 	void CreateJsonScript(GameObject* obj, JSONArraypack* to_save);

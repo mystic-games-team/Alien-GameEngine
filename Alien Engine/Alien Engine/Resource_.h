@@ -27,7 +27,7 @@ public:
 	const char* const GetAssetsPath() const;
 	const char* const GetLibraryPath() const;
 	void SetAssetsPath(const char* path);
-
+	void SetLibraryPath(const char* path);
 	// name
 	const char* const GetName() const;
 	void SetName(const char* name);

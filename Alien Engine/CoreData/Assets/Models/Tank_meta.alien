@@ -1,0 +1,23 @@
+{
+    "Meta": {
+        "ID": "12412762322357031302",
+        "NumMeshes": 15,
+        "PathMeshes": [
+            "Library\/Meshes\/16329384877772734484.alienMesh",
+            "Library\/Meshes\/292152840119044187.alienMesh",
+            "Library\/Meshes\/17555649028302062781.alienMesh",
+            "Library\/Meshes\/14656645718930876317.alienMesh",
+            "Library\/Meshes\/10362945154795937703.alienMesh",
+            "Library\/Meshes\/4838206785155204899.alienMesh",
+            "Library\/Meshes\/4795639698356644916.alienMesh",
+            "Library\/Meshes\/3494357616308967152.alienMesh",
+            "Library\/Meshes\/18151018805843403444.alienMesh",
+            "Library\/Meshes\/14916085050534635072.alienMesh",
+            "Library\/Meshes\/2412119093307039932.alienMesh",
+            "Library\/Meshes\/14160469606936842160.alienMesh",
+            "Library\/Meshes\/8498174806641014391.alienMesh",
+            "Library\/Meshes\/6216249920487581755.alienMesh",
+            "Library\/Meshes\/9925630321927808281.alienMesh"
+        ]
+    }
+}
