@@ -57,18 +57,12 @@ void Move::Update()
 	//}
 	////GameObject* namee = GameObject::FindWithName("Light");
 
-	//GameObject** untags = nullptr;
-	//GameObject** players = nullptr;
-	//GameObject** enemies = nullptr;
-	//uint s_untags = GameObject::FindGameObjectsWithTag("UnTagged", &untags);
-	//uint s_players = GameObject::FindGameObjectsWithTag("Player", &players);
-	//uint s_enemies = GameObject::FindGameObjectsWithTag("Enemy", &enemies);
-
-	//for (uint i = 0; i < s_untags; ++i) {
-	//	if (untags[i] != nullptr && untags[i]->IsEnabled()) {
-	//		int j = 0;
-	//	}
-	//}
+	GameObject** untags = nullptr;
+	GameObject** players = nullptr;
+	GameObject** enemies = nullptr;
+	uint s_untags = GameObject::FindGameObjectsWithTag("UnTagged", &untags);
+	uint s_players = GameObject::FindGameObjectsWithTag("Player", &players);
+	uint s_enemies = GameObject::FindGameObjectsWithTag("Enemy", &enemies);
 
 }
 

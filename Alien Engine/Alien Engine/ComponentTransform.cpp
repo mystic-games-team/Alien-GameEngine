@@ -319,7 +319,7 @@ bool ComponentTransform::DrawInspector()
 							ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(obj->GetPrefabID());
 							if (prefab != nullptr) {
 								(*item)->ToDelete();
-								prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin(), local_position);
+								prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin(), (*item)->GetComponent<ComponentTransform>()->local_position);
 							}
 							return false;
 						}
