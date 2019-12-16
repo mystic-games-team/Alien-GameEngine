@@ -6,6 +6,18 @@
 
 ALIEN_INIT_HEADER
 
+enum col {
+	orange,
+	red,
+	yellow,
+	blue,
+	green,
+
+	First = orange,
+	Last = green
+};
+
+
 class ALIEN_ENGINE_API Move : public Alien {
 
 public:
@@ -25,6 +37,7 @@ public:
 	int slider_int_test = 10;
 	float slider_float_test = 10.5F;
 	bool jump = false;
+	col col_ = col::green;
 };
 
 ALIEN_INIT_DATA Move* CreateMove() {
@@ -36,6 +49,8 @@ ALIEN_INIT_DATA Move* CreateMove() {
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(move->slider_int_test, 0, 20);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(move->slider_float_test, 1.5F, 13.5F);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(move->jump);
+	//SHOW_IN_INSPECTOR_AS_ENUM(move->col_, col);
+	ComponentScript::InspectorEnum<col>(&move->col_, "fa");
 	return move;
 } 
 ALIEN_DESTROY_DATA void DestroyMove(Move* move) { delete move; }
