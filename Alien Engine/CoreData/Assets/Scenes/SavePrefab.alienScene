@@ -1,0 +1,110 @@
+{
+    "Scene": {
+        "GameObjects": [
+            {
+                "Name": "Light",
+                "FamilyNumber": 1,
+                "ID": "2003798087519581992",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            15,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2878605390681692323"
+                    },
+                    {
+                        "Type": 3,
+                        "DiffuseColor": [
+                            0.75,
+                            0.75,
+                            0.75,
+                            1
+                        ],
+                        "AmbienColor": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ],
+                        "Enabled": true,
+                        "ID": "956120834347852671",
+                        "PrintIcon": true
+                    },
+                    {
+                        "Type": 5,
+                        "ID": "14232134953943005858",
+                        "ResourceID": "5410909361000620259",
+                        "DataName": "Move",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "input_int_test",
+                                "int": 0
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "drag_int_test",
+                                "int": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "input_float_test",
+                                "float": 0.34000000357627869
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "drag_float_test",
+                                "float": 10.399999618530273
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "slider_int_test",
+                                "int": 10
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "slider_float_test",
+                                "float": 10.5
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "jump",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "bullet",
+                                "prefab": "12731863052462295319"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

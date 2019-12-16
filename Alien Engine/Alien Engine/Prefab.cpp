@@ -10,6 +10,12 @@ Prefab::Prefab()
 
 Prefab::~Prefab()
 {
+	if (prefabID != 0) {
+		ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefabID);
+		if (prefab != nullptr) {
+			prefab->prefab_references.remove(this);
+		}
+	}
 }
 
 GameObject* Prefab::ConvertToGameObject(float3 local_position, GameObject* parent)
