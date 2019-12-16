@@ -879,7 +879,7 @@ void ModuleObjects::HotReload()
 
 bool ModuleObjects::SortGameObjectToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last)
 {
-	return first.first < last.first;
+	return first.first > last.first;
 }
 
 void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
