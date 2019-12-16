@@ -56,7 +56,6 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 		{
 			last_time_mod = file.st_mtime;
 		}
-		script->SetNumber("Meta.LastMod", last_time_mod);
 		if (!data_structures.empty()) {
 			script->SetBoolean("HasData", true);
 			JSONArraypack* structures = script->InitNewArray("DataStructure");
@@ -91,7 +90,13 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 		JSONfilepack* script = new JSONfilepack(path, object, value);
 
 		ID = std::stoull(script->GetString("Meta.ID"));
-		last_time_mod = script->GetNumber("Meta.LastMod");
+
+		struct stat file;
+		if (stat(meta_data_path.c_str(), &file) == 0)
+		{
+			last_time_mod = file.st_mtime;
+		}
+
 		if (script->GetBoolean("HasData")) {
 			JSONArraypack* structures = script->GetArray("DataStructure");
 			for (uint i = 0; i < structures->GetArraySize(); ++i) {
