@@ -82,7 +82,12 @@ public:
 		Function to create prefab or someting xd
 
 	*/
-	//TODO: find child
+
+	GameObject* GetChild(const char* child_name);
+	GameObject* GetChild(const int& index);
+	// look for child of child of child bla bla
+	GameObject* GetChildRecursive(const char* child_name);
+
 	void SetEnable(bool enable);
 	bool IsEnabled();
 

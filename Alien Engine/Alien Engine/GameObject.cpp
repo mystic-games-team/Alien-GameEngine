@@ -50,6 +50,38 @@ GameObject::~GameObject()
 	}
 }
 
+GameObject* GameObject::GetChild(const char* child_name)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr && App->StringCmp((*item)->name, child_name)) {
+			return (*item);
+		}
+	}
+	return nullptr;
+}
+
+GameObject* GameObject::GetChild(const int& index)
+{
+	if (index < children.size() && children[index] != nullptr) {
+		return children[index];
+	}
+	return nullptr;
+}
+
+GameObject* GameObject::GetChildRecursive(const char* child_name)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			if (App->StringCmp((*item)->name, child_name)) {
+				return (*item);
+			}
+			(*item)->GetChildRecursive(child_name);
+		}
+	}
+}
+
 void GameObject::SetEnable(bool enable)
 {
 	enabled = enable;
