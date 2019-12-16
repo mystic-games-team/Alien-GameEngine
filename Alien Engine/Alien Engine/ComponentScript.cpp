@@ -252,13 +252,15 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 						case InspectorScriptData::PREFAB: {
 							Prefab* value = (Prefab*)inspector_variables[i].ptr;
 							value->prefabID = std::stoull(inspector->GetString("prefab"));
-							ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(value->prefabID);
-							if (prefab != nullptr) {
-								value->prefab_name = prefab->name;
-								prefab->prefab_references.push_back(value);
-							}
-							else {
-								value->prefabID = 0;
+							if (value->prefabID != 0) {
+								ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(value->prefabID);
+								if (prefab != nullptr) {
+									value->prefab_name = prefab->name;
+									prefab->prefab_references.push_back(value);
+								}
+								else {
+									value->prefabID = 0;
+								}
 							}
 							break; }
 						default:

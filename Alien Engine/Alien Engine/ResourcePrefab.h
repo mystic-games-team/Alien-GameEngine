@@ -13,6 +13,7 @@ class GameObject;
 class ResourcePrefab : public Resource {
 	friend class ComponentScript;
 	friend class FileNode;
+	friend class ModuleObjects;
 	friend class Prefab;
 public:
 

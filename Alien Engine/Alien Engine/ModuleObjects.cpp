@@ -11,6 +11,8 @@
 #include "ComponentLight.h"
 #include "ReturnZ.h"
 #include "Time.h"
+#include "Prefab.h"
+#include "ResourcePrefab.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentScript.h"
 #include "Gizmos.h"
@@ -914,6 +916,10 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 									case InspectorScriptData::DataType::BOOL: {
 										inspector->SetNumber("bool", (*(bool*)((*script)->inspector_variables[i].ptr)));
 										break; }
+									case InspectorScriptData::DataType::PREFAB: {
+										Prefab* prefab = ((Prefab*)((*script)->inspector_variables[i].ptr));
+										inspector->SetString("prefab", std::to_string(prefab->prefabID));
+										break; }
 									default:
 										break;
 									}
@@ -971,6 +977,15 @@ void ModuleObjects::ReAssignScripts(JSONArraypack* to_load)
 										break; }
 									case InspectorScriptData::DataType::BOOL: {
 										*(bool*)(*item).ptr = inspector->GetNumber("bool");
+										break; }
+									case InspectorScriptData::DataType::PREFAB: {
+										ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(std::stoull(inspector->GetString("prefab")));
+										if (prefab != nullptr) {
+											Prefab* ins_prefab = (Prefab*)(*item).ptr;
+											ins_prefab->prefabID = prefab->GetID();
+											ins_prefab->prefab_name = std::string(prefab->GetName());
+											prefab->prefab_references.push_back(ins_prefab);
+										}
 										break; }
 									default:
 										break;
