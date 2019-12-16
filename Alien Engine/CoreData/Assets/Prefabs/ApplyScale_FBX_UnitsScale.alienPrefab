@@ -1,13 +1,13 @@
 {
     "Meta": {
-        "ID": "4122864395456122693"
+        "ID": "12731863052462295319"
     },
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "ApplyScale_FBX_UnitsScale",
                 "FamilyNumber": 1,
-                "ID": "15305385126863971341",
+                "ID": "5217606080056394378",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -17,36 +17,36 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "4122864395456122693",
+                "PrefabID": "12731863052462295319",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            -6.5,
+                            2,
+                            -6
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
-                            0
+                            0.056970957666635513,
+                            0.20243771374225616,
+                            -0.041534498333930969,
+                            0.97675389051437378
                         ],
                         "Scale": [
-                            1,
-                            1,
-                            1
+                            4,
+                            2.5,
+                            4
                         ],
                         "ScaleNegative": false,
-                        "ID": "2587716672076936816"
+                        "ID": "12978744391455799357"
                     }
                 ]
             },
             {
                 "Name": "Suzanne",
                 "FamilyNumber": 2,
-                "ID": "5827678767123568865",
-                "ParentID": "15305385126863971341",
+                "ID": "14930221850668543635",
+                "ParentID": "5217606080056394378",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -55,7 +55,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "4122864395456122693",
+                "PrefabID": "12731863052462295319",
                 "Components": [
                     {
                         "Type": 0,
@@ -76,7 +76,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "2979330868994877891"
+                        "ID": "13948841772279445334"
                     },
                     {
                         "Type": 1,
@@ -86,7 +86,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "16931075773637921060",
+                        "ID": "3119738636948503690",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "3201229051213655226",
@@ -101,7 +101,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "14407549902336502117",
+                        "ID": "10629125874181117405",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -110,8 +110,8 @@
             {
                 "Name": "Cube",
                 "FamilyNumber": 3,
-                "ID": "8189821342925100218",
-                "ParentID": "5827678767123568865",
+                "ID": "304804578389262500",
+                "ParentID": "14930221850668543635",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -120,7 +120,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "4122864395456122693",
+                "PrefabID": "12731863052462295319",
                 "Components": [
                     {
                         "Type": 0,
@@ -141,7 +141,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17111187698542240728"
+                        "ID": "5611951730883002359"
                     },
                     {
                         "Type": 1,
@@ -151,7 +151,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "1601698635636358134",
+                        "ID": "12344913423639217125",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "8716579664963550950",
@@ -166,7 +166,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "6869286723783932848",
+                        "ID": "16045839217757688270",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -175,8 +175,8 @@
             {
                 "Name": "Torus",
                 "FamilyNumber": 4,
-                "ID": "17031456260015129592",
-                "ParentID": "8189821342925100218",
+                "ID": "3044299002591712372",
+                "ParentID": "304804578389262500",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -185,7 +185,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "4122864395456122693",
+                "PrefabID": "12731863052462295319",
                 "Components": [
                     {
                         "Type": 0,
@@ -206,7 +206,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "16299684428830537106"
+                        "ID": "10268076690211485843"
                     },
                     {
                         "Type": 1,
@@ -216,7 +216,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "8603561499771103953",
+                        "ID": "18243372131755688790",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "2596805542104263399",
@@ -231,7 +231,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "4772698990442358469",
+                        "ID": "13399578742096658388",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -240,8 +240,8 @@
             {
                 "Name": "Cone",
                 "FamilyNumber": 2,
-                "ID": "3875746102105368353",
-                "ParentID": "15305385126863971341",
+                "ID": "12533594488417632393",
+                "ParentID": "5217606080056394378",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -250,7 +250,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "4122864395456122693",
+                "PrefabID": "12731863052462295319",
                 "Components": [
                     {
                         "Type": 0,
@@ -271,7 +271,7 @@
                             0.38366398215293884
                         ],
                         "ScaleNegative": false,
-                        "ID": "9219201757617559110"
+                        "ID": "15062522201855861443"
                     },
                     {
                         "Type": 1,
@@ -281,7 +281,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "12278764491218323988",
+                        "ID": "12458454030621580111",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "2582855131085354222",
@@ -296,7 +296,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "16221041723455144996",
+                        "ID": "10476270398370551410",
                         "HasTexture": false,
                         "Enabled": true
                     }

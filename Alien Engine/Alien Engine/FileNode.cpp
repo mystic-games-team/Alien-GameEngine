@@ -2,10 +2,10 @@
 #include "Application.h"
 #include "ResourceModel.h"
 #include "ResourceTexture.h"
-
+#include "ResourcePrefab.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
-
+#include "Prefab.h"
 FileNode::FileNode()
 {
 }
@@ -117,11 +117,18 @@ void FileNode::ResetPaths()
 		break; }
 	case FileDropType::PREFAB: {
 		std::string path = App->file_system->GetPathWithoutExtension(this->path + name);
-		path += "_meta.alienPrefab";
+		path += ".alienPrefab";
 		u64 ID = App->resources->GetIDFromAlienPath(path.data());
-		Resource* prefab = App->resources->GetResourceWithID(ID);
+		ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
 		if (prefab != nullptr) {
 			prefab->SetAssetsPath(std::string(this->path + name).data());
+			prefab->SetName(App->file_system->GetBaseFileName(path.data()).data());
+			auto item = prefab->prefab_references.begin();
+			for (; item != prefab->prefab_references.end(); ++item) {
+				if (*item != nullptr) {
+					(*item)->prefab_name = std::string(prefab->name);
+				}
+			}
 		}
 		break; }
 
@@ -185,6 +192,21 @@ void FileNode::RemoveResourceOfGameObjects()
 				for (uint i = 0; i < model_to_delete->meshes_attached.size(); ++i) {
 					if (model_to_delete->meshes_attached[i] != nullptr) {
 						App->objects->GetRoot(true)->SearchResourceToDelete(ResourceType::RESOURCE_MESH, (Resource*)model_to_delete->meshes_attached[i]);
+					}
+				}
+			}
+			break; }
+		case FileDropType::PREFAB: {
+			std::string path_ = App->file_system->GetPathWithoutExtension(path + name);
+			path_ += ".alienPrefab";
+			u64 ID = App->resources->GetIDFromAlienPath(path_.data());
+			ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
+			if (prefab != nullptr) {
+				auto item = prefab->prefab_references.begin();
+				for (; item != prefab->prefab_references.end(); ++item) {
+					if (*item != nullptr) {
+						(*item)->prefabID = 0;
+						(*item)->prefab_name.clear();
 					}
 				}
 			}

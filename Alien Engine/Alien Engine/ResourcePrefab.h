@@ -3,13 +3,16 @@
 #include "Resource_.h"
 #include <vector>
 #include "MathGeoLib/include/Math/float3.h"
+#include <list>
 
+class Prefab;
 class ResourceMesh;
 class GameObject;
 
 
 class ResourcePrefab : public Resource {
-
+	friend class ComponentScript;
+	friend class FileNode;
 public:
 
 	ResourcePrefab();
@@ -25,4 +28,7 @@ public:
 	// create GameObjects
 	void ConvertToGameObjects(GameObject* parent, int list_num = -1, float3 pos = { 0,0,0 }, bool set_selected = true);
 
+private:
+
+	std::list<Prefab*> prefab_references;
 };

@@ -145,8 +145,15 @@ bool ComponentScript::DrawInspector()
 								if (ID != 0) {
 									ResourcePrefab* prefab_ = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
 									if (prefab_ != nullptr) {
+										if (ptr->prefabID != 0) {
+											ResourcePrefab* last_prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ptr->prefabID);
+											if (last_prefab != nullptr) {
+												last_prefab->prefab_references.remove(ptr);
+											}
+										}
 										ptr->prefabID = ID;
 										ptr->prefab_name = std::string(prefab_->GetName());
+										prefab_->prefab_references.push_back(ptr);
 									}
 								}
 							}

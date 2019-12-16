@@ -11,6 +11,7 @@ ResourcePrefab::ResourcePrefab()
 
 ResourcePrefab::~ResourcePrefab()
 {
+	prefab_references.clear();
 }
 
 bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder)
