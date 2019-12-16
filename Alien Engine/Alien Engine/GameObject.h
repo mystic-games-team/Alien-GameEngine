@@ -82,7 +82,7 @@ public:
 		Function to create prefab or someting xd
 
 	*/
-
+	//TODO: find child
 	void SetEnable(bool enable);
 	bool IsEnabled();
 

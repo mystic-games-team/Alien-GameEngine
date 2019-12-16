@@ -65,8 +65,6 @@ void GameObject::DrawScene()
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-	ComponentCamera* camera = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
-	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
 
 	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
 	{
@@ -135,13 +133,13 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 	}
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
-	if (camera_ != nullptr && camera_->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) 
+	if (camera_ != nullptr && camera_->IsEnabled() && App->objects->GetSelectedObject() == this) 
 	{
-		if (App->objects->printing_scene)
+		if (App->objects->printing_scene && App->objects->draw_frustum)
 			camera_->DrawFrustum();
 		camera_->frustum.pos = transform->GetGlobalPosition();
-		camera_->frustum.front = transform->GetLocalRotation().WorldZ();
-		camera_->frustum.up = transform->GetLocalRotation().WorldY();
+		camera_->frustum.front = transform->GetGlobalRotation().WorldZ();
+		camera_->frustum.up = transform->GetGlobalRotation().WorldY();
 	}
 
 	if (App->objects->printing_scene)
