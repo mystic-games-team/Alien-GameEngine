@@ -1,0 +1,74 @@
+{
+    "Meta": {
+        "ID": "14808871187139106662"
+    },
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "TankChassis0",
+                "FamilyNumber": 1,
+                "ID": "2314338787248236312",
+                "ParentID": "7421101624910036629",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14808871187139106662",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "814046641703668023"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "2692620888840309214",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "8498174806641014391",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.087515890598297119,
+                            0.48627454042434692,
+                            0.085813149809837341,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "998360403998050401",
+                        "HasTexture": false,
+                        "Enabled": true
+                    }
+                ]
+            }
+        ]
+    }
+}

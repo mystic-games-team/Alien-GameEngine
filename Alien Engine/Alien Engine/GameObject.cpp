@@ -114,7 +114,7 @@ void GameObject::DrawGame()
 	}
 }
 
-void GameObject::SetDrawList(std::map<float, GameObject*>* to_draw, const ComponentCamera* camera)
+void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
 {
 	if (!is_static) {
 		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
@@ -123,7 +123,7 @@ void GameObject::SetDrawList(std::map<float, GameObject*>* to_draw, const Compon
 			if (App->renderer3D->IsInsideFrustum(camera, mesh->GetGlobalAABB())) {
 				float3 obj_pos = static_cast<ComponentTransform*>(GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
 				float distance = camera->frustum.pos.Distance(obj_pos);
-				to_draw->emplace(distance, this);
+				to_draw->push_back({ distance, this });
 			}
 		}
 	}

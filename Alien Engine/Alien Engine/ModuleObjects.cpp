@@ -11,6 +11,8 @@
 #include "ComponentLight.h"
 #include "ReturnZ.h"
 #include "Time.h"
+#include "Prefab.h"
+#include "ResourcePrefab.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentScript.h"
 #include "Gizmos.h"
@@ -183,7 +185,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			octree.Draw();
 
 		if (base_game_object->HasChildren()) {
-			std::map<float, GameObject*> to_draw;
+			std::vector<std::pair<float, GameObject*>> to_draw;
 
 			ComponentCamera* frustum_camera = nullptr;
 
@@ -210,8 +212,9 @@ update_status ModuleObjects::PostUpdate(float dt)
 				static GLfloat f[4] = { 1,1,1,1 };
 				glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, f);
 			}
-			std::map<float, GameObject*>::reverse_iterator it = to_draw.rbegin();
-			for (; it != to_draw.rend(); ++it) {
+			std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+			for (; it != to_draw.end(); ++it) {
 				if ((*it).second != nullptr) {
 					(*it).second->DrawScene();
 				}
@@ -238,7 +241,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			App->renderer3D->RenderGrid();
 
 		if (base_game_object->HasChildren()) {
-			std::map<float, GameObject*> to_draw;
+			std::vector<std::pair<float, GameObject*>> to_draw;
 
 			octree.SetStaticDrawList(&to_draw, App->renderer3D->actual_game_camera);
 
@@ -249,8 +252,9 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 
-			std::map<float, GameObject*>::reverse_iterator it = to_draw.rbegin();
-			for (; it != to_draw.rend(); ++it) {
+			std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+			for (; it != to_draw.end(); ++it) {
 				if ((*it).second != nullptr) {
 					(*it).second->DrawGame();
 				}
@@ -278,7 +282,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			App->renderer3D->RenderGrid();
 
 		if (base_game_object->HasChildren()) {
-			std::map<float, GameObject*> to_draw;
+			std::vector<std::pair<float, GameObject*>> to_draw;
 
 			octree.SetStaticDrawList(&to_draw, App->renderer3D->selected_game_camera);
 
@@ -289,8 +293,9 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 
-			std::map<float, GameObject*>::reverse_iterator it = to_draw.rbegin();
-			for (; it != to_draw.rend(); ++it) {
+			std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+			for (; it != to_draw.end(); ++it) {
 				if ((*it).second != nullptr) {
 					(*it).second->DrawGame();
 				}
@@ -872,6 +877,11 @@ void ModuleObjects::HotReload()
 	}
 }
 
+bool ModuleObjects::SortGameObjectToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last)
+{
+	return first.first < last.first;
+}
+
 void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 {
 	if (obj->HasChildren()) {
@@ -913,6 +923,10 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 										break; }
 									case InspectorScriptData::DataType::BOOL: {
 										inspector->SetNumber("bool", (*(bool*)((*script)->inspector_variables[i].ptr)));
+										break; }
+									case InspectorScriptData::DataType::PREFAB: {
+										Prefab* prefab = ((Prefab*)((*script)->inspector_variables[i].ptr));
+										inspector->SetString("prefab", std::to_string(prefab->prefabID));
 										break; }
 									default:
 										break;
@@ -971,6 +985,15 @@ void ModuleObjects::ReAssignScripts(JSONArraypack* to_load)
 										break; }
 									case InspectorScriptData::DataType::BOOL: {
 										*(bool*)(*item).ptr = inspector->GetNumber("bool");
+										break; }
+									case InspectorScriptData::DataType::PREFAB: {
+										ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(std::stoull(inspector->GetString("prefab")));
+										if (prefab != nullptr) {
+											Prefab* ins_prefab = (Prefab*)(*item).ptr;
+											ins_prefab->prefabID = prefab->GetID();
+											ins_prefab->prefab_name = std::string(prefab->GetName());
+											prefab->prefab_references.push_back(ins_prefab);
+										}
 										break; }
 									default:
 										break;

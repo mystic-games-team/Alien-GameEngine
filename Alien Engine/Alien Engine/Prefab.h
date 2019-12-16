@@ -9,6 +9,7 @@ class GameObject;
 class __declspec(dllexport) Prefab {
 	friend class ComponentScript;
 	friend class FileNode;
+	friend class ModuleObjects;
 public:
 
 	Prefab();
