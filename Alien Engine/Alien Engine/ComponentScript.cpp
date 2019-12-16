@@ -5,6 +5,9 @@
 #include "ComponentTransform.h"
 #include "ResourceScript.h"
 #include "Alien.h"
+#include "FileNode.h"
+#include "ResourcePrefab.h"
+#include "Prefab.h"
 
 ComponentScript::ComponentScript(GameObject* attach) : Component(attach)
 {
@@ -126,6 +129,32 @@ bool ComponentScript::DrawInspector()
 					default:
 						break;
 					}
+					break; }
+				case InspectorScriptData::DataType::PREFAB: {
+					ImGui::PushID(inspector_variables[i].ptr);
+					Prefab* ptr = (Prefab*)inspector_variables[i].ptr;
+					ImGui::InputText(inspector_variables[i].variable_name.data(), (ptr->prefab_name.empty()) ? "Prefab: NULL" : ptr->prefab_name.data(), NULL, ImGuiInputTextFlags_ReadOnly);
+					if (ImGui::BeginDragDropTarget()) {
+						const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+						if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+							FileNode* node = *(FileNode**)payload->Data;
+							if (node != nullptr && node->type == FileDropType::PREFAB) {
+								std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+								path += ".alienPrefab";
+								u64 ID = App->resources->GetIDFromAlienPath(path.data());
+								if (ID != 0) {
+									ResourcePrefab* prefab_ = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
+									if (prefab_ != nullptr) {
+										ptr->prefabID = ID;
+										ptr->prefab_name = std::string(prefab_->GetName());
+									}
+								}
+							}
+						}
+						ImGui::EndDragDropTarget();
+					}
+
+					ImGui::PopID();
 					break; }
 				default:
 					break;
@@ -325,6 +354,25 @@ void ComponentScript::InspectorBool(bool* ptr, const char* ptr_name)
 	ComponentScript* script = App->objects->actual_script_loading;
 	if (script != nullptr) {
 		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::BOOL, ptr, InspectorScriptData::CHECKBOX));
+	}
+}
+
+void ComponentScript::InspectorPrefab(Prefab* ptr, const char* ptr_name)
+{
+	if (ptr != nullptr) {
+		std::string name = typeid(*ptr).name();
+		if (!App->StringCmp(name.data(), "class Prefab"))
+			return;
+
+		std::string variable_name = GetVariableName(ptr_name);
+
+		ComponentScript* script = App->objects->actual_script_loading;
+		if (script != nullptr) {
+			script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::PREFAB, (void*)ptr, InspectorScriptData::NONE));
+		}
+	}
+	else {
+		LOG("Prefab variable must not be a pointer!!");
 	}
 }
 

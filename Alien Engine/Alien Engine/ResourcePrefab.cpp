@@ -52,6 +52,7 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder)
 		ID = App->resources->GetRandomID();
 		prefab_scene->SetString("Meta.ID", std::to_string(ID));
 
+		SetName(App->file_system->GetBaseFileName(path.data()).data());
 
 		// save prefab in library
 		meta_data_path = path;
@@ -85,6 +86,7 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 
 	if (ID != 0) {
 		meta_data_path = path;
+		SetName(App->file_system->GetBaseFileName(path.data()).data());
 		App->resources->AddResource(this);
 	}
 

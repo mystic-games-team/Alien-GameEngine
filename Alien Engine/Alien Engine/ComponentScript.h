@@ -4,9 +4,11 @@
 #include <vector>
 #include <string>
 
+class Prefab;
+
 struct __declspec(dllexport) InspectorScriptData {
 	friend class ComponentScript;
-	enum DataType { 
+	enum DataType {
 		INT, // DONE
 		INT2,
 		INT3,
@@ -14,10 +16,12 @@ struct __declspec(dllexport) InspectorScriptData {
 		FLOAT2,
 		FLOAT3,
 		STRING,
-		BOOL,
+		BOOL, // DONE
+		PREFAB,
 	};
 
 	enum ShowMode {
+		NONE,
 		INPUT_INT,
 		DRAGABLE_INT,
 		SLIDER_INT,
@@ -79,6 +83,8 @@ public:
 	static void InspectorSliderFloat(float* ptr, const char* ptr_name, const float& min_value, const float& max_value);
 	/*--------------------BOOL-----------------------*/
 	static void InspectorBool(bool* ptr, const char* ptr_name);
+	/*--------------------PREFAB-----------------------*/
+	static void InspectorPrefab(Prefab* ptr, const char* ptr_name);
 
 private:
 

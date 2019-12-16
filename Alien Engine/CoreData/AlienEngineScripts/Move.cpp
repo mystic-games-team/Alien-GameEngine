@@ -12,7 +12,7 @@ Move::~Move()
 
 void Move::Start()
 {
-
+	bullet.ConvertToGameObject(transform->GetGlobalPosition());
 }
 
 void Move::Update()

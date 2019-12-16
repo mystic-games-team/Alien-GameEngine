@@ -282,6 +282,7 @@
     <ClInclude Include="PCG\pcg_extras.hpp" />
     <ClInclude Include="PCG\pcg_random.hpp" />
     <ClInclude Include="PCG\pcg_uint128.hpp" />
+    <ClInclude Include="Prefab.h" />
     <ClInclude Include="RandomHelper.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceMesh.h" />
@@ -389,6 +390,7 @@
     <ClCompile Include="PanelSceneSelector.cpp" />
     <ClCompile Include="PanelTextEditor.cpp" />
     <ClCompile Include="Parson\parson.c" />
+    <ClCompile Include="Prefab.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="ResourceModel.cpp" />
     <ClCompile Include="ResourcePrefab.cpp" />

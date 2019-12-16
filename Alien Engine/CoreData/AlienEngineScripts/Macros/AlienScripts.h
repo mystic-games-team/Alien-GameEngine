@@ -25,6 +25,7 @@
 #include "..\..\..\Alien Engine\Camera.h"
 #include "..\..\..\Alien Engine\Gizmos.h"
 #include "..\..\..\Alien Engine\Color.h"
+#include "..\..\..\Alien Engine\Prefab.h"
 /*-----------------HELPERS-------------------*/
 
 #ifdef ALIENENGINESCRIPTS_EXPORTS
@@ -51,5 +52,7 @@
 #define SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(FLOAT_, MIN_, MAX_) ComponentScript::InspectorSliderFloat(&FLOAT_, #FLOAT_, MIN_, MAX_)
 /*--------------------bool--------------------*/
 #define SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(BOOL_) ComponentScript::InspectorBool(&BOOL_, #BOOL_)
+/*--------------------prefab--------------------*/
+#define SHOW_IN_INSPECTOR_AS_PREFAB(PREFAB_) ComponentScript::InspectorPrefab(&PREFAB_, #PREFAB_)
 // ------------INSPECTOR MACROS----------------\\
 

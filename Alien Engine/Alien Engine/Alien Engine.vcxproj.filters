@@ -522,6 +522,9 @@
     <ClInclude Include="Color.h">
       <Filter>ScriptHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="Prefab.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -831,6 +834,9 @@
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab.cpp">
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
   </ItemGroup>
