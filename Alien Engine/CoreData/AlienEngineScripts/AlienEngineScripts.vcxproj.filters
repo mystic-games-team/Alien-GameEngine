@@ -51,6 +51,9 @@
     <ClInclude Include="c.h">
       <Filter>Archivos de recursos</Filter>
     </ClInclude>
+    <ClInclude Include="Tank.h">
+      <Filter>Archivos de recursos</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Move.cpp">
@@ -88,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="c.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Tank.cpp">
+      <Filter>Archivos de recursos</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

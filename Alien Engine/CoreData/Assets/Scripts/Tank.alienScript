@@ -1,12 +1,12 @@
 {
     "Meta": {
-        "ID": "11163672839764118823",
-        "LastMod": 1576509871
+        "ID": "6911904684565242698",
+        "LastMod": 1576513857
     },
     "HasData": true,
     "DataStructure": [
         {
-            "DataName": "MyClassTest",
+            "DataName": "Tank",
             "UsesAlien": true
         }
     ]

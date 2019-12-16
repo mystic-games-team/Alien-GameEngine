@@ -1,0 +1,81 @@
+{
+    "Meta": {
+        "ID": "14164669321804297102"
+    },
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "Sphere",
+                "FamilyNumber": 1,
+                "ID": "12397650003870674841",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14164669321804297102",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16142192634007010243"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "17136356026395212518",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 1,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.28837251663208008,
+                            0.48039215803146362,
+                            0.23784121870994568,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "2476324148957462040",
+                        "HasTexture": false,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 5,
+                        "ID": "9764550723634646050",
+                        "ResourceID": "6911904684565242698",
+                        "DataName": "Tank",
+                        "HasInspector": false
+                    }
+                ]
+            }
+        ]
+    }
+}
