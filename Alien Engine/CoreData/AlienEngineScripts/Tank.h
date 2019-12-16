@@ -16,11 +16,17 @@ public:
 
 	void Start();
 	void Update();
+
+public:
+
 	Prefab bullet;
+	GameObject* wheels = nullptr;
+	ComponentTransform* wheels_transform = nullptr;
 };
 
 ALIEN_INIT_DATA Tank* CreateTank() {
 	Tank* tank = new Tank();
+	SHOW_IN_INSPECTOR_AS_PREFAB(tank->bullet);
 	return tank;
 }
 ALIEN_DESTROY_DATA void DestroyTank(Tank* tank) { delete tank; }
