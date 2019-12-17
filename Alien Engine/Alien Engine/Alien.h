@@ -38,7 +38,8 @@ public:
 	void* GetComponentScriptInParent(const char* script_class_name);
 	Component* GetComponentInChildren(const ComponentType& type, bool recursive);
 
-	void Destroy(GameObject* obj);
+	static void Destroy(GameObject* obj);
+	static void DestroyInstantly(GameObject* obj);
 
 	bool CompareTag(const char* tag_to_compare);
 

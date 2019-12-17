@@ -14,6 +14,8 @@ Move::~Move()
 void Move::Start()
 {
 	bullet.ConvertToGameObject(transform->GetGlobalPosition());
+
+	time = Time::GetGameTime();
 }
 
 void Move::Update()
@@ -74,6 +76,10 @@ void Move::Update()
 	tank = (Tank*)game_object->GetComponentScript(VARAIBLE_TO_STRING(Tank));
 	tank2 = (Tank*)game_object->GetComponentScript("Tank");
 	
+	if (time < Time::GetGameTime() - 2) {
+		game_object->SetNewParent(GameObject::FindWithName("Light"));
+		SetScriptEnable(false);
+	}
 }
 
 void Move::OnDrawGizmos()

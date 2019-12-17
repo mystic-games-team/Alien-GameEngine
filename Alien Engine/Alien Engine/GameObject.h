@@ -35,6 +35,7 @@ class __declspec(dllexport) GameObject
 	friend class PanelHierarchy;
 	friend class PanelScene;
 	friend class ModuleRenderer3D;
+	friend class PanelCreateObject;
 	friend class PanelInspector;
 	friend class ResourceModel;
 	friend class ResourceMesh;
@@ -50,6 +51,7 @@ public:
 public:
 
 	static void Destroy(GameObject* object);
+	static void DestroyInstantly(GameObject* object);
 	static GameObject* FindWithName(const char* name);
 	static GameObject* FindWithTag(const char* tag_to_find);
 	// return the sie of the array of gameobjects found, pass a GameObject** nullptr with &. Remember to delete it!!!
@@ -83,9 +85,11 @@ public:
 	void SetEnable(bool enable);
 	bool IsEnabled();
 
+	// parent
+	void SetNewParent(GameObject* new_parent);
+
 	// components
 	bool HasComponent(ComponentType component);
-	void AddComponent(Component* component);
 	Component* GetComponent(const ComponentType& type);
 	void* GetComponentScript(const char* script_class_name);
 	Component* GetComponentInParent(const ComponentType& type);
@@ -93,7 +97,6 @@ public:
 	Component* GetComponentInChildren(const ComponentType& type, bool recursive);
 
 	// children
-	void AddChild(GameObject* child);
 	bool HasChildren();
 
 	// GameObject name
@@ -120,14 +123,14 @@ private:
 
 	Component* GetComponentWithID(const u64& ID);
 	void RemoveComponent(Component* component);
+	void AddComponent(Component* component);
 
 	template <class Comp>
 	Comp* GetComponent();
 	template <class Comp>
 	std::vector<Comp*> GetComponents();
 
-	// parent
-	void SetNewParent(GameObject* new_parent);
+	void AddChild(GameObject* child);
 
 	// selected object
 	bool IsSelected();

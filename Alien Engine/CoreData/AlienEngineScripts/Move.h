@@ -24,6 +24,8 @@ public:
 	float slider_float_test = 10.5F;
 	bool jump = false;
 	Prefab bullet;
+
+	float time = 0;
 };
 
 ALIEN_FACTORY Move* CreateMove() {

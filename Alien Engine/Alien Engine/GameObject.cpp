@@ -485,7 +485,9 @@ void GameObject::SetNewParent(GameObject* new_parent)
 		else {
 			transform->Reparent(transform->global_transformation);
 		}
-
+	}
+	else {
+		LOG("NewParent was nullptr or NewParent was a child :O");
 	}
 }
 
@@ -521,6 +523,20 @@ bool GameObject::IsParentEnabled()
 void GameObject::Destroy(GameObject* object)
 {
 	object->ToDelete();
+}
+
+void GameObject::DestroyInstantly(GameObject* object)
+{
+	if (object->parent != nullptr) {
+		auto item = object->parent->children.begin();
+		for (; item != object->parent->children.end(); ++item) {
+			if (*item == object) {
+				object->parent->children.erase(item);
+				break;
+			}
+		}
+	}
+	delete object;
 }
 
 GameObject* GameObject::FindWithName(const char* name)

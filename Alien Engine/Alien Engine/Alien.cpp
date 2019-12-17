@@ -67,6 +67,11 @@ void Alien::Destroy(GameObject* obj)
 	GameObject::Destroy(obj);
 }
 
+void Alien::DestroyInstantly(GameObject* obj)
+{
+	GameObject::DestroyInstantly(obj);
+}
+
 bool Alien::CompareTag(const char* tag_to_compare)
 {
 	return strcmp(game_object->GetTag(), tag_to_compare) == 0;
