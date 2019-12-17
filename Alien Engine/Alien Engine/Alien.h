@@ -40,6 +40,8 @@ public:
 
 	void Destroy(GameObject* obj);
 
+	bool CompareTag(const char* tag_to_compare);
+
 	// Need
 	// TODO:
 	/*
@@ -78,8 +80,6 @@ public:
 		OnBecameInvisible();
 		OnBecameVisible();
 
-		OnDestroy();
-
 		OnGUI();
 
 		OnMouseDown();
@@ -93,8 +93,6 @@ public:
 		OnRenderObject(); // when all cameras finished rendering
 		OnPreCull();
 		OnPreRender();
-		
-		CompareTag();
 	*/
 
 public:
