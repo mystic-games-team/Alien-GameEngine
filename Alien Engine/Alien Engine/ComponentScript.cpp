@@ -278,6 +278,22 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 	}
 }
 
+void ComponentScript::OnDisable()
+{
+	if (need_alien && data_ptr != nullptr) {
+		Alien* alien = (Alien*)data_ptr;
+		alien->OnDisable();
+	}
+}
+
+void ComponentScript::OnEnable()
+{
+	if (need_alien && data_ptr != nullptr) {
+		Alien* alien = (Alien*)data_ptr;
+		alien->OnEnable();
+	}
+}
+
 void ComponentScript::InspectorInputInt(int* ptr, const char* ptr_name)
 {
 	std::string name = typeid(*ptr).name();

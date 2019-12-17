@@ -148,7 +148,15 @@ GameObject* GameObject::GetChildRecursive(const char* child_name)
 
 void GameObject::SetEnable(bool enable)
 {
-	enabled = enable;
+	if (enable != enabled) {
+		enabled = enable;
+		if (enable) {
+			OnEnable();
+		}
+		else {
+			OnDisable();
+		}
+	}
 }
 
 bool GameObject::IsEnabled()

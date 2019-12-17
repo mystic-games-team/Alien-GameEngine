@@ -73,6 +73,9 @@ void Move::Update()
 	Tank* tank2 = nullptr;
 	tank = (Tank*)game_object->GetComponentScript(VARAIBLE_TO_STRING(Tank));
 	tank2 = (Tank*)game_object->GetComponentScript("Tank");
+
+	Debug::Log("IM ENABLED");
+	game_object->SetEnable(false);
 	
 }
 

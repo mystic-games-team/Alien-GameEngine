@@ -15,5 +15,13 @@ bool Alien::IsScriptEnabled() const
 
 void Alien::SetScriptEnable(const bool& enable)
 {
-	*enabled = enable;
+	if (enable != *enabled) {
+		*enabled = enable;
+		if (enable) {
+			OnEnable();
+		}
+		else {
+			OnDisable();
+		}
+	}
 }

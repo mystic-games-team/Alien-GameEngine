@@ -16,8 +16,8 @@ public:
 	virtual void Update() {}
 	virtual void PostUpdate() {}
 
-	virtual void OnDisable() {} // TODO
-	virtual void OnEnable() {} // TODO
+	virtual void OnDisable() {} 
+	virtual void OnEnable() {} 
 
 	virtual void OnDrawGizmos() {}
 	virtual void OnDrawGizmosSelected() {}

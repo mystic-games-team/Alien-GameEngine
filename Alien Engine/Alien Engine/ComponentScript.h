@@ -17,7 +17,7 @@ struct __declspec(dllexport) InspectorScriptData {
 		FLOAT3,
 		STRING,
 		BOOL, // DONE
-		PREFAB,
+		PREFAB, // DONE
 	};
 
 	enum ShowMode {
@@ -68,6 +68,9 @@ private:
 
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
+
+	void OnDisable();
+	void OnEnable();
 
 	void LoadData(const char* name, bool is_alien);
 
