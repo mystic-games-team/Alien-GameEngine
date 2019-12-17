@@ -57,6 +57,12 @@ private:
 
 	void SetGlobalTransformation(const float4x4& global_transformation);
 
+public:
+
+	float3 forward = { 0,0,0 };
+	float3 up = { 0,0,0 };
+	float3 left = { 0,0,0 };
+
 private:
 
 	float4x4 global_transformation = float4x4::identity;
@@ -64,8 +70,6 @@ private:
 	
 	// to know if flip poly or not
 	bool is_scale_negative = false;
-private:
-
 	// position
 	float3 local_position = { 0,0,0 };
 	// sacale

@@ -19,9 +19,9 @@ void Tank::Update()
 {
 	float3 movement_vector = { 0, 0, 0 };
 
-	if (Input::GetKeyRepeat(SDL_SCANCODE_W))
+	/*if (Input::GetKeyRepeat(SDL_SCANCODE_W))
 	{
-		movement_vector += (float3(4, 0, 0)*Time::GetDT());
+		movement_vector += (float3(4, 0, 0)*Time::GetDT()) ;
 	}
 
 	if (Input::GetKeyRepeat(SDL_SCANCODE_S))
@@ -37,6 +37,10 @@ void Tank::Update()
 	if (Input::GetKeyRepeat(SDL_SCANCODE_D))
 	{
 		movement_vector += (float3(0, 0, 4) * Time::GetDT());
+	}*/
+
+	if (Input::GetKeyRepeat(SDL_SCANCODE_W)) {
+		movement_vector += transform->left.Mul(4 * Time::GetDT());
 	}
 
 	transform->SetLocalPosition(transform->GetGlobalPosition() + movement_vector);

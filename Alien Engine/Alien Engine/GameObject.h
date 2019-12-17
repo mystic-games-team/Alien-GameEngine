@@ -107,6 +107,10 @@ public:
 	// GameObject tag
 	void SetTag(const char* tag);
 	const char* GetTag();
+
+	// delete it at the begining of the next frame
+	void ToDelete(); 
+
 private:
 	// OnEnable/Disable
 	void OnEnable();
@@ -149,7 +153,6 @@ private:
 	void ChangeOBB(const bool& OBB_view);
 
 	// deleting 
-	void ToDelete(); // delete it at the begining of the next frame
 	void SearchToDelete();
 
 	// search and return true if exists in its children or children of children bla bla
