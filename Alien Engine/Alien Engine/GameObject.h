@@ -10,7 +10,7 @@
 
 enum class ResourceType;
 class Resource;
-
+class Prefab;
 class ComponentCamera;
 
 class __declspec(dllexport) GameObject
@@ -27,6 +27,7 @@ class __declspec(dllexport) GameObject
 	friend class ReturnZ;
 	friend class CompZ;
 	friend class ModuleCamera3D;
+	friend class Prefab;
 	friend class Octree;
 	friend class OctreeNode;
 	friend class FileNode;
@@ -53,35 +54,26 @@ public:
 	static GameObject* FindWithTag(const char* tag_to_find);
 	// return the sie of the array of gameobjects found, pass a GameObject** nullptr with &. Remember to delete it!!!
 	static uint FindGameObjectsWithTag(const char* tag_to_find, GameObject*** objects);
+
+	// parent = nullptr is root
+	static GameObject* Instantiate(const Prefab& prefab, const float3& position, GameObject* parent = nullptr);
+
 	// TODO: 
-	// static GameObject* Instantiate();
+	// static GameObject* Clone(pos, parent...); // with clone of a gameobject
 
-	// TODO: change static, is static... 
+	// TODO: change static, is static... cant move in code if is static!!
 
-		// TODO:
+	// TODO:
 	/*
-		GetComponent();
-		GetComponentInChildren();
-		GetComponentInParent();
 		GetComponents();
 		GetComponentsInChildren();
 		GetComponentsInParent();
-		TryGetComponent();
 
-		AddComponent(); ???????????????
-
-		GetInstanceID();
-
-		ToString(); // returns gameobject name
-
-		Destroy();
-		DestroyComponent();
 		Destroyimmediate();
 		DontDestroyOnLoad();
-
-		Function to create prefab or someting xd
-
 	*/
+
+
 
 	GameObject* GetChild(const char* child_name);
 	GameObject* GetChild(const int& index);
@@ -95,6 +87,10 @@ public:
 	bool HasComponent(ComponentType component);
 	void AddComponent(Component* component);
 	Component* GetComponent(const ComponentType& type);
+	void* GetComponentScript(const char* script_class_name);
+	Component* GetComponentInParent(const ComponentType& type);
+	void* GetComponentScriptInParent(const char* script_class_name);
+	Component* GetComponentInChildren(const ComponentType& type, bool recursive);
 
 	// children
 	void AddChild(GameObject* child);
@@ -103,6 +99,7 @@ public:
 	// GameObject name
 	void SetName(const char* name);
 	const char* GetName();
+	const char* ToString();
 
 	// GameObject tag
 	void SetTag(const char* tag);

@@ -52,3 +52,5 @@
 #define SHOW_IN_INSPECTOR_AS_PREFAB(PREFAB_) ComponentScript::InspectorPrefab(&PREFAB_, #PREFAB_)
 // ------------INSPECTOR MACROS----------------\\
 
+#define VARAIBLE_TO_STRING(VAR_) #VAR_
+

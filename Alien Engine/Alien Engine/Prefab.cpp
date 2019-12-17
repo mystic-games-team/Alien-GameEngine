@@ -3,7 +3,6 @@
 #include "ModuleResources.h"
 #include "ResourcePrefab.h"
 
-
 Prefab::Prefab()
 {
 }
@@ -30,4 +29,5 @@ GameObject* Prefab::ConvertToGameObject(float3 local_position, GameObject* paren
 		return nullptr;
 	}
 	prefab->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, local_position, false);
+	return (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
 }

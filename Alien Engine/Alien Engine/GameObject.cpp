@@ -10,6 +10,8 @@
 #include "ModuleObjects.h"
 #include "ComponentCamera.h"
 #include "ComponentScript.h"
+#include "Prefab.h"
+#include "ResourcePrefab.h"
 #include "ReturnZ.h"
 
 GameObject::GameObject(GameObject* parent)
@@ -48,6 +50,68 @@ GameObject::~GameObject()
 			*child = nullptr;
 		}
 	}
+}
+
+void* GameObject::GetComponentScript(const char* script_class_name)
+{
+	auto item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ComponentType::SCRIPT) {
+			ComponentScript* script = (ComponentScript*)*item;
+			if (App->StringCmp(script->data_name.data(), script_class_name)) {
+				return script->data_ptr;
+			}
+		}
+	}
+	return nullptr;
+}
+
+Component* GameObject::GetComponentInChildren(const ComponentType& type, bool recursive)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			auto item2 = (*item)->components.begin();
+			for (; item2 != (*item)->components.end(); ++item2) {
+				if (*item2 != nullptr && (*item2)->GetType() == type) {
+					return *item2;
+				}
+				if (recursive) {
+					(*item)->GetComponentInChildren(type, true);
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+void* GameObject::GetComponentScriptInParent(const char* script_class_name)
+{
+	if (parent != nullptr && parent->parent != nullptr) { // parent->parent != nullptr to test is not root :)
+		auto item = parent->components.begin();
+		for (; item != parent->components.end(); ++item) {
+			if (*item != nullptr && (*item)->GetType() == ComponentType::SCRIPT) {
+				ComponentScript* script = (ComponentScript*)*item;
+				if (App->StringCmp(script->data_name.data(), script_class_name)) {
+					return script->data_ptr;
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+Component* GameObject::GetComponentInParent(const ComponentType& type)
+{
+	if (parent != nullptr && parent->parent != nullptr) { // parent->parent != nullptr to test is not root :)
+		std::vector<Component*>::iterator item = parent->components.begin();
+		for (; item != parent->components.end(); ++item) {
+			if (*item != nullptr && (*item)->GetType() == type) {
+				return *item;
+			}
+		}
+	}
+	return nullptr;
 }
 
 GameObject* GameObject::GetChild(const char* child_name)
@@ -231,6 +295,11 @@ void GameObject::SetName(const char* name)
 }
 
 const char* GameObject::GetName()
+{
+	return name;
+}
+
+const char* GameObject::ToString()
 {
 	return name;
 }
@@ -469,6 +538,21 @@ uint GameObject::FindGameObjectsWithTag(const char* tag_to_find, GameObject*** o
 	}
 
 	return found.size();
+}
+
+GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position, GameObject* parent)
+{
+	if (prefab.prefabID != 0) {
+		ResourcePrefab* r_prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab.prefabID);
+		if (r_prefab != nullptr && App->StringCmp(prefab.prefab_name.data(), r_prefab->GetName())) {
+			r_prefab->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, false);
+			return (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
+		}
+		else {
+			return nullptr;
+		}
+	}
+	return nullptr;
 }
 
 void GameObject::OnEnable()

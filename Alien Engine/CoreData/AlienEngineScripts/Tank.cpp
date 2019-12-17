@@ -12,11 +12,16 @@ Tank::~Tank()
 void Tank::Start()
 {
 	wheels = GameObject::FindWithName("Lower_Tank");
-	wheels_transform = (ComponentTransform*)wheels->GetComponent(ComponentType::TRANSFORM);
+	if (wheels != nullptr) {
+		wheels_transform = (ComponentTransform*)wheels->GetComponent(ComponentType::TRANSFORM);
+	}
 }
 
 void Tank::Update()
 {
+	if (wheels == nullptr) {
+		return;
+	}
 	float3 movement_vector = { 0, 0, 0 };
 
 	/*if (Input::GetKeyRepeat(SDL_SCANCODE_W))
