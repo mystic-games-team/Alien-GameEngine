@@ -2,6 +2,8 @@
 
 class ComponentTransform;
 class GameObject;
+enum class ComponentType;
+class Component;
 
 class __declspec(dllexport) Alien {
 	friend class ComponentScript;
@@ -27,39 +29,37 @@ public:
 	bool IsScriptEnabled() const;
 	void SetScriptEnable(const bool& enable);
 
+	const char* ToString();
+
+	bool HasComponent(const ComponentType& component);
+	Component* GetComponent(const ComponentType& type);
+	void* GetComponentScript(const char* script_class_name);
+	Component* GetComponentInParent(const ComponentType& type);
+	void* GetComponentScriptInParent(const char* script_class_name);
+	Component* GetComponentInChildren(const ComponentType& type, bool recursive);
+
+	void Destroy(GameObject* obj);
+
 	// Need
 	// TODO:
 	/*
-		GetComponent();
-		GetComponentInChildren();
-		GetComponentInParent();
+		static GameObject* Clone(pos, parent...); // with clone of a gameobject
+
+		change static, is static... cant move in code if is static!!
+
 		GetComponents();
 		GetComponentsInChildren();
 		GetComponentsInParent();
-		TryGetComponent();
-		
-		AddComponent(); ???????????????
 
-		GetInstanceID();
-
-		ToString(); // returns gameobject name
-
-		Destroy();
-		Destroyimmediate();
 		DestroyComponent();
+		Destroyimmediate();
 		DontDestroyOnLoad();
-
-		Function to create prefab or someting xd
-		
 	*/
 
 
 	// Extras
 	// TODO: https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
 	/*
-		
-		OnValidate(); ??
-
 		SendMessage();
 		SendMessageUpWards
 

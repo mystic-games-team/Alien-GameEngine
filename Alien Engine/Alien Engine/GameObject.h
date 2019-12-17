@@ -58,17 +58,17 @@ public:
 	// parent = nullptr is root
 	static GameObject* Instantiate(const Prefab& prefab, const float3& position, GameObject* parent = nullptr);
 
-	// TODO: 
-	// static GameObject* Clone(pos, parent...); // with clone of a gameobject
-
-	// TODO: change static, is static... cant move in code if is static!!
-
 	// TODO:
 	/*
+		static GameObject* Clone(pos, parent...); // with clone of a gameobject
+
+		change static, is static... cant move in code if is static!!
+
 		GetComponents();
 		GetComponentsInChildren();
 		GetComponentsInParent();
 
+		DestroyComponent();
 		Destroyimmediate();
 		DontDestroyOnLoad();
 	*/
