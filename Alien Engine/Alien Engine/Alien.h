@@ -4,6 +4,7 @@ class ComponentTransform;
 class GameObject;
 enum class ComponentType;
 class Component;
+typedef unsigned int uint;
 
 class __declspec(dllexport) Alien {
 	friend class ComponentScript;
@@ -37,6 +38,19 @@ public:
 	Component* GetComponentInParent(const ComponentType& type);
 	void* GetComponentScriptInParent(const char* script_class_name);
 	Component* GetComponentInChildren(const ComponentType& type, bool recursive);
+	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
+	uint GetComponents(const ComponentType& type, Component*** comp_array);
+	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
+	uint GetComponentsInChildren(const ComponentType& type, Component*** comp_array, bool recursive);
+	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
+	uint GetComponentsInParent(const ComponentType& type, Component*** comp_array);
+	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
+	uint GetComponentsScript(const char* script_class_name, void*** script_array);
+	// return the sie of the array of components found, pass a ScriptClassToFind** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
+	uint GetComponentsScriptInChildren(const char* script_class_name, void*** script_array, bool recursive);
+	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
+	uint GetComponentsScriptInParent(const char* script_class_name, void*** script_array);
+
 
 	static void Destroy(GameObject* obj);
 	static void DestroyInstantly(GameObject* obj);

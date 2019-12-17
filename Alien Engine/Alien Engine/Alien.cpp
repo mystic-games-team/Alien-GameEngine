@@ -62,6 +62,36 @@ Component* Alien::GetComponentInChildren(const ComponentType& type, bool recursi
 	return game_object->GetComponentInChildren(type, recursive);
 }
 
+uint Alien::GetComponents(const ComponentType& type, Component*** comp_array)
+{
+	return game_object->GetComponents(type, comp_array);
+}
+
+uint Alien::GetComponentsInChildren(const ComponentType& type, Component*** comp_array, bool recursive)
+{
+	return game_object->GetComponentsInChildren(type, comp_array, recursive);
+}
+
+uint Alien::GetComponentsInParent(const ComponentType& type, Component*** comp_array)
+{
+	return game_object->GetComponentsInParent(type, comp_array);
+}
+
+uint Alien::GetComponentsScript(const char* script_class_name, void*** script_array)
+{
+	return game_object->GetComponentsScript(script_class_name, script_array);
+}
+
+uint Alien::GetComponentsScriptInChildren(const char* script_class_name, void*** script_array, bool recursive)
+{
+	return game_object->GetComponentsScriptInChildren(script_class_name, script_array, recursive);
+}
+
+uint Alien::GetComponentsScriptInParent(const char* script_class_name, void*** script_array)
+{
+	return game_object->GetComponentsScriptInParent(script_class_name, script_array);
+}
+
 void Alien::Destroy(GameObject* obj)
 {
 	GameObject::Destroy(obj);

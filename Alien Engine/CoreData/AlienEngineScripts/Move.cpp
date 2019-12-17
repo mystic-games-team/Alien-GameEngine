@@ -61,25 +61,32 @@ void Move::Update()
 	////GameObject* namee = GameObject::FindWithName("Light");
 
 
-	//GameObject** untags = nullptr;
-	//GameObject** players = nullptr;
-	//GameObject** enemies = nullptr;
-	//uint s_untags = GameObject::FindGameObjectsWithTag("UnTagged", &untags);
-	//uint s_players = GameObject::FindGameObjectsWithTag("Player", &players);
-	//uint s_enemies = GameObject::FindGameObjectsWithTag("Enemy", &enemies);
-
-	//delete[] untags;
+	GameObject** untags = nullptr;
+	GameObject** players = nullptr;
+	GameObject** enemies = nullptr;
+	uint s_untags = GameObject::FindGameObjectsWithTag("UnTagged", &untags);
+	uint s_players = GameObject::FindGameObjectsWithTag("Player", &players);
+	uint s_enemies = GameObject::FindGameObjectsWithTag("Enemy", &enemies);
+	uint count = 0;
+	for (uint i = 0; i < s_untags; ++i) {
+		if (untags[i] != nullptr && untags[i]->IsEnabled()) {
+			count++;
+			Debug::Log(untags[i]->GetName());
+		}
+	}
+	Debug::Log("%i", count);
+	GameObject::FreeArrayMemory((void***)&untags);
 
 	//game_object->ToDelete();
-	Tank* tank = nullptr;
-	Tank* tank2 = nullptr;
-	tank = (Tank*)game_object->GetComponentScript(VARAIBLE_TO_STRING(Tank));
-	tank2 = (Tank*)game_object->GetComponentScript("Tank");
-	
-	if (time < Time::GetGameTime() - 2) {
-		game_object->SetNewParent(GameObject::FindWithName("Light"));
-		SetScriptEnable(false);
-	}
+	//Tank* tank = nullptr;
+	//Tank* tank2 = nullptr;
+	//tank = (Tank*)game_object->GetComponentScript(VARAIBLE_TO_STRING(Tank));
+	//tank2 = (Tank*)game_object->GetComponentScript("Tank");
+	//
+	//if (time < Time::GetGameTime() - 2) {
+	//	game_object->SetNewParent(GameObject::FindWithName("Light"));
+	//	SetScriptEnable(false);
+	//}
 }
 
 void Move::OnDrawGizmos()

@@ -85,6 +85,124 @@ Component* GameObject::GetComponentInChildren(const ComponentType& type, bool re
 	return nullptr;
 }
 
+uint GameObject::GetComponents(const ComponentType& type, Component*** comp_array)
+{
+	std::vector<Component*> found;
+	for (uint i = 0; i < components.size(); ++i) {
+		if (components[i] != nullptr && components[i]->GetType() == type) {
+			found.push_back(components[i]);
+		}
+	}
+	if (!found.empty()) {
+		(*comp_array) = new Component * [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*comp_array)[i] = found[i];
+		}
+	}
+	return found.size();
+}
+
+uint GameObject::GetComponentsInChildren(const ComponentType& type, Component*** comp_array, bool recursive)
+{
+	if (children.empty()) {
+		return 0u;
+	}
+	std::vector<Component*> found;
+	GetComponentsChildren(type, &found, recursive);
+
+	if (found.empty()) {
+		return 0u;
+	}
+
+	(*comp_array) = new Component * [found.size()];
+	for (uint i = 0; i < found.size(); ++i) {
+		(*comp_array)[i] = found[i];
+	}
+	return found.size();
+}
+
+uint GameObject::GetComponentsInParent(const ComponentType& type, Component*** comp_array)
+{
+	if (parent != nullptr && parent->parent != nullptr) { // to know that is not root
+		std::vector<Component*> found;
+		for (uint i = 0; i < parent->components.size(); ++i) {
+			if (parent->components[i] != nullptr && parent->components[i]->GetType() == type) {
+				found.push_back(parent->components[i]);
+			}
+		}
+		if (!found.empty()) {
+			(*comp_array) = new Component * [found.size()];
+			for (uint i = 0; i < found.size(); ++i) {
+				(*comp_array)[i] = found[i];
+			}
+		}
+		return found.size();
+	}
+	return 0u;
+}
+
+uint GameObject::GetComponentsScript(const char* script_class_name, void*** comp_array)
+{
+	std::vector<void*> found;
+	for (uint i = 0; i < components.size(); ++i) {
+		if (components[i] != nullptr && components[i]->GetType() == ComponentType::SCRIPT) {
+			ComponentScript* script = (ComponentScript*)components[i];
+			if (App->StringCmp(script_class_name, script->data_name.data())) {
+				found.push_back(script->data_ptr);
+			}
+		}
+	}
+	if (!found.empty()) {
+		(*comp_array) = new void * [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*comp_array)[i] = found[i];
+		}
+	}
+	return found.size();
+}
+
+uint GameObject::GetComponentsScriptInChildren(const char* script_class_name, void*** comp_array, bool recursive)
+{
+	if (children.empty()) {
+		return 0u;
+	}
+	std::vector<void*> found;
+	GetComponentsScriptChildren(script_class_name, &found, recursive);
+
+	if (found.empty()) {
+		return 0u;
+	}
+
+	(*comp_array) = new void * [found.size()];
+	for (uint i = 0; i < found.size(); ++i) {
+		(*comp_array)[i] = found[i];
+	}
+	return found.size();
+}
+
+uint GameObject::GetComponentsScriptInParent(const char* script_class_name, void*** comp_array)
+{
+	if (parent != nullptr && parent->parent != nullptr) {
+		std::vector<void*> found;
+		for (uint i = 0; i < parent->components.size(); ++i) {
+			if (parent->components[i] != nullptr && parent->components[i]->GetType() == ComponentType::SCRIPT) {
+				ComponentScript* script = (ComponentScript*)parent->components[i];
+				if (App->StringCmp(script_class_name, script->data_name.data())) {
+					found.push_back(script->data_ptr);
+				}
+			}
+		}
+		if (!found.empty()) {
+			(*comp_array) = new void * [found.size()];
+			for (uint i = 0; i < found.size(); ++i) {
+				(*comp_array)[i] = found[i];
+			}
+		}
+		return found.size();
+	}
+	return 0u;
+}
+
 void* GameObject::GetComponentScriptInParent(const char* script_class_name)
 {
 	if (parent != nullptr && parent->parent != nullptr) { // parent->parent != nullptr to test is not root :)
@@ -290,6 +408,45 @@ bool GameObject::HasComponent(ComponentType component)
 	}
 
 	return exists;
+}
+
+void GameObject::GetComponentsChildren(const ComponentType& type, std::vector<Component*>* to_fill, bool recursive)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			auto item2 = (*item)->components.begin();
+			for (; item2 != (*item)->components.end(); ++item2) {
+				if (*item2 != nullptr && (*item2)->GetType() == type) {
+					to_fill->push_back(*item2);
+				}
+			}
+			if (recursive) {
+				(*item)->GetComponentsChildren(type, to_fill, true);
+			}
+		}
+	}
+}
+
+void GameObject::GetComponentsScriptChildren(const char* script_calss_name, std::vector<void*>* to_fill, bool recursive)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			auto item2 = (*item)->components.begin();
+			for (; item2 != (*item)->components.end(); ++item2) {
+				if (*item2 != nullptr && (*item2)->GetType() == ComponentType::SCRIPT) {
+					ComponentScript* script = (ComponentScript*)*item2;
+					if (App->StringCmp(script_calss_name, script->data_name.data())) {
+						to_fill->push_back(script->data_ptr);
+					}
+				}
+			}
+			if (recursive) {
+				(*item)->GetComponentsScriptChildren(script_calss_name, to_fill, true);
+			}
+		}
+	}
 }
 
 void GameObject::AddChild(GameObject* child)
@@ -564,6 +721,11 @@ uint GameObject::FindGameObjectsWithTag(const char* tag_to_find, GameObject*** o
 	return found.size();
 }
 
+void GameObject::FreeArrayMemory(void*** array_)
+{
+	delete[] * array_;
+}
+
 GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position, GameObject* parent)
 {
 	if (prefab.prefabID != 0) {
@@ -690,7 +852,7 @@ GameObject* GameObject::FindTag(const char* tag_to_find)
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
 			if (App->StringCmp((*item)->tag, tag_to_find)) {
-				return this;
+				return (*item);
 			}
 			ret = (*item)->FindTag(tag_to_find);
 			if (ret != nullptr)
@@ -706,7 +868,7 @@ void GameObject::FindTags(const char* tag_to_find, std::vector<GameObject*>* obj
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
 			if (App->StringCmp((*item)->tag, tag_to_find)) {
-				objects->push_back(this);
+				objects->push_back((*item));
 			}
 			(*item)->FindTags(tag_to_find, objects);
 		}
@@ -1152,9 +1314,3 @@ void GameObject::SearchToDelete()
 		}
 	}
 }
-
-
-
-
-
-
