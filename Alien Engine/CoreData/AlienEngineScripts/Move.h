@@ -4,8 +4,6 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-ALIEN_INIT_HEADER
-
 class ALIEN_ENGINE_API Move : public Alien {
 
 public:
@@ -28,7 +26,7 @@ public:
 	Prefab bullet;
 };
 
-ALIEN_INIT_DATA Move* CreateMove() {
+ALIEN_FACTORY Move* CreateMove() {
 	Move* move = new Move();
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(move->input_int_test);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_INT(move->drag_int_test);
@@ -40,9 +38,8 @@ ALIEN_INIT_DATA Move* CreateMove() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(move->bullet);
 	return move;
 } 
-ALIEN_DESTROY_DATA void DestroyMove(Move* move) { delete move; }
+ALIEN_FACTORY void DestroyMove(Move* move) { delete move; }
 
-ALIEN_END_HEADER
 
 #endif // !_MOVE_H_
 

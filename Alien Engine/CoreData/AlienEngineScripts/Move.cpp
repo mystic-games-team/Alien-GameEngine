@@ -65,6 +65,7 @@ void Move::Update()
 	uint s_players = GameObject::FindGameObjectsWithTag("Player", &players);
 	uint s_enemies = GameObject::FindGameObjectsWithTag("Enemy", &enemies);
 
+	delete[] untags;
 }
 
 void Move::OnDrawGizmos()

@@ -3,8 +3,6 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-ALIEN_INIT_HEADER
-
 class ALIEN_ENGINE_API Tank : public Alien {
 
 public:
@@ -24,13 +22,9 @@ public:
 	ComponentTransform* wheels_transform = nullptr;
 };
 
-ALIEN_INIT_DATA Tank* CreateTank() {
+ALIEN_FACTORY Tank* CreateTank() {
 	Tank* tank = new Tank();
 	SHOW_IN_INSPECTOR_AS_PREFAB(tank->bullet);
 	return tank;
 }
-ALIEN_DESTROY_DATA void DestroyTank(Tank* tank) { delete tank; }
-
-ALIEN_END_HEADER
-
-
+ALIEN_FACTORY void DestroyTank(Tank* tank) { delete tank; }

@@ -35,11 +35,7 @@
 #endif
 
 // define it next to the CreateClass/StructFunct to be able to use the class/struct
-#define ALIEN_INIT_DATA ALIEN_ENGINE_API
-#define ALIEN_DESTROY_DATA ALIEN_ENGINE_API
-
-#define ALIEN_INIT_HEADER extern "C" {
-#define ALIEN_END_HEADER }
+#define ALIEN_FACTORY extern "C" ALIEN_ENGINE_API
 
 // ------------INSPECTOR MACROS----------------\\
 /*--------------------int--------------------*/

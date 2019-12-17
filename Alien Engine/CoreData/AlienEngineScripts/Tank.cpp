@@ -42,7 +42,7 @@ void Tank::Update()
 	if (Input::GetKeyRepeat(SDL_SCANCODE_W)) {
 		movement_vector += transform->left.Mul(4 * Time::GetDT());
 	}
-
+	
 	transform->SetLocalPosition(transform->GetGlobalPosition() + movement_vector);
 	float3 euler_rotation = wheels_transform->GetLocalRotation().ToEulerXYZ();
 	euler_rotation.y = movement_vector.Normalized().AngleBetween({ 1,0,0 });
