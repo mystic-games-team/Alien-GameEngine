@@ -79,8 +79,9 @@ public:
 
 	// select/disselect objects
 	void SetNewSelectedObject(GameObject* selected);
-	GameObject* GetSelectedObject();
-	void DeselectObject();
+	const std::list<GameObject*>& GetSelectedObjects();
+	void DeselectObjects();
+	void DeselectObject(GameObject* obj);
 
 	/*---------Scripts Calls-----------*/
 	void InitScriptsOnPlay() const;
@@ -213,11 +214,10 @@ public:
 private:
 	// root
 	GameObject* base_game_object = nullptr;
-	GameObject* game_object_selected = nullptr;
+	std::list<GameObject*> game_objects_selected;
 	std::vector< std::tuple<GameObject*, GameObject*, bool>> to_reparent;
 
 	std::stack<ReturnZ*> save_return_actions;
 	std::stack<ReturnZ*> save_fordward_actions;
 	std::string out_path;
-
 };

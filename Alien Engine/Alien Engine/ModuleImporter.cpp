@@ -284,7 +284,7 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 
 		texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
 
-		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+		if (has_been_dropped && !App->objects->GetSelectedObjects().empty()) {
 			ApplyTextureToSelectedObject(texture);
 		}
 		LOG("This texture was already loaded");
@@ -297,7 +297,7 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		texture->CreateMetaData();
 		App->resources->AddNewFileNode(path, true);
 
-		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+		if (has_been_dropped && !App->objects->GetSelectedObjects().empty()) {
 			ApplyTextureToSelectedObject(texture);
 		}
 	}
@@ -379,22 +379,31 @@ void ModuleImporter::LoadTextureToResource(const char* path, ResourceTexture* te
 
 void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 {
-	GameObject* selected = App->objects->GetSelectedObject();
-	if (selected != nullptr) {
-		ComponentMaterial* material = (ComponentMaterial*)selected->GetComponent(ComponentType::MATERIAL);
+	std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+	auto item = selected.begin();
+	for (; item != selected.end(); ++item) {
+		if (*item != nullptr) {
+			ComponentMaterial* material = (ComponentMaterial*)(*item)->GetComponent(ComponentType::MATERIAL);
 
-		if (selected->HasComponent(ComponentType::MESH)) {
-			if (material == nullptr) {
-				material = new ComponentMaterial(selected);
-				selected->AddComponent(material);
-				ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, material);
+			if ((*item)->HasComponent(ComponentType::MESH)) {
+				bool exists = true;
+				if (material == nullptr) {
+					exists = false;
+					material = new ComponentMaterial((*item));
+					(*item)->AddComponent(material);
+				}
+				material->SetTexture(texture);
+				if (!exists) {
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, material);
+				}
+				else {
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, material);
+				}
 			}
-			material->SetTexture(texture);
+			else
+				LOG("Selected GameObject has no mesh");
 		}
-		else
-			LOG("Selected GameObject has no mesh");
-	}
-	
+	}	
 }
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ResourceMesh* mesh)

@@ -66,7 +66,7 @@ update_status ModuleCamera3D::Update(float dt)
 		if (is_scene_hovered)
 		{
 			Zoom();
-			if ((App->objects->GetSelectedObject() == nullptr || (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver())) && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
+			if ((App->objects->GetSelectedObjects().empty() || (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver())) && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
 				CreateRay();
 			}
 
@@ -82,10 +82,10 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		{
-			if (App->objects->GetSelectedObject() != nullptr)
+			/*if (App->objects->GetSelectedObjects() != nullptr)
 			{
-				fake_camera->Look(App->objects->GetSelectedObject()->GetBB().CenterPoint());
-			}
+				fake_camera->Look(App->objects->GetSelectedObjects()->GetBB().CenterPoint());
+			}*/ //TODO: :D
 		}
 	}
 
@@ -191,9 +191,10 @@ void ModuleCamera3D::Rotation(float dt)
 
 void ModuleCamera3D::Focus()
 {
-	if (App->objects->GetSelectedObject() != nullptr)
+	// TODO: :D
+	/*if (App->objects->GetSelectedObjects() != nullptr)
 	{
-		AABB bounding_box = App->objects->GetSelectedObject()->GetBB();
+		AABB bounding_box = App->objects->GetSelectedObjects()->GetBB();
 
 		if (bounding_box.IsFinite())
 		{
@@ -208,7 +209,7 @@ void ModuleCamera3D::Focus()
 		}
 		else
 		{
-			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
+			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObjects()->GetComponent(ComponentType::TRANSFORM);
 			float3 pos = transform->GetGlobalPosition();
 
 			fake_camera->Look(pos);
@@ -218,19 +219,7 @@ void ModuleCamera3D::Focus()
 			point_to_look = fake_camera->frustum.pos - (vector_distance - (3.f * vector_distance.Normalized()));
 			start_lerp = true;
 		}
-	}
-	//else
-	//{
-	//	for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
-	//	{
-	//		if (iter == App->objects->base_game_object->children.begin() || (*iter) != looking_at)
-	//		{
-	//			looking_at=(*iter);
-	//			ComponentTransform* tr = (ComponentTransform*)(*iter)->GetComponent(ComponentType::TRANSFORM);
-	//			LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
-	//		}
-	//	}
-	//}
+	}*/
 }
 
 void ModuleCamera3D::CreateRay()
@@ -275,7 +264,7 @@ void ModuleCamera3D::CreateRay()
 	}
 
 	if (!hit) {
-		App->objects->DeselectObject();
+		App->objects->DeselectObjects();
 	}
 
 	hit = false;

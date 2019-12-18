@@ -64,12 +64,6 @@ public:
 
 		change static, is static... cant move in code if is static!!
 
-		GetComponents();
-		GetComponentsInChildren();
-		GetComponentsInParent();
-
-		DestroyComponent();
-		Destroyimmediate();
 		DontDestroyOnLoad();
 	*/
 
@@ -115,13 +109,6 @@ public:
 	ComponentTransform* transform = nullptr;
 	GameObject* game_object = nullptr;
 
-	// TODO:
-	/*
-		enabled
-		game_object
-		tag?????
-		name
-	*/
 private:
 
 	bool* enabled = nullptr;

@@ -27,13 +27,24 @@ void PanelHierarchy::PanelLogic()
 		App->camera->is_scene_hovered = false;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr)
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) && !App->objects->GetSelectedObjects().empty())
 	{
-		if (!App->objects->prefab_scene && App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() != App->objects->GetSelectedObject())
-			popup_prefab_restructurate = true;
-		else if (App->objects->prefab_scene && App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() == App->objects->GetSelectedObject())
-			popup_delete_root_prefab_scene = true;
-		else App->objects->GetSelectedObject()->ToDelete();
+		std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+		auto item = selected.begin();
+		for (; item != selected.end(); ++item) {
+			if (*item != nullptr && (*item)->IsPrefab()) {
+				popup_prefab_restructurate = true;
+			}
+		}
+		if (!popup_prefab_restructurate) {
+			auto item = selected.begin();
+			for (; item != selected.end(); ++item) {
+				if (*item != nullptr) {
+					(*item)->ToDelete();
+				}
+			}
+			App->objects->DeselectObjects();
+		}
 	}
 	
 	ImGui::Spacing();

@@ -87,7 +87,7 @@ void ComponentMesh::DrawOutLine()
 
 	if (!glIsEnabled(GL_STENCIL_TEST))
 		return;
-	if (game_object_attached->IsParentSelected())
+	if (game_object_attached->IsParentSelected() && !game_object_attached->selected)
 	{
 		glColor3f(App->objects->parent_outline_color.r, App->objects->parent_outline_color.g, App->objects->parent_outline_color.b);
 		glLineWidth(App->objects->parent_line_width);

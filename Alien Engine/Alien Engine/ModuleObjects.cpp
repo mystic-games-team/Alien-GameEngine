@@ -262,7 +262,8 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 
-	if (App->renderer3D->selected_game_camera != nullptr && (App->objects->GetSelectedObject() != nullptr && App->renderer3D->actual_game_camera != App->objects->GetSelectedObject()->GetComponent(ComponentType::CAMERA) && App->renderer3D->SetCameraToDraw(App->renderer3D->selected_game_camera)))
+	// TODO: render camera preview
+	/*if (App->renderer3D->selected_game_camera != nullptr && (App->objects->GetSelectedObjects() != nullptr && App->renderer3D->actual_game_camera != App->objects->GetSelectedObjects()->GetComponent(ComponentType::CAMERA) && App->renderer3D->SetCameraToDraw(App->renderer3D->selected_game_camera)))
 	{
 		printing_scene = false;
 		if (App->renderer3D->render_zbuffer) {
@@ -300,7 +301,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		}
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	}
+	}*/
 
 
 	return UPDATE_CONTINUE;
@@ -359,7 +360,7 @@ void ModuleObjects::DeleteAllObjects()
 		else
 			++item;
 	}
-	game_object_selected = nullptr;
+	game_objects_selected.clear();
 }
 
 void ModuleObjects::ChangeEnableGrid()
@@ -404,35 +405,52 @@ void ModuleObjects::ChangeEnableOBB()
 
 void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)
 {
-	if (!object_selected->IsSelected()) {
-		if (game_object_selected == nullptr) {
-			object_selected->ChangeSelected(true);
-			game_object_selected = object_selected;
-		}
-		else if (object_selected != game_object_selected) {
-			game_object_selected->ChangeSelected(false);
-			object_selected->ChangeSelected(true);
-			game_object_selected = object_selected;
-		}
+	bool exists = std::find(game_objects_selected.begin(), game_objects_selected.end(), object_selected) != game_objects_selected.end();
 
-		App->renderer3D->selected_game_camera = (ComponentCamera*)object_selected->GetComponent(ComponentType::CAMERA);
+	if (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) {
+		object_selected->ChangeSelected(!exists);
+		if (!exists) {
+			game_objects_selected.push_back(object_selected);
+		}
+		else {
+			game_objects_selected.remove(object_selected);
+		}
 	}
+	else {
+		auto item = game_objects_selected.begin();
+		for (; item != game_objects_selected.end(); ++item) {
+			if (*item != object_selected) {
+				(*item)->ChangeSelected(false);
+			}
+		}
+		game_objects_selected.clear();
+		game_objects_selected.push_back(object_selected);
+		if (!exists) {
+			object_selected->ChangeSelected(true);
+		}
+	}
+	App->renderer3D->selected_game_camera = (ComponentCamera*)object_selected->GetComponent(ComponentType::CAMERA);
 }
 
-GameObject* ModuleObjects::GetSelectedObject()
+const std::list<GameObject*>& ModuleObjects::GetSelectedObjects()
 {
-	return game_object_selected;
+	return game_objects_selected;
 }
 
-void ModuleObjects::DeselectObject()
+void ModuleObjects::DeselectObjects()
 {
-	if (game_object_selected != nullptr) {
-		if (game_object_selected->GetComponent(ComponentType::CAMERA) == App->renderer3D->selected_game_camera) {
-			App->renderer3D->selected_game_camera = nullptr;
-		}
-		game_object_selected->ChangeSelected(false);
-		game_object_selected = nullptr;
+	auto item = game_objects_selected.begin();
+	for (; item != game_objects_selected.end(); ++item) {
+			(*item)->ChangeSelected(false);
 	}
+	game_objects_selected.clear();
+	App->renderer3D->selected_game_camera = nullptr;
+}
+
+void ModuleObjects::DeselectObject(GameObject* obj)
+{
+	game_objects_selected.remove(obj);
+	obj->ChangeSelected(false);
 }
 
 void ModuleObjects::InitScriptsOnPlay() const
@@ -468,20 +486,24 @@ void ModuleObjects::OnDrawGizmos() const
 {
 	Gizmos::controller = !Gizmos::controller;
 	// scripts OnDrawGizmos
-	std::vector<Alien*>::const_iterator item = current_scripts.cbegin();
-	for (; item != current_scripts.cend(); ++item) {
+	for (std::vector<Alien*>::const_iterator item = current_scripts.cbegin(); item != current_scripts.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 			(*item)->OnDrawGizmos();
 		}
 	}
 	// scripts OnDrawGizmosSelected
-	if (game_object_selected != nullptr && game_object_selected->parent_enabled && game_object_selected->enabled) {
-		std::vector<ComponentScript*> scripts = game_object_selected->GetComponents<ComponentScript>();
-		for (uint i = 0; i < scripts.size(); ++i) {
-			if (scripts[i] != nullptr && scripts[i]->IsEnabled() && scripts[i]->need_alien) {
-				Alien* alien = (Alien*)scripts[i]->data_ptr;
-				if (alien != nullptr) {
-					alien->OnDrawGizmosSelected();
+	
+
+	auto item = game_objects_selected.cbegin();
+	for (; item != game_objects_selected.cend(); ++item) {
+		if (*item != nullptr && (*item)->parent_enabled && (*item)->enabled) {
+			std::vector<ComponentScript*> scripts = (*item)->GetComponents<ComponentScript>();
+			for (uint i = 0; i < scripts.size(); ++i) {
+				if (scripts[i] != nullptr && scripts[i]->IsEnabled() && scripts[i]->need_alien) {
+					Alien* alien = (Alien*)scripts[i]->data_ptr;
+					if (alien != nullptr) {
+						alien->OnDrawGizmosSelected();
+					}
 				}
 			}
 		}
@@ -677,7 +699,7 @@ void ModuleObjects::LoadScene(const char* path, bool change_scene)
 		octree.Clear();
 		Gizmos::ClearAllCurrentGizmos();
 		delete base_game_object;
-		game_object_selected = nullptr;
+		game_objects_selected.clear();
 		base_game_object = new GameObject();
 		base_game_object->ID = 0;
 		base_game_object->is_static = true;
@@ -738,7 +760,7 @@ void ModuleObjects::LoadScene(const char* path, bool change_scene)
 void ModuleObjects::CreateEmptyScene(const char* path)
 {
 	delete base_game_object;
-	game_object_selected = nullptr;
+	game_objects_selected.clear();
 	base_game_object = new GameObject();
 	base_game_object->ID = 0;
 	base_game_object->is_static = true;
@@ -787,7 +809,7 @@ GameObject* ModuleObjects::GetRoot(bool ignore_prefab)
 void ModuleObjects::CreateRoot()
 {
 	delete base_game_object;
-	game_object_selected = nullptr;
+	game_objects_selected.clear();
 	base_game_object = new GameObject();
 	base_game_object->ID = 0;
 	base_game_object->is_static = true;

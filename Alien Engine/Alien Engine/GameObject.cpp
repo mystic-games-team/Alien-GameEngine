@@ -30,9 +30,9 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-	if (App->objects->GetSelectedObject() == this)
-		App->objects->DeselectObject();
-
+	if (std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
+		App->objects->DeselectObject(this);
+	}
 	App->objects->octree.Remove(this);
 
 	std::vector<Component*>::iterator item = components.begin();
@@ -357,8 +357,9 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
 	if (camera_ != nullptr && camera_->IsEnabled()) 
 	{
-		if (App->objects->printing_scene && App->objects->draw_frustum && App->objects->GetSelectedObject() == this)
+		if (App->objects->printing_scene && App->objects->draw_frustum && std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
 			camera_->DrawFrustum();
+		}
 		camera_->frustum.pos = transform->GetGlobalPosition();
 		camera_->frustum.front = transform->GetGlobalRotation().WorldZ();
 		camera_->frustum.up = transform->GetGlobalRotation().WorldY();
@@ -652,8 +653,9 @@ void GameObject::ToDelete()
 {
 	to_delete = true;
 	App->objects->need_to_delete_objects = true;
-	if (!App->objects->in_cntrl_Z)
-		ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, App->objects->GetSelectedObject());
+	if (!App->objects->in_cntrl_Z) {
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, this);
+	}
 }
 
 void GameObject::SayChildrenParentIsEnabled(const bool& enabled)

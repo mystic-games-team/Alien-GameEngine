@@ -25,10 +25,10 @@ void PanelInspector::PanelLogic()
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 	if (ImGui::IsWindowHovered())
 		App->camera->is_scene_hovered = false;
-	if (App->objects->GetSelectedObject() != nullptr)
+	if (App->objects->GetSelectedObjects().size() == 1)
 	{
 		static bool draw_add = true;
-		GameObject* obj = App->objects->GetSelectedObject();
+		GameObject* obj = App->objects->GetSelectedObjects().back();
 		std::vector<Component*>::iterator item = obj->components.begin();
 		for (; item != obj->components.end(); ++item)
 		{
@@ -53,6 +53,9 @@ void PanelInspector::PanelLogic()
 		else {
 			draw_add = true;
 		}
+	}
+	else if (App->objects->GetSelectedObjects().size() > 1) {
+		// TOOD:
 	}
 
 	ImGui::End();
@@ -127,7 +130,7 @@ void PanelInspector::ButtonAddComponent()
 
 		if (ImGui::Button("Add Component")) {
 			if (!App->StringCmp("Return To Components", std::get<0>(script_info))) {
-				GameObject* obj = App->objects->GetSelectedObject();
+				GameObject* obj = App->objects->GetSelectedObjects().back();
 				bool exists = false;
 				std::vector<ComponentScript*> scripts = obj->GetComponents<ComponentScript>();
 				for (uint i = 0; i < scripts.size(); ++i) {
@@ -171,10 +174,10 @@ void PanelInspector::ButtonAddComponent()
 
 			case 1: {
 
-				if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
+				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::MESH))
 				{
-					comp = new ComponentMesh(App->objects->GetSelectedObject());
-					App->objects->GetSelectedObject()->AddComponent(comp);
+					comp = new ComponentMesh(App->objects->GetSelectedObjects().back());
+					App->objects->GetSelectedObjects().back()->AddComponent(comp);
 				}
 
 				else
@@ -184,14 +187,14 @@ void PanelInspector::ButtonAddComponent()
 
 			case 2: {
 
-				if ((!App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL)) &&
-					App->objects->GetSelectedObject()->HasComponent(ComponentType::MESH))
+				if ((!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::MATERIAL)) &&
+					App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::MESH))
 				{
-					comp = new ComponentMaterial(App->objects->GetSelectedObject());
-					App->objects->GetSelectedObject()->AddComponent(comp);
+					comp = new ComponentMaterial(App->objects->GetSelectedObjects().back());
+					App->objects->GetSelectedObjects().back()->AddComponent(comp);
 				}
 
-				else if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
+				else if (App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::MATERIAL))
 				{
 					LOG("The selected object already has this component!");
 				}
@@ -203,10 +206,10 @@ void PanelInspector::ButtonAddComponent()
 
 			case 3: {
 
-				if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::LIGHT))
+				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::LIGHT))
 				{
-					comp = new ComponentLight(App->objects->GetSelectedObject());
-					App->objects->GetSelectedObject()->AddComponent(comp);
+					comp = new ComponentLight(App->objects->GetSelectedObjects().back());
+					App->objects->GetSelectedObjects().back()->AddComponent(comp);
 				}
 
 				else
@@ -216,10 +219,10 @@ void PanelInspector::ButtonAddComponent()
 
 			case 4: {
 
-				if (!App->objects->GetSelectedObject()->HasComponent(ComponentType::CAMERA))
+				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::CAMERA))
 				{
-					comp = new ComponentCamera(App->objects->GetSelectedObject());
-					App->objects->GetSelectedObject()->AddComponent(comp);
+					comp = new ComponentCamera(App->objects->GetSelectedObjects().back());
+					App->objects->GetSelectedObjects().back()->AddComponent(comp);
 					App->renderer3D->selected_game_camera = (ComponentCamera*)comp;
 				}
 

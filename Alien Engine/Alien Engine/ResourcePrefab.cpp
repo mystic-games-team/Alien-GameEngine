@@ -169,7 +169,7 @@ void ResourcePrefab::OpenPrefabScene()
 	App->objects->SwapReturnZ(false, false);
 	App->objects->prefab_scene = true;
 	App->objects->SaveScene("Library/save_prefab_scene.alienScene", false);
-	App->objects->DeselectObject();
+	App->objects->DeselectObjects();
 	App->objects->CreateRoot();
 	ConvertToGameObjects(App->objects->GetRoot(true));
 }
