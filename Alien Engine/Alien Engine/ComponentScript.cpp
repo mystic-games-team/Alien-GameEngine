@@ -132,8 +132,12 @@ bool ComponentScript::DrawInspector()
 					break; }
 				case InspectorScriptData::DataType::PREFAB: {
 					ImGui::PushID(inspector_variables[i].ptr);
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 					Prefab* ptr = (Prefab*)inspector_variables[i].ptr;
-					ImGui::InputText(inspector_variables[i].variable_name.data(), (ptr->prefab_name.empty()) ? "Prefab: NULL" : ptr->prefab_name.data(), NULL, ImGuiInputTextFlags_ReadOnly);
+					ImGui::Button((ptr->prefab_name.empty()) ? "Prefab: NULL" : std::string("Prefab: " + std::string(ptr->prefab_name)).data(), { ImGui::GetWindowWidth() * 0.6F , 0});
+					ImGui::PopStyleColor(3);
 					if (ImGui::BeginDragDropTarget()) {
 						const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
 						if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
@@ -160,8 +164,30 @@ bool ComponentScript::DrawInspector()
 						}
 						ImGui::EndDragDropTarget();
 					}
-
 					ImGui::PopID();
+					ImGui::SameLine();
+					ImGui::Text(inspector_variables[i].variable_name.data());
+					break; }
+				case InspectorScriptData::DataType::GAMEOBJECT: {
+					ImGui::PushID(inspector_variables[i].obj);
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+					ImGui::Button((inspector_variables[i].obj != nullptr && *inspector_variables[i].obj != nullptr) ? std::string("GameObject: " + std::string((*inspector_variables[i].obj)->name)).data() : "GameObject: NULL", { ImGui::GetWindowWidth() * 0.6F , 0 });
+					ImGui::PopStyleColor(3);
+					if (ImGui::BeginDragDropTarget()) {
+						const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
+						if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+							GameObject* obj = *(GameObject**)payload->Data;
+							if (obj != nullptr) {
+								*inspector_variables[i].obj = obj;
+							}
+						}
+						ImGui::EndDragDropTarget();
+					}
+					ImGui::PopID();
+					ImGui::SameLine();
+					ImGui::Text(inspector_variables[i].variable_name.data());
 					break; }
 				default:
 					break;
@@ -207,6 +233,14 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 			case InspectorScriptData::DataType::PREFAB: {
 				Prefab* value = (Prefab*)inspector_variables[i].ptr;
 				inspector->SetString("prefab", std::to_string(value->prefabID));
+				break; }
+			case InspectorScriptData::DataType::GAMEOBJECT: {
+				if (inspector_variables[i].obj != nullptr && *inspector_variables[i].obj != nullptr) {
+					inspector->SetString("gameobject", std::to_string((*inspector_variables[i].obj)->ID));
+				}
+				else {
+					inspector->SetString("gameobject", "0");
+				}
 				break; }
 			default:
 				break;
@@ -261,6 +295,12 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 								else {
 									value->prefabID = 0;
 								}
+							}
+							break; }
+						case InspectorScriptData::DataType::GAMEOBJECT: {
+							u64 id = std::stoull(inspector->GetString("gameobject"));
+							if (id != 0) {
+								App->objects->AddScriptObject(id, inspector_variables[i].obj);
 							}
 							break; }
 						default:
@@ -414,6 +454,18 @@ void ComponentScript::InspectorPrefab(Prefab* ptr, const char* ptr_name)
 	}
 	else {
 		LOG("Prefab variable must not be a pointer!!");
+	}
+}
+
+void ComponentScript::InspectorGameObject(GameObject** ptr, const char* ptr_name)
+{
+	std::string variable_name = GetVariableName(ptr_name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		InspectorScriptData data(variable_name, InspectorScriptData::DataType::GAMEOBJECT, nullptr, InspectorScriptData::NONE);
+		data.obj = ptr;
+		script->inspector_variables.push_back(data);
 	}
 }
 

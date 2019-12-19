@@ -121,6 +121,8 @@ public:
 
 	static bool SortGameObjectToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last);
 
+	void AddScriptObject(const u64& ID, GameObject** object);
+
 private:
 
 	void CreateJsonScript(GameObject* obj, JSONArraypack* to_save);
@@ -220,4 +222,6 @@ private:
 	std::stack<ReturnZ*> save_return_actions;
 	std::stack<ReturnZ*> save_fordward_actions;
 	std::string out_path;
+
+	std::vector<std::pair<u64, GameObject**>> to_add;
 };

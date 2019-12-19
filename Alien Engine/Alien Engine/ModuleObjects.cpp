@@ -751,6 +751,17 @@ void ModuleObjects::LoadScene(const char* path, bool change_scene)
 			current_scene.need_to_save = false;
 			DeleteReturns();
 		}
+
+		if (!to_add.empty()) {
+			auto item = to_add.begin();
+			for (; item != to_add.end(); ++item) {
+				GameObject* found = GetGameObjectByID((*item).first);
+				if (found != nullptr) {
+					*(*item).second = found;
+				}
+			}
+		}
+
 	}
 	else {
 		LOG("Error loading scene %s", path);
@@ -901,6 +912,11 @@ bool ModuleObjects::SortGameObjectToDraw(std::pair<float, GameObject*> first, st
 	return first.first > last.first;
 }
 
+void ModuleObjects::AddScriptObject(const u64& ID, GameObject** object)
+{
+	to_add.push_back({ ID, object });
+}
+
 void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 {
 	if (obj->HasChildren()) {
@@ -946,6 +962,15 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 									case InspectorScriptData::DataType::PREFAB: {
 										Prefab* prefab = ((Prefab*)((*script)->inspector_variables[i].ptr));
 										inspector->SetString("prefab", std::to_string(prefab->prefabID));
+										break; }
+									case InspectorScriptData::DataType::GAMEOBJECT: {
+										GameObject** obj = ((GameObject**)((*script)->inspector_variables[i].obj));
+										if (obj != nullptr && *obj != nullptr) {
+											inspector->SetString("gameobject", std::to_string((*obj)->prefabID));
+										}
+										else {
+											inspector->SetString("gameobject", "0");
+										}
 										break; }
 									default:
 										break;
@@ -1012,6 +1037,12 @@ void ModuleObjects::ReAssignScripts(JSONArraypack* to_load)
 											ins_prefab->prefabID = prefab->GetID();
 											ins_prefab->prefab_name = std::string(prefab->GetName());
 											prefab->prefab_references.push_back(ins_prefab);
+										}
+										break; }
+									case InspectorScriptData::DataType::GAMEOBJECT: {
+										u64 id = std::stoull(inspector->GetString("gameobject"));
+										if (id != 0) {
+											*(*item).obj = GetGameObjectByID(id);
 										}
 										break; }
 									default:
