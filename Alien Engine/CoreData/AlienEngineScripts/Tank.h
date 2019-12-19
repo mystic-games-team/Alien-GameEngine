@@ -23,7 +23,7 @@ public:
 	float max_velocity = 8.0f;
 	float3 direction = { 0,0,0 };
 	float velocity = 0.0f;
-	float friction_force = 2.0f;
+	float friction_force = 0.05f;
 	float acceleration = 4.0f;
 };
 
