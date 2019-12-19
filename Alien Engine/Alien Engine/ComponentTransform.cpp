@@ -871,12 +871,12 @@ void ComponentTransform::AddScale(const float3 scale)
 
 void ComponentTransform::AddRotation(const float3 rot)
 {
-	Quat to_add = Quat::FromEulerXYZ(rot.x, rot.y, rot.z);
-	local_rotation = local_rotation * to_add;
-	euler_rotation = local_rotation.ToEulerXYZ();
-	euler_rotation.x = RadToDeg(euler_rotation.x);
-	euler_rotation.y = RadToDeg(euler_rotation.y);
-	euler_rotation.z = RadToDeg(euler_rotation.z);
+	euler_rotation += rot;
+	float3 aux = euler_rotation;
+	aux.x = DegToRad(euler_rotation.x);
+	aux.y = DegToRad(euler_rotation.y);
+	aux.z = DegToRad(euler_rotation.z);
+	local_rotation = Quat::FromEulerXYZ(aux.x, aux.y, aux.z);
 
 	RecalculateTransform();
 }

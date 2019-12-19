@@ -64,22 +64,30 @@ void PanelInspector::PanelLogic()
 
 			std::list<GameObject*> selected = App->objects->GetSelectedObjects();
 			auto item = selected.begin();
-			float4x4 trans = float4x4::identity;
+			float4x4 trans = float4x4::zero;
 			bool some_static = false;
+
 			for (; item != selected.end(); ++item) {
 				if (*item != nullptr) {
 					if ((*item)->is_static) {
 						some_static = true;
 					}
-					trans = trans * (*item)->GetComponent<ComponentTransform>()->global_transformation;
+					if (trans.Equals(float4x4::zero)) {
+						trans = (*item)->GetComponent<ComponentTransform>()->global_transformation;
+					}
+					else {
+						trans = trans * (*item)->GetComponent<ComponentTransform>()->global_transformation;
+					}
+					
 				}
 			}
-			trans /= selected.size();
 			float3 view_pos, view_scale, view_rot;
 			Quat rot;
 			trans.Decompose(view_pos, rot, view_scale);
 			view_rot = rot.ToEulerXYZ();
-
+			view_rot = RadToDeg(view_rot) / selected.size();
+			view_pos /= selected.size();
+			view_scale /= selected.size();
 			float3 original_pos, original_rot, original_scale;
 			original_pos = view_pos;
 			original_rot = view_rot;
