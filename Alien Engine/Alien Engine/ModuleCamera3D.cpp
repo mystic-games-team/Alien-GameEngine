@@ -84,13 +84,18 @@ update_status ModuleCamera3D::Update(float dt)
 		if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		{
 			float3 to_look(0, 0, 0);
-			auto item = App->objects->GetSelectedObjects().begin();
-			for (; item != App->objects->GetSelectedObjects().end(); ++item) {
-				if (*item != nullptr) {
-					to_look += (*item)->GetBB().CenterPoint();
+			if (!App->objects->GetSelectedObjects().empty())
+			{
+				auto item = App->objects->GetSelectedObjects().begin();
+				for (; item != App->objects->GetSelectedObjects().end(); ++item) {
+					if (*item != nullptr) {
+						to_look += (*item)->GetBB().CenterPoint();
+					}
 				}
+				to_look /= App->objects->GetSelectedObjects().size();
 			}
 			fake_camera->Look(to_look);
+			reference = to_look;
 		}
 	}
 
@@ -201,6 +206,7 @@ void ModuleCamera3D::Focus()
 		AABB bounding_box;
 		bounding_box.SetNegativeInfinity();
 		auto item = App->objects->GetSelectedObjects().begin();
+
 		for (; item != App->objects->GetSelectedObjects().end(); ++item) {
 			if (*item != nullptr) {
 				AABB obj_aabb = (*item)->GetBB();
@@ -210,6 +216,7 @@ void ModuleCamera3D::Focus()
 				}
 			}
 		}
+
 		float offset = bounding_box.Diagonal().Length();
 
 		fake_camera->Look(bounding_box.CenterPoint());
