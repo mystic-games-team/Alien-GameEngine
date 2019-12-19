@@ -196,14 +196,13 @@ void PanelScene::GuizmosLogic()
 		
 		if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && !block_move)
 		{
-			//if (guizmo_return) {
-			//	ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, transform);
-			//	guizmo_return = false;
-			//}
 			GameObject* root = App->objects->GetRoot(true);
 			item = selected.begin();
 			for (; item != selected.end(); ++item) {
 				if (*item != nullptr) {
+					if (guizmo_return) {
+						ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, (*item)->GetComponent<ComponentTransform>());
+					}
 					if ((*item)->parent != root)
 					{
 						ComponentTransform* parent_transform = (ComponentTransform*)(*item)->parent->GetComponent(ComponentType::TRANSFORM);
@@ -212,6 +211,9 @@ void PanelScene::GuizmosLogic()
 					else {
 						(*item)->GetComponent<ComponentTransform>()->SetGlobalTransformation(delta_matrix.Transposed() * (*item)->GetComponent<ComponentTransform>()->global_transformation);
 					}
+				}
+				if (guizmo_return && (*item) == selected.back()) {
+					guizmo_return = false;
 				}
 			}
 		}
