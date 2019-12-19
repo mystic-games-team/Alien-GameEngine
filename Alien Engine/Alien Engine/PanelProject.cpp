@@ -341,9 +341,9 @@ void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 				current_active_folder->children[i]->changing_name = true;
 			}
 		}
-		if (ImGui::MenuItem("Copy Path")) {
-			// TODO: copy path
-		}
+		//if (ImGui::MenuItem("Copy Path")) {
+		//	// TODO: copy path
+		//}
 		ImGui::EndPopup();
 	}
 }

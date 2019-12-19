@@ -262,8 +262,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 
-	// TODO: render camera preview
-	/*if (App->renderer3D->selected_game_camera != nullptr && (App->objects->GetSelectedObjects() != nullptr && App->renderer3D->actual_game_camera != App->objects->GetSelectedObjects()->GetComponent(ComponentType::CAMERA) && App->renderer3D->SetCameraToDraw(App->renderer3D->selected_game_camera)))
+	if (App->renderer3D->selected_game_camera != nullptr && (App->objects->GetSelectedObjects().size() == 1 && App->renderer3D->actual_game_camera != App->objects->GetSelectedObjects().back()->GetComponent(ComponentType::CAMERA) && App->renderer3D->SetCameraToDraw(App->renderer3D->selected_game_camera)))
 	{
 		printing_scene = false;
 		if (App->renderer3D->render_zbuffer) {
@@ -301,8 +300,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		}
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	}*/
-
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -332,7 +330,9 @@ bool ModuleObjects::CleanUp()
 		delete octree.root;
 		octree.root = nullptr;
 	}
-	// TODO: clean up returnZ both
+
+	DeleteReturns();
+	
 	return true;
 }
 

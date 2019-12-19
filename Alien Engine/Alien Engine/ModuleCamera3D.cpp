@@ -325,7 +325,7 @@ bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSe
 {
 	bool ret = false;
 	ComponentMesh* mesh = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
-	// TODO: if obj doesnt have mesh, just set it selected because it might be camera or light
+
 	if (mesh != nullptr && mesh->mesh != nullptr)
 	{
 		ComponentTransform* transform = (ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM);

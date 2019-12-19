@@ -92,9 +92,7 @@ public:
 private:
 
 	u64 resourceID = 0;
-	// TODO: change to touple and next option is for personaliing ImGui inspector, like drag int text int bla bla
-	// enum for types of imgui to show variables
-	// change to struct, need variable name
+
 	std::vector<InspectorScriptData> inspector_variables;
 	bool need_alien = false;
 	std::string data_name;

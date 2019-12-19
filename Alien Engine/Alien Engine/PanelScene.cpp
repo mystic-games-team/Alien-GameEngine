@@ -141,12 +141,14 @@ void PanelScene::PanelLogic()
 	GuizmosLogic();
 
 	ImDrawList* list = ImGui::GetWindowDrawList();
-	if (list != nullptr && list->CmdBuffer.size() > 1)
+	if (list != nullptr && list->CmdBuffer.size() > 1) {
 		is_window_being_rendered = true;
-	else
+	}
+	else {
 		is_window_being_rendered = false;
+	}
 
-	if (App->renderer3D->selected_game_camera != nullptr && is_window_being_rendered)
+	if (App->renderer3D->selected_game_camera != nullptr && is_window_being_rendered && App->objects->GetSelectedObjects().size() == 1)
 	{
 		ImGui::SetNextWindowPos(ImVec2(max_space.x - 212, max_space.y - 154));
 		ImGui::SetNextWindowSize(ImVec2(192, 134));
@@ -160,14 +162,11 @@ void PanelScene::PanelLogic()
 		ImGui::End();
 	}
 
-	
-
 	ImGui::End();
 }
 
 void PanelScene::GuizmosLogic()
 {
-	// TODO: gizmo
 	if (!App->objects->GetSelectedObjects().empty()) {
 		bool block_move = false;
 		float4x4 trans = float4x4::zero;

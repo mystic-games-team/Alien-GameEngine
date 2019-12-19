@@ -620,7 +620,6 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SetNextWindowSize(ImVec2(App->window->width,52));
 	ImGui::Begin("## Tools", (bool*)false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse);
 
-	// TODO: Update Control if we use shortcuts
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 18);
 	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.undo->id, ImVec2(30, 30)))
@@ -630,7 +629,7 @@ void ModuleUI::SecondMenuBar()
 	if (ImGui::IsItemHovered())
 	{
 		ImGui::BeginTooltip();
-		ImGui::Text("Undo (Control+Z)");
+		ImGui::Text(std::string("Undo " + std::string(shortcut_cntrlZ->GetNameScancodes())).data());
 		ImGui::EndTooltip();
 	}
 	ImGui::SameLine();
@@ -643,7 +642,7 @@ void ModuleUI::SecondMenuBar()
 	if (ImGui::IsItemHovered())
 	{
 		ImGui::BeginTooltip();
-		ImGui::Text("Redo (Control+Y)");
+		ImGui::Text(std::string("Redo " + std::string(shortcut_cntrlY->GetNameScancodes())).data());
 		ImGui::EndTooltip();
 	}
 	// Vertical Separator
