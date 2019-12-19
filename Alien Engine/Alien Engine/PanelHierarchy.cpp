@@ -250,7 +250,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		(node->children.empty() ? ImGuiTreeNodeFlags_Leaf : 0), (!node->IsEnabled() || !node->IsParentEnabled()));
 	if (node->IsPrefab() && node->FindPrefabRoot() != node)
 		ImGui::PopStyleColor();
-	if (ImGui::IsItemClicked()) {
+	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(0)) {
 		App->objects->SetNewSelectedObject(node);
 	}
 	if (ImGui::IsItemHovered()) {

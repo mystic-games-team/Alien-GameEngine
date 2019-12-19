@@ -24,8 +24,8 @@ public:
 	float slider_float_test = 10.5F;
 	bool jump = false;
 	Prefab bullet;
-
-	float time = 0;
+	GameObject* test_object = nullptr;
+	float time2 = 0;
 };
 
 ALIEN_FACTORY Move* CreateMove() {
@@ -38,6 +38,7 @@ ALIEN_FACTORY Move* CreateMove() {
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(move->slider_float_test, 1.5F, 13.5F);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(move->jump);
 	SHOW_IN_INSPECTOR_AS_PREFAB(move->bullet);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(move->test_object);
 	return move;
 } 
 ALIEN_FACTORY void DestroyMove(Move* move) { delete move; }

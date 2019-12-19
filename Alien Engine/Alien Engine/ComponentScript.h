@@ -6,6 +6,7 @@
 
 class Prefab;
 
+
 struct __declspec(dllexport) InspectorScriptData {
 	friend class ComponentScript;
 	enum DataType {
@@ -18,6 +19,7 @@ struct __declspec(dllexport) InspectorScriptData {
 		STRING,
 		BOOL, // DONE
 		PREFAB, // DONE
+		GAMEOBJECT, // DONE
 	};
 
 	enum ShowMode {
@@ -43,6 +45,7 @@ struct __declspec(dllexport) InspectorScriptData {
 	ShowMode show_as;
 	void* ptr = nullptr;
 
+	GameObject** obj = nullptr;
 private:
 	//ugly
 	float min_slider = 0;
@@ -88,6 +91,8 @@ public:
 	static void InspectorBool(bool* ptr, const char* ptr_name);
 	/*--------------------PREFAB-----------------------*/
 	static void InspectorPrefab(Prefab* ptr, const char* ptr_name);
+	/*--------------------GAMEOBJECT-----------------------*/
+	static void InspectorGameObject(GameObject** ptr, const char* ptr_name);
 
 private:
 

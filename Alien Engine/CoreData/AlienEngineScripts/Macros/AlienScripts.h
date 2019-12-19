@@ -50,6 +50,8 @@
 #define SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(BOOL_) ComponentScript::InspectorBool(&BOOL_, #BOOL_)
 /*--------------------prefab--------------------*/
 #define SHOW_IN_INSPECTOR_AS_PREFAB(PREFAB_) ComponentScript::InspectorPrefab(&PREFAB_, #PREFAB_)
+/*--------------------gameobject--------------------*/
+#define SHOW_IN_INSPECTOR_AS_GAMEOBJECT(GAMEOBJECT_) ComponentScript::InspectorGameObject(&GAMEOBJECT_, #GAMEOBJECT_)
 // ------------INSPECTOR MACROS----------------\\
 
 #define VARAIBLE_TO_STRING(VAR_) #VAR_
