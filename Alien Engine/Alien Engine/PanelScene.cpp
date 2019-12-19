@@ -168,40 +168,71 @@ void PanelScene::PanelLogic()
 void PanelScene::GuizmosLogic()
 {
 	// TODO: gizmo
-	//if (App->objects->GetSelectedObjects() != nullptr) {
-	//	ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObjects()->GetComponent(ComponentType::TRANSFORM);
+	if (!App->objects->GetSelectedObjects().empty()) {
+		bool block_move = false;
+		float4x4 trans = float4x4::identity;
+		std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+		auto item = selected.begin();
+		for (; item != selected.end(); ++item) {
+			if (*item != nullptr) {
+				if ((*item)->is_static) {
+					block_move = true;
+				}
+				trans += (*item)->GetComponent<ComponentTransform>()->global_transformation;
+			}
+		}
 
-	//	float4x4 view_transposed = App->camera->fake_camera->frustum.ViewMatrix();
-	//	view_transposed.Transpose();
-	//	float4x4 projection_transposed = App->camera->fake_camera->frustum.ProjectionMatrix();
-	//	projection_transposed.Transpose();
-	//	float4x4 object_transform_matrix = transform->global_transformation;
-	//	object_transform_matrix.Transpose();
-	//	float4x4 delta_matrix;
+		float4x4 view_transposed = App->camera->fake_camera->frustum.ViewMatrix();
+		view_transposed.Transpose();
+		float4x4 projection_transposed = App->camera->fake_camera->frustum.ProjectionMatrix();
+		projection_transposed.Transpose();
+		float4x4 object_transform_matrix = trans / selected.size();
+		object_transform_matrix.Transpose();
+		float4x4 delta_matrix;
 
-	//	ImGuizmo::SetRect(posX, posY, width, height);
-	//	ImGuizmo::SetDrawlist();
-	//	ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
-	//	static bool guizmo_return = true;
-	//	
-	//	if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && !transform->game_object_attached->is_static)
-	//	{
-	//		if (guizmo_return) {
-	//			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, transform);
-	//			guizmo_return = false;
-	//		}
-	//		ComponentTransform* parent_transform = (ComponentTransform*)App->objects->GetSelectedObjects()->parent->GetComponent(ComponentType::TRANSFORM);
-	//		if (App->objects->GetSelectedObjects()->parent != App->objects->GetRoot(true))
-	//		{
-	//			transform->SetGlobalTransformation(parent_transform->global_transformation.Inverted() * object_transform_matrix.Transposed());
-	//		}
-	//		else
-	//			transform->SetGlobalTransformation(object_transform_matrix.Transposed());
-	//	}
-	//	else if (!guizmo_return) {
-	//		guizmo_return = true;
-	//	}
-	//}
+		ImGuizmo::SetRect(posX, posY, width, height);
+		ImGuizmo::SetDrawlist();
+		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
+		static bool guizmo_return = true;
+		
+		if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && !block_move)
+		{
+			//if (guizmo_return) {
+			//	ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, transform);
+			//	guizmo_return = false;
+			//}
+			float4x4 before = trans / selected.size();
+			float3 b_pos, b_scale, b_euler;
+			Quat b_rot;
+			before.Decompose(b_pos, b_rot, b_scale);
+			b_euler = b_rot.ToEulerXYZ();
+			item = selected.begin();
+
+			float3 a_pos, a_scale, a_euler;
+			Quat a_rot;
+			object_transform_matrix.Transposed().Decompose(a_pos, a_rot, a_scale);
+			a_euler = a_rot.ToEulerXYZ();
+			item = selected.begin();
+
+			float4x4 difference = float4x4::identity;
+			difference.FromTRS(a_pos - b_pos, a_rot * b_rot.Inverted(), a_scale - b_scale);
+			item = selected.begin();
+			for (; item != selected.end(); ++item) {
+				if (*item != nullptr) {
+					ComponentTransform* parent_transform = (ComponentTransform*)(*item)->parent->GetComponent(ComponentType::TRANSFORM);
+					if ((*item)->parent != App->objects->GetRoot(true))
+					{
+						(*item)->GetComponent<ComponentTransform>()->SetGlobalTransformation(parent_transform->global_transformation.Inverted() * delta_matrix.Transposed() * (*item)->GetComponent<ComponentTransform>()->global_transformation);
+					}
+					else
+						(*item)->GetComponent<ComponentTransform>()->SetGlobalTransformation(delta_matrix.Transposed() * (*item)->GetComponent<ComponentTransform>()->global_transformation);
+				}
+			}
+		}
+		else if (!guizmo_return) {
+			guizmo_return = true;
+		}
+	}
 }
 
 void PanelScene::GuizmosControls()
