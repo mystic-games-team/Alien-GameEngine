@@ -19,7 +19,7 @@ struct __declspec(dllexport) InspectorScriptData {
 		STRING,
 		BOOL, // DONE
 		PREFAB, // DONE
-		GAMEOBJECT,
+		GAMEOBJECT, // DONE
 	};
 
 	enum ShowMode {

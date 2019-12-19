@@ -1031,12 +1031,15 @@ void ModuleObjects::ReAssignScripts(JSONArraypack* to_load)
 										*(bool*)(*item).ptr = inspector->GetNumber("bool");
 										break; }
 									case InspectorScriptData::DataType::PREFAB: {
-										ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(std::stoull(inspector->GetString("prefab")));
-										if (prefab != nullptr) {
-											Prefab* ins_prefab = (Prefab*)(*item).ptr;
-											ins_prefab->prefabID = prefab->GetID();
-											ins_prefab->prefab_name = std::string(prefab->GetName());
-											prefab->prefab_references.push_back(ins_prefab);
+										u64 id = std::stoull(inspector->GetString("prefab"));
+										if (id != 0) {
+											ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(id);
+											if (prefab != nullptr) {
+												Prefab* ins_prefab = (Prefab*)(*item).ptr;
+												ins_prefab->prefabID = prefab->GetID();
+												ins_prefab->prefab_name = std::string(prefab->GetName());
+												prefab->prefab_references.push_back(ins_prefab);
+											}
 										}
 										break; }
 									case InspectorScriptData::DataType::GAMEOBJECT: {
