@@ -170,7 +170,7 @@ void PanelScene::GuizmosLogic()
 	// TODO: gizmo
 	if (!App->objects->GetSelectedObjects().empty()) {
 		bool block_move = false;
-		float4x4 trans = float4x4::identity;
+		float4x4 trans = float4x4::zero;
 		std::list<GameObject*> selected = App->objects->GetSelectedObjects();
 		auto item = selected.begin();
 		for (; item != selected.end(); ++item) {
@@ -201,31 +201,18 @@ void PanelScene::GuizmosLogic()
 			//	ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, transform);
 			//	guizmo_return = false;
 			//}
-			float4x4 before = trans / selected.size();
-			float3 b_pos, b_scale, b_euler;
-			Quat b_rot;
-			before.Decompose(b_pos, b_rot, b_scale);
-			b_euler = b_rot.ToEulerXYZ();
-			item = selected.begin();
-
-			float3 a_pos, a_scale, a_euler;
-			Quat a_rot;
-			object_transform_matrix.Transposed().Decompose(a_pos, a_rot, a_scale);
-			a_euler = a_rot.ToEulerXYZ();
-			item = selected.begin();
-
-			float4x4 difference = float4x4::identity;
-			difference.FromTRS(a_pos - b_pos, a_rot * b_rot.Inverted(), a_scale - b_scale);
+			GameObject* root = App->objects->GetRoot(true);
 			item = selected.begin();
 			for (; item != selected.end(); ++item) {
 				if (*item != nullptr) {
-					ComponentTransform* parent_transform = (ComponentTransform*)(*item)->parent->GetComponent(ComponentType::TRANSFORM);
-					if ((*item)->parent != App->objects->GetRoot(true))
+					if ((*item)->parent != root)
 					{
+						ComponentTransform* parent_transform = (ComponentTransform*)(*item)->parent->GetComponent(ComponentType::TRANSFORM);
 						(*item)->GetComponent<ComponentTransform>()->SetGlobalTransformation(parent_transform->global_transformation.Inverted() * delta_matrix.Transposed() * (*item)->GetComponent<ComponentTransform>()->global_transformation);
 					}
-					else
+					else {
 						(*item)->GetComponent<ComponentTransform>()->SetGlobalTransformation(delta_matrix.Transposed() * (*item)->GetComponent<ComponentTransform>()->global_transformation);
+					}
 				}
 			}
 		}
