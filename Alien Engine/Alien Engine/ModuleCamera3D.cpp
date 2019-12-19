@@ -77,15 +77,20 @@ update_status ModuleCamera3D::Update(float dt)
 		{
 			Rotation(dt);
 		}
-		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {
 			Focus();
+		}
 
 		if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		{
-			/*if (App->objects->GetSelectedObjects() != nullptr)
-			{
-				fake_camera->Look(App->objects->GetSelectedObjects()->GetBB().CenterPoint());
-			}*/ //TODO: :D
+			float3 to_look(0, 0, 0);
+			auto item = App->objects->GetSelectedObjects().begin();
+			for (; item != App->objects->GetSelectedObjects().end(); ++item) {
+				if (*item != nullptr) {
+					to_look += (*item)->GetBB().CenterPoint();
+				}
+			}
+			fake_camera->Look(to_look);
 		}
 	}
 
@@ -191,35 +196,29 @@ void ModuleCamera3D::Rotation(float dt)
 
 void ModuleCamera3D::Focus()
 {
-	// TODO: :D
-	/*if (App->objects->GetSelectedObjects() != nullptr)
+	if (!App->objects->GetSelectedObjects().empty())
 	{
-		AABB bounding_box = App->objects->GetSelectedObjects()->GetBB();
-
-		if (bounding_box.IsFinite())
-		{
-			float offset = bounding_box.Diagonal().Length();
-
-			fake_camera->Look(bounding_box.CenterPoint());
-			reference = bounding_box.CenterPoint();
-			float3 vector_distance = fake_camera->frustum.pos - bounding_box.CenterPoint();
-
-			point_to_look = fake_camera->frustum.pos - (vector_distance - (offset * vector_distance.Normalized()));
-			start_lerp = true;
+		AABB bounding_box;
+		bounding_box.SetNegativeInfinity();
+		auto item = App->objects->GetSelectedObjects().begin();
+		for (; item != App->objects->GetSelectedObjects().end(); ++item) {
+			if (*item != nullptr) {
+				AABB obj_aabb = (*item)->GetBB();
+				if (obj_aabb.IsFinite()) {
+					bounding_box.maxPoint = { max(obj_aabb.maxPoint.x, bounding_box.maxPoint.x), max(obj_aabb.maxPoint.y, bounding_box.maxPoint.y), max(obj_aabb.maxPoint.z, bounding_box.maxPoint.z) };
+					bounding_box.minPoint = { min(obj_aabb.minPoint.x, bounding_box.minPoint.x), min(obj_aabb.minPoint.y, bounding_box.minPoint.y), min(obj_aabb.minPoint.z, bounding_box.minPoint.z) };
+				}
+			}
 		}
-		else
-		{
-			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObjects()->GetComponent(ComponentType::TRANSFORM);
-			float3 pos = transform->GetGlobalPosition();
+		float offset = bounding_box.Diagonal().Length();
 
-			fake_camera->Look(pos);
-			reference = pos;
+		fake_camera->Look(bounding_box.CenterPoint());
+		reference = bounding_box.CenterPoint();
+		float3 vector_distance = fake_camera->frustum.pos - bounding_box.CenterPoint();
 
-			float3 vector_distance = fake_camera->frustum.pos - pos;
-			point_to_look = fake_camera->frustum.pos - (vector_distance - (3.f * vector_distance.Normalized()));
-			start_lerp = true;
-		}
-	}*/
+		point_to_look = fake_camera->frustum.pos - (vector_distance - (offset * vector_distance.Normalized()));
+		start_lerp = true;
+	}
 }
 
 void ModuleCamera3D::CreateRay()
