@@ -39,7 +39,7 @@ ComponentTransform::ComponentTransform(GameObject* attach, const float3& pos, co
 	forward = { 2 * (local_rotation.x * local_rotation.z + local_rotation.w * local_rotation.y),
 			2 * (local_rotation.y * local_rotation.z - local_rotation.w * local_rotation.x),
 			1 - 2 * (local_rotation.x * local_rotation.x + local_rotation.y * local_rotation.y) };
-	left = { 1 - 2 * (local_rotation.y * local_rotation.y + local_rotation.z * local_rotation.z),
+	right = { 1 - 2 * (local_rotation.y * local_rotation.y + local_rotation.z * local_rotation.z),
 		 2 * (local_rotation.x * local_rotation.y + local_rotation.w * local_rotation.z),
 		 2 * (local_rotation.x * local_rotation.z + local_rotation.w * local_rotation.y) };
 
@@ -196,7 +196,7 @@ void ComponentTransform::RecalculateTransform()
 	forward = { 2 * (local_rotation.x * local_rotation.z + local_rotation.w * local_rotation.y),
 				2 * (local_rotation.y * local_rotation.z - local_rotation.w * local_rotation.x),
 				1 - 2 * (local_rotation.x * local_rotation.x + local_rotation.y * local_rotation.y) };
-	left = { 1 - 2 * (local_rotation.y * local_rotation.y + local_rotation.z * local_rotation.z),
+	right = { 1 - 2 * (local_rotation.y * local_rotation.y + local_rotation.z * local_rotation.z),
 			 2 * (local_rotation.x * local_rotation.y + local_rotation.w * local_rotation.z),
 			 2 * (local_rotation.x * local_rotation.z + local_rotation.w * local_rotation.y) };
 

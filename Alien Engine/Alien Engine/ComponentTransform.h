@@ -61,7 +61,7 @@ public:
 
 	float3 forward = { 0,0,0 };
 	float3 up = { 0,0,0 };
-	float3 left = { 0,0,0 };
+	float3 right = { 0,0,0 };
 
 private:
 

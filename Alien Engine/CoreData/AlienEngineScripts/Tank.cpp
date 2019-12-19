@@ -19,37 +19,51 @@ void Tank::Start()
 
 void Tank::Update()
 {
-	if (wheels == nullptr) {
+	if (wheels == nullptr) 
+	{
 		return;
 	}
-	float3 movement_vector = { 0, 0, 0 };
 
-	/*if (Input::GetKeyRepeat(SDL_SCANCODE_W))
+	float3 accel_vector = { 0, 0, 0 };
+
+	if (Input::GetKeyRepeat(SDL_SCANCODE_W)) 
 	{
-		movement_vector += (float3(4, 0, 0)*Time::GetDT()) ;
+		accel_vector += transform->forward.Mul(acceleration * Time::GetDT());
 	}
-
 	if (Input::GetKeyRepeat(SDL_SCANCODE_S))
 	{
-		movement_vector += (float3(-4, 0, 0) * Time::GetDT());
+		accel_vector += transform->forward.Mul(-acceleration * Time::GetDT());
 	}
 
 	if (Input::GetKeyRepeat(SDL_SCANCODE_A))
 	{
-		movement_vector += (float3(0, 0, -4) * Time::GetDT());
+		accel_vector += transform->right.Mul(-acceleration * Time::GetDT());
 	}
 
 	if (Input::GetKeyRepeat(SDL_SCANCODE_D))
 	{
-		movement_vector += (float3(0, 0, 4) * Time::GetDT());
-	}*/
-
-	if (Input::GetKeyRepeat(SDL_SCANCODE_W)) {
-		movement_vector += transform->left.Mul(4 * Time::GetDT());
+		accel_vector += transform->right.Mul(acceleration * Time::GetDT());
 	}
+
+	if (velocity < max_velocity)
+	{
+		velocity += accel_vector.Length();
+		direction += accel_vector.Normalized();
+		if (velocity > max_velocity)
+			velocity = max_velocity;
+	}
+
+	transform->SetLocalPosition(transform->GetGlobalPosition() + direction.Mul(velocity).Mul(Time::GetDT()));
 	
-	transform->SetLocalPosition(transform->GetGlobalPosition() + movement_vector);
+	if (velocity > 0)
+	{
+		velocity -= friction_force * Time::GetDT();
+		if (velocity < 0)
+			velocity = 0;
+	}
+
+
 	float3 euler_rotation = wheels_transform->GetLocalRotation().ToEulerXYZ();
-	euler_rotation.y = movement_vector.Normalized().AngleBetween({ 1,0,0 });
+	euler_rotation.y = accel_vector.Normalized().AngleBetween({ 1,0,0 });
 	wheels_transform->SetLocalRotation(Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z));
 }
