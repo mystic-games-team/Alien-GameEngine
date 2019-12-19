@@ -55,7 +55,140 @@ void PanelInspector::PanelLogic()
 		}
 	}
 	else if (App->objects->GetSelectedObjects().size() > 1) {
-		// TOOD:
+		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
+			ImGui::Spacing();
+			ImGui::Text("Position  ");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(70);
+			ImGui::PushID(1);
+
+			std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+			auto item = selected.begin();
+			float4x4 trans = float4x4::identity;
+			bool some_static = false;
+			for (; item != selected.end(); ++item) {
+				if (*item != nullptr) {
+					if ((*item)->is_static) {
+						some_static = true;
+					}
+					trans = trans * (*item)->GetComponent<ComponentTransform>()->global_transformation;
+				}
+			}
+			trans /= selected.size();
+			float3 view_pos, view_scale, view_rot;
+			Quat rot;
+			trans.Decompose(view_pos, rot, view_scale);
+			view_rot = rot.ToEulerXYZ();
+
+			float3 original_pos, original_rot, original_scale;
+			original_pos = view_pos;
+			original_rot = view_rot;
+			original_scale = view_scale;
+
+			bool need_refresh_pos = false;
+			bool need_refresh_scale = false;
+			bool need_refresh_rot = false;
+
+			if (ImGui::DragFloat("X", &view_pos.x, 0.5F, 0, 0, "%.3f", 1, some_static)) {
+				need_refresh_pos = true;
+			}
+
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(70);
+			ImGui::PushID(2);
+			if (ImGui::DragFloat("Y", &view_pos.y, 0.5F, 0, 0, "%.3f", 1, some_static)) {
+				need_refresh_pos = true;
+			}
+
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(70);
+			ImGui::PushID(3);
+			if (ImGui::DragFloat("Z", &view_pos.z, 0.5F, 0, 0, "%.3f", 1, some_static)) {
+				need_refresh_pos = true;
+			}
+
+			ImGui::PopID();
+			ImGui::Spacing();
+
+			ImGui::Text("Rotation  ");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(70);
+			ImGui::PushID(4);
+
+			if (ImGui::DragFloat("X", &view_rot.x, 0.5F, 0, 0, "%.3f", 1, some_static)) {
+				need_refresh_rot = true;
+			}
+
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(70);
+			ImGui::PushID(5);
+			if (ImGui::DragFloat("Y", &view_rot.y, 0.5F, 0, 0, "%.3f", 1, some_static)) {
+				need_refresh_rot = true;
+			}
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(70);
+			ImGui::PushID(6);
+			if (ImGui::DragFloat("Z", &view_rot.z, 0.5F, 0, 0, "%.3f", 1, some_static)) {
+				need_refresh_rot = true;
+			}
+			ImGui::PopID();
+			ImGui::Spacing();
+
+			ImGui::Text("Scale     ");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(70);
+			ImGui::PushID(7);
+			if (ImGui::DragFloat("X", &view_scale.x, 0.5F, 0, 0, "%.3f", 1, some_static)) {
+				need_refresh_scale = true;
+			}
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(70);
+			ImGui::PushID(8);
+			if (ImGui::DragFloat("Y", &view_scale.y, 0.5F, 0, 0, "%.3f", 1, some_static)) {
+				need_refresh_scale = true;
+			}
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(70);
+			ImGui::PushID(9);
+			if (ImGui::DragFloat("Z", &view_scale.z, 0.5F, 0, 0, "%.3f", 1, some_static)) {
+				need_refresh_scale = true;
+			}
+			ImGui::PopID();
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
+			if (need_refresh_pos) {
+				item = selected.begin();
+				for (; item != selected.end(); ++item) {
+					if (*item != nullptr) {
+						(*item)->GetComponent<ComponentTransform>()->AddPosition(view_pos - original_pos);
+					}
+				}
+			}
+			else if (need_refresh_rot) {
+				item = selected.begin();
+				for (; item != selected.end(); ++item) {
+					if (*item != nullptr) {
+						(*item)->GetComponent<ComponentTransform>()->AddRotation(view_rot - original_rot);
+					}
+				}
+			}
+			else if (need_refresh_scale) {
+				item = selected.begin();
+				for (; item != selected.end(); ++item) {
+					if (*item != nullptr) {
+						(*item)->GetComponent<ComponentTransform>()->AddScale(view_scale - original_scale);
+					}
+				}
+			}
+		}
 	}
 
 	ImGui::End();

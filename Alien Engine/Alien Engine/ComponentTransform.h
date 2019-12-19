@@ -11,6 +11,7 @@ class __declspec(dllexport) ComponentTransform : public Component {
 	friend class ModuleCamera3D;
 	friend class ModuleObjects;
 	friend class ModuleUI;
+	friend class PanelInspector;
 public:
 
 	ComponentTransform(GameObject* attach);
@@ -56,6 +57,10 @@ private:
 	void LoadComponent(JSONArraypack* to_load);
 
 	void SetGlobalTransformation(const float4x4& global_transformation);
+
+	void AddPosition(const float3 pos);
+	void AddScale(const float3 scale);
+	void AddRotation(const float3 rot);
 
 public:
 

@@ -856,6 +856,31 @@ void ComponentTransform::SetGlobalTransformation(const float4x4& global_transfor
 	RecalculateTransform();
 }
 
+void ComponentTransform::AddPosition(const float3 pos)
+{
+	local_position += pos;
+	RecalculateTransform();
+}
+
+void ComponentTransform::AddScale(const float3 scale)
+{
+	local_scale += scale;
+	LookScale();
+	RecalculateTransform();
+}
+
+void ComponentTransform::AddRotation(const float3 rot)
+{
+	Quat to_add = Quat::FromEulerXYZ(rot.x, rot.y, rot.z);
+	local_rotation = local_rotation * to_add;
+	euler_rotation = local_rotation.ToEulerXYZ();
+	euler_rotation.x = RadToDeg(euler_rotation.x);
+	euler_rotation.y = RadToDeg(euler_rotation.y);
+	euler_rotation.z = RadToDeg(euler_rotation.z);
+
+	RecalculateTransform();
+}
+
 void ComponentTransform::Reparent(const float4x4& transform)
 {
 	float3 position, scale;
