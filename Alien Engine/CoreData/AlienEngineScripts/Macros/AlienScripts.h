@@ -26,6 +26,8 @@
 #include "..\..\..\Alien Engine\Gizmos.h"
 #include "..\..\..\Alien Engine\Color.h"
 #include "..\..\..\Alien Engine\Prefab.h"
+#include "..\..\..\Alien Engine\SceneManager.h"
+#include "..\..\..\Alien Engine\AlienEngine.h"
 /*-----------------HELPERS-------------------*/
 
 #ifdef ALIENENGINESCRIPTS_EXPORTS
