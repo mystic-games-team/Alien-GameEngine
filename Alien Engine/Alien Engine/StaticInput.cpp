@@ -1,34 +1,35 @@
 #include "StaticInput.h"
 #include "Application.h"
-
-KEY_STATE Input::GetKey(const SDL_Scancode& code)
-{
-	return App->input->GetKey(code);
-}
+#include "PanelGame.h"
 
 bool Input::GetKeyDown(const SDL_Scancode& code)
 {
-	return App->input->GetKey(code) == KEY_DOWN;
+	return IsInputAvailable() && App->input->GetKey(code) == KEY_DOWN;
 }
 
 bool Input::GetKeyIdle(const SDL_Scancode& code)
 {
-	return App->input->GetKey(code) == KEY_IDLE;
+	return IsInputAvailable() && App->input->GetKey(code) == KEY_IDLE;
 }
 
 bool Input::GetKeyUp(const SDL_Scancode& code)
 {
-	return App->input->GetKey(code) == KEY_UP;
+	return IsInputAvailable() && App->input->GetKey(code) == KEY_UP;
 }
 
 bool Input::GetKeyRepeat(const SDL_Scancode& code)
 {
-	return App->input->GetKey(code) == KEY_REPEAT;
+	return IsInputAvailable() && App->input->GetKey(code) == KEY_REPEAT;
 }
 
 SDL_Scancode Input::GetFirstKeyDown()
 {
-	return App->input->GetFirstKeyPressed();
+	if (IsInputAvailable()) {
+		return App->input->GetFirstKeyPressed();
+	}
+	else {
+		return SDL_SCANCODE_UNKNOWN;
+	}
 }
 
 float3 Input::GetMousePosition()
@@ -48,7 +49,7 @@ float Input::GetMouseX()
 
 bool Input::IsAnyMouseButtonPressed()
 {
-	return App->input->IsMousePressed();
+	return IsInputAvailable() && App->input->IsMousePressed();
 }
 
 float Input::GetMouseWheel()
@@ -66,27 +67,27 @@ float Input::GetMouseXMotion()
 	return App->input->GetMouseXMotion();
 }
 
-KEY_STATE Input::GetMouseButton(const MOUSE_BUTTONS& button)
-{
-	return App->input->GetMouseButton(button);
-}
-
 bool Input::GetMouseButtonDown(const MOUSE_BUTTONS& button)
 {
-	return App->input->GetMouseButton(button) == KEY_DOWN;
+	return IsInputAvailable() && App->input->GetMouseButton(button) == KEY_DOWN;
 }
 
 bool Input::GetMouseButtonUp(const MOUSE_BUTTONS& button)
 {
-	return App->input->GetMouseButton(button) == KEY_UP;
+	return IsInputAvailable() && App->input->GetMouseButton(button) == KEY_UP;
 }
 
 bool Input::GetMouseButtonIdle(const MOUSE_BUTTONS& button)
 {
-	return App->input->GetMouseButton(button) == KEY_IDLE;
+	return IsInputAvailable() && App->input->GetMouseButton(button) == KEY_IDLE;
 }
 
 bool Input::GetMouseButtonRepeat(const MOUSE_BUTTONS& button)
 {
-	return App->input->GetMouseButton(button) == KEY_REPEAT;
+	return IsInputAvailable() && App->input->GetMouseButton(button) == KEY_REPEAT;
+}
+
+bool Input::IsInputAvailable()
+{
+	return App->ui->panel_game->game_focused;
 }

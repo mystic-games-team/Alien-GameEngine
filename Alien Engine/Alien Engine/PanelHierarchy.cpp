@@ -184,9 +184,9 @@ void PanelHierarchy::PanelLogic()
 			if (ImGui::Button("Don't save")) {
 				popup_leave_prefab_view = false;
 				App->objects->prefab_scene = false;
-				App->objects->enable_instancies = true;
 				App->objects->SwapReturnZ(true, true);
 				App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
+				App->objects->enable_instancies = true;
 				remove("Library/save_prefab_scene.alienScene");
 			}
 			ImGui::PopStyleColor();

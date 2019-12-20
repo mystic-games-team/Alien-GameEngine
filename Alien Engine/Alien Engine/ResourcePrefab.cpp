@@ -132,9 +132,9 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 	if (App->objects->prefab_scene) {
 		App->objects->prefab_opened = nullptr;
 		App->objects->prefab_scene = false;
-		App->objects->enable_instancies = true;
 		App->objects->SwapReturnZ(true, true);
 		App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
+		App->objects->enable_instancies = true;
 		remove("Library/save_prefab_scene.alienScene");
 	}
 	App->objects->ignore_cntrlZ = true;
@@ -162,8 +162,9 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 
 void ResourcePrefab::OpenPrefabScene()
 {
-	if (App->objects->prefab_scene)
+	if (App->objects->prefab_scene) {
 		return;
+	}
 	App->objects->prefab_opened = this;
 	App->objects->enable_instancies = false;
 	App->objects->SwapReturnZ(false, false);
@@ -203,13 +204,13 @@ void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, floa
 			game_objects->GetNode(std::get<2>(*item));
 			GameObject* obj = new GameObject();
 			if (std::get<0>(*item) == 1) { 
-				obj->LoadObject(game_objects, parent);
+				obj->LoadObject(game_objects, parent, !set_selected);
 			}
 			else { // search parent
 				std::vector<GameObject*>::iterator objects = objects_created.begin();
 				for (; objects != objects_created.end(); ++objects) {
 					if ((*objects)->ID == std::get<1>(*item)) {
-						obj->LoadObject(game_objects, *objects);
+						obj->LoadObject(game_objects, *objects, !set_selected);
 						break;
 					}
 				}
@@ -223,13 +224,15 @@ void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, floa
 		}
 		obj->ResetIDs();
 		obj->SetPrefab(ID);
-		if (set_selected)
-			App->objects->SetNewSelectedObject(obj);
 		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);
 		transform->SetLocalPosition(pos.x, pos.y, pos.z);
+		if (set_selected) {
+			App->objects->SetNewSelectedObject(obj);
+			App->camera->fake_camera->Look(parent->children.back()->GetBB().CenterPoint());
+			App->camera->reference = parent->children.back()->GetBB().CenterPoint();
+		}
+
 		delete prefab;
-		App->camera->fake_camera->Look(parent->children.back()->GetBB().CenterPoint());
-		App->camera->reference = parent->children.back()->GetBB().CenterPoint();
 	}
 	else {
 		LOG("Error loading prefab %s", path.data());

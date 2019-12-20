@@ -21,7 +21,6 @@ public:
 	};
 
 	/*----------KEYBOARD--------------*/
-	static KEY_STATE GetKey(const SDL_Scancode& code);
 	static bool GetKeyDown(const SDL_Scancode& code);
 	static bool GetKeyIdle(const SDL_Scancode& code);
 	static bool GetKeyUp(const SDL_Scancode& code);
@@ -37,7 +36,6 @@ public:
 	static float GetMouseWheel();
 	static float GetMouseYMotion();
 	static float GetMouseXMotion();
-	static KEY_STATE GetMouseButton(const MOUSE_BUTTONS& button);
 	static bool GetMouseButtonDown(const MOUSE_BUTTONS& button);
 	static bool GetMouseButtonUp(const MOUSE_BUTTONS& button);
 	static bool GetMouseButtonIdle(const MOUSE_BUTTONS& button);
@@ -46,4 +44,7 @@ public:
 
 	// TOOD: mouse pos relative to the panel game texture
 
+private:
+
+	static bool IsInputAvailable();
 };

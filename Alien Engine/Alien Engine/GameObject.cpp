@@ -1031,13 +1031,13 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 	}
 }
 
-void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
+void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool force_no_selected)
 {
 	strcpy(name, to_load->GetString("Name"));
 	ID = std::stoull(to_load->GetString("ID"));
 	enabled = to_load->GetBoolean("Enabled");
 	parent_enabled = to_load->GetBoolean("ParentEnabled");
-	if (to_load->GetBoolean("Selected")) {
+	if (!force_no_selected && to_load->GetBoolean("Selected")) {
 		App->objects->SetNewSelectedObject(this);
 	}
 	prefab_locked = to_load->GetBoolean("PrefabLocked");

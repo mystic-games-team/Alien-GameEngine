@@ -173,7 +173,7 @@ private:
 	AABB GetBB(); // 0 = Local Bounding Box, 1 = Global Bounding Box
 	OBB GetGlobalOBB();
 	void SaveObject(JSONArraypack* to_save, const uint& family_number);
-	void LoadObject(JSONArraypack* to_save, GameObject* parent);
+	void LoadObject(JSONArraypack* to_save, GameObject* parent, bool force_no_selected = false);
 
 	void SearchResourceToDelete(const ResourceType& type, Resource* to_delete);
 

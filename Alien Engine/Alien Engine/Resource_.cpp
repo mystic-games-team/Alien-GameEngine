@@ -57,8 +57,9 @@ const bool Resource::NeedToLoad() const
 
 void Resource::IncreaseReferences()
 {
-	if (references == 0)
+	if (references == 0) {
 		LoadMemory();
+	}
 	if (App->objects->enable_instancies) {
 		++references;
 	}
@@ -69,6 +70,7 @@ void Resource::DecreaseReferences()
 	if (App->objects->enable_instancies) {
 		--references;
 	}
-	if (references == 0)
+	if (references == 0) {
 		FreeMemory();
+	}
 }
