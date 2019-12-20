@@ -134,6 +134,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		shortcut_octree_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ViewOctree", i);
 		shortcut_cntrlZ_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.GoBack", i);
 		shortcut_cntrlY_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.GoFordward", i);
+		shortcut_duplicate_object_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.DuplicateObject", i);
 	}
 	if (panel_about != nullptr) {
 		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
@@ -165,6 +166,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		shortcut_octree->SetShortcutKeys(shortcut_octree_codes[0], shortcut_octree_codes[1], shortcut_octree_codes[2]);
 		shortcut_cntrlZ->SetShortcutKeys(shortcut_cntrlZ_codes[0], shortcut_cntrlZ_codes[1], shortcut_cntrlZ_codes[2]);
 		shortcut_cntrlY->SetShortcutKeys(shortcut_cntrlY_codes[0], shortcut_cntrlY_codes[1], shortcut_cntrlY_codes[2]);
+		shortcut_duplicate_object->SetShortcutKeys(shortcut_duplicate_object_codes[0], shortcut_duplicate_object_codes[1], shortcut_duplicate_object_codes[2]);
 
 		// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 		App->shortcut_manager->OrderShortCuts();
@@ -202,6 +204,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 		config->SetArrayNumber("Configuration.UI.ShortCuts.ViewOctree", (uint)shortcut_octree->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.GoBack", (uint)shortcut_cntrlZ->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.GoFordward", (uint)shortcut_cntrlY->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.DuplicateObject", (uint)shortcut_duplicate_object->GetScancode(i));
 	}
 }
 void ModuleUI::LoadLayouts()
@@ -1085,6 +1088,7 @@ void ModuleUI::InitShortCuts()
 	shortcut_octree = App->shortcut_manager->AddShortCut("Octree", shortcut_octree_codes[0], std::bind(&ModuleObjects::ChangeEnableOctree, App->objects), shortcut_octree_codes[1], shortcut_octree_codes[2]);
 	shortcut_cntrlZ = App->shortcut_manager->AddShortCut("Go Back", shortcut_cntrlZ_codes[0], ReturnZ::GoBackOneAction, shortcut_cntrlZ_codes[1], shortcut_cntrlZ_codes[2]);
 	shortcut_cntrlY = App->shortcut_manager->AddShortCut("Go Forward", shortcut_cntrlY_codes[0], ReturnZ::GoFordwardOneAction, shortcut_cntrlY_codes[1], shortcut_cntrlY_codes[2]);
+	shortcut_duplicate_object = App->shortcut_manager->AddShortCut("Duplicate Object", shortcut_duplicate_object_codes[0], std::bind(&ModuleObjects::DuplicateObjects, App->objects), shortcut_duplicate_object_codes[1], shortcut_duplicate_object_codes[2]);
 	
 	// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 	App->shortcut_manager->OrderShortCuts();

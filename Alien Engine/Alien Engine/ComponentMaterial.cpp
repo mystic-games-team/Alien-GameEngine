@@ -250,6 +250,19 @@ void ComponentMaterial::LoadComponent(JSONArraypack* to_load)
 	ID = std::stoull(to_load->GetString("ID"));
 }
 
+void ComponentMaterial::Clone(Component* clone)
+{
+	clone->enabled = enabled;
+	clone->not_destroy = not_destroy;
+	ComponentMaterial* mat = (ComponentMaterial*)clone;
+	mat->color = color;
+	mat->texture = texture;
+	if (texture != nullptr) {
+		++texture->references;
+	}
+	mat->texture_activated = texture_activated;
+}
+
 void ComponentMaterial::SetTexture(ResourceTexture* tex)
 {
 	if (texture != nullptr)

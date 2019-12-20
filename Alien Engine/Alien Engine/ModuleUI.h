@@ -115,7 +115,6 @@ private:
 
 	PanelAbout* panel_about = nullptr;
 	PanelRender* panel_render = nullptr;
-	PanelHierarchy* panel_hierarchy = nullptr;
 	PanelInspector* panel_inspector = nullptr;
 
 	PanelLayout* panel_layout = nullptr;
@@ -137,6 +136,7 @@ private:
 	ShortCut* shortcut_octree = nullptr;
 	ShortCut* shortcut_cntrlZ = nullptr;
 	ShortCut* shortcut_cntrlY = nullptr;
+	ShortCut* shortcut_duplicate_object = nullptr;
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_project_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -167,6 +167,7 @@ private:
 	SDL_Scancode shortcut_octree_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_cntrlZ_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_cntrlY_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode shortcut_duplicate_object_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 
 	std::pair<bool, Time::GameState> change_game_state;
 
@@ -180,6 +181,7 @@ public:
 	PanelSceneSelector* panel_scene_selector = nullptr;
 	PanelScene* panel_scene = nullptr;
 	PanelGame* panel_game = nullptr;
+	PanelHierarchy* panel_hierarchy = nullptr;
 	PanelTextEditor* panel_text_editor = nullptr;
 
 	// layouts

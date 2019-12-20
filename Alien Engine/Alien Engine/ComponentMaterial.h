@@ -26,6 +26,8 @@ private:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
+	void Clone(Component* clone);
+
 	void SetTexture(ResourceTexture* tex);
 	const ResourceTexture* GetTexture() const;
 

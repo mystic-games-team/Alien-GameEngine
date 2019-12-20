@@ -49,6 +49,8 @@ private:
 	void DrawFrustum();
 	void DrawIconCamera();
 
+	void Clone(Component* clone);
+
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 

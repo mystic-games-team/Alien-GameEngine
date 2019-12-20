@@ -43,6 +43,8 @@ private:
 	void Reset();
 	void SetComponent(Component* component);
 
+	void Clone(Component* clone);
+
 	void RecalculateAABB_OBB();
 	const AABB GetGlobalAABB() const;
 	const OBB GetOBB() const;

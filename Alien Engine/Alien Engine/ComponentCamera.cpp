@@ -399,6 +399,27 @@ void ComponentCamera::DrawIconCamera()
 	}
 }
 
+void ComponentCamera::Clone(Component* clone)
+{
+	clone->enabled = enabled;
+	clone->not_destroy = not_destroy;
+	ComponentCamera* camera = (ComponentCamera*)clone;
+	camera->camera_color_background = camera_color_background;
+	camera->camera_icon_color = camera_icon_color;
+	camera->enabled = enabled;
+	camera->far_plane = far_plane;
+	camera->frustum = frustum;
+	camera->horizontal_fov = horizontal_fov;
+	camera->is_fov_horizontal = is_fov_horizontal;
+	camera->mesh_camera = mesh_camera;
+	camera->near_plane = near_plane;
+	camera->print_icon = print_icon;
+	camera->projection_changed = projection_changed;
+	camera->vertical_fov = vertical_fov;
+	camera->ViewMatrix = ViewMatrix;
+	camera->ViewMatrixInverse = ViewMatrixInverse;
+}
+
 void ComponentCamera::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);

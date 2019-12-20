@@ -62,12 +62,8 @@ public:
 
 	// TODO:
 	/*
-		static GameObject* Clone(pos, parent...); // with clone of a gameobject
-
 		change static, is static... cant move in code if is static!!
 
-		DestroyComponent();
-		Destroyimmediate();
 		DontDestroyOnLoad();
 	*/
 
@@ -174,6 +170,9 @@ private:
 	OBB GetGlobalOBB();
 	void SaveObject(JSONArraypack* to_save, const uint& family_number);
 	void LoadObject(JSONArraypack* to_save, GameObject* parent, bool force_no_selected = false);
+
+	void Clone();
+	void CloningGameObject(GameObject* clone);
 
 	void SearchResourceToDelete(const ResourceType& type, Resource* to_delete);
 

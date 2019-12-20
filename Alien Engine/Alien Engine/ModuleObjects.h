@@ -123,6 +123,8 @@ public:
 
 	void AddScriptObject(const u64& ID, GameObject** object);
 
+	void DuplicateObjects();
+
 private:
 
 	void CreateJsonScript(GameObject* obj, JSONArraypack* to_save);
@@ -212,7 +214,6 @@ public:
 	ComponentScript* actual_script_loading = nullptr;
 
 	std::vector<std::string> tags;
-
 private:
 	// root
 	GameObject* base_game_object = nullptr;

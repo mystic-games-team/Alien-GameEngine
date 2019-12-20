@@ -17,6 +17,8 @@ private:
 	bool DrawInspector();
 	void OnDisable();
 
+	void Clone(Component* clone);
+
 	void Reset();
 	void SetComponent(Component* component);
 

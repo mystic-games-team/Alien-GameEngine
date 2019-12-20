@@ -801,6 +801,23 @@ void ComponentTransform::SetComponent(Component* component)
 	}
 }
 
+void ComponentTransform::Clone(Component* clone)
+{
+	clone->enabled = enabled;
+	clone->not_destroy = not_destroy;
+	ComponentTransform* transform = (ComponentTransform*)clone;
+	transform->euler_rotation = euler_rotation;
+	transform->forward = forward;
+	transform->global_transformation = global_transformation;
+	transform->is_scale_negative = is_scale_negative;
+	transform->local_position = local_position;
+	transform->local_rotation = local_rotation;
+	transform->local_scale = local_scale;
+	transform->local_transformation = local_transformation;
+	transform->right = right;
+	transform->up = up;
+}
+
 void ComponentTransform::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);

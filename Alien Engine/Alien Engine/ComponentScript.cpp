@@ -318,6 +318,47 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 	}
 }
 
+void ComponentScript::Clone(Component* clone)
+{
+	clone->enabled = enabled;
+	clone->not_destroy = not_destroy;
+	ComponentScript* script = (ComponentScript*)clone;
+	script->LoadData(data_name.data(), need_alien);
+	if (inspector_variables.size() == script->inspector_variables.size()) {
+		for (uint i = 0; i < inspector_variables.size(); ++i) {
+			if (script->inspector_variables[i].variable_type == inspector_variables[i].variable_type) {
+				switch (inspector_variables[i].variable_type) {
+				case InspectorScriptData::DataType::BOOL: {
+					bool variable = *(bool*)inspector_variables[i].ptr;
+					bool* script_var = (bool*)script->inspector_variables[i].ptr;
+					*script_var = variable;
+					break; }
+				case InspectorScriptData::DataType::INT: {
+					int variable = *(int*)inspector_variables[i].ptr;
+					int* script_var = (int*)script->inspector_variables[i].ptr;
+					*script_var = variable;
+					break; }
+				case InspectorScriptData::DataType::FLOAT: {
+					float variable = *(float*)inspector_variables[i].ptr;
+					float* script_var = (float*)script->inspector_variables[i].ptr;
+					*script_var = variable;
+					break; }
+				case InspectorScriptData::DataType::PREFAB: {
+					Prefab variable = *(Prefab*)inspector_variables[i].ptr;
+					Prefab* script_var = (Prefab*)script->inspector_variables[i].ptr;
+					(*script_var).prefabID = variable.prefabID;
+					(*script_var).prefab_name = variable.prefab_name;
+					break; }
+				case InspectorScriptData::DataType::GAMEOBJECT: {
+					GameObject* obj = *inspector_variables[i].obj;
+					*script->inspector_variables[i].obj = obj;
+					break; }
+				}
+			}
+		}
+	}
+}
+
 void ComponentScript::OnDisable()
 {
 	if (need_alien && data_ptr != nullptr) {

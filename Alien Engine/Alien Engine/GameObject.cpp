@@ -1109,6 +1109,83 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 
 }
 
+void GameObject::Clone()
+{
+	GameObject* clone = new GameObject(parent);
+	CloningGameObject(clone);
+	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, clone);
+}
+
+void GameObject::CloningGameObject(GameObject* clone)
+{
+	clone->to_delete = to_delete;
+	clone->prefabID = prefabID;
+	strcpy(clone->name, name);
+	strcpy(clone->tag, tag);
+	clone->enabled = enabled;
+	clone->parent_enabled = parent_enabled;
+	clone->prefab_locked = prefab_locked;
+	clone->is_static = is_static;
+
+	if (!components.empty()) {
+		auto item = components.begin();
+		for (; item != components.end(); ++item) {
+			if (*item != nullptr) {
+				switch ((*item)->GetType()) {
+				case ComponentType::TRANSFORM: {
+					ComponentTransform* transform = new ComponentTransform(clone);
+					(*item)->Clone(transform);
+					clone->AddComponent(transform);
+					break; }
+				case ComponentType::LIGHT: {
+					ComponentLight* light = new ComponentLight(clone);
+					(*item)->Clone(light);
+					clone->AddComponent(light);
+					break; }
+				case ComponentType::MATERIAL: {
+					ComponentMaterial* material = new ComponentMaterial(clone);
+					(*item)->Clone(material);
+					clone->AddComponent(material);
+					break; }
+				case ComponentType::MESH: {
+					ComponentMesh* mesh = new ComponentMesh(clone);
+					(*item)->Clone(mesh);
+					clone->AddComponent(mesh);
+					break; }
+				case ComponentType::CAMERA: {
+					ComponentCamera* camera = new ComponentCamera(clone);
+					(*item)->Clone(camera);
+					clone->AddComponent(camera);
+					break; }
+				case ComponentType::SCRIPT: {
+					ComponentScript* script = new ComponentScript(clone);
+					(*item)->Clone(script);
+					// dont need to addcomponent, clone script does it
+					break; }
+				default:
+					LOG("Unknown component type while loading");
+					break;
+				}
+			}
+		}
+	}
+
+	if (clone->is_static) {
+		App->objects->octree.Insert(clone, false);
+	}
+
+	if (!children.empty()) {
+		auto item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				GameObject* child = new GameObject(clone);
+				(*item)->CloningGameObject(child);
+			}
+		}
+	}
+	
+}
+
 void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_delete)
 {
 	SDL_assert((uint)FileDropType::UNKNOWN == 5);

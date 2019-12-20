@@ -99,6 +99,17 @@ void ComponentLight::OnDisable()
 	glDisable(light_id);
 }
 
+void ComponentLight::Clone(Component* clone)
+{
+	clone->enabled = enabled;
+	clone->not_destroy = not_destroy;
+	ComponentLight* light = (ComponentLight*)clone;
+	light->ambient = ambient;
+	light->diffuse = diffuse;
+	light->light_id = light_id;
+	light->print_icon = print_icon;
+}
+
 void ComponentLight::Reset()
 {
 	ambient = { 0.5f, 0.5f, 0.5f, 1.0f };

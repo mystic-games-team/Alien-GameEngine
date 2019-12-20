@@ -207,6 +207,14 @@ void PanelHierarchy::PanelLogic()
 		}
 	}
 
+	if (ImGui::IsWindowFocused()) {
+		is_focused = true;
+	}
+	else {
+		is_focused = false;
+	}
+
+
 	ImGui::End();
 	
 }

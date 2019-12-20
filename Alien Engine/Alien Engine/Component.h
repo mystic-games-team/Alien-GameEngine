@@ -47,6 +47,8 @@ protected:
 
 	void ResetIDs();
 
+	virtual void Clone(Component* clone) {}
+
 	const ComponentType& GetType() const;
 
 	virtual void OnEnable() {}

@@ -65,7 +65,6 @@ void PanelScene::PanelLogic()
 
 	lastHeight = ImGui::GetWindowHeight();
 
-
 	// drop a fbx/texture in the window
 	ImVec2 min_space = ImGui::GetWindowContentRegionMin();
 	ImVec2 max_space = ImGui::GetWindowContentRegionMax();

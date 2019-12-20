@@ -12,10 +12,12 @@ public:
 
 	void PanelLogic();
 
+	bool is_focused = false;
 private:
 
 	void PrintNode(GameObject* node);
 	void RightClickMenu();
+
 
 private:
 

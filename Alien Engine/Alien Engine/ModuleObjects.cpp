@@ -15,6 +15,7 @@
 #include "ResourcePrefab.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentScript.h"
+#include "PanelHierarchy.h"
 #include "Gizmos.h"
 #include "Alien.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
@@ -896,6 +897,18 @@ bool ModuleObjects::SortGameObjectToDraw(std::pair<float, GameObject*> first, st
 void ModuleObjects::AddScriptObject(const u64& ID, GameObject** object)
 {
 	to_add.push_back({ ID, object });
+}
+
+void ModuleObjects::DuplicateObjects()
+{
+	if (App->camera->is_scene_focused || App->ui->panel_hierarchy->is_focused) {
+		auto item = game_objects_selected.begin();
+		for (; item != game_objects_selected.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->Clone();
+			}
+		}
+	}
 }
 
 void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
