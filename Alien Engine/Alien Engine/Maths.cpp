@@ -45,7 +45,6 @@ int Maths::Floor(const double& value)
 	return val - (val > value);
 }
 
-
 int Maths::Clamp(const int& value, const int& min, const int& max)
 {
 	return (value > max) ? max : ((value < min) ? min : value);

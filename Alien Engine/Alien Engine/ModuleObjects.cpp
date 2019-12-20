@@ -72,29 +72,9 @@ bool ModuleObjects::Start()
 	current_scene.full_path = "Untitled*";
 	current_scene.is_untitled = true;
 
-	////void* (*Creator)(std::vector<std::pair<std::string, void*>>*) = (void* (*)(std::vector<std::pair<std::string, void*>>*))GetProcAddress(App->scripts_dll, "CreateJump");
-	//std::vector<std::pair<std::string, void*>>* ins = nullptr;
-	////void* new_class = Creator(&ins);
-
-	////static_cast<Alien*>(new_class)->Start();
-	//int* ptr = nullptr;
-	//void*(*Creator)() = (void*(*)())GetProcAddress(App->scripts_dll, "CreateMove");
-	//void* to_create = nullptr;
-	//to_create = Creator();
-	//Alien* alien = static_cast<Alien*>(to_create);
-	////alien->transform = base_game_object->children.back()->GetComponent<ComponentTransform>();
-	//alien->Start();
-
-	static char curr_dir[MAX_PATH];
-	GetCurrentDirectoryA(MAX_PATH, curr_dir);
-
-	out_path = std::string(curr_dir + std::string("/") + SCRIPTS_DLL_OUTPUT + std::string("AlienEngineScripts.dll"));
-	App->file_system->NormalizePath(out_path);
-
 	App->camera->fake_camera->frustum.pos = { 25,25,25 };
 	App->camera->fake_camera->Look(float3(0, 0, 0));
 
-	GameObject* test = GameObject::FindWithName("Light");
 
 	return ret;
 }

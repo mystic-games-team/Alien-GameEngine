@@ -221,7 +221,6 @@ private:
 
 	std::stack<ReturnZ*> save_return_actions;
 	std::stack<ReturnZ*> save_fordward_actions;
-	std::string out_path;
 
 	std::vector<std::pair<u64, GameObject**>> to_add;
 };

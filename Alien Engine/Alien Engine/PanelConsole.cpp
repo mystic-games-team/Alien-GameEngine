@@ -56,16 +56,19 @@ void PanelConsole::PanelLogic()
 		ImGui::SetScrollHereX(1.0F);
 	}
 	if (scroll_y) {
+		ImGui::SetScrollHereY(1.0F);
+	}
+
+	if (!scroll_y && ImGui::GetScrollY() / ImGui::GetScrollMaxY() >= 0.95F) {
+		scroll_y = true;
+	}
+	else if (scroll_y && ImGui::GetScrollY() / ImGui::GetScrollMaxY() <= 0.95F) {
 		scroll_y = false;
-		ImGui::SetScrollHereY(1.0F);
 	}
 
-	if (ImGui::GetScrollY() / ImGui::GetScrollMaxY() >= 0.95F) {
-		ImGui::SetScrollHereY(1.0F);
-	}
-
-	if (ImGui::IsWindowHovered())
+	if (ImGui::IsWindowHovered()) {
 		App->camera->is_scene_hovered = false;
+	}
 	ImGui::EndChild();
 
 	ImGui::End();
