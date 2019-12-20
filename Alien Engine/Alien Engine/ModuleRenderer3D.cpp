@@ -112,7 +112,7 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_TEXTURE_2D);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
-
+		glEnable(GL_NORMALIZE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 

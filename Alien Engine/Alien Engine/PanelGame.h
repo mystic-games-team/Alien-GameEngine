@@ -15,6 +15,9 @@ public:
 
 	bool game_focused = false;
 
+	float posX = 0;
+	float posY = 0;
+
 private:
 	float width = 960;
 	float height = 540;

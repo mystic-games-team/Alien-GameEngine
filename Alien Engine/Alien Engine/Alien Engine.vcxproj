@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Alien.h" />
+    <ClInclude Include="AlienEngine.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
@@ -301,6 +302,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Alien.cpp" />
+    <ClCompile Include="AlienEngine.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />

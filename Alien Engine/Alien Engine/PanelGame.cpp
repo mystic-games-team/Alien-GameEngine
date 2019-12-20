@@ -56,9 +56,18 @@ void PanelGame::PanelLogic()
 	ImGui::SetCursorPosX((ImGui::GetWindowWidth() - width) * 0.5f);
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() - height) * 0.5f);
 
+	posX = ImGui::GetWindowPos().x + ImGui::GetCursorPosX();
+	posY = ImGui::GetWindowPos().y + ImGui::GetCursorPosY();
+
 	if (App->renderer3D->actual_game_camera != nullptr)
 	{
 		ImGui::Image((ImTextureID)App->renderer3D->game_tex->id, { width,height }, { 0,1 }, { 1,0 });
+	}
+
+	if (ImGui::IsWindowHovered()) {
+		float2 origin = float2((App->input->GetMousePosition().x - posX), (App->input->GetMousePosition().y - posY) - 19);
+		LOG("MouseX: %f", origin.x);
+		LOG("MouseY: %f", origin.y);
 	}
 
 	lastHeight = ImGui::GetWindowHeight();
