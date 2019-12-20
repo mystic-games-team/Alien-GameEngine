@@ -19,7 +19,9 @@ public:
 
 	Prefab bullet;
 	GameObject* wheels = nullptr;
+	GameObject* turret = nullptr;
 	ComponentTransform* wheels_transform = nullptr;
+	ComponentTransform* turret_transform = nullptr;
 	float max_velocity_forward = 8.0f;
 	float max_velocity_backward = -8.0f;
 	float3 direction = { 0,0,0 };

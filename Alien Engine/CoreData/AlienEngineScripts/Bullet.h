@@ -14,9 +14,11 @@ public:
 	void Update();
 
 public:
+
 	float life_time = 3.0f;
 	float time = 0.0f;
 	float velocity = 10.0f;
+	float3 bullet_direction = { 0,0,0 };
 };
 
 ALIEN_FACTORY Bullet* CreateBullet() {

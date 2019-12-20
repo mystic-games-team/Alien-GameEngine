@@ -1,4 +1,5 @@
 #include "Tank.h"
+#include "Bullet.h"
 
 Tank::Tank() : Alien()
 {
@@ -16,15 +17,16 @@ void Tank::Start()
 	{
 		wheels_transform = (ComponentTransform*)wheels->GetComponent(ComponentType::TRANSFORM);
 	}
+
+	turret = GameObject::FindWithName("TankTurret");
+	if (turret != nullptr)
+	{
+		turret_transform = (ComponentTransform*)turret->GetComponent(ComponentType::TRANSFORM);
+	}
 }
 
 void Tank::Update()
 {
-	if (wheels == nullptr) 
-	{
-		return;
-	}
-
 	float3 accel_vector = { 0, 0, 0 };
 	float3 euler_rotation = { 0,0,0 };
 
@@ -111,6 +113,12 @@ void Tank::Update()
 	// Shooting
 	if (Input::GetMouseButtonDown(Input::MOUSE_LEFT_BUTTON))
 	{
-		bullet.ConvertToGameObject(transform->GetGlobalPosition());
+		GameObject* bullet_created = bullet.ConvertToGameObject({ transform->GetGlobalPosition().x,transform->GetGlobalPosition().y + 1.5f,transform->GetGlobalPosition().z });
+
+		if (bullet_created != nullptr)
+		{
+			Bullet* minion = (Bullet*)bullet_created->GetComponentScript("Bullet");
+			minion->bullet_direction = turret_transform->forward;
+		}
 	}
 }
