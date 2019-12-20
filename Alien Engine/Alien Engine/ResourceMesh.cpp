@@ -260,7 +260,7 @@ bool ResourceMesh::DeleteMetaData()
 	return true;
 }
 
-void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created)
+void ResourceMesh::ConvertToGameObject(std::vector<std::pair<u64, GameObject*>>* objects_created)
 {
 	// look if is loaded
 	IncreaseReferences();
@@ -270,18 +270,18 @@ void ResourceMesh::ConvertToGameObject(std::vector<GameObject*>* objects_created
 
 	// if parent name is not null, search the parent name
 	if (!App->StringCmp(parent_name.data(), "null") && objects_created != nullptr) {
-		std::vector<GameObject*>::iterator item = objects_created->begin();
+		std::vector<std::pair<u64, GameObject*>>::iterator item = objects_created->begin();
 		for (; item != objects_created->end(); ++item) {
-			if (*item != nullptr && App->StringCmp((*item)->GetName(), parent_name.data())) {
-				obj = new GameObject((*item));
+			if ((*item).second != nullptr && App->StringCmp((*item).second->GetName(), parent_name.data()) && family_number -1 == (*item).first) {
+				obj = new GameObject((*item).second);
 				break;
 			}
 		}
-		objects_created->push_back(obj);
+		objects_created->push_back({ family_number, obj });
 	}
 	else if (objects_created != nullptr) { // parent name == null so, the parent must be the one created before
-		obj = new GameObject(App->objects->GetRoot(false)->children.back());
-		objects_created->push_back(obj);
+		obj = new GameObject(objects_created->at(0).second);
+		objects_created->push_back({ family_number, obj });
 	}
 	else { // if objects created == nullptr then parent must be the root
 		obj = new GameObject(App->objects->GetRoot(false));

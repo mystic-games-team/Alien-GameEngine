@@ -26,7 +26,7 @@ public:
 
 	bool DeleteMetaData();
 
-	void ConvertToGameObject(std::vector<GameObject*>* objects_created);
+	void ConvertToGameObject(std::vector<std::pair<u64, GameObject*>>* objects_created);
 
 	void InitBuffers();
 

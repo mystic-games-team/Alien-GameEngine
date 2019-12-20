@@ -30,10 +30,12 @@ void PanelHierarchy::PanelLogic()
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) && !App->objects->GetSelectedObjects().empty())
 	{
 		std::list<GameObject*> selected = App->objects->GetSelectedObjects();
-		auto item = selected.begin();
-		for (; item != selected.end(); ++item) {
-			if (*item != nullptr && (*item)->IsPrefab()) {
-				popup_prefab_restructurate = true;
+		if (!App->objects->prefab_scene) {
+			auto item = selected.begin();
+			for (; item != selected.end(); ++item) {
+				if (*item != nullptr && (*item)->IsPrefab() && (*item)->FindPrefabRoot() != *item) {
+					popup_prefab_restructurate = true;
+				}
 			}
 		}
 		if (!popup_prefab_restructurate) {

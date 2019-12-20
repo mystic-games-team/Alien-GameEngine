@@ -220,13 +220,18 @@ void ResourceModel::ConvertToGameObjects()
 
 	if (meshes_attached.size() > 1) { // needs an empty gameobject
 		
-		// create the parent
-		GameObject* parent = App->objects->CreateEmptyGameObject(nullptr, false);
-		parent->SetName(name.data());
+		GameObject* parent = nullptr;
+		if (meshes_attached.at(0)->family_number == meshes_attached.at(1)->family_number) {
+			parent = App->objects->CreateEmptyGameObject(nullptr, false);
+			parent->SetName(name.data());
+		}
+		else {
+			parent = App->objects->GetRoot(false);
+		}
 		
 		// vector to find the parents
-		std::vector<GameObject*> objects_created;
-		objects_created.push_back(parent);
+		std::vector<std::pair<u64,GameObject*>> objects_created;
+		objects_created.push_back({ 0,parent });
 
 		std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 		for (; item != meshes_attached.end(); ++item) {
@@ -242,9 +247,9 @@ void ResourceModel::ConvertToGameObjects()
 	}
 	else { 
 		meshes_attached.at(0)->ConvertToGameObject(nullptr);
-		App->objects->SetNewSelectedObject(App->objects->GetRoot(false)->children.back());
-		ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
 	}
+	App->objects->SetNewSelectedObject(App->objects->GetRoot(false)->children.back());
+	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
 	App->camera->fake_camera->Look(App->objects->GetRoot(false)->children.back()->GetBB().CenterPoint());
 }
 
