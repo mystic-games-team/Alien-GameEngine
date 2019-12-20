@@ -3,8 +3,6 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-ALIEN_INIT_HEADER
-
 class ALIEN_ENGINE_API DataAlienTypeName : public Alien {
 
 public:
@@ -14,12 +12,11 @@ public:
 
 };
 
-ALIEN_INIT_DATA DataAlienTypeName* CreateDataAlienTypeName() {
+ALIEN_FACTORY DataAlienTypeName* CreateDataAlienTypeName() {
 	DataAlienTypeName* alien = new DataAlienTypeName();
 	// To show in inspector here
 
 	return alien;
 } 
-ALIEN_DESTROY_DATA void DestroyDataAlienTypeName(DataAlienTypeName* alien) { delete alien; }
+ALIEN_FACTORY void DestroyDataAlienTypeName(DataAlienTypeName* alien) { delete alien; }
 
-ALIEN_END_HEADER

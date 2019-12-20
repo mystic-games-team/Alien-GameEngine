@@ -3,8 +3,6 @@
 #include "Macros/AlienScripts.h"
 #include "..\..\Alien Engine\Alien.h"
 
-ALIEN_INIT_HEADER
-
 struct ALIEN_ENGINE_API DataAlienTypeName {
 
 	DataAlienTypeName();
@@ -12,12 +10,10 @@ struct ALIEN_ENGINE_API DataAlienTypeName {
 
 };
 
-ALIEN_INIT_DATA DataAlienTypeName* CreateDataAlienTypeName() {
+ALIEN_FACTORY DataAlienTypeName* CreateDataAlienTypeName() {
 	DataAlienTypeName* alien = new DataAlienTypeName();
 	// To show in inspector here
 	
 	return alien;
 }
-ALIEN_DESTROY_DATA void DestroyDataAlienTypeName(DataAlienTypeName* alien) { delete alien; }
-
-ALIEN_END_HEADER
+ALIEN_FACTORY void DestroyDataAlienTypeName(DataAlienTypeName* alien) { delete alien; }
