@@ -105,4 +105,12 @@ void Tank::Update()
 			velocity = 0;
 		}
 	}
+
+
+
+	// Shooting
+	if (Input::GetMouseButton(Input::MOUSE_LEFT_BUTTON))
+	{
+		bullet.ConvertToGameObject(transform->GetGlobalPosition());
+	}
 }

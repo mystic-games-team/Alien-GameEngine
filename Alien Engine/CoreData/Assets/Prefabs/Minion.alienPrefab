@@ -7,7 +7,7 @@
             {
                 "Name": "Minion",
                 "FamilyNumber": 1,
-                "ID": "16574176644904678681",
+                "ID": "9898323006993071513",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -27,18 +27,18 @@
                             0
                         ],
                         "Rotation": [
-                            -0.7071068286895752,
                             0,
                             0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1,
-                            1,
+                            0,
                             1
                         ],
+                        "Scale": [
+                            0.25,
+                            0.25,
+                            0.25
+                        ],
                         "ScaleNegative": false,
-                        "ID": "12344190475828032727"
+                        "ID": "4467916393504518352"
                     },
                     {
                         "Type": 1,
@@ -48,7 +48,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "4756141733567189846",
+                        "ID": "9678068179819505950",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "15979036104549893341",
@@ -63,10 +63,17 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "5293100706012226546",
+                        "ID": "2810444726795062269",
                         "HasTexture": true,
                         "TextureID": "6974451830160532054",
                         "Enabled": true
+                    },
+                    {
+                        "Type": 5,
+                        "ID": "17739476060679402957",
+                        "ResourceID": "10048217376534367663",
+                        "DataName": "Bullet",
+                        "HasInspector": false
                     }
                 ]
             }

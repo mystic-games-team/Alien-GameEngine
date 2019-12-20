@@ -165,11 +165,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Macros\AlienScripts.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="Tank.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Macros\dllmain.cpp" />
     <ClCompile Include="Move.cpp" />
     <ClCompile Include="Tank.cpp" />
