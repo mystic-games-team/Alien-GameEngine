@@ -1,0 +1,12 @@
+{
+    "Meta": {
+        "ID": "11297238060066218818"
+    },
+    "HasData": true,
+    "DataStructure": [
+        {
+            "DataName": "Test",
+            "UsesAlien": true
+        }
+    ]
+}

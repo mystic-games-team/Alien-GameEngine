@@ -357,7 +357,7 @@ void ModuleUI::CreateScriptFile(const int& type, bool to_export, const char* nam
 				file_str = line;
 			}
 			else {
-				file_str += std::string("\r") + line;
+				file_str += std::string("\n") + line;
 			}
 		}
 		file.close();
@@ -387,7 +387,7 @@ void ModuleUI::CreateScriptFile(const int& type, bool to_export, const char* nam
 				cpp_str = line;
 			}
 			else {
-				cpp_str += std::string("\r") + line;
+				cpp_str += std::string("\n") + line;
 			}
 		}
 		cpp.close();
