@@ -228,6 +228,8 @@ void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, floa
 		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);
 		transform->SetLocalPosition(pos.x, pos.y, pos.z);
 		delete prefab;
+		App->camera->fake_camera->Look(parent->children.back()->GetBB().CenterPoint());
+		App->camera->reference = parent->children.back()->GetBB().CenterPoint();
 	}
 	else {
 		LOG("Error loading prefab %s", path.data());

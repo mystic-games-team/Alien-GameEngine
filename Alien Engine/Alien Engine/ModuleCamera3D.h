@@ -40,9 +40,9 @@ public:
 
 	ComponentCamera* fake_camera = nullptr;
 
-private:
-
 	float3 reference = float3::zero;
+
+private:
 
 	Frustum* frustum=nullptr;
 
