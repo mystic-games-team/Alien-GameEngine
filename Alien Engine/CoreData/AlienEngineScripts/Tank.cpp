@@ -26,44 +26,69 @@ void Tank::Update()
 	}
 
 	float3 accel_vector = { 0, 0, 0 };
+	float3 euler_rotation = { 0,0,0 };
 
 	if (Input::GetKeyRepeat(SDL_SCANCODE_W)) 
 	{
-		accel_vector += transform->forward.Mul(acceleration * Time::GetDT());
+		velocity += acceleration * Time::GetDT();
 	}
 	if (Input::GetKeyRepeat(SDL_SCANCODE_S))
 	{
-		accel_vector -= transform->forward.Mul(acceleration * Time::GetDT());
+		velocity -= acceleration * Time::GetDT();
 	}
+
+	velocity = Maths::Clamp(velocity, max_velocity_backward, max_velocity_forward);
 
 	if (Input::GetKeyRepeat(SDL_SCANCODE_A))
 	{
-		accel_vector -= transform->right.Mul(acceleration * Time::GetDT());
+		euler_rotation = transform->GetLocalRotation().ToEulerXYZ() * RADTODEG;
+
+		if (!change_angle)
+		{
+			euler_rotation.y += 15 * Time::GetDT();
+		}
+		else
+		{
+			euler_rotation.y -= 15 * Time::GetDT();
+		}
+
+		if (euler_rotation.y >= 90 || euler_rotation.y <= -90)
+		{
+			change_angle = true;
+		}
+		else
+			change_angle = false;
+
+		euler_rotation *= DEGTORAD;
+		transform->SetLocalRotation(Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z));
 	}
 
 	if (Input::GetKeyRepeat(SDL_SCANCODE_D))
 	{
-		accel_vector += transform->right.Mul(acceleration * Time::GetDT());
+		euler_rotation = transform->GetLocalRotation().ToEulerXYZ() * RADTODEG;
+
+		if (change_angle)
+		{
+			euler_rotation.y += 15 * Time::GetDT();
+		}
+		else
+		{
+			euler_rotation.y -= 15 * Time::GetDT();
+		}
+
+		if (euler_rotation.y >= 90 || euler_rotation.y <= -90)
+		{
+			change_angle = true;
+		}
+		else
+			change_angle = false;
+
+		euler_rotation *= DEGTORAD;
+		transform->SetLocalRotation(Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z));
 	}
 
-	// Direction should only be incremented if the input is entering
+	transform->SetLocalPosition(transform->GetGlobalPosition() + transform->forward.Mul(velocity).Mul(Time::GetDT()));
 
-	if (velocity < max_velocity)
-	{
-		velocity += accel_vector.Length();
-		direction += accel_vector.Normalized();
-		Debug::Log("D_X: %f", direction.x);
-		Debug::Log("D_Y: %f", direction.y);
-		Debug::Log("D_Z: %f", direction.z);
-		if (velocity > max_velocity)
-			velocity = max_velocity;
-	}
-
-	transform->SetLocalPosition(transform->GetGlobalPosition() + direction.Mul(velocity).Mul(Time::GetDT()));
-	Debug::Log("X: %f", accel_vector.x);
-	Debug::Log("Y: %f", accel_vector.y);
-	Debug::Log("Z: %f", accel_vector.z);
-	
 	if (velocity > 0)
 	{
 		velocity -= friction_force;
@@ -72,12 +97,12 @@ void Tank::Update()
 			velocity = 0;
 		}
 	}
-	else
-		direction = { 0,0,0 };
-
-	
-
-	/*float3 euler_rotation = wheels_transform->GetLocalRotation().ToEulerXYZ();
-	euler_rotation.y = accel_vector.Normalized().AngleBetween({ 1,0,0 });
-	wheels_transform->SetLocalRotation(Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z));*/
+	else if (velocity < 0)
+	{
+		velocity += friction_force;
+		if (velocity > 0)
+		{
+			velocity = 0;
+		}
+	}
 }
