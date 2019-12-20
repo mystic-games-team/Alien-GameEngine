@@ -186,8 +186,11 @@ update_status ModuleObjects::PostUpdate(float dt)
 			
 			if (prefab_scene) {
 				glEnable(GL_LIGHT0);
-				static GLfloat f[4] = { 1,1,1,1 };
-				glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, f);
+				static Color ambient{ 0.5f, 0.5f, 0.5f, 1.0f };
+				static Color diffuse{ 0.75f, 0.75f, 0.75f, 1.0f };
+				glLightfv(GL_LIGHT0, GL_POSITION, float3(0, 15, -40).ptr());
+				glLightfv(GL_LIGHT0, GL_AMBIENT, &ambient);
+				glLightfv(GL_LIGHT0, GL_DIFFUSE, &diffuse);
 			}
 			std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
 			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();

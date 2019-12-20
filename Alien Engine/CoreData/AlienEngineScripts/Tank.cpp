@@ -89,7 +89,7 @@ void Tank::Update()
 		transform->SetLocalRotation(Quat::FromEulerXYZ(euler_rotation.x, euler_rotation.y, euler_rotation.z));
 	}
 
-	transform->SetLocalPosition(transform->GetGlobalPosition() + transform->forward.Mul(velocity).Mul(Time::GetDT()));
+	transform->SetLocalPosition(transform->GetGlobalPosition() + transform->forward * velocity * Time::GetDT());
 
 	if (velocity > 0)
 	{
