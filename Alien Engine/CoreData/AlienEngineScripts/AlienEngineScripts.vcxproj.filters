@@ -24,9 +24,6 @@
     <ClInclude Include="Tank.h">
       <Filter>Archivos de recursos</Filter>
     </ClInclude>
-    <ClInclude Include="Test.h">
-      <Filter>Archivos de recursos</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Move.cpp">
@@ -36,9 +33,6 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="Tank.cpp">
-      <Filter>Archivos de recursos</Filter>
-    </ClCompile>
-    <ClCompile Include="Test.cpp">
       <Filter>Archivos de recursos</Filter>
     </ClCompile>
   </ItemGroup>
