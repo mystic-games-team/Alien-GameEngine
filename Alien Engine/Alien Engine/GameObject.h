@@ -171,7 +171,7 @@ private:
 	void SaveObject(JSONArraypack* to_save, const uint& family_number);
 	void LoadObject(JSONArraypack* to_save, GameObject* parent, bool force_no_selected = false);
 
-	void Clone();
+	GameObject* Clone();
 	void CloningGameObject(GameObject* clone);
 
 	void SearchResourceToDelete(const ResourceType& type, Resource* to_delete);

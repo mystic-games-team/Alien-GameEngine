@@ -192,9 +192,13 @@ void PanelScene::GuizmosLogic()
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
 		static bool guizmo_return = true;
-		
+		static bool duplicate = false;
 		if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && !block_move)
 		{
+			if (!duplicate && (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_REPEAT)) {
+				duplicate = true;
+				App->objects->DuplicateObjects();
+			}
 			GameObject* root = App->objects->GetRoot(true);
 			item = selected.begin();
 			for (; item != selected.end(); ++item) {
@@ -218,6 +222,7 @@ void PanelScene::GuizmosLogic()
 		}
 		else if (!guizmo_return) {
 			guizmo_return = true;
+			duplicate = false;
 		}
 	}
 }

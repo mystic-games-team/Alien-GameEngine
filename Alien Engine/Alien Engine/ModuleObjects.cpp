@@ -902,10 +902,19 @@ void ModuleObjects::AddScriptObject(const u64& ID, GameObject** object)
 void ModuleObjects::DuplicateObjects()
 {
 	if (App->camera->is_scene_focused || App->ui->panel_hierarchy->is_focused) {
+		std::vector<GameObject*> new_selected;
 		auto item = game_objects_selected.begin();
 		for (; item != game_objects_selected.end(); ++item) {
 			if (*item != nullptr) {
-				(*item)->Clone();
+				new_selected.push_back((*item)->Clone());
+			}
+		}
+		DeselectObjects();
+		auto item2 = new_selected.begin();
+		for (; item2 != new_selected.end(); ++item2) {
+			if (*item2 != nullptr) {
+				(*item2)->ChangeSelected(true);
+				game_objects_selected.push_back(*item2);
 			}
 		}
 	}

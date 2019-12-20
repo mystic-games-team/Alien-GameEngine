@@ -1109,18 +1109,31 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 
 }
 
-void GameObject::Clone()
+GameObject* GameObject::Clone()
 {
 	GameObject* clone = new GameObject(parent);
 	CloningGameObject(clone);
 	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, clone);
+	return clone;
 }
 
 void GameObject::CloningGameObject(GameObject* clone)
 {
 	clone->to_delete = to_delete;
 	clone->prefabID = prefabID;
-	strcpy(clone->name, name);
+
+	std::string name_ = name;
+	if (name_.back() != ')') {
+		strcpy(clone->name, std::string(name + std::string(" (1)")).data());
+	}
+	else {
+		int num = std::stoi(&(name_.at(name_.size() - 2)));
+		int offset = std::to_string(num).size() + 2;
+		std::string nam(name_.begin(), name_.size() - offset + name_.begin());
+		nam += std::string("(" + std::to_string(num + 1) + std::string(")"));
+		strcpy(clone->name, nam.data());
+	}
+	
 	strcpy(clone->tag, tag);
 	clone->enabled = enabled;
 	clone->parent_enabled = parent_enabled;
