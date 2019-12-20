@@ -109,7 +109,7 @@ void Tank::Update()
 
 
 	// Shooting
-	if (Input::GetMouseButton(Input::MOUSE_LEFT_BUTTON))
+	if (Input::GetMouseButtonDown(Input::MOUSE_LEFT_BUTTON))
 	{
 		bullet.ConvertToGameObject(transform->GetGlobalPosition());
 	}

@@ -102,7 +102,7 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 	// scripts preupdate
 	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
-		std::vector<Alien*>::iterator item = current_scripts.begin();
+		std::list<Alien*>::iterator item = current_scripts.begin();
 		for (; item != current_scripts.end(); ++item) {
 			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 				(*item)->PreUpdate();
@@ -117,7 +117,7 @@ update_status ModuleObjects::Update(float dt)
 {
 	// scripts update
 	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
-		std::vector<Alien*>::iterator item = current_scripts.begin();
+		std::list<Alien*>::iterator item = current_scripts.begin();
 		for (; item != current_scripts.end(); ++item) {
 			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 				(*item)->Update();
@@ -131,7 +131,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 {
 	// scripts postupdate
 	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
-		std::vector<Alien*>::iterator item = current_scripts.begin();
+		std::list<Alien*>::iterator item = current_scripts.begin();
 		for (; item != current_scripts.end(); ++item) {
 			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 				(*item)->PostUpdate();
@@ -436,7 +436,7 @@ void ModuleObjects::DeselectObject(GameObject* obj)
 void ModuleObjects::InitScriptsOnPlay() const
 {
 	// scripts awake
-	std::vector<Alien*>::const_iterator item = current_scripts.cbegin();
+	std::list<Alien*>::const_iterator item = current_scripts.cbegin();
 	for (; item != current_scripts.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 			(*item)->Awake();
@@ -454,7 +454,7 @@ void ModuleObjects::InitScriptsOnPlay() const
 void ModuleObjects::CleanUpScriptsOnStop() const
 {
 	// scripts cleanup
-	std::vector<Alien*>::const_iterator item = current_scripts.cbegin();
+	std::list<Alien*>::const_iterator item = current_scripts.cbegin();
 	for (; item != current_scripts.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr) {
 			(*item)->CleanUp();
@@ -466,14 +466,12 @@ void ModuleObjects::OnDrawGizmos() const
 {
 	Gizmos::controller = !Gizmos::controller;
 	// scripts OnDrawGizmos
-	for (std::vector<Alien*>::const_iterator item = current_scripts.cbegin(); item != current_scripts.cend(); ++item) {
+	for (std::list<Alien*>::const_iterator item = current_scripts.cbegin(); item != current_scripts.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 			(*item)->OnDrawGizmos();
 		}
 	}
 	// scripts OnDrawGizmosSelected
-	
-
 	auto item = game_objects_selected.cbegin();
 	for (; item != game_objects_selected.cend(); ++item) {
 		if (*item != nullptr && (*item)->parent_enabled && (*item)->enabled) {
