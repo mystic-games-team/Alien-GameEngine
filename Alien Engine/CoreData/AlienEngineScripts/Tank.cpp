@@ -119,6 +119,10 @@ void Tank::Update()
 		{
 			Bullet* minion = (Bullet*)bullet_created->GetComponentScript("Bullet");
 			minion->bullet_direction = turret_transform->forward;
+			velocity -= recoil;
 		}
 	}
+
+	Debug::Log("%f", velocity);
+
 }
