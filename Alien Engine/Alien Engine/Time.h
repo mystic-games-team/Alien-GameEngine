@@ -9,6 +9,8 @@ private:
 	friend class ModuleUI;
 	friend class ReturnZ;
 	friend class ModuleObjects;
+	friend class PanelScene;
+	friend class PanelInspector;
 
 	enum class GameState {
 		NONE,

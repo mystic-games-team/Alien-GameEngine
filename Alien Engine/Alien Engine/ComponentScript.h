@@ -56,6 +56,7 @@ class __declspec(dllexport) ComponentScript : public Component {
 	friend class ReturnZ;
 	friend class CompZ;
 	friend class PanelInspector;
+	friend class Prefab;
 	friend class ModuleObjects;
 	friend class GameObject;
 public:

@@ -7,6 +7,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentLight.h"
 #include "ReturnZ.h"
+#include "Alien.h"
 #include "ComponentScript.h"
 
 PanelInspector::PanelInspector(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -286,7 +287,14 @@ void PanelInspector::ButtonAddComponent()
 					comp_script->LoadData(std::get<0>(script_info), std::get<1>(script_info));
 					std::get<0>(script_info) = "Return To Components";
 					component = 0;
-					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, comp_script);
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, (void*)comp_script);
+					if (Time::IsInGameState() && comp_script->need_alien && comp_script->data_ptr != nullptr) {
+						Alien* alien = (Alien*)comp_script;
+						if (alien != nullptr) {
+							alien->Awake();
+							alien->Start();
+						}
+					}
 				}
 				else {
 					LOG("This script is already attached!");

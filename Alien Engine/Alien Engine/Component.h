@@ -26,6 +26,7 @@ class __declspec(dllexport) Component {
 	friend class ComponentScript;
 	friend class GameObject;
 	friend class ReturnZ;
+	friend class Prefab;
 	friend class CompZ;
 	friend class PanelInspector;
 	friend class ModuleObjects;

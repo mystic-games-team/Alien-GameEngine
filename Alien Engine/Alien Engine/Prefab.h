@@ -11,6 +11,7 @@ class __declspec(dllexport) Prefab {
 	friend class FileNode;
 	friend class ModuleObjects;
 	friend class GameObject;
+	friend class PanelScene;
 public:
 
 	Prefab();
@@ -18,6 +19,10 @@ public:
 
 	// parent = nullptr set the root
 	GameObject* ConvertToGameObject(float3 local_position, GameObject * parent = nullptr);
+
+private:
+
+	static void InitScripts(GameObject* obj);
 
 private:
 	u64 prefabID = 0;

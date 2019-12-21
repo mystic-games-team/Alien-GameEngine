@@ -7,6 +7,7 @@
 #include "PanelSceneSelector.h"
 #include "ResourcePrefab.h"
 #include "ComponentTransform.h"
+#include "Prefab.h"
 #include "ReturnZ.h"
 #include "PanelGame.h"
 
@@ -102,6 +103,9 @@ void PanelScene::PanelLogic()
 				if (ID != 0) {
 					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
 					prefab->ConvertToGameObjects(App->objects->GetRoot(false));
+					if (Time::IsInGameState()) {
+						Prefab::InitScripts(App->objects->GetRoot(false)->children.back());
+					}
 					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
 				}
 			}

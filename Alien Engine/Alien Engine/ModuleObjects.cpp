@@ -880,6 +880,16 @@ void ModuleObjects::HotReload()
 					if (to_load->GetBoolean("AreScripts")) {
 						JSONArraypack* scripts_to_load = to_load->GetArray("Arr.Scripts");
 						ReAssignScripts(scripts_to_load);
+
+						if (Time::IsInGameState()) {
+							auto item = current_scripts.begin();
+							for (; item != current_scripts.end(); ++item) {
+								if (*item != nullptr) {
+									(*item)->Awake();
+									(*item)->Start();
+								}
+							}
+						}
 					}
 					remove("Library/ScriptsTEMP.alien");
 					delete to_load;
