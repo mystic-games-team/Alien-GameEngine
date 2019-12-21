@@ -131,7 +131,7 @@ const float3 ComponentTransform::GetGlobalScale() const
 
 void ComponentTransform::SetLocalRotation(const Quat& new_local_rotation)
 {
-	local_rotation = new_local_rotation;
+	local_rotation.Set(new_local_rotation.x, new_local_rotation.y, new_local_rotation.z, new_local_rotation.w);
 
 	euler_rotation = local_rotation.ToEulerXYZ();
 	euler_rotation.x = RadToDeg(euler_rotation.x);

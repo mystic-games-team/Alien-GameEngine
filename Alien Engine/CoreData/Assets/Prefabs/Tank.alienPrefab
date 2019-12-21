@@ -7,7 +7,7 @@
             {
                 "Name": "Tank",
                 "FamilyNumber": 1,
-                "ID": "13873395784539047494",
+                "ID": "2685520804458915635",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -38,11 +38,11 @@
                             0.0099999997764825821
                         ],
                         "ScaleNegative": false,
-                        "ID": "4050192135769522758"
+                        "ID": "5791820415935522339"
                     },
                     {
                         "Type": 5,
-                        "ID": "3533131259541813990",
+                        "ID": "17849260989729751105",
                         "ResourceID": "6911904684565242698",
                         "DataName": "Tank",
                         "HasInspector": true,
@@ -64,6 +64,11 @@
                             },
                             {
                                 "VarType": 3,
+                                "Name": "recoil",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 3,
                                 "Name": "friction_force",
                                 "float": 0.05000000074505806
                             },
@@ -79,11 +84,11 @@
             {
                 "Name": "TankRenderers",
                 "FamilyNumber": 2,
-                "ID": "6157312027656868688",
-                "ParentID": "13873395784539047494",
+                "ID": "128404793599726729",
+                "ParentID": "2685520804458915635",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -110,19 +115,19 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15582497104227593600"
+                        "ID": "3347817599112718039"
                     }
                 ]
             },
             {
                 "Name": "TankTurret",
                 "FamilyNumber": 3,
-                "ID": "10790178601962209509",
-                "ParentID": "6157312027656868688",
+                "ID": "1515015424881046659",
+                "ParentID": "128404793599726729",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -148,19 +153,19 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9441598663907168289"
+                        "ID": "15264763592704772467"
                     }
                 ]
             },
             {
                 "Name": "TankTurret0",
                 "FamilyNumber": 4,
-                "ID": "5795976940399426023",
-                "ParentID": "10790178601962209509",
+                "ID": "15503250050353065736",
+                "ParentID": "1515015424881046659",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -186,7 +191,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5983975249302336085"
+                        "ID": "1075800296000713351"
                     },
                     {
                         "Type": 1,
@@ -196,7 +201,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "10587540109074103732",
+                        "ID": "5338825965571791579",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "1040890521049193598",
@@ -211,7 +216,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "4237465352900288686",
+                        "ID": "9975321912664875033",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -220,12 +225,12 @@
             {
                 "Name": "TankTurret1",
                 "FamilyNumber": 4,
-                "ID": "7019147839295892109",
-                "ParentID": "10790178601962209509",
+                "ID": "17982967411503081850",
+                "ParentID": "1515015424881046659",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -251,7 +256,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13618482675743019439"
+                        "ID": "14922226203048068966"
                     },
                     {
                         "Type": 1,
@@ -261,7 +266,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "13031443988968673591",
+                        "ID": "3493951527166890422",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "3684109019140756085",
@@ -276,7 +281,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "12226377861710237690",
+                        "ID": "17178115494377185910",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -285,12 +290,12 @@
             {
                 "Name": "Lower_Tank",
                 "FamilyNumber": 3,
-                "ID": "15630930331376683514",
-                "ParentID": "6157312027656868688",
+                "ID": "6383232948638098713",
+                "ParentID": "128404793599726729",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -316,19 +321,19 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3026633785018112706"
+                        "ID": "14442492136652591099"
                     }
                 ]
             },
             {
                 "Name": "TankChassis",
                 "FamilyNumber": 4,
-                "ID": "18115423072583702492",
-                "ParentID": "15630930331376683514",
+                "ID": "13877396973137288769",
+                "ParentID": "6383232948638098713",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -354,19 +359,19 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12708126543393471052"
+                        "ID": "5083812280650100331"
                     }
                 ]
             },
             {
                 "Name": "TankChassis0",
                 "FamilyNumber": 5,
-                "ID": "5885623752678955797",
-                "ParentID": "18115423072583702492",
+                "ID": "16165948755925375706",
+                "ParentID": "13877396973137288769",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -392,7 +397,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18429850007623337254"
+                        "ID": "4464339248326844582"
                     },
                     {
                         "Type": 1,
@@ -402,7 +407,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "15014081746067430842",
+                        "ID": "4760377367315132660",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "11073574909247652545",
@@ -417,7 +422,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "7195464483970662125",
+                        "ID": "16510865679839595896",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -426,12 +431,12 @@
             {
                 "Name": "TankChassis1",
                 "FamilyNumber": 5,
-                "ID": "18134190444028344183",
-                "ParentID": "18115423072583702492",
+                "ID": "1341638042659977637",
+                "ParentID": "13877396973137288769",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -457,7 +462,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13889523804052096833"
+                        "ID": "7645911368928982951"
                     },
                     {
                         "Type": 1,
@@ -467,7 +472,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "4790176400198574574",
+                        "ID": "5690907996600782861",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "17204551756428324339",
@@ -482,7 +487,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "16658309450887880022",
+                        "ID": "5258244916439816657",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -491,12 +496,12 @@
             {
                 "Name": "TankChassis2",
                 "FamilyNumber": 5,
-                "ID": "17757648932712178475",
-                "ParentID": "18115423072583702492",
+                "ID": "11937947924233301509",
+                "ParentID": "13877396973137288769",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -522,7 +527,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17070304604816546539"
+                        "ID": "17663889889886628026"
                     },
                     {
                         "Type": 1,
@@ -532,7 +537,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "12545609668199195632",
+                        "ID": "11331265495053331641",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "4560858234170784574",
@@ -547,7 +552,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "2393532763844031586",
+                        "ID": "7711036946502106399",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -556,12 +561,12 @@
             {
                 "Name": "TankTracksRight",
                 "FamilyNumber": 4,
-                "ID": "48825103910787479",
-                "ParentID": "15630930331376683514",
+                "ID": "275247932008137162",
+                "ParentID": "6383232948638098713",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -587,19 +592,19 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1093477776094334742"
+                        "ID": "2247833755687629990"
                     }
                 ]
             },
             {
                 "Name": "TankTracksRight0",
                 "FamilyNumber": 5,
-                "ID": "2560612483364532393",
-                "ParentID": "48825103910787479",
+                "ID": "17302681891640367774",
+                "ParentID": "275247932008137162",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -625,7 +630,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "6407613197893609345"
+                        "ID": "8881320571517072615"
                     },
                     {
                         "Type": 1,
@@ -635,7 +640,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "16662211210263952705",
+                        "ID": "8116850594416665629",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "6812103188346852185",
@@ -650,7 +655,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "11852019573254439945",
+                        "ID": "15252365048903766373",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -659,12 +664,12 @@
             {
                 "Name": "TankTracksRight1",
                 "FamilyNumber": 5,
-                "ID": "7121799869226399855",
-                "ParentID": "48825103910787479",
+                "ID": "12008534435910320060",
+                "ParentID": "275247932008137162",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -690,7 +695,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7649435110708275038"
+                        "ID": "16933356559602531079"
                     },
                     {
                         "Type": 1,
@@ -700,7 +705,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "6175534070847546945",
+                        "ID": "12259163380747682362",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9598230646652024850",
@@ -715,7 +720,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "18340296529081909575",
+                        "ID": "13852715065118894450",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -724,12 +729,12 @@
             {
                 "Name": "TankTracksLeft",
                 "FamilyNumber": 4,
-                "ID": "265134289135960504",
-                "ParentID": "15630930331376683514",
+                "ID": "9430629688991560785",
+                "ParentID": "6383232948638098713",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -755,19 +760,19 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4439940917518659503"
+                        "ID": "10775489273349188613"
                     }
                 ]
             },
             {
                 "Name": "TankTracksLeft0",
                 "FamilyNumber": 5,
-                "ID": "13721964512566226670",
-                "ParentID": "265134289135960504",
+                "ID": "4438541320360001027",
+                "ParentID": "9430629688991560785",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -793,7 +798,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5302761050224132862"
+                        "ID": "17406839029208836812"
                     },
                     {
                         "Type": 1,
@@ -803,7 +808,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "15355989976342915428",
+                        "ID": "10404399893352375157",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "3087502241609226189",
@@ -818,7 +823,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "11084986109141263228",
+                        "ID": "3232399714675306719",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -827,12 +832,12 @@
             {
                 "Name": "TankTracksLeft1",
                 "FamilyNumber": 5,
-                "ID": "4834250180801592472",
-                "ParentID": "265134289135960504",
+                "ID": "5886044752024503839",
+                "ParentID": "9430629688991560785",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -858,7 +863,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "945621383453925117"
+                        "ID": "3873235439086529259"
                     },
                     {
                         "Type": 1,
@@ -868,7 +873,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "8034150537467433296",
+                        "ID": "11905780771998603757",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "3137283523178973172",
@@ -883,7 +888,7 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "1783805754680463604",
+                        "ID": "6416956079235591947",
                         "HasTexture": false,
                         "Enabled": true
                     }
@@ -891,9 +896,9 @@
             },
             {
                 "Name": "TankCam",
-                "FamilyNumber": 2,
-                "ID": "12861564673307077492",
-                "ParentID": "13873395784539047494",
+                "FamilyNumber": 4,
+                "ID": "9039130935262241152",
+                "ParentID": "6383232948638098713",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -907,14 +912,14 @@
                     {
                         "Type": 0,
                         "Position": [
-                            2.6909659936791286e-05,
+                            2.6909661755780689e-05,
                             373.71206665039063,
                             -225.73640441894531
                         ],
                         "Rotation": [
                             0.38268345594406128,
-                            1.8708014738050283e-12,
-                            2.9254414645948912e-13,
+                            1.8675191601480456e-12,
+                            2.9390362756356869e-13,
                             0.92387950420379639
                         ],
                         "Scale": [
@@ -923,7 +928,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "16533025380529198779"
+                        "ID": "5280199634773175076"
                     },
                     {
                         "Type": 4,
@@ -938,7 +943,7 @@
                         "FarPlane": 200,
                         "NearPlane": 0.10000000149011612,
                         "isFovHori": 0,
-                        "ID": "5651429767996827622",
+                        "ID": "1871821513856515315",
                         "IsGameCamera": true,
                         "IsSelectedCamera": false,
                         "PrintIcon": true,
