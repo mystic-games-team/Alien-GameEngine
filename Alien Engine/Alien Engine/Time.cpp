@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "PanelConsole.h"
 #include "ModuleObjects.h"
+#include "PanelGame.h"
 
 Time::GameState Time::state = Time::GameState::NONE;
 float Time::time_since_start = 0.0F;
@@ -37,6 +38,7 @@ void Time::Play()
 			App->engine_logs.clear();
 		}
 		state = GameState::PLAY;
+		ImGui::SetWindowFocus(App->ui->panel_game->GetPanelName().data());
 		App->objects->InitScriptsOnPlay();
 		game_time = 0.0F;
 		game_timer->Start();
