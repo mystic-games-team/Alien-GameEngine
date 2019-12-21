@@ -203,8 +203,9 @@ bool ComponentMaterial::DrawInspector()
 void ComponentMaterial::Reset()
 {
 	color = { 1,1,1,1 };
-	if (texture != nullptr)
+	if (texture != nullptr) {
 		texture->DecreaseReferences();
+	}
 	texture = nullptr;
 }
 
@@ -213,11 +214,13 @@ void ComponentMaterial::SetComponent(Component* component)
 	if (component->GetType() == type) {
 
 		ComponentMaterial* material = (ComponentMaterial*)component;
-		if (texture != nullptr)
+		if (texture != nullptr) {
 			texture->DecreaseReferences();
+		}
 		texture = material->texture;
-		if (texture != nullptr)
+		if (texture != nullptr) {
 			texture->IncreaseReferences();
+		}
 
 		color = material->color;
 	}

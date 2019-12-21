@@ -41,13 +41,12 @@ protected:
 
 	virtual void Reset() {}
 	virtual void SetComponent(Component* component) {}
+	virtual void Clone(Component* clone) {}
 
 	virtual void SaveComponent(JSONArraypack* to_save) {}
 	virtual void LoadComponent(JSONArraypack* to_load) {}
 
 	void ResetIDs();
-
-	virtual void Clone(Component* clone) {}
 
 	const ComponentType& GetType() const;
 

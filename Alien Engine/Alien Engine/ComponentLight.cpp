@@ -114,6 +114,7 @@ void ComponentLight::Reset()
 {
 	ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
 	diffuse = { 0.75f, 0.75f, 0.75f, 1.0f };
+	print_icon = true;
 }
 
 void ComponentLight::SetComponent(Component* component)
@@ -125,6 +126,7 @@ void ComponentLight::SetComponent(Component* component)
 		light_id = light->light_id;
 		diffuse = light->diffuse;
 		ambient = light->ambient;
+		print_icon = light->print_icon;
 	}
 }
 

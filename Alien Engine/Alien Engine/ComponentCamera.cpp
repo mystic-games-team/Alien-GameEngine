@@ -224,6 +224,7 @@ void ComponentCamera::Reset()
 	frustum.verticalFov = DEGTORAD * vertical_fov;
 	AspectRatio(16, 9);
 	horizontal_fov = frustum.horizontalFov * RADTODEG;
+	print_icon = true;
 }
 
 void ComponentCamera::SetComponent(Component* component)
@@ -233,6 +234,14 @@ void ComponentCamera::SetComponent(Component* component)
 		ComponentCamera* camera = (ComponentCamera*)component;
 		
 		camera_color_background = camera->camera_color_background;
+		near_plane = camera->near_plane;
+		far_plane = camera->far_plane;
+		frustum = camera->frustum;
+		vertical_fov = camera->vertical_fov;
+		horizontal_fov = camera->horizontal_fov;
+		print_icon = camera->print_icon;
+		is_fov_horizontal = camera->is_fov_horizontal;
+		camera_icon_color = camera->camera_icon_color;
 	}
 }
 

@@ -43,6 +43,46 @@ void ComponentScript::Reset()
 
 void ComponentScript::SetComponent(Component* component)
 {
+	if (component->GetType() == type) {
+		ComponentScript* script = (ComponentScript*)component;
+		if (App->StringCmp(data_name.data(), script->data_name.data())) {
+			if (script->inspector_variables.size() == inspector_variables.size()) {
+				for (uint i = 0; i < inspector_variables.size(); ++i) {
+					if (inspector_variables[i].variable_type == script->inspector_variables[i].variable_type) {
+						switch (inspector_variables[i].variable_type)
+						{
+						case InspectorScriptData::DataType::INT: {
+							int* var = (int*)inspector_variables[i].ptr;
+							int* copy = (int*)script->inspector_variables[i].ptr;
+							*var = *copy;
+							break; }
+						case InspectorScriptData::DataType::FLOAT: {
+							float* var = (float*)inspector_variables[i].ptr;
+							float* copy = (float*)script->inspector_variables[i].ptr;
+							*var = *copy;
+							break; }
+						case InspectorScriptData::DataType::BOOL: {
+							bool* var = (bool*)inspector_variables[i].ptr;
+							bool* copy = (bool*)script->inspector_variables[i].ptr;
+							*var = *copy;
+							break; }
+						case InspectorScriptData::DataType::PREFAB: {
+							Prefab* var = (Prefab*)inspector_variables[i].ptr;
+							Prefab* copy = (Prefab*)script->inspector_variables[i].ptr;
+							(*var).prefabID = (*copy).prefabID;
+							(*var).prefab_name = (*copy).prefab_name;
+							break; }
+						case InspectorScriptData::DataType::GAMEOBJECT: {
+							*inspector_variables[i].obj = *script->inspector_variables[i].obj;
+							break; }
+						default:
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 bool ComponentScript::DrawInspector()
