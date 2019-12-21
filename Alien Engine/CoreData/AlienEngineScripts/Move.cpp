@@ -1,17 +1,17 @@
 #include "Move.h"
 #include "Tank.h"
 
-Move::Move() : Alien()
+Move2::Move2() : Alien()
 {
 
 }
 
-Move::~Move()
+Move2::~Move2()
 {
 
 }
 
-void Move::Start()
+void Move2::Start()
 {
 	bullet.ConvertToGameObject(transform->GetGlobalPosition());
 
@@ -22,7 +22,7 @@ void Move::Start()
 	}
 }
 
-void Move::Update()
+void Move2::Update()
 {
 	//if (Input::GetFirstKeyDown() == SDL_SCANCODE_1)
 	//	test = 12;
@@ -93,7 +93,7 @@ void Move::Update()
 	//}
 }
 
-void Move::OnDrawGizmos()
+void Move2::OnDrawGizmos()
 {
 	Gizmos::DrawCube(transform->GetGlobalPosition(), { 4,2,3 }, Color::Yellow());
 }

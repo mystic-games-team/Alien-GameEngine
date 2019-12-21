@@ -5,7 +5,7 @@
     "HasData": true,
     "DataStructure": [
         {
-            "DataName": "Move",
+            "DataName": "Move2",
             "UsesAlien": true
         }
     ]

@@ -82,31 +82,57 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 	meta_data_path = std::string(path.data());
 	path = std::string(assets_file_path);
 
-	JSON_Value* value = json_parse_file(path.data());
-	JSON_Object* object = json_value_get_object(value);
+	ID = App->resources->GetIDFromAlienPath(assets_file_path);
+	remove(assets_file_path);
+	std::ifstream file(meta_data_path);
+	if (file.is_open()) {
+		std::string line;
+		while (std::getline(file, line)) {
+			if (line.find("ALIEN_ENGINE_API") != std::string::npos) {
+				bool alien = false;
+				if (line.find("Alien") != std::string::npos) {
+					alien = true;
+				}
+				std::string class_name = GetDataStructure(line, "ALIEN_ENGINE_API");
+				data_structures.push_back({ class_name, alien });
+			}
+		}
+		file.close();
+	}
 
-	if (value != nullptr && object != nullptr)
-	{
-		JSONfilepack* script = new JSONfilepack(path, object, value);
+	JSON_Value* value = json_value_init_object();
+	JSON_Object* json_object = json_value_get_object(value);
+	json_serialize_to_file_pretty(value, path.data());
 
-		ID = std::stoull(script->GetString("Meta.ID"));
+	if (value != nullptr && json_object != nullptr) {
+		JSONfilepack* script = new JSONfilepack(path.data(), json_object, value);
+		script->StartSave();
+
+		script->SetString("Meta.ID", std::to_string(ID));
 
 		struct stat file;
 		if (stat(meta_data_path.c_str(), &file) == 0)
 		{
 			last_time_mod = file.st_mtime;
 		}
+		if (!data_structures.empty()) {
+			script->SetBoolean("HasData", true);
+			JSONArraypack* structures = script->InitNewArray("DataStructure");
 
-		if (script->GetBoolean("HasData")) {
-			JSONArraypack* structures = script->GetArray("DataStructure");
-			for (uint i = 0; i < structures->GetArraySize(); ++i) {
-				data_structures.push_back({ structures->GetString("DataName") ,structures->GetBoolean("UsesAlien") });
-				structures->GetAnotherNode();
+			for (uint i = 0; i < data_structures.size(); ++i) {
+				structures->SetAnotherNode();
+				structures->SetString("DataName", data_structures[i].first);
+				structures->SetBoolean("UsesAlien", data_structures[i].second);
 			}
 		}
+		else {
+			script->SetBoolean("HasData", false);
+		}
+		script->FinishSave();
 		delete script;
 		App->resources->AddResource(this);
 	}
+	
 	return true;
 }
 

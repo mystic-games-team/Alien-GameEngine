@@ -4,13 +4,13 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-class ALIEN_ENGINE_API Move : public Alien {
+class ALIEN_ENGINE_API Move2 : public Alien {
 
 public:
 
-	Move();
+	Move2();
 
-	virtual ~Move();
+	virtual ~Move2();
 
 
 	void Start();
@@ -28,8 +28,8 @@ public:
 	float time2 = 0;
 };
 
-ALIEN_FACTORY Move* CreateMove() {
-	Move* move = new Move();
+ALIEN_FACTORY Move2* CreateMove2() {
+	Move2* move = new Move2();
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(move->input_int_test);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_INT(move->drag_int_test);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(move->input_float_test);
