@@ -40,7 +40,7 @@ public:
 
 	ComponentCamera* fake_camera = nullptr;
 
-	float3 reference = float3::zero;
+	float3 reference = float3::zero();
 
 private:
 
@@ -55,5 +55,5 @@ private:
 	SDL_Cursor* cursor = nullptr;
 
 	bool start_lerp = false;
-	float3 point_to_look=(float3::zero);
+	float3 point_to_look = float3::zero();
 };

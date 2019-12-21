@@ -41,8 +41,6 @@ ALIEN_FACTORY Move* CreateMove() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(move->test_object);
 	return move;
 } 
-ALIEN_FACTORY void DestroyMove(Move* move) { delete move; }
-
 
 #endif // !_MOVE_H_
 

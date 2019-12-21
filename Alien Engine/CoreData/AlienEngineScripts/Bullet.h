@@ -28,4 +28,3 @@ ALIEN_FACTORY Bullet* CreateBullet() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(bullet->velocity);
 	return bullet;
 } 
-ALIEN_FACTORY void DestroyBullet(Bullet* alien) { delete alien; }

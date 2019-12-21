@@ -505,7 +505,7 @@ CONST_WIN32 float3 float3x4::Col(int col) const
 	assume(col < Cols);
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (col < 0 || col >= Cols)
-		return float3::nan;
+		return float3::nan();
 #endif
 	return float3(v[0][col], v[1][col], v[2][col]);
 }

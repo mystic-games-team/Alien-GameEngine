@@ -172,7 +172,7 @@ void PanelScene::GuizmosLogic()
 {
 	if (!App->objects->GetSelectedObjects().empty()) {
 		bool block_move = false;
-		float4x4 trans = float4x4::zero;
+		float4x4 trans = float4x4::zero();
 		std::list<GameObject*> selected = App->objects->GetSelectedObjects();
 		auto item = selected.begin();
 		for (; item != selected.end(); ++item) {

@@ -68,7 +68,7 @@ float3 Polyhedron::Vertex(int vertexIndex) const
 	assume(vertexIndex < (int)v.size());
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (vertexIndex < 0 || vertexIndex >= (int)v.size())
-		return float3::nan;
+		return float3::nan();
 #endif
 	
 	return v[vertexIndex];
@@ -81,7 +81,7 @@ LineSegment Polyhedron::Edge(int edgeIndex) const
 	assume(edgeIndex < (int)edges.size());
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (edgeIndex < 0 || edgeIndex >= (int)edges.size())
-		return LineSegment(float3::nan, float3::nan);
+		return LineSegment(float3::nan(), float3::nan());
 #endif
 	return edges[edgeIndex];
 }
@@ -167,7 +167,7 @@ float3 Polyhedron::FaceNormal(int faceIndex) const
 	else if (face.v.size() == 1)
 		return float3(0,1,0);
 	else
-		return float3::nan;
+		return float3::nan();
 }
 
 int Polyhedron::ExtremeVertex(const float3 &direction) const
@@ -202,7 +202,7 @@ void Polyhedron::ProjectToAxis(const float3 &direction, float &outMin, float &ou
 
 float3 Polyhedron::Centroid() const
 {
-	float3 centroid = float3::zero;
+	float3 centroid = float3::zero();
 	for(int i = 0; i < NumVertices(); ++i)
 		centroid += Vertex(i);
 	return centroid / (float)NumVertices();
@@ -533,7 +533,7 @@ float3 Polyhedron::ClosestPointConvex(const float3 &point) const
 	assume(IsConvex());
 	if (ContainsConvex(point))
 		return point;
-	float3 closestPoint = float3::nan;
+	float3 closestPoint = float3::nan();
 	float closestDistance = FLT_MAX;
 	for(int i = 0; i < NumFaces(); ++i)
 	{
@@ -552,7 +552,7 @@ float3 Polyhedron::ClosestPoint(const float3 &point) const
 {
 	if (Contains(point))
 		return point;
-	float3 closestPoint = float3::nan;
+	float3 closestPoint = float3::nan();
 	float closestDistance = FLT_MAX;
 	for(int i = 0; i < NumFaces(); ++i)
 	{
@@ -586,9 +586,9 @@ float3 Polyhedron::ClosestPoint(const LineSegment &lineSegment, float3 *lineSegm
 			*lineSegmentPt = lineSegment.b;
 		return lineSegment.b;
 	}
-	float3 closestPt = float3::nan;
+	float3 closestPt = float3::nan();
 	float closestDistance = FLT_MAX;
-	float3 closestLineSegmentPt = float3::nan;
+	float3 closestLineSegmentPt = float3::nan();
 	for(int i = 0; i < NumFaces(); ++i)
 	{
 		float3 lineSegPt;
@@ -1219,7 +1219,7 @@ Polyhedron Polyhedron::Octahedron(const float3 &centerPos, float scale, bool ccw
 Polyhedron Polyhedron::Hexahedron(const float3 &centerPos, float scale, bool ccwIsFrontFacing)
 {
 	AABB aabb(float3(-1,-1,-1), float3(1,1,1));
-	aabb.Scale(float3::zero, scale * 0.5f);
+	aabb.Scale(float3::zero(), scale * 0.5f);
 	aabb.Translate(centerPos);
 	Polyhedron p = aabb.ToPolyhedron();
 	if (ccwIsFrontFacing)

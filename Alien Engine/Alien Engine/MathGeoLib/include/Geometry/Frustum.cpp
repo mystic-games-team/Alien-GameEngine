@@ -515,7 +515,7 @@ float3 Frustum::CornerPoint(int cornerIndex) const
 
 float3 Frustum::ExtremePoint(const float3 &direction) const
 {
-	float3 mostExtreme = float3::nan;
+	float3 mostExtreme = float3::nan();
 	float mostExtremeDist = -FLT_MAX;
 	for(int i = 0; i < 8; ++i)
 	{
@@ -559,7 +559,7 @@ OBB Frustum::MinimalEnclosingOBB() const
 	obb.axis[1] = up;
 	obb.axis[2] = -front;
 	obb.axis[0] = Cross(obb.axis[1], obb.axis[2]);
-	obb.r = float3::zero;
+	obb.r = float3::zero();
 	for(int i = 0; i < 8; ++i)
 		obb.Enclose(CornerPoint(i));
 	return obb;

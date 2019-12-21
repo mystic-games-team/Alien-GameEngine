@@ -35,6 +35,8 @@
 #include <QMatrix4x4>
 #endif
 
+#include "MathConstants.h"
+
 MATH_BEGIN_NAMESPACE
 
 /// A 4-by-4 matrix for affine transformations and perspective projections of 3D geometry.
@@ -91,7 +93,9 @@ public:
 #endif
 
 	/// A constant matrix that has zeroes in all its entries.
-	static const float4x4 zero;
+	static const float4x4 zero() {
+		return float4x4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	}
 
 	/// A constant matrix that is the identity.
 	/** The identity matrix looks like the following:
@@ -100,13 +104,17 @@ public:
 		   0 0 1 0
 		   0 0 0 1
 		Transforming a vector by the identity matrix is like multiplying a number by one, i.e. the vector is not changed. */
-	static const float4x4 identity;
+	static const float4x4 identity() {
+		return float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+	}
 
 	/// A compile-time constant float4x4 which has NaN in each element.
 	/// For this constant, each element has the value of quiet NaN, or Not-A-Number.
 	/// @note Never compare a float4x4 to this value! Due to how IEEE floats work, for each float x, both the expression "x == nan" and "x != nan" returns false!
 	///	   That is, nothing is equal to NaN, not even NaN itself!
-	static const float4x4 nan;
+	static const float4x4 nan() {
+		return float4x4(FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN);
+	}
 
 	/// Creates a new float4x4 with uninitialized member values.
 	/** [opaque-qtscript] */

@@ -159,7 +159,7 @@ bool Sphere::IsDegenerate() const
 
 void Sphere::SetDegenerate()
 {
-	pos = float3::nan;
+	pos = float3::nan();
 	r = FLOAT_NAN;
 }
 

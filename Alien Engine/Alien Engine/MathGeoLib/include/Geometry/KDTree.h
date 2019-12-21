@@ -213,8 +213,8 @@ struct TriangleKdTreeRayQueryNearestHitVisitor
 	{
 		rayT = FLOAT_INF;
 		triangleIndex = KdTree<Triangle>::BUCKET_SENTINEL;
-		pos = float3::nan;
-		barycentricUV = float2::nan;
+		pos = float3::nan();
+		barycentricUV = float2::nan();
 	}
 	bool operator()(KdTree<Triangle> &tree, const KdTreeNode &leaf, const Ray &ray, float tNear, float tFar)
 	{

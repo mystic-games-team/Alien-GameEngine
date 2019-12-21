@@ -19,9 +19,9 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 
 	frustum.type = FrustumType::PerspectiveFrustum;
 
-	frustum.pos = float3::zero;
-	frustum.front = float3::unitZ;
-	frustum.up = float3::unitY;
+	frustum.pos = float3::zero();
+	frustum.front = float3::unitZ();
+	frustum.up = float3::unitY();
 
 	frustum.nearPlaneDistance = near_plane;
 	frustum.farPlaneDistance = far_plane;
@@ -261,7 +261,7 @@ void ComponentCamera::Look(const float3& position_to_look)
 {
 	float3 direction = position_to_look - frustum.pos;
 
-	float3x3 matrix = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3::unitY);
+	float3x3 matrix = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3::unitY());
 
 	frustum.front = matrix.MulDir(frustum.front).Normalized();
 	frustum.up = matrix.MulDir(frustum.up).Normalized();

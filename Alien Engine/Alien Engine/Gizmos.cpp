@@ -10,8 +10,8 @@ void Gizmos::DrawCube(const float3& position, const float3& size, const Color& c
 	float3 centered_pos = { position.x - size.x / 2 ,  position.y - size.y / 2 ,  position.z - size.z / 2 };
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
 		if (Gizmos::active_gizmos[i].type == PrimitiveType::CUBE) {
-			float4x4 matrix = float4x4::identity;
-			matrix = matrix.FromTRS(centered_pos, Quat::identity, size);
+			float4x4 matrix = float4x4::identity();
+			matrix = matrix.FromTRS(centered_pos, Quat::identity(), size);
 			DrawPoly(Gizmos::active_gizmos[i].mesh, matrix, color);
 			Gizmos::active_gizmos[i].controller = controller;
 			return;
@@ -19,8 +19,8 @@ void Gizmos::DrawCube(const float3& position, const float3& size, const Color& c
 	}
 	ResourceMesh* mesh = App->resources->GetPrimitive(PrimitiveType::CUBE);
 	Gizmos::active_gizmos.push_back(Gizmo(mesh, true, PrimitiveType::CUBE));
-	float4x4 matrix = float4x4::identity;
-	matrix = matrix.FromTRS(centered_pos, Quat::identity, size);
+	float4x4 matrix = float4x4::identity();
+	matrix = matrix.FromTRS(centered_pos, Quat::identity(), size);
 	DrawPoly(mesh, matrix, color);
 }
 
@@ -29,8 +29,8 @@ void Gizmos::DrawWireCube(const float3& position, const float3& size, const Colo
 	float3 centered_pos = { position.x - size.x / 2 ,  position.y - size.y / 2 ,  position.z - size.z / 2 };
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
 		if (Gizmos::active_gizmos[i].type == PrimitiveType::CUBE) {
-			float4x4 matrix = float4x4::identity;
-			matrix = matrix.FromTRS(centered_pos, Quat::identity, size);
+			float4x4 matrix = float4x4::identity();
+			matrix = matrix.FromTRS(centered_pos, Quat::identity(), size);
 			DrawWire(Gizmos::active_gizmos[i].mesh, matrix, color, line_width);
 			Gizmos::active_gizmos[i].controller = controller;
 			return;
@@ -38,8 +38,8 @@ void Gizmos::DrawWireCube(const float3& position, const float3& size, const Colo
 	}
 	ResourceMesh* mesh = App->resources->GetPrimitive(PrimitiveType::CUBE);
 	Gizmos::active_gizmos.push_back(Gizmo(mesh, true, PrimitiveType::CUBE));
-	float4x4 matrix = float4x4::identity;
-	matrix = matrix.FromTRS(centered_pos, Quat::identity, size);
+	float4x4 matrix = float4x4::identity();
+	matrix = matrix.FromTRS(centered_pos, Quat::identity(), size);
 	DrawWire(mesh, matrix, color, line_width);
 }
 
@@ -47,8 +47,8 @@ void Gizmos::DrawSphere(const float3& position, const float& radius, const Color
 {
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
 		if (Gizmos::active_gizmos[i].type == PrimitiveType::SPHERE_ALIEN) {
-			float4x4 matrix = float4x4::identity;
-			matrix = matrix.FromTRS(position, Quat::identity, { radius * 2, radius * 2, radius * 2 });
+			float4x4 matrix = float4x4::identity();
+			matrix = matrix.FromTRS(position, Quat::identity(), { radius * 2, radius * 2, radius * 2 });
 			DrawPoly(Gizmos::active_gizmos[i].mesh, matrix, color);
 			Gizmos::active_gizmos[i].controller = controller;
 			return;
@@ -56,8 +56,8 @@ void Gizmos::DrawSphere(const float3& position, const float& radius, const Color
 	}
 	ResourceMesh* mesh = App->resources->GetPrimitive(PrimitiveType::SPHERE_ALIEN);
 	Gizmos::active_gizmos.push_back(Gizmo(mesh, true, PrimitiveType::SPHERE_ALIEN));
-	float4x4 matrix = float4x4::identity;
-	matrix = matrix.FromTRS(position, Quat::identity, { radius * 2, radius * 2, radius * 2 });
+	float4x4 matrix = float4x4::identity();
+	matrix = matrix.FromTRS(position, Quat::identity(), { radius * 2, radius * 2, radius * 2 });
 	DrawPoly(mesh, matrix, color);
 }
 
@@ -65,8 +65,8 @@ void Gizmos::DrawWireSphere(const float3& position, const float& radius, const C
 {
 	for (uint i = 0; i < Gizmos::active_gizmos.size(); ++i) {
 		if (Gizmos::active_gizmos[i].type == PrimitiveType::SPHERE_ALIEN) {
-			float4x4 matrix = float4x4::identity;
-			matrix = matrix.FromTRS(position, Quat::identity, { radius * 2, radius * 2, radius * 2 });
+			float4x4 matrix = float4x4::identity();
+			matrix = matrix.FromTRS(position, Quat::identity(), { radius * 2, radius * 2, radius * 2 });
 			DrawWire(Gizmos::active_gizmos[i].mesh, matrix, color, line_width);
 			Gizmos::active_gizmos[i].controller = controller;
 			return;
@@ -74,8 +74,8 @@ void Gizmos::DrawWireSphere(const float3& position, const float& radius, const C
 	}
 	ResourceMesh* mesh = App->resources->GetPrimitive(PrimitiveType::SPHERE_ALIEN);
 	Gizmos::active_gizmos.push_back(Gizmo(mesh, true, PrimitiveType::SPHERE_ALIEN));
-	float4x4 matrix = float4x4::identity;
-	matrix = matrix.FromTRS(position, Quat::identity, { radius * 2, radius * 2, radius * 2 });
+	float4x4 matrix = float4x4::identity();
+	matrix = matrix.FromTRS(position, Quat::identity(), { radius * 2, radius * 2, radius * 2 });
 	DrawWire(mesh, matrix, color, line_width);
 }
 

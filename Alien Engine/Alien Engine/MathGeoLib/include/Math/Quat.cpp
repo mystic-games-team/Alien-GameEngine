@@ -337,7 +337,7 @@ float3 MUST_USE_RESULT Quat::SlerpVector(const float3 &from, const float3 &to, f
 		return to;
 	///\todo The following chain can be greatly optimized.
 	Quat q = Quat::RotateFromTo(from, to);
-	q = Slerp(Quat::identity, q, t);
+	q = Slerp(Quat::identity(), q, t);
 	return q.Transform(from);
 }
 
@@ -350,7 +350,7 @@ float3 MUST_USE_RESULT Quat::SlerpVectorAbs(const float3 &from, const float3 &to
 	if (a <= angleRadians)
 		return to;
 	float t = angleRadians / a;
-	q = Slerp(Quat::identity, q, t);
+	q = Slerp(Quat::identity(), q, t);
 	return q.Transform(from);
 }
 
@@ -566,7 +566,7 @@ Quat MUST_USE_RESULT Quat::RandomRotation(LCG &lcg)
 			return Quat(x, y, z, w) / Sqrt(lenSq);
 	}
 	assume(false && "Quat::RandomRotation failed!");
-	return Quat::identity;
+	return Quat::identity();
 }
 
 ///@todo the following could be heavily optimized. Don't route through float3x3 conversion.
@@ -782,8 +782,5 @@ Quat MUST_USE_RESULT Quat::Mul(const Quat &rhs) const { return *this * rhs; }
 Quat MUST_USE_RESULT Quat::Mul(const float3x3 &rhs) const { return *this * Quat(rhs); }
 float3 MUST_USE_RESULT Quat::Mul(const float3 &vector) const { return this->Transform(vector); }
 float4 MUST_USE_RESULT Quat::Mul(const float4 &vector) const { return this->Transform(vector); }
-
-const Quat Quat::identity = Quat(0.f, 0.f, 0.f, 1.f);
-const Quat Quat::nan = Quat(FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN);
 
 MATH_END_NAMESPACE

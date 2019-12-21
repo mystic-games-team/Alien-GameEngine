@@ -111,14 +111,14 @@ void ModuleCamera3D::Move(const float3& Movement)
 // -----------------------------------------------------------------
 void ModuleCamera3D::Movement()
 {
-	float3 movement(float3::zero);
+	float3 movement(float3::zero());
 
 
 
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
-		if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT) movement += float3::unitY;
-		if (App->input->GetKey(SDL_SCANCODE_X) == KEY_REPEAT) movement -= float3::unitY;
+		if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT) movement += float3::unitY();
+		if (App->input->GetKey(SDL_SCANCODE_X) == KEY_REPEAT) movement -= float3::unitY();
 
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) movement -= frustum->front;
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) movement += frustum->front;
@@ -126,7 +126,7 @@ void ModuleCamera3D::Movement()
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) movement -= frustum->WorldRight();
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) movement += frustum->WorldRight();
 
-		if (!movement.Equals(float3::zero))
+		if (!movement.Equals(float3::zero()))
 		{
 			frustum->Translate(movement * speed);
 			reference += movement*speed;
@@ -135,7 +135,7 @@ void ModuleCamera3D::Movement()
 
 	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
-		movement = float3::zero;
+		movement = float3::zero();
 
 		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 		SDL_SetCursor(cursor);
@@ -143,10 +143,10 @@ void ModuleCamera3D::Movement()
 		if (App->input->GetMouseXMotion() > -1) movement -= frustum->WorldRight();
 		if (App->input->GetMouseXMotion() < 1) movement += frustum->WorldRight();
 
-		if (App->input->GetMouseYMotion() < 1) movement -= float3::unitY * 0.5f;
-		if (App->input->GetMouseYMotion() > -1) movement += float3::unitY * 0.5f;
+		if (App->input->GetMouseYMotion() < 1) movement -= float3::unitY() * 0.5f;
+		if (App->input->GetMouseYMotion() > -1) movement += float3::unitY() * 0.5f;
 
-		if (!movement.Equals(float3::zero))
+		if (!movement.Equals(float3::zero()))
 		{
 			frustum->Translate(movement * mouse_speed);
 			reference += movement * mouse_speed;
@@ -161,7 +161,7 @@ void ModuleCamera3D::Movement()
 
 void ModuleCamera3D::Zoom()
 {
-	float3 zoom(float3::zero);
+	float3 zoom(float3::zero());
 
 	if (App->input->GetMouseZ() > 0)
 	{

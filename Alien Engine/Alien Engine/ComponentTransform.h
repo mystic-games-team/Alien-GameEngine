@@ -72,8 +72,8 @@ public:
 
 private:
 
-	float4x4 global_transformation = float4x4::identity;
-	float4x4 local_transformation = float4x4::identity;
+	float4x4 global_transformation = float4x4::identity();
+	float4x4 local_transformation = float4x4::identity();
 	
 	// to know if flip poly or not
 	bool is_scale_negative = false;

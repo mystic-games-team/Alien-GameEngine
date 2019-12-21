@@ -48,4 +48,3 @@ ALIEN_FACTORY Tank* CreateTank() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(tank->bullet);
 	return tank;
 }
-ALIEN_FACTORY void DestroyTank(Tank* tank) { delete tank; }

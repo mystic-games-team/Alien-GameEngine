@@ -150,9 +150,9 @@ public:
 
 class CompTransformZ : public CompZ {
 public:
-	float3 pos = float3::zero;
-	float3 scale = float3::zero;
-	Quat rot = Quat::identity;
+	float3 pos = float3::zero();
+	float3 scale = float3::zero();
+	Quat rot = Quat::identity();
 };
 
 class CompLightZ : public CompZ {

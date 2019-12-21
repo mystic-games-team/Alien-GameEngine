@@ -65,7 +65,7 @@ void PanelInspector::PanelLogic()
 
 			std::list<GameObject*> selected = App->objects->GetSelectedObjects();
 			auto item = selected.begin();
-			float4x4 trans = float4x4::zero;
+			float4x4 trans = float4x4::zero();
 			bool some_static = false;
 
 			for (; item != selected.end(); ++item) {
@@ -73,7 +73,7 @@ void PanelInspector::PanelLogic()
 					if ((*item)->is_static) {
 						some_static = true;
 					}
-					if (trans.Equals(float4x4::zero)) {
+					if (trans.Equals(float4x4::zero())) {
 						trans = (*item)->GetComponent<ComponentTransform>()->global_transformation;
 					}
 					else {

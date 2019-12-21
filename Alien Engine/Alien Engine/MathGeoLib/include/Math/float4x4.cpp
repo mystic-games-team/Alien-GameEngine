@@ -531,21 +531,21 @@ float4x4 float4x4::OrthographicProjection(const Plane &p)
 
 float4x4 float4x4::OrthographicProjectionYZ()
 {
-	float4x4 v = identity;
+	float4x4 v = identity();
 	v[0][0] = 0.f;
 	return v;
 }
 
 float4x4 float4x4::OrthographicProjectionXZ()
 {
-	float4x4 v = identity;
+	float4x4 v = identity();
 	v[1][1] = 0.f;
 	return v;
 }
 
 float4x4 float4x4::OrthographicProjectionXY()
 {
-	float4x4 v = identity;
+	float4x4 v = identity();
 	v[2][2] = 0.f;
 	return v;
 }
@@ -554,7 +554,7 @@ float4x4 float4x4::ComplementaryProjection() const
 {
 	assume(IsIdempotent());
 
-	return float4x4::identity - *this;
+	return float4x4::identity() - *this;
 }
 
 MatrixProxy<float4x4::Cols> &float4x4::operator[](int row)
@@ -671,7 +671,7 @@ CONST_WIN32 float3 float4x4::Col3(int col) const
 	assume(col < Cols);
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (col < 0 || col >= Cols)
-		return float3::nan;
+		return float3::nan();
 #endif
 	return float3(v[0][col], v[1][col], v[2][col]);
 }
@@ -1321,12 +1321,12 @@ float4x4 float4x4::Adjugate() const
 
 bool float4x4::CholeskyDecompose(float4x4 &outL) const
 {
-	return CholeskyDecomposeMatrix(*this, outL);
+	return CholeskyDecomposeMatrix(*this, outL, zero());
 }
 
 bool float4x4::LUDecompose(float4x4 &outLower, float4x4 &outUpper) const
 {
-	return LUDecomposeMatrix(*this, outLower, outUpper);
+	return LUDecomposeMatrix(*this, outLower, outUpper, identity(), zero());
 }
 
 bool float4x4::Inverse(float epsilon)
@@ -1343,7 +1343,7 @@ bool float4x4::Inverse(float epsilon)
 	mathassert(!success || (copy * *this).IsIdentity(1e-1f));
 	return success;
 #else
-	return InverseMatrix(*this, epsilon);
+	return InverseMatrix(*this, epsilon, identity());
 #endif
 #endif
 }
@@ -2184,9 +2184,5 @@ float4x4 float4x4::Mul(const Quat &rhs) const { return *this * rhs; }
 float3 float4x4::MulPos(const float3 &pointVector) const { return this->TransformPos(pointVector); }
 float3 float4x4::MulDir(const float3 &directionVector) const { return this->TransformDir(directionVector); }
 float4 float4x4::Mul(const float4 &vector) const { return *this * vector; }
-
-const float4x4 float4x4::zero	 = float4x4(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0);
-const float4x4 float4x4::identity = float4x4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
-const float4x4 float4x4::nan = float4x4(FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN);
 
 MATH_END_NAMESPACE

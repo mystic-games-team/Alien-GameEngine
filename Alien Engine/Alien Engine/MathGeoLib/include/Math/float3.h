@@ -41,6 +41,8 @@
 #include "../../../Bullet/include/LinearMath/btVector3.h"
 #endif
 
+#include "MathConstants.h"
+
 MATH_BEGIN_NAMESPACE
 
 /// A vector of form (x,y,z).
@@ -640,34 +642,48 @@ public:
 	/// Specifies a compile-time constant float3 with value (0, 0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float3 zero;
+	static const float3 zero() {
+		return float3(0, 0, 0);
+	}
 	/// Specifies a compile-time constant float3 with value (1, 1, 1). [similarOverload: zero]
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float3 one;
+	static const float3 one() {
+		return float3(1, 1, 1);
+	}
 	/// Specifies a compile-time constant float3 with value (1, 0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float3 unitX;
+	static const float3 unitX() {
+		return float3(1, 0, 0);
+	}
 	/// Specifies a compile-time constant float3 with value (0, 1, 0). [similarOverload: unitX]
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float3 unitY;
+	static const float3 unitY() {
+		return float3(0, 1, 0);
+	}
 	/// Specifies a compile-time constant float3 with value (0, 0, 1). [similarOverload: unitX]
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float3 unitZ;
+	static const float3 unitZ() {
+		return float3(0, 0, 1);
+	}
 	/// A compile-time constant float3 with value (NaN, NaN, NaN).
 	/** For this constant, each element has the value of quiet NaN, or Not-A-Number.
 		@note Never compare a float3 to this value! Due to how IEEE floats work, for each float x, both expressions "x == nan" and "x != nan" return false!
 			  That is, nothing is equal to NaN, not even NaN itself!
 		@note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float3 nan;
+	static const float3 nan() {
+		return float3(FLOAT_NAN, FLOAT_NAN, FLOAT_NAN);
+	}
 	/// A compile-time constant float3 with value (+infinity, +infinity, +infinity). [similarOverload: nan]
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float3 inf;
+	static const float3 inf() {
+		return float3(FLOAT_INF, FLOAT_INF, FLOAT_INF);
+	}
 
 #ifdef MATH_OGRE_INTEROP
 	float3(const Ogre::Vector3 &other) { x = other.x; y = other.y; z = other.z; }

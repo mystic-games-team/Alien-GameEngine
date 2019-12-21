@@ -18,5 +18,4 @@ ALIEN_FACTORY DataAlienTypeName* CreateDataAlienTypeName() {
 
 	return alien;
 } 
-ALIEN_FACTORY void DestroyDataAlienTypeName(DataAlienTypeName* alien) { delete alien; }
 

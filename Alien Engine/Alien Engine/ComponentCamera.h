@@ -76,8 +76,8 @@ private:
 	bool print_icon = true;
 	Color camera_icon_color = { 0.85f,0.85f,0.85f,0.5 };
 
-	float4x4 ViewMatrix = float4x4::identity;
-	float4x4 ViewMatrixInverse = float4x4::identity;
+	float4x4 ViewMatrix = float4x4::identity();
+	float4x4 ViewMatrixInverse = float4x4::identity();
 
 public:
 	Color camera_color_background{ 0.05f, 0.05f, 0.05f, 1.0f };

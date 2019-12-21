@@ -744,9 +744,9 @@ void InverseAffineMatrixNonuniformScale(Matrix &mat)
 }
 
 template<typename Matrix>
-bool InverseMatrix(Matrix &mat, float epsilon)
+bool InverseMatrix(Matrix &mat, float epsilon, Matrix identity)
 {
-	Matrix inversed = Matrix::identity; // will contain the inverse matrix
+	Matrix inversed = identity; // will contain the inverse matrix
 
 	for(int column = 0; column < Min<int>(Matrix::Rows, Matrix::Cols); ++column)
 	{
@@ -791,10 +791,10 @@ bool InverseMatrix(Matrix &mat, float epsilon)
 	@return True if the decomposition was successful, false otherwise. If the return value is false, the
 		contents of the output matrix are unspecified.*/
 template<typename Matrix>
-bool LUDecomposeMatrix(const Matrix &mat, Matrix &lower, Matrix &upper)
+bool LUDecomposeMatrix(const Matrix &mat, Matrix &lower, Matrix &upper, Matrix identity, Matrix zero)
 {
-	lower = Matrix::identity;
-	upper = Matrix::zero;
+	lower = identity;
+	upper = zero;
 
 	for(int i = 0; i < Matrix::Rows; ++i)
 	{
@@ -821,9 +821,9 @@ bool LUDecomposeMatrix(const Matrix &mat, Matrix &lower, Matrix &upper)
 	@return True if succesful, false otherwise. If the return value is false, the contents of the output
 		matrix are unspecified. */
 template<typename Matrix>
-bool CholeskyDecomposeMatrix(const Matrix &mat, Matrix &lower)
+bool CholeskyDecomposeMatrix(const Matrix &mat, Matrix &lower, Matrix zero)
 {
-	lower = Matrix::zero;
+	lower = zero;
 	for(int i = 0; i < Matrix::Rows; ++i)
 	{
 		for(int j = 0; j < i; ++j)
