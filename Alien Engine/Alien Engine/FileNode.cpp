@@ -70,8 +70,18 @@ void FileNode::DeleteNodeData(bool delete_folder)
 			remove(meta_path.data());
 
 			Resource* resource_to_delete = App->resources->GetResourceWithID(ID);
-			if (resource_to_delete != nullptr)
+			if (resource_to_delete != nullptr) {
 				resource_to_delete->DeleteMetaData();
+				auto item = App->resources->resources.begin();
+				for (; item != App->resources->resources.end(); ++item) {
+					if (*item == resource_to_delete) {
+						delete* item;
+						*item = nullptr;
+						App->resources->resources.erase(item);
+						break;
+					}
+				}
+			}
 		}
 		remove(hole_path.data());
 	}
