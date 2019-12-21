@@ -744,6 +744,9 @@ void ModuleObjects::LoadScene(const char* path, bool change_scene)
 			}
 		}
 
+		if (!current_scripts.empty() && Time::IsInGameState()) {
+			InitScriptsOnPlay();
+		}
 	}
 	else {
 		LOG("Error loading scene %s", path);

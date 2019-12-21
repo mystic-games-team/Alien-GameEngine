@@ -3,7 +3,7 @@
 #include "ModuleObjects.h"
 #include "ComponentLight.h"
 #include "ComponentTransform.h"
-
+#include "PanelHierarchy.h"
 
 ResourcePrefab::ResourcePrefab()
 {
@@ -162,6 +162,10 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 
 void ResourcePrefab::OpenPrefabScene()
 {
+	if (Time::IsInGameState()) {
+		App->ui->panel_hierarchy->popup_no_open_prefab = true;
+		return;
+	}
 	if (App->objects->prefab_scene) {
 		return;
 	}

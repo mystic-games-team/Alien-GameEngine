@@ -13,6 +13,7 @@ public:
 	void PanelLogic();
 
 	bool is_focused = false;
+	bool popup_no_open_prefab = false;
 private:
 
 	void PrintNode(GameObject* node);

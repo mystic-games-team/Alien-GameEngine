@@ -11,6 +11,7 @@ private:
 	friend class ModuleObjects;
 	friend class PanelScene;
 	friend class PanelInspector;
+	friend class ResourcePrefab;
 
 	enum class GameState {
 		NONE,

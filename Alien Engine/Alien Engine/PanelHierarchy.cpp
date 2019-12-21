@@ -38,7 +38,15 @@ void PanelHierarchy::PanelLogic()
 				}
 			}
 		}
-		if (!popup_prefab_restructurate) {
+		else {
+			auto item = selected.begin();
+			for (; item != selected.end(); ++item) {
+				if (*item != nullptr && (*item)->IsPrefab() && (*item)->FindPrefabRoot() == *item) {
+					popup_delete_root_prefab_scene = true;
+				}
+			}
+		}
+		if (!popup_prefab_restructurate && !popup_delete_root_prefab_scene) {
 			auto item = selected.begin();
 			for (; item != selected.end(); ++item) {
 				if (*item != nullptr) {
@@ -162,6 +170,21 @@ void PanelHierarchy::PanelLogic()
 			ImGui::SetCursorPosX(95);
 			if (ImGui::Button("Ok", { 50,0 })) {
 				popup_delete_root_prefab_scene = false;
+			}
+			ImGui::EndPopup();
+		}
+	}
+
+	if (popup_no_open_prefab) {
+		ImGui::OpenPopup("Prefab View no available");
+		ImGui::SetNextWindowSize({ 245,80 });
+		if (ImGui::BeginPopupModal("Prefab View no available", &popup_no_open_prefab, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::Text("Exit game to see the prefab view");
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(95);
+			if (ImGui::Button("Ok", { 50,0 })) {
+				popup_no_open_prefab = false;
 			}
 			ImGui::EndPopup();
 		}
@@ -417,11 +440,15 @@ void PanelHierarchy::RightClickMenu()
 			}
 			if (ImGui::MenuItem("Remove Object"))
 			{
-				if (!App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() != object_menu)
+				if (!App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() != object_menu) {
 					popup_prefab_restructurate = true;
-				else if (App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() == object_menu)
+				}
+				else if (App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() == object_menu) {
 					popup_delete_root_prefab_scene = true;
-				else object_menu->ToDelete();
+				}
+				else {
+					object_menu->ToDelete();
+				}
 			}
 			ImGui::Separator();
 		}
