@@ -172,7 +172,6 @@
     <ClInclude Include="glew\include\glew.h" />
     <ClInclude Include="glew\include\glxew.h" />
     <ClInclude Include="glew\include\wglew.h" />
-    <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="gpudetect\DeviceId.h" />
     <ClInclude Include="gpudetect\dxgi1_4.h" />
@@ -317,7 +316,6 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="FileNode.cpp" />
     <ClCompile Include="Gizmos.cpp" />
-    <ClCompile Include="glmath.cpp" />
     <ClCompile Include="gpudetect\DeviceId.cpp" />
     <ClCompile Include="ImGuizmos\ImCurveEdit.cpp" />
     <ClCompile Include="ImGuizmos\ImGradient.cpp" />

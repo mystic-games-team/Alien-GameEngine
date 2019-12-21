@@ -439,15 +439,15 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ResourceMesh* mes
 			uint index2 = mesh->index[i + 1] * 3;
 			uint index3 = mesh->index[i + 2] * 3;
 
-			vec3 x0(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
-			vec3 x1(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
-			vec3 x2(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
+			float3 x0(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
+			float3 x1(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
+			float3 x2(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
 
-			vec3 v0 = x0 - x2;
-			vec3 v1 = x1 - x2;
-			vec3 n = cross(v0, v1);
+			float3 v0 = x0 - x2;
+			float3 v1 = x1 - x2;
+			float3 n = v0.Cross(v1);
 
-			vec3 normalized = normalize(n);
+			float3 normalized = n.Normalized();
 
 			mesh->center_point[i] = (x0.x + x1.x + x2.x) / 3;
 			mesh->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
