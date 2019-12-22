@@ -39,7 +39,7 @@ ModuleUI::~ModuleUI()
 // Load assets
 bool ModuleUI::Start()
 {
-	LOG("Loading UI assets");
+	LOG_ENGINE("Loading UI assets");
 	bool ret = true;
 
 	// Setup Dear ImGui context
@@ -70,7 +70,7 @@ bool ModuleUI::Start()
 // Load assets
 bool ModuleUI::CleanUp()
 {
-	LOG("Unloading UI scene");
+	LOG_ENGINE("Unloading UI scene");
 
 	if (!need_to_save_layouts) // just save to know which is active
 		SaveLayoutsActive();
@@ -607,7 +607,7 @@ void ModuleUI::MainMenuBar()
 		}
 		if (ImGui::MenuItem("Documentation"))
 		{
-			LOG("Put link wiki");
+			LOG_ENGINE("Put link wiki");
 		}
 		if (ImGui::MenuItem("Report a bug", shortcut_report_bug->GetNameScancodes()))
 		{

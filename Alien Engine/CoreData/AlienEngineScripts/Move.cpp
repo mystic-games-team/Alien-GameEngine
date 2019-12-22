@@ -18,7 +18,7 @@ void Move2::Start()
 	time2 = Time::GetGameTime();
 
 	if (test_object != nullptr) {
-		Debug::Log(test_object->GetName());
+		LOG(test_object->GetName());
 	}
 }
 
@@ -75,10 +75,10 @@ void Move2::Update()
 	for (uint i = 0; i < s_untags; ++i) {
 		if (untags[i] != nullptr && untags[i]->IsEnabled()) {
 			count++;
-			Debug::Log(untags[i]->GetName());
+			LOG(untags[i]->GetName());
 		}
 	}
-	Debug::Log("%i", count);
+	LOG("%i", count);
 	GameObject::FreeArrayMemory((void***)&untags);
 
 	//game_object->ToDelete();
@@ -98,5 +98,6 @@ void Move2::Update()
 
 void Move2::OnDrawGizmos()
 {
+	LOG("GIZMO :D");
 	Gizmos::DrawCube(transform->GetGlobalPosition(), { 4,2,3 }, Color::Yellow());
 }

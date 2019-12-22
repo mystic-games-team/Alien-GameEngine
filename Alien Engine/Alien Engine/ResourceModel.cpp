@@ -87,7 +87,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 					}
 
 					meshes_paths[item - meshes_attached.begin()] = (*item)->GetLibraryPath();
-					LOG("Created alienMesh file %s", (*item)->GetLibraryPath());
+					LOG_ENGINE("Created alienMesh file %s", (*item)->GetLibraryPath());
 				}
 			}
 			meta->SetArrayString("Model.PathMeshes", meshes_paths, meshes_attached.size());
@@ -96,7 +96,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 				delete[] paths;
 			delete[] meshes_paths;
 			// Create the file
-			LOG("Created alien file %s", meta_data_path.data());
+			LOG_ENGINE("Created alien file %s", meta_data_path.data());
 			
 			meta->FinishSave();
 			alien->FinishSave();
@@ -110,7 +110,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 
 	}
 	else {
-		LOG("Error creating meta with path %s", meta_data_path.data());
+		LOG_ENGINE("Error creating meta with path %s", meta_data_path.data());
 		return false;
 	}
 }
@@ -163,7 +163,7 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 					meshes_attached.push_back(r_mesh);
 				}
 				else {
-					LOG("Error loading %s", mesh_path[i].data());
+					LOG_ENGINE("Error loading %s", mesh_path[i].data());
 					delete r_mesh;
 				}
 			}

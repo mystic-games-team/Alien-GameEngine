@@ -73,7 +73,7 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder)
 
 	}
 	else {
-		LOG("Could not load scene, fail when creating the file");
+		LOG_ENGINE("Could not load scene, fail when creating the file");
 	}
 
 	return true;
@@ -239,6 +239,6 @@ void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, floa
 		delete prefab;
 	}
 	else {
-		LOG("Error loading prefab %s", path.data());
+		LOG_ENGINE("Error loading prefab %s", path.data());
 	}
 }

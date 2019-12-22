@@ -45,7 +45,7 @@ void Application::LoadDll()
 
 	if (file_system->Exists(DLL_CREATION_PATH)) {
 		remove(DLL_WORKING_PATH);
-		while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG("Visual Studio is creating the new DLL"); }
+		while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG_ENGINE("Visual Studio is creating the new DLL"); }
 	}
 	scripts_dll = LoadLibrary(dll.data());
 }
@@ -182,7 +182,7 @@ bool Application::Init()
 	}
 
 	// After all Init calls we call Start() in all modules
-	LOG("Application Start --------------");
+	LOG_ENGINE("Application Start --------------");
 	item = list_modules.begin();
 	
 	Time::Start();
@@ -247,7 +247,7 @@ JSONfilepack* Application::LoadJSONFile(const std::string& path)
 
 	if (value == nullptr || object == nullptr)
 	{
-		LOG("Error loading %s", path);
+		LOG_ENGINE("Error loading %s", path);
 		return nullptr;
 	}
 	else {
@@ -262,7 +262,7 @@ JSONfilepack* Application::CreateJSONFile(const std::string& path)
 	JSON_Object* object = json_value_get_object(value);
 	json_serialize_to_file_pretty(value, path.data());
 	if (value == nullptr || object == nullptr) {
-		LOG("Error creating JSON with path %s", path.data());
+		LOG_ENGINE("Error creating JSON with path %s", path.data());
 		return nullptr;
 	}
 	else {

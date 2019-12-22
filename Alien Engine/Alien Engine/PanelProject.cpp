@@ -392,10 +392,10 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 
 				current_active_folder->children[i]->ResetPaths();
 
-				LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
+				LOG_ENGINE("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
 			}
 			else {
-				LOG("Failing while renaming %s to %s because this name already exists", current_active_folder->children[i]->name.data(), name);
+				LOG_ENGINE("Failing while renaming %s to %s because this name already exists", current_active_folder->children[i]->name.data(), name);
 			}
 		}
 
@@ -486,7 +486,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						App->file_system->DiscoverEverythig(node);
 					}
 					else {
-						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
+						LOG_ENGINE("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
 				}
 				else { // move folder down
@@ -506,7 +506,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						App->file_system->DiscoverEverythig(node);
 					}
 					else {
-						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
+						LOG_ENGINE("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
 					}
 				}
 			}
@@ -526,7 +526,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						current_active_file = nullptr;
 					}
 					else {
-						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
+						LOG_ENGINE("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
 				}
 				else { // move folder up
@@ -541,7 +541,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						current_active_file = nullptr;
 					}
 					else {
-						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
+						LOG_ENGINE("Could not move %s to %s", node_to_move->path.data(), std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
 					}
 				}
 			}

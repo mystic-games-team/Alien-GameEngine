@@ -115,7 +115,7 @@ void PanelHierarchy::PanelLogic()
 				else if (!obj->is_static)
 					App->objects->ReparentGameObject(obj, App->objects->GetRoot(false));
 				else
-					LOG("Objects static can not be reparented");
+					LOG_ENGINE("Objects static can not be reparented");
 			}
 			ImGui::ClearDragDrop();
 		}
@@ -300,7 +300,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 				else if (!obj->is_static)
 					App->objects->ReparentGameObject(obj, node);
 				else
-					LOG("Objects static can not be reparented");
+					LOG_ENGINE("Objects static can not be reparented");
 			}
 			ImGui::ClearDragDrop();
 		}

@@ -96,7 +96,7 @@ void Gizmos::DrawWireMesh(const ComponentMesh * mesh, const float4x4& global_tra
 		DrawWire(mesh->mesh, global_transform, color, line_width);
 	}
 	else {
-		LOG("DrawWireMesh: Mesh is nullptr or has no mesh attached!");
+		LOG_ENGINE("DrawWireMesh: Mesh is nullptr or has no mesh attached!");
 	}
 }
 

@@ -98,7 +98,7 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 		return true;
 	}
 	else {
-		LOG("Error creating meta with path %s", meta_data_path.data());
+		LOG_ENGINE("Error creating meta with path %s", meta_data_path.data());
 		return false;
 	}
 }
@@ -241,7 +241,7 @@ bool ResourceMesh::LoadMemory()
 		delete meta;
 	}
 	else {
-		LOG("Error loading %s", meta_data_path.data());
+		LOG_ENGINE("Error loading %s", meta_data_path.data());
 	}
 
 	return true;

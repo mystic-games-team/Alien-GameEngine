@@ -14,7 +14,7 @@ void PanelConsole::PanelLogic()
 {
 
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
-	LOG("AAA");
+
 	ImGui::BeginChild("#console buttons", { ImGui::GetWindowWidth(),30 });
 	if (!game_console) ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.06F, 0.53F,0.98F,1 });
 	if (ImGui::Button("Engine Console") && game_console) {
@@ -63,19 +63,21 @@ void PanelConsole::PanelLogic()
 	}
 
 	if (game_console) {
-		/*auto item = App->game_string_logs.begin();
+		auto item = App->game_string_logs.begin();
 		for (; item != App->game_string_logs.end(); ++item) {
 			if (collapse) {
-				ImGui::Button(std::to_string((*item).first).data());
+				ImGui::Button(std::to_string((*item).instances).data());
 				ImGui::SameLine();
-				ImGui::Text((*item).second.data());
+				ImGui::Text((*item).loged.back().second.data());
 			}
 			else {
-				for (uint i = 0; i < (*item).first; ++i) {
-					ImGui::Text((*item).second.data());
+				for (uint i = 0; i < (*item).loged.size(); ++i) {
+					for (uint j = 0; j < (*item).loged[i].first; ++j) {
+						ImGui::Text((*item).loged[i].second.data());
+					}
 				}
 			}
-		}*/
+		}
 	}
 	else {
 		auto item = App->engine_string_logs.begin();

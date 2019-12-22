@@ -58,3 +58,5 @@
 
 #define VARAIBLE_TO_STRING(VAR_) #VAR_
 
+#define LOG(format, ...) Debug::Log(__FILE__, __LINE__, format, __VA_ARGS__);
+

@@ -409,10 +409,10 @@ void ComponentScript::OnDisable()
 		catch (...)
 		{
 			try {
-				LOG("CODE ERROR IN THE ONDISABLE OF THE SCRIPT: %s", data_name.data());
+				LOG_ENGINE("CODE ERROR IN THE ONDISABLE OF THE SCRIPT: %s", data_name.data());
 			}
 			catch (...) {
-				LOG("UNKNOWN ERROR IN SCRIPTS ONDISABLE");
+				LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDISABLE");
 			}
 			// TODO: avisar dalguna manera al usuari
 		}
@@ -429,10 +429,10 @@ void ComponentScript::OnEnable()
 		catch (...)
 		{
 			try {
-				LOG("CODE ERROR IN THE ONENABLE OF THE SCRIPT: %s", data_name.data());
+				LOG_ENGINE("CODE ERROR IN THE ONENABLE OF THE SCRIPT: %s", data_name.data());
 			}
 			catch (...) {
-				LOG("UNKNOWN ERROR IN SCRIPTS ONENABLE");
+				LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONENABLE");
 			}
 			// TODO: avisar dalguna manera al usuari
 		}
@@ -558,7 +558,7 @@ void ComponentScript::InspectorPrefab(Prefab* ptr, const char* ptr_name)
 		}
 	}
 	else {
-		LOG("Prefab variable must not be a pointer!!");
+		LOG_ENGINE("Prefab variable must not be a pointer!!");
 	}
 }
 
@@ -587,10 +587,10 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 		catch (...)
 		{
 			try {
-				LOG("CODE ERROR IN THE CONSTRUCTOR OF THE SCRIPT: %s", name);
+				LOG_ENGINE("CODE ERROR IN THE CONSTRUCTOR OF THE SCRIPT: %s", name);
 			}
 			catch (...) {
-				LOG("UNKNOWN ERROR IN SCRIPTS CONSTRUCTOR");
+				LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS CONSTRUCTOR");
 			}
 			// TODO: avisar dalguna manera al usuari
 			return;

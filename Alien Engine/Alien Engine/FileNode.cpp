@@ -94,10 +94,10 @@ void FileNode::DeleteNodeData(bool delete_folder)
 
 		if (delete_folder) {			
 			if (std::experimental::filesystem::remove_all(path.data())) {
-				LOG("Folder removed successfully %s", path.data());
+				LOG_ENGINE("Folder removed successfully %s", path.data());
 			}
 			else {
-				LOG("Could not remove folder %s", path.data());
+				LOG_ENGINE("Could not remove folder %s", path.data());
 			}
 		}
 	}
@@ -144,7 +144,7 @@ void FileNode::ResetPaths()
 		break; }
 
 	default: {
-		LOG("Type in reset paths not added");
+		LOG_ENGINE("Type in reset paths not added");
 		break; }
 	}
 }

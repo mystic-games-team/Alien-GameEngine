@@ -45,7 +45,7 @@ bool ModuleObjects::Init()
 
 bool ModuleObjects::Start()
 {
-	LOG("Starting Module Objects");
+	LOG_ENGINE("Starting Module Objects");
 	bool ret = true;
 
 	if (App->file_system->Exists(FILE_TAGS)) {
@@ -423,10 +423,10 @@ void ModuleObjects::InitScriptsOnPlay() const
 			catch (...)
 			{
 				try {
-					LOG("CODE ERROR IN THE AWAKE OF THE SCRIPT: %s", (*item)->data_name);
+					LOG_ENGINE("CODE ERROR IN THE AWAKE OF THE SCRIPT: %s", (*item)->data_name);
 				}
 				catch (...) {
-					LOG("UNKNOWN ERROR IN SCRIPTS AWAKE");
+					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS AWAKE");
 				}
 				// TODO: avisar dalguna manera al usuari
 			}
@@ -442,10 +442,10 @@ void ModuleObjects::InitScriptsOnPlay() const
 			catch (...)
 			{
 				try {
-					LOG("CODE ERROR IN THE START OF THE SCRIPT: %s", (*item)->data_name);
+					LOG_ENGINE("CODE ERROR IN THE START OF THE SCRIPT: %s", (*item)->data_name);
 				}
 				catch (...) {
-					LOG("UNKNOWN ERROR IN SCRIPTS START");
+					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS START");
 				}
 				// TODO: avisar dalguna manera al usuari
 			}
@@ -465,10 +465,10 @@ void ModuleObjects::ScriptsPreUpdate() const
 				catch (...)
 				{
 					try {
-						LOG("CODE ERROR IN THE PREUPDATE OF THE SCRIPT: %s", (*item)->data_name);
+						LOG_ENGINE("CODE ERROR IN THE PREUPDATE OF THE SCRIPT: %s", (*item)->data_name);
 					}
 					catch (...) {
-						LOG("UNKNOWN ERROR IN SCRIPTS PREUPDATE");
+						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS PREUPDATE");
 					}
 					// TODO: avisar dalguna manera al usuari
 				}
@@ -489,10 +489,10 @@ void ModuleObjects::ScriptsUpdate() const
 				catch (...)	   
 				{
 					try {
-						LOG("CODE ERROR IN THE UPDATE OF THE SCRIPT: %s", (*item)->data_name);
+						LOG_ENGINE("CODE ERROR IN THE UPDATE OF THE SCRIPT: %s", (*item)->data_name);
 					}
 					catch (...) {
-						LOG("UNKNOWN ERROR IN SCRIPTS UPDATE");
+						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS UPDATE");
 					}
 					// TODO: avisar dalguna manera al usuari
 				}
@@ -513,10 +513,10 @@ void ModuleObjects::ScriptsPostUpdate() const
 				catch (...)
 				{
 					try {
-						LOG("CODE ERROR IN THE POSTUPDATE OF THE SCRIPT: %s", (*item)->data_name);
+						LOG_ENGINE("CODE ERROR IN THE POSTUPDATE OF THE SCRIPT: %s", (*item)->data_name);
 					}
 					catch (...) {
-						LOG("UNKNOWN ERROR IN SCRIPTS POSTUPDATE");
+						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS POSTUPDATE");
 					}
 					// TODO: avisar dalguna manera al usuari
 				}
@@ -536,10 +536,10 @@ void ModuleObjects::CleanUpScriptsOnStop() const
 			catch (...)
 			{
 				try {
-					LOG("CODE ERROR IN THE CLEANUP OF THE SCRIPT: %s", (*item)->data_name);
+					LOG_ENGINE("CODE ERROR IN THE CLEANUP OF THE SCRIPT: %s", (*item)->data_name);
 				}
 				catch (...) {
-					LOG("UNKNOWN ERROR IN SCRIPTS CLEANUP");
+					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS CLEANUP");
 				}
 				// TODO: avisar dalguna manera al usuari
 			}
@@ -559,10 +559,10 @@ void ModuleObjects::OnDrawGizmos() const
 			catch (...)
 			{
 				try {
-					LOG("CODE ERROR IN THE ONDRAWGIZMOS OF THE SCRIPT: %s", (*item)->data_name);
+					LOG_ENGINE("CODE ERROR IN THE ONDRAWGIZMOS OF THE SCRIPT: %s", (*item)->data_name);
 				}
 				catch (...) {
-					LOG("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOS");
+					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOS");
 				}
 				// TODO: avisar dalguna manera al usuari
 			}
@@ -583,10 +583,10 @@ void ModuleObjects::OnDrawGizmos() const
 						catch (...)
 						{
 							try {
-								LOG("CODE ERROR IN THE ONDRAWGIZMOSSELECTED OF THE SCRIPT: %s", alien->data_name);
+								LOG_ENGINE("CODE ERROR IN THE ONDRAWGIZMOSSELECTED OF THE SCRIPT: %s", alien->data_name);
 							}
 							catch (...) {
-								LOG("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOSSELECTED");
+								LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOSSELECTED");
 							}
 							// TODO: avisar dalguna manera al usuari
 						}
@@ -772,7 +772,7 @@ void ModuleObjects::SaveScene(const char* path, bool change_scene)
 		}
 	}
 	else {
-		LOG("Could not load scene, fail when creating the file");
+		LOG_ENGINE("Could not load scene, fail when creating the file");
 	}
 }
 
@@ -854,7 +854,7 @@ void ModuleObjects::LoadScene(const char* path, bool change_scene)
 		}
 	}
 	else {
-		LOG("Error loading scene %s", path);
+		LOG_ENGINE("Error loading scene %s", path);
 	}
 }
 
@@ -968,15 +968,15 @@ void ModuleObjects::HotReload()
 	}
 	current_scripts.clear();
 	if (FreeLibrary(App->scripts_dll)) {
-		LOG("Dll correctly unloaded");
+		LOG_ENGINE("Dll correctly unloaded");
 		if (remove(DLL_WORKING_PATH) == 0) {
-			LOG("Dll correctly removed");
+			LOG_ENGINE("Dll correctly removed");
 			App->resources->ReloadScripts();
 			// if this change is done without waiting, we cant move the file because the creating dll process hasn't finished
 			// so I just wait until MoveFileA succed. 
 			// If someone knows how to know when an extern process finishes with a file, tell me please contrasnya@gmail.com
-			while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG("Visual Studio is creating the new DLL"); }
-			LOG("New Dll correctly moved");
+			while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG_ENGINE("Visual Studio is creating the new DLL"); }
+			LOG_ENGINE("New Dll correctly moved");
 			App->scripts_dll = nullptr;
 			App->scripts_dll = LoadLibrary(App->dll.data());
 			if (App->scripts_dll != nullptr) {

@@ -157,7 +157,7 @@ Resource* ModuleResources::GetResourceWithID(const u64& ID)
 		if (*item != nullptr && (*item)->GetID() == ID)
 			return (*item);
 	}
-	LOG("No resource found with ID %i", ID);
+	LOG_ENGINE("No resource found with ID %i", ID);
 	return nullptr;
 }
 
@@ -473,7 +473,7 @@ void ModuleResources::ReadPrefabs(std::vector<std::string> directories, std::vec
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourcePrefab* model = new ResourcePrefab();
 		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
-			LOG("Error while loading %s because has not .alienPrefab", files[i]);
+			LOG_ENGINE("Error while loading %s because has not .alienPrefab", files[i]);
 			delete model;
 		}
 	}

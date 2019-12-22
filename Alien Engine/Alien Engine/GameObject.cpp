@@ -645,7 +645,7 @@ void GameObject::SetNewParent(GameObject* new_parent)
 		}
 	}
 	else {
-		LOG("NewParent was nullptr or NewParent was a child :O");
+		LOG_ENGINE("NewParent was nullptr or NewParent was a child :O");
 	}
 }
 
@@ -1095,7 +1095,7 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				// dont need to addcomponent, load script does it
 				break; }
 			default:
-				LOG("Unknown component type while loading");
+				LOG_ENGINE("Unknown component type while loading");
 				break;
 			}
 
@@ -1176,7 +1176,7 @@ void GameObject::CloningGameObject(GameObject* clone)
 					// dont need to addcomponent, clone script does it
 					break; }
 				default:
-					LOG("Unknown component type while loading");
+					LOG_ENGINE("Unknown component type while loading");
 					break;
 				}
 			}

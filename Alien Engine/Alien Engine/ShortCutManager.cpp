@@ -36,7 +36,7 @@ ShortCut* ShortCutManager::AddShortCut(const char* order_name, const SDL_Scancod
 		return new_shortcut;
 	}
 	else {
-		LOG("Fail adding a shortcut");
+		LOG_ENGINE("Fail adding a shortcut");
 		return nullptr;
 	}
 }
@@ -95,7 +95,7 @@ void ShortCutManager::ChangeKey()
 					}
 					break; }
 				default: {
-					LOG("ShortCutTStateChange UNKNOWN");
+					LOG_ENGINE("ShortCutTStateChange UNKNOWN");
 					break; }
 				}
 			}
@@ -129,7 +129,7 @@ void ShortCutManager::ShortCutClicked()
 					}
 					break; }
 				default: {
-					LOG("ShortCutTypeUnknown");
+					LOG_ENGINE("ShortCutTypeUnknown");
 					break; }
 				}
 			}
@@ -150,7 +150,7 @@ const char* ShortCut::GetShortcutName()
 		sprintf_s(shortcut_char, 50, "%s / %s + %s", SDL_GetScancodeName(key2_repeat), SDL_GetScancodeName(key3_repeat_extra), SDL_GetScancodeName(key1_down));
 		break; }
 	default: {
-		LOG("ShortCutType in get name UNKNOWN")
+		LOG_ENGINE("ShortCutType in get name UNKNOWN")
 		break; }
 	}
 	return shortcut_char;
@@ -255,7 +255,7 @@ const SDL_Scancode& ShortCut::GetScancode(const uint& index)
 		ret = key3_repeat_extra;
 		break; }
 	default: {
-		LOG("ShortCutIndex not valid %i", index);
+		LOG_ENGINE("ShortCutIndex not valid %i", index);
 		break; }
 	}
 	return ret;

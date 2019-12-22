@@ -297,11 +297,11 @@ void PanelInspector::ButtonAddComponent()
 					}
 				}
 				else {
-					LOG("This script is already attached!");
+					LOG_ENGINE("This script is already attached!");
 				}
 			}
 			else {
-				LOG("Select a script");
+				LOG_ENGINE("Select a script");
 			}
 		}
 	}
@@ -318,7 +318,7 @@ void PanelInspector::ButtonAddComponent()
 			{
 
 			case 0: {
-				LOG("Select a Component!");
+				LOG_ENGINE("Select a Component!");
 				break; }
 
 			case 1: {
@@ -330,7 +330,7 @@ void PanelInspector::ButtonAddComponent()
 				}
 
 				else
-					LOG("The selected object already has this component!");
+					LOG_ENGINE("The selected object already has this component!");
 
 				break; }
 
@@ -345,11 +345,11 @@ void PanelInspector::ButtonAddComponent()
 
 				else if (App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::MATERIAL))
 				{
-					LOG("The selected object already has this component!");
+					LOG_ENGINE("The selected object already has this component!");
 				}
 
 				else
-					LOG("The object needs a mesh to have a material!");
+					LOG_ENGINE("The object needs a mesh to have a material!");
 
 				break; }
 
@@ -362,7 +362,7 @@ void PanelInspector::ButtonAddComponent()
 				}
 
 				else
-					LOG("The selected object already has this component!");
+					LOG_ENGINE("The selected object already has this component!");
 
 				break; }
 
@@ -376,7 +376,7 @@ void PanelInspector::ButtonAddComponent()
 				}
 
 				else
-					LOG("The selected object already has this component!");
+					LOG_ENGINE("The selected object already has this component!");
 
 				break; }
 			}

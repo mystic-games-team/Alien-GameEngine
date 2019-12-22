@@ -35,7 +35,7 @@ bool ModuleImporter::Init()
 	ilInit();
 	iluInit();
 	ilutInit();
-	LOG("Initing Devil");
+	LOG_ENGINE("Initing Devil");
 
 	return true;
 }
@@ -59,7 +59,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 {
 	bool ret = true;
 
-	LOG("Loading %s", path);
+	LOG_ENGINE("Loading %s", path);
 
 	// if this file has been already imported just load the .alienModel
 	Resource* model = nullptr;
@@ -70,12 +70,12 @@ bool ModuleImporter::LoadModelFile(const char* path)
 		
 		if (scene != nullptr) {
 			InitScene(path, scene);
-			LOG("Succesfully loaded %s", path);
+			LOG_ENGINE("Succesfully loaded %s", path);
 		}
 		else {
 			ret = false;
-			LOG("Error loading model %s", path);
-			LOG("Error type: %s", aiGetErrorString());
+			LOG_ENGINE("Error loading model %s", path);
+			LOG_ENGINE("Error type: %s", aiGetErrorString());
 		}
 		aiReleaseImport(scene);
 		App->resources->AddNewFileNode(path, true);
@@ -110,7 +110,7 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 
 void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent, uint family_number)
 {
-	LOG("Loading node with name %s", node->mName.C_Str());
+	LOG_ENGINE("Loading node with name %s", node->mName.C_Str());
 	ResourceMesh* next_parent = nullptr;
 
 	std::string node_name = node->mName.C_Str();
@@ -152,7 +152,7 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Res
 		}
 	}
 	for (uint i = 0; i < node->mNumChildren; ++i) {
-		LOG("Loading children of node %s", node->mName.C_Str());
+		LOG_ENGINE("Loading children of node %s", node->mName.C_Str());
 		uint fam_num = 1;
 		if (next_parent != nullptr)
 			fam_num = next_parent->family_number + 1;
@@ -181,7 +181,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 			if (ai_mesh->mFaces[i].mNumIndices != 3) {
 				uint non[3] = { 0,0,0 };
 				memcpy(&ret->index[i * 3], non, 3 * sizeof(uint));
-				LOG("WARNING, geometry face with != 3 indices!");
+				LOG_ENGINE("WARNING, geometry face with != 3 indices!");
 			}
 			else {
 				memcpy(&ret->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
@@ -287,7 +287,7 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		if (has_been_dropped && !App->objects->GetSelectedObjects().empty()) {
 			ApplyTextureToSelectedObject(texture);
 		}
-		LOG("This texture was already loaded");
+		LOG_ENGINE("This texture was already loaded");
 
 		return texture;
 	}
@@ -330,11 +330,11 @@ ResourceTexture* ModuleImporter::LoadEngineTexture(const char* path)
 
 		App->resources->AddResource(texture);
 
-		LOG("Texture successfully loaded: %s", path);
+		LOG_ENGINE("Texture successfully loaded: %s", path);
 	}
 	else {
-		LOG("Error while loading image in %s", path);
-		LOG("Error: %s", ilGetString(ilGetError()));
+		LOG_ENGINE("Error while loading image in %s", path);
+		LOG_ENGINE("Error: %s", ilGetString(ilGetError()));
 	}
 
 	ilDeleteImages(1, &new_image_id);
@@ -367,11 +367,11 @@ void ModuleImporter::LoadTextureToResource(const char* path, ResourceTexture* te
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		LOG("Texture successfully loaded: %s", path);
+		LOG_ENGINE("Texture successfully loaded: %s", path);
 	}
 	else {
-		LOG("Error while loading image in %s", path);
-		LOG("Error: %s", ilGetString(ilGetError()));
+		LOG_ENGINE("Error while loading image in %s", path);
+		LOG_ENGINE("Error: %s", ilGetString(ilGetError()));
 	}
 
 	ilDeleteImages(1, &new_image_id);
@@ -401,7 +401,7 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 				}
 			}
 			else
-				LOG("Selected GameObject has no mesh");
+				LOG_ENGINE("Selected GameObject has no mesh");
 		}
 	}	
 }
@@ -500,8 +500,8 @@ bool ModuleImporter::ReImportModel(ResourceModel* model)
 	}
 	else {
 		ret = false;
-		LOG("Error loading model %s", model->GetAssetsPath());
-		LOG("Error type: %s", aiGetErrorString());
+		LOG_ENGINE("Error loading model %s", model->GetAssetsPath());
+		LOG_ENGINE("Error type: %s", aiGetErrorString());
 	}
 	aiReleaseImport(scene);
 

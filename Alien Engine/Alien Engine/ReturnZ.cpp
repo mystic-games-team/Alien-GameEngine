@@ -7,6 +7,7 @@
 #include "ComponentLight.h"
 #include "ResourceScript.h"
 #include "ResourceTexture.h"
+#include "Maths.h"
 #include "Octree.h"
 #include "PanelTextEditor.h"
 #include "ComponentScript.h"
@@ -310,7 +311,7 @@ void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 					comp = cameraZ;
 					break; }
 				default:
-					LOG("A component hasn't been saved");
+					LOG_ENGINE("A component hasn't been saved");
 					break;
 				}
 				if (comp != nullptr) {
@@ -608,8 +609,8 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		camera->vertical_fov = cameraZ->vertical_fov;
 		camera->is_fov_horizontal = cameraZ->is_fov_horizontal;
 		// set frustum
-		camera->frustum.verticalFov = camera->vertical_fov * DEGTORAD;
-		camera->frustum.horizontalFov = camera->horizontal_fov * DEGTORAD;
+		camera->frustum.verticalFov = camera->vertical_fov * Maths::Deg2Rad();
+		camera->frustum.horizontalFov = camera->horizontal_fov * Maths::Deg2Rad();
 		camera->frustum.nearPlaneDistance = camera->near_plane;
 		camera->frustum.farPlaneDistance = camera->far_plane;
 		break; }
