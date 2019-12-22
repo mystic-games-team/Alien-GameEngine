@@ -66,18 +66,16 @@ void PanelGame::PanelLogic()
 
 	if (ImGui::IsWindowHovered()) {
 		float2 origin = float2((App->input->GetMousePosition().x - posX), (App->input->GetMousePosition().y - posY) - 19);
-		LOG("MouseX: %f", origin.x);
-		LOG("MouseY: %f", origin.y);
 	}
 
 	lastHeight = ImGui::GetWindowHeight();
 
-	if (ImGui::IsWindowFocused())
-	{
+	if (ImGui::IsWindowFocused()) {
 		game_focused = true;
 	}
-	else
+	else {
 		game_focused = false;
+	}
 	
 	ImGui::End();
 }

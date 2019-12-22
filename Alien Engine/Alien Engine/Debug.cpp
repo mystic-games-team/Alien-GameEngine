@@ -15,17 +15,17 @@ void Debug::Log(const char* message, ...)
 
 	bool exists = false;
 	
-	auto item = App->game_string_logs.begin();
+	/*auto item = App->game_string_logs.begin();
 	for (; item != App->game_string_logs.end(); ++item) {
-		if (strcmp((*item).second.data(), tmp_string2) == 0) {
-			++(*item).first;
+		if ((*item).line == line && strcmp((*item).file, file)) {
 			exists = true;
-			break;
+			(*item).loged = tmp_string2;
+			++(*item).instances;
 		}
 	}
 	if (!exists) {
-		App->game_string_logs.push_back({ 1,tmp_string2 });
-	}
+		App->game_string_logs.push_back(LogInfo(line, file, tmp_string2));
+	}*/
 
 	OutputDebugString(std::string('\n' + tmp_string2).data());
 

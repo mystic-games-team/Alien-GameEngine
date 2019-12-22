@@ -57,13 +57,13 @@ void PanelConsole::PanelLogic()
 	ImGui::BeginChild("#console logs", { 0,0 },false, ImGuiWindowFlags_HorizontalScrollbar);
 	
 	if (collapse) {
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.06F, 0.53F,0.98F,1 });
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.06F, 0.53F,0.98F,1 });
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.06F, 0.53F,0.98F,1 });
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.8F, 0.23F,0.98F,1 });
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F, 0.23F,0.98F,1 });
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.8F, 0.23F,0.98F,1 });
 	}
 
 	if (game_console) {
-		auto item = App->game_string_logs.begin();
+		/*auto item = App->game_string_logs.begin();
 		for (; item != App->game_string_logs.end(); ++item) {
 			if (collapse) {
 				ImGui::Button(std::to_string((*item).first).data());
@@ -75,19 +75,21 @@ void PanelConsole::PanelLogic()
 					ImGui::Text((*item).second.data());
 				}
 			}
-		}
+		}*/
 	}
 	else {
 		auto item = App->engine_string_logs.begin();
 		for (; item != App->engine_string_logs.end(); ++item) {
 			if (collapse) {
-				ImGui::Button(std::to_string((*item).first).data());
+				ImGui::Button(std::to_string((*item).instances).data());
 				ImGui::SameLine();
-				ImGui::Text((*item).second.data());
+				ImGui::Text((*item).loged.back().second.data());
 			}
 			else {
-				for (uint i = 0; i < (*item).first; ++i) {
-					ImGui::Text((*item).second.data());
+				for (uint i = 0; i < (*item).loged.size(); ++i) {
+					for (uint j = 0; j < (*item).loged[i].first; ++j) {
+						ImGui::Text((*item).loged[i].second.data());
+					}
 				}
 			}
 		}

@@ -335,6 +335,7 @@ bool Application::CleanUp()
 	return ret;
 }
 
+
 bool Application::StringCmp(const char* str1, const char* str2)
 {
 	size_t size = strlen(str1);

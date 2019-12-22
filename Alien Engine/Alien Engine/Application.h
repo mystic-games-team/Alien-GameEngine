@@ -17,6 +17,22 @@
 #include "ModuleFileSystem.h"
 #include "ModuleResources.h"
 
+#include <string>
+#include <vector>
+
+struct LogInfo {
+	LogInfo(const int& line, const char* file, const char* loged) {
+		this->line = line;
+		strcpy(this->file, file);
+		this->loged.push_back({ 1,std::string(loged) });
+		instances = 1;
+	}
+	int line = 0;
+	int instances = 0;
+	char file[MAX_PATH];
+	std::vector<std::pair<int, std::string>> loged;
+};
+
 class Application
 {
 public:
@@ -34,8 +50,8 @@ public:
 	bool fps_cap = true;
 	uint16_t framerate_cap;
 	int fps_limit = 30;
-	std::vector<std::pair<int, std::string>> engine_string_logs;
-	std::vector<std::pair<int, std::string>> game_string_logs;
+	std::vector<LogInfo> engine_string_logs;
+	std::vector<LogInfo> game_string_logs;
 	HINSTANCE scripts_dll = nullptr;
 	std::string dll;
 private:
@@ -96,3 +112,5 @@ private:
 };
 
 extern Application* App;
+
+
