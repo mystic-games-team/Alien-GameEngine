@@ -423,7 +423,7 @@ void ModuleObjects::InitScriptsOnPlay() const
 			catch (...)
 			{
 				try {
-					LOG("CODE ERROR IN THE AWAKE OF THE SCRIPT: %s", (*item)->data_name.data());
+					LOG("CODE ERROR IN THE AWAKE OF THE SCRIPT: %s", (*item)->data_name);
 				}
 				catch (...) {
 					LOG("UNKNOWN ERROR IN SCRIPTS AWAKE");
@@ -442,7 +442,7 @@ void ModuleObjects::InitScriptsOnPlay() const
 			catch (...)
 			{
 				try {
-					LOG("CODE ERROR IN THE START OF THE SCRIPT: %s", (*item)->data_name.data());
+					LOG("CODE ERROR IN THE START OF THE SCRIPT: %s", (*item)->data_name);
 				}
 				catch (...) {
 					LOG("UNKNOWN ERROR IN SCRIPTS START");
@@ -465,7 +465,7 @@ void ModuleObjects::ScriptsPreUpdate() const
 				catch (...)
 				{
 					try {
-						LOG("CODE ERROR IN THE PREUPDATE OF THE SCRIPT: %s", (*item)->data_name.data());
+						LOG("CODE ERROR IN THE PREUPDATE OF THE SCRIPT: %s", (*item)->data_name);
 					}
 					catch (...) {
 						LOG("UNKNOWN ERROR IN SCRIPTS PREUPDATE");
@@ -489,7 +489,7 @@ void ModuleObjects::ScriptsUpdate() const
 				catch (...)	   
 				{
 					try {
-						LOG("CODE ERROR IN THE UPDATE OF THE SCRIPT: %s", (*item)->data_name.data());
+						LOG("CODE ERROR IN THE UPDATE OF THE SCRIPT: %s", (*item)->data_name);
 					}
 					catch (...) {
 						LOG("UNKNOWN ERROR IN SCRIPTS UPDATE");
@@ -513,7 +513,7 @@ void ModuleObjects::ScriptsPostUpdate() const
 				catch (...)
 				{
 					try {
-						LOG("CODE ERROR IN THE POSTUPDATE OF THE SCRIPT: %s", (*item)->data_name.data());
+						LOG("CODE ERROR IN THE POSTUPDATE OF THE SCRIPT: %s", (*item)->data_name);
 					}
 					catch (...) {
 						LOG("UNKNOWN ERROR IN SCRIPTS POSTUPDATE");
@@ -536,7 +536,7 @@ void ModuleObjects::CleanUpScriptsOnStop() const
 			catch (...)
 			{
 				try {
-					LOG("CODE ERROR IN THE CLEANUP OF THE SCRIPT: %s", (*item)->data_name.data());
+					LOG("CODE ERROR IN THE CLEANUP OF THE SCRIPT: %s", (*item)->data_name);
 				}
 				catch (...) {
 					LOG("UNKNOWN ERROR IN SCRIPTS CLEANUP");
@@ -559,7 +559,7 @@ void ModuleObjects::OnDrawGizmos() const
 			catch (...)
 			{
 				try {
-					LOG("CODE ERROR IN THE ONDRAWGIZMOS OF THE SCRIPT: %s", (*item)->data_name.data());
+					LOG("CODE ERROR IN THE ONDRAWGIZMOS OF THE SCRIPT: %s", (*item)->data_name);
 				}
 				catch (...) {
 					LOG("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOS");
@@ -583,7 +583,7 @@ void ModuleObjects::OnDrawGizmos() const
 						catch (...)
 						{
 							try {
-								LOG("CODE ERROR IN THE ONDRAWGIZMOSSELECTED OF THE SCRIPT: %s", alien->data_name.data());
+								LOG("CODE ERROR IN THE ONDRAWGIZMOSSELECTED OF THE SCRIPT: %s", alien->data_name);
 							}
 							catch (...) {
 								LOG("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOSSELECTED");

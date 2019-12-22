@@ -583,15 +583,6 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 		App->objects->actual_script_loading = this;
 		try {
 			data_ptr = Creator();
-			game_object_attached->AddComponent(this);
-			if (need_alien) {
-				Alien* alien = (Alien*)data_ptr;
-				App->objects->current_scripts.push_back(alien);
-				alien->game_object = game_object_attached;
-				alien->transform = game_object_attached->GetComponent<ComponentTransform>();
-				alien->enabled = &enabled;
-				alien->data_name = data_name;
-			}
 		}
 		catch (...)
 		{
@@ -602,6 +593,16 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 				LOG("UNKNOWN ERROR IN SCRIPTS CONSTRUCTOR");
 			}
 			// TODO: avisar dalguna manera al usuari
+			return;
+		}
+		game_object_attached->AddComponent(this);
+		if (need_alien) {
+			Alien* alien = (Alien*)data_ptr;
+			App->objects->current_scripts.push_back(alien);
+			alien->game_object = game_object_attached;
+			alien->transform = game_object_attached->GetComponent<ComponentTransform>();
+			alien->enabled = &enabled;
+			strcpy(alien->data_name, name);
 		}
 	}
 }

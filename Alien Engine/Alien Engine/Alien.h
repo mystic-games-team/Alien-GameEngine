@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 class ComponentTransform;
 class GameObject;
 enum class ComponentType;
@@ -115,6 +113,6 @@ public:
 private:
 
 	bool* enabled = nullptr;
-	std::string data_name;
+	char data_name[260];
 
 };
