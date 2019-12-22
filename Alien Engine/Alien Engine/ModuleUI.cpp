@@ -607,7 +607,7 @@ void ModuleUI::MainMenuBar()
 		}
 		if (ImGui::MenuItem("Documentation"))
 		{
-			LOG_ENGINE("Put link wiki");
+			App->OpenWebsite("https://contrasnya.wixsite.com/aliengameengine");
 		}
 		if (ImGui::MenuItem("Report a bug", shortcut_report_bug->GetNameScancodes()))
 		{

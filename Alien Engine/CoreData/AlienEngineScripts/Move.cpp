@@ -92,8 +92,8 @@ void Move2::Update()
 	//	SetScriptEnable(false);
 	//}
 
-	GameObject* obj = nullptr;
-	obj->GetChild(0);
+	//GameObject* obj = nullptr;
+	//obj->GetChild(0);
 }
 
 void Move2::OnDrawGizmos()

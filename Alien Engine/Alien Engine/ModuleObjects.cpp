@@ -975,7 +975,7 @@ void ModuleObjects::HotReload()
 			// if this change is done without waiting, we cant move the file because the creating dll process hasn't finished
 			// so I just wait until MoveFileA succed. 
 			// If someone knows how to know when an extern process finishes with a file, tell me please contrasnya@gmail.com
-			while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG_ENGINE("Visual Studio is creating the new DLL"); }
+			while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) {}
 			LOG_ENGINE("New Dll correctly moved");
 			App->scripts_dll = nullptr;
 			App->scripts_dll = LoadLibrary(App->dll.data());

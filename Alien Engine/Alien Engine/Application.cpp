@@ -45,7 +45,7 @@ void Application::LoadDll()
 
 	if (file_system->Exists(DLL_CREATION_PATH)) {
 		remove(DLL_WORKING_PATH);
-		while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) { LOG_ENGINE("Visual Studio is creating the new DLL"); }
+		while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) {}
 	}
 	scripts_dll = LoadLibrary(dll.data());
 }
