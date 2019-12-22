@@ -17,7 +17,7 @@ public:
 	bool clear_on_play = true;
 
 private:
-
+	bool collapse = true;
 	bool game_console = true;
 	bool scroll_x = true;
 	bool scroll_y = true;

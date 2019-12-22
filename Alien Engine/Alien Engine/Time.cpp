@@ -35,8 +35,8 @@ void Time::Play()
 		App->objects->SaveScene("Library/play_scene.alienScene", false);
 		App->objects->ignore_cntrlZ = true;
 		if (App->ui->panel_console->clear_on_play) {
-			App->game_logs.clear();
-			App->engine_logs.clear();
+			App->game_string_logs.clear();
+			App->engine_string_logs.clear();
 		}
 		state = GameState::PLAY;
 		ImGui::SetWindowFocus(App->ui->panel_game->GetPanelName().data());
