@@ -100,45 +100,19 @@ update_status ModuleObjects::PreUpdate(float dt)
 		}
 		to_reparent.clear();
 	}
-
-	// scripts preupdate
-	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
-		std::list<Alien*>::iterator item = current_scripts.begin();
-		for (; item != current_scripts.end(); ++item) {
-			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
-				(*item)->PreUpdate();
-			}
-		}
-	}
-
+	ScriptsPreUpdate();
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleObjects::Update(float dt)
 {
-	// scripts update
-	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
-		std::list<Alien*>::iterator item = current_scripts.begin();
-		for (; item != current_scripts.end(); ++item) {
-			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
-				(*item)->Update();
-			}
-		}
-	}
+	ScriptsUpdate();
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleObjects::PostUpdate(float dt)
 {
-	// scripts postupdate
-	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
-		std::list<Alien*>::iterator item = current_scripts.begin();
-		for (; item != current_scripts.end(); ++item) {
-			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
-				(*item)->PostUpdate();
-			}
-		}
-	}
+	ScriptsPostUpdate();
 
 	if (App->renderer3D->SetCameraToDraw(App->camera->fake_camera)) {
 		printing_scene = true;
@@ -443,25 +417,132 @@ void ModuleObjects::InitScriptsOnPlay() const
 	std::list<Alien*>::const_iterator item = current_scripts.cbegin();
 	for (; item != current_scripts.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
-			(*item)->Awake();
+			try {
+				(*item)->Awake();
+			}
+			catch (...)
+			{
+				try {
+					LOG("CODE ERROR IN THE AWAKE OF THE SCRIPT: %s", (*item)->data_name.data());
+				}
+				catch (...) {
+					LOG("UNKNOWN ERROR IN SCRIPTS AWAKE");
+				}
+				// TODO: avisar dalguna manera al usuari
+			}
 		}
 	}
 	// scripts start
 	item = current_scripts.cbegin();
 	for (; item != current_scripts.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
-			(*item)->Start();
+			try {
+				(*item)->Start();
+			}
+			catch (...)
+			{
+				try {
+					LOG("CODE ERROR IN THE START OF THE SCRIPT: %s", (*item)->data_name.data());
+				}
+				catch (...) {
+					LOG("UNKNOWN ERROR IN SCRIPTS START");
+				}
+				// TODO: avisar dalguna manera al usuari
+			}
+		}
+	}
+}
+
+void ModuleObjects::ScriptsPreUpdate() const
+{
+	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
+		std::list<Alien*>::const_iterator item = current_scripts.cbegin();
+		for (; item != current_scripts.cend(); ++item) {
+			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
+				try {
+					(*item)->PreUpdate();
+				}
+				catch (...)
+				{
+					try {
+						LOG("CODE ERROR IN THE PREUPDATE OF THE SCRIPT: %s", (*item)->data_name.data());
+					}
+					catch (...) {
+						LOG("UNKNOWN ERROR IN SCRIPTS PREUPDATE");
+					}
+					// TODO: avisar dalguna manera al usuari
+				}
+			}
+		}
+	}
+}
+
+void ModuleObjects::ScriptsUpdate() const
+{
+	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
+		std::list<Alien*>::const_iterator item = current_scripts.cbegin();
+		for (; item != current_scripts.cend(); ++item) {
+			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
+				try {
+					(*item)->Update();
+				}
+				catch (...)	   
+				{
+					try {
+						LOG("CODE ERROR IN THE UPDATE OF THE SCRIPT: %s", (*item)->data_name.data());
+					}
+					catch (...) {
+						LOG("UNKNOWN ERROR IN SCRIPTS UPDATE");
+					}
+					// TODO: avisar dalguna manera al usuari
+				}
+			}
+		}
+	}
+}
+
+void ModuleObjects::ScriptsPostUpdate() const
+{
+	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
+		std::list<Alien*>::const_iterator item = current_scripts.cbegin();
+		for (; item != current_scripts.cend(); ++item) {
+			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
+				try {
+					(*item)->PostUpdate();
+				}
+				catch (...)
+				{
+					try {
+						LOG("CODE ERROR IN THE POSTUPDATE OF THE SCRIPT: %s", (*item)->data_name.data());
+					}
+					catch (...) {
+						LOG("UNKNOWN ERROR IN SCRIPTS POSTUPDATE");
+					}
+					// TODO: avisar dalguna manera al usuari
+				}
+			}
 		}
 	}
 }
 
 void ModuleObjects::CleanUpScriptsOnStop() const
 {
-	// scripts cleanup
 	std::list<Alien*>::const_iterator item = current_scripts.cbegin();
 	for (; item != current_scripts.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr) {
-			(*item)->CleanUp();
+			try {
+				(*item)->CleanUp();
+			}
+			catch (...)
+			{
+				try {
+					LOG("CODE ERROR IN THE CLEANUP OF THE SCRIPT: %s", (*item)->data_name.data());
+				}
+				catch (...) {
+					LOG("UNKNOWN ERROR IN SCRIPTS CLEANUP");
+				}
+				// TODO: avisar dalguna manera al usuari
+			}
 		}
 	}
 }
@@ -472,7 +553,19 @@ void ModuleObjects::OnDrawGizmos() const
 	// scripts OnDrawGizmos
 	for (std::list<Alien*>::const_iterator item = current_scripts.cbegin(); item != current_scripts.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
-			(*item)->OnDrawGizmos();
+			try {
+				(*item)->OnDrawGizmos();
+			}
+			catch (...)
+			{
+				try {
+					LOG("CODE ERROR IN THE ONDRAWGIZMOS OF THE SCRIPT: %s", (*item)->data_name.data());
+				}
+				catch (...) {
+					LOG("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOS");
+				}
+				// TODO: avisar dalguna manera al usuari
+			}
 		}
 	}
 	// scripts OnDrawGizmosSelected
@@ -484,7 +577,19 @@ void ModuleObjects::OnDrawGizmos() const
 				if (scripts[i] != nullptr && scripts[i]->IsEnabled() && scripts[i]->need_alien) {
 					Alien* alien = (Alien*)scripts[i]->data_ptr;
 					if (alien != nullptr) {
-						alien->OnDrawGizmosSelected();
+						try {
+							alien->OnDrawGizmosSelected();
+						}
+						catch (...)
+						{
+							try {
+								LOG("CODE ERROR IN THE ONDRAWGIZMOSSELECTED OF THE SCRIPT: %s", alien->data_name.data());
+							}
+							catch (...) {
+								LOG("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOSSELECTED");
+							}
+							// TODO: avisar dalguna manera al usuari
+						}
 					}
 				}
 			}

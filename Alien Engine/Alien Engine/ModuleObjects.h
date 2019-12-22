@@ -85,6 +85,9 @@ public:
 
 	/*---------Scripts Calls-----------*/
 	void InitScriptsOnPlay() const;
+	void ScriptsPreUpdate() const;
+	void ScriptsUpdate() const;
+	void ScriptsPostUpdate() const;
 	void CleanUpScriptsOnStop() const;
 	void OnDrawGizmos() const;
 	/*---------Scripts Calls-----------*/

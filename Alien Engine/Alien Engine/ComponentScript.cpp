@@ -402,16 +402,40 @@ void ComponentScript::Clone(Component* clone)
 void ComponentScript::OnDisable()
 {
 	if (need_alien && data_ptr != nullptr) {
-		Alien* alien = (Alien*)data_ptr;
-		alien->OnDisable();
+		try {
+			Alien* alien = (Alien*)data_ptr;
+			alien->OnDisable();
+		}
+		catch (...)
+		{
+			try {
+				LOG("CODE ERROR IN THE ONDISABLE OF THE SCRIPT: %s", data_name.data());
+			}
+			catch (...) {
+				LOG("UNKNOWN ERROR IN SCRIPTS ONDISABLE");
+			}
+			// TODO: avisar dalguna manera al usuari
+		}
 	}
 }
 
 void ComponentScript::OnEnable()
 {
 	if (need_alien && data_ptr != nullptr) {
-		Alien* alien = (Alien*)data_ptr;
-		alien->OnEnable();
+		try {
+			Alien* alien = (Alien*)data_ptr;
+			alien->OnEnable();
+		}
+		catch (...)
+		{
+			try {
+				LOG("CODE ERROR IN THE ONENABLE OF THE SCRIPT: %s", data_name.data());
+			}
+			catch (...) {
+				LOG("UNKNOWN ERROR IN SCRIPTS ONENABLE");
+			}
+			// TODO: avisar dalguna manera al usuari
+		}
 	}
 }
 
@@ -557,14 +581,27 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 	if (Creator != nullptr) {
 		data_name = std::string(name);
 		App->objects->actual_script_loading = this;
-		data_ptr = Creator();
-		game_object_attached->AddComponent(this);
-		if (need_alien) {
-			Alien* alien = (Alien*)data_ptr;
-			App->objects->current_scripts.push_back(alien);
-			alien->game_object = game_object_attached;
-			alien->transform = game_object_attached->GetComponent<ComponentTransform>();
-			alien->enabled = &enabled;
+		try {
+			data_ptr = Creator();
+			game_object_attached->AddComponent(this);
+			if (need_alien) {
+				Alien* alien = (Alien*)data_ptr;
+				App->objects->current_scripts.push_back(alien);
+				alien->game_object = game_object_attached;
+				alien->transform = game_object_attached->GetComponent<ComponentTransform>();
+				alien->enabled = &enabled;
+				alien->data_name = data_name;
+			}
+		}
+		catch (...)
+		{
+			try {
+				LOG("CODE ERROR IN THE CONSTRUCTOR OF THE SCRIPT: %s", name);
+			}
+			catch (...) {
+				LOG("UNKNOWN ERROR IN SCRIPTS CONSTRUCTOR");
+			}
+			// TODO: avisar dalguna manera al usuari
 		}
 	}
 }

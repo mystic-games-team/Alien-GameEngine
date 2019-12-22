@@ -8,6 +8,7 @@ typedef unsigned int uint;
 
 class __declspec(dllexport) Alien {
 	friend class ComponentScript;
+	friend class ModuleObjects;
 public:
 	Alien();
 	virtual ~Alien();
@@ -112,5 +113,6 @@ public:
 private:
 
 	bool* enabled = nullptr;
+	std::string data_name;
 
 };
