@@ -16,3 +16,8 @@ LineSegment& RayCreator::CreateRayScreenToWorld(const float& x, const float& y, 
 
 	return camera->frustum.UnProjectLineSegment(origin.x, origin.y);
 }
+
+Ray& RayCreator::CreateRay(const float3& origin, const float3& direction)
+{
+	return Ray(origin, direction);
+}

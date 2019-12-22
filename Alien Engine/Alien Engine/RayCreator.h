@@ -9,5 +9,5 @@ class __declspec(dllexport) RayCreator {
 public:
 
 	LineSegment& CreateRayScreenToWorld(const float& x, const float& y, const ComponentCamera* camera);
-	//TODO: CreateRay
+	Ray& CreateRay(const float3& origin, const float3& direction);
 };
