@@ -286,6 +286,7 @@
     <ClInclude Include="PCG\pcg_uint128.hpp" />
     <ClInclude Include="Prefab.h" />
     <ClInclude Include="RandomHelper.h" />
+    <ClInclude Include="RayCreator.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="ResourceModel.h" />
@@ -394,6 +395,7 @@
     <ClCompile Include="PanelTextEditor.cpp" />
     <ClCompile Include="Parson\parson.c" />
     <ClCompile Include="Prefab.cpp" />
+    <ClCompile Include="RayCreator.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="ResourceModel.cpp" />
     <ClCompile Include="ResourcePrefab.cpp" />

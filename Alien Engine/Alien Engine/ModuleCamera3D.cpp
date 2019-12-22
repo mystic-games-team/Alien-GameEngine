@@ -70,8 +70,9 @@ update_status ModuleCamera3D::Update(float dt)
 				CreateRay();
 			}
 
-			if (!ImGuizmo::IsUsing())
+			if (!ImGuizmo::IsUsing()) {
 				Movement();
+			}
 		}
 		if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 		{
@@ -248,7 +249,7 @@ void ModuleCamera3D::CreateRay()
 
 	// with octree to static objects
 	CreateObjectsHitMap(&hits, App->objects->octree.root, ray);
-
+	
 	// without octree for the dynamics
 	std::vector<GameObject*>::iterator item = App->objects->GetRoot(true)->children.begin();
 	for (; item != App->objects->GetRoot(true)->children.end(); ++item) {

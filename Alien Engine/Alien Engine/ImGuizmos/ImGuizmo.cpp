@@ -1775,12 +1775,12 @@ namespace ImGuizmo
             vec_t baseVector = gContext.mTranslationPlanOrigin - gContext.mModel.v.position;
             float ratio = Dot(axisValue, baseVector + delta) / Dot(axisValue, baseVector);
 
-            gContext.mScale[axisIndex] = max(ratio, 0.001f);
+            gContext.mScale[axisIndex] = max(ratio, 0.F);
          }
          else
          {
-            float scaleDelta = (io.MousePos.x - gContext.mSaveMousePosx)  * 0.01f;
-            gContext.mScale.Set(max(1.f + scaleDelta, 0.001f));
+            float scaleDelta = (io.MousePos.x - gContext.mSaveMousePosx)  * 0.f;
+            gContext.mScale.Set(scaleDelta);
          }
 
          // snap
@@ -1792,7 +1792,7 @@ namespace ImGuizmo
 
          // no 0 allowed
          for (int i = 0; i < 3;i++)
-            gContext.mScale[i] = max(gContext.mScale[i], 0.001f);
+            gContext.mScale[i] = max(gContext.mScale[i], 0.f);
 
          // compute matrix & delta
          matrix_t deltaMatrixScale;

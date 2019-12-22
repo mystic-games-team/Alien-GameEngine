@@ -528,6 +528,9 @@
     <ClInclude Include="SceneManager.h">
       <Filter>ScriptHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="RayCreator.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -843,6 +846,9 @@
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCreator.cpp">
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
   </ItemGroup>

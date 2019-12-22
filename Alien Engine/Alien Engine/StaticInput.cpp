@@ -34,17 +34,17 @@ SDL_Scancode Input::GetFirstKeyDown()
 
 float3 Input::GetMousePosition()
 {
-	return App->input->GetMousePosition();
+	return float3((App->input->GetMouseX() - App->ui->panel_game->posX), (App->input->GetMouseY() - App->ui->panel_game->posY) - 19, App->input->GetMouseZ());
 }
 
 float Input::GetMouseY()
 {
-	return App->input->GetMouseY();
+	return App->input->GetMouseY() - App->ui->panel_game->posY - 19;
 }
 
 float Input::GetMouseX()
 {
-	return App->input->GetMouseX();
+	return App->input->GetMouseX() - App->ui->panel_game->posX;
 }
 
 bool Input::IsAnyMouseButtonPressed()
