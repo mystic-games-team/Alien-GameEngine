@@ -172,11 +172,21 @@ bool ComponentScript::DrawInspector()
 					break; }
 				case InspectorScriptData::DataType::PREFAB: {
 					ImGui::PushID(inspector_variables[i].ptr);
+					Prefab* ptr = (Prefab*)inspector_variables[i].ptr;
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+					if (ImGui::Button("X")) {
+						ptr->prefab_name.clear();
+						ptr->prefabID = 0;
+					}
+					ImGui::PopStyleColor(3);
+					ImGui::SameLine(ImGui::GetCursorPosX() + 17);
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
-					Prefab* ptr = (Prefab*)inspector_variables[i].ptr;
-					ImGui::Button((ptr->prefab_name.empty()) ? "Prefab: NULL" : std::string("Prefab: " + std::string(ptr->prefab_name)).data(), { ImGui::GetWindowWidth() * 0.6F , 0});
+
+					ImGui::Button((ptr->prefab_name.empty()) ? "Prefab: NULL" : std::string("Prefab: " + std::string(ptr->prefab_name)).data(), { ImGui::GetWindowWidth() * 0.55F , 0});
 					ImGui::PopStyleColor(3);
 					if (ImGui::BeginDragDropTarget()) {
 						const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
@@ -210,10 +220,20 @@ bool ComponentScript::DrawInspector()
 					break; }
 				case InspectorScriptData::DataType::GAMEOBJECT: {
 					ImGui::PushID(inspector_variables[i].obj);
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+					if (ImGui::Button("X")) {
+						if (inspector_variables[i].obj != nullptr) {
+							*inspector_variables[i].obj = nullptr;
+						}
+					}
+					ImGui::PopStyleColor(3);
+					ImGui::SameLine(ImGui::GetCursorPosX() + 17);
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
-					ImGui::Button((inspector_variables[i].obj != nullptr && *inspector_variables[i].obj != nullptr) ? std::string("GameObject: " + std::string((*inspector_variables[i].obj)->name)).data() : "GameObject: NULL", { ImGui::GetWindowWidth() * 0.6F , 0 });
+					ImGui::Button((inspector_variables[i].obj != nullptr && *inspector_variables[i].obj != nullptr) ? std::string("GameObject: " + std::string((*inspector_variables[i].obj)->name)).data() : "GameObject: NULL", { ImGui::GetWindowWidth() * 0.55F , 0 });
 					ImGui::PopStyleColor(3);
 					if (ImGui::BeginDragDropTarget()) {
 						const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
