@@ -71,6 +71,8 @@ public:
 
 	void CreateNewScriptPopUp();
 
+	void SetError();
+
 	// style
 	void ChangeStyle(const int& style_number);
 

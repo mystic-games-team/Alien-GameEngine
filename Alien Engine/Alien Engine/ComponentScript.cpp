@@ -434,7 +434,7 @@ void ComponentScript::OnDisable()
 			catch (...) {
 				LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDISABLE");
 			}
-			// TODO: avisar dalguna manera al usuari
+			App->ui->SetError();
 		}
 	}
 }
@@ -454,7 +454,7 @@ void ComponentScript::OnEnable()
 			catch (...) {
 				LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONENABLE");
 			}
-			// TODO: avisar dalguna manera al usuari
+			App->ui->SetError();
 		}
 	}
 }
@@ -612,7 +612,7 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 			catch (...) {
 				LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS CONSTRUCTOR");
 			}
-			// TODO: avisar dalguna manera al usuari
+			App->ui->SetError();
 			return;
 		}
 		game_object_attached->AddComponent(this);

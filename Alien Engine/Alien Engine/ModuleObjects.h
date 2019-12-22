@@ -203,6 +203,8 @@ public:
 	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;
 	
+	bool errors = false;
+
 	Octree octree;
 	std::stack<ReturnZ*> return_actions;
 	std::stack<ReturnZ*> fordward_actions;

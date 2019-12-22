@@ -53,6 +53,7 @@ void Time::Play()
 		App->objects->CleanUpScriptsOnStop();
 		state = GameState::NONE;
 		game_time = 0.0F;
+		App->objects->errors = false;
 		App->ui->panel_console->game_console = false;
 		App->objects->LoadScene("Library/play_scene.alienScene", false);
 		App->objects->ignore_cntrlZ = false;

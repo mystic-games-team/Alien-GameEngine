@@ -428,7 +428,7 @@ void ModuleObjects::InitScriptsOnPlay() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS AWAKE");
 				}
-				// TODO: avisar dalguna manera al usuari
+				App->ui->SetError();
 			}
 		}
 	}
@@ -447,7 +447,7 @@ void ModuleObjects::InitScriptsOnPlay() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS START");
 				}
-				// TODO: avisar dalguna manera al usuari
+				App->ui->SetError();
 			}
 		}
 	}
@@ -470,7 +470,7 @@ void ModuleObjects::ScriptsPreUpdate() const
 					catch (...) {
 						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS PREUPDATE");
 					}
-					// TODO: avisar dalguna manera al usuari
+					App->ui->SetError();
 				}
 			}
 		}
@@ -494,7 +494,7 @@ void ModuleObjects::ScriptsUpdate() const
 					catch (...) {
 						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS UPDATE");
 					}
-					// TODO: avisar dalguna manera al usuari
+					App->ui->SetError();
 				}
 			}
 		}
@@ -518,7 +518,7 @@ void ModuleObjects::ScriptsPostUpdate() const
 					catch (...) {
 						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS POSTUPDATE");
 					}
-					// TODO: avisar dalguna manera al usuari
+					App->ui->SetError();
 				}
 			}
 		}
@@ -541,7 +541,7 @@ void ModuleObjects::CleanUpScriptsOnStop() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS CLEANUP");
 				}
-				// TODO: avisar dalguna manera al usuari
+				App->ui->SetError();
 			}
 		}
 	}
@@ -564,7 +564,7 @@ void ModuleObjects::OnDrawGizmos() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOS");
 				}
-				// TODO: avisar dalguna manera al usuari
+				App->ui->SetError();
 			}
 		}
 	}
@@ -588,7 +588,7 @@ void ModuleObjects::OnDrawGizmos() const
 							catch (...) {
 								LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOSSELECTED");
 							}
-							// TODO: avisar dalguna manera al usuari
+							App->ui->SetError();
 						}
 					}
 				}
@@ -988,7 +988,7 @@ void ModuleObjects::HotReload()
 					if (to_load->GetBoolean("AreScripts")) {
 						JSONArraypack* scripts_to_load = to_load->GetArray("Arr.Scripts");
 						ReAssignScripts(scripts_to_load);
-
+						errors = false;
 						if (Time::IsInGameState()) {
 							auto item = current_scripts.begin();
 							for (; item != current_scripts.end(); ++item) {

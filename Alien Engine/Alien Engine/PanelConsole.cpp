@@ -16,6 +16,7 @@ void PanelConsole::PanelLogic()
 	ImGui::Begin(panel_name.data(), &enabled, ImGuiWindowFlags_NoCollapse);
 
 	ImGui::BeginChild("#console buttons", { ImGui::GetWindowWidth(),30 });
+
 	if (!game_console) ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.06F, 0.53F,0.98F,1 });
 	if (ImGui::Button("Engine Console") && game_console) {
 		game_console = false;
@@ -54,8 +55,16 @@ void PanelConsole::PanelLogic()
 	else if (collapse) ImGui::PopStyleColor();
 	ImGui::Separator();
 	ImGui::EndChild();
+
+	if (App->objects->errors) {
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ChildWindowBg, { 0.55f,0,0,1 });
+	}
 	ImGui::BeginChild("#console logs", { 0,0 },false, ImGuiWindowFlags_HorizontalScrollbar);
-	
+	if (App->objects->errors) {
+		ImGui::PopStyleColor();
+	}
+
+
 	if (collapse) {
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.8F, 0.23F,0.98F,1 });
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F, 0.23F,0.98F,1 });

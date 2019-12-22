@@ -993,6 +993,21 @@ void ModuleUI::CreateNewScriptPopUp()
 	}
 }
 
+void ModuleUI::SetError()
+{
+	if (!App->objects->errors) {
+		App->objects->errors = true;
+		panel_console->game_console = false;
+		ImGui::SetWindowFocus(panel_console->GetName().data());
+		if (App->camera->is_scene_focused) {
+			ImGui::SetWindowFocus(panel_scene->GetName().data());
+		}
+		else if (panel_game->game_focused) {
+			ImGui::SetWindowFocus(panel_game->GetName().data());
+		}
+	}
+}
+
 void ModuleUI::DeleteLayout(Layout* layout)
 {
 
