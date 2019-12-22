@@ -39,6 +39,7 @@ void Time::Play()
 			App->engine_string_logs.clear();
 		}
 		state = GameState::PLAY;
+		App->ui->panel_console->game_console = true;
 		ImGui::SetWindowFocus(App->ui->panel_game->GetPanelName().data());
 		App->objects->InitScriptsOnPlay();
 		game_time = 0.0F;
@@ -52,6 +53,7 @@ void Time::Play()
 		App->objects->CleanUpScriptsOnStop();
 		state = GameState::NONE;
 		game_time = 0.0F;
+		App->ui->panel_console->game_console = false;
 		App->objects->LoadScene("Library/play_scene.alienScene", false);
 		App->objects->ignore_cntrlZ = false;
 		remove("Library/play_scene.alienScene");

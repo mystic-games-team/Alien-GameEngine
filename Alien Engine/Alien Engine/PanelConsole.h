@@ -15,10 +15,10 @@ public:
 public:
 
 	bool clear_on_play = true;
-
+	bool game_console = false;
 private:
 	bool collapse = true;
-	bool game_console = true;
+
 	bool scroll_x = true;
 	bool scroll_y = true;
 
