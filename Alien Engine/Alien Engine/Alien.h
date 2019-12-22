@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class ComponentTransform;
 class GameObject;
 enum class ComponentType;
