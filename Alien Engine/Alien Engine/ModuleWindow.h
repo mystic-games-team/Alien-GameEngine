@@ -25,6 +25,12 @@ public:
 	void SetWindowName(const char* name);
 	void SetOrganitzationName(const char* name);
 
+	void SetBorderless(bool borderless);
+	void SetFullScreen(bool fullscreen);
+	void SetFullDesktop(bool fulldesktop);
+
+	void SetResizable(bool resizable);
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

@@ -117,24 +117,14 @@ void PanelConfig::PanelLogic()
 		ImGui::Text("Refresh Rate:"); ImGui::SameLine(); ImGui::TextColored({ 255,0,0,255 }, "%i", display_mode.refresh_rate);
 		ImGui::Spacing();
 		if (ImGui::Checkbox(" FullScreen", &App->window->fullscreen)) {
-			if (App->window->fullscreen) {
-				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN);
-			}
-			else {
-				SDL_SetWindowFullscreen(App->window->window, 0);
-			}
+			App->window->SetFullScreen(App->window->fullscreen);
 		}
 		ImGui::SameLine();
 		if (ImGui::Checkbox(" FullDesktop", &App->window->full_desktop)) {
-			if (App->window->full_desktop) {
-				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-			}
-			else {
-				SDL_SetWindowFullscreen(App->window->window, 0);
-			}
+			App->window->SetFullDesktop(App->window->full_desktop);
 		}
 		if (ImGui::Checkbox(" Borderless", &App->window->borderless)) {
-			SDL_SetWindowBordered(App->window->window, (SDL_bool)!App->window->borderless);
+			SDL_SetWindowBordered(App->window->window, (SDL_bool)App->window->borderless);
 		}
 		ImGui::SameLine();
 		if (ImGui::Checkbox(" Resizable", &App->window->resizable)) {

@@ -16,7 +16,7 @@ void Move2::Start()
 	bullet.ConvertToGameObject(transform->GetGlobalPosition());
 
 	time2 = Time::GetGameTime();
-
+	Screen::SetFullDesktop(true);
 	if (test_object != nullptr) {
 		LOG(test_object->GetName());
 	}
@@ -91,9 +91,6 @@ void Move2::Update()
 	//	game_object->SetNewParent(GameObject::FindWithName("Light"));
 	//	SetScriptEnable(false);
 	//}
-
-	GameObject* obj = nullptr;
-	(*obj).ToDelete();
 }
 
 void Move2::OnDrawGizmos()

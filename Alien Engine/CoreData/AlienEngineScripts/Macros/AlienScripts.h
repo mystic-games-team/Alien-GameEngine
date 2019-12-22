@@ -28,6 +28,8 @@
 #include "..\..\..\Alien Engine\Prefab.h"
 #include "..\..\..\Alien Engine\SceneManager.h"
 #include "..\..\..\Alien Engine\AlienEngine.h"
+#include "..\..\..\Alien Engine\RayCreator.h"
+#include "..\..\..\Alien Engine\Screen.h"
 /*-----------------HELPERS-------------------*/
 
 #ifdef ALIENENGINESCRIPTS_EXPORTS

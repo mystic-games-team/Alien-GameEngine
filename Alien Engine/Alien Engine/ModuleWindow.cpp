@@ -41,6 +41,10 @@ bool ModuleWindow::Init()
 		if (start_maximized) {
 			flags |= SDL_WINDOW_MAXIMIZED;
 		}
+		else if (borderless)
+		{
+			flags |= SDL_WINDOW_BORDERLESS;
+		}
 
 		if(fullscreen)
 		{
@@ -50,11 +54,6 @@ bool ModuleWindow::Init()
 		if(resizable)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
-		}
-
-		if(borderless)
-		{
-			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
 		if(full_desktop)
@@ -107,8 +106,9 @@ void ModuleWindow::LoadConfig(JSONfilepack*& config)
 	organitzation_name = (char*)config->GetString("Configuration.Application.Organitzation");
 	style = config->GetNumber("Configuration.Window.StyleType");
 	start_maximized = config->GetBoolean("Configuration.Window.StartMax");
-	if (ImGui::GetCurrentContext() != nullptr)
+	if (ImGui::GetCurrentContext() != nullptr) {
 		App->ui->ChangeStyle(style);
+	}
 	//SDL_SetWindowTitle(window, window_name);
 	//SDL_SetWindowSize(window, width, height);
 	//if (fullscreen) {
@@ -161,3 +161,44 @@ void ModuleWindow::SetOrganitzationName(const char* name)
 {
 	organitzation_name = (char*)name;
 }
+
+void ModuleWindow::SetBorderless(bool borderless)
+{
+	this->borderless = borderless;
+	SDL_SetWindowBordered(window, (SDL_bool)borderless);
+}
+
+void ModuleWindow::SetFullScreen(bool fullscreen)
+{
+	this->fullscreen = fullscreen;
+	if (fullscreen) {
+		full_desktop = false;
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	}
+	else {
+		SDL_SetWindowFullscreen(window, 0);
+		SDL_SetWindowBordered(window, (SDL_bool)borderless);
+		SDL_SetWindowResizable(window, (SDL_bool)resizable);
+	}
+}
+
+void ModuleWindow::SetFullDesktop(bool fulldesktop)
+{
+	this->full_desktop = fulldesktop;
+	if (fulldesktop) {
+		fullscreen = false;
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}
+	else {
+		SDL_SetWindowFullscreen(window, 0);
+		SDL_SetWindowBordered(window, (SDL_bool)borderless);
+		SDL_SetWindowResizable(window, (SDL_bool)resizable);
+	}
+}
+
+void ModuleWindow::SetResizable(bool resizable)
+{
+	this->resizable = resizable;
+	SDL_SetWindowResizable(window, (SDL_bool)resizable);
+}
+

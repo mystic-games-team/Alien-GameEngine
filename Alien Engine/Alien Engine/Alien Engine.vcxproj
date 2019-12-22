@@ -296,6 +296,7 @@
     <ClInclude Include="Resource_.h" />
     <ClInclude Include="ReturnZ.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Screen.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
     <ClInclude Include="StaticInput.h" />
@@ -404,6 +405,7 @@
     <ClCompile Include="Resource_.cpp" />
     <ClCompile Include="ReturnZ.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
     <ClCompile Include="StaticInput.cpp" />

@@ -13,7 +13,7 @@
             "Fullscreen": false,
             "Fulldesktop": false,
             "Resizable": true,
-            "Borderless": false,
+            "Borderless": true,
 			      "StartMax": true,
             "StyleType": 1
         },
