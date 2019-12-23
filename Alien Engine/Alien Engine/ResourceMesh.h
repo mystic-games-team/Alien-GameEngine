@@ -50,7 +50,7 @@ public:
 	float* center_point = nullptr;
 
 	bool is_primitive = false;
-
+	bool is_custom = true;
 private:
 
 	std::string parent_name;

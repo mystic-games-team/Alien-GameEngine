@@ -474,7 +474,9 @@ ResourceMesh* ModuleImporter::LoadEngineModels(const char* path)
 	}
 
 	aiReleaseImport(scene);
-
+	if (r_mesh != nullptr) {
+		r_mesh->is_custom = false;
+	}
 	return r_mesh;
 }
 
