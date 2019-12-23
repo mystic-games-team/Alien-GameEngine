@@ -104,7 +104,7 @@ void Tank::Rotation()
 
 	float3 wheels = wheels_transform->GetLocalRotation().ToEulerXYZ();
 
-	if (wheels.x == 0)
+	if (wheels.x == 0 && wheels.y > 0)
 	{
 		rotation.y = (-(mouse.x * 180 / width) + 90) + (wheels.y * Maths::Rad2Deg());
 
@@ -112,6 +112,7 @@ void Tank::Rotation()
 		{
 			rotation.x = -180;
 			rotation.z = -180;
+			rotation.y -= wheels.y * 2 * Maths::Rad2Deg();
 		}
 		else
 		{
@@ -119,21 +120,59 @@ void Tank::Rotation()
 			rotation.z = 0;
 		}
 	}
-	else
+
+	else if (wheels.x == 0 && wheels.y < 0)
 	{
-		rotation.y = (-(mouse.x * 180 / width) - 90) - (wheels.y * Maths::Rad2Deg());
+		rotation.y = ((mouse.x * 180 / width)) - (wheels.y * Maths::Rad2Deg());
 
 		if (mouse.y > (height / 2))
 		{
-			rotation.x = -180;
-			rotation.z = -180;
-		}
-		else
-		{
+			rotation.y += 0;
 			rotation.x = 0;
 			rotation.z = 0;
 		}
+		else
+		{
+			rotation.y -= 270;
+			rotation.x = -180;
+			rotation.z = -180;
+		}
+	}
 
+	if (wheels.x == -180 && wheels.y > 0)
+	{
+		rotation.y = (-(mouse.x * 180 / width)) - (wheels.y * Maths::Rad2Deg());
+
+		if (mouse.y > (height / 2))
+		{
+			rotation.y += 0;
+			rotation.x = 0;
+			rotation.z = 0;
+		}
+		else
+		{
+			rotation.y -= 270;
+			rotation.x = -180;
+			rotation.z = -180;
+		}
+	}
+
+	else if (wheels.x == -180 && wheels.y < 0)
+	{
+		rotation.y = ((mouse.x * 180 / width)) - (wheels.y * Maths::Rad2Deg());
+
+		if (mouse.y > (height / 2))
+		{
+			rotation.y += 0;
+			rotation.x = 0;
+			rotation.z = 0;
+		}
+		else
+		{
+			rotation.y -= 270;
+			rotation.x = -180;
+			rotation.z = -180;
+		}
 	}
 
 	turret_transform->SetLocalRotation(Quat::FromEulerXYZ(rotation.x * Maths::Deg2Rad(), rotation.y * Maths::Deg2Rad(), rotation.z * Maths::Deg2Rad()));
