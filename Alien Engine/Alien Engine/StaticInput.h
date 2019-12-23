@@ -30,8 +30,8 @@ public:
 
 	/*----------MOUSE--------------*/
 	static float3 GetMousePosition();
-	static float GetMouseY();
-	static float GetMouseX();
+	static int GetMouseY();
+	static int GetMouseX();
 	static bool IsAnyMouseButtonPressed();
 	static float GetMouseWheel();
 	static float GetMouseYMotion();

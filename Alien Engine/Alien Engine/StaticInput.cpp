@@ -41,7 +41,7 @@ float3 Input::GetMousePosition()
 #endif 
 }
 
-float Input::GetMouseY()
+int Input::GetMouseY()
 {
 #ifndef GAME_VERSION
 	return App->input->GetMouseY() - App->ui->panel_game->posY - 19;
@@ -50,7 +50,7 @@ float Input::GetMouseY()
 #endif
 }
 
-float Input::GetMouseX()
+int Input::GetMouseX()
 {
 #ifndef GAME_VERSION
 	return App->input->GetMouseX() - App->ui->panel_game->posX;

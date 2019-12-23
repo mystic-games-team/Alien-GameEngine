@@ -96,22 +96,30 @@ void Tank::Rotation()
 		wheels_transform->SetLocalRotation(Quat::FromEulerXYZ(0, angle * Maths::Deg2Rad(), 0));
 	}
 
-	Plane plane = {{ 0,1.5f,0 },{0,1,0}};
-	ray = RayCreator::CreateRayScreenToWorld(Input::GetMouseX(), Input::GetMouseY(), Camera::GetCurrentCamera());
-	if (ray.Intersects(plane))
-	{
-		to_look = ray.GetPoint(ray.Distance(plane));
-		LOG("X: %f", to_look.x);
-		LOG("Y: %f", to_look.y);
-		LOG("Z: %f", to_look.z);
-		float3 dir = (to_look - turret_transform->GetGlobalPosition()).Normalized();
-		Quat quat = Quat::LookAt(turret_transform->forward, dir, turret_transform->up, { 0,1,0 });
-		float y = quat.ToEulerXYZ().y;
-		turret_transform->SetLocalRotation(Quat::FromEulerXYZ(0, y * Maths::Deg2Rad(), 0));
+	float2 mouse = { Input::GetMousePosition().x, Input::GetMousePosition().y };
+	float3 rotation = turret_transform->GetLocalRotation().ToEulerXYZ();
+	int width = Screen::GetWidth();
+	int middle = width / 2;
+	int height = Screen::GetHeight();
+
+	if (mouse.x > middle) { // negative angle
+		//int angle_inverted = (mouse.x / width) * 100;
+		//rotation.y = -(90 - angle_inverted);
+		rotation.y = -(mouse.x / width) * 100;
 	}
+	else if (mouse.x < middle) { // positive angle
+		//int angle_inverted = (mouse.x / middle) * 100;
+		//rotation.y = (90 - angle_inverted);
+		rotation.y = (mouse.x / middle) * 100;
+	}
+	else {
+		rotation.y = 0;
+	}
+
+	turret_transform->SetLocalRotation(Quat::FromEulerXYZ(0, rotation.y * Maths::Deg2Rad(), 0));
 }
 
 void Tank::OnDrawGizmos()
 {
-	Gizmos::DrawLine(ray.a, to_look, Color::Red());
+	Gizmos::DrawLine(ray.a, ray.b, Color::Red());
 }
