@@ -14,8 +14,10 @@ __declspec(dllexport) void log(const char file[], int line, const char* format, 
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 
 #define HAVE_M_PI
-#define ALIEN_ENGINE_VERSION 0.75
+#define ALIEN_ENGINE_VERSION 1.0
 
+
+// DISCOMMENT TO START THE ENGINE IN PLAY MODE
 //#define GAME_VERSION
 
 #define RELEASE( x )\
