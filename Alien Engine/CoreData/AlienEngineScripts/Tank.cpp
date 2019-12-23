@@ -1,5 +1,6 @@
 #include "Tank.h"
 #include "Bullet.h"
+#include "../../Alien Engine/MathGeoLib/include/Geometry/Plane.h"
 
 Tank::Tank() : Alien()
 {
@@ -43,7 +44,7 @@ void Tank::Shoot()
 		{
 			Bullet* minion = (Bullet*)bullet_created->GetComponentScript("Bullet");
 			minion->bullet_direction = turret_transform->forward;
-			velocity -= recoil;
+			// TODO: Recoil
 		}
 	}
 }
@@ -85,13 +86,21 @@ void Tank::Rotation()
 {
 	if (Input::GetKeyRepeat(SDL_SCANCODE_A))
 	{
-		angle += 15 * Time::GetDT();
+		angle += turning_velocity * Time::GetDT();
 		wheels_transform->SetLocalRotation(Quat::FromEulerXYZ(0, angle * Maths::Deg2Rad(), 0));
 	}
 
 	if (Input::GetKeyRepeat(SDL_SCANCODE_D))
 	{
-		angle -= 15 * Time::GetDT();
+		angle -= turning_velocity * Time::GetDT();
 		wheels_transform->SetLocalRotation(Quat::FromEulerXYZ(0, angle * Maths::Deg2Rad(), 0));
 	}
+
+	//Plane plane = {{ transform->GetGlobalPosition().x,transform->GetGlobalPosition().y + 1.5f,transform->GetGlobalPosition().z },{0,1,0}};
+	//LineSegment ray = RayCreator::CreateRayScreenToWorld(Input::GetMouseX(), Input::GetMouseY(), Camera::GetCurrentCamera());
+	//if (ray.Intersects(plane))
+	//{
+	//	float3 to_look = ray.GetPoint(ray.Distance(plane));
+	//	turret_transform->SetLocalRotation(Quat::LookAt(turret_transform->forward, to_look - turret_transform->GetGlobalPosition(), turret_transform->up, { 0,1,0 }));
+	//}
 }
