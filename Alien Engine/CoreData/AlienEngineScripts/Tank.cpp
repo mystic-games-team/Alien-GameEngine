@@ -128,7 +128,7 @@ void Tank::Rotation()
 
 		if (mouse.y > (height / 2))
 		{
-			rotation.y -= (-90-wheels.y);
+			rotation.y -= (-90-wheels.y*2);
 			rotation.x = 0;
 			rotation.z = 0;
 		}
