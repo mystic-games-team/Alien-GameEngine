@@ -96,11 +96,22 @@ void Tank::Rotation()
 		wheels_transform->SetLocalRotation(Quat::FromEulerXYZ(0, angle * Maths::Deg2Rad(), 0));
 	}
 
-	Plane plane = {{ transform->GetGlobalPosition().x,transform->GetGlobalPosition().y + 1.5f,transform->GetGlobalPosition().z },{0,1,0}};
-	LineSegment ray = RayCreator::CreateRayScreenToWorld(Input::GetMouseX(), Input::GetMouseY(), Camera::GetCurrentCamera());
+	Plane plane = {{ 0,1.5f,0 },{0,1,0}};
+	ray = RayCreator::CreateRayScreenToWorld(Input::GetMouseX(), Input::GetMouseY(), Camera::GetCurrentCamera());
 	if (ray.Intersects(plane))
 	{
-		float3 to_look = ray.GetPoint(ray.Distance(plane));
-		turret_transform->SetLocalRotation(Quat::LookAt(turret_transform->forward, to_look - turret_transform->GetGlobalPosition(), turret_transform->up, { 0,1,0 }));
+		to_look = ray.GetPoint(ray.Distance(plane));
+		LOG("X: %f", to_look.x);
+		LOG("Y: %f", to_look.y);
+		LOG("Z: %f", to_look.z);
+		float3 dir = (to_look - turret_transform->GetGlobalPosition()).Normalized();
+		Quat quat = Quat::LookAt(turret_transform->forward, dir, turret_transform->up, { 0,1,0 });
+		float y = quat.ToEulerXYZ().y;
+		turret_transform->SetLocalRotation(Quat::FromEulerXYZ(0, y * Maths::Deg2Rad(), 0));
 	}
+}
+
+void Tank::OnDrawGizmos()
+{
+	Gizmos::DrawLine(ray.a, to_look, Color::Red());
 }

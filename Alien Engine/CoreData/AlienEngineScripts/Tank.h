@@ -17,6 +17,8 @@ public:
 	void Movement();
 	void Rotation();
 
+	void OnDrawGizmos();
+
 public:
 
 	Prefab bullet;
@@ -36,7 +38,8 @@ public:
 private:
 
 	float angle = 0.0f;
-
+	LineSegment ray;
+	float3 to_look = { 0,0,0 };
 };
 
 ALIEN_FACTORY Tank* CreateTank() {
