@@ -39,7 +39,7 @@ void Tank::Shoot()
 	// Shooting
 	if (Input::GetMouseButtonDown(Input::MOUSE_LEFT_BUTTON))
 	{
-		GameObject* bullet_created = bullet.ConvertToGameObject({ transform->GetGlobalPosition().x,transform->GetGlobalPosition().y + 1.5f,transform->GetGlobalPosition().z });
+		GameObject* bullet_created = bullet.ConvertToGameObject((float3{ transform->GetGlobalPosition().x,transform->GetGlobalPosition().y + 1.5f,transform->GetGlobalPosition().z }) + turret_transform->forward * 1.2f);
 
 		if (bullet_created != nullptr)
 		{
@@ -128,7 +128,7 @@ void Tank::Rotation()
 
 		if (mouse.y > (height / 2))
 		{
-			rotation.y -= (-90-wheels.y*2);
+			rotation.y -= (-90 - wheels.y * 2);
 			rotation.x = 0;
 			rotation.z = 0;
 		}
@@ -140,7 +140,7 @@ void Tank::Rotation()
 		}
 	}
 
-	else if (wheels.x == -180 && wheels.y > 0)
+	else if ((wheels.x == -180 || wheels.x == 180) && wheels.y > 0)
 	{
 		rotation.y = (-(mouse.x * 180 / width)) - (wheels.y);
 
@@ -158,21 +158,21 @@ void Tank::Rotation()
 		}
 	}
 
-	else if (wheels.x == -180 && wheels.y < 0)
+	else if ((wheels.x == -180 || wheels.x == 180) && wheels.y < 0)
 	{
-		rotation.y = ((mouse.x * 180 / width)) - (wheels.y);
+		rotation.y = (-(mouse.x * 180 / width));
 
 		if (mouse.y > (height / 2))
 		{
-			rotation.y += 0;
-			rotation.x = 0;
-			rotation.z = 0;
+			rotation.x = -180;
+			rotation.z = -180;
+			rotation.y += wheels.y-90;
 		}
 		else
 		{
-			rotation.y -= 270;
-			rotation.x = -180;
-			rotation.z = -180;
+			rotation.x = 0;
+			rotation.z = 0;
+			rotation.y -= wheels.y+90;
 		}
 	}
 
