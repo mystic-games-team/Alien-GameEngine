@@ -3,7 +3,7 @@
 #include "ComponentCamera.h"
 #include "Globals.h"
 
-LineSegment& RayCreator::CreateRayScreenToWorld(const float& x, const float& y, const ComponentCamera* camera)
+LineSegment RayCreator::CreateRayScreenToWorld(const float& x, const float& y, const ComponentCamera* camera)
 {
 	if (camera == nullptr) {
 		LOG_ENGINE("Camera passaed in CreateRayScreenToWorld was nullptr!");
@@ -17,7 +17,7 @@ LineSegment& RayCreator::CreateRayScreenToWorld(const float& x, const float& y, 
 	return camera->frustum.UnProjectLineSegment(origin.x, origin.y);
 }
 
-Ray& RayCreator::CreateRay(const float3& origin, const float3& direction)
+Ray RayCreator::CreateRay(const float3& origin, const float3& direction)
 {
 	return Ray(origin, direction);
 }
