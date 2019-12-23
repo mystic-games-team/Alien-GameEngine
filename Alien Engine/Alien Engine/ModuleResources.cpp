@@ -24,6 +24,7 @@ ModuleResources::~ModuleResources()
 
 bool ModuleResources::Start()
 {
+#ifndef GAME_VERSION
 	// Load Icons
 	icons.jpg_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_jpg.png");
 	icons.png_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_png.png");
@@ -49,10 +50,16 @@ bool ModuleResources::Start()
 	icons.prefab = App->importer->LoadEngineTexture("Configuration/EngineTextures/prefab.png");
 	icons.prefab_lock = App->importer->LoadEngineTexture("Configuration/EngineTextures/prefab_lock.png");
 
-	
 	camera_mesh = App->importer->LoadEngineModels("Configuration/Engine Models/camera.FBX");
 	light_mesh = App->importer->LoadEngineModels("Configuration/Engine Models/bulb.fbx");
 
+	assets = new FileNode();
+	assets->is_file = false;
+	assets->is_base_file = true;
+	assets->name = "Assets";
+
+	App->file_system->DiscoverEverythig(assets);
+#endif
 
 	// Load Primitives as resource
 	cube = new ResourceMesh();
@@ -63,17 +70,9 @@ bool ModuleResources::Start()
 	icosahedron = new ResourceMesh();
 	octahedron = new ResourceMesh();
 
-	assets = new FileNode();
-	assets->is_file = false;
-	assets->is_base_file = true;
-	assets->name = "Assets";
-
-
 	// TODO: look if all meta data has its fbx or texture if not remove meta data
 
 	ReadAllMetaData();
-
-	App->file_system->DiscoverEverythig(assets);
 
 	return true;
 }

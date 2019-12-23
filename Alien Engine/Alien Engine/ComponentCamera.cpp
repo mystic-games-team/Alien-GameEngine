@@ -40,9 +40,10 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 		App->objects->game_cameras.push_back(this);
 	}
 	
+#ifndef GAME_VERSION
 	mesh_camera = new ComponentMesh(game_object_attached);
-
 	mesh_camera->mesh = App->resources->camera_mesh;
+#endif
 }
 
 ComponentCamera::~ComponentCamera()
@@ -68,8 +69,9 @@ ComponentCamera::~ComponentCamera()
 			break;
 		}
 	}
-
+#ifndef GAME_VERSION
 	delete mesh_camera;
+#endif
 }
 
 bool ComponentCamera::DrawInspector()

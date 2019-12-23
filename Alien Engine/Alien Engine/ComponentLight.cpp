@@ -11,12 +11,17 @@ ComponentLight::ComponentLight(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::LIGHT;
 
+#ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
+#endif
 }
 
 ComponentLight::~ComponentLight()
 {
+#ifndef GAME_VERSION
+	delete bulb;
+#endif
 	glDisable(light_id);
 }
 
