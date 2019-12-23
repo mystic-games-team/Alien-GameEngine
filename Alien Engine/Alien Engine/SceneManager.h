@@ -2,8 +2,8 @@
 
 class __declspec(dllexport) SceneManager {
 
-	void LoadScene(const char* path);
-	int ScenesLoaded();
+	static void LoadScene(const char* path);
+	static int ScenesLoaded();
 
 private:
 

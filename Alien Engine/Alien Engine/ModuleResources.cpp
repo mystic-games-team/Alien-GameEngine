@@ -491,6 +491,7 @@ void ModuleResources::ReadPrefabs(std::vector<std::string> directories, std::vec
 
 void ModuleResources::ReadScripts()
 {
+#ifndef GAME_VERSION
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
 	std::vector<std::string> scripts;
@@ -516,6 +517,23 @@ void ModuleResources::ReadScripts()
 		}
 		scripts.clear();
 	}
+#else
+	std::vector<std::string> files;
+	std::vector<std::string> directories;
+	std::vector<std::string> scripts;
+
+	App->file_system->DiscoverFiles(SCRIPTS_FOLDER, files, directories, true);
+	GetAllScriptsPath(directories, files, SCRIPTS_FOLDER, &scripts);
+
+	files.clear();
+	directories.clear();
+
+	for (uint i = 0; i < scripts.size(); ++i) {
+		ResourceScript* script = new ResourceScript();
+		script->SetName(App->file_system->GetBaseFileName(scripts[i].data()).data());
+		script->ReadBaseInfo(scripts[i].data());
+	}
+#endif
 }
 
 void ModuleResources::GetAllScriptsPath(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder, std::vector<std::string>* scripts)
