@@ -421,7 +421,6 @@ void ComponentCamera::Clone(Component* clone)
 	camera->frustum = frustum;
 	camera->horizontal_fov = horizontal_fov;
 	camera->is_fov_horizontal = is_fov_horizontal;
-	camera->mesh_camera = mesh_camera;
 	camera->near_plane = near_plane;
 	camera->print_icon = print_icon;
 	camera->projection_changed = projection_changed;

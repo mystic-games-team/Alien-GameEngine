@@ -20,8 +20,9 @@ ComponentMesh::~ComponentMesh()
 	{
 		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
 	}
-	if (mesh != nullptr)
+	if (mesh != nullptr) {
 		mesh->DecreaseReferences();
+	}
 }
 
 void ComponentMesh::DrawPolygon()
