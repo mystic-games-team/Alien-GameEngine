@@ -103,17 +103,17 @@ void Tank::Rotation()
 	int middle = width / 2;
 	int height = Screen::GetHeight();
 
-	float3 wheels = wheels_transform->GetLocalRotation().ToEulerXYZ();
+	float3 wheels = wheels_transform->GetLocalRotation().ToEulerXYZ() * Maths::Rad2Deg();
 
 	if (wheels.x == 0 && wheels.y > 0)
 	{
-		rotation.y = (-(mouse.x * 180 / width) + 90) + (wheels.y * Maths::Rad2Deg());
+		rotation.y = (-(mouse.x * 180 / width) + 90) + (wheels.y);
 
 		if (mouse.y > (height / 2))
 		{
 			rotation.x = -180;
 			rotation.z = -180;
-			rotation.y -= wheels.y * 2 * Maths::Rad2Deg();
+			rotation.y -= wheels.y * 2;
 		}
 		else
 		{
@@ -124,11 +124,11 @@ void Tank::Rotation()
 
 	else if (wheels.x == 0 && wheels.y < 0)
 	{
-		rotation.y = ((mouse.x * 180 / width)) - (wheels.y * Maths::Rad2Deg());
+		rotation.y = ((mouse.x * 180 / width)) - (wheels.y);
 
 		if (mouse.y > (height / 2))
 		{
-			rotation.y += 0;
+			rotation.y -= (-90-wheels.y*2);
 			rotation.x = 0;
 			rotation.z = 0;
 		}
@@ -140,27 +140,27 @@ void Tank::Rotation()
 		}
 	}
 
-	if (wheels.x == -180 && wheels.y > 0)
+	else if (wheels.x == -180 && wheels.y > 0)
 	{
-		rotation.y = (-(mouse.x * 180 / width)) - (wheels.y * Maths::Rad2Deg());
+		rotation.y = (-(mouse.x * 180 / width)) - (wheels.y);
 
 		if (mouse.y > (height / 2))
 		{
-			rotation.y += 0;
-			rotation.x = 0;
-			rotation.z = 0;
+			rotation.y -= (90 - wheels.y * 2);
+			rotation.x = -180;
+			rotation.z = -180;
 		}
 		else
 		{
-			rotation.y -= 270;
-			rotation.x = -180;
-			rotation.z = -180;
+			rotation.y -= 90;
+			rotation.x = 0;
+			rotation.z = 0;
 		}
 	}
 
 	else if (wheels.x == -180 && wheels.y < 0)
 	{
-		rotation.y = ((mouse.x * 180 / width)) - (wheels.y * Maths::Rad2Deg());
+		rotation.y = ((mouse.x * 180 / width)) - (wheels.y);
 
 		if (mouse.y > (height / 2))
 		{
