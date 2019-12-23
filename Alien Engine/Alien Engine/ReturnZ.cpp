@@ -408,7 +408,6 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 					ComponentScript* script = new ComponentScript(new_obj);
 					CompScriptZ* scriptZ = (CompScriptZ*)(*item);
 					CompZ::SetComponent(script, scriptZ);
-					new_obj->AddComponent(script);
 					break; }
 				default:
 					break;

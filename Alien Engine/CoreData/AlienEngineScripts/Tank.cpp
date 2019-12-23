@@ -31,6 +31,7 @@ void Tank::Update()
 	Movement();
 	Rotation();
 	Shoot();
+	ControlCamera();
 }
 
 void Tank::Shoot()
@@ -137,6 +138,28 @@ void Tank::Rotation()
 	}
 
 	turret_transform->SetLocalRotation(Quat::FromEulerXYZ(rotation.x * Maths::Deg2Rad(), rotation.y * Maths::Deg2Rad(), rotation.z * Maths::Deg2Rad()));
+}
+
+void Tank::ControlCamera()
+{
+	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
+		Camera::SetCurrentCamera((ComponentCamera*)GameObject::FindWithName("FrontCamera")->GetComponent(ComponentType::CAMERA));
+	}
+	else if (Input::GetKeyDown(SDL_SCANCODE_2)) {
+		Camera::SetCurrentCamera((ComponentCamera*)GameObject::FindWithName("RightCamera")->GetComponent(ComponentType::CAMERA));
+	}
+	else if (Input::GetKeyDown(SDL_SCANCODE_3)) {
+		Camera::SetCurrentCamera((ComponentCamera*)GameObject::FindWithName("LeftCamera")->GetComponent(ComponentType::CAMERA));
+	}
+	else if (Input::GetKeyDown(SDL_SCANCODE_4)) {
+		Camera::SetCurrentCamera((ComponentCamera*)GameObject::FindWithName("BackCamera")->GetComponent(ComponentType::CAMERA));
+	}
+	else if (Input::GetKeyDown(SDL_SCANCODE_5)) {
+		Camera::SetCurrentCamera((ComponentCamera*)GameObject::FindWithName("UpCamera")->GetComponent(ComponentType::CAMERA));
+	}
+	else if (Input::GetMouseButtonDown(Input::MOUSE_BUTTONS::MOUSE_RIGHT_BUTTON)) {
+		Camera::SetCurrentCamera((ComponentCamera*)GameObject::FindWithName("MainCamera")->GetComponent(ComponentType::CAMERA));
+	}
 }
 
 void Tank::OnDrawGizmos()
