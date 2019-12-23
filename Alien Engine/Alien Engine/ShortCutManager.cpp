@@ -22,8 +22,9 @@ ShortCutManager::~ShortCutManager()
 
 void ShortCutManager::UpdateShortCuts()
 {
-	if (App->ui->panel_config->IsEnabled())
+	if (App->ui->panel_config->IsEnabled()) {
 		ChangeKey();
+	}
 	ShortCutClicked();
 }
 

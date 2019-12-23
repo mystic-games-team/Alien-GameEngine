@@ -64,6 +64,7 @@ bool ModuleObjects::Start()
 		}
 	}
 
+#ifndef GAME_VERSION
 	GameObject* light_test = new GameObject(base_game_object);
 	light_test->SetName("Light");
 	light_test->AddComponent(new ComponentTransform(light_test, { 0,15,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
@@ -72,11 +73,12 @@ bool ModuleObjects::Start()
 	current_scene.name_without_extension = "Untitled*";
 	current_scene.full_path = "Untitled*";
 	current_scene.is_untitled = true;
-
 	App->camera->fake_camera->frustum.pos = { 25,25,25 };
 	App->camera->fake_camera->Look(float3(0, 0, 0));
-
-
+#else 
+	LoadScene("Assets/Scenes/Assigment3Scene.alienScene");
+	Time::Play();
+#endif
 	return ret;
 }
 
@@ -113,7 +115,7 @@ update_status ModuleObjects::Update(float dt)
 update_status ModuleObjects::PostUpdate(float dt)
 {
 	ScriptsPostUpdate();
-
+#ifndef GAME_VERSION
 	if (App->renderer3D->SetCameraToDraw(App->camera->fake_camera)) {
 		printing_scene = true;
 		// Scene Drawing
@@ -259,7 +261,31 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
+#else
 
+	if (base_game_object->HasChildren()) {
+		std::vector<std::pair<float, GameObject*>> to_draw;
+
+		octree.SetStaticDrawList(&to_draw, App->renderer3D->actual_game_camera);
+		if (allow_grid) {
+			App->renderer3D->RenderGrid();
+		}
+		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+		for (; item != base_game_object->children.end(); ++item) {
+			if (*item != nullptr && (*item)->IsEnabled()) {
+				(*item)->SetDrawList(&to_draw, App->renderer3D->actual_game_camera);
+			}
+		}
+
+		std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+		std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+		for (; it != to_draw.end(); ++it) {
+			if ((*it).second != nullptr) {
+				(*it).second->DrawGame();
+			}
+		}
+	}
+#endif
 	return UPDATE_CONTINUE;
 }
 

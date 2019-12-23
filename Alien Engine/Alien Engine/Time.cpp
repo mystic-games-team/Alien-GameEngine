@@ -34,13 +34,15 @@ void Time::Play()
 	if (state == GameState::NONE) {
 		App->objects->SaveScene("Library/play_scene.alienScene", false);
 		App->objects->ignore_cntrlZ = true;
+#ifndef GAME_VERSION
 		if (App->ui->panel_console->clear_on_play) {
 			App->game_string_logs.clear();
 			App->engine_string_logs.clear();
 		}
-		state = GameState::PLAY;
-		App->ui->panel_console->game_console = true;
 		ImGui::SetWindowFocus(App->ui->panel_game->GetPanelName().data());
+		App->ui->panel_console->game_console = true;
+#endif
+		state = GameState::PLAY;
 		App->objects->InitScriptsOnPlay();
 		game_time = 0.0F;
 		game_timer->Start();
@@ -53,12 +55,14 @@ void Time::Play()
 		App->objects->CleanUpScriptsOnStop();
 		state = GameState::NONE;
 		game_time = 0.0F;
+#ifndef GAME_VERSION
 		App->objects->errors = false;
 		App->ui->panel_console->game_console = false;
+		ImGui::SetWindowFocus(App->ui->panel_scene->GetPanelName().data());
+#endif
 		App->objects->LoadScene("Library/play_scene.alienScene", false);
 		App->objects->ignore_cntrlZ = false;
 		remove("Library/play_scene.alienScene");
-		ImGui::SetWindowFocus(App->ui->panel_scene->GetPanelName().data());
 	}
 }
 

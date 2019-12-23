@@ -89,5 +89,8 @@ bool Input::GetMouseButtonRepeat(const MOUSE_BUTTONS& button)
 
 bool Input::IsInputAvailable()
 {
+#ifndef GAME_VERSION
 	return App->ui->panel_game->game_focused;
+#endif
+	return true;
 }

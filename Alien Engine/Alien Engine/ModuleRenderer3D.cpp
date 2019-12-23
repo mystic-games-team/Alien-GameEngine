@@ -42,13 +42,14 @@ bool ModuleRenderer3D::Init()
 	
 	glewInit();
 
+#ifndef GAME_VERSION
 	App->camera->fake_camera = new ComponentCamera(nullptr);
 	App->camera->fake_camera->frustum.farPlaneDistance = 1000.0F;
 	scene_fake_camera = App->camera->fake_camera;
+#endif
 
 	if(ret == true)
 	{
-		
 		//Use Vsync
 		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 			LOG_ENGINE("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
@@ -80,9 +81,6 @@ bool ModuleRenderer3D::Init()
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
 		
-		//Initialize clear color
-		glClearColor(scene_fake_camera->camera_color_background.r, scene_fake_camera->camera_color_background.g, scene_fake_camera->camera_color_background.b, scene_fake_camera->camera_color_background.a);
-
 		//Check for error
 		error = glGetError();
 		if(error != GL_NO_ERROR)
@@ -103,7 +101,6 @@ bool ModuleRenderer3D::Init()
 
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
-		glClearColor(scene_fake_camera->camera_color_background.r, scene_fake_camera->camera_color_background.g, scene_fake_camera->camera_color_background.b, scene_fake_camera->camera_color_background.a);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
@@ -131,17 +128,30 @@ bool ModuleRenderer3D::Start()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {	
+#ifdef GAME_VERSION
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearStencil(0);
+	if (actual_game_camera != nullptr) {
+		glClearColor(actual_game_camera->camera_color_background.r, actual_game_camera->camera_color_background.g, actual_game_camera->camera_color_background.b, actual_game_camera->camera_color_background.a);
+	}
+	glLoadIdentity();
 
+	glMatrixMode(GL_MODELVIEW);
+	if (actual_game_camera != nullptr) {
+		glLoadMatrixf(actual_game_camera->GetViewMatrix());
+	}
+#endif
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+#ifndef GAME_VERSION
 	App->ui->Draw(); // last draw UI!!!
+#endif
 
 	SDL_GL_SwapWindow(App->window->window);
-
 
 	return UPDATE_CONTINUE;
 }
@@ -150,7 +160,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG_ENGINE("Destroying 3D Renderer");
+#ifndef GAME_VERSION
 	DeleteFrameBuffers();
+#endif
 	SDL_GL_DeleteContext(context);
 
 	return true;
@@ -159,11 +171,25 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
+#ifndef GAME_VERSION
 	glViewport(0, 0, width, height);
 	App->window->width = width;
 	App->window->height = height;
 
 	CreateRenderTexture();
+#else 
+	glViewport(0, 0, width, height);
+	App->window->width = width;
+	App->window->height = height;
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	if (actual_game_camera != nullptr) {
+		glLoadMatrixf(actual_game_camera->GetProjectionMatrix());
+	}
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+#endif
 }
 
 void ModuleRenderer3D::CreateRenderTexture()
@@ -362,9 +388,9 @@ void ModuleRenderer3D::UpdateCameraMatrix(ComponentCamera* camera)
 
 bool ModuleRenderer3D::SetCameraToDraw(const ComponentCamera * camera)
 {
-	if (camera == nullptr)
+	if (camera == nullptr) {
 		return false;
-
+	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearStencil(0);
 	if (App->objects->prefab_scene)

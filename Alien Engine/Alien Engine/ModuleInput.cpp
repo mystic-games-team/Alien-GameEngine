@@ -110,7 +110,9 @@ update_status ModuleInput::PreUpdate(float dt)
 	SDL_Event e;
 	while(SDL_PollEvent(&e))
 	{
+#ifndef GAME_VERSION
 		ImGui_ImplSDL2_ProcessEvent(&e);
+#endif
 		switch(e.type)
 		{
 		case SDL_MOUSEWHEEL: {

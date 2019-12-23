@@ -7,8 +7,10 @@ Application::Application()
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	renderer3D = new ModuleRenderer3D();
+#ifndef GAME_VERSION
 	camera = new ModuleCamera3D();
 	ui = new ModuleUI();
+#endif
 	importer = new ModuleImporter();
 	objects = new ModuleObjects();
 	file_system = new ModuleFileSystem();
@@ -22,15 +24,18 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
+#ifndef GAME_VERSION
 	AddModule(camera);
+#endif
 	AddModule(input);
 	AddModule(file_system);
 	AddModule(resources);
 	AddModule(importer);
 	// Scenes
 	AddModule(objects);
+#ifndef GAME_VERSION
 	AddModule(ui);
-	
+#endif
 	// Renderer last!
 	AddModule(renderer3D);
 
@@ -170,8 +175,9 @@ bool Application::Init()
 
 	layout = LoadJSONFile("Configuration/LayoutsInfo.json");
 
+#ifndef GAME_VERSION
 	shortcut_manager = new ShortCutManager();
-
+#endif
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
@@ -234,10 +240,9 @@ void Application::FinishUpdate()
 		float delaytimefinish = time.ReadMs();
 	}
 	Time::Update();
+#ifndef GAME_VERSION
 	ui->FramerateRegister((float)prev_last_sec_frame_count, (float)(framerate_cap));
-
-	
-
+#endif
 }
 
 JSONfilepack* Application::LoadJSONFile(const std::string& path)
@@ -298,9 +303,9 @@ update_status Application::Update()
 		++item;
 	}
 	item = list_modules.begin();
-
+#ifndef GAME_VERSION
 	shortcut_manager->UpdateShortCuts();
-
+#endif
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
 		ret = (*item)->Update(dt);

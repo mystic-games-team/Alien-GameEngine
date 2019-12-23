@@ -51,9 +51,6 @@ bool ModuleUI::Start()
 	io.WantSaveIniSettings = false;
 
 	ChangeStyle(App->window->style);
-
-
-	// Setup Platform/Renderer bindings
 	ImGui_ImplOpenGL3_Init();
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
@@ -401,13 +398,14 @@ void ModuleUI::CreateScriptFile(const int& type, bool to_export, const char* nam
 
 update_status ModuleUI::PreUpdate(float dt)
 {
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	if (Time::state == Time::GameState::PLAY_ONCE)
+	if (Time::state == Time::GameState::PLAY_ONCE) {
 		Time::Pause();
-
+}
 	if (change_game_state.first) {
 		switch (change_game_state.second) {
 		case Time::GameState::NONE: {
@@ -429,8 +427,8 @@ update_status ModuleUI::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ModuleUI::Draw() {
-
+void ModuleUI::Draw() 
+{
 	if (show_demo_wndow) {
 		ImGui::ShowDemoWindow(&show_demo_wndow);
 	}
@@ -441,8 +439,6 @@ void ModuleUI::Draw() {
 	if (creating_script) {
 		CreateNewScriptPopUp();
 	}
-
-
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
