@@ -102,21 +102,41 @@ void Tank::Rotation()
 	int middle = width / 2;
 	int height = Screen::GetHeight();
 
-	if (mouse.x > middle) { // negative angle
-		//int angle_inverted = (mouse.x / width) * 100;
-		//rotation.y = -(90 - angle_inverted);
-		rotation.y = -(mouse.x / width) * 100;
+	float3 wheels = wheels_transform->GetLocalRotation().ToEulerXYZ();
+
+	if (wheels.x == 0)
+	{
+		rotation.y = (-(mouse.x * 180 / width) + 90) + (wheels.y * Maths::Rad2Deg());
+
+		if (mouse.y > (height / 2))
+		{
+			rotation.x = -180;
+			rotation.z = -180;
+		}
+		else
+		{
+			rotation.x = 0;
+			rotation.z = 0;
+		}
 	}
-	else if (mouse.x < middle) { // positive angle
-		//int angle_inverted = (mouse.x / middle) * 100;
-		//rotation.y = (90 - angle_inverted);
-		rotation.y = (mouse.x / middle) * 100;
-	}
-	else {
-		rotation.y = 0;
+	else
+	{
+		rotation.y = (-(mouse.x * 180 / width) - 90) - (wheels.y * Maths::Rad2Deg());
+
+		if (mouse.y > (height / 2))
+		{
+			rotation.x = -180;
+			rotation.z = -180;
+		}
+		else
+		{
+			rotation.x = 0;
+			rotation.z = 0;
+		}
+
 	}
 
-	turret_transform->SetLocalRotation(Quat::FromEulerXYZ(0, rotation.y * Maths::Deg2Rad(), 0));
+	turret_transform->SetLocalRotation(Quat::FromEulerXYZ(rotation.x * Maths::Deg2Rad(), rotation.y * Maths::Deg2Rad(), rotation.z * Maths::Deg2Rad()));
 }
 
 void Tank::OnDrawGizmos()
