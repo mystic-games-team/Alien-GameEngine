@@ -16,7 +16,7 @@ __declspec(dllexport) void log(const char file[], int line, const char* format, 
 #define HAVE_M_PI
 #define ALIEN_ENGINE_VERSION 0.75
 
-#define GAME_VERSION
+//#define GAME_VERSION
 
 #define RELEASE( x )\
     {\
