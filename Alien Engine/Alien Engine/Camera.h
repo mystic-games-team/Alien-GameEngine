@@ -10,5 +10,6 @@ public:
 
 	static std::vector<ComponentCamera*> GetAllCameras();
 	static ComponentCamera* GetCurrentCamera();
+	static void SetCurrentCamera(ComponentCamera* camera);
 	static uint GetNumCameras();
 };

@@ -16,7 +16,7 @@ public:
 	void Shoot();
 	void Movement();
 	void Rotation();
-
+	void ControlCamera();
 	void OnDrawGizmos();
 
 public:

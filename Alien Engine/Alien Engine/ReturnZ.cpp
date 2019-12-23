@@ -196,6 +196,10 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 			ComponentCamera* camera = (ComponentCamera*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
 			CompZ::SetComponent(camera, comp->comp);
 			break; }
+		case ComponentType::SCRIPT: {
+			ComponentScript* script = (ComponentScript*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
+			CompZ::SetComponent(script, comp->comp);
+			break; }
 		case ComponentType::LIGHT: {
 			ComponentLight* light = (ComponentLight*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
 			CompZ::SetComponent(light, comp->comp);
@@ -310,6 +314,11 @@ void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 					CompZ::SetCompZ((*item), (CompZ**)&cameraZ);
 					comp = cameraZ;
 					break; }
+				case ComponentType::SCRIPT: {
+					CompScriptZ* scriptZ = nullptr;
+					CompZ::SetCompZ((*item), (CompZ**)&scriptZ);
+					comp = scriptZ;
+					break; }
 				default:
 					LOG_ENGINE("A component hasn't been saved");
 					break;
@@ -394,6 +403,11 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 					CompCameraZ* cameraZ = (CompCameraZ*)(*item);
 					CompZ::SetComponent(camera, cameraZ);
 					new_obj->AddComponent(camera);
+					break; }
+				case ComponentType::SCRIPT: {
+					ComponentScript* script = new ComponentScript(new_obj);
+					CompScriptZ* scriptZ = (CompScriptZ*)(*item);
+					CompZ::SetComponent(script, scriptZ);
 					break; }
 				default:
 					break;
