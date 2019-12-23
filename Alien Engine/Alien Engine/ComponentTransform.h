@@ -59,6 +59,7 @@ private:
 	void LoadComponent(JSONArraypack* to_load);
 
 	void SetGlobalTransformation(const float4x4& global_transformation);
+	void SetGlobalRotation(const Quat& rotation);
 
 	void AddPosition(const float3 pos);
 	void AddScale(const float3 scale);

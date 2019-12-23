@@ -873,6 +873,11 @@ void ComponentTransform::SetGlobalTransformation(const float4x4& global_transfor
 	RecalculateTransform();
 }
 
+void ComponentTransform::SetGlobalRotation(const Quat& rotation)
+{
+	//float3 pos
+}
+
 void ComponentTransform::AddPosition(const float3 pos)
 {
 	local_position += pos;
