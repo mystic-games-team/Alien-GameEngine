@@ -743,6 +743,13 @@ GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position
 	return nullptr;
 }
 
+GameObject* GameObject::CloneObject(GameObject* to_clone, GameObject* parent)
+{
+	GameObject* clone = new GameObject((parent == nullptr) ? to_clone->parent : parent);
+	to_clone->CloningGameObject(clone);
+	return clone;
+}
+
 void GameObject::OnEnable()
 {
 	std::vector<Component*>::iterator item = components.begin();
@@ -1109,9 +1116,9 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 
 }
 
-GameObject* GameObject::Clone()
+GameObject* GameObject::Clone(GameObject* parent)
 {
-	GameObject* clone = new GameObject(parent);
+	GameObject* clone = new GameObject((parent == nullptr) ? this->parent : parent);
 	CloningGameObject(clone);
 	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, clone);
 	return clone;

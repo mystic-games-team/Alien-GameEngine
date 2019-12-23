@@ -59,7 +59,7 @@ public:
 	static void FreeArrayMemory(void*** array_);
 	// parent = nullptr is root
 	static GameObject* Instantiate(const Prefab& prefab, const float3& position, GameObject* parent = nullptr);
-
+	static GameObject* CloneObject(GameObject* to_clone, GameObject* parent = nullptr);
 	// TODO:
 	/*
 		change static, is static... cant move in code if is static!!
@@ -171,7 +171,7 @@ private:
 	void SaveObject(JSONArraypack* to_save, const uint& family_number);
 	void LoadObject(JSONArraypack* to_save, GameObject* parent, bool force_no_selected = false);
 
-	GameObject* Clone();
+	GameObject* Clone(GameObject* parent = nullptr);
 	void CloningGameObject(GameObject* clone);
 
 	void SearchResourceToDelete(const ResourceType& type, Resource* to_delete);
