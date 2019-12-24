@@ -12,6 +12,13 @@ ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& w
 	type = ResourceType::RESOURCE_TEXTURE;
 }
 
+ResourceTexture::ResourceTexture(const char* path)
+{
+	name = App->file_system->GetBaseFileName(path); 
+	this->path = std::string(path); 
+	type = ResourceType::RESOURCE_TEXTURE;
+}
+
 ResourceTexture::~ResourceTexture()
 {
 	glDeleteTextures(1, &id);
