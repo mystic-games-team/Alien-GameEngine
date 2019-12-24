@@ -33,7 +33,7 @@ public:
 	float friction_force = 0.05f;
 	float acceleration = 4.0f;
 	float recoil = 0.0f;
-	float recoil_velocity = 4.0f;
+	float recoil_velocity = 6.0f;
 	float3 recoil_direction = { 0,0,0 };
 	float turning_velocity = 30.0f;
 
