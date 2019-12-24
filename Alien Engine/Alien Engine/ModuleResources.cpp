@@ -629,7 +629,7 @@ void ModuleResources::ReadScripts()
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
 	std::vector<std::string> scripts;
-
+	
 	App->file_system->DiscoverFiles(SCRIPTS_FOLDER, files, directories, true);
 	GetAllScriptsPath(directories, files, SCRIPTS_FOLDER, &scripts);
 
