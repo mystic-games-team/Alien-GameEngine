@@ -43,10 +43,18 @@ void Screen::SetBorderless(bool borderless)
 
 int Screen::GetHeight()
 {
+#ifndef GAME_VERSION
 	return App->ui->panel_game->height;
+#else
+	return App->window->height;
+#endif
 }
 
 int Screen::GetWidth()
 {
+#ifndef GAME_VERSION
 	return App->ui->panel_game->width;
+#else
+	return App->window->width;
+#endif
 }

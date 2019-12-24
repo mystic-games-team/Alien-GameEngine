@@ -58,7 +58,9 @@ ComponentCamera::~ComponentCamera()
 				if (!App->objects->game_cameras.empty())
 				{
 					App->renderer3D->actual_game_camera = App->objects->game_cameras.front();
-					App->ui->actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+					#ifndef GAME_VERSION
+						App->ui->actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+					#endif
 				}
 				else
 					App->renderer3D->actual_game_camera = nullptr;
