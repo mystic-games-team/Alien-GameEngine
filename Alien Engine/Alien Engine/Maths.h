@@ -17,6 +17,13 @@ public:
 	static float Clamp(const float& value, const float& min, const float& max);
 	static double Clamp(const double& value, const double& min, const double& max);
 
+	static float Cos(const float& angle_in_degrees);
+	static float Sin(const float& angle_in_degrees);
+
+	static float Power(const float& base, const float& exponent);
+
+	static int Factorial(const int& number);
+
 	static int Min(const int& value1, const int& value2);
 	static float Min(const float& value1, const float& value2);
 	static double Min(const double& value1, const double& value2);

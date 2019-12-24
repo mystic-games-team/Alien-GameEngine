@@ -11,9 +11,8 @@ Bullet::~Bullet()
 void Bullet::Start()
 {
 	time = Time::GetGameTime();
-	float3 quat = transform->GetLocalRotation().ToEulerXYZ() * Maths::Rad2Deg();
-	float3 rot = quat.Mul(bullet_direction);
-	transform->SetLocalRotation(Quat::FromEulerXYZ(rot.x,rot.y,rot.z));
+	ComponentTransform* t_tr = (ComponentTransform*)GameObject::FindWithName("TankTurret")->GetComponent(ComponentType::TRANSFORM);
+	transform->SetLocalRotation(t_tr->GetLocalRotation());
 }
 
 void Bullet::Update()

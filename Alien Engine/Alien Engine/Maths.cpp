@@ -1,4 +1,5 @@
 #include "Maths.h"
+#include "MathGeoLib/include/Math/MathFunc.h"
 
 float Maths::Abs(const float& value)
 {
@@ -58,6 +59,42 @@ float Maths::Clamp(const float& value, const float& min, const float& max)
 double Maths::Clamp(const double& value, const double& min, const double& max)
 {
 	return (value > max) ? max : ((value < min) ? min : value);
+}
+
+float Maths::Cos(const float& angle_in_degrees)
+{
+	return math::Cos(angle_in_degrees * Deg2Rad());
+}
+
+float Maths::Sin(const float& angle_in_degrees)
+{
+	return math::Sin(angle_in_degrees * Deg2Rad());
+}
+
+float Maths::Power(const float& base, const float& exponent)
+{
+	if (exponent < 0) 
+	{
+		if (base == 0)
+		{
+			return -0; // Error!!
+		}
+		return 1 / (base * Power(base, (-exponent) - 1));
+	}
+	if (exponent == 0)
+	{
+		return 1;
+	}
+	if (exponent == 1)
+	{
+		return base;
+	}
+	return base * Power(base, exponent - 1);
+}
+
+int Maths::Factorial(const int& number)
+{
+	return number <= 0 ? 1 : number * Factorial(number - 1);
 }
 
 int Maths::Min(const int& value1, const int& value2)
