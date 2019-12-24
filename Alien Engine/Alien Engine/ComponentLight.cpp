@@ -6,6 +6,7 @@
 #include "Application.h"
 #include "ReturnZ.h"
 #include "ComponentMesh.h"
+#include "Gizmos.h"
 
 ComponentLight::ComponentLight(GameObject* attach) : Component(attach)
 {
@@ -159,15 +160,10 @@ void ComponentLight::DrawIconLight()
 	if (bulb != nullptr && print_icon)
 	{
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
-		float3 pos = transform->GetLocalPosition();
-		float3 scale = transform->GetLocalScale();
-		transform->SetLocalScale(0.2f, 0.18f, 0.2f);
-		transform->SetLocalPosition(pos.x - 0.133f, pos.y, pos.z);
+		float3 pos = transform->GetGlobalPosition();
+		float4x4 matrix = float4x4::FromTRS({ pos.x - 0.133f, pos.y, pos.z }, transform->GetGlobalRotation(), { 0.2f, 0.18f, 0.2f });
 		glDisable(GL_LIGHTING);
-		glColor3f(ambient.r, ambient.g, ambient.b);
-		bulb->DrawPolygon();
+		Gizmos::DrawPoly(bulb->mesh, matrix, ambient);
 		glEnable(GL_LIGHTING);
-		transform->SetLocalScale(scale.x, scale.y, scale.z);
-		transform->SetLocalPosition(pos.x, pos.y, pos.z);
 	}
 }

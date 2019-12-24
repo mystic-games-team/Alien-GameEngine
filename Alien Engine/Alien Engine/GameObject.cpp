@@ -1185,31 +1185,20 @@ AABB GameObject::GetBB() const
 
 			if (camera != nullptr) {
 				ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
-				float3 pos = transform->GetLocalPosition();
-				Quat rot = transform->GetLocalRotation();
-				float3 scale = transform->GetLocalScale();
-				transform->SetLocalScale(0.1f, 0.1f, 0.1f);
-				float3 position = pos - camera->frustum.front.Normalized() * 2;
-				Quat right_rot = { 0.7071,0,0.7071,0 };
-				Quat rotation = { 0,0,1,0 };
-				Quat rotated = rot * (rotation * right_rot);
-				transform->SetLocalPosition(position.x, position.y, position.z);
-				transform->SetLocalRotation(rotated.x, rotated.y, rotated.z, rotated.w);
+				float4x4 matrix = float4x4::FromTRS(transform->GetGlobalPosition() - camera->frustum.front.Normalized() * 2, transform->GetGlobalRotation() * (Quat{ 0,0,1,0 } *Quat{ 0.7071,0,0.7071,0 }), { 0.1F,0.1F,0.1F });
+				float4x4 to_save = transform->global_transformation;
+				transform->global_transformation = matrix;
 				camera->mesh_camera->RecalculateAABB_OBB();
-				transform->SetLocalScale(scale.x, scale.y, scale.z);
-				transform->SetLocalPosition(pos.x, pos.y, pos.z);
-				transform->SetLocalRotation(rot.x, rot.y, rot.z, rot.w);
+				transform->global_transformation = to_save;
 				return camera->mesh_camera->GetGlobalAABB();
 			}
 			else if (light != nullptr) {
 				ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
-				float3 pos = transform->GetLocalPosition();
-				float3 scale = transform->GetLocalScale();
-				transform->SetLocalScale(0.2f, 0.18f, 0.2f);
-				transform->SetLocalPosition(pos.x - 0.133f, pos.y, pos.z);
+				float3 pos = transform->GetGlobalPosition();
+				float4x4 matrix = float4x4::FromTRS({ pos.x - 0.133f, pos.y, pos.z }, transform->GetGlobalRotation(), { 0.2f, 0.18f, 0.2f });
+				float4x4 to_save = transform->global_transformation;
 				light->bulb->RecalculateAABB_OBB();
-				transform->SetLocalScale(scale.x, scale.y, scale.z);
-				transform->SetLocalPosition(pos.x, pos.y, pos.z);
+				transform->global_transformation = to_save;
 				return light->bulb->GetGlobalAABB();
 			}
 

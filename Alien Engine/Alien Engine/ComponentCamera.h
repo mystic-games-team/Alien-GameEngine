@@ -75,7 +75,7 @@ private:
 	ComponentMesh* mesh_camera = nullptr;
 
 	bool print_icon = true;
-	Color camera_icon_color = { 0.85f,0.85f,0.85f,0.5 };
+	Color camera_icon_color = { 0.85f,0.85f,0.85f, 1.0F };
 
 	float4x4 ViewMatrix = float4x4::identity();
 	float4x4 ViewMatrixInverse = float4x4::identity();
