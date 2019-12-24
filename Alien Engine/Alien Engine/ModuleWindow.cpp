@@ -215,12 +215,12 @@ bool ModuleWindow::CreateCoreWindow()
 	if (start_maximized) {
 		int display_index = SDL_GetWindowDisplayIndex(window);
 		if (display_index < 0) {
-			SDL_Log("error getting window display");
+			return false;
 		}
 
 		SDL_Rect usable_bounds;
 		if (0 != SDL_GetDisplayUsableBounds(display_index, &usable_bounds)) {
-			SDL_Log("error getting usable bounds");
+			return false;
 		}
 		int bar_size = 0;
 		SDL_GetWindowBordersSize(window, &bar_size, nullptr, nullptr, nullptr);
@@ -250,7 +250,7 @@ bool ModuleWindow::CreateCoreWindow()
 	SDL_GetWindowSize(window, &width, &height);
 
 	screen_surface = SDL_GetWindowSurface(window);
-
+	App->renderer3D->OnResize(width, height);
 	return ret;
 }
 

@@ -76,8 +76,21 @@ bool ModuleObjects::Start()
 	App->camera->fake_camera->frustum.pos = { 25,25,25 };
 	App->camera->fake_camera->Look(float3(0, 0, 0));
 #else 
-	LoadScene("Assets/Scenes/Assigment3TankScene.alienScene");
-	Time::Play();
+	JSON_Value* value = json_parse_file(BUILD_SETTINGS_PATH);
+	JSON_Object* object = json_value_get_object(value);
+
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* meta = new JSONfilepack(BUILD_SETTINGS_PATH, object, value);
+
+		LoadScene(meta->GetString("Build.FirstScene"));
+		Time::Play();
+
+		delete meta;
+	}
+	else {
+		ret = false;
+	}
 #endif
 	return ret;
 }
