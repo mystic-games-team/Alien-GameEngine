@@ -57,14 +57,14 @@ void Time::Play()
 		App->objects->CleanUpScriptsOnStop();
 		state = GameState::NONE;
 		game_time = 0.0F;
+		App->objects->LoadScene("Library/play_scene.alienScene", false);
+		App->objects->ignore_cntrlZ = false;
+		remove("Library/play_scene.alienScene");
 #ifndef GAME_VERSION
 		App->objects->errors = false;
 		App->ui->panel_console->game_console = false;
 		ImGui::SetWindowFocus(App->ui->panel_scene->GetPanelName().data());
 #endif
-		App->objects->LoadScene("Library/play_scene.alienScene", false);
-		App->objects->ignore_cntrlZ = false;
-		remove("Library/play_scene.alienScene");
 	}
 }
 

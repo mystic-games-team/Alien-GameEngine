@@ -115,11 +115,13 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Res
 	LOG_ENGINE("Loading node with name %s", node->mName.C_Str());
 	ResourceMesh* next_parent = nullptr;
 
-	aiMatrix4x4 mat; //identity
-	while (std::string(node->mName.C_Str()).find("_$AssimpFbx$_") != std::string::npos) { //iterate nodes that contains dummy name
-		mat = mat * node->mTransformation;    // multiply its transform to don't lose the transformation
+	/*-----------------------BY https://github.com/christt105 -------------------*/
+	aiMatrix4x4 mat; 
+	while (std::string(node->mName.C_Str()).find("_$AssimpFbx$_") != std::string::npos) { 
+		mat = mat * node->mTransformation;    
 		node = node->mChildren[0];
 	}
+	/*---------------------------------------------------------------------------*/
 
 	if (node->mNumMeshes == 1) {
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
