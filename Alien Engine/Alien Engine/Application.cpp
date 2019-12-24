@@ -190,14 +190,16 @@ bool Application::Init()
 	// After all Init calls we call Start() in all modules
 	LOG_ENGINE("Application Start --------------");
 	item = list_modules.begin();
-	
+
 	Time::Start();
 	while(item != list_modules.end() && ret == true)
 	{
 		ret = (*item)->Start();
 		++item;
 	}
-	
+
+	ret = window->CreateCoreWindow();
+
 	return ret;
 }
 

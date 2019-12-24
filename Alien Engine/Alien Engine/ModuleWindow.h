@@ -31,12 +31,14 @@ public:
 
 	void SetResizable(bool resizable);
 
+	bool CreateCoreWindow();
+
 public:
 	//The window we'll be rendering to
-	SDL_Window* window;
+	SDL_Window* window = nullptr;
 
 	//The surface contained by the window
-	SDL_Surface* screen_surface;
+	SDL_Surface* screen_surface = nullptr;
 
 	int width = 0;
 	int height = 0;
@@ -50,6 +52,9 @@ public:
 	char* window_name = nullptr;
 	char* organitzation_name = nullptr;
 
+private:
+	SDL_Renderer* renderer = nullptr;
+	SDL_Texture* texture = nullptr;
 };
 
 #endif // __ModuleWindow_H__

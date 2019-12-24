@@ -28,7 +28,7 @@ bool ModuleWindow::Init()
 	}
 	else
 	{
-		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS;
 
 		//Use OpenGL 2.1
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -37,31 +37,8 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
-		if (start_maximized) {
-			flags |= SDL_WINDOW_MAXIMIZED;
-		}
-		else if (borderless)
-		{
-			flags |= SDL_WINDOW_BORDERLESS;
-		}
-
-		if(fullscreen)
-		{
-			flags |= SDL_WINDOW_FULLSCREEN;
-		}
-
-		if(resizable)
-		{
-			flags |= SDL_WINDOW_RESIZABLE;
-		}
-
-		if(full_desktop)
-		{
-			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-		}
 		
-		window = SDL_CreateWindow(window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width * SCREEN_SIZE, height * SCREEN_SIZE, flags);
+		window = SDL_CreateWindow(window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 457, 300, flags);
 		if(window == NULL)
 		{
 			LOG_ENGINE("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -69,9 +46,11 @@ bool ModuleWindow::Init()
 		}
 		else
 		{
-			//Get window surface
-			screen_surface = SDL_GetWindowSurface(window);
-			//SDL_SetWindowBrightness(window, brightness);
+			renderer = SDL_CreateRenderer(window, -1, 0);
+			screen_surface = SDL_LoadBMP("Configuration/EngineTextures/Logo_Name.bmp");
+			texture = SDL_CreateTextureFromSurface(renderer, screen_surface);
+			SDL_RenderCopy(renderer, texture, NULL, NULL);
+			SDL_RenderPresent(renderer);
 		}
 	}
 	return ret;
@@ -200,5 +179,51 @@ void ModuleWindow::SetResizable(bool resizable)
 {
 	this->resizable = resizable;
 	SDL_SetWindowResizable(window, (SDL_bool)resizable);
+}
+
+bool ModuleWindow::CreateCoreWindow()
+{
+	bool ret = true;
+
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);
+
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(screen_surface);
+	SDL_DestroyRenderer(renderer);
+
+	SDL_SetWindowPosition(window, 0, 0);
+	SDL_SetWindowSize(window, width, height);
+	SDL_SetWindowBordered(window, SDL_bool(true));
+
+	if (start_maximized) {
+		SDL_MaximizeWindow(window);
+	}
+	else if (!borderless)
+	{
+		SDL_SetWindowBordered(window, SDL_bool(false));
+	}
+
+	if (fullscreen)
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	}
+
+	if (resizable)
+	{
+		SDL_SetWindowResizable(window, (SDL_bool)true);
+	}
+
+	if (full_desktop)
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}
+
+	SDL_GetWindowSize(window, &width, &height);
+
+	screen_surface = SDL_GetWindowSurface(window);
+
+	return ret;
 }
 
