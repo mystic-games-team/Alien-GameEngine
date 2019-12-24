@@ -160,6 +160,17 @@ Resource* ModuleResources::GetResourceWithID(const u64& ID)
 	return nullptr;
 }
 
+const Resource* ModuleResources::GetResourceWithID(const u64& ID) const
+{
+	std::vector<Resource*>::const_iterator item = resources.cbegin();
+	for (; item != resources.cend(); ++item) {
+		if (*item != nullptr && (*item)->GetID() == ID)
+			return (*item);
+	}
+	LOG_ENGINE("No resource found with ID %i", ID);
+	return nullptr;
+}
+
 void ModuleResources::AddNewFileNode(const std::string& path, bool is_file)
 {
 	std::string folder = App->file_system->GetCurrentHolePathFolder(path);
@@ -194,6 +205,20 @@ ResourceTexture * ModuleResources::GetTextureByName(const char * name)
 	std::vector<Resource*>::iterator item = resources.begin();
 	for (; item != resources.end(); ++item) {
 		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && App->StringCmp(App->file_system->GetBaseFileName((*item)->GetAssetsPath()).data(),App->file_system->GetBaseFileName(name).data())) {
+			return static_cast<ResourceTexture*>(*item);
+		}
+	}
+
+	return ret;
+}
+
+const ResourceTexture* ModuleResources::GetTextureByName(const char* name) const
+{
+	ResourceTexture* ret = nullptr;
+
+	std::vector<Resource*>::const_iterator item = resources.cbegin();
+	for (; item != resources.cend(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && App->StringCmp(App->file_system->GetBaseFileName((*item)->GetAssetsPath()).data(), App->file_system->GetBaseFileName(name).data())) {
 			return static_cast<ResourceTexture*>(*item);
 		}
 	}
@@ -242,12 +267,54 @@ ResourceMesh* ModuleResources::GetPrimitive(const PrimitiveType& type)
 	return ret;
 }
 
-bool ModuleResources::Exists(const char * path, Resource** resource)
+const ResourceMesh* ModuleResources::GetPrimitive(const PrimitiveType& type) const
+{
+	ResourceMesh* ret = nullptr;
+
+	switch (type)
+	{
+	case PrimitiveType::CUBE:
+		ret = cube;
+		break;
+	case PrimitiveType::SPHERE_ALIEN:
+		ret = sphere;
+		break;
+	case PrimitiveType::ROCK:
+		ret = rock;
+		break;
+	case PrimitiveType::DODECAHEDRON:
+		ret = dodecahedron;
+		break;
+	case PrimitiveType::OCTAHEDRON:
+		ret = octahedron;
+		break;
+	case PrimitiveType::TORUS:
+		ret = torus;
+		break;
+	case PrimitiveType::ICOSAHEDRON:
+		ret = icosahedron;
+		break;
+	default:
+		break;
+	}
+
+	if (ret != nullptr) {
+		if (ret->NeedToLoad()) {
+			CreatePrimitive(type, &ret);
+		}
+		if (App->objects->enable_instancies) {
+			++ret->references;
+		}
+	}
+	return ret;
+}
+
+bool ModuleResources::Exists(const char * path, Resource** resource) const
 {
 	bool exists = false;
 
-	std::vector<Resource*>::iterator item = resources.begin();
-	for (; item != resources.end(); ++item) {
+	std::vector<Resource*>::const_iterator item = resources.cbegin();
+	for (; item != resources.cend(); ++item) {
 		if (*item != nullptr && App->StringCmp(path, (*item)->GetAssetsPath())) {
 			exists = true;
 			if (resource != nullptr)
@@ -298,6 +365,48 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 		break; }
 	}
 	
+	App->importer->LoadParShapesMesh(par_mesh, *ret);
+}
+
+void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** ret) const
+{
+	(*ret)->is_primitive = true;
+	par_shapes_mesh* par_mesh = nullptr;
+
+	switch (type)
+	{
+	case PrimitiveType::CUBE: {
+		par_mesh = par_shapes_create_cube();
+		(*ret)->SetName("Cube");
+		break; }
+	case PrimitiveType::SPHERE_ALIEN: {
+		par_mesh = par_shapes_create_subdivided_sphere(5);
+		(*ret)->SetName("Sphere");
+		break; }
+	case PrimitiveType::ROCK: {
+		par_mesh = par_shapes_create_rock(3, 3);
+		(*ret)->SetName("Rock");
+		break; }
+	case PrimitiveType::DODECAHEDRON: {
+		par_mesh = par_shapes_create_dodecahedron();
+		(*ret)->SetName("Dodecahedron");
+		break; }
+	case PrimitiveType::OCTAHEDRON: {
+		par_mesh = par_shapes_create_octahedron();
+		(*ret)->SetName("Octahedron");
+		break; }
+	case PrimitiveType::TORUS: {
+		par_mesh = par_shapes_create_torus(12, 12, 0.5F);
+		(*ret)->SetName("Torus");
+		break; }
+	case PrimitiveType::ICOSAHEDRON: {
+		par_mesh = par_shapes_create_icosahedron();
+		(*ret)->SetName("Icosahedron");
+		break; }
+	default: {
+		break; }
+	}
+
 	App->importer->LoadParShapesMesh(par_mesh, *ret);
 }
 

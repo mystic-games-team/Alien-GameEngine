@@ -1069,17 +1069,6 @@ void ModuleUI::UpdatePanels()
 		}
 	}
 }
-
-Panel*& ModuleUI::GetPanelByName(const std::string& panel_name)
-{
-	std::vector<Panel*>::iterator item = panels.begin();
-	for (; item != panels.end(); ++item) {
-		if (*item != nullptr && (*item)->GetName() == panel_name) {
-			return (*item);
-		}
-	}
-	SDL_assert(1 == 0); //panel name is not correct, revise panels names!!
-}
                   
 void ModuleUI::InitShortCuts()
 {

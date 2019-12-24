@@ -60,16 +60,22 @@ public:
 
 	u64 GetIDFromAlienPath(const char* path);
 	Resource* GetResourceWithID(const u64& ID);
+	const Resource* GetResourceWithID(const u64& ID) const;
 
 	void AddNewFileNode(const std::string& path, bool is_file);
 
 	u64 GetRandomID();
 
 	ResourceTexture* GetTextureByName(const char* name);
+	const ResourceTexture* GetTextureByName(const char* name) const;
+
 	ResourceMesh* GetPrimitive(const PrimitiveType& type);
-	bool Exists(const char* path, Resource** resource);
+	const ResourceMesh* GetPrimitive(const PrimitiveType& type) const;
+
+	bool Exists(const char* path, Resource** resource) const;
 
 	void CreatePrimitive(const PrimitiveType& type, ResourceMesh** mesh);
+	void CreatePrimitive(const PrimitiveType& type, ResourceMesh** mesh) const;
 
 	void ReadHeaderFile(const char* path, std::vector<std::string>& current_scripts);
 	void ReloadScripts();

@@ -75,42 +75,53 @@ public:
 	GameObject* GetChildRecursive(const char* child_name);
 
 	void SetEnable(bool enable);
-	bool IsEnabled();
+	bool IsEnabled() const;
 
 	// parent
 	void SetNewParent(GameObject* new_parent);
 
 	// components
-	bool HasComponent(ComponentType component);
+	bool HasComponent(ComponentType component) const;
 	Component* GetComponent(const ComponentType& type);
+	const Component* GetComponent(const ComponentType& type) const;
 	void* GetComponentScript(const char* script_class_name);
+	const void* GetComponentScript(const char* script_class_name) const;
 	Component* GetComponentInParent(const ComponentType& type);
+	const Component* GetComponentInParent(const ComponentType& type) const;
 	void* GetComponentScriptInParent(const char* script_class_name);
+	const void* GetComponentScriptInParent(const char* script_class_name) const;
 	Component* GetComponentInChildren(const ComponentType& type, bool recursive);
+	const Component* GetComponentInChildren(const ComponentType& type, bool recursive) const;
 	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
 	uint GetComponents(const ComponentType& type, Component*** comp_array);
+	const uint GetComponents(const ComponentType& type, Component*** comp_array) const;
 	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
 	uint GetComponentsInChildren(const ComponentType& type, Component*** comp_array, bool recursive);
+	const uint GetComponentsInChildren(const ComponentType& type, Component*** comp_array, bool recursive) const;
 	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
 	uint GetComponentsInParent(const ComponentType& type, Component*** comp_array);
+	const uint GetComponentsInParent(const ComponentType& type, Component*** comp_array) const;
 	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
 	uint GetComponentsScript(const char* script_class_name, void*** script_array);
+	const uint GetComponentsScript(const char* script_class_name, void*** script_array) const;
 	// return the sie of the array of components found, pass a ScriptClassToFind** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
 	uint GetComponentsScriptInChildren(const char* script_class_name, void*** script_array, bool recursive);
+	const uint GetComponentsScriptInChildren(const char* script_class_name, void*** script_array, bool recursive) const;
 	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
 	uint GetComponentsScriptInParent(const char* script_class_name, void*** script_array);
+	const uint GetComponentsScriptInParent(const char* script_class_name, void*** script_array) const;
 
 	// children
-	bool HasChildren();
+	bool HasChildren() const;
 
 	// GameObject name
 	void SetName(const char* name);
-	const char* GetName();
+	const char* GetName() const;
 	const char* ToString();
 
 	// GameObject tag
 	void SetTag(const char* tag);
-	const char* GetTag();
+	const char* GetTag() const;
 
 	// delete it at the begining of the next frame
 	void ToDelete(); 
@@ -126,6 +137,7 @@ private:
 	void SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera);
 
 	Component* GetComponentWithID(const u64& ID);
+	const Component* GetComponentWithID(const u64& ID) const;
 	void RemoveComponent(Component* component);
 	void AddComponent(Component* component);
 
@@ -134,19 +146,26 @@ private:
 	template <class Comp>
 	std::vector<Comp*> GetComponents();
 
+	template <class Comp>
+	const Comp* GetComponent() const;
+	template <class Comp>
+	const std::vector<Comp*> GetComponents() const;
+
 	void GetComponentsChildren(const ComponentType& type, std::vector<Component*>* to_fill, bool recursive);
+	void GetComponentsChildren(const ComponentType& type, std::vector<Component*>* to_fill, bool recursive) const;
 	void GetComponentsScriptChildren(const char* script_calss_name, std::vector<void*>* to_fill, bool recursive);
+	void GetComponentsScriptChildren(const char* script_calss_name, std::vector<void*>* to_fill, bool recursive) const;
 
 	void AddChild(GameObject* child);
 
 	// selected object
-	bool IsSelected();
-	bool IsParentSelected();
+	bool IsSelected() const;
+	bool IsParentSelected() const;
 	void ChangeSelected(const bool& select);
 
 	// enabling
 	void SayChildrenParentIsEnabled(const bool& enabled);
-	bool IsParentEnabled();
+	bool IsParentEnabled() const;
 
 	// flip poly if scale negative
 	void ScaleNegative(const bool& is_negative);
@@ -163,11 +182,11 @@ private:
 	void SearchToDelete();
 
 	// search and return true if exists in its children or children of children bla bla
-	bool Exists(GameObject* object);
+	bool Exists(GameObject* object) const;
 
 	// Bounding Boxes
-	AABB GetBB(); // 0 = Local Bounding Box, 1 = Global Bounding Box
-	OBB GetGlobalOBB();
+	AABB GetBB() const; // 0 = Local Bounding Box, 1 = Global Bounding Box
+	OBB GetGlobalOBB() const;
 	void SaveObject(JSONArraypack* to_save, const uint& family_number);
 	void LoadObject(JSONArraypack* to_save, GameObject* parent, bool force_no_selected = false);
 
@@ -243,6 +262,31 @@ inline Comp* GameObject::GetComponent()
 
 template<class Comp>
 inline std::vector<Comp*> GameObject::GetComponents()
+{
+	std::vector<Comp*> comps;
+	for (uint i = 0; i < components.size(); ++i) {
+		Comp* component = dynamic_cast<Comp*>(components[i]);
+		if (component != nullptr) {
+			comps.push_back(component);
+		}
+	}
+	return comps;
+}
+
+template<class Comp>
+inline const Comp* GameObject::GetComponent() const
+{
+	for (uint i = 0; i < components.size(); ++i) {
+		Comp* component = dynamic_cast<Comp*>(components[i]);
+		if (component != nullptr) {
+			return component;
+		}
+	}
+	return nullptr;
+}
+
+template<class Comp>
+inline const std::vector<Comp*> GameObject::GetComponents() const
 {
 	std::vector<Comp*> comps;
 	for (uint i = 0; i < components.size(); ++i) {

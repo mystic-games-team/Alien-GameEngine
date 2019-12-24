@@ -86,7 +86,6 @@ private:
 	// panels
 	void InitPanels();
 	void UpdatePanels();
-	Panel*& GetPanelByName(const std::string& panel_name);
 
 	// shortcuts
 	void InitShortCuts();
