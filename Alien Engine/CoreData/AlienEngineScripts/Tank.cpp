@@ -45,7 +45,8 @@ void Tank::Shoot()
 		{
 			Bullet* minion = (Bullet*)bullet_created->GetComponentScript("Bullet");
 			minion->bullet_direction = turret_transform->forward;
-			// TODO: Recoil
+			recoil_direction = turret_transform->forward;
+			recoil = recoil_velocity;
 		}
 	}
 }
@@ -63,7 +64,16 @@ void Tank::Movement()
 
 	velocity = Maths::Clamp(velocity, max_velocity_backward, max_velocity_forward);
 
-	transform->SetLocalPosition(transform->GetGlobalPosition() + wheels_transform->forward * velocity * Time::GetDT());
+	if (recoil > 0)
+	{
+		recoil -= friction_force;
+		if (recoil <= 0)
+		{
+			recoil = 0;
+		}
+	}
+
+	transform->SetLocalPosition(transform->GetGlobalPosition() + wheels_transform->forward * velocity * Time::GetDT() - recoil_direction * recoil * Time::GetDT());
 
 	if (velocity > 0)
 	{
