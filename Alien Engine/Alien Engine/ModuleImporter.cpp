@@ -507,7 +507,10 @@ bool ModuleImporter::ReImportModel(ResourceModel* model)
 		model->name = App->file_system->GetBaseFileName(model->GetAssetsPath());
 		this->model = model;
 		// start recursive function to all nodes
-		LoadSceneNode(scene->mRootNode, scene, nullptr, 1);
+
+		for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
+			LoadSceneNode(scene->mRootNode->mChildren[i], scene, nullptr, 1);
+		}
 
 		// create the meta data files like .alien
 		if (model->CreateMetaData(model->ID)) {
