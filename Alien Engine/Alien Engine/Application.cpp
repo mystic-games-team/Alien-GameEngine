@@ -39,6 +39,7 @@ Application::Application()
 	// Renderer last!
 	AddModule(renderer3D);
 
+	window->segment_width = (WINDOW_ICON_WIDTH - BAR_BEGIN_POS * 2) / (list_modules.size() * 2);
 }
 
 void Application::LoadDll()
@@ -184,6 +185,7 @@ bool Application::Init()
 	while(item != list_modules.end() && ret == true)
 	{
 		ret = (*item)->Init();
+		window->IncreaseBar();
 		++item;
 	}
 
@@ -195,6 +197,7 @@ bool Application::Init()
 	while(item != list_modules.end() && ret == true)
 	{
 		ret = (*item)->Start();
+		window->IncreaseBar();
 		++item;
 	}
 

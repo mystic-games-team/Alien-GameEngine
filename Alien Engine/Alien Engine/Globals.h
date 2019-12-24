@@ -51,3 +51,7 @@ enum update_status
 // Configuration -----------
 #define SCREEN_SIZE 1
 #define VSYNC true
+#define WINDOW_ICON_WIDTH 457
+#define WINDOW_ICON_HEIGHT 300
+#define BAR_BEGIN_POS 6
+#define BAR_END_POS WINDOW_ICON_WIDTH - BAR_BEGIN_POS

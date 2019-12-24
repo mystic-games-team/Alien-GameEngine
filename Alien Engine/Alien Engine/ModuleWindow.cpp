@@ -38,7 +38,7 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 		
-		window = SDL_CreateWindow(window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 457, 300, flags);
+		window = SDL_CreateWindow(window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_ICON_WIDTH, WINDOW_ICON_HEIGHT, flags);
 		if(window == NULL)
 		{
 			LOG_ENGINE("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -50,6 +50,7 @@ bool ModuleWindow::Init()
 			screen_surface = SDL_LoadBMP("Configuration/EngineTextures/Logo_Name.bmp");
 			texture = SDL_CreateTextureFromSurface(renderer, screen_surface);
 			SDL_RenderCopy(renderer, texture, NULL, NULL);
+
 			SDL_RenderPresent(renderer);
 		}
 	}
@@ -181,6 +182,20 @@ void ModuleWindow::SetResizable(bool resizable)
 	SDL_SetWindowResizable(window, (SDL_bool)resizable);
 }
 
+void ModuleWindow::IncreaseBar()
+{
+	SDL_Rect r;
+	r.x = BAR_BEGIN_POS + segment_width * current_division;
+	r.y = 280;
+	r.w = segment_width;
+	r.h = 15;
+	++current_division;
+	SDL_SetRenderDrawColor(renderer, 0, 170, 0, 255);
+	SDL_RenderFillRect(renderer, &r);
+	SDL_RenderPresent(renderer);
+	SDL_Delay(50);
+}
+
 bool ModuleWindow::CreateCoreWindow()
 {
 	bool ret = true;
@@ -198,7 +213,19 @@ bool ModuleWindow::CreateCoreWindow()
 	SDL_SetWindowBordered(window, SDL_bool(true));
 
 	if (start_maximized) {
-		SDL_MaximizeWindow(window);
+		int display_index = SDL_GetWindowDisplayIndex(window);
+		if (display_index < 0) {
+			return false;
+		}
+
+		SDL_Rect usable_bounds;
+		if (0 != SDL_GetDisplayUsableBounds(display_index, &usable_bounds)) {
+			return false;
+		}
+		int bar_size = 0;
+		SDL_GetWindowBordersSize(window, &bar_size, nullptr, nullptr, nullptr);
+		SDL_SetWindowPosition(window, usable_bounds.x, usable_bounds.y + bar_size - 1);
+		SDL_SetWindowSize(window, usable_bounds.w, usable_bounds.h - bar_size + 1);
 	}
 	else if (!borderless)
 	{
@@ -223,7 +250,7 @@ bool ModuleWindow::CreateCoreWindow()
 	SDL_GetWindowSize(window, &width, &height);
 
 	screen_surface = SDL_GetWindowSurface(window);
-
+	App->renderer3D->OnResize(width, height);
 	return ret;
 }
 

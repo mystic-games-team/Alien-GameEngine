@@ -98,6 +98,8 @@ The user can check the editor options activating them in the renderer window.
 
 ### Assigment 3
 
+* Intro Icon Image while opening the engine with a progress bar.
+
 * More than 1 object is supported to be selected, cntrl to select another keeping the others. Also they can be moved/rotated/scaled or deleted and cntrl D clone them. Moving a object with shift pressed, clones it and move the clone.
 
 * GameObjects have a tag and can be assigned in the inspector. Also there is a menu to create or remove tags. GameObjects can be find with their tag.
