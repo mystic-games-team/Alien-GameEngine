@@ -32,8 +32,14 @@ void PanelConsole::PanelLogic()
 	ImGui::Text("|");
 	ImGui::SameLine();
 	if (ImGui::Button("Clear")) {
-		if (game_console) App->game_string_logs.clear();
-		else App->engine_string_logs.clear();
+		if (game_console) {
+			App->game_string_logs.clear();
+			App->all_game_logs.clear();
+		}
+		else {
+			App->engine_string_logs.clear();
+			App->all_engine_logs.clear();
+		}
 	}
 	ImGui::SameLine();
 
@@ -71,13 +77,50 @@ void PanelConsole::PanelLogic()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.8F, 0.23F,0.98F,1 });
 	}
 
-	if (game_console) {
-		auto item = App->game_string_logs.begin();
-		for (; item != App->game_string_logs.end(); ++item) {
+	std::vector<LogInfo>* logs = nullptr;
+	ImGuiTextBuffer* buf_logs = nullptr;
+	if (collapse) {
+		if (game_console) {
+			logs = &App->game_string_logs;
+		}
+		else {
+			logs = &App->engine_string_logs;
+		}
+	}
+	else {
+		if (game_console) {
+			buf_logs = &App->all_game_logs;
+		}
+		else {
+			buf_logs = &App->all_engine_logs;
+		}
+	}
+
+	if (logs != nullptr) {
+		auto item = logs->begin();
+		for (; item != logs->end(); ++item) {
 			if (collapse) {
-				ImGui::Button(std::to_string((*item).instances).data());
-				ImGui::SameLine();
-				ImGui::Text((*item).loged.back().second.data());
+				if (!(*item).opened) {
+					ImGui::Button(std::to_string((*item).instances).data());
+					ImGui::SameLine();
+					ImGui::Selectable((*item).loged.back().second.data());
+					if (ImGui::IsItemClicked()) {
+						(*item).opened = true;
+					}
+				}
+				else {
+					ImGui::Separator();
+					for (uint i = 0; i < (*item).loged.size(); ++i) {
+						ImGui::SetCursorPosX(20);
+						ImGui::Button(std::to_string((*item).loged[i].first).data());
+						ImGui::SameLine();
+						ImGui::Selectable((*item).loged[i].second.data());
+						if (ImGui::IsItemClicked()) {
+							(*item).opened = false;
+						}
+					}
+					ImGui::Separator();
+				}
 			}
 			else {
 				for (uint i = 0; i < (*item).loged.size(); ++i) {
@@ -89,22 +132,9 @@ void PanelConsole::PanelLogic()
 		}
 	}
 	else {
-		auto item = App->engine_string_logs.begin();
-		for (; item != App->engine_string_logs.end(); ++item) {
-			if (collapse) {
-				ImGui::Button(std::to_string((*item).instances).data());
-				ImGui::SameLine();
-				ImGui::Text((*item).loged.back().second.data());
-			}
-			else {
-				for (uint i = 0; i < (*item).loged.size(); ++i) {
-					for (uint j = 0; j < (*item).loged[i].first; ++j) {
-						ImGui::Text((*item).loged[i].second.data());
-					}
-				}
-			}
-		}
+		ImGui::TextUnformatted(buf_logs->begin());
 	}
+
 	
 	if (collapse) {
 		ImGui::PopStyleColor(3);

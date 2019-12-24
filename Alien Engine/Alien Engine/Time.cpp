@@ -38,6 +38,8 @@ void Time::Play()
 		if (App->ui->panel_console->clear_on_play) {
 			App->game_string_logs.clear();
 			App->engine_string_logs.clear();
+			App->all_engine_logs.clear();
+			App->all_game_logs.clear();
 		}
 		ImGui::SetWindowFocus(App->ui->panel_game->GetPanelName().data());
 		App->ui->panel_console->game_console = true;
