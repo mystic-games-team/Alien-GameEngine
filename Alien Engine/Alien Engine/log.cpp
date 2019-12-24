@@ -12,10 +12,15 @@ void log(const char file[], int line, const char* format, ...)
 	va_start(ap, format);
 	vsprintf_s(tmp_string, 4096, format, ap);
 	va_end(ap);
-	
 	sprintf_s(tmp_string2, 4096, "%s(%d) : %s", file, line, tmp_string);
 	
 	if (App != nullptr) {
+		if (!App->all_engine_logs.empty()) {
+			App->all_engine_logs.appendf(std::string("\n" + std::string(tmp_string2)).data());
+		}
+		else {
+			App->all_engine_logs.appendf(tmp_string2);
+		}
 		bool exists = false;
 		std::vector<LogInfo>::iterator item = App->engine_string_logs.begin();
 		for (; item != App->engine_string_logs.end(); ++item) {

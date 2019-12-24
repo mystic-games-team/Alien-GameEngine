@@ -28,6 +28,7 @@ struct LogInfo {
 		instances = 1;
 	}
 	int line = 0;
+	bool opened = false;
 	int instances = 0;
 	char file[MAX_PATH];
 	std::vector<std::pair<int, std::string>> loged;
@@ -52,6 +53,8 @@ public:
 	int fps_limit = 30;
 	std::vector<LogInfo> engine_string_logs;
 	std::vector<LogInfo> game_string_logs;
+	ImGuiTextBuffer all_engine_logs;
+	ImGuiTextBuffer all_game_logs;
 	HINSTANCE scripts_dll = nullptr;
 	std::string dll;
 private:

@@ -16,6 +16,12 @@ void Debug::Log(const char file[], int line, const char* format, ...)
 	sprintf_s(tmp_string2, 4096, "%s(%d) : %s", file, line, tmp_string);
 
 	if (App != nullptr) {
+		if (!App->all_game_logs.empty()) {
+			App->all_game_logs.appendf(std::string("\n" + std::string(tmp_string2)).data());
+		}
+		else {
+			App->all_game_logs.appendf(tmp_string2);
+		}
 		bool exists = false;
 		std::vector<LogInfo>::iterator item = App->game_string_logs.begin();
 		for (; item != App->game_string_logs.end(); ++item) {
@@ -45,9 +51,11 @@ void Debug::Log(const char file[], int line, const char* format, ...)
 void Debug::ClearGameConsole()
 {
 	App->game_string_logs.clear();
+	App->all_game_logs.clear();
 }
 
 void Debug::ClearEngineConsole()
 {
+	App->all_engine_logs.clear();
 	App->engine_string_logs.clear();
 }
