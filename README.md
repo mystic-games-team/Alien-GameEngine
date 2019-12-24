@@ -27,28 +27,30 @@ The user can check the editor options activating them in the renderer window.
 
 ## Shortcuts
 
-* Left Ctrl / Rigth Ctrl + A: Panel About
-* Left Ctrl / Rigth Ctrl + I: Panel Project
-* Left Ctrl / Rigth Ctrl + O: Panel Config
-* Left Ctrl / Rigth Ctrl + T: Panel Console
-* Left Ctrl / Rigth Ctrl + R: Panel Render
-* Left Ctrl / Rigth Ctrl + U: Panel Hierarchy
-* Left Ctrl / Rigth Ctrl + P: Panel Create Object
-* Left Ctrl / Rigth Ctrl + M: Panel Inspector
-* Left Ctrl / Rigth Ctrl + E: Panel Scene
-* Left Ctrl / Rigth Ctrl + D: Panel ImGui Demo
-* Left Ctrl / Rigth Ctrl + B: Edit Layouts
-* Left Ctrl / Rigth Ctrl + G: Panel Game
+* Left Ctrl / Right Ctrl + A: Panel About
+* Left Ctrl / Right Ctrl + I: Panel Project
+* Left Ctrl / Right Ctrl + O: Panel Config
+* Left Ctrl / Right Ctrl + T: Panel Console
+* Left Ctrl / Right Ctrl + R: Panel Render
+* Left Ctrl / Right Ctrl + U: Panel Hierarchy
+* Left Ctrl / Right Ctrl + P: Panel Create Object
+* Left Ctrl / Right Ctrl + M: Panel Inspector
+* Left Ctrl / Right Ctrl + E: Panel Scene
+* Left Ctrl / Right Ctrl + D: Panel ImGui Demo
+* Left Ctrl / Right Ctrl + B: Edit Layouts
+* Left Ctrl / Right Ctrl + G: Panel Game
 
-* Left Ctrl / Rigth Ctrl + S: Save Scene
-* Left Ctrl / Rigth Ctrl + N: New Scene
-* Left Ctrl / Rigth Ctrl + L: Load Scene
-* Left Alt / Rigth Alt + S: Save Scene as...
+* Left Ctrl / Right Ctrl + S: Save Scene
+* Left Ctrl / Right Ctrl + N: New Scene
+* Left Ctrl / Right Ctrl + L: Load Scene
+* Left Alt / Right Alt + S: Save Scene as...
 
-* Left Ctrl / Rigth Ctrl + Z: Reverse Action
-* Left Ctrl / Rigth Ctrl + Y: Advance Action
+* Left Ctrl / Right Ctrl + Z: Reverse Action
+* Left Ctrl / Right Ctrl + Y: Advance Action
 
-* Left Alt / Rigth Alt + F1: Report Bug
+* Left Ctrl / Right Ctrl + D: Clone Selected Objects
+
+* Left Alt / Right Alt + F1: Report Bug
 
 * F3: Mesh View
 * F4: Wireframe Mode
@@ -93,6 +95,20 @@ The user can check the editor options activating them in the renderer window.
 * Light and Camera Icons in Scene: Icons that show where this components are and help in the mousepicking of them.
 
 * Octree: To view octree, check box in the panel renderer in the octree options must be active and at least one gameobject with mesh must be static. 
+
+### Assigment 3
+
+* More than 1 object is supported to be selected, cntrl to select another keeping the others. Also they can be moved/rotated/scaled or deleted and cntrl D clone them. Moving a object with shift pressed, clones it and move the clone.
+
+* GameObjects have a tag and can be assigned in the inspector. Also there is a menu to create or remove tags. GameObjects can be find with their tag.
+
+* There is a text editor for the scripts in the engine.
+
+* Clone GameObjects
+
+* Engine can be started with game mode. Some modules and ImGui is never created.
+
+* Maybe HotReload?
 
 ## Panels
 
