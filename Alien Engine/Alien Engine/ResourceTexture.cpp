@@ -8,7 +8,7 @@ ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& w
 	this->id = id;
 	this->width = width;
 	this->height = height;
-
+	name = App->file_system->GetBaseFileName(path);
 	type = ResourceType::RESOURCE_TEXTURE;
 }
 
