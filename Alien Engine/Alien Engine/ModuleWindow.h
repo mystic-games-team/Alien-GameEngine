@@ -31,6 +31,8 @@ public:
 
 	void SetResizable(bool resizable);
 
+	void IncreaseBar();
+
 	bool CreateCoreWindow();
 
 public:
@@ -51,10 +53,11 @@ public:
 	int style = 0;
 	char* window_name = nullptr;
 	char* organitzation_name = nullptr;
-
+	int segment_width = 0;
 private:
 	SDL_Renderer* renderer = nullptr;
 	SDL_Texture* texture = nullptr;
+	int current_division = 0;
 };
 
 #endif // __ModuleWindow_H__
