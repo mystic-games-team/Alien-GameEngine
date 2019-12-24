@@ -95,7 +95,9 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 	model->path = std::string(path);
 
 	// start recursive function to all nodes
-	LoadSceneNode(scene->mRootNode, scene, nullptr, 1);
+	for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
+		LoadSceneNode(scene->mRootNode->mChildren[i], scene, nullptr, 1);
+	}
 
 	// create the meta data files like .alien
 	if (model->CreateMetaData()) {
@@ -113,44 +115,58 @@ void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, Res
 	LOG_ENGINE("Loading node with name %s", node->mName.C_Str());
 	ResourceMesh* next_parent = nullptr;
 
-	std::string node_name = node->mName.C_Str();
-	if (node_name.find("_$AssimpFbx$_") == std::string::npos && node_name.find("RootNode") == std::string::npos) {
-		if (node->mNumMeshes == 1) {
-			const aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
-			next_parent = LoadNodeMesh(scene, node, mesh, parent);
-			next_parent->family_number = family_number;
-			App->resources->AddResource(next_parent);
-			model->meshes_attached.push_back(next_parent);
-		}
-		else if (node->mNumMeshes > 1) {
-			ResourceMesh* parent_node = new ResourceMesh();
-			parent_node->family_number = family_number;
-			App->resources->AddResource(parent_node);
-			model->meshes_attached.push_back(parent_node);
-			parent_node->SetName(node->mName.C_Str());
-			if (parent != nullptr)
-				parent_node->parent_name = parent->name;
-
-			for (uint i = 0; i < node->mNumMeshes; ++i) {
-				const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-				next_parent = LoadNodeMesh(scene, node, mesh, parent_node);
-				next_parent->name += std::to_string(i);
-				next_parent->family_number = family_number + 1;
-				App->resources->AddResource(next_parent);
-				model->meshes_attached.push_back(next_parent);
-			}
-			next_parent = parent_node;
-		}
-		else if (node->mNumMeshes == 0) {
-			next_parent = new ResourceMesh();
-			next_parent->family_number = family_number;
-			App->resources->AddResource(next_parent);
-			model->meshes_attached.push_back(next_parent);
-			next_parent->SetName(node->mName.C_Str());
-			if (parent != nullptr)
-				next_parent->parent_name = parent->name;
-		}
+	aiMatrix4x4 mat; //identity
+	while (std::string(node->mName.C_Str()).find("_$AssimpFbx$_") != std::string::npos) { //iterate nodes that contains dummy name
+		mat = mat * node->mTransformation;    // multiply its transform to don't lose the transformation
+		node = node->mChildren[0];
 	}
+
+	if (node->mNumMeshes == 1) {
+		const aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
+		next_parent = LoadNodeMesh(scene, node, mesh, parent);
+		next_parent->family_number = family_number;
+		App->resources->AddResource(next_parent);
+		model->meshes_attached.push_back(next_parent);
+	}
+	else if (node->mNumMeshes > 1) {
+		ResourceMesh* parent_node = new ResourceMesh();
+		parent_node->family_number = family_number;
+		App->resources->AddResource(parent_node);
+		model->meshes_attached.push_back(parent_node);
+		parent_node->SetName(node->mName.C_Str());
+		if (parent != nullptr)
+			parent_node->parent_name = parent->name;
+
+		for (uint i = 0; i < node->mNumMeshes; ++i) {
+			const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+			next_parent = LoadNodeMesh(scene, node, mesh, parent_node);
+			next_parent->name += std::to_string(i);
+			next_parent->family_number = family_number + 1;
+			App->resources->AddResource(next_parent);
+			model->meshes_attached.push_back(next_parent);
+		}
+		next_parent = parent_node;
+	}
+	else if (node->mNumMeshes == 0) {
+		next_parent = new ResourceMesh();
+		next_parent->family_number = family_number;
+		App->resources->AddResource(next_parent);
+		model->meshes_attached.push_back(next_parent);
+		next_parent->SetName(node->mName.C_Str());
+		if (parent != nullptr)
+			next_parent->parent_name = parent->name;
+	}
+
+	if (next_parent != nullptr) {
+		mat = mat * node->mTransformation;
+		aiVector3D pos, scale;
+		aiQuaternion rot;
+		mat.Decompose(scale, rot, pos);
+		next_parent->pos = { pos.x,pos.y,pos.z };
+		next_parent->scale = { scale.x,scale.y,scale.z };
+		next_parent->rot = { rot.x,rot.y,rot.z,rot.w };
+	}
+
 	for (uint i = 0; i < node->mNumChildren; ++i) {
 		LOG_ENGINE("Loading children of node %s", node->mName.C_Str());
 		uint fam_num = 1;
@@ -245,24 +261,24 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	App->file_system->NormalizePath(normal_path);
 	ret->texture = App->resources->GetTextureByName(normal_path.data());
 
-	// get local transformations
-	aiVector3D translation, scaling;
-	aiQuaternion rotation;
-	// local pos, rot & scale
-	node->mTransformation.Decompose(scaling, rotation, translation);
+	//// get local transformations
+	//aiVector3D translation, scaling;
+	//aiQuaternion rotation;
+	//// local pos, rot & scale
+	//node->mTransformation.Decompose(scaling, rotation, translation);
 
-	// set the scale in value of 1 but keeping the dimensions
-	//float max_ = max(scaling.x, scaling.y);
-	//max_ = max(max_, scaling.z);
+	//// set the scale in value of 1 but keeping the dimensions
+	////float max_ = max(scaling.x, scaling.y);
+	////max_ = max(max_, scaling.z);
 
-	float3 pos(translation.x, translation.y, translation.z);
-	//float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
-	float3 scale(scaling.x, scaling.y, scaling.z);
-	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+	//float3 pos(translation.x, translation.y, translation.z);
+	////float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
+	//float3 scale(scaling.x, scaling.y, scaling.z);
+	//Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	ret->pos = pos;
-	ret->scale = scale;
-	ret->rot = rot;
+	//ret->pos = pos;
+	//ret->scale = scale;
+	//ret->rot = rot;
 	ret->name = std::string(node->mName.C_Str());
 
 	return ret;
