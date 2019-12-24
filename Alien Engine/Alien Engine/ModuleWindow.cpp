@@ -50,6 +50,19 @@ bool ModuleWindow::Init()
 			screen_surface = SDL_LoadBMP("Configuration/EngineTextures/Logo_Name.bmp");
 			texture = SDL_CreateTextureFromSurface(renderer, screen_surface);
 			SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+			SDL_Rect r;
+			r.x = 6;
+			r.y = 280;
+			r.w = 50;
+			r.h = 15;
+
+			// Set render color to blue ( rect will be rendered in this color )
+			SDL_SetRenderDrawColor(renderer, 0, 170, 0, 255);
+
+			// Render rect
+			SDL_RenderFillRect(renderer, &r);
+
 			SDL_RenderPresent(renderer);
 		}
 	}
@@ -198,7 +211,19 @@ bool ModuleWindow::CreateCoreWindow()
 	SDL_SetWindowBordered(window, SDL_bool(true));
 
 	if (start_maximized) {
-		SDL_MaximizeWindow(window);
+		int display_index = SDL_GetWindowDisplayIndex(window);
+		if (display_index < 0) {
+			SDL_Log("error getting window display");
+		}
+
+		SDL_Rect usable_bounds;
+		if (0 != SDL_GetDisplayUsableBounds(display_index, &usable_bounds)) {
+			SDL_Log("error getting usable bounds");
+		}
+		int bar_size = 0;
+		SDL_GetWindowBordersSize(window, &bar_size, nullptr, nullptr, nullptr);
+		SDL_SetWindowPosition(window, usable_bounds.x, usable_bounds.y + bar_size - 1);
+		SDL_SetWindowSize(window, usable_bounds.w, usable_bounds.h - bar_size + 1);
 	}
 	else if (!borderless)
 	{
