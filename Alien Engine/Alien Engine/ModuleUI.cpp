@@ -7,6 +7,7 @@
 #include <gl/GL.h>
 #include "PanelAbout.h"
 #include "PanelConfig.h"
+#include "PanelBuild.h"
 #include "PanelConsole.h"
 #include "PanelCreateObject.h"
 #include "PanelHierarchy.h"
@@ -103,6 +104,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 {
 	for (uint i = 0; i < 3; ++i) {
 		panel_config_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", i);
+		panel_build_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelBuild", i);
 		panel_about_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", i);
 		panel_create_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
 		panel_project_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
@@ -135,6 +137,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 	}
 	if (panel_about != nullptr) {
 		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
+		panel_build->shortcut->SetShortcutKeys(panel_build_codes[0], panel_build_codes[1], panel_build_codes[2]);
 		panel_config->shortcut->SetShortcutKeys(panel_config_codes[0], panel_config_codes[1], panel_config_codes[2]);
 		panel_scene_selector->shortcut->SetShortcutKeys(panel_scene_selector_codes[0], panel_scene_selector_codes[1], panel_scene_selector_codes[2]);
 		panel_project->shortcut->SetShortcutKeys(panel_project_codes[0], panel_project_codes[1], panel_project_codes[2]);
@@ -174,6 +177,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 {
 	for (uint i = 0; i < 3; ++i) {
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_config->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_build->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelProject", (uint)panel_project->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelHierarchy", (uint)panel_hierarchy->shortcut->GetScancode(i));
@@ -467,6 +471,10 @@ void ModuleUI::MainMenuBar()
 		if (ImGui::MenuItem("Import"))
 		{
 
+		}
+		if (ImGui::MenuItem("Build Settings", panel_build->shortcut->GetNameScancodes()))
+		{
+			panel_build->ChangeEnable();
 		}
 		if (ImGui::MenuItem("Close", "Alt + F4"))
 		{
@@ -1042,6 +1050,7 @@ void ModuleUI::InitPanels()
 	panel_text_editor = new PanelTextEditor("Text Editor", panel_text_edit_codes[0], panel_text_edit_codes[1], panel_text_edit_codes[2]);
 	panel_layout = new PanelLayout("Layout Editor", panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
 	panel_game = new PanelGame("Game", panel_game_codes[0], panel_game_codes[1], panel_game_codes[2]);
+	panel_build = new PanelBuild("Build", panel_build_codes[0], panel_build_codes[1], panel_build_codes[2]);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
@@ -1056,6 +1065,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_layout);
 	panels.push_back(panel_scene_selector);
 	panels.push_back(panel_text_editor);
+	panels.push_back(panel_build);
 }
 
 void ModuleUI::UpdatePanels()

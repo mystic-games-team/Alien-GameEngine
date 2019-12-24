@@ -534,6 +534,9 @@
     <ClInclude Include="Screen.h">
       <Filter>ScriptHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="PanelBuild.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -856,6 +859,9 @@
     </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelBuild.cpp">
+      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

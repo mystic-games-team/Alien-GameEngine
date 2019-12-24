@@ -23,6 +23,7 @@ class PanelLayout;
 class PanelProject;
 class PanelSceneSelector;
 class PanelGame;
+class PanelBuild;
 class PanelTextEditor;
 
 struct ShortCut;
@@ -117,7 +118,7 @@ private:
 	PanelAbout* panel_about = nullptr;
 	PanelRender* panel_render = nullptr;
 	PanelInspector* panel_inspector = nullptr;
-
+	PanelBuild* panel_build = nullptr;
 	PanelLayout* panel_layout = nullptr;
 
 	// ShortCuts
@@ -141,6 +142,7 @@ private:
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_project_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_build_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_layout_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_scene_selector_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_about_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
