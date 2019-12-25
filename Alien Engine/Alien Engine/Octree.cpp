@@ -221,9 +221,7 @@ void OctreeNode::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* t
 			std::vector<OctreeNode*>::iterator item = children.begin();
 			for (; item != children.end(); ++item) {
 				if (*item != nullptr) {
-					if (App->renderer3D->IsInsideFrustum(camera, (*item)->section)) {
-						(*item)->SetStaticDrawList(to_draw, camera);
-					}
+					(*item)->SetStaticDrawList(to_draw, camera);
 				}
 			}
 		}

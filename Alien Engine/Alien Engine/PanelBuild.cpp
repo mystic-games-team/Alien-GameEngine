@@ -1,4 +1,5 @@
 #include "PanelBuild.h"
+#include <shlobj.h>
 
 PanelBuild::PanelBuild(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -52,7 +53,7 @@ void PanelBuild::PanelLogic()
 
 		ImGui::SetCursorPosX(10);
 		if (ImGui::Button("Add README", { 90,0 })) {
-			SelectFile("Select the README file", readme_path);
+			SelectFile("Select the README file", readme_path, true, readme_fullpath);
 		}
 		ImGui::SameLine();
 
@@ -73,7 +74,7 @@ void PanelBuild::PanelLogic()
 
 		ImGui::SetCursorPosX(10);
 		if (ImGui::Button("Add LICENSE", { 90,0 })) {
-			SelectFile("Select the LICENSE file", license_path);
+			SelectFile("Select the LICENSE file", license_path, true, license_fullpath);
 		}
 		ImGui::SameLine();
 
@@ -93,7 +94,7 @@ void PanelBuild::PanelLogic()
 
 		ImGui::SetCursorPosX(10);
 		if (ImGui::Button("Build Folder", { 90,0 })) {
-			SelectFile("Select the build folder", build_folder);
+			SelectFile("Select the build folder", build_folder, false, build_folder_fullpath);
 		}
 		ImGui::SameLine();
 
@@ -130,8 +131,11 @@ void PanelBuild::OnPanelDesactive()
 	selected = nullptr;
 	scenes.clear();
 	readme_path.clear();
+	readme_fullpath.clear();
 	license_path.clear();
+	license_fullpath.clear();
 	build_folder.clear();
+	build_folder_fullpath.clear();
 	strcpy(game_name, "MyAwesomeGame");
 }
 
@@ -152,36 +156,93 @@ void PanelBuild::GetAllScenes(const std::vector<std::string>& directories, const
 	}
 }
 
-void PanelBuild::SelectFile(const char* text, std::string& to_fill)
+void PanelBuild::SelectFile(const char* text, std::string& to_fill, bool file, std::string& full_path)
 {
-	OPENFILENAME to_load;
+	if (file) {
+		OPENFILENAME to_load;
 
-	static char filename[MAX_PATH];
+		static char filename[MAX_PATH];
 
-	// get the current game directory
-	static char curr_dir[MAX_PATH];
-	GetCurrentDirectoryA(MAX_PATH, curr_dir);
+		// get the current game directory
+		static char curr_dir[MAX_PATH];
+		GetCurrentDirectoryA(MAX_PATH, curr_dir);
 
-	std::string dir = std::string(curr_dir + std::string("\\") + std::string("Assets")).data();
+		std::string dir = std::string(curr_dir + std::string("\\") + std::string("Assets")).data();
 
-	// fill eveything with 0  in order to avoid problems
-	ZeroMemory(&filename, sizeof(filename));
-	ZeroMemory(&to_load, sizeof(to_load));
+		// fill eveything with 0  in order to avoid problems
+		ZeroMemory(&filename, sizeof(filename));
+		ZeroMemory(&to_load, sizeof(to_load));
 
-	to_load.lStructSize = sizeof(to_load);
-	to_load.hwndOwner = NULL;
-	to_load.lpstrFilter = NULL;
-	to_load.lpstrFile = filename;
-	to_load.nMaxFile = MAX_PATH;
-	to_load.lpstrTitle = text;
-	to_load.lpstrInitialDir = dir.data();
-	to_load.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
-	if (GetOpenFileNameA(&to_load))
-	{
-		SetCurrentDirectoryA(curr_dir);
-		to_fill = filename;
+		to_load.lStructSize = sizeof(to_load);
+		to_load.hwndOwner = NULL;
+		to_load.lpstrFilter = NULL;
+		to_load.lpstrFile = filename;
+		to_load.nMaxFile = MAX_PATH;
+		to_load.lpstrTitle = text;
+		to_load.lpstrInitialDir = dir.data();
+		to_load.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+		if (GetOpenFileNameA(&to_load))
+		{
+			SetCurrentDirectoryA(curr_dir);
+			to_fill = filename;
+			App->file_system->NormalizePath(to_fill);
+			full_path = to_fill;
+			for (uint i = 0; i < 3; ++i) {
+				to_fill = to_fill.substr(to_fill.find_first_of("/") + 1);
+			}
+		}
+		else {
+			SetCurrentDirectoryA(curr_dir);
+		}
 	}
 	else {
-		SetCurrentDirectoryA(curr_dir);
+		BROWSEINFO to_load;
+		char szPath[MAX_PATH + 1];
+		LPITEMIDLIST pidl;
+		BOOL bResult = FALSE;
+
+		LPMALLOC pMalloc;
+
+		if (SUCCEEDED(SHGetMalloc(&pMalloc)))
+		{
+			static char filename[MAX_PATH];
+
+			// get the current game directory
+			static char curr_dir[MAX_PATH];
+			GetCurrentDirectoryA(MAX_PATH, curr_dir);
+
+			std::string dir = std::string(curr_dir + std::string("\\") + std::string("Assets")).data();
+
+			// fill eveything with 0  in order to avoid problems
+			ZeroMemory(&filename, sizeof(filename));
+			ZeroMemory(&to_load, sizeof(to_load));
+
+			to_load.hwndOwner = NULL;
+			to_load.pszDisplayName = filename;
+			to_load.lpszTitle = text;
+
+			pidl = SHBrowseForFolder(&to_load);
+			if (pidl)
+			{
+				if (SHGetPathFromIDList(pidl, szPath))
+				{
+					bResult = TRUE;
+					strcpy(filename, szPath);
+					to_fill = filename;
+					App->file_system->NormalizePath(to_fill);
+					full_path = to_fill;
+					for (uint i = 0; i < 3; ++i) {
+						to_fill = to_fill.substr(to_fill.find_first_of("/") + 1);
+					}
+				}
+
+				pMalloc->Free(pidl);
+				pMalloc->Release();
+				SetCurrentDirectoryA(curr_dir);
+			}
+			else {
+				SetCurrentDirectoryA(curr_dir);
+			}
+		}
 	}
 }

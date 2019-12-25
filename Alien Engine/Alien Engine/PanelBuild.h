@@ -16,7 +16,7 @@ public:
 private:
 
 	void GetAllScenes(const std::vector<std::string>& directories, const std::vector<std::string>& files, const std::string& current_folder);
-	void SelectFile(const char* text, std::string& to_fill);
+	void SelectFile(const char* text, std::string& to_fill, bool file, std::string& full_path);
 
 private:
 
@@ -24,7 +24,10 @@ private:
 	std::vector<std::string> scenes;
 
 	std::string readme_path;
+	std::string readme_fullpath;
 	std::string license_path;
+	std::string license_fullpath;
 	std::string build_folder;
+	std::string build_folder_fullpath;
 	char game_name[MAX_PATH] = "MyAwesomeGame";
 };
