@@ -16,6 +16,8 @@ public:
 private:
 
 	void GetAllScenes(const std::vector<std::string>& directories, const std::vector<std::string>& files, const std::string& current_folder);
+	void SelectFile(const char* text, std::string& to_fill);
+
 private:
 
 	const char* selected = nullptr;

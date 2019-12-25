@@ -52,7 +52,7 @@ void PanelBuild::PanelLogic()
 
 		ImGui::SetCursorPosX(10);
 		if (ImGui::Button("Add README", { 90,0 })) {
-
+			SelectFile("Select the README file", readme_path);
 		}
 		ImGui::SameLine();
 
@@ -63,8 +63,8 @@ void PanelBuild::PanelLogic()
 		}
 		else {
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2f, 0.5F, 0.2f, 1 });
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.2f, 0.5F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.2f, 0.5F, 0.2f, 1 });
 		}
 		ImGui::Button((readme_path.empty()) ? "NO README" : readme_path.data(), {ImGui::GetWindowWidth() * 0.61F, 0});
 		ImGui::PopStyleColor(3);
@@ -73,7 +73,7 @@ void PanelBuild::PanelLogic()
 
 		ImGui::SetCursorPosX(10);
 		if (ImGui::Button("Add LICENSE", { 90,0 })) {
-
+			SelectFile("Select the LICENSE file", license_path);
 		}
 		ImGui::SameLine();
 
@@ -84,8 +84,8 @@ void PanelBuild::PanelLogic()
 		}
 		else {
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2f, 0.5F, 0.2f, 1 });
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.2f, 0.5F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.2f, 0.5F, 0.2f, 1 });
 		}
 		ImGui::Button((license_path.empty()) ? "NO LICENSE" : license_path.data(), { ImGui::GetWindowWidth() * 0.61F, 0 });
 		ImGui::PopStyleColor(3);
@@ -93,19 +93,19 @@ void PanelBuild::PanelLogic()
 
 		ImGui::SetCursorPosX(10);
 		if (ImGui::Button("Build Folder", { 90,0 })) {
-
+			SelectFile("Select the build folder", build_folder);
 		}
 		ImGui::SameLine();
 
-		if (license_path.empty()) {
+		if (build_folder.empty()) {
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.7f, 0.2F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
 		}
 		else {
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2f, 0.5F, 0.2f, 1 });
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.2f, 0.5F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.2f, 0.5F, 0.2f, 1 });
 		}
 		ImGui::Button((build_folder.empty()) ? "NO BUILD FOLDER" : build_folder.data(), { ImGui::GetWindowWidth() * 0.61F, 0 });
 		ImGui::PopStyleColor(3);
@@ -119,6 +119,9 @@ void PanelBuild::PanelLogic()
 		ImGui::Button("Build and Run", { 100,0 });
 
 		ImGui::EndPopup();
+	}
+	else {
+		OnPanelDesactive();
 	}
 }
 
@@ -146,5 +149,39 @@ void PanelBuild::GetAllScenes(const std::vector<std::string>& directories, const
 			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
 			GetAllScenes(new_directories, new_files, dir);
 		}
+	}
+}
+
+void PanelBuild::SelectFile(const char* text, std::string& to_fill)
+{
+	OPENFILENAME to_load;
+
+	static char filename[MAX_PATH];
+
+	// get the current game directory
+	static char curr_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, curr_dir);
+
+	std::string dir = std::string(curr_dir + std::string("\\") + std::string("Assets")).data();
+
+	// fill eveything with 0  in order to avoid problems
+	ZeroMemory(&filename, sizeof(filename));
+	ZeroMemory(&to_load, sizeof(to_load));
+
+	to_load.lStructSize = sizeof(to_load);
+	to_load.hwndOwner = NULL;
+	to_load.lpstrFilter = NULL;
+	to_load.lpstrFile = filename;
+	to_load.nMaxFile = MAX_PATH;
+	to_load.lpstrTitle = text;
+	to_load.lpstrInitialDir = dir.data();
+	to_load.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	if (GetOpenFileNameA(&to_load))
+	{
+		SetCurrentDirectoryA(curr_dir);
+		to_fill = filename;
+	}
+	else {
+		SetCurrentDirectoryA(curr_dir);
 	}
 }
