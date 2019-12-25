@@ -383,8 +383,6 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 					CompMeshZ* meshZ = (CompMeshZ*)(*item);
 					CompZ::SetComponent(mesh, meshZ);
 					new_obj->AddComponent(mesh);
-					if (mesh->mesh != nullptr)
-						mesh->mesh->IncreaseReferences();
 					break; }
 				case ComponentType::MATERIAL: {
 					ComponentMaterial* material = new ComponentMaterial(new_obj);
@@ -546,8 +544,9 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 	case ComponentType::MESH: {
 		ComponentMesh* mesh = (ComponentMesh*)component;
 		CompMeshZ* meshZ = (CompMeshZ*)compZ;
-		if (meshZ->resourceID != 0)
+		if (meshZ->resourceID != 0) {
 			mesh->mesh = (ResourceMesh*)App->resources->GetResourceWithID(meshZ->resourceID);
+		}
 		else if (meshZ->is_primitive) {
 			switch (meshZ->type) {
 			case PrimitiveType::CUBE: {
@@ -579,6 +578,10 @@ void CompZ::SetComponent(Component* component, CompZ* compZ)
 		mesh->view_mesh = meshZ->view_mesh;
 		mesh->view_face_normals = meshZ->view_face_normals;
 		mesh->view_vertex_normals = meshZ->view_vertex_normals;
+		if (mesh->mesh != nullptr) {
+			mesh->mesh->IncreaseReferences();
+		}
+		mesh->GenerateAABB();
 		mesh->RecalculateAABB_OBB();
 		break; }
 	case ComponentType::MATERIAL: {

@@ -268,11 +268,13 @@ void ComponentMaterial::Clone(Component* clone)
 
 void ComponentMaterial::SetTexture(ResourceTexture* tex)
 {
-	if (texture != nullptr)
+	if (texture != nullptr) {
 		texture->DecreaseReferences();
+	}
 	texture = tex;
-	if (texture != nullptr)
+	if (texture != nullptr) {
 		texture->IncreaseReferences();
+	}
 }
 
 const ResourceTexture* ComponentMaterial::GetTexture() const
