@@ -224,8 +224,8 @@ bool ModuleWindow::CreateCoreWindow()
 		}
 		int bar_size = 0;
 		SDL_GetWindowBordersSize(window, &bar_size, nullptr, nullptr, nullptr);
-		SDL_SetWindowPosition(window, usable_bounds.x, usable_bounds.y + bar_size - 1);
-		SDL_SetWindowSize(window, usable_bounds.w, usable_bounds.h - bar_size + 1);
+		SDL_SetWindowPosition(window, usable_bounds.x, usable_bounds.y + bar_size - 2);
+		SDL_SetWindowSize(window, usable_bounds.w, usable_bounds.h - bar_size + 2);
 	}
 	else if (!borderless)
 	{

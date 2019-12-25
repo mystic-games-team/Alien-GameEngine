@@ -35,13 +35,21 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 	if (PHYSFS_setWriteDir(".") == 0)
 		LOG_ENGINE("File System error while creating write dir: %s\n", PHYSFS_getLastError());
 
+#ifndef GAME_VERSION
 	// Make sure standard paths exist
 	const char* dirs[] = {
 		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER, TEXTURES_FOLDER,
 		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER, SCRIPTS_FOLDER, SCENE_FOLDER,
 		ASSETS_PREFAB_FOLDER, SCRIPTS_DLL_OUTPUT
 	};
-
+#else
+	// Make sure standard paths exist
+	const char* dirs[] = {
+		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER, TEXTURES_FOLDER,
+		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER, SCRIPTS_FOLDER, SCENE_FOLDER,
+		ASSETS_PREFAB_FOLDER
+};
+#endif
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
 	{
 		if (PHYSFS_exists(dirs[i]) == 0)
@@ -70,6 +78,7 @@ bool ModuleFileSystem::Init()
 	// Ask SDL for a write dir
 	char* write_path = SDL_GetPrefPath(App->window->organitzation_name, App->window->window_name);
 
+#ifndef GAME_VERSION
 	// Trun this on while in game mode
 	//if(PHYSFS_setWriteDir(write_path) == 0)
 		//LOG("File System error while creating write dir: %s\n", PHYSFS_getLastError());
@@ -81,6 +90,7 @@ bool ModuleFileSystem::Init()
 			last_mod_dll = file.st_mtime;
 		}
 	}
+#endif
 
 	SDL_free(write_path);
 
@@ -89,6 +99,7 @@ bool ModuleFileSystem::Init()
 
 update_status ModuleFileSystem::PreUpdate(float dt)
 {
+#ifndef GAME_VERSION
 	static std::string dll_path(std::string(SCRIPTS_DLL_OUTPUT + std::string("AlienEngineScripts.dll")));
 	if (Exists(dll_path.data())) {
 		struct stat file;
@@ -100,7 +111,7 @@ update_status ModuleFileSystem::PreUpdate(float dt)
 			}
 		}
 	}
-
+#endif
 	return UPDATE_CONTINUE;
 }
 
