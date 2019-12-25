@@ -481,8 +481,9 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 		ComponentMaterial* material = (ComponentMaterial*)component;
 		CompMaterialZ* materialZ = new CompMaterialZ();
 		*compZ = materialZ;
-		if (material->GetTexture() != nullptr)
+		if (material->GetTexture() != nullptr) {
 			materialZ->resourceID = material->GetTexture()->GetID();
+		}
 		materialZ->objectID = material->game_object_attached->ID;
 		materialZ->color = material->color;
 		materialZ->texture_activated = material->texture_activated;
@@ -524,8 +525,9 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 
 void CompZ::SetComponent(Component* component, CompZ* compZ)
 {
-	if (component == nullptr)
+	if (component == nullptr) {
 		return;
+	}
 
 	switch (compZ->type) {
 	case ComponentType::TRANSFORM: {
@@ -647,8 +649,6 @@ void CompZ::AttachCompZToGameObject(CompZ* compZ)
 		ComponentMesh* mesh = new ComponentMesh(obj);
 		CompZ::SetComponent(mesh, compZ);
 		obj->AddComponent(mesh);
-		if (mesh->mesh != nullptr)
-			mesh->mesh->IncreaseReferences();
 		break; }
 	case ComponentType::MATERIAL: {
 		ComponentMaterial* material = new ComponentMaterial(obj);

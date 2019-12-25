@@ -34,10 +34,12 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder)
 		for (uint i = 0; i < files.size(); ++i) {
 			if (App->StringCmp(files[i].data(), App->file_system->GetBaseFileNameWithExtension(path.data()).data())) {
 				++num_file;
-				if (folder == nullptr)
+				if (folder == nullptr) {
 					path = std::string(ASSETS_PREFAB_FOLDER + std::string(object->GetName()) + " (" + std::to_string(num_file) + ")" + ".alienPrefab");
-				else
+				}
+				else {
 					path = std::string(std::string(folder) + std::string(object->GetName()) + " (" + std::to_string(num_file) + ")" + ".alienPrefab");
+				}
 				i = -1;
 			}
 		}
@@ -138,6 +140,7 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 		remove("Library/save_prefab_scene.alienScene");
 	}
 	App->objects->ignore_cntrlZ = true;
+	App->objects->in_cntrl_Z = true;
 	std::vector<GameObject*> objs;
 	App->objects->GetRoot(true)->GetObjectWithPrefabID(ID, &objs);
 	if (!objs.empty()) {
@@ -157,6 +160,7 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 			}
 		}
 	}
+	App->objects->in_cntrl_Z = false;
 	App->objects->ignore_cntrlZ = false;
 }
 
