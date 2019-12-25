@@ -48,8 +48,9 @@ void OctreeNode::Insert(GameObject* object, const AABB& sect)
 			}
 		}
 	}
-	else
+	else {
 		App->objects->octree.Recalculate(object);
+	}
 }
 
 void OctreeNode::Regrup()
@@ -221,7 +222,9 @@ void OctreeNode::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* t
 			std::vector<OctreeNode*>::iterator item = children.begin();
 			for (; item != children.end(); ++item) {
 				if (*item != nullptr) {
-					(*item)->SetStaticDrawList(to_draw, camera);
+					if (App->renderer3D->IsInsideFrustum(camera, (*item)->section)) {
+						(*item)->SetStaticDrawList(to_draw, camera);
+					}
 				}
 			}
 		}
@@ -383,14 +386,13 @@ void Octree::Recalculate(GameObject* new_object)
 	new_section.SetNegativeInfinity();
 
 	if (new_object != nullptr) {
-		to_save.push_back(new_object);
 		ComponentMesh* mesh = (ComponentMesh*)new_object->GetComponent(ComponentType::MESH);
 		new_section = mesh->GetGlobalAABB();
 	}
 
 	// get all gameobjects in octree and get the min & max points
 	root->SaveGameObjects(&to_save, &new_section);
-
+	to_save.push_back(new_object);
 	// delete the old octree and create it again
 	Init(new_section.minPoint, new_section.maxPoint);
 
@@ -406,8 +408,9 @@ void Octree::Recalculate(GameObject* new_object)
 
 void Octree::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
 {
-	if (root == nullptr)
+	if (root == nullptr) {
 		return;
+	}
 
 	root->SetStaticDrawList(to_draw, camera);
 }

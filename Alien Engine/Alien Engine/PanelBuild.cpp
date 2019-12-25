@@ -22,7 +22,7 @@ void PanelBuild::PanelLogic()
 	}
 
 	ImGui::OpenPopup("Build Settings");
-	ImGui::SetNextWindowSize({ 300,375 });
+	ImGui::SetNextWindowSize({ 300,400 });
 	if (ImGui::BeginPopupModal("Build Settings", &enabled, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		ImGui::Text("Select the first scene for the build");
@@ -48,16 +48,20 @@ void PanelBuild::PanelLogic()
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
-		ImGui::InputText(" Game Title", game_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue);
+		ImGui::InputText("Game Title", game_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue);
+		ImGui::Spacing();
+
+		ImGui::SetCursorPosX(10);
+		ImGui::InputText("Folder Name", folder_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue);
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
 		if (ImGui::Button("Add README", { 90,0 })) {
-			SelectFile("Select the README file", readme_path, true, readme_fullpath);
+			SelectFile("Select the README file", readme_name, true, readme_fullpath);
 		}
 		ImGui::SameLine();
 
-		if (readme_path.empty()) {
+		if (readme_name.empty()) {
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.7f, 0.2F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
@@ -67,18 +71,18 @@ void PanelBuild::PanelLogic()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.2f, 0.5F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.2f, 0.5F, 0.2f, 1 });
 		}
-		ImGui::Button((readme_path.empty()) ? "NO README" : readme_path.data(), {ImGui::GetWindowWidth() * 0.61F, 0});
+		ImGui::Button((readme_name.empty()) ? "NO README" : readme_name.data(), {ImGui::GetWindowWidth() * 0.61F, 0});
 		ImGui::PopStyleColor(3);
 
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
 		if (ImGui::Button("Add LICENSE", { 90,0 })) {
-			SelectFile("Select the LICENSE file", license_path, true, license_fullpath);
+			SelectFile("Select the LICENSE file", license_name, true, license_fullpath);
 		}
 		ImGui::SameLine();
 
-		if (license_path.empty()) {
+		if (license_name.empty()) {
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.7f, 0.2F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
@@ -88,17 +92,17 @@ void PanelBuild::PanelLogic()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.2f, 0.5F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.2f, 0.5F, 0.2f, 1 });
 		}
-		ImGui::Button((license_path.empty()) ? "NO LICENSE" : license_path.data(), { ImGui::GetWindowWidth() * 0.61F, 0 });
+		ImGui::Button((license_name.empty()) ? "NO LICENSE" : license_name.data(), { ImGui::GetWindowWidth() * 0.61F, 0 });
 		ImGui::PopStyleColor(3);
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
 		if (ImGui::Button("Build Folder", { 90,0 })) {
-			SelectFile("Select the build folder", build_folder, false, build_folder_fullpath);
+			SelectFile("Select the build folder", build_name, false, build_folder_fullpath);
 		}
 		ImGui::SameLine();
 
-		if (build_folder.empty()) {
+		if (build_name.empty()) {
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.7f, 0.2F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
@@ -108,7 +112,7 @@ void PanelBuild::PanelLogic()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.2f, 0.5F, 0.2f, 1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.2f, 0.5F, 0.2f, 1 });
 		}
-		ImGui::Button((build_folder.empty()) ? "NO BUILD FOLDER" : build_folder.data(), { ImGui::GetWindowWidth() * 0.61F, 0 });
+		ImGui::Button((build_name.empty()) ? "NO BUILD FOLDER" : build_name.data(), { ImGui::GetWindowWidth() * 0.61F, 0 });
 		ImGui::PopStyleColor(3);
 
 		ImGui::Spacing();
@@ -130,13 +134,14 @@ void PanelBuild::OnPanelDesactive()
 {
 	selected = nullptr;
 	scenes.clear();
-	readme_path.clear();
+	readme_name.clear();
 	readme_fullpath.clear();
-	license_path.clear();
+	license_name.clear();
 	license_fullpath.clear();
-	build_folder.clear();
+	build_name.clear();
 	build_folder_fullpath.clear();
 	strcpy(game_name, "MyAwesomeGame");
+	strcpy(folder_name, "FolderName");
 }
 
 void PanelBuild::GetAllScenes(const std::vector<std::string>& directories, const std::vector<std::string>& files, const std::string& current_folder)
@@ -184,12 +189,9 @@ void PanelBuild::SelectFile(const char* text, std::string& to_fill, bool file, s
 		if (GetOpenFileNameA(&to_load))
 		{
 			SetCurrentDirectoryA(curr_dir);
-			to_fill = filename;
-			App->file_system->NormalizePath(to_fill);
-			full_path = to_fill;
-			for (uint i = 0; i < 3; ++i) {
-				to_fill = to_fill.substr(to_fill.find_first_of("/") + 1);
-			}
+			full_path = filename;
+			App->file_system->NormalizePath(full_path);
+			to_fill = App->file_system->GetBaseFileName(full_path.data());
 		}
 		else {
 			SetCurrentDirectoryA(curr_dir);
@@ -228,12 +230,9 @@ void PanelBuild::SelectFile(const char* text, std::string& to_fill, bool file, s
 				{
 					bResult = TRUE;
 					strcpy(filename, szPath);
-					to_fill = filename;
-					App->file_system->NormalizePath(to_fill);
-					full_path = to_fill;
-					for (uint i = 0; i < 3; ++i) {
-						to_fill = to_fill.substr(to_fill.find_first_of("/") + 1);
-					}
+					full_path = filename;
+					App->file_system->NormalizePath(full_path);
+					to_fill = App->file_system->GetBaseFileName(full_path.data());
 				}
 
 				pMalloc->Free(pidl);

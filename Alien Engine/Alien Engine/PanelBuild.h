@@ -23,11 +23,12 @@ private:
 	const char* selected = nullptr;
 	std::vector<std::string> scenes;
 
-	std::string readme_path;
+	std::string readme_name;
 	std::string readme_fullpath;
-	std::string license_path;
+	std::string license_name;
 	std::string license_fullpath;
-	std::string build_folder;
+	std::string build_name;
 	std::string build_folder_fullpath;
 	char game_name[MAX_PATH] = "MyAwesomeGame";
+	char folder_name[MAX_PATH] = "FolderName";
 };
