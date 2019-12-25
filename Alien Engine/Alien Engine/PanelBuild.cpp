@@ -21,7 +21,7 @@ void PanelBuild::PanelLogic()
 	}
 
 	ImGui::OpenPopup("Build Settings");
-	ImGui::SetNextWindowSize({ 300,400 });
+	ImGui::SetNextWindowSize({ 300,375 });
 	if (ImGui::BeginPopupModal("Build Settings", &enabled, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		ImGui::Text("Select the first scene for the build");
@@ -44,6 +44,10 @@ void PanelBuild::PanelLogic()
 			ImGui::Text(scenes[i].data());
 		}
 		ImGui::EndChild();
+		ImGui::Spacing();
+
+		ImGui::SetCursorPosX(10);
+		ImGui::InputText(" Game Title", game_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue);
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
@@ -85,6 +89,34 @@ void PanelBuild::PanelLogic()
 		}
 		ImGui::Button((license_path.empty()) ? "NO LICENSE" : license_path.data(), { ImGui::GetWindowWidth() * 0.61F, 0 });
 		ImGui::PopStyleColor(3);
+		ImGui::Spacing();
+
+		ImGui::SetCursorPosX(10);
+		if (ImGui::Button("Build Folder", { 90,0 })) {
+
+		}
+		ImGui::SameLine();
+
+		if (license_path.empty()) {
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
+		}
+		else {
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2f, 0.5F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
+		}
+		ImGui::Button((build_folder.empty()) ? "NO BUILD FOLDER" : build_folder.data(), { ImGui::GetWindowWidth() * 0.61F, 0 });
+		ImGui::PopStyleColor(3);
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		ImGui::SetCursorPosX(45);
+		ImGui::Button("Build", { 100,0 });
+		ImGui::SameLine();
+		ImGui::Button("Build and Run", { 100,0 });
 
 		ImGui::EndPopup();
 	}
@@ -94,6 +126,10 @@ void PanelBuild::OnPanelDesactive()
 {
 	selected = nullptr;
 	scenes.clear();
+	readme_path.clear();
+	license_path.clear();
+	build_folder.clear();
+	strcpy(game_name, "MyAwesomeGame");
 }
 
 void PanelBuild::GetAllScenes(const std::vector<std::string>& directories, const std::vector<std::string>& files, const std::string& current_folder)

@@ -24,4 +24,5 @@ private:
 	std::string readme_path;
 	std::string license_path;
 	std::string build_folder;
+	char game_name[MAX_PATH] = "MyAwesomeGame";
 };
