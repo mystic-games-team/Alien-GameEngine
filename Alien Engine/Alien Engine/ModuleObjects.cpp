@@ -156,12 +156,15 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 			ComponentCamera* frustum_camera = nullptr;
 
-			if (check_culling_in_scene)
+			if (!check_culling_in_scene)
+			{
+				frustum_camera = App->camera->fake_camera;
+			}
+			else if (check_culling_in_scene && App->renderer3D->actual_game_camera != nullptr)
 			{
 				frustum_camera = App->renderer3D->actual_game_camera;
 			}
-			else
-			{
+			else {
 				frustum_camera = App->camera->fake_camera;
 			}
 
