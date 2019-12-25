@@ -425,6 +425,14 @@ void PanelHierarchy::RightClickMenu()
 					}
 				}
 
+				if (ImGui::MenuItem("Save Prefab as the Original", nullptr, nullptr, !App->objects->prefab_scene)) {
+					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(object_menu->GetPrefabID());
+					if (prefab != nullptr) {
+						prefab->Save(object_menu->FindPrefabRoot());
+						App->objects->SetNewSelectedObject(object_menu);
+					}
+				}
+
 				if (ImGui::MenuItem("UnPack Prefab", nullptr, nullptr, !App->objects->prefab_scene)) {
 					GameObject* obj = object_menu->FindPrefabRoot();
 					obj->UnpackPrefab();
