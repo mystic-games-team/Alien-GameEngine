@@ -47,20 +47,47 @@ void PanelBuild::PanelLogic()
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
-		if (ImGui::Button("Add README")) {
+		if (ImGui::Button("Add README", { 90,0 })) {
 
 		}
 		ImGui::SameLine();
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 
-		ImGui::Button((readme_path.empty()) ? "NO README" : readme_path.data());
+		if (readme_path.empty()) {
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
+		}
+		else {
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2f, 0.5F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
+		}
+		ImGui::Button((readme_path.empty()) ? "NO README" : readme_path.data(), {ImGui::GetWindowWidth() * 0.61F, 0});
+		ImGui::PopStyleColor(3);
+
+		ImGui::Spacing();
+
+		ImGui::SetCursorPosX(10);
+		if (ImGui::Button("Add LICENSE", { 90,0 })) {
+
+		}
+		ImGui::SameLine();
+
+		if (license_path.empty()) {
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
+		}
+		else {
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.2f, 0.5F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.7f, 0.2F, 0.2f, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.7f, 0.2F, 0.2f, 1 });
+		}
+		ImGui::Button((license_path.empty()) ? "NO LICENSE" : license_path.data(), { ImGui::GetWindowWidth() * 0.61F, 0 });
 		ImGui::PopStyleColor(3);
 
 		ImGui::EndPopup();
 	}
-
 }
 
 void PanelBuild::OnPanelDesactive()

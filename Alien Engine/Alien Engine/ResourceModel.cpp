@@ -5,6 +5,7 @@
 #include "Application.h"
 #include <algorithm>
 #include "ReturnZ.h"
+#include "ComponentTransform.h"
 
 ResourceModel::ResourceModel() : Resource()
 {
@@ -222,7 +223,8 @@ void ResourceModel::ConvertToGameObjects()
 		
 		GameObject* parent = nullptr;
 		if (meshes_attached.at(0)->family_number == meshes_attached.at(1)->family_number) {
-			parent = App->objects->CreateEmptyGameObject(nullptr, false);
+			parent = new GameObject(App->objects->GetRoot(false));
+			parent->AddComponent(new ComponentTransform(parent, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
 			parent->SetName(name.data());
 		}
 		else {
@@ -241,9 +243,9 @@ void ResourceModel::ConvertToGameObjects()
 		}
 		objects_created.clear();
 
-		// set it selected
-		App->objects->SetNewSelectedObject(parent);
-		ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, parent);
+		//// set it selected
+		//App->objects->SetNewSelectedObject(parent);
+		//ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, parent);
 	}
 	else { 
 		meshes_attached.at(0)->ConvertToGameObject(nullptr);

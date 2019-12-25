@@ -265,12 +265,14 @@ void ComponentCamera::AspectRatio(int width_ratio, int height_ratio, bool fov_ty
 
 void ComponentCamera::Look(const float3& position_to_look)
 {
-	float3 direction = position_to_look - frustum.pos;
+	if (position_to_look.IsFinite()) {
+		float3 direction = position_to_look - frustum.pos;
 
-	float3x3 matrix = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3::unitY());
+		float3x3 matrix = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3::unitY());
 
-	frustum.front = matrix.MulDir(frustum.front).Normalized();
-	frustum.up = matrix.MulDir(frustum.up).Normalized();
+		frustum.front = matrix.MulDir(frustum.front).Normalized();
+		frustum.up = matrix.MulDir(frustum.up).Normalized();
+	}
 }
 
 float* ComponentCamera::GetProjectionMatrix() const
