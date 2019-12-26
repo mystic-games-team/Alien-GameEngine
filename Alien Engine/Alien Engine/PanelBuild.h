@@ -30,6 +30,7 @@ private:
 	std::string build_name;
 	std::string build_folder_fullpath;
 	std::string exe_path;
+	std::string folder_location;
 	char game_name[MAX_PATH] = "MyAwesomeGame";
 	char folder_name[MAX_PATH] = "MyAwesomeFolder";
 };

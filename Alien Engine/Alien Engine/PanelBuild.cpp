@@ -123,12 +123,14 @@ void PanelBuild::PanelLogic()
 		ImGui::SetCursorPosX(45);
 		if (ImGui::Button("Build", { 100,0 }) && !build_folder_fullpath.empty()) {
 			CreateBuild();
-			// TODO: open explorer to show
+			ShellExecute(NULL, NULL, folder_location.data(), NULL, NULL, SW_SHOW);
+			ChangeEnable();
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Build and Run", { 100,0 }) && !build_folder_fullpath.empty()) {
 			CreateBuild();
 			ShellExecute(NULL, NULL, exe_path.data(), NULL, NULL, SW_SHOW);
+			ChangeEnable();
 		}
 
 		ImGui::EndPopup();
@@ -148,6 +150,7 @@ void PanelBuild::OnPanelDesactive()
 	license_fullpath.clear();
 	build_name.clear();
 	build_folder_fullpath.clear();
+	folder_location.clear();
 	strcpy(game_name, "MyAwesomeGame");
 	strcpy(folder_name, "MyAwesomeFolder");
 }
@@ -199,7 +202,7 @@ void PanelBuild::SelectFile(const char* text, std::string& to_fill, bool file, s
 			SetCurrentDirectoryA(curr_dir);
 			full_path = filename;
 			App->file_system->NormalizePath(full_path);
-			to_fill = App->file_system->GetBaseFileName(full_path.data());
+			to_fill = full_path.substr(full_path.find_last_of("/") + 1);
 		}
 		else {
 			SetCurrentDirectoryA(curr_dir);
@@ -256,8 +259,21 @@ void PanelBuild::SelectFile(const char* text, std::string& to_fill, bool file, s
 
 void PanelBuild::CreateBuild()
 {
-	std::string folder_location = std::string(build_folder_fullpath + "/" + folder_name);
+	folder_location = std::string(build_folder_fullpath + "/" + folder_name);
+	if (std::experimental::filesystem::exists(folder_location.data())) {
+		uint i = 1;
+		for(;;) {
+			std::string tmp = folder_location + " (" + std::to_string(i) + ")";
+			if (!std::experimental::filesystem::exists(tmp.data())) {
+				folder_location = tmp;
+				break;
+			}
+			++i;
+		}
+	}
+
 	CreateDirectoryA(folder_location.data(), NULL);
+
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
 	App->file_system->DiscoverFiles("", files, directories);
