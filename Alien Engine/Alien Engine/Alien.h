@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 class ComponentTransform;
 class GameObject;
 enum class ComponentType;
@@ -68,11 +70,14 @@ public:
 
 	bool CompareTag(const char* tag_to_compare) const;
 
+	void Invoke(std::function<void()> void_no_params_function, float seconds);
+	void CancelInvoke();
+	void InvokeRepeating(std::function<void()> void_no_params_function, float seconds_to_first_invoke, float seconds_between_each_call);
+	//bool IsInvoking(std::function<void()> void_no_params_function);
+
 	// Need
 	// TODO:
 	/*
-		static GameObject* Clone(pos, parent...); // with clone of a gameobject
-
 		change static, is static... cant move in code if is static!!
 
 		DontDestroyOnLoad();
@@ -84,11 +89,6 @@ public:
 	/*
 		SendMessage();
 		SendMessageUpWards
-
-		Invoke();
-		CancelInvoke();
-		InvokeRepeating();
-		IsInvoking();
 
 		OnApplicationPause();
 		OnApplicationResume();

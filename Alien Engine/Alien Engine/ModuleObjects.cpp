@@ -116,6 +116,26 @@ update_status ModuleObjects::PreUpdate(float dt)
 		}
 		to_reparent.clear();
 	}
+
+	if (!invokes.empty()) {
+		std::list<InvokeInfo*> invokes_list = invokes;
+		auto item = invokes_list.begin();
+		for (; item != invokes_list.end(); ++item) {
+			if ((*item)->time_started + (*item)->time_to_wait < Time::time_since_start) {
+				(*item)->function();
+				if (!(*item)->is_repeating) {
+					invokes.remove(*item);
+					delete* item;
+					*item = nullptr;
+				}
+				else {
+					(*item)->time_started = Time::time_since_start;
+					(*item)->time_to_wait = (*item)->time_between;
+				}
+			}
+		}
+	}
+
 	ScriptsPreUpdate();
 	return UPDATE_CONTINUE;
 }
@@ -1110,6 +1130,57 @@ void ModuleObjects::DuplicateObjects()
 		}
 	}
 }
+
+void ModuleObjects::AddInvoke(std::function<void()> void_no_params_function, const float& second, Alien* alien)
+{
+	InvokeInfo* info = new InvokeInfo();
+	info->function = void_no_params_function;
+	info->time_to_wait = second;
+	info->alien = alien;
+	info->is_repeating = false;
+	info->time_started = Time::time_since_start;
+	info->ID = App->resources->GetRandomID();
+
+	invokes.push_back(info);
+}
+
+void ModuleObjects::AddInvokeRepeating(std::function<void()> void_no_params_function, const float& second, const float& seconds_between_each_call, Alien* alien)
+{
+	InvokeInfo* info = new InvokeInfo();
+	info->function = void_no_params_function;
+	info->time_to_wait = second;
+	info->alien = alien;
+	info->is_repeating = true;
+	info->time_between = seconds_between_each_call;
+	info->time_started = Time::time_since_start;
+	info->ID = App->resources->GetRandomID();
+
+	invokes.push_back(info);
+}
+
+void ModuleObjects::CancelInvokes(Alien* alien)
+{
+	auto invokes_list = invokes;
+	auto item = invokes_list.begin();
+	for (; item != invokes_list.end(); ++item) {
+		if ((*item)->alien == alien) {
+			invokes.remove(*item);
+			delete* item;
+			*item = nullptr;
+		}
+	}
+}
+
+//bool ModuleObjects::IsInvoking(std::function<void()> void_no_params_function)
+//{
+//	auto item = invokes.begin();
+//	for (; item != invokes.end(); ++item) {
+//		if ((*item). == CompareFunction<void>(void_no_params_function)) {
+//			return true;
+//		}
+//	}
+//	return false;
+//}
 
 void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 {

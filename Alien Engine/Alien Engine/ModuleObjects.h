@@ -10,11 +10,26 @@
 #include "Octree.h"
 #include "ComponentCamera.h"
 #include <stack>
+#include <functional>
 
 class ReturnZ;
 class ResourcePrefab;
 class ComponentScript;
 class Alien;
+
+struct InvokeInfo {
+	std::function<void()> function = nullptr;
+	float time_to_wait = 0.0F;
+	float time_started = 0.0F;
+	bool is_repeating = false;
+	float time_between = 0.0F;
+	Alien* alien = nullptr;
+	u64 ID = 0;
+
+	bool operator==(const InvokeInfo& info) {
+		return ID == info.ID;
+	}
+};
 
 struct Scene {
 
@@ -128,6 +143,11 @@ public:
 
 	void DuplicateObjects();
 
+	void AddInvoke(std::function<void()> void_no_params_function, const float& second, Alien* alien);
+	void AddInvokeRepeating(std::function<void()> void_no_params_function, const float& second, const float& seconds_between_each_call, Alien* alien);
+	void CancelInvokes(Alien* alien);
+	/*bool IsInvoking(std::function<void()> void_no_params_function);*/
+
 private:
 
 	void CreateJsonScript(GameObject* obj, JSONArraypack* to_save);
@@ -219,6 +239,7 @@ public:
 	ComponentScript* actual_script_loading = nullptr;
 
 	std::vector<std::string> tags;
+
 private:
 	// root
 	GameObject* base_game_object = nullptr;
@@ -229,4 +250,7 @@ private:
 	std::stack<ReturnZ*> save_fordward_actions;
 
 	std::vector<std::pair<u64, GameObject**>> to_add;
+
+	std::list<InvokeInfo*> invokes;
 };
+
