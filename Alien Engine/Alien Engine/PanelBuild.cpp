@@ -128,7 +128,7 @@ void PanelBuild::PanelLogic()
 		ImGui::SameLine();
 		if (ImGui::Button("Build and Run", { 100,0 }) && !build_folder_fullpath.empty()) {
 			CreateBuild();
-			// TODO: ShellExcecute
+			ShellExecute(NULL, NULL, exe_path.data(), NULL, NULL, SW_SHOW);
 		}
 
 		ImGui::EndPopup();
@@ -278,6 +278,7 @@ void PanelBuild::CreateBuild()
 			std::experimental::filesystem::copy(std::string(dir + "/" + files[i]).data(), std::string(folder_location + "/" + files[i]).data());
 		}
 	}
-
-	std::experimental::filesystem::copy(BUILD_EXE_PATH, std::string(folder_location + "/" + game_name + ".exe").data());
+	exe_path = std::string(folder_location + "/" + "Alien Engine" + ".exe");
+	// TODO: posar al json del buildsettings lescena add readme and license
+	std::experimental::filesystem::copy(BUILD_EXE_PATH, exe_path.data());
 }

@@ -49,10 +49,13 @@ void Application::LoadDll()
 	dll = std::string(curr_dir + std::string("/") + "AlienEngineScripts.dll");
 	file_system->NormalizePath(dll);
 
+#ifndef GAME_VERSION
 	if (file_system->Exists(DLL_CREATION_PATH)) {
 		remove(DLL_WORKING_PATH);
 		while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) {}
 	}
+#endif
+
 	scripts_dll = LoadLibrary(dll.data());
 }
 

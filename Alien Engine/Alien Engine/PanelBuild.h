@@ -29,6 +29,7 @@ private:
 	std::string license_fullpath;
 	std::string build_name;
 	std::string build_folder_fullpath;
+	std::string exe_path;
 	char game_name[MAX_PATH] = "MyAwesomeGame";
 	char folder_name[MAX_PATH] = "MyAwesomeFolder";
 };
