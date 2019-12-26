@@ -90,10 +90,6 @@ public:
 		InvokeRepeating();
 		IsInvoking();
 
-		StartCorrutine();
-		CancelCorrutin();
-		CancelAllCorrutines();
-
 		OnApplicationPause();
 		OnApplicationResume();
 		

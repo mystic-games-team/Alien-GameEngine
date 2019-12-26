@@ -404,15 +404,23 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 		}
 	}
 	else {	// make the name smaller
-		if (current_active_folder->children[i]->name.length() > 7) {
-			char new_char[8];
-			memcpy(new_char, current_active_folder->children[i]->name.data(), 7);
-			new_char[7] = '\0';
-			std::string name(std::string(new_char) + std::string("..."));
+		ImVec2 size = ImGui::CalcTextSize(current_active_folder->children[i]->name.data());
+		if (size.x > 55) {
+			std::string name = current_active_folder->children[i]->name.data();
+			
+			for (;;) {
+				name.pop_back();
+				if (ImGui::CalcTextSize(name.data()).x <= 55) {
+					name.pop_back();
+					break;
+				}
+			}
+			name += "...";
 			ImGui::Text(name.data());
 		}
-		else
+		else {
 			ImGui::Text(current_active_folder->children[i]->name.data());
+		}
 	}
 }
 
