@@ -80,8 +80,9 @@ Application::~Application()
 	}
 	json_files.clear();
 
-	if (shortcut_manager != nullptr)
+	if (shortcut_manager != nullptr) {
 		delete shortcut_manager;
+	}
 
 	FreeLibrary(scripts_dll);
 }

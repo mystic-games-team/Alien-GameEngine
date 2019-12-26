@@ -1555,6 +1555,21 @@ void GameObject::LockPrefab(bool lock)
 	}
 }
 
+void GameObject::GetAllPrefabRoots(std::vector<GameObject*>& roots)
+{
+	if (IsPrefab() && FindPrefabRoot() == this) {
+		roots.push_back(this);
+	}
+	else {
+		auto item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->GetAllPrefabRoots(roots);
+			}
+		}
+	}
+}
+
 void GameObject::ResetIDs()
 {
 	ID = App->resources->GetRandomID();

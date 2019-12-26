@@ -296,6 +296,8 @@ void PanelBuild::CreateBuild()
 			std::experimental::filesystem::copy(std::string(dir + "/" + files[i]).data(), std::string(folder_location + "/" + files[i]).data());
 		}
 	}
+
+	// TODO: change the name for the game name
 	exe_path = std::string(folder_location + "/" + "Alien Engine" + ".exe");
 	std::experimental::filesystem::copy(BUILD_EXE_PATH, exe_path.data());
 

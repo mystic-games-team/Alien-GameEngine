@@ -44,7 +44,7 @@ public:
 
 private:
 
-	Frustum* frustum=nullptr;
+	Frustum* frustum = nullptr;
 
 	float speed = 0.f;
 	float zoom_speed = 0.f;

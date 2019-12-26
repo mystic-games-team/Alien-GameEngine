@@ -6,6 +6,7 @@
 #include "imgui/imgui_internal.h"
 #include "PanelProject.h"
 #include "ResourceTexture.h"
+#include "ComponentTransform.h"
 
 
 PanelHierarchy::PanelHierarchy(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -417,7 +418,7 @@ void PanelHierarchy::RightClickMenu()
 								ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(obj->GetPrefabID());
 								if (prefab != nullptr) {
 									(*item)->ToDelete();
-									prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin());
+									prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin(), obj->GetComponent<ComponentTransform>()->GetGlobalPosition());
 								}
 								break;
 							}
