@@ -39,6 +39,7 @@ The user can check the editor options activating them in the renderer window.
 * Left Ctrl / Right Ctrl + D: Panel ImGui Demo
 * Left Ctrl / Right Ctrl + B: Edit Layouts
 * Left Ctrl / Right Ctrl + G: Panel Game
+* Left Ctrl / Right Ctrl + K: Panel Build Settings
 
 * Left Ctrl / Right Ctrl + S: Save Scene
 * Left Ctrl / Right Ctrl + N: New Scene
@@ -110,6 +111,8 @@ The user can check the editor options activating them in the renderer window.
 
 * Engine can be started with game mode. Some modules and ImGui is never created.
 
+* With cntrl + k or File->Build Settings user can create a automatic build for the game
+
 * Maybe HotReload?
 
 ## Panels
@@ -126,6 +129,10 @@ can change parents.
 * Panel Layout: Two types of panels, one to create a new layout and the other with info about all layouts (here you
 can remove or rename layouts).
 * Panel About: Base info about creators of this software and libraries used.
+* Panel TextEditor: Script Editor in engine.
+* Panel Project: Is an explorer where user can create folders, delete, move...
+* Panel Game: It shows the game view
+* Panel Build: To create a release for the game
 
 ## Tasks by Member Assigment 2
 
