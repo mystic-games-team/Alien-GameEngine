@@ -32,14 +32,14 @@ void PanelBuild::PanelLogic()
 		ImGui::BeginChild("#BuildChildSceneSelector", { 0, 175 }, true);
 
 		for (uint i = 0; i < scenes.size(); ++i) {
-			bool exists = selected == scenes[i].data();
+			bool exists = selected == i;
 			ImGui::Selectable(std::string("##" + scenes[i]).data(), exists, ImGuiSelectableFlags_AllowItemOverlap);
 			if (ImGui::IsItemClicked()) {
 				if (exists) {
-					selected = nullptr;
+					selected = -1;
 				}
 				else {
-					selected = scenes[i].data();
+					selected = i;
 				}
 			}
 			ImGui::SameLine();
@@ -121,13 +121,13 @@ void PanelBuild::PanelLogic()
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(45);
-		if (ImGui::Button("Build", { 100,0 }) && !build_folder_fullpath.empty()) {
+		if (ImGui::Button("Build", { 100,0 }) && !build_folder_fullpath.empty() && selected != -1) {
 			CreateBuild();
 			ShellExecute(NULL, NULL, folder_location.data(), NULL, NULL, SW_SHOW);
 			ChangeEnable();
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("Build and Run", { 100,0 }) && !build_folder_fullpath.empty()) {
+		if (ImGui::Button("Build and Run", { 100,0 }) && !build_folder_fullpath.empty() && selected != -1) {
 			CreateBuild();
 			ShellExecute(NULL, NULL, exe_path.data(), NULL, NULL, SW_SHOW);
 			ChangeEnable();
@@ -142,11 +142,12 @@ void PanelBuild::PanelLogic()
 
 void PanelBuild::OnPanelDesactive()
 {
-	selected = nullptr;
+	selected = -1;
 	scenes.clear();
 	readme_name.clear();
 	readme_fullpath.clear();
 	license_name.clear();
+	full_path_scenes.clear();
 	license_fullpath.clear();
 	build_name.clear();
 	build_folder_fullpath.clear();
@@ -159,6 +160,7 @@ void PanelBuild::GetAllScenes(const std::vector<std::string>& directories, const
 {
 	for (uint i = 0; i < files.size(); ++i) {
 		scenes.push_back(App->file_system->GetBaseFileName(files[i].data()));
+		full_path_scenes.push_back(std::string(current_folder + files[i]));
 	}
 	if (!directories.empty()) {
 		std::vector<std::string> new_files;
@@ -295,6 +297,30 @@ void PanelBuild::CreateBuild()
 		}
 	}
 	exe_path = std::string(folder_location + "/" + "Alien Engine" + ".exe");
-	// TODO: posar al json del buildsettings lescena add readme and license
 	std::experimental::filesystem::copy(BUILD_EXE_PATH, exe_path.data());
+
+	std::experimental::filesystem::remove(BUILD_SETTINGS_PATH);
+
+	JSON_Value* value = json_value_init_object();
+	JSON_Object* json_object = json_value_get_object(value);
+	json_serialize_to_file_pretty(value, BUILD_SETTINGS_PATH);
+
+	if (value != nullptr && json_object != nullptr) {
+		JSONfilepack* build = new JSONfilepack(BUILD_SETTINGS_PATH, json_object, value);
+		build->StartSave();
+
+		build->SetString("Build.FirstScene", full_path_scenes[selected]);
+		build->SetString("Build.GameName", game_name);
+
+		build->FinishSave();
+	}
+
+
+	if (!readme_fullpath.empty()) {
+		std::experimental::filesystem::copy(readme_fullpath.data(), std::string(folder_location + "/" + readme_name).data());
+	}
+
+	if (!license_fullpath.empty()) {
+		std::experimental::filesystem::copy(license_fullpath.data(), std::string(folder_location + "/" + license_name).data());
+	}
 }

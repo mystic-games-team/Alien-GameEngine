@@ -20,8 +20,9 @@ private:
 	void CreateBuild();
 private:
 
-	const char* selected = nullptr;
+	int selected = -1;
 	std::vector<std::string> scenes;
+	std::vector<std::string> full_path_scenes;
 
 	std::string readme_name;
 	std::string readme_fullpath;
