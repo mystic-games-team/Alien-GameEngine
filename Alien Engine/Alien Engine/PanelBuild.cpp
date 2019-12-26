@@ -1,5 +1,7 @@
 #include "PanelBuild.h"
 #include <shlobj.h>
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include <experimental/filesystem>
 
 PanelBuild::PanelBuild(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
@@ -48,11 +50,11 @@ void PanelBuild::PanelLogic()
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
-		ImGui::InputText("Game Title", game_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue);
+		ImGui::InputText("Game Title", game_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
-		ImGui::InputText("Folder Name", folder_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue);
+		ImGui::InputText("Folder Name", folder_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
@@ -119,9 +121,15 @@ void PanelBuild::PanelLogic()
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(45);
-		ImGui::Button("Build", { 100,0 });
+		if (ImGui::Button("Build", { 100,0 }) && !build_folder_fullpath.empty()) {
+			CreateBuild();
+			// TODO: open explorer to show
+		}
 		ImGui::SameLine();
-		ImGui::Button("Build and Run", { 100,0 });
+		if (ImGui::Button("Build and Run", { 100,0 }) && !build_folder_fullpath.empty()) {
+			CreateBuild();
+			// TODO: ShellExcecute
+		}
 
 		ImGui::EndPopup();
 	}
@@ -141,7 +149,7 @@ void PanelBuild::OnPanelDesactive()
 	build_name.clear();
 	build_folder_fullpath.clear();
 	strcpy(game_name, "MyAwesomeGame");
-	strcpy(folder_name, "FolderName");
+	strcpy(folder_name, "MyAwesomeFolder");
 }
 
 void PanelBuild::GetAllScenes(const std::vector<std::string>& directories, const std::vector<std::string>& files, const std::string& current_folder)
@@ -232,7 +240,7 @@ void PanelBuild::SelectFile(const char* text, std::string& to_fill, bool file, s
 					strcpy(filename, szPath);
 					full_path = filename;
 					App->file_system->NormalizePath(full_path);
-					to_fill = App->file_system->GetBaseFileName(full_path.data());
+					to_fill = full_path.substr(full_path.find_last_of("/") + 1);
 				}
 
 				pMalloc->Free(pidl);
@@ -244,4 +252,32 @@ void PanelBuild::SelectFile(const char* text, std::string& to_fill, bool file, s
 			}
 		}
 	}
+}
+
+void PanelBuild::CreateBuild()
+{
+	std::string folder_location = std::string(build_folder_fullpath + "/" + folder_name);
+	CreateDirectoryA(folder_location.data(), NULL);
+	std::vector<std::string> files;
+	std::vector<std::string> directories;
+	App->file_system->DiscoverFiles("", files, directories);
+	
+	static char curr_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, curr_dir);
+	std::string dir(curr_dir);
+	App->file_system->NormalizePath(dir);
+
+	for (uint i = 0; i < directories.size(); ++i) {
+		if (strcmp(directories[i].data(), "AlienEngineScripts") != 0 && strcmp(directories[i].data(), "Library") != 0) {
+			std::experimental::filesystem::copy(std::string(dir + "/" + directories[i]).data(), std::string(folder_location + "/" + directories[i]).data(), std::experimental::filesystem::copy_options::recursive);
+		}
+	}
+
+	for (uint i = 0; i < files.size(); ++i) {
+		if (strcmp(files[i].data(), "Alien Engine.exe") != 0 && strcmp(files[i].data(), "memleaks.log") != 0 && strcmp(files[i].data(), "memory.log") != 0) {
+			std::experimental::filesystem::copy(std::string(dir + "/" + files[i]).data(), std::string(folder_location + "/" + files[i]).data());
+		}
+	}
+
+	std::experimental::filesystem::copy(BUILD_EXE_PATH, std::string(folder_location + "/" + game_name + ".exe").data());
 }
