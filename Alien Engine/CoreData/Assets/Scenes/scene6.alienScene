@@ -1,0 +1,147 @@
+{
+    "Scene": {
+        "Name": "scene6",
+        "GameObjects": [
+            {
+                "Name": "Light",
+                "FamilyNumber": 1,
+                "ID": "717354890734014109",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            15,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3011957246834709611"
+                    },
+                    {
+                        "Type": 3,
+                        "DiffuseColor": [
+                            0.75,
+                            0.75,
+                            0.75,
+                            1
+                        ],
+                        "AmbienColor": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ],
+                        "Enabled": true,
+                        "ID": "2368971491698928197",
+                        "PrintIcon": true
+                    }
+                ]
+            },
+            {
+                "Name": "Minion",
+                "FamilyNumber": 1,
+                "ID": "224693907751636157",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "15734655480464923972",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            8.75,
+                            12.25,
+                            8.75
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7520176646196138050"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "5618465932035808133",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "15979036104549893341",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.58799999952316284,
+                            0.58799999952316284,
+                            0.58799999952316284,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "6194456810128094853",
+                        "HasTexture": true,
+                        "TextureID": "6974451830160532054",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 5,
+                        "ID": "14776186674182187205",
+                        "ResourceID": "10048217376534367663",
+                        "DataName": "Bullet",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "life_time",
+                                "float": 3
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "velocity",
+                                "float": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

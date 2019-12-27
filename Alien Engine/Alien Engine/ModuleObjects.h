@@ -32,18 +32,6 @@ struct InvokeInfo {
 	}
 };
 
-struct Scene {
-
-	Scene() {}
-	~Scene() {}
-
-	std::string name_without_extension;
-	std::string full_path;
-	bool need_to_save = false;
-	bool is_untitled = true;
-	ResourceScene* resource_scene = nullptr;
-};
-
 enum class PrimitiveType
 {
 	CUBE,
@@ -129,8 +117,8 @@ public:
 
 	// scenes
 	void SaveScene(ResourceScene* scene, const char* force_with_path = nullptr);
-	void LoadScene(const char* path, bool change_scene = true);
-	void CreateEmptyScene(const char* path);
+	void LoadScene(const char * name, bool change_scene = true);
+	void CreateEmptyScene(ResourceScene* scene);
 
 	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
@@ -160,7 +148,8 @@ private:
 	void DeleteReturns();
 
 public:
-	Scene current_scene;
+
+	ResourceScene* current_scene = nullptr;
 
 	std::list<Alien*> current_scripts;
 

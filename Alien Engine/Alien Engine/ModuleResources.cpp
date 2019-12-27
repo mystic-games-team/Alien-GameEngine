@@ -485,6 +485,19 @@ void ModuleResources::ReloadScripts()
 	App->ui->panel_project->RefreshAllNodes();
 }
 
+ResourceScene* ModuleResources::GetSceneByName(const char* name)
+{
+	auto item = resources.begin();
+	for (; item != resources.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_SCENE) {
+			if (App->StringCmp((*item)->GetName(), name)) {
+				return dynamic_cast<ResourceScene*>(*item);
+			}
+		}
+	}
+	return nullptr;
+}
+
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)
 {
 	FileNode* to_search = nullptr;

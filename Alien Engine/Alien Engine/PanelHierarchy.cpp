@@ -2,6 +2,7 @@
 #include "ModuleObjects.h"
 #include "GameObject.h"
 #include "PanelCreateObject.h"
+#include "ResourceScene.h"
 #include "ResourcePrefab.h"
 #include "imgui/imgui_internal.h"
 #include "PanelProject.h"
@@ -71,7 +72,7 @@ void PanelHierarchy::PanelLogic()
 		}
 	}
 	else {
-		ImGui::Text(std::string("Current Scene: " + App->objects->current_scene.name_without_extension).data());
+		ImGui::Text((App->objects->current_scene != nullptr) ? App->objects->current_scene->GetName() : "Untitled*");
 	}
 
 	ImGui::Spacing();

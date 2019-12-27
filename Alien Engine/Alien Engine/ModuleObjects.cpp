@@ -71,9 +71,6 @@ bool ModuleObjects::Start()
 	light_test->AddComponent(new ComponentTransform(light_test, { 0,15,2.5f }, { 0,0,0,0 }, { 1,1,1 }));
 	light_test->AddComponent(new ComponentLight(light_test));
 
-	current_scene.name_without_extension = "Untitled*";
-	current_scene.full_path = "Untitled*";
-	current_scene.is_untitled = true;
 	App->camera->fake_camera->frustum.pos = { 25,25,25 };
 	App->camera->fake_camera->Look(float3(0, 0, 0));
 #else 
@@ -961,12 +958,7 @@ void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_wi
 		scene->FinishSave();
 		delete scene;
 		if (force_with_path == nullptr) {
-			current_scene.full_path = to_load_scene->GetAssetsPath();
-			current_scene.is_untitled = false;
-			current_scene.name_without_extension = std::string(to_load_scene->GetName());
-			current_scene.need_to_save = false;
-			current_scene.resource_scene = to_load_scene;
-
+			current_scene = to_load_scene;
 			std::experimental::filesystem::copy(to_load_scene->GetAssetsPath(), to_load_scene->GetLibraryPath());
 		}
 	}
@@ -975,140 +967,135 @@ void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_wi
 	}
 }
 
-void ModuleObjects::LoadScene(const char* path, bool change_scene)
+void ModuleObjects::LoadScene(const char * name, bool change_scene)
 {
-	JSON_Value* value = json_parse_file(path);
-	JSON_Object* object = json_value_get_object(value);
+	ResourceScene* to_load = App->resources->GetSceneByName(name);
+	if (to_load != nullptr || !change_scene) {
 
-	if (value != nullptr && object != nullptr)
-	{
-		octree.Clear();
-		Gizmos::ClearAllCurrentGizmos();
+		std::string path;
+		if (to_load != nullptr) {
+			path = to_load->GetLibraryPath();
+		}
+		else {
+			path = name;
+		}
+
+		JSON_Value* value = json_parse_file(path.data());
+		JSON_Object* object = json_value_get_object(value);
+
+		if (value != nullptr && object != nullptr)
+		{
+			octree.Clear();
+			Gizmos::ClearAllCurrentGizmos();
+			delete base_game_object;
+			game_objects_selected.clear();
+			base_game_object = new GameObject();
+			base_game_object->ID = 0;
+			base_game_object->is_static = true;
+
+			current_scripts.clear();
+
+			JSONfilepack* scene = new JSONfilepack(path.data(), object, value);
+
+			JSONArraypack* game_objects = scene->GetArray("Scene.GameObjects");
+
+			// first is family number, second parentID, third is array index in the json file
+			std::vector<std::tuple<uint, u64, uint>> objects_to_create;
+
+			for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
+				uint family_number = game_objects->GetNumber("FamilyNumber");
+				u64 parentID = std::stoull(game_objects->GetString("ParentID"));
+				objects_to_create.push_back({ family_number,parentID, i });
+				game_objects->GetAnotherNode();
+			}
+			std::sort(objects_to_create.begin(), objects_to_create.end(), ModuleObjects::SortByFamilyNumber);
+			game_objects->GetFirstNode();
+			std::vector<GameObject*> objects_created;
+
+			std::vector<std::tuple<uint, u64, uint>>::iterator item = objects_to_create.begin();
+			for (; item != objects_to_create.end(); ++item) {
+				game_objects->GetNode(std::get<2>(*item));
+				GameObject* obj = new GameObject();
+				if (std::get<0>(*item) == 1) { // family number == 1 so parent is the base game object
+					obj->LoadObject(game_objects, base_game_object);
+				}
+				else { // search parent
+					std::vector<GameObject*>::iterator objects = objects_created.begin();
+					for (; objects != objects_created.end(); ++objects) {
+						if ((*objects)->ID == std::get<1>(*item)) {
+							obj->LoadObject(game_objects, *objects);
+							break;
+						}
+					}
+				}
+				objects_created.push_back(obj);
+			}
+			delete scene;
+
+			if (change_scene) {
+				struct stat file;
+				stat(path.data(), &file);
+
+				// refresh prefabs if are not locked
+				std::vector<GameObject*> prefab_roots;
+				base_game_object->GetAllPrefabRoots(prefab_roots);
+
+				for (uint i = 0; i < prefab_roots.size(); ++i) {
+					if (prefab_roots[i] != nullptr && !prefab_roots[i]->prefab_locked) {
+						ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab_roots[i]->GetPrefabID());
+						if (prefab != nullptr && prefab->GetID() != 0) {
+							struct stat prefab_file;
+							// TODO: when passing to library change
+							if (stat(prefab->GetAssetsPath(), &prefab_file) == 0) {
+								if (prefab_file.st_mtime > file.st_mtime) {
+									auto find = prefab_roots[i]->parent->children.begin();
+									for (; find != prefab_roots[i]->parent->children.end(); ++find) {
+										if (*find == prefab_roots[i]) {
+											prefab->ConvertToGameObjects(prefab_roots[i]->parent, find - prefab_roots[i]->parent->children.begin(), (*find)->GetComponent<ComponentTransform>()->GetGlobalPosition());
+											prefab_roots[i]->ToDelete();
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				current_scene = to_load;
+				DeleteReturns();
+			}
+
+			if (!to_add.empty()) {
+				auto item = to_add.begin();
+				for (; item != to_add.end(); ++item) {
+					GameObject* found = GetGameObjectByID((*item).first);
+					if (found != nullptr) {
+						*(*item).second = found;
+					}
+				}
+			}
+
+			if (!current_scripts.empty() && Time::IsInGameState()) {
+				InitScriptsOnPlay();
+			}
+		}
+		else {
+			LOG_ENGINE("Error loading scene %s", path.data());
+		}
+	}
+}
+
+void ModuleObjects::CreateEmptyScene(ResourceScene* scene)
+{
+	if (scene != nullptr) {
 		delete base_game_object;
 		game_objects_selected.clear();
 		base_game_object = new GameObject();
 		base_game_object->ID = 0;
 		base_game_object->is_static = true;
 
-		current_scripts.clear();
-
-		JSONfilepack* scene = new JSONfilepack(path, object, value);
-
-		JSONArraypack* game_objects = scene->GetArray("Scene.GameObjects");
-
-		// first is family number, second parentID, third is array index in the json file
-		std::vector<std::tuple<uint, u64, uint>> objects_to_create;
-
-		for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
-			uint family_number = game_objects->GetNumber("FamilyNumber");
-			u64 parentID = std::stoull(game_objects->GetString("ParentID"));
-			objects_to_create.push_back({ family_number,parentID, i });
-			game_objects->GetAnotherNode();
-		}
-		std::sort(objects_to_create.begin(), objects_to_create.end(), ModuleObjects::SortByFamilyNumber);
-		game_objects->GetFirstNode();
-		std::vector<GameObject*> objects_created;
-
-		std::vector<std::tuple<uint, u64, uint>>::iterator item = objects_to_create.begin();
-		for (; item != objects_to_create.end(); ++item) {
-			game_objects->GetNode(std::get<2>(*item));
-			GameObject* obj = new GameObject();
-			if (std::get<0>(*item) == 1) { // family number == 1 so parent is the base game object
-				obj->LoadObject(game_objects, base_game_object);
-			}
-			else { // search parent
-				std::vector<GameObject*>::iterator objects = objects_created.begin();
-				for (; objects != objects_created.end(); ++objects) {
-					if ((*objects)->ID == std::get<1>(*item)) {
-						obj->LoadObject(game_objects, *objects);
-						break;
-					}
-				}
-			}
-			objects_created.push_back(obj);
-		}
-		delete scene;
-
-		struct stat file;
-		stat(path, &file);
-
-		// refresh prefabs if are not locked
-		std::vector<GameObject*> prefab_roots;
-		base_game_object->GetAllPrefabRoots(prefab_roots);
-
-		for (uint i = 0; i < prefab_roots.size(); ++i) {
-			if (prefab_roots[i] != nullptr && !prefab_roots[i]->prefab_locked) {
-				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab_roots[i]->GetPrefabID());
-				if (prefab != nullptr && prefab->GetID() != 0) {
-					struct stat prefab_file;
-					// TODO: when passing to library change
-					if (stat(prefab->GetAssetsPath(), &prefab_file) == 0) {
-						if (prefab_file.st_mtime > file.st_mtime) {
-							auto find = prefab_roots[i]->parent->children.begin();
-							for (; find != prefab_roots[i]->parent->children.end(); ++find) {
-								if (*find == prefab_roots[i]) {
-									prefab->ConvertToGameObjects(prefab_roots[i]->parent, find - prefab_roots[i]->parent->children.begin(), (*find)->GetComponent<ComponentTransform>()->GetGlobalPosition());
-									prefab_roots[i]->ToDelete();
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		if (change_scene) {
-			std::string path_normalized = path;
-			App->file_system->NormalizePath(path_normalized);
-			current_scene.full_path = path;
-			current_scene.is_untitled = false;
-			current_scene.name_without_extension = App->file_system->GetBaseFileName(path_normalized.data());
-			current_scene.need_to_save = false;
-			DeleteReturns();
-		}
-
-		if (!to_add.empty()) {
-			auto item = to_add.begin();
-			for (; item != to_add.end(); ++item) {
-				GameObject* found = GetGameObjectByID((*item).first);
-				if (found != nullptr) {
-					*(*item).second = found;
-				}
-			}
-		}
-
-		if (!current_scripts.empty() && Time::IsInGameState()) {
-			InitScriptsOnPlay();
-		}
+		current_scene = scene;
 	}
-	else {
-		LOG_ENGINE("Error loading scene %s", path);
-	}
-}
-
-void ModuleObjects::CreateEmptyScene(const char* path)
-{
-	delete base_game_object;
-	game_objects_selected.clear();
-	base_game_object = new GameObject();
-	base_game_object->ID = 0;
-	base_game_object->is_static = true;
-
-	// try to remove the file because the user might have selected a name that already exists
-	remove(path);
-
-	JSON_Value* value = json_value_init_object();
-	JSON_Object* object = json_value_get_object(value);
-	json_serialize_to_file_pretty(value, path);
-
-	std::string path_normalized = path;
-	App->file_system->NormalizePath(path_normalized);
-	current_scene.full_path = path;
-	current_scene.is_untitled = false;
-	current_scene.name_without_extension = App->file_system->GetBaseFileName(path_normalized.data());
-	current_scene.need_to_save = false;
-
 }
 
 void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number)

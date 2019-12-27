@@ -180,11 +180,6 @@ void FileNode::ResetPaths()
 				scene->SetName(new_name.data());
 			}
 		}
-		// TODO: remove Scene structure and just keep a pointer to resource scene
-		//if (App->StringCmp(App->objects->current_scene.full_path.data(), std::string(curr_dir + std::string("/") + current_active_folder->path + current_active_folder->children[i]->name).data())) {
-		//	App->objects->current_scene.full_path = std::string(curr_dir + current_active_folder->path + std::string("/") + name_before_rename).data();
-		//	App->objects->current_scene.name_without_extension = App->file_system->GetBaseFileName(App->objects->current_scene.full_path.data());
-		//}
 		break; }
 	default: {
 		LOG_ENGINE("Type in reset paths not added");
@@ -217,12 +212,10 @@ void FileNode::RemoveResourceOfGameObjects()
 		case FileDropType::SCENE:
 			static char curr_dir[MAX_PATH];
 			GetCurrentDirectoryA(MAX_PATH, curr_dir);
-			if (App->StringCmp(App->objects->current_scene.full_path.data(), std::string(curr_dir + std::string("/") + path + name).data())) {
-				App->objects->CreateRoot();
-				App->objects->current_scene.name_without_extension = "Untitled*";
-				App->objects->current_scene.full_path = "Untitled*";
-				App->objects->current_scene.need_to_save = false;
-				App->objects->current_scene.is_untitled = true;
+			if (App->objects->current_scene != nullptr) {
+				if (App->StringCmp(App->file_system->GetBaseFileName(name.data()).data(), App->objects->current_scene->GetName())) {
+					App->objects->current_scene = nullptr;
+				}
 			}
 			break;
 		case FileDropType::SCRIPT:

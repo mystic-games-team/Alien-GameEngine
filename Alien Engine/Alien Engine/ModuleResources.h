@@ -12,6 +12,7 @@ enum class FileDropType;
 class Resource;
 class ResourceModel;
 class ResourceMesh;
+class ResourceScene;
 class ResourceTexture;
 
 struct Icons {
@@ -79,6 +80,8 @@ public:
 
 	void ReadHeaderFile(const char* path, std::vector<std::string>& current_scripts);
 	void ReloadScripts();
+
+	ResourceScene* GetSceneByName(const char* name);
 
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
