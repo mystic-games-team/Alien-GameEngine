@@ -28,6 +28,13 @@ public:
 	virtual void OnDrawGizmos() {}
 	virtual void OnDrawGizmosSelected() {}
 
+	// called to the script attached before the camera start culling
+	virtual void OnPreCull() {}
+	// called to the script attached after a camera finishes rendering
+	virtual void OnPreRender() {}
+	// called to the script attached after a camera finishes rendering
+	virtual void OnPostRender() {}
+
 	virtual void CleanUp() {}
 
 	bool IsScriptEnabled() const;
@@ -87,16 +94,8 @@ public:
 	// Extras
 	// TODO: https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
 	/*
-		SendMessage();
-		SendMessageUpWards
-
-		OnApplicationPause();
-		OnApplicationResume();
-		
 		OnBecameInvisible();
 		OnBecameVisible();
-
-		OnGUI();
 
 		OnMouseDown();
 		OnMouseUp();
@@ -104,11 +103,6 @@ public:
 		OnMouseEnter();
 		OnMouseExit();
 		OnMouseOver();
-
-		OnPostRender(); // when a camera finished rendering
-		OnRenderObject(); // when all cameras finished rendering
-		OnPreCull();
-		OnPreRender();
 	*/
 
 public:

@@ -235,8 +235,9 @@ update_status ModuleObjects::PostUpdate(float dt)
 			App->renderer3D->RenderGrid();
 
 		if (base_game_object->HasChildren()) {
-			std::vector<std::pair<float, GameObject*>> to_draw;
 
+			OnPreCull(App->renderer3D->actual_game_camera);
+			std::vector<std::pair<float, GameObject*>> to_draw;
 			octree.SetStaticDrawList(&to_draw, App->renderer3D->actual_game_camera);
 
 			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
@@ -247,15 +248,17 @@ update_status ModuleObjects::PostUpdate(float dt)
 			}
 
 			std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+
+			OnPreRender(App->renderer3D->actual_game_camera);
 			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
 			for (; it != to_draw.end(); ++it) {
 				if ((*it).second != nullptr) {
 					(*it).second->DrawGame();
 				}
 			}
-		}
-	
 
+			OnPostRender(App->renderer3D->actual_game_camera);
+		}
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 
@@ -300,7 +303,9 @@ update_status ModuleObjects::PostUpdate(float dt)
 	}
 #else
 
-	if (base_game_object->HasChildren()) {
+	if (base_game_object->HasChildren() && App->renderer3D->actual_game_camera != nullptr) {
+		
+		OnPreCull(App->renderer3D->actual_game_camera);
 		std::vector<std::pair<float, GameObject*>> to_draw;
 
 		octree.SetStaticDrawList(&to_draw, App->renderer3D->actual_game_camera);
@@ -315,12 +320,14 @@ update_status ModuleObjects::PostUpdate(float dt)
 		}
 
 		std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+		OnPreRender(App->renderer3D->actual_game_camera);
 		std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
 		for (; it != to_draw.end(); ++it) {
 			if ((*it).second != nullptr) {
 				(*it).second->DrawGame();
 			}
 		}
+		OnPostRender(App->renderer3D->actual_game_camera);
 	}
 #endif
 	return UPDATE_CONTINUE;
@@ -491,7 +498,9 @@ void ModuleObjects::InitScriptsOnPlay() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS AWAKE");
 				}
+				#ifndef GAME_VERSION
 				App->ui->SetError();
+				#endif
 			}
 		}
 	}
@@ -510,7 +519,9 @@ void ModuleObjects::InitScriptsOnPlay() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS START");
 				}
+				#ifndef GAME_VERSION
 				App->ui->SetError();
+				#endif
 			}
 		}
 	}
@@ -533,7 +544,9 @@ void ModuleObjects::ScriptsPreUpdate() const
 					catch (...) {
 						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS PREUPDATE");
 					}
+					#ifndef GAME_VERSION
 					App->ui->SetError();
+					#endif
 				}
 			}
 		}
@@ -557,7 +570,9 @@ void ModuleObjects::ScriptsUpdate() const
 					catch (...) {
 						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS UPDATE");
 					}
+					#ifndef GAME_VERSION
 					App->ui->SetError();
+					#endif
 				}
 			}
 		}
@@ -581,7 +596,9 @@ void ModuleObjects::ScriptsPostUpdate() const
 					catch (...) {
 						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS POSTUPDATE");
 					}
+					#ifndef GAME_VERSION
 					App->ui->SetError();
+					#endif
 				}
 			}
 		}
@@ -604,7 +621,9 @@ void ModuleObjects::CleanUpScriptsOnStop() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS CLEANUP");
 				}
+				#ifndef GAME_VERSION
 				App->ui->SetError();
+				#endif
 			}
 		}
 	}
@@ -627,7 +646,9 @@ void ModuleObjects::OnDrawGizmos() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOS");
 				}
+				#ifndef GAME_VERSION
 				App->ui->SetError();
+				#endif
 			}
 		}
 	}
@@ -651,7 +672,9 @@ void ModuleObjects::OnDrawGizmos() const
 							catch (...) {
 								LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOSSELECTED");
 							}
+							#ifndef GAME_VERSION
 							App->ui->SetError();
+							#endif
 						}
 					}
 				}
@@ -659,6 +682,96 @@ void ModuleObjects::OnDrawGizmos() const
 		}
 	}
 	Gizmos::RemoveGizmos();
+}
+
+void ModuleObjects::OnPreCull(ComponentCamera* camera) const
+{
+	if (camera != nullptr && camera->game_object_attached != nullptr) {
+		std::vector<ComponentScript*> script_cameras = camera->game_object_attached->GetComponents<ComponentScript>();
+		auto item = script_cameras.begin();
+		for (; item != script_cameras.end(); ++item) {
+			if (*item != nullptr && (*item)->need_alien && (*item)->data_ptr != nullptr) {
+				Alien* alien = (Alien*)(*item)->data_ptr;
+				if (alien != nullptr) {
+					try {
+						alien->OnPreCull();
+					}
+					catch (...)
+					{
+						try {
+							LOG_ENGINE("CODE ERROR IN THE ONPRECULL OF THE SCRIPT: %s", alien->data_name);
+						}
+						catch (...) {
+							LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONPRECULL");
+						}
+						#ifndef GAME_VERSION
+						App->ui->SetError();
+						#endif
+					}
+				}
+			}
+		}
+	} 
+}
+
+void ModuleObjects::OnPreRender(ComponentCamera* camera) const
+{
+	if (camera != nullptr && camera->game_object_attached != nullptr) {
+		std::vector<ComponentScript*> script_cameras = camera->game_object_attached->GetComponents<ComponentScript>();
+		auto item = script_cameras.begin();
+		for (; item != script_cameras.end(); ++item) {
+			if (*item != nullptr && (*item)->need_alien && (*item)->data_ptr != nullptr) {
+				Alien* alien = (Alien*)(*item)->data_ptr;
+				if (alien != nullptr) {
+					try {
+						alien->OnPreRender();
+					}
+					catch (...)
+					{
+						try {
+							LOG_ENGINE("CODE ERROR IN THE ONPRERENDER OF THE SCRIPT: %s", alien->data_name);
+						}
+						catch (...) {
+							LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONPRERENDER");
+						}
+						#ifndef GAME_VERSION
+						App->ui->SetError();
+						#endif
+					}
+				}
+			}
+		}
+	}
+}
+
+void ModuleObjects::OnPostRender(ComponentCamera* camera) const
+{
+	if (camera != nullptr && camera->game_object_attached != nullptr) {
+		std::vector<ComponentScript*> script_cameras = camera->game_object_attached->GetComponents<ComponentScript>();
+		auto item = script_cameras.begin();
+		for (; item != script_cameras.end(); ++item) {
+			if (*item != nullptr && (*item)->need_alien && (*item)->data_ptr != nullptr) {
+				Alien* alien = (Alien*)(*item)->data_ptr;
+				if (alien != nullptr) {
+					try {
+						alien->OnPostRender();
+					}
+					catch (...)
+					{
+						try {
+							LOG_ENGINE("CODE ERROR IN THE ONPOSTRENDER OF THE SCRIPT: %s", alien->data_name);
+						}
+						catch (...) {
+							LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONPOSTRENDER");
+						}
+						#ifndef GAME_VERSION
+						App->ui->SetError();
+						#endif
+					}
+				}
+			}
+		}
+	}
 }
 
 GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent, bool set_selected)

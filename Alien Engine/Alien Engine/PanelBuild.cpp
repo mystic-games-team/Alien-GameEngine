@@ -51,6 +51,11 @@ void PanelBuild::PanelLogic()
 
 		ImGui::SetCursorPosX(10);
 		ImGui::InputText("Game Title", game_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
+		if (ImGui::IsItemHovered()) {
+			ImGui::BeginTooltip();
+			ImGui::Text("Game Title is working in progress, it will come soon, sorry :(");
+			ImGui::EndTooltip();
+		}
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);

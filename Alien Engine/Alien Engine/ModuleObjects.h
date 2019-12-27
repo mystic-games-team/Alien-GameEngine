@@ -105,6 +105,9 @@ public:
 	void ScriptsPostUpdate() const;
 	void CleanUpScriptsOnStop() const;
 	void OnDrawGizmos() const;
+	void OnPreCull(ComponentCamera* camera) const;
+	void OnPreRender(ComponentCamera* camera) const;
+	void OnPostRender(ComponentCamera* camera) const;
 	/*---------Scripts Calls-----------*/
 
 	// if parent is nullptr, parent will be the invisible game object
