@@ -253,7 +253,6 @@ void PanelSceneSelector::MenuSaveCurrentScene()
 			menu_save_current = false;
 		}
 		
-
 		ImGui::SameLine();
 
 		if (ImGui::Button("Don't save", { 80,20 })) {

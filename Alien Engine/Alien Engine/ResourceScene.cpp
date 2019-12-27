@@ -48,7 +48,6 @@ bool ResourceScene::CreateMetaData(const u64& force_id)
 
 bool ResourceScene::ReadBaseInfo(const char* assets_file_path)
 {
-	// TODO: ha dhaver dos fitxers de scene en els assets, si no es troba el de la library que es torni a crear
 	path = std::string(assets_file_path);
 	name = App->file_system->GetBaseFileName(path.data());
 
@@ -60,7 +59,7 @@ bool ResourceScene::ReadBaseInfo(const char* assets_file_path)
 		meta_data_path = LIBRARY_SCENES_FOLDER + std::to_string(ID) + ".alienScene";
 
 		if (!App->file_system->Exists(meta_data_path.data())) {
-			App->file_system->Copy(meta_path.data(), meta_data_path.data());
+			App->file_system->Copy(assets_file_path, meta_data_path.data());
 		}
 
 		App->resources->AddResource(this);
