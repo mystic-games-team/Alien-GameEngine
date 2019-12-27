@@ -87,6 +87,7 @@ private:
 	void ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
 	void ReadModels(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
 	void ReadPrefabs(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
+	void ReadScenes(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
 	void ReadScripts();
 
 	void GetAllScriptsPath(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder, std::vector<std::string>* scripts);

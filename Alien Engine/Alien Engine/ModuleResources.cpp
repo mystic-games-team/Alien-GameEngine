@@ -7,6 +7,7 @@
 #include "Application.h"
 #include "ResourceTexture.h"
 #include "RandomHelper.h"
+#include "ResourceScene.h"
 #include "PanelProject.h"
 #include "ResourcePrefab.h"
 #include "FileNode.h"
@@ -533,6 +534,14 @@ void ModuleResources::ReadAllMetaData()
 
 	// Init Scripts
 	ReadScripts();
+
+	// Init Scenes
+	App->file_system->DiscoverFiles(SCENE_FOLDER, files, directories);
+
+	ReadScenes(directories, files, SCENE_FOLDER);
+
+	files.clear();
+	directories.clear();
 }
 
 void ModuleResources::ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
@@ -593,6 +602,29 @@ void ModuleResources::ReadPrefabs(std::vector<std::string> directories, std::vec
 			std::string dir = current_folder + directories[i] + "/";
 			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
 			ReadPrefabs(new_directories, new_files, dir);
+		}
+	}
+}
+
+void ModuleResources::ReadScenes(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
+{
+	for (uint i = 0; i < files.size(); ++i) {
+		if (files[i].find("_meta.alien") == std::string::npos) {
+			ResourceScene* scene = new ResourceScene();
+			if (!scene->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
+				LOG_ENGINE("Error loading %s", files[i].data());
+				delete scene;
+			}
+		}
+	}
+	if (!directories.empty()) {
+		std::vector<std::string> new_files;
+		std::vector<std::string> new_directories;
+
+		for (uint i = 0; i < directories.size(); ++i) {
+			std::string dir = current_folder + directories[i] + "/";
+			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
+			ReadModels(new_directories, new_files, dir);
 		}
 	}
 }

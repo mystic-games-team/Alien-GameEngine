@@ -40,14 +40,14 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 	const char* dirs[] = {
 		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER, TEXTURES_FOLDER,
 		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER, SCRIPTS_FOLDER, SCENE_FOLDER,
-		ASSETS_PREFAB_FOLDER, SCRIPTS_DLL_OUTPUT
+		ASSETS_PREFAB_FOLDER, SCRIPTS_DLL_OUTPUT, LIBRARY_SCENES_FOLDER
 	};
 #else
 	// Make sure standard paths exist
 	const char* dirs[] = {
 		ASSETS_FOLDER, LIBRARY_FOLDER, CONFIGURATION_FOLDER, MODELS_FOLDER, TEXTURES_FOLDER,
 		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER, SCRIPTS_FOLDER, SCENE_FOLDER,
-		ASSETS_PREFAB_FOLDER
+		ASSETS_PREFAB_FOLDER, LIBRARY_SCENES_FOLDER
 };
 #endif
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
@@ -387,6 +387,23 @@ void ModuleFileSystem::NormalizePath(std::string& full_path) const
 		else
 			*it = (*it);
 	}
+}
+
+bool ModuleFileSystem::CreateNewFile(const char* path)
+{
+	JSON_Value* value = json_value_init_object();
+	JSON_Object* json_object = json_value_get_object(value);
+	json_serialize_to_file_pretty(value, path);
+
+	if (value != nullptr && json_object != nullptr) {
+		JSONfilepack* file = new JSONfilepack(path, json_object, value);
+		file->StartSave();
+		file->FinishSave();
+		delete file;
+
+		return true;
+	}
+	return false;
 }
 
 unsigned int ModuleFileSystem::Load(const char* path, const char* file, char** buffer) const

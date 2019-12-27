@@ -16,6 +16,7 @@ struct aiFileIO;
 #define LIBRARY_MODELS_FOLDER "Library/Models/"
 #define LIBRARY_MESHES_FOLDER "Library/Meshes/"
 #define LIBRARY_TEXTURES_FOLDER "Library/Textures/"
+#define LIBRARY_SCENES_FOLDER "Library/Scenes/"
 #define CONFIGURATION_FOLDER "Configuration/"
 #define CONFIGURATION_LAYOUTS_FOLDER "Configuration/Layouts/"
 #define MODELS_FOLDER "Assets/Models/"
@@ -91,6 +92,8 @@ public:
 	void SplitFilePath(const char* full_path, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
 	void NormalizePath(char* full_path) const;
 	void NormalizePath(std::string& full_path) const;
+
+	bool CreateNewFile(const char* path);
 
 	// Open for Read/Write
 	unsigned int Load(const char* path, const char* file, char** buffer) const;

@@ -7,6 +7,7 @@
 #include "ResourceModel.h"
 #include "ResourcePrefab.h"
 #include "ResourceScript.h"
+#include "ResourceScene.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 
@@ -379,15 +380,6 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 					current_active_folder->children[i]->path = current_active_folder->children[i]->parent->path + name_before_rename + "/";
 				}
 
-				if (current_active_folder->children[i]->type == FileDropType::SCENE) {
-					static char curr_dir[MAX_PATH];
-					GetCurrentDirectoryA(MAX_PATH, curr_dir);
-					if (App->StringCmp(App->objects->current_scene.full_path.data(), std::string(curr_dir + std::string("/") + current_active_folder->path + current_active_folder->children[i]->name).data())) {
-						App->objects->current_scene.full_path = std::string(curr_dir + current_active_folder->path + std::string("/") + name_before_rename).data();
-						App->objects->current_scene.name_without_extension = App->file_system->GetBaseFileName(App->objects->current_scene.full_path.data());
-					}
-				}
-
 				current_active_folder->children[i]->name = name_before_rename;
 
 				current_active_folder->children[i]->ResetPaths();
@@ -464,8 +456,9 @@ void PanelProject::RightClickToWindow(bool pop_up_item)
 bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 {
 	bool ret = false;
-	if (node->is_file || ImGui::IsMouseDragging())
+	if (node->is_file || ImGui::IsMouseDragging()) {
 		return ret;
+	}
 
 	if (ImGui::BeginDragDropTargetCustom(ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()), ImGui::GetID("##ProjectChild"))) {
 		const ImGuiPayload* payload = ImGui::GetDragDropPayload();

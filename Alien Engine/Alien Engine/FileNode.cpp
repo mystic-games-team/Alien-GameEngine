@@ -3,8 +3,10 @@
 #include "ResourceModel.h"
 #include "ResourceTexture.h"
 #include "ResourcePrefab.h"
+#include "ResourceScene.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
+#include <fstream>
 #include "Prefab.h"
 FileNode::FileNode()
 {
@@ -142,7 +144,48 @@ void FileNode::ResetPaths()
 			}
 		}
 		break; }
-
+	case FileDropType::SCENE: {
+		static char curr_dir[MAX_PATH];
+		GetCurrentDirectoryA(MAX_PATH, curr_dir);
+		std::string meta_name = App->file_system->GetPathWithoutExtension(path + name) + "_meta.alien";
+		u64 ID = App->resources->GetIDFromAlienPath(meta_name.data());
+		if (ID != 0) {
+			ResourceScene* scene = (ResourceScene*)App->resources->GetResourceWithID(ID);
+			scene->SetAssetsPath(std::string(path + name).data());
+			if (scene != nullptr) {
+				std::ifstream file(scene->GetAssetsPath());
+				std::string file_str;
+				std::string new_name = App->file_system->GetBaseFileName(name.data());
+				if (file.is_open()) {
+					std::string line;
+					bool done = false;
+					while (std::getline(file, line)) {
+						if (!done && line.find(scene->GetName()) != std::string::npos) {
+							line.replace(line.find(scene->GetName()), std::string(scene->GetName()).size(), new_name.data());
+							done = true;
+						}
+						if (file_str.empty()) {
+							file_str = line;
+						}
+						else {
+							file_str += std::string("\n") + line;
+						}
+					}
+					file.close();
+				}
+				remove(scene->GetAssetsPath());
+				remove(scene->GetLibraryPath());
+				App->file_system->Save(scene->GetAssetsPath(), file_str.data(), file_str.size());
+				App->file_system->Save(scene->GetLibraryPath(), file_str.data(), file_str.size());
+				scene->SetName(new_name.data());
+			}
+		}
+		// TODO: remove Scene structure and just keep a pointer to resource scene
+		//if (App->StringCmp(App->objects->current_scene.full_path.data(), std::string(curr_dir + std::string("/") + current_active_folder->path + current_active_folder->children[i]->name).data())) {
+		//	App->objects->current_scene.full_path = std::string(curr_dir + current_active_folder->path + std::string("/") + name_before_rename).data();
+		//	App->objects->current_scene.name_without_extension = App->file_system->GetBaseFileName(App->objects->current_scene.full_path.data());
+		//}
+		break; }
 	default: {
 		LOG_ENGINE("Type in reset paths not added");
 		break; }

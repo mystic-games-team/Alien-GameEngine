@@ -142,6 +142,7 @@ bool ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 	bool ret = false;
 	App->objects->in_cntrl_Z = true;
 
+	// if new case is added, remember to ret = true if succed
 	switch (action->action->type) {
 	case ReturnActions::DELETE_OBJECT: {
 		ActionDeleteObject* object = (ActionDeleteObject*)action->action;

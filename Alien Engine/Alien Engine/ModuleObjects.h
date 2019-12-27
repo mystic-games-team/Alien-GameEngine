@@ -16,6 +16,7 @@ class ReturnZ;
 class ResourcePrefab;
 class ComponentScript;
 class Alien;
+class ResourceScene;
 
 struct InvokeInfo {
 	std::function<void()> function = nullptr;
@@ -40,6 +41,7 @@ struct Scene {
 	std::string full_path;
 	bool need_to_save = false;
 	bool is_untitled = true;
+	ResourceScene* resource_scene = nullptr;
 };
 
 enum class PrimitiveType
@@ -126,7 +128,7 @@ public:
 	void ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ = true);
 
 	// scenes
-	void SaveScene(const char* path, bool change_scene = true);
+	void SaveScene(ResourceScene* scene, const char* force_with_path = nullptr);
 	void LoadScene(const char* path, bool change_scene = true);
 	void CreateEmptyScene(const char* path);
 

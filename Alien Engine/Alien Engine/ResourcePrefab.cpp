@@ -5,8 +5,9 @@
 #include "ComponentTransform.h"
 #include "PanelHierarchy.h"
 
-ResourcePrefab::ResourcePrefab()
+ResourcePrefab::ResourcePrefab() : Resource()
 {
+	type = ResourceType::RESOURCE_PREFAB;
 }
 
 ResourcePrefab::~ResourcePrefab()
@@ -177,7 +178,7 @@ void ResourcePrefab::OpenPrefabScene()
 	App->objects->enable_instancies = false;
 	App->objects->SwapReturnZ(false, false);
 	App->objects->prefab_scene = true;
-	App->objects->SaveScene("Library/save_prefab_scene.alienScene", false);
+	App->objects->SaveScene(nullptr, "Library/save_prefab_scene.alienScene");
 	App->objects->DeselectObjects();
 	App->objects->CreateRoot();
 	ConvertToGameObjects(App->objects->GetRoot(true));

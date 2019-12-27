@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
+#include "ResourceScene.h"
 #include "ComponentMesh.h"
 #include "ComponentLight.h"
 #include "ReturnZ.h"
@@ -906,20 +907,41 @@ void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_pare
 	}
 }
 
-void ModuleObjects::SaveScene(const char* path, bool change_scene)
+void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_with_path)
 {
-	// remove the last save and save the new
-	remove(path);
+	if (to_load_scene == nullptr && force_with_path == nullptr) {
+		LOG_ENGINE("Scene to load was nullptr");
+		return;
+	}
 
+	std::string meta_path;
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* object = json_value_get_object(value);
-	json_serialize_to_file_pretty(value, path);
+
+	if (force_with_path == nullptr) {
+		// remove the last save and save the new
+		remove(to_load_scene->GetLibraryPath());
+		meta_path = to_load_scene->GetAssetsPath();
+		remove(meta_path.data());
+	}
+	else {
+		meta_path = std::string(force_with_path);
+	}
+	
+	json_serialize_to_file_pretty(value, meta_path.data());
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* scene = new JSONfilepack(path, object, value);
+		JSONfilepack* scene = new JSONfilepack(meta_path.data(), object, value);
 
 		scene->StartSave();
+
+		if (force_with_path == nullptr) {
+			scene->SetString("Scene.Name", to_load_scene->GetName());
+		}
+		else {
+			scene->SetString("Scene.Name", "NONE");
+		}
 
 		if (!base_game_object->children.empty()) { // if base game objects has children, save them
 			JSONArraypack* game_objects = scene->InitNewArray("Scene.GameObjects");
@@ -938,13 +960,14 @@ void ModuleObjects::SaveScene(const char* path, bool change_scene)
 
 		scene->FinishSave();
 		delete scene;
-		if (change_scene) {
-			std::string path_normalized = path;
-			App->file_system->NormalizePath(path_normalized);
-			current_scene.full_path = path;
+		if (force_with_path == nullptr) {
+			current_scene.full_path = to_load_scene->GetAssetsPath();
 			current_scene.is_untitled = false;
-			current_scene.name_without_extension = App->file_system->GetBaseFileName(path_normalized.data());
+			current_scene.name_without_extension = std::string(to_load_scene->GetName());
 			current_scene.need_to_save = false;
+			current_scene.resource_scene = to_load_scene;
+
+			std::experimental::filesystem::copy(to_load_scene->GetAssetsPath(), to_load_scene->GetLibraryPath());
 		}
 	}
 	else {
