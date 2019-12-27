@@ -33,7 +33,7 @@ public:
 	static void GoBackOneAction();
 	static void GoFordwardOneAction();
 
-	static void DoAction(ReturnZ* to_return, bool is_fordward);
+	static bool DoAction(ReturnZ* to_return, bool is_fordward);
 
 public:
 

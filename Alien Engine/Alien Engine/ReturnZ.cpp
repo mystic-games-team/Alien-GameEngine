@@ -111,7 +111,13 @@ void ReturnZ::GoBackOneAction()
 	ReturnZ* to_return = App->objects->return_actions.top();
 	App->objects->return_actions.pop();
 
-	ReturnZ::DoAction(to_return, false);
+	while (!ReturnZ::DoAction(to_return, false)) {
+		if (App->objects->return_actions.empty()) {
+			break;
+		}
+		to_return = App->objects->return_actions.top();
+		App->objects->return_actions.pop();
+	}
 }
 
 void ReturnZ::GoFordwardOneAction()
@@ -122,11 +128,18 @@ void ReturnZ::GoFordwardOneAction()
 	ReturnZ* to_return = App->objects->fordward_actions.top();
 	App->objects->fordward_actions.pop();
 
-	ReturnZ::DoAction(to_return, true);
+	while (!ReturnZ::DoAction(to_return, true)) {
+		if (App->objects->fordward_actions.empty()) {
+			break;
+		}
+		to_return = App->objects->fordward_actions.top();
+		App->objects->fordward_actions.pop();
+	}
 }
 
-void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
+bool ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 {
+	bool ret = false;
 	App->objects->in_cntrl_Z = true;
 
 	switch (action->action->type) {
@@ -143,6 +156,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 			else {
 				ReturnZ::AddNewFordwarAction(ReturnActions::ADD_OBJECT, obj);
 			}
+			ret = true;
 		}
 
 		break; }
@@ -151,7 +165,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 		GameObject* to_delete = App->objects->GetGameObjectByID(object->objectID);
 		if (to_delete != nullptr) {
 			to_delete->ToDelete();
-
+			ret = true;
 			if (is_fordward) {
 				ReturnZ::AddNewAction(ReturnActions::DELETE_OBJECT, App->objects->GetGameObjectByID(object->objectID), false);
 			}
@@ -168,6 +182,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 		if (obj != nullptr) {
 			Component* component = obj->GetComponentWithID(comp->comp->compID);
 			if (component != nullptr) {
+				ret = true;
 				if (is_fordward) {
 					ReturnZ::AddNewAction(ReturnActions::CHANGE_COMPONENT, component, false);
 				}
@@ -220,6 +235,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 				else {
 					ReturnZ::AddNewFordwarAction(ReturnActions::ADD_COMPONENT, component);
 				}
+				ret = true;
 			}
 		}
 		break; }
@@ -243,6 +259,7 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 						delete component;
 						component = nullptr;
 						obj->components.erase(item);
+						ret = true;
 						break;
 					}
 				}
@@ -262,11 +279,14 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 				ReturnZ::AddNewFordwarAction(ReturnActions::REPARENT_HIERARCHY, obj);
 			}
 			App->objects->ReparentGameObject(obj, parent, false);
+			ret = true;
 		}
 		break; }
 	}
 	App->objects->in_cntrl_Z = false;
 	delete action;
+
+	return ret;
 }
 
 void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
