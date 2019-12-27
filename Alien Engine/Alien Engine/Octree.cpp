@@ -392,7 +392,11 @@ void Octree::Recalculate(GameObject* new_object)
 
 	// get all gameobjects in octree and get the min & max points
 	root->SaveGameObjects(&to_save, &new_section);
-	to_save.push_back(new_object);
+
+	if (new_object != nullptr) {
+		to_save.push_back(new_object);
+	}
+
 	// delete the old octree and create it again
 	Init(new_section.minPoint, new_section.maxPoint);
 

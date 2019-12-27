@@ -174,36 +174,36 @@ void ReturnZ::DoAction(ReturnZ* action, bool is_fordward)
 				else {
 					ReturnZ::AddNewFordwarAction(ReturnActions::CHANGE_COMPONENT, component);
 				}
+				switch (comp->comp->type) {
+				case ComponentType::TRANSFORM: {
+					ComponentTransform* transform = (ComponentTransform*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
+					CompZ::SetComponent(transform, comp->comp);
+					if (App->objects->octree.Exists(transform->game_object_attached)) {
+						App->objects->octree.Recalculate(nullptr);
+					}
+					break; }
+				case ComponentType::MESH: {
+					ComponentMesh* mesh = (ComponentMesh*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
+					CompZ::SetComponent(mesh, comp->comp);
+					break; }
+				case ComponentType::MATERIAL: {
+					ComponentMaterial* material = (ComponentMaterial*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
+					CompZ::SetComponent(material, comp->comp);
+					break; }
+				case ComponentType::CAMERA: {
+					ComponentCamera* camera = (ComponentCamera*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
+					CompZ::SetComponent(camera, comp->comp);
+					break; }
+				case ComponentType::SCRIPT: {
+					ComponentScript* script = (ComponentScript*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
+					CompZ::SetComponent(script, comp->comp);
+					break; }
+				case ComponentType::LIGHT: {
+					ComponentLight* light = (ComponentLight*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
+					CompZ::SetComponent(light, comp->comp);
+					break; }
+				}
 			}
-		}
-		switch (comp->comp->type) {
-		case ComponentType::TRANSFORM: {
-			ComponentTransform* transform = (ComponentTransform*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
-			CompZ::SetComponent(transform, comp->comp);
-			if (App->objects->octree.Exists(transform->game_object_attached)) {
-				App->objects->octree.Recalculate(nullptr);
-			}
-			break; }
-		case ComponentType::MESH: {
-			ComponentMesh* mesh = (ComponentMesh*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
-			CompZ::SetComponent(mesh, comp->comp);
-			break; }
-		case ComponentType::MATERIAL: {
-			ComponentMaterial* material = (ComponentMaterial*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
-			CompZ::SetComponent(material, comp->comp);
-			break; }
-		case ComponentType::CAMERA: {
-			ComponentCamera* camera = (ComponentCamera*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
-			CompZ::SetComponent(camera, comp->comp);
-			break; }
-		case ComponentType::SCRIPT: {
-			ComponentScript* script = (ComponentScript*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
-			CompZ::SetComponent(script, comp->comp);
-			break; }
-		case ComponentType::LIGHT: {
-			ComponentLight* light = (ComponentLight*)App->objects->GetGameObjectByID(comp->comp->objectID)->GetComponentWithID(comp->comp->compID);
-			CompZ::SetComponent(light, comp->comp);
-			break; }
 		}
 		break; }
 	case ReturnActions::DELETE_COMPONENT: {
@@ -345,80 +345,83 @@ void ReturnZ::SetDeleteObject(GameObject* obj, ActionDeleteObject* to_fill)
 
 void ReturnZ::CreateObject(ActionDeleteObject* obj)
 {
-	GameObject* new_obj = new GameObject();
-	new_obj->parent = App->objects->GetGameObjectByID(obj->object->parentID);
-	if (new_obj->parent != nullptr) {
-		new_obj->parent->AddChild(new_obj);
-	}
-	new_obj->enabled = obj->object->enabled;
-	new_obj->is_static = obj->object->is_static;
-	if (new_obj->is_static) {
-		App->objects->octree.Insert(new_obj, false);
-	}
-	new_obj->prefab_locked = obj->object->prefab_locked;
-	new_obj->SetPrefab(obj->object->prefabID);
-	new_obj->ID = obj->object->ID;
-	new_obj->SetName(obj->object->name.data());
-	if (obj->object->selected) {
-		App->objects->SetNewSelectedObject(new_obj);
-	}
-	new_obj->parent_enabled = obj->object->parent_enabled;
-	new_obj->parent_selected = obj->object->parent_selected;
+	GameObject* parent = App->objects->GetGameObjectByID(obj->object->parentID);
+	if (parent != nullptr) {
+		GameObject* new_obj = new GameObject();
+		new_obj->parent = parent;
+		if (new_obj->parent != nullptr) {
+			new_obj->parent->AddChild(new_obj);
+		}
+		new_obj->enabled = obj->object->enabled;
+		new_obj->is_static = obj->object->is_static;
+		if (new_obj->is_static) {
+			App->objects->octree.Insert(new_obj, false);
+		}
+		new_obj->prefab_locked = obj->object->prefab_locked;
+		new_obj->SetPrefab(obj->object->prefabID);
+		new_obj->ID = obj->object->ID;
+		new_obj->SetName(obj->object->name.data());
+		if (obj->object->selected) {
+			App->objects->SetNewSelectedObject(new_obj);
+		}
+		new_obj->parent_enabled = obj->object->parent_enabled;
+		new_obj->parent_selected = obj->object->parent_selected;
 
-	if (!obj->object->comps.empty()) {
-		std::vector<CompZ*>::iterator item = obj->object->comps.begin();
-		for (; item != obj->object->comps.end(); ++item) {
-			if (*item != nullptr) {
-				SDL_assert((uint)ComponentType::UNKNOWN == 4); // add new type to switch
-				switch ((*item)->type)
-				{
-				case ComponentType::TRANSFORM: {
-					CompTransformZ* transZ = (CompTransformZ*)(*item);
-					ComponentTransform* transform = new ComponentTransform(new_obj);
-					CompZ::SetComponent(transform, transZ);
-					new_obj->AddComponent(transform);
-					break; }
-				case ComponentType::MESH: {
-					ComponentMesh* mesh = new ComponentMesh(new_obj);
-					CompMeshZ* meshZ = (CompMeshZ*)(*item);
-					CompZ::SetComponent(mesh, meshZ);
-					new_obj->AddComponent(mesh);
-					break; }
-				case ComponentType::MATERIAL: {
-					ComponentMaterial* material = new ComponentMaterial(new_obj);
-					CompMaterialZ* materialZ = (CompMaterialZ*)(*item);
-					CompZ::SetComponent(material, materialZ);
-					new_obj->AddComponent(material);
-					break; }
-				case ComponentType::LIGHT: {
-					ComponentLight* light = new ComponentLight(new_obj);
-					CompLightZ* lightZ = (CompLightZ*)(*item);
-					CompZ::SetComponent(light, lightZ);
-					new_obj->AddComponent(light);
-					break; }
-				case ComponentType::CAMERA: {
-					ComponentCamera* camera = new ComponentCamera(new_obj);
-					CompCameraZ* cameraZ = (CompCameraZ*)(*item);
-					CompZ::SetComponent(camera, cameraZ);
-					new_obj->AddComponent(camera);
-					break; }
-				case ComponentType::SCRIPT: {
-					ComponentScript* script = new ComponentScript(new_obj);
-					CompScriptZ* scriptZ = (CompScriptZ*)(*item);
-					CompZ::SetComponent(script, scriptZ);
-					break; }
-				default:
-					break;
+		if (!obj->object->comps.empty()) {
+			std::vector<CompZ*>::iterator item = obj->object->comps.begin();
+			for (; item != obj->object->comps.end(); ++item) {
+				if (*item != nullptr) {
+					SDL_assert((uint)ComponentType::UNKNOWN == 4); // add new type to switch
+					switch ((*item)->type)
+					{
+					case ComponentType::TRANSFORM: {
+						CompTransformZ* transZ = (CompTransformZ*)(*item);
+						ComponentTransform* transform = new ComponentTransform(new_obj);
+						CompZ::SetComponent(transform, transZ);
+						new_obj->AddComponent(transform);
+						break; }
+					case ComponentType::MESH: {
+						ComponentMesh* mesh = new ComponentMesh(new_obj);
+						CompMeshZ* meshZ = (CompMeshZ*)(*item);
+						CompZ::SetComponent(mesh, meshZ);
+						new_obj->AddComponent(mesh);
+						break; }
+					case ComponentType::MATERIAL: {
+						ComponentMaterial* material = new ComponentMaterial(new_obj);
+						CompMaterialZ* materialZ = (CompMaterialZ*)(*item);
+						CompZ::SetComponent(material, materialZ);
+						new_obj->AddComponent(material);
+						break; }
+					case ComponentType::LIGHT: {
+						ComponentLight* light = new ComponentLight(new_obj);
+						CompLightZ* lightZ = (CompLightZ*)(*item);
+						CompZ::SetComponent(light, lightZ);
+						new_obj->AddComponent(light);
+						break; }
+					case ComponentType::CAMERA: {
+						ComponentCamera* camera = new ComponentCamera(new_obj);
+						CompCameraZ* cameraZ = (CompCameraZ*)(*item);
+						CompZ::SetComponent(camera, cameraZ);
+						new_obj->AddComponent(camera);
+						break; }
+					case ComponentType::SCRIPT: {
+						ComponentScript* script = new ComponentScript(new_obj);
+						CompScriptZ* scriptZ = (CompScriptZ*)(*item);
+						CompZ::SetComponent(script, scriptZ);
+						break; }
+					default:
+						break;
+					}
 				}
 			}
 		}
-	}
-	
-	if (!obj->object->children.empty()) {
-		std::vector<ActionDeleteObject*>::iterator item = obj->object->children.begin();
-		for (; item != obj->object->children.end(); ++item) {
-			if (*item != nullptr) {
-				ReturnZ::CreateObject((*item));
+
+		if (!obj->object->children.empty()) {
+			std::vector<ActionDeleteObject*>::iterator item = obj->object->children.begin();
+			for (; item != obj->object->children.end(); ++item) {
+				if (*item != nullptr) {
+					ReturnZ::CreateObject((*item));
+				}
 			}
 		}
 	}
