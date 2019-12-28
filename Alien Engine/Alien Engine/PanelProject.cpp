@@ -221,9 +221,10 @@ void PanelProject::SeeFiles()
 			}
 			// double click prefab
 			if (current_active_folder->children[i]->type == FileDropType::PREFAB && ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
-				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name).data()));
-				if (prefab != nullptr)
+				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name)) + "_meta.alien").data()));
+				if (prefab != nullptr) {
 					prefab->OpenPrefabScene();
+				}
 			}
 
 			if (ImGui::IsItemHovered() && current_active_file != current_active_folder->children[i]) {

@@ -98,11 +98,10 @@ void PanelScene::PanelLogic()
 
 			// drop prefab
 			if (node != nullptr && node->type == FileDropType::PREFAB) {
-				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name) + ".alienPrefab";
+				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name) + "_meta.alien";
 				u64 ID = App->resources->GetIDFromAlienPath(path.data());
 				if (ID != 0) {
 					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
-					prefab->SetLibraryPath(path.data());
 					prefab->ConvertToGameObjects(App->objects->GetRoot(false));
 					if (Time::IsInGameState()) {
 						Prefab::InitScripts(App->objects->GetRoot(false)->children.back());

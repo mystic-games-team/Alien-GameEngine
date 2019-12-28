@@ -15,20 +15,25 @@ ResourcePrefab::~ResourcePrefab()
 	prefab_references.clear();
 }
 
-bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder)
+bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder, u64 force_id)
 {
-	if (folder == nullptr)
-		path = std::string(ASSETS_PREFAB_FOLDER + std::string(object->GetName()) + ".alienPrefab");
-	else
-		path = std::string(std::string(folder) + std::string(object->GetName()) + ".alienPrefab");
-
 	std::vector<std::string> files;
 	std::vector<std::string> dir;
-
-	if (folder == nullptr)
+	if (folder == nullptr) {
+		path = std::string(ASSETS_PREFAB_FOLDER + std::string(object->GetName()) + ".alienPrefab");
 		App->file_system->DiscoverFiles(ASSETS_PREFAB_FOLDER, files, dir);
-	else
+	}
+	else {
+		path = std::string(std::string(folder) + std::string(object->GetName()) + ".alienPrefab");
 		App->file_system->DiscoverFiles(folder, files, dir);
+	}
+
+	if (force_id != 0) {
+		ID = force_id;
+	}
+	else {
+		ID = App->resources->GetRandomID();
+	}
 
 	if (!files.empty()) {
 		uint num_file = 0;
@@ -45,6 +50,7 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder)
 			}
 		}
 	}
+
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* json_object = json_value_get_object(value);
 	json_serialize_to_file_pretty(value, path.data());
@@ -53,8 +59,6 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder)
 		// save ID in assets
 		JSONfilepack* prefab_scene = new JSONfilepack(path.data(), json_object, value);
 		prefab_scene->StartSave();
-		ID = App->resources->GetRandomID();
-		prefab_scene->SetString("Meta.ID", std::to_string(ID));
 
 		SetName(App->file_system->GetBaseFileName(path.data()).data());
 
@@ -74,6 +78,21 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder)
 
 		App->resources->AddResource(this);
 
+		std::string meta_path = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
+		JSON_Value* meta_value = json_value_init_object();
+		JSON_Object* meta_object = json_value_get_object(meta_value);
+		json_serialize_to_file_pretty(meta_value, meta_path.data());
+
+		if (meta_value != nullptr && meta_object != nullptr) {
+			JSONfilepack* meta = new JSONfilepack(meta_path.data(), meta_object, meta_value);
+			meta->StartSave();
+			meta->SetString("Meta.ID", std::to_string(ID));
+			meta->FinishSave();
+			delete meta;
+
+			meta_data_path = LIBRARY_PREFABS_FOLDER + std::to_string(ID) + ".alienPrefab";
+			App->file_system->Copy(path.data(), meta_data_path.data());
+		}
 	}
 	else {
 		LOG_ENGINE("Could not load scene, fail when creating the file");
@@ -86,10 +105,11 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 {
 	path = std::string(assets_file_path);
 
-	ID = App->resources->GetIDFromAlienPath(path.data());
+	// TODO: change when loading game
+	ID = App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data());
 
 	if (ID != 0) {
-		meta_data_path = path;
+		meta_data_path = LIBRARY_PREFABS_FOLDER + std::to_string(ID) + ".alienPrefab";;
 		SetName(App->file_system->GetBaseFileName(path.data()).data());
 		App->resources->AddResource(this);
 	}
@@ -115,14 +135,14 @@ bool ResourcePrefab::DeleteMetaData()
 void ResourcePrefab::Save(GameObject* prefab_root)
 {
 	remove(meta_data_path.data());
+	remove(path.data());
 	JSON_Value* prefab_value = json_value_init_object();
 	JSON_Object* prefab_object = json_value_get_object(prefab_value);
-	json_serialize_to_file_pretty(prefab_value, meta_data_path.data());
+	json_serialize_to_file_pretty(prefab_value, path.data());
 	prefab_root->SetPrefab(ID);
 	if (prefab_value != nullptr && prefab_object != nullptr) {
-		JSONfilepack* prefab = new JSONfilepack(meta_data_path.data(), prefab_object, prefab_value);
+		JSONfilepack* prefab = new JSONfilepack(path.data(), prefab_object, prefab_value);
 		prefab->StartSave();
-		prefab->SetString("Meta.ID", std::to_string(ID));
 		JSONArraypack* game_objects = prefab->InitNewArray("Prefab.GameObjects");
 
 		game_objects->SetAnotherNode();
@@ -130,6 +150,8 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 		App->objects->SaveGameObject(prefab_root, game_objects, 1);
 
 		prefab->FinishSave();
+
+		App->file_system->Copy(path.data(), meta_data_path.data());
 		delete prefab;
 	}
 	if (App->objects->prefab_scene) {

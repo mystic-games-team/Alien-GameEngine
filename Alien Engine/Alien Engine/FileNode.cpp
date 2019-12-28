@@ -61,12 +61,9 @@ void FileNode::DeleteNodeData(bool delete_folder)
 		std::string hole_path = std::string(path + name).data();
 
 		std::string meta_path;
-		if (type == FileDropType::PREFAB) {
-			meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + ".alienPrefab";
-		}
-		else {
-			meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + "_meta.alien";
-		}
+
+		meta_path = App->file_system->GetPathWithoutExtension(hole_path.data()) + "_meta.alien";
+
 		u64 ID = App->resources->GetIDFromAlienPath(meta_path.data());
 		if (ID != 0) {
 			remove(meta_path.data());
@@ -129,13 +126,12 @@ void FileNode::ResetPaths()
 		break; }
 	case FileDropType::PREFAB: {
 		std::string path = App->file_system->GetPathWithoutExtension(this->path + name);
-		path += ".alienPrefab";
+		path += "_meta.alien";
 		u64 ID = App->resources->GetIDFromAlienPath(path.data());
 		ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
 		if (prefab != nullptr) {
 			prefab->SetAssetsPath(std::string(this->path + name).data());
-			prefab->SetLibraryPath(std::string(this->path + name).data());
-			prefab->SetName(App->file_system->GetBaseFileName(path.data()).data());
+			prefab->SetName(App->file_system->GetBaseFileName(std::string(this->path + name).data()).data());
 			auto item = prefab->prefab_references.begin();
 			for (; item != prefab->prefab_references.end(); ++item) {
 				if (*item != nullptr) {
@@ -245,7 +241,7 @@ void FileNode::RemoveResourceOfGameObjects()
 			break; }
 		case FileDropType::PREFAB: {
 			std::string path_ = App->file_system->GetPathWithoutExtension(path + name);
-			path_ += ".alienPrefab";
+			path_ += "_meta.alien";
 			u64 ID = App->resources->GetIDFromAlienPath(path_.data());
 			ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
 			if (prefab != nullptr) {
