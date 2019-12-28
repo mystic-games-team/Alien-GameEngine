@@ -31,7 +31,7 @@ struct aiFileIO;
 
 // -------DLL Paths--------
 #define SCRIPTS_DLL_OUTPUT "AlienEngineScripts/OutPut/"
-#define DLL_WORKING_PATH "AlienEngineScripts.dll"
+#define DLL_WORKING_PATH "DLLs/AlienEngineScripts.dll"
 #define DLL_CREATION_PATH "AlienEngineScripts/OutPut/AlienEngineScripts.dll"
 // -------DLL Paths--------
 

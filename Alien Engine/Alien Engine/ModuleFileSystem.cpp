@@ -15,6 +15,13 @@ using namespace std;
 
 ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 {
+	static char curr_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, curr_dir);
+	std::string normal = curr_dir;
+	NormalizePath(normal);
+	std::string dir = normal.assign(normal.data(), normal.size() - 5);
+	SetCurrentDirectoryA(dir.data());
+
 	// needs to be created before Init so other modules can use it
 	char* base_path = SDL_GetBasePath();
 	PHYSFS_init(base_path);
@@ -48,7 +55,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module()
 		LIBRARY_FOLDER, CONFIGURATION_FOLDER,
 		LIBRARY_MESHES_FOLDER,LIBRARY_MODELS_FOLDER, LIBRARY_TEXTURES_FOLDER,
 		LIBRARY_SCENES_FOLDER, LIBRARY_PREFABS_FOLDER, LIBRARY_SCRIPTS_FOLDER
-};
+	};
 #endif
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
 	{

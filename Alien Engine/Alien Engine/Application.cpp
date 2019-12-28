@@ -46,7 +46,7 @@ void Application::LoadDll()
 {
 	static char curr_dir[MAX_PATH];
 	GetCurrentDirectoryA(MAX_PATH, curr_dir);
-	dll = std::string(curr_dir + std::string("/") + "AlienEngineScripts.dll");
+	dll = std::string(curr_dir + std::string("/") + DLL_WORKING_PATH);
 	file_system->NormalizePath(dll);
 
 #ifndef GAME_VERSION
