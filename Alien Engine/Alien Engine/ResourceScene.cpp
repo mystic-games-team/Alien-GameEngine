@@ -61,7 +61,17 @@ bool ResourceScene::ReadBaseInfo(const char* assets_file_path)
 		if (!App->file_system->Exists(meta_data_path.data())) {
 			App->file_system->Copy(assets_file_path, meta_data_path.data());
 		}
-
+		else {
+			// TODO: look what to do when game mode
+			struct stat meta_file;
+			struct stat assets_file;
+			stat(path.data(), &assets_file);
+			stat(meta_data_path.data(), &meta_file);
+			if (assets_file.st_mtime != meta_file.st_mtime) {
+				remove(meta_data_path.data());
+				App->file_system->Copy(path.data(), meta_data_path.data());
+			}
+		}
 		App->resources->AddResource(this);
 		return true;
 	}
