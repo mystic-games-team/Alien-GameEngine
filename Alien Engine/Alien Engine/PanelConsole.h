@@ -19,7 +19,7 @@ public:
 private:
 	bool collapse = true;
 
-	bool scroll_x = true;
+	bool scroll_x = false;
 	bool scroll_y = true;
 
 };

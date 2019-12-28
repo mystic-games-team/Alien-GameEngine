@@ -72,7 +72,8 @@ void PanelHierarchy::PanelLogic()
 		}
 	}
 	else {
-		ImGui::Text((App->objects->current_scene != nullptr) ? App->objects->current_scene->GetName() : "Untitled*");
+		std::string scene_name = "Current Scene: " + std::string((App->objects->current_scene != nullptr) ? App->objects->current_scene->GetName() : "Untitled*");
+		ImGui::Text(scene_name.data());
 	}
 
 	ImGui::Spacing();

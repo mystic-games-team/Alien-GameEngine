@@ -193,7 +193,7 @@ void PanelProject::SeeFiles()
 			ImGui::NextColumn();
 		}
 
-
+		
 		for (uint i = 0; i < current_active_folder->children.size(); ++i) {
 			color = { 0, 0, 0, 0 };
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i])
