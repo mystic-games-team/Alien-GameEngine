@@ -4,7 +4,7 @@
             {
                 "Name": "Cylinder",
                 "FamilyNumber": 1,
-                "ID": "7607779293776380586",
+                "ID": "8240935892786834841",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -14,14 +14,14 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "12488092968007257987",
+                "PrefabID": "9261721343092204587",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -0.088116690516471863,
-                            1.6285911798477173,
-                            2.0036473274230957
+                            0,
+                            0,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -35,7 +35,7 @@
                             0.20000000298023224
                         ],
                         "ScaleNegative": false,
-                        "ID": "2481890410272026613"
+                        "ID": "2235331960196809638"
                     },
                     {
                         "Type": 1,
@@ -45,7 +45,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "3966160645852014481",
+                        "ID": "15836315195835882317",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "15979036104549893341",
@@ -60,15 +60,15 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "6397545077613956383",
+                        "ID": "17416705079990557768",
                         "HasTexture": true,
                         "TextureID": "6974451830160532054",
                         "Enabled": true
                     },
                     {
                         "Type": 5,
-                        "ID": "12043671665114896451",
-                        "ResourceID": "10048217376534367663",
+                        "ID": "17847570623878570515",
+                        "ResourceID": "10305044087442133567",
                         "DataName": "Bullet",
                         "HasInspector": true,
                         "Inspector": [

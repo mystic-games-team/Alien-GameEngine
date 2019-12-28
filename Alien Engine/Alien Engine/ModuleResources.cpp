@@ -414,7 +414,7 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 void ModuleResources::ReadHeaderFile(const char* path, std::vector<std::string>& current_scripts)
 {
 	ResourceScript* script = new ResourceScript();
-	script->SetAssetsPath(path);
+	script->header_path = std::string(path);
 	script->SetName(App->file_system->GetBaseFileName(path).data());
 	for (auto item = current_scripts.begin(); item != current_scripts.end(); ++item) {
 		if (App->StringCmp(App->file_system->GetBaseFileName(path).data(), App->file_system->GetBaseFileName((*item).data()).data())) {

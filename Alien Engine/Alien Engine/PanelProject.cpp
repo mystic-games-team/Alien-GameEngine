@@ -210,11 +210,11 @@ void PanelProject::SeeFiles()
 
 			// double click script
 			if (current_active_folder->children[i]->type == FileDropType::SCRIPT && ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
-				ResourceScript* script = (ResourceScript*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name).data()));
+				ResourceScript* script = (ResourceScript*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name).data()) + "_meta.alien").data()));
 				if (script != nullptr) {
 					static char curr_dir[MAX_PATH];
 					GetCurrentDirectoryA(MAX_PATH, curr_dir);
-					std::string path_ = curr_dir + std::string("/") + std::string(script->GetLibraryPath());
+					std::string path_ = curr_dir + std::string("/") + std::string(script->header_path.data());
 					App->file_system->NormalizePath(path_);
 					ShellExecute(NULL, NULL, path_.data(), NULL, NULL, SW_SHOW);
 				}
@@ -528,7 +528,22 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						current_active_file = nullptr;
 					}
 					else {
-						LOG_ENGINE("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
+
+						DWORD errorMessageID = ::GetLastError();
+
+
+						LPSTR messageBuffer = nullptr;
+						size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+							NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+
+						std::string message(messageBuffer, size);
+
+						//Free the buffer.
+						LocalFree(messageBuffer);
+
+
+						LOG_ENGINE(message.data());
+						LOG_ENGINE("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node_to_move->path + node_to_move->name).data());
 					}
 				}
 				else { // move folder up

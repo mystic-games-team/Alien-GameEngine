@@ -25,6 +25,7 @@ struct aiFileIO;
 #define SCRIPTS_FOLDER "Assets/Scripts/"
 #define SCENE_FOLDER "Assets/Scenes/"
 #define ASSETS_PREFAB_FOLDER "Assets/Prefabs/"
+#define LIBRARY_SCRIPTS_FOLDER "Library/Scripts/"
 #define HEADER_SCRIPTS_FILE "AlienEngineScripts/"
 // -------Foldres Paths--------
 

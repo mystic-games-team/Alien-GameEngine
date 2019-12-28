@@ -4,6 +4,7 @@
 
 #include <utility>
 #include <vector>
+#include <string>
 
 class ResourceScript : public Resource {
 public:
@@ -24,4 +25,6 @@ private:
 public:
 	bool reload_completed = false;
 	std::vector<std::pair<std::string, bool>> data_structures;
+
+	std::string header_path;
 };

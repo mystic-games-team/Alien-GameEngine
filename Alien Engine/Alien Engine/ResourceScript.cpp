@@ -16,14 +16,14 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 {
 	bool ret = true;
 
-	if (force_id != 0)
+	if (force_id != 0) {
 		ID = force_id;
-	else
+	}
+	else {
 		ID = App->resources->GetRandomID();
+	}
 
-	meta_data_path = std::string(path.data());
-
-	std::ifstream file(path);
+	std::ifstream file(header_path);
 	if (file.is_open()) {
 		std::string line;
 		while (std::getline(file, line)) {
@@ -49,10 +49,8 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 		JSONfilepack* script = new JSONfilepack(path.data(), json_object, value);
 		script->StartSave();
 
-		script->SetString("Meta.ID", std::to_string(ID));
-
 		struct stat file;
-		if (stat(meta_data_path.c_str(), &file) == 0)
+		if (stat(header_path.c_str(), &file) == 0)
 		{
 			last_time_mod = file.st_mtime;
 		}
@@ -71,6 +69,27 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 		}
 		script->FinishSave();
 		delete script;
+
+
+		JSON_Value* meta_value = json_value_init_object();
+		JSON_Object* meta_object = json_value_get_object(meta_value);
+
+		std::string meta_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien");
+
+		json_serialize_to_file_pretty(meta_value, meta_path.data());
+
+		if (meta_value != nullptr && meta_object != nullptr) {
+
+			JSONfilepack* file = new JSONfilepack(meta_path, meta_object, meta_value);
+			file->StartSave();
+			file->SetString("Meta.ID", std::to_string(ID));
+			file->FinishSave();
+			delete file;
+		}
+
+		meta_data_path = LIBRARY_SCRIPTS_FOLDER + std::to_string(ID) + ".alienPrefab";
+		App->file_system->Copy(path.data(), meta_data_path.data());
+
 		App->resources->AddResource(this);
 	}
 
@@ -80,12 +99,12 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 {
 #ifndef GAME_VERSION
-	meta_data_path = std::string(path.data());
 	path = std::string(assets_file_path);
-
-	ID = App->resources->GetIDFromAlienPath(assets_file_path);
+	
+	ID = App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(assets_file_path) + "_meta.alien").data());
+	meta_data_path = LIBRARY_SCRIPTS_FOLDER + std::to_string(ID) + ".alienPrefab";
 	remove(assets_file_path);
-	std::ifstream file(meta_data_path);
+	std::ifstream file(header_path);
 	if (file.is_open()) {
 		std::string line;
 		while (std::getline(file, line)) {
@@ -109,8 +128,6 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 		JSONfilepack* script = new JSONfilepack(path.data(), json_object, value);
 		script->StartSave();
 
-		script->SetString("Meta.ID", std::to_string(ID));
-
 		struct stat file;
 		if (stat(meta_data_path.c_str(), &file) == 0)
 		{
@@ -131,6 +148,8 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 		}
 		script->FinishSave();
 		delete script;
+		App->file_system->Copy(path.data(), meta_data_path.data());
+
 		App->resources->AddResource(this);
 	}
 #else
