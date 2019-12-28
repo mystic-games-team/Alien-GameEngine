@@ -23,6 +23,7 @@ public:
 	// meta data
 	bool CreateMetaData(GameObject* object, const char* folder = nullptr, u64 force_id = 0);
 	bool ReadBaseInfo(const char* assets_file_path);
+	void ReadLibrary(const char* meta_data);
 	bool DeleteMetaData();
 	void Save(GameObject* prefab_root);
 	void OpenPrefabScene();

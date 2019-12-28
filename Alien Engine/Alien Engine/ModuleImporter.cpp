@@ -42,8 +42,6 @@ bool ModuleImporter::Init()
 
 bool ModuleImporter::Start()
 {
-	LoadTextureFile("Assets/Textures/Checkers.png");
-	//LoadModelFile("Assets/Models/BakerHouse.fbx");
 
 	return true;
 }
@@ -308,14 +306,14 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		return texture;
 	}
 	else {
-		texture = new ResourceTexture(path);
+		/*texture = new ResourceTexture(path);
 
 		texture->CreateMetaData();
 		App->resources->AddNewFileNode(path, true);
 
 		if (has_been_dropped && !App->objects->GetSelectedObjects().empty()) {
 			ApplyTextureToSelectedObject(texture);
-		}
+		}*/
 	}
 	
 	return texture;

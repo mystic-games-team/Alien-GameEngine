@@ -54,7 +54,7 @@ public:
 private:
 
 	std::string parent_name;
-	std::string texture_name;
+	u64 texture_id = 0;
 	uint family_number = 0;
 
 	ResourceTexture* texture = nullptr;

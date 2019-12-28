@@ -98,7 +98,6 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 
 bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 {
-#ifndef GAME_VERSION
 	path = std::string(assets_file_path);
 	
 	ID = App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(assets_file_path) + "_meta.alien").data());
@@ -152,23 +151,21 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 
 		App->resources->AddResource(this);
 	}
-#else
-	path = std::string(assets_file_path);
+	return true;
+}
 
-	JSON_Value* value = json_parse_file(path.data());
+void ResourceScript::ReadLibrary(const char* meta_data)
+{
+	meta_data_path = std::string(meta_data);
+
+	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* script = new JSONfilepack(path, object, value);
+		JSONfilepack* script = new JSONfilepack(meta_data_path, object, value);
 
-		ID = std::stoull(script->GetString("Meta.ID"));
-
-		struct stat file;
-		if (stat(meta_data_path.c_str(), &file) == 0)
-		{
-			last_time_mod = file.st_mtime;
-		}
+		ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
 
 		if (script->GetBoolean("HasData")) {
 			JSONArraypack* structures = script->GetArray("DataStructure");
@@ -180,8 +177,6 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 		delete script;
 		App->resources->AddResource(this);
 	}
-#endif
-	return true;
 }
 
 bool ResourceScript::NeedReload() const

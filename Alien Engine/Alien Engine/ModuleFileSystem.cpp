@@ -575,6 +575,7 @@ const char* ModuleFileSystem::GetReadPaths() const
 
 void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 {
+#ifndef GAME_VERSION
 	LOG_ENGINE("File Dropped with path %s", extern_path);
 
 	std::string final_path;
@@ -607,6 +608,7 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 		App->importer->LoadTextureFile(final_path.data(), true);
 		break;
 	}
+#endif
 }
 const FileDropType& ModuleFileSystem::SearchExtension(const std::string& extern_path)
 {

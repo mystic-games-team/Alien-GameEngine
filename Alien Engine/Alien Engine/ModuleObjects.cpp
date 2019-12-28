@@ -82,7 +82,7 @@ bool ModuleObjects::Start()
 		JSONfilepack* meta = new JSONfilepack(BUILD_SETTINGS_PATH, object, value);
 
 		SDL_SetWindowTitle(App->window->window, meta->GetString("Build.GameName"));
-		LoadScene(App->file_system->GetBaseFileName(meta->GetString("Build.FirstScene")));
+		LoadScene(App->file_system->GetBaseFileName(meta->GetString("Build.FirstScene")).data());
 		Time::Play();
 
 		delete meta;

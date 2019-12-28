@@ -36,7 +36,10 @@ public:
 	// type
 	const ResourceType GetType() const;
 
+	// when engine
 	virtual bool ReadBaseInfo(const char* assets_file_path) { return true; }
+	// when modo game
+	virtual void ReadLibrary(const char* meta_data) {}
 
 	virtual bool CreateMetaData(const u64& force_id = 0) { return true; } // when someting is dropped
 	virtual bool DeleteMetaData() { return true; } // this deletes the resource too

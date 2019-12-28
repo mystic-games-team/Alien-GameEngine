@@ -13,6 +13,7 @@ public:
 
 	bool CreateMetaData(const u64& force_id = 0);
 	bool ReadBaseInfo(const char* assets_file_path);
+	void ReadLibrary(const char* meta_data);
 	bool NeedReload() const;
 private:
 

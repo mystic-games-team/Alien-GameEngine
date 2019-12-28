@@ -177,6 +177,38 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 	return ret;
 }
 
+void ResourceModel::ReadLibrary(const char* meta_data)
+{
+	meta_data_path = meta_data;
+	ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
+
+	JSON_Value* mesh_value = json_parse_file(meta_data_path.data());
+	JSON_Object* mesh_object = json_value_get_object(mesh_value);
+
+	if (mesh_value != nullptr && mesh_object != nullptr) {
+
+		JSONfilepack* model = new JSONfilepack(meta_data_path, mesh_object, mesh_value);
+
+		name = model->GetString("Model.Name");
+		int num_meshes = model->GetNumber("Model.NumMeshes");
+		std::string* mesh_path = model->GetArrayString("Model.PathMeshes");
+
+		for (uint i = 0; i < num_meshes; ++i) {
+			ResourceMesh* r_mesh = new ResourceMesh();
+			if (r_mesh->ReadBaseInfo(mesh_path[i].data())) {
+				meshes_attached.push_back(r_mesh);
+			}
+			else {
+				LOG_ENGINE("Error loading %s", mesh_path[i].data());
+				delete r_mesh;
+			}
+		}
+		delete[] mesh_path;
+		delete model;
+		App->resources->AddResource(this);
+	}
+}
+
 bool ResourceModel::LoadMemory()
 {
 	bool ret = true;

@@ -132,6 +132,14 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 	return true;
 }
 
+void ResourcePrefab::ReadLibrary(const char* meta_data)
+{
+	meta_data_path = std::string(meta_data);
+
+	ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
+
+	App->resources->AddResource(this);
+}
 
 bool ResourcePrefab::DeleteMetaData()
 {

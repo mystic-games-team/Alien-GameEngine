@@ -90,8 +90,6 @@ bool ResourceTexture::CreateMetaData(const u64& force_id)
 		ret = false;
 	}
 
-
-
 	return ret;
 }
 
@@ -140,6 +138,13 @@ bool ResourceTexture::ReadBaseInfo(const char* assets_path)
 	App->resources->AddResource(this);
 
 	return ret;
+}
+
+void ResourceTexture::ReadLibrary(const char* meta_data)
+{
+	this->meta_data_path = meta_data;
+	ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
+	App->resources->AddResource(this);
 }
 
 bool ResourceTexture::DeleteMetaData()

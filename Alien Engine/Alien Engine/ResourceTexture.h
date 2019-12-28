@@ -17,6 +17,7 @@ public:
 	bool LoadMemory();
 	void FreeMemory();
 	bool ReadBaseInfo(const char* assets_path);
+	void ReadLibrary(const char* meta_data);
 	bool DeleteMetaData();
 
 public:

@@ -45,8 +45,9 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 		// texture path
 		meta->SetBoolean("Mesh.HasTexture", (texture != nullptr) ? true : false);
 
-		if (texture != nullptr)
-			meta->SetString("Mesh.Texture", texture->GetAssetsPath());
+		if (texture != nullptr) {
+			meta->SetString("Mesh.Texture", std::to_string(texture->GetID()));
+		}
 		meta->SetColor("Mesh.MatColor", material_color);
 		// transformations
 		// pos
@@ -122,8 +123,9 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 		family_number = meta->GetNumber("Mesh.FamilyNumber");
 		// texture path
 		bool has_texture = meta->GetBoolean("Mesh.HasTexture");
-		if (has_texture)
-			texture_name = meta->GetString("Mesh.Texture");
+		if (has_texture) {
+			texture_id = std::stoull(meta->GetString("Mesh.Texture"));
+		}
 		material_color = meta->GetColor("Mesh.MatColor");
 		// transformations
 		// pos
@@ -231,8 +233,8 @@ bool ResourceMesh::LoadMemory()
 			uv_cords = meta->GetNumberArray("Mesh.UV");
 		}
 
-		if (!texture_name.empty()) {
-			texture = App->importer->LoadTextureFile(texture_name.data());
+		if (texture_id != 0) {
+			texture = (ResourceTexture*)App->resources->GetResourceWithID(texture_id);
 		}
 
 		if (num_vertex != 0)

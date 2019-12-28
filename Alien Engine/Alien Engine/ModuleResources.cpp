@@ -517,11 +517,10 @@ FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* 
 
 void ModuleResources::ReadAllMetaData()
 {
-	SDL_assert((uint)ResourceType::RESOURECE_MAX == 3); // load the new resource
-
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
 
+#ifndef GAME_VERSION
 	// Init Textures
 	App->file_system->DiscoverFiles(TEXTURES_FOLDER, files, directories);
 
@@ -555,6 +554,53 @@ void ModuleResources::ReadAllMetaData()
 
 	files.clear();
 	directories.clear();
+#else
+
+	// textures
+	App->file_system->DiscoverFiles(LIBRARY_TEXTURES_FOLDER, files, directories, true);
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceTexture* texture = new ResourceTexture();
+		texture->ReadLibrary(files[i].data());
+	}
+	files.clear();
+	directories.clear();
+
+	// models
+	App->file_system->DiscoverFiles(LIBRARY_MODELS_FOLDER, files, directories, true);
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceModel* model = new ResourceModel();
+		model->ReadLibrary(files[i].data());
+	}
+	files.clear();
+	directories.clear();
+
+	// scenes
+	App->file_system->DiscoverFiles(LIBRARY_SCENES_FOLDER, files, directories, true);
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceScene* scene = new ResourceScene();
+		scene->ReadLibrary(files[i].data());
+	}
+	files.clear();
+	directories.clear();
+
+	// prefabs
+	App->file_system->DiscoverFiles(LIBRARY_PREFABS_FOLDER, files, directories, true);
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourcePrefab* prefab = new ResourcePrefab();
+		prefab->ReadLibrary(files[i].data());
+	}
+	files.clear();
+	directories.clear();
+
+	// scripts
+	App->file_system->DiscoverFiles(LIBRARY_SCRIPTS_FOLDER, files, directories, true);
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceScript* script = new ResourceScript();
+		script->ReadLibrary(files[i].data());
+	}
+	files.clear();
+	directories.clear();
+#endif
 }
 
 void ModuleResources::ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
