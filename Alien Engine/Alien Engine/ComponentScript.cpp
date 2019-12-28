@@ -194,7 +194,7 @@ bool ComponentScript::DrawInspector()
 							FileNode* node = *(FileNode**)payload->Data;
 							if (node != nullptr && node->type == FileDropType::PREFAB) {
 								std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
-								path += ".alienPrefab";
+								path += "_meta.alien";
 								u64 ID = App->resources->GetIDFromAlienPath(path.data());
 								if (ID != 0) {
 									ResourcePrefab* prefab_ = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
