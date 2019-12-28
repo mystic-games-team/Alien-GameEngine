@@ -33,7 +33,7 @@ MATH_BEGIN_NAMESPACE
    Well-formed polygons are always planar, i.e. all the vertices lie on the same plane. It is possible
    to store non-planar Polygons in this structure, but their representation is ambiguous, and for all practical
    purposes, should be avoided. */
-class Polygon
+class __declspec(dllexport) Polygon
 {
 public:
 	/// The default constructor creates a null polygon.

@@ -1,0 +1,12 @@
+{
+    "Meta": {
+        "ID": "8513552184146785384",
+        "NumMeshes": 4,
+        "PathMeshes": [
+            "Library\/Meshes\/18302224945882795925.alienMesh",
+            "Library\/Meshes\/851785074586917945.alienMesh",
+            "Library\/Meshes\/11595943302853044646.alienMesh",
+            "Library\/Meshes\/2826744209279990895.alienMesh"
+        ]
+    }
+}

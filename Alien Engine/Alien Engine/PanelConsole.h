@@ -12,9 +12,14 @@ public:
 	void PanelLogic();
 	void OnPanelDesactive();
 
-private:
+public:
 
-	bool scroll_x = true;
+	bool clear_on_play = true;
+	bool game_console = false;
+private:
+	bool collapse = true;
+
+	bool scroll_x = false;
 	bool scroll_y = true;
 
 };

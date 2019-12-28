@@ -5,9 +5,11 @@
 #include "MathGeoLib/include/MathBuildConfig.h"
 #include "ComponentTransform.h"
 #include "ModuleObjects.h"
+#include "Gizmos.h"
 #include "Application.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "Maths.h"
 #include "imgui/imgui.h"
 #include "ReturnZ.h"
 #include "ModuleRenderer3D.h"
@@ -19,13 +21,13 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 
 	frustum.type = FrustumType::PerspectiveFrustum;
 
-	frustum.pos = float3::zero;
-	frustum.front = float3::unitZ;
-	frustum.up = float3::unitY;
+	frustum.pos = float3::zero();
+	frustum.front = float3::unitZ();
+	frustum.up = float3::unitY();
 
 	frustum.nearPlaneDistance = near_plane;
 	frustum.farPlaneDistance = far_plane;
-	frustum.verticalFov = DEGTORAD * vertical_fov;
+	frustum.verticalFov = Maths::Deg2Rad() * vertical_fov;
 	AspectRatio(16, 9);
 
 	camera_color_background = Color(0.1f, 0.1f, 0.1f, 1.0f);
@@ -39,9 +41,10 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 		App->objects->game_cameras.push_back(this);
 	}
 	
+#ifndef GAME_VERSION
 	mesh_camera = new ComponentMesh(game_object_attached);
-
 	mesh_camera->mesh = App->resources->camera_mesh;
+#endif
 }
 
 ComponentCamera::~ComponentCamera()
@@ -55,7 +58,9 @@ ComponentCamera::~ComponentCamera()
 				if (!App->objects->game_cameras.empty())
 				{
 					App->renderer3D->actual_game_camera = App->objects->game_cameras.front();
-					App->ui->actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+					#ifndef GAME_VERSION
+						App->ui->actual_name = App->renderer3D->actual_game_camera->game_object_attached->GetName();
+					#endif
 				}
 				else
 					App->renderer3D->actual_game_camera = nullptr;
@@ -67,8 +72,9 @@ ComponentCamera::~ComponentCamera()
 			break;
 		}
 	}
-
+#ifndef GAME_VERSION
 	delete mesh_camera;
+#endif
 }
 
 bool ComponentCamera::DrawInspector()
@@ -92,7 +98,6 @@ bool ComponentCamera::DrawInspector()
 	{
 		RightClickMenu("Camera");
 		static bool cntrl_z = true;
-		ImGui::Spacing();
 		ImGui::Spacing();
 		static Color col;
 		col = camera_color_background;
@@ -153,9 +158,9 @@ bool ComponentCamera::DrawInspector()
 					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 				cntrl_z = false;
 				horizontal_fov = sup;
-				frustum.horizontalFov = horizontal_fov * DEGTORAD;
+				frustum.horizontalFov = horizontal_fov * Maths::Deg2Rad();
 				AspectRatio(16, 9, true);
-				vertical_fov = frustum.verticalFov * RADTODEG;
+				vertical_fov = frustum.verticalFov * Maths::Rad2Deg();
 				App->renderer3D->UpdateCameraMatrix(this);
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
@@ -172,9 +177,9 @@ bool ComponentCamera::DrawInspector()
 					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 				cntrl_z = false;
 				vertical_fov = sup;
-				frustum.verticalFov = vertical_fov * DEGTORAD;
+				frustum.verticalFov = vertical_fov * Maths::Deg2Rad();
 				AspectRatio(16, 9);
-				horizontal_fov = frustum.horizontalFov * RADTODEG;
+				horizontal_fov = frustum.horizontalFov * Maths::Rad2Deg();
 				App->renderer3D->UpdateCameraMatrix(this);
 			}
 			else if (!cntrl_z && ImGui::IsMouseReleased(0)) {
@@ -198,15 +203,17 @@ bool ComponentCamera::DrawInspector()
 		ImGui::Text("|");
 		ImGui::SameLine();
 		ImGui::PushID("fdgdfdgdgserwfew");
-		ImGui::ColorEdit3("Icon Color", &camera_icon_color, ImGuiColorEditFlags_Float);
+		ImGui::ColorEdit4("Icon Color", &camera_icon_color, ImGuiColorEditFlags_Float);
 		ImGui::PopID();
 		ImGui::Spacing();
 		ImGui::Separator();
+		ImGui::Spacing();
 	}
 
 	else
 		RightClickMenu("Camera");
 
+	
 	return true;
 }
 
@@ -220,9 +227,10 @@ void ComponentCamera::Reset()
 	frustum.farPlaneDistance = far_plane;
 
 	vertical_fov = 60.0f;
-	frustum.verticalFov = DEGTORAD * vertical_fov;
+	frustum.verticalFov = Maths::Deg2Rad() * vertical_fov;
 	AspectRatio(16, 9);
-	horizontal_fov = frustum.horizontalFov * RADTODEG;
+	horizontal_fov = frustum.horizontalFov * Maths::Rad2Deg();
+	print_icon = true;
 }
 
 void ComponentCamera::SetComponent(Component* component)
@@ -230,8 +238,16 @@ void ComponentCamera::SetComponent(Component* component)
 	if (component->GetType() == type) {
 
 		ComponentCamera* camera = (ComponentCamera*)component;
-
+		
 		camera_color_background = camera->camera_color_background;
+		near_plane = camera->near_plane;
+		far_plane = camera->far_plane;
+		frustum = camera->frustum;
+		vertical_fov = camera->vertical_fov;
+		horizontal_fov = camera->horizontal_fov;
+		print_icon = camera->print_icon;
+		is_fov_horizontal = camera->is_fov_horizontal;
+		camera_icon_color = camera->camera_icon_color;
 	}
 }
 
@@ -249,12 +265,14 @@ void ComponentCamera::AspectRatio(int width_ratio, int height_ratio, bool fov_ty
 
 void ComponentCamera::Look(const float3& position_to_look)
 {
-	float3 direction = position_to_look - frustum.pos;
+	if (position_to_look.IsFinite()) {
+		float3 direction = position_to_look - frustum.pos;
 
-	float3x3 matrix = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3::unitY);
+		float3x3 matrix = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3::unitY());
 
-	frustum.front = matrix.MulDir(frustum.front).Normalized();
-	frustum.up = matrix.MulDir(frustum.up).Normalized();
+		frustum.front = matrix.MulDir(frustum.front).Normalized();
+		frustum.up = matrix.MulDir(frustum.up).Normalized();
+	}
 }
 
 float* ComponentCamera::GetProjectionMatrix() const
@@ -266,6 +284,62 @@ float* ComponentCamera::GetProjectionMatrix() const
 float* ComponentCamera::GetViewMatrix() const
 {
 	return (float*)static_cast<float4x4>(frustum.ViewMatrix()).Transposed().v;
+}
+
+void ComponentCamera::SetVerticalFov(const float& vertical_fov)
+{
+	this->vertical_fov = vertical_fov;
+	frustum.verticalFov = Maths::Deg2Rad() * vertical_fov;
+	AspectRatio(16, 9);
+}
+
+float ComponentCamera::GetVerticalFov() const
+{
+	return vertical_fov;
+}
+
+void ComponentCamera::SetHorizontalFov(const float& horizontal_fov)
+{
+	this->horizontal_fov = horizontal_fov;
+	frustum.horizontalFov = Maths::Deg2Rad() * horizontal_fov;
+	AspectRatio(16, 9, true);
+}
+
+float ComponentCamera::GetHorizontalFov() const
+{
+	return horizontal_fov;
+}
+
+void ComponentCamera::SetFarPlane(const float& far_plane)
+{
+	this->far_plane = far_plane;
+	frustum.farPlaneDistance = far_plane;
+}
+
+void ComponentCamera::SetNearPlane(const float& near_plane)
+{
+	this->near_plane = near_plane;
+	frustum.nearPlaneDistance = near_plane;
+}
+
+float ComponentCamera::GetFarPlane() const
+{
+	return far_plane;
+}
+
+float ComponentCamera::GetNearPlane() const
+{
+	return near_plane;
+}
+
+void ComponentCamera::SetCameraPosition(const float3& position)
+{
+	frustum.pos = position;
+}
+
+float3 ComponentCamera::GetCameraPosition() const
+{
+	return frustum.pos;
 }
 
 void ComponentCamera::DrawFrustum()
@@ -322,24 +396,33 @@ void ComponentCamera::DrawIconCamera()
 	if (mesh_camera != nullptr && print_icon)
 	{
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
-		float3 pos = transform->GetLocalPosition();
-		Quat rot = transform->GetLocalRotation();
-		float3 scale = transform->GetLocalScale();
-		transform->SetLocalScale(0.1f, 0.1f, 0.1f);
-		float3 position = pos - frustum.front.Normalized() * 2;
-		Quat right_rot = { 0.7071,0,0.7071,0 };
-		Quat rotation= { 0,0,1,0 };
-		Quat rotated = rot* (rotation*right_rot);
-		transform->SetLocalPosition(position.x, position.y, position.z);
-		transform->SetLocalRotation(rotated.x, rotated.y, rotated.z, rotated.w);
+		float3 position = transform->GetGlobalPosition() - frustum.front.Normalized() * 2;
+		Quat rotated = transform->GetGlobalRotation() * (Quat{ 0,0,1,0 } * Quat{ 0.7071,0,0.7071,0 });
+		float4x4 matrix = float4x4::FromTRS(position, rotated, { 0.1F,0.1F,0.1F });
 		glDisable(GL_LIGHTING);
-		glColor3f(camera_icon_color.r, camera_icon_color.g, camera_icon_color.b);
-		mesh_camera->DrawPolygon();
+		Gizmos::DrawPoly(mesh_camera->mesh, matrix, camera_icon_color);
 		glEnable(GL_LIGHTING);
-		transform->SetLocalScale(scale.x, scale.y, scale.z);
-		transform->SetLocalPosition(pos.x, pos.y, pos.z);
-		transform->SetLocalRotation(rot.x, rot.y, rot.z, rot.w);
 	}
+}
+
+void ComponentCamera::Clone(Component* clone)
+{
+	clone->enabled = enabled;
+	clone->not_destroy = not_destroy;
+	ComponentCamera* camera = (ComponentCamera*)clone;
+	camera->camera_color_background = camera_color_background;
+	camera->camera_icon_color = camera_icon_color;
+	camera->enabled = enabled;
+	camera->far_plane = far_plane;
+	camera->frustum = frustum;
+	camera->horizontal_fov = horizontal_fov;
+	camera->is_fov_horizontal = is_fov_horizontal;
+	camera->near_plane = near_plane;
+	camera->print_icon = print_icon;
+	camera->projection_changed = projection_changed;
+	camera->vertical_fov = vertical_fov;
+	camera->ViewMatrix = ViewMatrix;
+	camera->ViewMatrixInverse = ViewMatrixInverse;
 }
 
 void ComponentCamera::SaveComponent(JSONArraypack* to_save)
@@ -379,8 +462,8 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 
 	frustum.nearPlaneDistance = near_plane;
 	frustum.farPlaneDistance = far_plane;
-	frustum.verticalFov = vertical_fov * DEGTORAD;
-	frustum.horizontalFov = horizontal_fov * DEGTORAD;
+	frustum.verticalFov = vertical_fov * Maths::Deg2Rad();
+	frustum.horizontalFov = horizontal_fov * Maths::Deg2Rad();
 
 	if (game_object_attached != nullptr) {
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);

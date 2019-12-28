@@ -140,7 +140,7 @@ void PanelRender::PanelLogic()
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::BeginTooltip();
-			ImGui::Text("If Active, the culling in the scene is from the game camera. \nCheck PanelGame and control the active camera in the scene");
+			ImGui::Text("If Active, the culling in the scene is from the game camera. \nCheck PanelGame and control the active camera in the scene\nIt must exist a game camera");
 			ImGui::EndTooltip();
 		}
 	}

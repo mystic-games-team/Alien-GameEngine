@@ -10,19 +10,26 @@
 #include "Octree.h"
 #include "ComponentCamera.h"
 #include <stack>
+#include <functional>
 
 class ReturnZ;
 class ResourcePrefab;
+class ComponentScript;
+class Alien;
+class ResourceScene;
 
-struct Scene {
+struct InvokeInfo {
+	std::function<void()> function = nullptr;
+	float time_to_wait = 0.0F;
+	float time_started = 0.0F;
+	bool is_repeating = false;
+	float time_between = 0.0F;
+	Alien* alien = nullptr;
+	u64 ID = 0;
 
-	Scene() {}
-	~Scene() {}
-
-	std::string name_without_extension;
-	std::string full_path;
-	bool need_to_save = false;
-	bool is_untitled = true;
+	bool operator==(const InvokeInfo& info) {
+		return ID == info.ID;
+	}
 };
 
 enum class PrimitiveType
@@ -77,8 +84,21 @@ public:
 
 	// select/disselect objects
 	void SetNewSelectedObject(GameObject* selected);
-	GameObject* GetSelectedObject();
-	void DeselectObject();
+	const std::list<GameObject*>& GetSelectedObjects();
+	void DeselectObjects();
+	void DeselectObject(GameObject* obj);
+
+	/*---------Scripts Calls-----------*/
+	void InitScriptsOnPlay() const;
+	void ScriptsPreUpdate() const;
+	void ScriptsUpdate() const;
+	void ScriptsPostUpdate() const;
+	void CleanUpScriptsOnStop() const;
+	void OnDrawGizmos() const;
+	void OnPreCull(ComponentCamera* camera) const;
+	void OnPreRender(ComponentCamera* camera) const;
+	void OnPostRender(ComponentCamera* camera) const;
+	/*---------Scripts Calls-----------*/
 
 	// if parent is nullptr, parent will be the invisible game object
 	GameObject* CreateEmptyGameObject(GameObject* parent, bool set_selected = true);
@@ -96,9 +116,9 @@ public:
 	void ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ = true);
 
 	// scenes
-	void SaveScene(const char* path, bool change_scene = true);
-	void LoadScene(const char* path, bool change_scene = true);
-	void CreateEmptyScene(const char* path);
+	void SaveScene(ResourceScene* scene, const char* force_with_path = nullptr);
+	void LoadScene(const char * name, bool change_scene = true);
+	void CreateEmptyScene(ResourceScene* scene);
 
 	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
@@ -107,13 +127,31 @@ public:
 	void CreateRoot();
 
 	void SwapReturnZ(bool get_save, bool delete_current);
+	
+	void HotReload();
+
+	static bool SortGameObjectToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last);
+
+	void AddScriptObject(const u64& ID, GameObject** object);
+
+	void DuplicateObjects();
+
+	void AddInvoke(std::function<void()> void_no_params_function, const float& second, Alien* alien);
+	void AddInvokeRepeating(std::function<void()> void_no_params_function, const float& second, const float& seconds_between_each_call, Alien* alien);
+	void CancelInvokes(Alien* alien);
+	/*bool IsInvoking(std::function<void()> void_no_params_function);*/
 
 private:
 
+	void CreateJsonScript(GameObject* obj, JSONArraypack* to_save);
+	void ReAssignScripts(JSONArraypack* to_load);
 	void DeleteReturns();
 
 public:
-	Scene current_scene;
+
+	ResourceScene* current_scene = nullptr;
+
+	std::list<Alien*> current_scripts;
 
 	Component* component_in_copy = nullptr;
 
@@ -179,6 +217,8 @@ public:
 	// if true, objects with to_delete = true will be deleted
 	bool need_to_delete_objects = false;
 	
+	bool errors = false;
+
 	Octree octree;
 	std::stack<ReturnZ*> return_actions;
 	std::stack<ReturnZ*> fordward_actions;
@@ -189,13 +229,22 @@ public:
 	bool enable_instancies = true;
 	ResourcePrefab* prefab_opened = nullptr;
 	bool ignore_cntrlZ = false;
+
+	ComponentScript* actual_script_loading = nullptr;
+
+	std::vector<std::string> tags;
+
 private:
 	// root
 	GameObject* base_game_object = nullptr;
-	GameObject* game_object_selected = nullptr;
+	std::list<GameObject*> game_objects_selected;
 	std::vector< std::tuple<GameObject*, GameObject*, bool>> to_reparent;
 
 	std::stack<ReturnZ*> save_return_actions;
 	std::stack<ReturnZ*> save_fordward_actions;
 
+	std::vector<std::pair<u64, GameObject**>> to_add;
+
+	std::list<InvokeInfo*> invokes;
 };
+

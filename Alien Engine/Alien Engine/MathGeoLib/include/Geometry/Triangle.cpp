@@ -198,7 +198,7 @@ LineSegment Triangle::Edge(int i) const
 	else if (i == 2)
 		return LineSegment(c, a);
 	else
-		return LineSegment(float3::nan, float3::nan);
+		return LineSegment(float3::nan(), float3::nan());
 }
 
 float3 Triangle::Vertex(int i) const
@@ -212,7 +212,7 @@ float3 Triangle::Vertex(int i) const
 	else if (i == 2)
 		return c;
 	else
-		return float3::nan;
+		return float3::nan();
 }
 
 Plane Triangle::PlaneCCW() const
@@ -247,7 +247,7 @@ float3 Triangle::UnnormalizedNormalCW() const
 
 float3 Triangle::ExtremePoint(const float3 &direction) const
 {
-	float3 mostExtreme = float3::nan;
+	float3 mostExtreme = float3::nan();
 	float mostExtremeDist = -FLT_MAX;
 	for(int i = 0; i < 3; ++i)
 	{

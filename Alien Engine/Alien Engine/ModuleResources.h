@@ -12,6 +12,7 @@ enum class FileDropType;
 class Resource;
 class ResourceModel;
 class ResourceMesh;
+class ResourceScene;
 class ResourceTexture;
 
 struct Icons {
@@ -20,6 +21,7 @@ struct Icons {
 	ResourceTexture* png_file = nullptr;
 	ResourceTexture* dds_file = nullptr;
 	ResourceTexture* tga_file = nullptr;
+	ResourceTexture* script_file = nullptr;
 	ResourceTexture* folder = nullptr;
 	ResourceTexture* prefab_icon = nullptr;
 	ResourceTexture* model = nullptr;
@@ -59,23 +61,39 @@ public:
 
 	u64 GetIDFromAlienPath(const char* path);
 	Resource* GetResourceWithID(const u64& ID);
+	const Resource* GetResourceWithID(const u64& ID) const;
 
 	void AddNewFileNode(const std::string& path, bool is_file);
 
 	u64 GetRandomID();
 
 	ResourceTexture* GetTextureByName(const char* name);
+	const ResourceTexture* GetTextureByName(const char* name) const;
+
 	ResourceMesh* GetPrimitive(const PrimitiveType& type);
-	bool Exists(const char* path, Resource** resource);
+	const ResourceMesh* GetPrimitive(const PrimitiveType& type) const;
+
+	bool Exists(const char* path, Resource** resource) const;
 
 	void CreatePrimitive(const PrimitiveType& type, ResourceMesh** mesh);
+	void CreatePrimitive(const PrimitiveType& type, ResourceMesh** mesh) const;
+
+	void ReadHeaderFile(const char* path, std::vector<std::string>& current_scripts);
+	void ReloadScripts();
+
+	ResourceScene* GetSceneByName(const char* name);
+
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
+
 	void ReadAllMetaData();
 	void ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
 	void ReadModels(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
-
 	void ReadPrefabs(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
+	void ReadScenes(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
+	void ReadScripts();
+
+	void GetAllScriptsPath(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder, std::vector<std::string>* scripts);
 
 public:
 

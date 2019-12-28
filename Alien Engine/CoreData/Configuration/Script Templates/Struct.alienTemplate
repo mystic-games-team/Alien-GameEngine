@@ -1,0 +1,10 @@
+#pragma once
+
+#include "Macros/AlienScripts.h"
+
+struct DataAlienTypeName {
+
+	DataAlienTypeName();
+	~DataAlienTypeName();
+
+};

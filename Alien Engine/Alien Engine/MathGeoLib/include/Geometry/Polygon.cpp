@@ -58,7 +58,7 @@ float3 Polygon::Vertex(int vertexIndex) const
 	assume(vertexIndex < (int)p.size());
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (vertexIndex < 0 || vertexIndex >= (int)p.size())
-		return float3::nan;
+		return float3::nan();
 #endif
 	return p[vertexIndex];
 }
@@ -66,7 +66,7 @@ float3 Polygon::Vertex(int vertexIndex) const
 LineSegment Polygon::Edge(int i) const
 {
 	if (p.empty())
-		return LineSegment(float3::nan, float3::nan);
+		return LineSegment(float3::nan(), float3::nan());
 	if (p.size() == 1)
 		return LineSegment(p[0], p[0]);
 	return LineSegment(p[i], p[(i+1)%p.size()]);
@@ -75,9 +75,9 @@ LineSegment Polygon::Edge(int i) const
 LineSegment Polygon::Edge2D(int i) const
 {
 	if (p.empty())
-		return LineSegment(float3::nan, float3::nan);
+		return LineSegment(float3::nan(), float3::nan());
 	if (p.size() == 1)
-		return LineSegment(float3::zero, float3::zero);
+		return LineSegment(float3::zero(), float3::zero());
 	return LineSegment(float3(MapTo2D(i), 0), float3(MapTo2D((i+1)%p.size()), 0));
 }
 
@@ -117,7 +117,7 @@ bool Polygon::DiagonalExists(int i, int j) const
 float3 Polygon::BasisU() const
 {
 	if (p.size() < 2)
-		return float3::unitX;
+		return float3::unitX();
 	float3 u = p[1] - p[0];
 	u.Normalize(); // Always succeeds, even if u was zero (generates (1,0,0)).
 	return u;
@@ -126,7 +126,7 @@ float3 Polygon::BasisU() const
 float3 Polygon::BasisV() const
 {
 	if (p.size() < 2)
-		return float3::unitY;
+		return float3::unitY();
 	return Cross(PlaneCCW().normal, BasisU()).Normalized();
 }
 
@@ -138,7 +138,7 @@ LineSegment Polygon::Diagonal(int i, int j) const
 	assume(j < (int)p.size());
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (i < 0 || j < 0 || i >= (int)p.size() || j >= (int)p.size())
-		return LineSegment(float3::nan, float3::nan);
+		return LineSegment(float3::nan(), float3::nan());
 #endif
 	return LineSegment(p[i], p[j]);
 }
@@ -174,7 +174,7 @@ float2 Polygon::MapTo2D(int i) const
 	assume(i < (int)p.size());
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (i < 0 || i >= (int)p.size())
-		return float2::nan;
+		return float2::nan();
 #endif
 	return MapTo2D(p[i]);
 }
@@ -184,7 +184,7 @@ float2 Polygon::MapTo2D(const float3 &point) const
 	assume(!p.empty());
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (p.empty())
-		return float2::nan;
+		return float2::nan();
 #endif
 	float3 basisU = BasisU();
 	float3 basisV = BasisV();
@@ -197,7 +197,7 @@ float3 Polygon::MapFrom2D(const float2 &point) const
 	assume(!p.empty());
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (p.empty())
-		return float3::nan;
+		return float3::nan();
 #endif
 	return p[0] + point.x * BasisU() + point.y * BasisV();
 }
@@ -532,7 +532,7 @@ float3 Polygon::ClosestPoint(const float3 &point) const
 	assume(IsPlanar());
 
 	std::vector<Triangle> tris = Triangulate();
-	float3 closestPt = float3::nan;
+	float3 closestPt = float3::nan();
 	float closestDist = FLT_MAX;
 	for(size_t i = 0; i < tris.size(); ++i)
 	{
@@ -555,8 +555,8 @@ float3 Polygon::ClosestPoint(const LineSegment &lineSegment) const
 float3 Polygon::ClosestPoint(const LineSegment &lineSegment, float3 *lineSegmentPt) const
 {
 	std::vector<Triangle> tris = Triangulate();
-	float3 closestPt = float3::nan;
-	float3 closestLineSegmentPt = float3::nan;
+	float3 closestPt = float3::nan();
+	float3 closestLineSegmentPt = float3::nan();
 	float closestDist = FLT_MAX;
 	for(size_t i = 0; i < tris.size(); ++i)
 	{
@@ -593,7 +593,7 @@ Plane Polygon::EdgePlane(int edgeIndex) const
 
 float3 Polygon::ExtremePoint(const float3 &direction) const
 {
-	float3 mostExtreme = float3::nan;
+	float3 mostExtreme = float3::nan();
 	float mostExtremeDist = -FLT_MAX;
 	for(int i = 0; i < NumVertices(); ++i)
 	{
@@ -635,7 +635,7 @@ bool Contains(const float3 &point, const float3 &viewDirection) const;
 float Polygon::Area() const
 {
 	assume(IsPlanar());
-	float3 area = float3::zero;
+	float3 area = float3::zero();
 	if (p.size() <= 2)
 		return 0.f;
 
@@ -660,8 +660,8 @@ float Polygon::Perimeter() const
 float3 Polygon::Centroid() const
 {
 	if (NumVertices() == 0)
-		return float3::nan;
-	float3 centroid = float3::zero;
+		return float3::nan();
+	float3 centroid = float3::zero();
 	for(int i = 0; i < NumVertices(); ++i)
 		centroid += Vertex(i);
 	return centroid / (float)NumVertices();
@@ -670,7 +670,7 @@ float3 Polygon::Centroid() const
 float3 Polygon::PointOnEdge(float normalizedDistance) const
 {
 	if (p.empty())
-		return float3::nan;
+		return float3::nan();
 	if (p.size() < 2)
 		return p[0];
 	normalizedDistance = Frac(normalizedDistance); // Take modulo 1 so we have the range [0,1[.
@@ -698,7 +698,7 @@ float3 Polygon::FastRandomPointInside(LCG &rng) const
 {
 	std::vector<Triangle> tris = Triangulate();
 	if (tris.empty())
-		return float3::nan;
+		return float3::nan();
 	return tris[rng.Int(0, (int)tris.size()-1)].RandomPointInside(rng);
 }
 

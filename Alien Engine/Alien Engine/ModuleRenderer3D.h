@@ -1,7 +1,6 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "glmath.h"
 #include "glew/include/glew.h"
 #include "ModuleImporter.h"
 #include "ComponentCamera.h"
@@ -62,8 +61,7 @@ public:
 	uint z_framebuffer;
 
 	SDL_GLContext context;
-	mat3x3 NormalMatrix;
-	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+
 	
 	bool render_zbuffer = false;
 

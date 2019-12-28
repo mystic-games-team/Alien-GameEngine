@@ -6,10 +6,11 @@ Application::Application()
 {
 	window = new ModuleWindow();
 	input = new ModuleInput();
-	scene_intro = new ModuleSceneIntro();
 	renderer3D = new ModuleRenderer3D();
+#ifndef GAME_VERSION
 	camera = new ModuleCamera3D();
 	ui = new ModuleUI();
+#endif
 	importer = new ModuleImporter();
 	objects = new ModuleObjects();
 	file_system = new ModuleFileSystem();
@@ -19,21 +20,43 @@ Application::Application()
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
 
+	LoadDll();
+
 	// Main Modules
 	AddModule(window);
+#ifndef GAME_VERSION
 	AddModule(camera);
+#endif
 	AddModule(input);
 	AddModule(file_system);
 	AddModule(resources);
 	AddModule(importer);
 	// Scenes
-	AddModule(scene_intro);
 	AddModule(objects);
+#ifndef GAME_VERSION
 	AddModule(ui);
-	
+#endif
 	// Renderer last!
 	AddModule(renderer3D);
 
+	window->segment_width = (WINDOW_ICON_WIDTH - BAR_BEGIN_POS * 2) / (list_modules.size() * 2);
+}
+
+void Application::LoadDll()
+{
+	static char curr_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, curr_dir);
+	dll = std::string(curr_dir + std::string("/") + "AlienEngineScripts.dll");
+	file_system->NormalizePath(dll);
+
+#ifndef GAME_VERSION
+	if (file_system->Exists(DLL_CREATION_PATH)) {
+		remove(DLL_WORKING_PATH);
+		while (MoveFileA(DLL_CREATION_PATH, DLL_WORKING_PATH) == FALSE) {}
+	}
+#endif
+
+	scripts_dll = LoadLibrary(dll.data());
 }
 
 Application::~Application()
@@ -57,8 +80,11 @@ Application::~Application()
 	}
 	json_files.clear();
 
-	if (shortcut_manager != nullptr)
+	if (shortcut_manager != nullptr) {
 		delete shortcut_manager;
+	}
+
+	FreeLibrary(scripts_dll);
 }
 
 void Application::LoadDefaultConfig()
@@ -154,28 +180,33 @@ bool Application::Init()
 
 	layout = LoadJSONFile("Configuration/LayoutsInfo.json");
 
+#ifndef GAME_VERSION
 	shortcut_manager = new ShortCutManager();
-
+#endif
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
 	while(item != list_modules.end() && ret == true)
 	{
 		ret = (*item)->Init();
+		window->IncreaseBar();
 		++item;
 	}
 
 	// After all Init calls we call Start() in all modules
-	LOG("Application Start --------------");
+	LOG_ENGINE("Application Start --------------");
 	item = list_modules.begin();
-	
+
 	Time::Start();
 	while(item != list_modules.end() && ret == true)
 	{
 		ret = (*item)->Start();
+		window->IncreaseBar();
 		++item;
 	}
-	
+
+	ret = window->CreateCoreWindow();
+
 	return ret;
 }
 
@@ -218,7 +249,9 @@ void Application::FinishUpdate()
 		float delaytimefinish = time.ReadMs();
 	}
 	Time::Update();
+#ifndef GAME_VERSION
 	ui->FramerateRegister((float)prev_last_sec_frame_count, (float)(framerate_cap));
+#endif
 }
 
 JSONfilepack* Application::LoadJSONFile(const std::string& path)
@@ -228,7 +261,7 @@ JSONfilepack* Application::LoadJSONFile(const std::string& path)
 
 	if (value == nullptr || object == nullptr)
 	{
-		LOG("Error loading %s", path);
+		LOG_ENGINE("Error loading %s", path);
 		return nullptr;
 	}
 	else {
@@ -243,7 +276,7 @@ JSONfilepack* Application::CreateJSONFile(const std::string& path)
 	JSON_Object* object = json_value_get_object(value);
 	json_serialize_to_file_pretty(value, path.data());
 	if (value == nullptr || object == nullptr) {
-		LOG("Error creating JSON with path %s", path.data());
+		LOG_ENGINE("Error creating JSON with path %s", path.data());
 		return nullptr;
 	}
 	else {
@@ -279,9 +312,9 @@ update_status Application::Update()
 		++item;
 	}
 	item = list_modules.begin();
-
+#ifndef GAME_VERSION
 	shortcut_manager->UpdateShortCuts();
-
+#endif
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
 		ret = (*item)->Update(dt);
@@ -316,15 +349,15 @@ bool Application::CleanUp()
 	return ret;
 }
 
+
 bool Application::StringCmp(const char* str1, const char* str2)
 {
-	if (strlen(str1) != strlen(str2))
+	size_t size = strlen(str1);
+	if (size != strlen(str2))
 		return false;
 
-	for (uint i = 0; i < strlen(str1); ++i) {
-		if (std::tolower(str1[i]) == std::tolower(str2[i]))
-			continue;
-		else
+	for (uint i = 0; i < size; ++i) {
+		if (std::tolower(str1[i]) != std::tolower(str2[i]))
 			return false;
 	}
 	return true;

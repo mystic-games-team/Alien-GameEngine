@@ -23,7 +23,7 @@
 MATH_BEGIN_NAMESPACE
 
 /// A 3D cylinder 
-class Cylinder
+class __declspec(dllexport) Cylinder
 {
 public:
 	/// Specifies the two inner points of this capsule.

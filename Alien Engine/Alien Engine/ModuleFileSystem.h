@@ -10,11 +10,14 @@ struct aiFileIO;
 #include "Bass/include/bass.h"
 //struct BASS_FILEPROCS;
 
+// -------Foldres Paths--------
 #define ASSETS_FOLDER "Assets/"
 #define LIBRARY_FOLDER "Library/"
 #define LIBRARY_MODELS_FOLDER "Library/Models/"
 #define LIBRARY_MESHES_FOLDER "Library/Meshes/"
 #define LIBRARY_TEXTURES_FOLDER "Library/Textures/"
+#define LIBRARY_SCENES_FOLDER "Library/Scenes/"
+#define LIBRARY_PREFABS_FOLDER "Library/Prefabs/"
 #define CONFIGURATION_FOLDER "Configuration/"
 #define CONFIGURATION_LAYOUTS_FOLDER "Configuration/Layouts/"
 #define MODELS_FOLDER "Assets/Models/"
@@ -22,6 +25,27 @@ struct aiFileIO;
 #define SCRIPTS_FOLDER "Assets/Scripts/"
 #define SCENE_FOLDER "Assets/Scenes/"
 #define ASSETS_PREFAB_FOLDER "Assets/Prefabs/"
+#define HEADER_SCRIPTS_FILE "AlienEngineScripts/"
+// -------Foldres Paths--------
+
+// -------DLL Paths--------
+#define SCRIPTS_DLL_OUTPUT "AlienEngineScripts/OutPut/"
+#define DLL_WORKING_PATH "AlienEngineScripts.dll"
+#define DLL_CREATION_PATH "AlienEngineScripts/OutPut/AlienEngineScripts.dll"
+// -------DLL Paths--------
+
+#define FILE_TAGS "Configuration/Tags/tags.alienTags"
+#define BUILD_SETTINGS_PATH "Configuration/BuildSettings.alienBuild"
+#define BUILD_EXE_PATH "../Alien Engine/EngineBuild/Alien Engine.exe"
+
+// -------Templates--------
+#define EXPORT_FILE_CLASS_TEMPLATE "Configuration/Script Templates/ExportClass.alienTemplate"
+#define CLASS_FILE_TEMPLATE "Configuration/Script Templates/Class.alienTemplate"
+#define EXPORT_FILE_STRUCT_TEMPLATE "Configuration/Script Templates/ExportStruct.alienTemplate"
+#define STRUCT_FILE_TEMPLATE "Configuration/Script Templates/Struct.alienTemplate"
+#define CPP_FILE_TEMPLATE "Configuration/Script Templates/BaseCPP.alienTemplate"
+#define CPP_ALIEN_FILE_TEMPLATE "Configuration/Script Templates/AlienCPP.alienTemplate"
+// -------Templates--------
 
 #include "Resource_.h"
 
@@ -51,7 +75,7 @@ public:
 
 	// Called before render is available
 	bool Init();
-
+	update_status PreUpdate(float dt);
 	// Called before quitting
 	bool CleanUp() override;
 
@@ -61,7 +85,7 @@ public:
 	bool ExistsInFolderRecursive(const char* folder, const char* file_name);
 	bool IsDirectory(const char* file) const;
 	void CreateDirectory(const char* directory);
-	void DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list) const;
+	void DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list, bool files_hole_path = false) const;
 	void DiscoverEverythig(FileNode* node);
 	void DiscoverFolders(FileNode* node);
 	bool CopyFromOutsideFS(const char* full_path, const char* destination);
@@ -69,6 +93,8 @@ public:
 	void SplitFilePath(const char* full_path, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
 	void NormalizePath(char* full_path) const;
 	void NormalizePath(std::string& full_path) const;
+
+	bool CreateNewFile(const char* path);
 
 	// Open for Read/Write
 	unsigned int Load(const char* path, const char* file, char** buffer) const;
@@ -103,10 +129,11 @@ private:
 	void CreateAssimpIO();
 	void CreateBassIO();
 
-
 private:
 
 	aiFileIO* AssimpIO = nullptr;
 	BASS_FILEPROCS* BassIO = nullptr;
+
+	time_t last_mod_dll = 0;
 };
 

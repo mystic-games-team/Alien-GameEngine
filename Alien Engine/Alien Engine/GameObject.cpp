@@ -9,6 +9,9 @@
 #include "RandomHelper.h"
 #include "ModuleObjects.h"
 #include "ComponentCamera.h"
+#include "ComponentScript.h"
+#include "Prefab.h"
+#include "ResourcePrefab.h"
 #include "ReturnZ.h"
 
 GameObject::GameObject(GameObject* parent)
@@ -27,9 +30,9 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-	if (App->objects->GetSelectedObject() == this)
-		App->objects->DeselectObject();
-
+	if (std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
+		App->objects->DeselectObject(this);
+	}
 	App->objects->octree.Remove(this);
 
 	std::vector<Component*>::iterator item = components.begin();
@@ -49,72 +52,416 @@ GameObject::~GameObject()
 	}
 }
 
-bool GameObject::IsEnabled()
+void* GameObject::GetComponentScript(const char* script_class_name)
+{
+	auto item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ComponentType::SCRIPT) {
+			ComponentScript* script = (ComponentScript*)*item;
+			if (App->StringCmp(script->data_name.data(), script_class_name)) {
+				return script->data_ptr;
+			}
+		}
+	}
+	return nullptr;
+}
+
+const void* GameObject::GetComponentScript(const char* script_class_name) const
+{
+	auto item = components.cbegin();
+	for (; item != components.cend(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ComponentType::SCRIPT) {
+			ComponentScript* script = (ComponentScript*)*item;
+			if (App->StringCmp(script->data_name.data(), script_class_name)) {
+				return script->data_ptr;
+			}
+		}
+	}
+	return nullptr;
+}
+
+Component* GameObject::GetComponentInChildren(const ComponentType& type, bool recursive)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			auto item2 = (*item)->components.begin();
+			for (; item2 != (*item)->components.end(); ++item2) {
+				if (*item2 != nullptr && (*item2)->GetType() == type) {
+					return *item2;
+				}
+				if (recursive) {
+					(*item)->GetComponentInChildren(type, true);
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+const Component* GameObject::GetComponentInChildren(const ComponentType& type, bool recursive) const
+{
+	auto item = children.cbegin();
+	for (; item != children.cend(); ++item) {
+		if (*item != nullptr) {
+			auto item2 = (*item)->components.begin();
+			for (; item2 != (*item)->components.end(); ++item2) {
+				if (*item2 != nullptr && (*item2)->GetType() == type) {
+					return *item2;
+				}
+				if (recursive) {
+					(*item)->GetComponentInChildren(type, true);
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+
+uint GameObject::GetComponents(const ComponentType& type, Component*** comp_array)
+{
+	std::vector<Component*> found;
+	for (uint i = 0; i < components.size(); ++i) {
+		if (components[i] != nullptr && components[i]->GetType() == type) {
+			found.push_back(components[i]);
+		}
+	}
+	if (!found.empty()) {
+		(*comp_array) = new Component * [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*comp_array)[i] = found[i];
+		}
+	}
+	return found.size();
+}
+
+const uint GameObject::GetComponents(const ComponentType& type, Component*** comp_array) const
+{
+	std::vector<Component*> found;
+	for (uint i = 0; i < components.size(); ++i) {
+		if (components[i] != nullptr && components[i]->GetType() == type) {
+			found.push_back(components[i]);
+		}
+	}
+	if (!found.empty()) {
+		(*comp_array) = new Component * [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*comp_array)[i] = found[i];
+		}
+	}
+	return found.size();
+}
+
+uint GameObject::GetComponentsInChildren(const ComponentType& type, Component*** comp_array, bool recursive)
+{
+	if (children.empty()) {
+		return 0u;
+	}
+	std::vector<Component*> found;
+	GetComponentsChildren(type, &found, recursive);
+
+	if (found.empty()) {
+		return 0u;
+	}
+
+	(*comp_array) = new Component * [found.size()];
+	for (uint i = 0; i < found.size(); ++i) {
+		(*comp_array)[i] = found[i];
+	}
+	return found.size();
+}
+
+const uint GameObject::GetComponentsInChildren(const ComponentType& type, Component*** comp_array, bool recursive) const
+{
+	if (children.empty()) {
+		return 0u;
+	}
+	std::vector<Component*> found;
+	GetComponentsChildren(type, &found, recursive);
+
+	if (found.empty()) {
+		return 0u;
+	}
+
+	(*comp_array) = new Component * [found.size()];
+	for (uint i = 0; i < found.size(); ++i) {
+		(*comp_array)[i] = found[i];
+	}
+	return found.size();
+}
+
+uint GameObject::GetComponentsInParent(const ComponentType& type, Component*** comp_array)
+{
+	if (parent != nullptr && parent->parent != nullptr) { // to know that is not root
+		std::vector<Component*> found;
+		for (uint i = 0; i < parent->components.size(); ++i) {
+			if (parent->components[i] != nullptr && parent->components[i]->GetType() == type) {
+				found.push_back(parent->components[i]);
+			}
+		}
+		if (!found.empty()) {
+			(*comp_array) = new Component * [found.size()];
+			for (uint i = 0; i < found.size(); ++i) {
+				(*comp_array)[i] = found[i];
+			}
+		}
+		return found.size();
+	}
+	return 0u;
+}
+
+const uint GameObject::GetComponentsInParent(const ComponentType& type, Component*** comp_array) const
+{
+	if (parent != nullptr && parent->parent != nullptr) { // to know that is not root
+		std::vector<Component*> found;
+		for (uint i = 0; i < parent->components.size(); ++i) {
+			if (parent->components[i] != nullptr && parent->components[i]->GetType() == type) {
+				found.push_back(parent->components[i]);
+			}
+		}
+		if (!found.empty()) {
+			(*comp_array) = new Component * [found.size()];
+			for (uint i = 0; i < found.size(); ++i) {
+				(*comp_array)[i] = found[i];
+			}
+		}
+		return found.size();
+	}
+	return 0u;
+}
+
+uint GameObject::GetComponentsScript(const char* script_class_name, void*** comp_array)
+{
+	std::vector<void*> found;
+	for (uint i = 0; i < components.size(); ++i) {
+		if (components[i] != nullptr && components[i]->GetType() == ComponentType::SCRIPT) {
+			ComponentScript* script = (ComponentScript*)components[i];
+			if (App->StringCmp(script_class_name, script->data_name.data())) {
+				found.push_back(script->data_ptr);
+			}
+		}
+	}
+	if (!found.empty()) {
+		(*comp_array) = new void * [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*comp_array)[i] = found[i];
+		}
+	}
+	return found.size();
+}
+
+const uint GameObject::GetComponentsScript(const char* script_class_name, void*** comp_array) const
+{
+	std::vector<void*> found;
+	for (uint i = 0; i < components.size(); ++i) {
+		if (components[i] != nullptr && components[i]->GetType() == ComponentType::SCRIPT) {
+			ComponentScript* script = (ComponentScript*)components[i];
+			if (App->StringCmp(script_class_name, script->data_name.data())) {
+				found.push_back(script->data_ptr);
+			}
+		}
+	}
+	if (!found.empty()) {
+		(*comp_array) = new void* [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*comp_array)[i] = found[i];
+		}
+	}
+	return found.size();
+}
+
+uint GameObject::GetComponentsScriptInChildren(const char* script_class_name, void*** comp_array, bool recursive)
+{
+	if (children.empty()) {
+		return 0u;
+	}
+	std::vector<void*> found;
+	GetComponentsScriptChildren(script_class_name, &found, recursive);
+
+	if (found.empty()) {
+		return 0u;
+	}
+
+	(*comp_array) = new void * [found.size()];
+	for (uint i = 0; i < found.size(); ++i) {
+		(*comp_array)[i] = found[i];
+	}
+	return found.size();
+}
+
+const uint GameObject::GetComponentsScriptInChildren(const char* script_class_name, void*** comp_array, bool recursive) const
+{
+	if (children.empty()) {
+		return 0u;
+	}
+	std::vector<void*> found;
+	GetComponentsScriptChildren(script_class_name, &found, recursive);
+
+	if (found.empty()) {
+		return 0u;
+	}
+
+	(*comp_array) = new void* [found.size()];
+	for (uint i = 0; i < found.size(); ++i) {
+		(*comp_array)[i] = found[i];
+	}
+	return found.size();
+}
+
+uint GameObject::GetComponentsScriptInParent(const char* script_class_name, void*** comp_array)
+{
+	if (parent != nullptr && parent->parent != nullptr) {
+		std::vector<void*> found;
+		for (uint i = 0; i < parent->components.size(); ++i) {
+			if (parent->components[i] != nullptr && parent->components[i]->GetType() == ComponentType::SCRIPT) {
+				ComponentScript* script = (ComponentScript*)parent->components[i];
+				if (App->StringCmp(script_class_name, script->data_name.data())) {
+					found.push_back(script->data_ptr);
+				}
+			}
+		}
+		if (!found.empty()) {
+			(*comp_array) = new void * [found.size()];
+			for (uint i = 0; i < found.size(); ++i) {
+				(*comp_array)[i] = found[i];
+			}
+		}
+		return found.size();
+	}
+	return 0u;
+}
+
+const uint GameObject::GetComponentsScriptInParent(const char* script_class_name, void*** comp_array) const
+{
+	if (parent != nullptr && parent->parent != nullptr) {
+		std::vector<void*> found;
+		for (uint i = 0; i < parent->components.size(); ++i) {
+			if (parent->components[i] != nullptr && parent->components[i]->GetType() == ComponentType::SCRIPT) {
+				ComponentScript* script = (ComponentScript*)parent->components[i];
+				if (App->StringCmp(script_class_name, script->data_name.data())) {
+					found.push_back(script->data_ptr);
+				}
+			}
+		}
+		if (!found.empty()) {
+			(*comp_array) = new void* [found.size()];
+			for (uint i = 0; i < found.size(); ++i) {
+				(*comp_array)[i] = found[i];
+			}
+		}
+		return found.size();
+	}
+	return 0u;
+}
+
+void* GameObject::GetComponentScriptInParent(const char* script_class_name)
+{
+	if (parent != nullptr && parent->parent != nullptr) { // parent->parent != nullptr to test is not root :)
+		auto item = parent->components.begin();
+		for (; item != parent->components.end(); ++item) {
+			if (*item != nullptr && (*item)->GetType() == ComponentType::SCRIPT) {
+				ComponentScript* script = (ComponentScript*)*item;
+				if (App->StringCmp(script->data_name.data(), script_class_name)) {
+					return script->data_ptr;
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+const void* GameObject::GetComponentScriptInParent(const char* script_class_name) const
+{
+	if (parent != nullptr && parent->parent != nullptr) { // parent->parent != nullptr to test is not root :)
+		auto item = parent->components.cbegin();
+		for (; item != parent->components.cend(); ++item) {
+			if (*item != nullptr && (*item)->GetType() == ComponentType::SCRIPT) {
+				ComponentScript* script = (ComponentScript*)*item;
+				if (App->StringCmp(script->data_name.data(), script_class_name)) {
+					return script->data_ptr;
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+Component* GameObject::GetComponentInParent(const ComponentType& type)
+{
+	if (parent != nullptr && parent->parent != nullptr) { // parent->parent != nullptr to test is not root :)
+		std::vector<Component*>::iterator item = parent->components.begin();
+		for (; item != parent->components.end(); ++item) {
+			if (*item != nullptr && (*item)->GetType() == type) {
+				return *item;
+			}
+		}
+	}
+	return nullptr;
+}
+
+const Component* GameObject::GetComponentInParent(const ComponentType& type) const
+{
+	if (parent != nullptr && parent->parent != nullptr) { // parent->parent != nullptr to test is not root :)
+		std::vector<Component*>::const_iterator item = parent->components.cbegin();
+		for (; item != parent->components.cend(); ++item) {
+			if (*item != nullptr && (*item)->GetType() == type) {
+				return *item;
+			}
+		}
+	}
+	return nullptr;
+}
+
+
+GameObject* GameObject::GetChild(const char* child_name)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr && App->StringCmp((*item)->name, child_name)) {
+			return (*item);
+		}
+	}
+	return nullptr;
+}
+
+GameObject* GameObject::GetChild(const int& index)
+{
+	if (index < children.size() && children[index] != nullptr) {
+		return children[index];
+	}
+	return nullptr;
+}
+
+GameObject* GameObject::GetChildRecursive(const char* child_name)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			if (App->StringCmp((*item)->name, child_name)) {
+				return (*item);
+			}
+			(*item)->GetChildRecursive(child_name);
+		}
+	}
+}
+
+void GameObject::SetEnable(bool enable)
+{
+	if (enable != enabled) {
+		enabled = enable;
+		if (enable) {
+			OnEnable();
+		}
+		else {
+			OnDisable();
+		}
+	}
+}
+
+bool GameObject::IsEnabled() const
 {
 	return enabled;
-}
-
-void GameObject::PreUpdate()
-{
-	if (!components.empty()) {
-		std::vector<Component*>::iterator item = components.begin();
-		for (; item != components.end(); ++item) {
-			if (*item != nullptr && (*item)->IsEnabled()) {
-				(*item)->PreUpdate();
-			}
-		}
-	}
-
-	if (!children.empty()) {
-		std::vector<GameObject*>::iterator child = children.begin();
-		for (; child != children.end(); ++child) {
-			if (*child != nullptr && (*child)->IsEnabled()) {
-				(*child)->PreUpdate();
-			}
-		}
-	}
-}
-
-void GameObject::Update()
-{
-	if (!components.empty()) {
-		std::vector<Component*>::iterator item = components.begin();
-		for (; item != components.end(); ++item) {
-			if (*item != nullptr && (*item)->IsEnabled()) {
-				(*item)->Update();
-			}
-		}
-	}
-
-	if (!children.empty()) {
-		std::vector<GameObject*>::iterator child = children.begin();
-		for (; child != children.end(); ++child) {
-			if (*child != nullptr && (*child)->IsEnabled()) {
-				(*child)->Update();
-			}
-		}
-	}
-}
-
-void GameObject::PostUpdate()
-{
-	if (!components.empty()) {
-		std::vector<Component*>::iterator item = components.begin();
-		for (; item != components.end(); ++item) {
-			if (*item != nullptr && (*item)->IsEnabled()) {
-				(*item)->PostUpdate();
-			}
-		}
-	}
-
-	if (!children.empty()) {
-		std::vector<GameObject*>::iterator child = children.begin();
-		for (; child != children.end(); ++child) {
-			if (*child != nullptr && (*child)->IsEnabled()) {
-				(*child)->PostUpdate();
-			}
-		}
-	}
 }
 
 void GameObject::DrawScene()
@@ -122,8 +469,6 @@ void GameObject::DrawScene()
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-	ComponentCamera* camera = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
-	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
 
 	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
 	{
@@ -171,7 +516,7 @@ void GameObject::DrawGame()
 	}
 }
 
-void GameObject::SetDrawList(std::map<float, GameObject*>* to_draw, const ComponentCamera* camera)
+void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
 {
 	if (!is_static) {
 		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
@@ -180,7 +525,7 @@ void GameObject::SetDrawList(std::map<float, GameObject*>* to_draw, const Compon
 			if (App->renderer3D->IsInsideFrustum(camera, mesh->GetGlobalAABB())) {
 				float3 obj_pos = static_cast<ComponentTransform*>(GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
 				float distance = camera->frustum.pos.Distance(obj_pos);
-				to_draw->emplace(distance, this);
+				to_draw->push_back({ distance, this });
 			}
 		}
 	}
@@ -192,13 +537,14 @@ void GameObject::SetDrawList(std::map<float, GameObject*>* to_draw, const Compon
 	}
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
-	if (camera_ != nullptr && camera_->IsEnabled() && App->objects->draw_frustum && App->objects->GetSelectedObject() == this) 
+	if (camera_ != nullptr && camera_->IsEnabled()) 
 	{
-		if (App->objects->printing_scene)
+		if (App->objects->printing_scene && App->objects->draw_frustum && std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
 			camera_->DrawFrustum();
+		}
 		camera_->frustum.pos = transform->GetGlobalPosition();
-		camera_->frustum.front = transform->GetLocalRotation().WorldZ();
-		camera_->frustum.up = transform->GetLocalRotation().WorldY();
+		camera_->frustum.front = transform->GetGlobalRotation().WorldZ();
+		camera_->frustum.up = transform->GetGlobalRotation().WorldY();
 	}
 
 	if (App->objects->printing_scene)
@@ -223,28 +569,20 @@ void GameObject::SetDrawList(std::map<float, GameObject*>* to_draw, const Compon
 
 void GameObject::AddComponent(Component* component)
 {
-	bool exists = false;
-	std::vector<Component*>::iterator item = components.begin();
-	for (; item != components.end(); ++item) {
-		if (*item != nullptr && (*item)->GetType() == component->GetType())
-		{
-			exists = true;
-			break;
+	for (auto item = components.begin(); item != components.end(); ++item) {
+		if (*item != nullptr && *item == component) {
+			return;
 		}
 	}
-
-	if (!exists)
-	{
-		components.push_back(component);
-	}
+	components.push_back(component);
 }
 
-bool GameObject::HasComponent(ComponentType component)
+bool GameObject::HasComponent(ComponentType component) const
 {
 	bool exists = false;
 
-	std::vector<Component*>::iterator item = components.begin();
-	for (; item != components.end(); ++item) {
+	std::vector<Component*>::const_iterator item = components.cbegin();
+	for (; item != components.cend(); ++item) {
 		if (*item != nullptr && (*item)->GetType() == component)
 		{
 			exists = true;
@@ -255,6 +593,84 @@ bool GameObject::HasComponent(ComponentType component)
 	return exists;
 }
 
+void GameObject::GetComponentsChildren(const ComponentType& type, std::vector<Component*>* to_fill, bool recursive)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			auto item2 = (*item)->components.begin();
+			for (; item2 != (*item)->components.end(); ++item2) {
+				if (*item2 != nullptr && (*item2)->GetType() == type) {
+					to_fill->push_back(*item2);
+				}
+			}
+			if (recursive) {
+				(*item)->GetComponentsChildren(type, to_fill, true);
+			}
+		}
+	}
+}
+
+void GameObject::GetComponentsChildren(const ComponentType& type, std::vector<Component*>* to_fill, bool recursive) const
+{
+	auto item = children.cbegin();
+	for (; item != children.cend(); ++item) {
+		if (*item != nullptr) {
+			auto item2 = (*item)->components.cbegin();
+			for (; item2 != (*item)->components.cend(); ++item2) {
+				if (*item2 != nullptr && (*item2)->GetType() == type) {
+					to_fill->push_back(*item2);
+				}
+			}
+			if (recursive) {
+				(*item)->GetComponentsChildren(type, to_fill, true);
+			}
+		}
+	}
+}
+
+void GameObject::GetComponentsScriptChildren(const char* script_calss_name, std::vector<void*>* to_fill, bool recursive)
+{
+	auto item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			auto item2 = (*item)->components.begin();
+			for (; item2 != (*item)->components.end(); ++item2) {
+				if (*item2 != nullptr && (*item2)->GetType() == ComponentType::SCRIPT) {
+					ComponentScript* script = (ComponentScript*)*item2;
+					if (App->StringCmp(script_calss_name, script->data_name.data())) {
+						to_fill->push_back(script->data_ptr);
+					}
+				}
+			}
+			if (recursive) {
+				(*item)->GetComponentsScriptChildren(script_calss_name, to_fill, true);
+			}
+		}
+	}
+}
+
+void GameObject::GetComponentsScriptChildren(const char* script_calss_name, std::vector<void*>* to_fill, bool recursive) const
+{
+	auto item = children.cbegin();
+	for (; item != children.cend(); ++item) {
+		if (*item != nullptr) {
+			auto item2 = (*item)->components.cbegin();
+			for (; item2 != (*item)->components.cend(); ++item2) {
+				if (*item2 != nullptr && (*item2)->GetType() == ComponentType::SCRIPT) {
+					ComponentScript* script = (ComponentScript*)*item2;
+					if (App->StringCmp(script_calss_name, script->data_name.data())) {
+						to_fill->push_back(script->data_ptr);
+					}
+				}
+			}
+			if (recursive) {
+				(*item)->GetComponentsScriptChildren(script_calss_name, to_fill, true);
+			}
+		}
+	}
+}
+
 void GameObject::AddChild(GameObject* child)
 {
 	children.push_back(child);
@@ -262,18 +678,44 @@ void GameObject::AddChild(GameObject* child)
 
 void GameObject::SetName(const char* name)
 {
-	this->name = std::string(name);
+	strcpy(this->name, name);
 }
 
-const char* GameObject::GetName()
+const char* GameObject::GetName() const
 {
-	return name.c_str();
+	return name;
+}
+
+const char* GameObject::ToString()
+{
+	return name;
+}
+
+void GameObject::SetTag(const char* tag)
+{
+	strcpy(this->tag, tag);
+}
+
+const char* GameObject::GetTag() const
+{
+	return tag;
 }
 
 Component* GameObject::GetComponent(const ComponentType& type)
 {
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == type) {
+			return *item;
+		}
+	}
+	return nullptr;
+}
+
+const Component* GameObject::GetComponent(const ComponentType& type) const
+{
+	std::vector<Component*>::const_iterator item = components.cbegin();
+	for (; item != components.cend(); ++item) {
 		if (*item != nullptr && (*item)->GetType() == type) {
 			return *item;
 		}
@@ -292,12 +734,36 @@ Component* GameObject::GetComponentWithID(const u64& compID)
 	return nullptr;
 }
 
-bool GameObject::IsSelected()
+const Component* GameObject::GetComponentWithID(const u64& compID) const
+{
+	std::vector<Component*>::const_iterator item = components.cbegin();
+	for (; item != components.cend(); ++item) {
+		if (*item != nullptr && (*item)->ID == compID) {
+			return *item;
+		}
+	}
+	return nullptr;
+}
+
+void GameObject::RemoveComponent(Component* component)
+{
+	std::vector<Component*>::iterator item = components.begin();
+	for (; item != components.end(); ++item) {
+		if (*item != nullptr && *item == component) {
+			delete* item;
+			(*item) = nullptr;
+			components.erase(item);
+			break;
+		}
+	}
+}
+
+bool GameObject::IsSelected() const
 {
 	return selected;
 }
 
-bool GameObject::IsParentSelected()
+bool GameObject::IsParentSelected() const
 {
 	return parent_selected;
 }
@@ -399,7 +865,7 @@ void GameObject::ChangeOBB(const bool& OBB_view)
 	}
 }
 
-bool GameObject::HasChildren()
+bool GameObject::HasChildren() const
 {
 	return !children.empty();
 }
@@ -420,7 +886,9 @@ void GameObject::SetNewParent(GameObject* new_parent)
 		else {
 			transform->Reparent(transform->global_transformation);
 		}
-
+	}
+	else {
+		LOG_ENGINE("NewParent was nullptr or NewParent was a child :O");
 	}
 }
 
@@ -428,8 +896,9 @@ void GameObject::ToDelete()
 {
 	to_delete = true;
 	App->objects->need_to_delete_objects = true;
-	if (!App->objects->in_cntrl_Z)
-		ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, App->objects->GetSelectedObject());
+	if (!App->objects->in_cntrl_Z) {
+		ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, this);
+	}
 }
 
 void GameObject::SayChildrenParentIsEnabled(const bool& enabled)
@@ -448,9 +917,80 @@ void GameObject::SayChildrenParentIsEnabled(const bool& enabled)
 	}
 }
 
-bool GameObject::IsParentEnabled()
+bool GameObject::IsParentEnabled() const
 {
 	return parent_enabled;
+}
+
+void GameObject::Destroy(GameObject* object)
+{
+	object->ToDelete();
+}
+
+void GameObject::DestroyInstantly(GameObject* object)
+{
+	if (object->parent != nullptr) {
+		auto item = object->parent->children.begin();
+		for (; item != object->parent->children.end(); ++item) {
+			if (*item == object) {
+				object->parent->children.erase(item);
+				break;
+			}
+		}
+	}
+	delete object;
+}
+
+GameObject* GameObject::FindWithName(const char* name)
+{
+	return App->objects->GetRoot(true)->Find(name);
+}
+
+GameObject* GameObject::FindWithTag(const char* tag_to_find)
+{
+	return App->objects->GetRoot(true)->FindTag(tag_to_find);
+}
+
+uint GameObject::FindGameObjectsWithTag(const char* tag_to_find, GameObject*** objects)
+{
+	std::vector<GameObject*> found;
+	App->objects->GetRoot(true)->FindTags(tag_to_find, &found);
+
+	if (found.size() > 0) {
+		(*objects) = new GameObject*[found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*objects)[i] = found[i];
+		}
+	}
+
+	return found.size();
+}
+
+void GameObject::FreeArrayMemory(void*** array_)
+{
+	delete[] * array_;
+}
+
+GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position, GameObject* parent)
+{
+	if (prefab.prefabID != 0) {
+		ResourcePrefab* r_prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab.prefabID);
+		if (r_prefab != nullptr && App->StringCmp(prefab.prefab_name.data(), r_prefab->GetName())) {
+			r_prefab->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, false);
+			return (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
+		}
+		else {
+			return nullptr;
+		}
+	}
+	return nullptr;
+}
+
+GameObject* GameObject::CloneObject(GameObject* to_clone, GameObject* parent)
+{
+	GameObject* clone = new GameObject((parent == nullptr) ? to_clone->parent : parent);
+	to_clone->CloningGameObject(clone);
+	return clone;
 }
 
 void GameObject::OnEnable()
@@ -500,6 +1040,23 @@ void GameObject::ScaleNegative(const bool& is_negative)
 	}
 }
 
+GameObject* GameObject::Find(const char* name)
+{
+	GameObject* ret = nullptr;
+	if (App->StringCmp(name, this->name)) {
+		return this;
+	}
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			ret = (*item)->Find(name);
+			if (ret != nullptr)
+				break;
+		}
+	}
+	return ret;
+}
+
 void GameObject::SayChildrenParentIsSelected(const bool& selected)
 {
 	std::vector<GameObject*>::iterator item = children.begin();
@@ -507,6 +1064,18 @@ void GameObject::SayChildrenParentIsSelected(const bool& selected)
 		if (*item != nullptr) {
 			(*item)->parent_selected = selected;
 			(*item)->SayChildrenParentIsSelected(selected);
+		}
+	}
+}
+
+void GameObject::ReTag(const char* from, const char* to)
+{
+	if (App->StringCmp(tag, from)) {
+		strcpy(tag, to);
+	}
+	for (uint i = 0; i < children.size(); ++i) {
+		if (children[i] != nullptr) {
+			children[i]->ReTag(from, to);
 		}
 	}
 }
@@ -528,15 +1097,45 @@ GameObject* GameObject::GetGameObjectByID(const u64 & id)
 	return ret;
 }
 
-bool GameObject::Exists(GameObject* object)
+GameObject* GameObject::FindTag(const char* tag_to_find)
+{
+	GameObject* ret = nullptr;
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			if (App->StringCmp((*item)->tag, tag_to_find)) {
+				return (*item);
+			}
+			ret = (*item)->FindTag(tag_to_find);
+			if (ret != nullptr)
+				break;
+		}
+	}
+	return ret;
+}
+
+void GameObject::FindTags(const char* tag_to_find, std::vector<GameObject*>* objects)
+{
+	std::vector<GameObject*>::iterator item = children.begin();
+	for (; item != children.end(); ++item) {
+		if (*item != nullptr) {
+			if (App->StringCmp((*item)->tag, tag_to_find)) {
+				objects->push_back((*item));
+			}
+			(*item)->FindTags(tag_to_find, objects);
+		}
+	}
+}
+
+bool GameObject::Exists(GameObject* object) const
 {
 	bool ret = false;
 
 	if (this == object)
 		return true;
 
-	std::vector<GameObject*>::iterator item = children.begin();
-	for (; item != children.end(); ++item) {
+	std::vector<GameObject*>::const_iterator item = children.cbegin();
+	for (; item != children.cend(); ++item) {
 		if (*item != nullptr) {
 			ret = (*item)->Exists(object);
 			if (ret)
@@ -547,7 +1146,7 @@ bool GameObject::Exists(GameObject* object)
 	return ret;
 }
 
-AABB GameObject::GetBB()
+AABB GameObject::GetBB() const
 {
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 
@@ -563,7 +1162,7 @@ AABB GameObject::GetBB()
 			parent_aabb.SetNegativeInfinity();
 		}
 
-		for (std::vector<GameObject*>::iterator iter = children.begin(); iter != children.end(); ++iter)
+		for (std::vector<GameObject*>::const_iterator iter = children.cbegin(); iter != children.cend(); ++iter)
 		{
 			AABB child_aabb = (*iter)->GetBB();
 			parent_aabb.maxPoint = parent_aabb.maxPoint.Max(child_aabb.maxPoint);
@@ -586,31 +1185,20 @@ AABB GameObject::GetBB()
 
 			if (camera != nullptr) {
 				ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
-				float3 pos = transform->GetLocalPosition();
-				Quat rot = transform->GetLocalRotation();
-				float3 scale = transform->GetLocalScale();
-				transform->SetLocalScale(0.1f, 0.1f, 0.1f);
-				float3 position = pos - camera->frustum.front.Normalized() * 2;
-				Quat right_rot = { 0.7071,0,0.7071,0 };
-				Quat rotation = { 0,0,1,0 };
-				Quat rotated = rot * (rotation * right_rot);
-				transform->SetLocalPosition(position.x, position.y, position.z);
-				transform->SetLocalRotation(rotated.x, rotated.y, rotated.z, rotated.w);
+				float4x4 matrix = float4x4::FromTRS(transform->GetGlobalPosition() - camera->frustum.front.Normalized() * 2, transform->GetGlobalRotation() * (Quat{ 0,0,1,0 } *Quat{ 0.7071,0,0.7071,0 }), { 0.1F,0.1F,0.1F });
+				float4x4 to_save = transform->global_transformation;
+				transform->global_transformation = matrix;
 				camera->mesh_camera->RecalculateAABB_OBB();
-				transform->SetLocalScale(scale.x, scale.y, scale.z);
-				transform->SetLocalPosition(pos.x, pos.y, pos.z);
-				transform->SetLocalRotation(rot.x, rot.y, rot.z, rot.w);
+				transform->global_transformation = to_save;
 				return camera->mesh_camera->GetGlobalAABB();
 			}
 			else if (light != nullptr) {
 				ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
-				float3 pos = transform->GetLocalPosition();
-				float3 scale = transform->GetLocalScale();
-				transform->SetLocalScale(0.2f, 0.18f, 0.2f);
-				transform->SetLocalPosition(pos.x - 0.133f, pos.y, pos.z);
+				float3 pos = transform->GetGlobalPosition();
+				float4x4 matrix = float4x4::FromTRS({ pos.x - 0.133f, pos.y, pos.z }, transform->GetGlobalRotation(), { 0.2f, 0.18f, 0.2f });
+				float4x4 to_save = transform->global_transformation;
 				light->bulb->RecalculateAABB_OBB();
-				transform->SetLocalScale(scale.x, scale.y, scale.z);
-				transform->SetLocalPosition(pos.x, pos.y, pos.z);
+				transform->global_transformation = to_save;
 				return light->bulb->GetGlobalAABB();
 			}
 
@@ -623,7 +1211,7 @@ AABB GameObject::GetBB()
 	}
 }
 
-OBB GameObject::GetGlobalOBB()
+OBB GameObject::GetGlobalOBB() const
 {
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
@@ -665,6 +1253,7 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 	to_save->SetBoolean("IsStatic", is_static);
 	to_save->SetBoolean("IsPrefab", IsPrefab());
 	to_save->SetBoolean("PrefabLocked", prefab_locked);
+	to_save->SetString("Tag", tag);
 	if (IsPrefab()) {
 		to_save->SetString("PrefabID", std::to_string(prefabID));
 	}
@@ -681,18 +1270,22 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 	}
 }
 
-void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
+void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool force_no_selected)
 {
-	name = to_load->GetString("Name");
+	strcpy(name, to_load->GetString("Name"));
 	ID = std::stoull(to_load->GetString("ID"));
 	enabled = to_load->GetBoolean("Enabled");
 	parent_enabled = to_load->GetBoolean("ParentEnabled");
-	if (to_load->GetBoolean("Selected")) {
+	if (!force_no_selected && to_load->GetBoolean("Selected")) {
 		App->objects->SetNewSelectedObject(this);
 	}
 	prefab_locked = to_load->GetBoolean("PrefabLocked");
 	parent_selected = to_load->GetBoolean("ParentSelected");
 	is_static = to_load->GetBoolean("IsStatic");
+	std::string tag_ = to_load->GetString("Tag");
+	if (std::find(App->objects->tags.begin(), App->objects->tags.end(), tag_) != App->objects->tags.end()) {
+		strcpy(tag, tag_.data());
+	}
 	if (to_load->GetBoolean("IsPrefab")) {
 		u64 id = std::stoull(to_load->GetString("PrefabID"));
 		if (App->resources->GetResourceWithID(id) != nullptr) {
@@ -735,8 +1328,13 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 				camera->LoadComponent(components_to_load);
 				AddComponent(camera);
 				break; }
+			case (int)ComponentType::SCRIPT: {
+				ComponentScript* script = new ComponentScript(this);
+				script->LoadComponent(components_to_load);
+				// dont need to addcomponent, load script does it
+				break; }
 			default:
-				LOG("Unknown component type while loading");
+				LOG_ENGINE("Unknown component type while loading");
 				break;
 			}
 
@@ -748,6 +1346,96 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent)
 		App->objects->octree.Insert(this, false);
 	}
 
+}
+
+GameObject* GameObject::Clone(GameObject* parent)
+{
+	GameObject* clone = new GameObject((parent == nullptr) ? this->parent : parent);
+	CloningGameObject(clone);
+	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, clone);
+	return clone;
+}
+
+void GameObject::CloningGameObject(GameObject* clone)
+{
+	clone->to_delete = to_delete;
+	clone->prefabID = prefabID;
+
+	std::string name_ = name;
+	if (name_.back() != ')') {
+		strcpy(clone->name, std::string(name + std::string(" (1)")).data());
+	}
+	else {
+		int num = std::stoi(&(name_.at(name_.size() - 2)));
+		int offset = std::to_string(num).size() + 2;
+		std::string nam(name_.begin(), name_.size() - offset + name_.begin());
+		nam += std::string("(" + std::to_string(num + 1) + std::string(")"));
+		strcpy(clone->name, nam.data());
+	}
+	
+	strcpy(clone->tag, tag);
+	clone->enabled = enabled;
+	clone->parent_enabled = parent_enabled;
+	clone->prefab_locked = prefab_locked;
+	clone->is_static = is_static;
+
+	if (!components.empty()) {
+		auto item = components.begin();
+		for (; item != components.end(); ++item) {
+			if (*item != nullptr) {
+				switch ((*item)->GetType()) {
+				case ComponentType::TRANSFORM: {
+					ComponentTransform* transform = new ComponentTransform(clone);
+					(*item)->Clone(transform);
+					clone->AddComponent(transform);
+					break; }
+				case ComponentType::LIGHT: {
+					ComponentLight* light = new ComponentLight(clone);
+					(*item)->Clone(light);
+					clone->AddComponent(light);
+					break; }
+				case ComponentType::MATERIAL: {
+					ComponentMaterial* material = new ComponentMaterial(clone);
+					(*item)->Clone(material);
+					clone->AddComponent(material);
+					break; }
+				case ComponentType::MESH: {
+					ComponentMesh* mesh = new ComponentMesh(clone);
+					(*item)->Clone(mesh);
+					clone->AddComponent(mesh);
+					break; }
+				case ComponentType::CAMERA: {
+					ComponentCamera* camera = new ComponentCamera(clone);
+					(*item)->Clone(camera);
+					clone->AddComponent(camera);
+					break; }
+				case ComponentType::SCRIPT: {
+					ComponentScript* script = new ComponentScript(clone);
+					(*item)->Clone(script);
+					// dont need to addcomponent, clone script does it
+					break; }
+				default:
+					LOG_ENGINE("Unknown component type while loading");
+					break;
+				}
+			}
+		}
+	}
+
+	if (clone->is_static) {
+		App->objects->octree.Insert(clone, false);
+	}
+
+	if (!children.empty()) {
+		auto item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				GameObject* child = new GameObject(clone);
+				(*item)->CloningGameObject(child);
+			}
+		}
+	}
+	
 }
 
 void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_delete)
@@ -867,6 +1555,21 @@ void GameObject::LockPrefab(bool lock)
 	}
 }
 
+void GameObject::GetAllPrefabRoots(std::vector<GameObject*>& roots)
+{
+	if (IsPrefab() && FindPrefabRoot() == this) {
+		roots.push_back(this);
+	}
+	else {
+		auto item = children.begin();
+		for (; item != children.end(); ++item) {
+			if (*item != nullptr) {
+				(*item)->GetAllPrefabRoots(roots);
+			}
+		}
+	}
+}
+
 void GameObject::ResetIDs()
 {
 	ID = App->resources->GetRandomID();
@@ -957,9 +1660,3 @@ void GameObject::SearchToDelete()
 		}
 	}
 }
-
-
-
-
-
-

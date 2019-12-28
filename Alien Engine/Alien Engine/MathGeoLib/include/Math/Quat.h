@@ -41,10 +41,12 @@
 #include <OgreQuaternion.h>
 #endif
 
+#include "MathConstants.h"
+
 MATH_BEGIN_NAMESPACE
 
 /// Represents a rotation or an orientation of a 3D object.
-class ALIGN16 Quat
+class ALIGN16 __declspec(dllexport) Quat
 {
 public:
 
@@ -357,12 +359,16 @@ public:
 
 	/// The identity quaternion performs no rotation when applied to a vector.
 	/// For quaternions, the identity has the value r = 1, i,j,k = 0.
-	static const Quat identity;
+	static Quat identity() {
+		return Quat(0.f, 0.f, 0.f, 1.f);
+	}
 	/// A compile-time constant Quat with value (NaN, NaN, NaN, NaN).
 	/// For this constant, each element has the value of quiet NaN, or Not-A-Number.
 	/// @note Never compare a Quat to this value! Due to how IEEE floats work, for each float x, both the expression "x == nan" and "x != nan" returns false!
 	///	   That is, nothing is equal to NaN, not even NaN itself!
-	static const Quat nan;
+	static Quat nan() {
+		return Quat(FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN);
+	}
 
 	/// Divides a quaternion by another. Division "a / b" results in a quaternion that rotates the orientation b to coincide with the orientation a.
 	Quat operator /(const Quat &rhs) const;

@@ -21,7 +21,7 @@
 
 MATH_BEGIN_NAMESPACE
 
-class Polynomial
+class __declspec(dllexport) Polynomial
 {
 public:
 

@@ -1,0 +1,272 @@
+{
+    "Configuration": {
+        "Application": {
+            "CapFPS": true,
+            "LimitFPS": 60,
+            "Name": "Alien Engine",
+            "Organitzation": "UPC CITM"
+        },
+        "Window": {
+            "Width": 1200,
+            "Height": 650,
+            "Brightness": 1,
+            "Fullscreen": false,
+            "Fulldesktop": false,
+            "Resizable": true,
+            "Borderless": true,
+			      "StartMax": true,
+            "StyleType": 1
+        },
+        "UI": {
+          "ShortCuts": {
+            "PanelConfig": [
+              18,
+              224,
+              228
+            ],
+			"GoBack": [
+              29,
+              224,
+              228
+            ],
+			"GoFordward": [
+              28,
+              224,
+              228
+            ],
+            "PanelAbout": [
+              4,
+              224,
+              228
+            ],
+            "EnableOutline": [
+              65,
+              0,
+              0
+            ],
+            "PanelLayout": [
+              5,
+              224,
+              228
+            ],
+            "PanelConsole": [
+              23,
+              224,
+              228
+            ],
+			"PanelTextEditor": [
+              20,
+              224,
+              228
+            ],
+            "PanelProject": [
+              12,
+              224,
+              228
+            ],
+            "PanelSceneSelector": [
+              22,
+              224,
+              228
+            ],
+			"PanelBuild": [
+              14,
+              224,
+              228
+            ],
+            "PanelInspector": [
+              16,
+              224,
+              228
+            ],
+            "PanelCreate": [
+              19,
+              224,
+              228
+            ],
+            "WireframeMode": [
+              61,
+              0,
+              0
+            ],
+            "AABB": [
+              66,
+              0,
+              0
+            ],
+            "OBB": [
+              67,
+              0,
+              0
+            ],
+            "ViewOctree": [
+              68,
+              0,
+              0
+            ],
+            "Game": [
+              10,
+              224,
+              228
+            ],
+            "NewScene": [
+              17,
+              224,
+              228
+            ],
+            "LoadScene": [
+              15,
+              224,
+              228
+            ],
+            "SaveSceneAsNew": [
+              22,
+              226,
+              230
+            ],
+            "ViewMesh": [
+              60,
+              0,
+              0
+            ],
+            "ReportBug": [
+              58,
+              226,
+              230
+            ],
+            "PanelRender": [
+              21,
+              224,
+              228
+            ],
+            "PanelHierarchy": [
+              24,
+              224,
+              228
+            ],
+            "PanelScene": [
+              8,
+              224,
+              228
+            ],
+            "DuplicateObject": [
+              7,
+              224,
+              228
+            ],
+			"ImGuiDemo": [
+              17,
+              224,
+              228
+            ],
+            "ShowGrid": [
+              62,
+              0,
+              0
+            ],
+            "ShowNormalVertex": [
+              63,
+              0,
+              0
+            ],
+            "ShowNormalFace": [
+              64,
+              0,
+              0
+            ]
+          }
+        },
+      "Renderer": {
+        "Wireframe": false,
+        "MeshView": false,
+        "VertexNormals": false,
+        "FaceNormals": false,
+        "MeshWidth": 1,
+        "VertexNormalsWidth": 1,
+        "FaceNormalsWidth": 1,
+        "VertexNormalsLength": 1,
+        "FaceNormalsLength": 1,
+        "AllowGrid": true,
+        "GridWidth": 1,
+        "GridSpacing": 1,
+        "GridLength": 20,
+        "Outline": true,
+        "ParentLineWidth": 12,
+        "NoChildLineWidth": 12,
+        "DrawAABB": true,
+        "DrawOBB": true,
+        "LineWidthAABB": 1,
+        "LineWidthOBB": 1,
+        "RenderOctree": false,
+        "OctreelineWidth": 3,
+        "Octreebucket":  2,
+        "ColorAABB": [
+          1,
+          1,
+          1
+        ],
+        "ColorOBB": [
+          0,
+          1,
+          0
+        ],
+        "ParentOutlineColor": [
+          0,
+          1,
+          1
+        ],
+        "NoChildOutlineColor": [
+          1,
+          0.5,
+          0
+        ],
+        "GridColor": [
+          1,
+          1,
+          1
+        ],
+        "OctreeColor": [
+          1,
+          0,
+          0
+        ],
+        "BackgroundColor": [
+          0.05,
+          0.05,
+          0.05
+        ],
+        "VertexNormalColor": [
+          1,
+          0,
+          1
+        ],
+        "FaceNormalColor": [
+          0,
+          0,
+          1
+        ],
+        "MeshColor": [
+          1,
+          1,
+          1
+        ],
+        "FrustumLineWidth": 1,
+        "DrawFrustum": true,
+        "FrustumColor": [
+          1,
+          0,
+          0,
+          1
+        ],
+        "DrawRay": false,
+        "RayWidth": 5,
+        "RayColor": 
+        [
+          1,
+          0,
+          0,
+          1
+        ]
+      }
+    }
+}

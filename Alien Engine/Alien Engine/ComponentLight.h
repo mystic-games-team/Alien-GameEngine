@@ -4,15 +4,20 @@
 #include "Color.h"
 #include "ComponentMesh.h"
 
-class ComponentLight : public Component {
+class __declspec(dllexport) ComponentLight : public Component {
+	friend class GameObject;
+	friend class ComponentMesh;
 public:
 	ComponentLight(GameObject* attach);
 	virtual ~ComponentLight();
 
+private:
 	void LightLogic();
 
 	bool DrawInspector();
 	void OnDisable();
+
+	void Clone(Component* clone);
 
 	void Reset();
 	void SetComponent(Component* component);
@@ -25,10 +30,10 @@ public:
 public:
 	Color ambient{ 0.5f, 0.5f, 0.5f, 1.0f };
 	Color diffuse{ 0.75f, 0.75f, 0.75f, 1.0f };
-	ComponentMesh* bulb = nullptr;
-private:
 
+private:
+	ComponentMesh* bulb = nullptr;
 	bool print_icon = true;
 
-	uint light_id=0;
+	uint light_id = 0;
 };

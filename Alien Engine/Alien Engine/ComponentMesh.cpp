@@ -20,8 +20,9 @@ ComponentMesh::~ComponentMesh()
 	{
 		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
 	}
-	if (mesh != nullptr)
+	if (mesh != nullptr && mesh->is_custom) {
 		mesh->DecreaseReferences();
+	}
 }
 
 void ComponentMesh::DrawPolygon()
@@ -77,7 +78,6 @@ void ComponentMesh::DrawPolygon()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();
-
 }
 
 void ComponentMesh::DrawOutLine()
@@ -88,7 +88,7 @@ void ComponentMesh::DrawOutLine()
 
 	if (!glIsEnabled(GL_STENCIL_TEST))
 		return;
-	if (game_object_attached->IsParentSelected())
+	if (game_object_attached->IsParentSelected() && !game_object_attached->selected)
 	{
 		glColor3f(App->objects->parent_outline_color.r, App->objects->parent_outline_color.g, App->objects->parent_outline_color.b);
 		glLineWidth(App->objects->parent_line_width);
@@ -275,8 +275,6 @@ bool ComponentMesh::DrawInspector()
 			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			draw_OBB = check;
 		}
-		ImGui::Spacing();
-
 		
 		ImGui::Spacing();
 		ImGui::Separator();
@@ -422,6 +420,26 @@ void ComponentMesh::SetComponent(Component* component)
 		if (game_object_attached != nullptr)
 			RecalculateAABB_OBB();
 	}
+}
+
+void ComponentMesh::Clone(Component* clone)
+{
+	clone->enabled = enabled;
+	clone->not_destroy = not_destroy;
+	ComponentMesh* mesh = (ComponentMesh*)clone;
+	mesh->draw_AABB = draw_AABB;
+	mesh->draw_OBB = draw_OBB;
+	mesh->global_aabb = global_aabb;
+	mesh->local_aabb = local_aabb;
+	mesh->mesh = this->mesh;
+	if (this->mesh != nullptr) {
+		++this->mesh->references;
+	}
+	mesh->obb = obb;
+	mesh->view_face_normals = view_face_normals;
+	mesh->view_mesh = view_mesh;
+	mesh->view_vertex_normals = view_vertex_normals;
+	mesh->wireframe = wireframe;
 }
 
 AABB ComponentMesh::GenerateAABB()

@@ -4,6 +4,7 @@
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/Quat.h"
 #include "GameObject.h"
+#include "Color.h"
 
 class ResourceTexture;
 
@@ -25,7 +26,7 @@ public:
 
 	bool DeleteMetaData();
 
-	void ConvertToGameObject(std::vector<GameObject*>* objects_created);
+	void ConvertToGameObject(std::vector<std::pair<u64, GameObject*>>* objects_created);
 
 	void InitBuffers();
 
@@ -49,7 +50,7 @@ public:
 	float* center_point = nullptr;
 
 	bool is_primitive = false;
-
+	bool is_custom = true;
 private:
 
 	std::string parent_name;
@@ -61,5 +62,7 @@ private:
 	float3 pos = { 0,0,0 };
 	float3 scale = { 1,1,1 };
 	Quat rot = { 0,0,0,0 };
+
+	Color material_color;
 
 };

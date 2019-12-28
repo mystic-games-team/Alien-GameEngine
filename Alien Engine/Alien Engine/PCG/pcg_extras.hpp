@@ -518,10 +518,10 @@ auto bounded_rand(RngType& rng, typename RngType::result_type upper_bound)
         -> typename RngType::result_type
 {
     typedef typename RngType::result_type rtype;
-    rtype threshold = (RngType::max() - RngType::min() + rtype(1) - upper_bound)
+    rtype threshold = ((RngType::max)() - (RngType::min)() + rtype(1) - upper_bound)
                     % upper_bound;
     for (;;) {
-        rtype r = rng() - RngType::min();
+        rtype r = rng() - (RngType::min)();
         if (r >= threshold)
             return r % upper_bound;
     }
@@ -578,9 +578,9 @@ public:
     constexpr size_t size() const
     {
         return (sizeof(typename RngType::result_type) > sizeof(result_type)
-                && RngType::max() > ~size_t(0UL))
+                && (RngType::max)() > ~size_t(0UL))
              ? ~size_t(0UL)
-             : size_t(RngType::max());
+             : size_t((RngType::max)());
     }
 };
 

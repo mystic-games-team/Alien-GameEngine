@@ -33,7 +33,7 @@ public:
 	static void GoBackOneAction();
 	static void GoFordwardOneAction();
 
-	static void DoAction(ReturnZ* to_return, bool is_fordward);
+	static bool DoAction(ReturnZ* to_return, bool is_fordward);
 
 public:
 
@@ -150,15 +150,22 @@ public:
 
 class CompTransformZ : public CompZ {
 public:
-	float3 pos = float3::zero;
-	float3 scale = float3::zero;
-	Quat rot = Quat::identity;
+	float3 pos = float3::zero();
+	float3 scale = float3::zero();
+	Quat rot = Quat::identity();
 };
 
 class CompLightZ : public CompZ {
 public:
 	Color ambient{ 0.5f, 0.5f, 0.5f, 1.0f };
 	Color diffuse{ 0.75f, 0.75f, 0.75f, 1.0f };
+};
+
+class CompScriptZ : public CompZ {
+public:
+	std::string data_name;
+	u64 resourceID = 0;
+	bool need_alien = false;
 };
 
 class CompCameraZ : public CompZ {

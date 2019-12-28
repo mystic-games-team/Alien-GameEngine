@@ -1,17 +1,15 @@
 
 #pragma once
 
-struct Color
+class __declspec(dllexport) Color
 {
-	float r, g, b, a;
+public:
 	
-	Color() : r(0.0f), g(0.0f), b(0.0f), a(1.0f)
-	{}
+	Color() : r(0.0f), g(0.0f), b(0.0f), a(1.0f) {}
 
-	Color(float r, float g, float b, float a = 1.0f) : r(r), g(g), b(b), a(a)
-	{}
+	Color(float r, float g, float b, float a = 1.0f) : r(r), g(g), b(b), a(a) {}
 
-	void Set(float r, float g, float b, float a = 1.0f)
+	void Set(float r, float g, float b, float a = 1.0f) 
 	{
 		this->r = r;
 		this->g = g;
@@ -23,10 +21,22 @@ struct Color
 	{
 		return (float*)this;
 	}
-};
 
-extern Color Red;
-extern Color Green;
-extern Color Blue;
-extern Color Black;
-extern Color White;
+	static Color Black();
+	static Color Blue();
+	static Color Clear();
+	static Color Cyan();
+	static Color Gray();
+	static Color Green();
+	static Color Grey();
+	static Color Magenta();
+	static Color Red();
+	static Color White();
+	static Color Yellow();
+	static Color Orange();
+	static Color Purple();
+
+
+public:
+	float r, g, b, a;
+};

@@ -7,6 +7,7 @@
 #include "PanelSceneSelector.h"
 #include "ResourcePrefab.h"
 #include "ComponentTransform.h"
+#include "Prefab.h"
 #include "ReturnZ.h"
 #include "PanelGame.h"
 
@@ -65,7 +66,6 @@ void PanelScene::PanelLogic()
 
 	lastHeight = ImGui::GetWindowHeight();
 
-
 	// drop a fbx/texture in the window
 	ImVec2 min_space = ImGui::GetWindowContentRegionMin();
 	ImVec2 max_space = ImGui::GetWindowContentRegionMax();
@@ -83,7 +83,7 @@ void PanelScene::PanelLogic()
 			FileNode* node = *(FileNode**)payload->Data;
 
 			// drop texture
-			if (node != nullptr && node->type == FileDropType::TEXTURE && App->objects->GetSelectedObject() != nullptr) {
+			if (node != nullptr && node->type == FileDropType::TEXTURE && !App->objects->GetSelectedObjects().empty()) {
 				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
 				path += "_meta.alien";
 
@@ -92,19 +92,20 @@ void PanelScene::PanelLogic()
 				ResourceTexture* texture_dropped = (ResourceTexture*)App->resources->GetResourceWithID(ID);
 
 				if (texture_dropped != nullptr) {
-					if (App->objects->GetSelectedObject()->HasComponent(ComponentType::MATERIAL))
-						ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, App->objects->GetSelectedObject()->GetComponent(ComponentType::MATERIAL));
 					App->importer->ApplyTextureToSelectedObject(texture_dropped);
 				}
 			}
 
 			// drop prefab
 			if (node != nullptr && node->type == FileDropType::PREFAB) {
-				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name) + ".alienPrefab";
+				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name) + "_meta.alien";
 				u64 ID = App->resources->GetIDFromAlienPath(path.data());
 				if (ID != 0) {
 					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
 					prefab->ConvertToGameObjects(App->objects->GetRoot(false));
+					if (Time::IsInGameState()) {
+						Prefab::InitScripts(App->objects->GetRoot(false)->children.back());
+					}
 					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
 				}
 			}
@@ -143,12 +144,14 @@ void PanelScene::PanelLogic()
 	GuizmosLogic();
 
 	ImDrawList* list = ImGui::GetWindowDrawList();
-	if (list != nullptr && list->CmdBuffer.size() > 1)
+	if (list != nullptr && list->CmdBuffer.size() > 1) {
 		is_window_being_rendered = true;
-	else
+	}
+	else {
 		is_window_being_rendered = false;
+	}
 
-	if (App->renderer3D->selected_game_camera != nullptr && is_window_being_rendered)
+	if (App->renderer3D->selected_game_camera != nullptr && is_window_being_rendered && App->objects->GetSelectedObjects().size() == 1)
 	{
 		ImGui::SetNextWindowPos(ImVec2(max_space.x - 212, max_space.y - 154));
 		ImGui::SetNextWindowSize(ImVec2(192, 134));
@@ -162,21 +165,30 @@ void PanelScene::PanelLogic()
 		ImGui::End();
 	}
 
-	
-
 	ImGui::End();
 }
 
 void PanelScene::GuizmosLogic()
 {
-	if (App->objects->GetSelectedObject() != nullptr) {
-		ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
+	if (!App->objects->GetSelectedObjects().empty()) {
+		bool block_move = false;
+		float4x4 trans = float4x4::zero();
+		std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+		auto item = selected.begin();
+		for (; item != selected.end(); ++item) {
+			if (*item != nullptr) {
+				if ((*item)->is_static) {
+					block_move = true;
+				}
+				trans += (*item)->GetComponent<ComponentTransform>()->global_transformation;
+			}
+		}
 
 		float4x4 view_transposed = App->camera->fake_camera->frustum.ViewMatrix();
 		view_transposed.Transpose();
 		float4x4 projection_transposed = App->camera->fake_camera->frustum.ProjectionMatrix();
 		projection_transposed.Transpose();
-		float4x4 object_transform_matrix = transform->global_transformation;
+		float4x4 object_transform_matrix = trans / selected.size();
 		object_transform_matrix.Transpose();
 		float4x4 delta_matrix;
 
@@ -184,23 +196,37 @@ void PanelScene::GuizmosLogic()
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
 		static bool guizmo_return = true;
-		
-		if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && !transform->game_object_attached->is_static)
+		static bool duplicate = false;
+		if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && !block_move)
 		{
-			if (guizmo_return) {
-				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, transform);
-				guizmo_return = false;
+			if (!duplicate && (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_REPEAT)) {
+				duplicate = true;
+				App->objects->DuplicateObjects();
 			}
-			ComponentTransform* parent_transform = (ComponentTransform*)App->objects->GetSelectedObject()->parent->GetComponent(ComponentType::TRANSFORM);
-			if (App->objects->GetSelectedObject()->parent != App->objects->GetRoot(true))
-			{
-				transform->SetGlobalTransformation(parent_transform->global_transformation.Inverted() * object_transform_matrix.Transposed());
+			GameObject* root = App->objects->GetRoot(true);
+			item = selected.begin();
+			for (; item != selected.end(); ++item) {
+				if (*item != nullptr) {
+					if (guizmo_return) {
+						ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, (*item)->GetComponent<ComponentTransform>());
+					}
+					if ((*item)->parent != root)
+					{
+						ComponentTransform* parent_transform = (ComponentTransform*)(*item)->parent->GetComponent(ComponentType::TRANSFORM);
+						(*item)->GetComponent<ComponentTransform>()->SetGlobalTransformation(parent_transform->global_transformation.Inverted() * delta_matrix.Transposed() * (*item)->GetComponent<ComponentTransform>()->global_transformation);
+					}
+					else {
+						(*item)->GetComponent<ComponentTransform>()->SetGlobalTransformation(delta_matrix.Transposed() * (*item)->GetComponent<ComponentTransform>()->global_transformation);
+					}
+				}
+				if (guizmo_return && (*item) == selected.back()) {
+					guizmo_return = false;
+				}
 			}
-			else
-				transform->SetGlobalTransformation(object_transform_matrix.Transposed());
 		}
 		else if (!guizmo_return) {
 			guizmo_return = true;
+			duplicate = false;
 		}
 	}
 }

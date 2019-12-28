@@ -1,0 +1,21 @@
+#pragma once
+
+#include "..\..\Alien Engine\Alien.h"
+#include "Macros/AlienScripts.h"
+
+class ALIEN_ENGINE_API DataAlienTypeName : public Alien {
+
+public:
+
+	DataAlienTypeName();
+	virtual ~DataAlienTypeName();
+
+};
+
+ALIEN_FACTORY DataAlienTypeName* CreateDataAlienTypeName() {
+	DataAlienTypeName* alien = new DataAlienTypeName();
+	// To show in inspector here
+
+	return alien;
+} 
+

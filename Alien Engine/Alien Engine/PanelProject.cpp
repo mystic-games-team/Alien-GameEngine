@@ -6,6 +6,8 @@
 #include "imgui/imgui_internal.h"
 #include "ResourceModel.h"
 #include "ResourcePrefab.h"
+#include "ResourceScript.h"
+#include "ResourceScene.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 
@@ -191,7 +193,7 @@ void PanelProject::SeeFiles()
 			ImGui::NextColumn();
 		}
 
-
+		
 		for (uint i = 0; i < current_active_folder->children.size(); ++i) {
 			color = { 0, 0, 0, 0 };
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i])
@@ -206,10 +208,23 @@ void PanelProject::SeeFiles()
 				current_active_file = current_active_folder->children[i];
 			}
 
-			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && current_active_folder->children[i]->type == FileDropType::PREFAB) {
-				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name).data()));
-				if (prefab != nullptr) 
+			// double click script
+			if (current_active_folder->children[i]->type == FileDropType::SCRIPT && ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
+				ResourceScript* script = (ResourceScript*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name).data()));
+				if (script != nullptr) {
+					static char curr_dir[MAX_PATH];
+					GetCurrentDirectoryA(MAX_PATH, curr_dir);
+					std::string path_ = curr_dir + std::string("/") + std::string(script->GetLibraryPath());
+					App->file_system->NormalizePath(path_);
+					ShellExecute(NULL, NULL, path_.data(), NULL, NULL, SW_SHOW);
+				}
+			}
+			// double click prefab
+			if (current_active_folder->children[i]->type == FileDropType::PREFAB && ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
+				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name)) + "_meta.alien").data()));
+				if (prefab != nullptr) {
 					prefab->OpenPrefabScene();
+				}
 			}
 
 			if (ImGui::IsItemHovered() && current_active_file != current_active_folder->children[i]) {
@@ -328,9 +343,9 @@ void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 				current_active_folder->children[i]->changing_name = true;
 			}
 		}
-		if (ImGui::MenuItem("Copy Path")) {
-			// TODO: copy path
-		}
+		//if (ImGui::MenuItem("Copy Path")) {
+		//	// TODO: copy path
+		//}
 		ImGui::EndPopup();
 	}
 }
@@ -366,23 +381,14 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 					current_active_folder->children[i]->path = current_active_folder->children[i]->parent->path + name_before_rename + "/";
 				}
 
-				if (current_active_folder->children[i]->type == FileDropType::SCENE) {
-					static char curr_dir[MAX_PATH];
-					GetCurrentDirectoryA(MAX_PATH, curr_dir);
-					if (App->StringCmp(App->objects->current_scene.full_path.data(), std::string(curr_dir + std::string("/") + current_active_folder->path + current_active_folder->children[i]->name).data())) {
-						App->objects->current_scene.full_path = std::string(curr_dir + current_active_folder->path + std::string("/") + name_before_rename).data();
-						App->objects->current_scene.name_without_extension = App->file_system->GetBaseFileName(App->objects->current_scene.full_path.data());
-					}
-				}
-
 				current_active_folder->children[i]->name = name_before_rename;
 
 				current_active_folder->children[i]->ResetPaths();
 
-				LOG("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
+				LOG_ENGINE("New file/folder renamed correctly to %s", current_active_folder->children[i]->name.data());
 			}
 			else {
-				LOG("Failing while renaming %s to %s because this name already exists", current_active_folder->children[i]->name.data(), name);
+				LOG_ENGINE("Failing while renaming %s to %s because this name already exists", current_active_folder->children[i]->name.data(), name);
 			}
 		}
 
@@ -391,21 +397,33 @@ void PanelProject::PrintNodeNameUnderIcon(const uint& i)
 		}
 	}
 	else {	// make the name smaller
-		if (current_active_folder->children[i]->name.length() > 7) {
-			char new_char[8];
-			memcpy(new_char, current_active_folder->children[i]->name.data(), 7);
-			new_char[7] = '\0';
-			std::string name(std::string(new_char) + std::string("..."));
+		ImVec2 size = ImGui::CalcTextSize(current_active_folder->children[i]->name.data());
+		if (size.x > 55) {
+			std::string name = current_active_folder->children[i]->name.data();
+			
+			for (;;) {
+				name.pop_back();
+				if (ImGui::CalcTextSize(name.data()).x <= 55) {
+					name.pop_back();
+					break;
+				}
+			}
+			name += "...";
 			ImGui::Text(name.data());
 		}
-		else
+		else {
 			ImGui::Text(current_active_folder->children[i]->name.data());
+		}
 	}
 }
 
 void PanelProject::RightClickToWindow(bool pop_up_item)
 {
 	if (!pop_up_item && ImGui::BeginPopupContextWindow()) {
+		if (ImGui::MenuItem("Create New Script")) {
+			App->ui->creating_script = true;
+		}
+		ImGui::Separator();
 		if (ImGui::MenuItem("Create New Folder")) {
 			int folder_number = 0;
 			std::string folder_name = "NewFolder" + std::to_string(folder_number);
@@ -439,8 +457,9 @@ void PanelProject::RightClickToWindow(bool pop_up_item)
 bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 {
 	bool ret = false;
-	if (node->is_file || ImGui::IsMouseDragging())
+	if (node->is_file || ImGui::IsMouseDragging()) {
 		return ret;
+	}
 
 	if (ImGui::BeginDragDropTargetCustom(ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()), ImGui::GetID("##ProjectChild"))) {
 		const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -469,7 +488,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						App->file_system->DiscoverEverythig(node);
 					}
 					else {
-						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
+						LOG_ENGINE("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
 				}
 				else { // move folder down
@@ -489,7 +508,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						App->file_system->DiscoverEverythig(node);
 					}
 					else {
-						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
+						LOG_ENGINE("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
 					}
 				}
 			}
@@ -509,7 +528,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						current_active_file = nullptr;
 					}
 					else {
-						LOG("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
+						LOG_ENGINE("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
 					}
 				}
 				else { // move folder up
@@ -524,7 +543,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						current_active_file = nullptr;
 					}
 					else {
-						LOG("Could not move %s to %s", node_to_move->path.data(), std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
+						LOG_ENGINE("Could not move %s to %s", node_to_move->path.data(), std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());
 					}
 				}
 			}

@@ -308,8 +308,10 @@ JSONArraypack* JSONfilepack::InitNewArray(const std::string& name)
 
 JSONArraypack* JSONfilepack::GetArray(const std::string& name)
 {
-	JSON_Array* arr = json_object_dotget_array(object, name.data());
-	JSON_Value* value = json_array_get_value(arr, 0);
+	JSON_Array* arr = nullptr;
+	while (arr == nullptr) { arr = json_object_dotget_array(object, name.data()); }
+	JSON_Value* value = nullptr;
+	while (value == nullptr) { value = json_array_get_value(arr, 0); }
 	JSONArraypack* array_pack = new JSONArraypack(arr, value);
 	arrays.push_back(array_pack);
 

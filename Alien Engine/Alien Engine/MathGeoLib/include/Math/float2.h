@@ -34,10 +34,12 @@
 #include <OgreVector2.h>
 #endif
 
+#include "MathConstants.h"
+
 MATH_BEGIN_NAMESPACE
 
 /// A vector of form (x,y).
-class float2
+class __declspec(dllexport) float2
 {
 public:
 	enum
@@ -572,30 +574,42 @@ public:
 	/// Specifies a compile-time constant float2 with value (0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float2 zero;
+	static const float2 zero() {
+		return float2(0, 0);
+	}
 	/// Specifies a compile-time constant float2 with value (1, 1). [similarOverload: zero]
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float2 one;
+	static const float2 one() {
+		return float2(1, 1);
+	}
 	/// Specifies a compile-time constant float2 with value (1, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float2 unitX;
+	static const float2 unitX() {
+		return float2(1, 0);
+	}
 	/// Specifies a compile-time constant float2 with value (0, 1). [similarOverload: unitX]
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float2 unitY;
+	static const float2 unitY() {
+		return float2(0, 1);
+	}
 	/// A compile-time constant float2 with value (NaN, NaN).
 	/** For this constant, each element has the value of quiet NaN, or Not-A-Number.
 		@note Never compare a float2 to this value! Due to how IEEE floats work, for each float x, both expressions "x == nan" and "x != nan" return false!
 			  That is, nothing is equal to NaN, not even NaN itself!
 		@note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float2 nan;
+	static const float2 nan() {
+		return float2(FLOAT_NAN, FLOAT_NAN);
+	}
 	/// A compile-time constant float2 with value (+infinity, +infinity). [similarOverload: nan]
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float2 inf;
+	static const float2 inf() {
+		return float2(FLOAT_INF, FLOAT_INF);
+	}
 
 #ifdef MATH_OGRE_INTEROP
 	float2(const Ogre::Vector2 &other) { x = other.x; y = other.y; }

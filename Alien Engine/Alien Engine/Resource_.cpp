@@ -25,6 +25,11 @@ void Resource::SetAssetsPath(const char* path)
 	this->path = std::string(path);
 }
 
+void Resource::SetLibraryPath(const char* path)
+{
+	this->meta_data_path = std::string(path);
+}
+
 const char* const Resource::GetName() const
 {
 	return name.data();
@@ -52,8 +57,9 @@ const bool Resource::NeedToLoad() const
 
 void Resource::IncreaseReferences()
 {
-	if (references == 0)
+	if (references == 0) {
 		LoadMemory();
+	}
 	if (App->objects->enable_instancies) {
 		++references;
 	}
@@ -64,6 +70,7 @@ void Resource::DecreaseReferences()
 	if (App->objects->enable_instancies) {
 		--references;
 	}
-	if (references == 0)
+	if (references == 0) {
 		FreeMemory();
+	}
 }

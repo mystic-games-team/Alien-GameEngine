@@ -4,6 +4,7 @@
 #include "ResourceTexture.h"
 #include "imgui/imgui_internal.h"
 #include "FileNode.h"
+#include "ResourceScene.h"
 #include "PanelProject.h"
 
 PanelSceneSelector::PanelSceneSelector(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -44,11 +45,11 @@ void PanelSceneSelector::OrganizeSave(const SceneSelectorState& state)
 
 void PanelSceneSelector::OrganizeSaveScene()
 {
-	if (App->objects->current_scene.is_untitled) {
+	if (App->objects->current_scene == nullptr) {
 		OrganizeSave(SceneSelectorState::SAVE_AS_NEW);
 	}
 	else {
-		App->objects->SaveScene(App->objects->current_scene.full_path.data());
+		App->objects->SaveScene(App->objects->current_scene);
 	}
 }
 
@@ -101,10 +102,18 @@ void PanelSceneSelector::SaveSceneAsNew()
 
 		std::string extension;
 		App->file_system->SplitFilePath(filename, nullptr, nullptr, &extension);
-		if (!App->StringCmp("alienScene", extension.data()))
-			App->objects->SaveScene(std::string(filename + std::string(".alienScene")).data());
-		else
-			App->objects->SaveScene(filename);
+
+		ResourceScene* scene = new ResourceScene();
+		std::string path;
+		if (!App->StringCmp("alienScene", extension.data())) {
+			path = std::string(filename + std::string(".alienScene")).data();
+		}
+		else {
+			path = filename;
+		}
+		scene->SetAssetsPath(path.data());
+		scene->CreateMetaData();
+		App->objects->SaveScene(scene);
 
 		// last of all, refresh nodes because I have no idea if the user has created folders or moved things in the explorer. Users are bad people creating folders without using the alien engine explorer :(
 		App->ui->panel_project->RefreshAllNodes();
@@ -143,8 +152,10 @@ void PanelSceneSelector::LoadScene()
 	if (GetOpenFileNameA(&to_load))
 	{
 		SetCurrentDirectoryA(curr_dir);
+		std::string name = filename;
+		App->file_system->NormalizePath(name);
 
-		App->objects->LoadScene(filename);
+		App->objects->LoadScene(App->file_system->GetBaseFileName(name.data()).data());
 
 		// last of all, refresh nodes because I have no idea if the user has created folders or moved things in the explorer. Users are bad people creating folders without using the alien engine explorer :(
 		App->ui->panel_project->RefreshAllNodes();
@@ -186,10 +197,17 @@ void PanelSceneSelector::CreateNewScene()
 		std::string extension;
 		App->file_system->SplitFilePath(filename, nullptr, nullptr, &extension);
 
-		if (!App->StringCmp("alienScene",extension.data()))
-			App->objects->CreateEmptyScene(std::string(filename + std::string(".alienScene")).data());
-		else 
-			App->objects->CreateEmptyScene(filename);
+		ResourceScene* scene = new ResourceScene();
+		std::string path;
+		if (!App->StringCmp("alienScene", extension.data())) {
+			path = std::string(filename + std::string(".alienScene")).data();
+		}
+		else {
+			path = filename;
+		}
+		scene->SetAssetsPath(path.data());
+		scene->CreateMetaData();
+		App->objects->CreateEmptyScene(scene);
 
 		// last of all, refresh nodes because I have no idea if the user has created folders or moved things in the explorer. Users are bad people creating folders without using the alien engine explorer :(
 		App->ui->panel_project->RefreshAllNodes();
@@ -211,7 +229,12 @@ void PanelSceneSelector::MenuSaveCurrentScene()
 
 		ImGui::Spacing();
 
-		ImGui::Text(App->file_system->GetBaseFileNameWithExtension(App->objects->current_scene.full_path.data()).data());
+		if (App->objects->current_scene != nullptr) {
+			ImGui::Text(App->file_system->GetBaseFileNameWithExtension(App->objects->current_scene->GetAssetsPath()).data());
+		}
+		else {
+			ImGui::Text("Untitled*");
+		}
 
 		ImGui::Spacing();
 
@@ -221,16 +244,15 @@ void PanelSceneSelector::MenuSaveCurrentScene()
 		ImGui::Spacing();
 
 		if (ImGui::Button("Save", { 65,20 })) {
-			if (App->objects->current_scene.is_untitled) {
+			if (App->objects->current_scene == nullptr) {
 				SaveSceneAsNew();
 			}
 			else {
-				App->objects->SaveScene(App->objects->current_scene.full_path.data());
+				App->objects->SaveScene(App->objects->current_scene);
 			}
 			menu_save_current = false;
 		}
 		
-
 		ImGui::SameLine();
 
 		if (ImGui::Button("Don't save", { 80,20 })) {
@@ -265,7 +287,7 @@ void PanelSceneSelector::MenuSaveCurrentScene()
 			CreateNewScene();
 		}
 		else if (!scene_to_load.empty()) {
-			App->objects->LoadScene(scene_to_load.data());
+			App->objects->LoadScene(App->file_system->GetBaseFileName(scene_to_load.data()).data());
 			scene_to_load.clear();
 		}
 	}

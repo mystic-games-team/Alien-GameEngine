@@ -10,6 +10,9 @@ enum class ResourceType {
 	RESOURCE_MESH,
 	RESOURCE_MODEL,
 	RESOURCE_TEXTURE,
+	RESOURCE_SCRIPT,
+	RESOURCE_SCENE,
+	RESOURCE_PREFAB,
 
 	RESOURECE_MAX
 };
@@ -26,7 +29,7 @@ public:
 	const char* const GetAssetsPath() const;
 	const char* const GetLibraryPath() const;
 	void SetAssetsPath(const char* path);
-
+	void SetLibraryPath(const char* path);
 	// name
 	const char* const GetName() const;
 	void SetName(const char* name);

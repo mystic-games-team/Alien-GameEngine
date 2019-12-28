@@ -23,7 +23,7 @@ ModuleCamera3D::~ModuleCamera3D()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
-	LOG("Setting up the camera");
+	LOG_ENGINE("Setting up the camera");
 	bool ret = true;
 
 	return ret;
@@ -32,7 +32,7 @@ bool ModuleCamera3D::Start()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::CleanUp()
 {
-	LOG("Cleaning camera");
+	LOG_ENGINE("Cleaning camera");
 
 	SDL_FreeCursor(cursor);
 
@@ -66,26 +66,37 @@ update_status ModuleCamera3D::Update(float dt)
 		if (is_scene_hovered)
 		{
 			Zoom();
-			if ((App->objects->GetSelectedObject() == nullptr || (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver())) && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
+			if ((App->objects->GetSelectedObjects().empty() || (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver())) && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {
 				CreateRay();
 			}
 
-			if (!ImGuizmo::IsUsing())
+			if (!ImGuizmo::IsUsing()) {
 				Movement();
+			}
 		}
 		if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 		{
 			Rotation(dt);
 		}
-		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {
 			Focus();
+		}
 
 		if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		{
-			if (App->objects->GetSelectedObject() != nullptr)
+			float3 to_look(0, 0, 0);
+			if (!App->objects->GetSelectedObjects().empty())
 			{
-				fake_camera->Look(App->objects->GetSelectedObject()->GetBB().CenterPoint());
+				auto item = App->objects->GetSelectedObjects().begin();
+				for (; item != App->objects->GetSelectedObjects().end(); ++item) {
+					if (*item != nullptr) {
+						to_look += (*item)->GetBB().CenterPoint();
+					}
+				}
+				to_look /= App->objects->GetSelectedObjects().size();
 			}
+			fake_camera->Look(to_look);
+			reference = to_look;
 		}
 	}
 
@@ -101,14 +112,14 @@ void ModuleCamera3D::Move(const float3& Movement)
 // -----------------------------------------------------------------
 void ModuleCamera3D::Movement()
 {
-	float3 movement(float3::zero);
+	float3 movement(float3::zero());
 
 
 
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
-		if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT) movement += float3::unitY;
-		if (App->input->GetKey(SDL_SCANCODE_X) == KEY_REPEAT) movement -= float3::unitY;
+		if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT) movement += float3::unitY();
+		if (App->input->GetKey(SDL_SCANCODE_X) == KEY_REPEAT) movement -= float3::unitY();
 
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) movement -= frustum->front;
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) movement += frustum->front;
@@ -116,7 +127,7 @@ void ModuleCamera3D::Movement()
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) movement -= frustum->WorldRight();
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) movement += frustum->WorldRight();
 
-		if (!movement.Equals(float3::zero))
+		if (!movement.Equals(float3::zero()))
 		{
 			frustum->Translate(movement * speed);
 			reference += movement*speed;
@@ -125,7 +136,7 @@ void ModuleCamera3D::Movement()
 
 	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 	{
-		movement = float3::zero;
+		movement = float3::zero();
 
 		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 		SDL_SetCursor(cursor);
@@ -133,10 +144,10 @@ void ModuleCamera3D::Movement()
 		if (App->input->GetMouseXMotion() > -1) movement -= frustum->WorldRight();
 		if (App->input->GetMouseXMotion() < 1) movement += frustum->WorldRight();
 
-		if (App->input->GetMouseYMotion() < 1) movement -= float3::unitY * 0.5f;
-		if (App->input->GetMouseYMotion() > -1) movement += float3::unitY * 0.5f;
+		if (App->input->GetMouseYMotion() < 1) movement -= float3::unitY() * 0.5f;
+		if (App->input->GetMouseYMotion() > -1) movement += float3::unitY() * 0.5f;
 
-		if (!movement.Equals(float3::zero))
+		if (!movement.Equals(float3::zero()))
 		{
 			frustum->Translate(movement * mouse_speed);
 			reference += movement * mouse_speed;
@@ -151,7 +162,7 @@ void ModuleCamera3D::Movement()
 
 void ModuleCamera3D::Zoom()
 {
-	float3 zoom(float3::zero);
+	float3 zoom(float3::zero());
 
 	if (App->input->GetMouseZ() > 0)
 	{
@@ -191,46 +202,31 @@ void ModuleCamera3D::Rotation(float dt)
 
 void ModuleCamera3D::Focus()
 {
-	if (App->objects->GetSelectedObject() != nullptr)
+	if (!App->objects->GetSelectedObjects().empty())
 	{
-		AABB bounding_box = App->objects->GetSelectedObject()->GetBB();
+		AABB bounding_box;
+		bounding_box.SetNegativeInfinity();
+		auto item = App->objects->GetSelectedObjects().begin();
 
-		if (bounding_box.IsFinite())
-		{
-			float offset = bounding_box.Diagonal().Length();
-
-			fake_camera->Look(bounding_box.CenterPoint());
-			reference = bounding_box.CenterPoint();
-			float3 vector_distance = fake_camera->frustum.pos - bounding_box.CenterPoint();
-
-			point_to_look = fake_camera->frustum.pos - (vector_distance - (offset * vector_distance.Normalized()));
-			start_lerp = true;
+		for (; item != App->objects->GetSelectedObjects().end(); ++item) {
+			if (*item != nullptr) {
+				AABB obj_aabb = (*item)->GetBB();
+				if (obj_aabb.IsFinite()) {
+					bounding_box.maxPoint = { max(obj_aabb.maxPoint.x, bounding_box.maxPoint.x), max(obj_aabb.maxPoint.y, bounding_box.maxPoint.y), max(obj_aabb.maxPoint.z, bounding_box.maxPoint.z) };
+					bounding_box.minPoint = { min(obj_aabb.minPoint.x, bounding_box.minPoint.x), min(obj_aabb.minPoint.y, bounding_box.minPoint.y), min(obj_aabb.minPoint.z, bounding_box.minPoint.z) };
+				}
+			}
 		}
-		else
-		{
-			ComponentTransform* transform = (ComponentTransform*)App->objects->GetSelectedObject()->GetComponent(ComponentType::TRANSFORM);
-			float3 pos = transform->GetGlobalPosition();
 
-			fake_camera->Look(pos);
-			reference = pos;
+		float offset = bounding_box.Diagonal().Length();
 
-			float3 vector_distance = fake_camera->frustum.pos - pos;
-			point_to_look = fake_camera->frustum.pos - (vector_distance - (3.f * vector_distance.Normalized()));
-			start_lerp = true;
-		}
+		fake_camera->Look(bounding_box.CenterPoint());
+		reference = bounding_box.CenterPoint();
+		float3 vector_distance = fake_camera->frustum.pos - bounding_box.CenterPoint();
+
+		point_to_look = fake_camera->frustum.pos - (vector_distance - (offset * vector_distance.Normalized()));
+		start_lerp = true;
 	}
-	//else
-	//{
-	//	for (std::vector<GameObject*>::iterator iter = App->objects->base_game_object->children.begin(); iter != App->objects->base_game_object->children.end(); ++iter)
-	//	{
-	//		if (iter == App->objects->base_game_object->children.begin() || (*iter) != looking_at)
-	//		{
-	//			looking_at=(*iter);
-	//			ComponentTransform* tr = (ComponentTransform*)(*iter)->GetComponent(ComponentType::TRANSFORM);
-	//			LookAt({ tr->GetGlobalPosition().x, tr->GetGlobalPosition().y, tr->GetGlobalPosition().z });
-	//		}
-	//	}
-	//}
 }
 
 void ModuleCamera3D::CreateRay()
@@ -253,7 +249,7 @@ void ModuleCamera3D::CreateRay()
 
 	// with octree to static objects
 	CreateObjectsHitMap(&hits, App->objects->octree.root, ray);
-
+	
 	// without octree for the dynamics
 	std::vector<GameObject*>::iterator item = App->objects->GetRoot(true)->children.begin();
 	for (; item != App->objects->GetRoot(true)->children.end(); ++item) {
@@ -275,7 +271,7 @@ void ModuleCamera3D::CreateRay()
 	}
 
 	if (!hit) {
-		App->objects->DeselectObject();
+		App->objects->DeselectObjects();
 	}
 
 	hit = false;
@@ -337,7 +333,7 @@ bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSe
 {
 	bool ret = false;
 	ComponentMesh* mesh = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
-	// TODO: if obj doesnt have mesh, just set it selected because it might be camera or light
+
 	if (mesh != nullptr && mesh->mesh != nullptr)
 	{
 		ComponentTransform* transform = (ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM);

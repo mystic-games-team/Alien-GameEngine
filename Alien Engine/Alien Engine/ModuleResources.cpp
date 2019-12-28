@@ -7,9 +7,12 @@
 #include "Application.h"
 #include "ResourceTexture.h"
 #include "RandomHelper.h"
+#include "ResourceScene.h"
 #include "PanelProject.h"
 #include "ResourcePrefab.h"
 #include "FileNode.h"
+#include "ResourceScript.h"
+
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 {
@@ -22,12 +25,14 @@ ModuleResources::~ModuleResources()
 
 bool ModuleResources::Start()
 {
+#ifndef GAME_VERSION
 	// Load Icons
 	icons.jpg_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_jpg.png");
 	icons.png_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_png.png");
 	icons.dds_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_dds.png");
 	icons.tga_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_tga.png");
 	icons.folder = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_folder.png");
+	icons.script_file = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_script.png");
 	icons.prefab_icon = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_prefab.png");
 	icons.model = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_model.png");
 	icons.return_icon = App->importer->LoadEngineTexture("Configuration/EngineTextures/icon_return.png");
@@ -46,10 +51,16 @@ bool ModuleResources::Start()
 	icons.prefab = App->importer->LoadEngineTexture("Configuration/EngineTextures/prefab.png");
 	icons.prefab_lock = App->importer->LoadEngineTexture("Configuration/EngineTextures/prefab_lock.png");
 
-	
 	camera_mesh = App->importer->LoadEngineModels("Configuration/Engine Models/camera.FBX");
 	light_mesh = App->importer->LoadEngineModels("Configuration/Engine Models/bulb.fbx");
 
+	assets = new FileNode();
+	assets->is_file = false;
+	assets->is_base_file = true;
+	assets->name = "Assets";
+
+	App->file_system->DiscoverEverythig(assets);
+#endif
 
 	// Load Primitives as resource
 	cube = new ResourceMesh();
@@ -60,12 +71,6 @@ bool ModuleResources::Start()
 	icosahedron = new ResourceMesh();
 	octahedron = new ResourceMesh();
 
-	assets = new FileNode();
-	assets->is_file = false;
-	assets->is_base_file = true;
-	assets->name = "Assets";
-
-	App->file_system->DiscoverEverythig(assets);
 	// TODO: look if all meta data has its fbx or texture if not remove meta data
 
 	ReadAllMetaData();
@@ -152,7 +157,18 @@ Resource* ModuleResources::GetResourceWithID(const u64& ID)
 		if (*item != nullptr && (*item)->GetID() == ID)
 			return (*item);
 	}
-	LOG("No resource found with ID %i", ID);
+	LOG_ENGINE("No resource found with ID %i", ID);
+	return nullptr;
+}
+
+const Resource* ModuleResources::GetResourceWithID(const u64& ID) const
+{
+	std::vector<Resource*>::const_iterator item = resources.cbegin();
+	for (; item != resources.cend(); ++item) {
+		if (*item != nullptr && (*item)->GetID() == ID)
+			return (*item);
+	}
+	LOG_ENGINE("No resource found with ID %i", ID);
 	return nullptr;
 }
 
@@ -190,6 +206,20 @@ ResourceTexture * ModuleResources::GetTextureByName(const char * name)
 	std::vector<Resource*>::iterator item = resources.begin();
 	for (; item != resources.end(); ++item) {
 		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && App->StringCmp(App->file_system->GetBaseFileName((*item)->GetAssetsPath()).data(),App->file_system->GetBaseFileName(name).data())) {
+			return static_cast<ResourceTexture*>(*item);
+		}
+	}
+
+	return ret;
+}
+
+const ResourceTexture* ModuleResources::GetTextureByName(const char* name) const
+{
+	ResourceTexture* ret = nullptr;
+
+	std::vector<Resource*>::const_iterator item = resources.cbegin();
+	for (; item != resources.cend(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && App->StringCmp(App->file_system->GetBaseFileName((*item)->GetAssetsPath()).data(), App->file_system->GetBaseFileName(name).data())) {
 			return static_cast<ResourceTexture*>(*item);
 		}
 	}
@@ -235,16 +265,57 @@ ResourceMesh* ModuleResources::GetPrimitive(const PrimitiveType& type)
 			++ret->references;
 		}
 	}
-
 	return ret;
 }
 
-bool ModuleResources::Exists(const char * path, Resource** resource)
+const ResourceMesh* ModuleResources::GetPrimitive(const PrimitiveType& type) const
+{
+	ResourceMesh* ret = nullptr;
+
+	switch (type)
+	{
+	case PrimitiveType::CUBE:
+		ret = cube;
+		break;
+	case PrimitiveType::SPHERE_ALIEN:
+		ret = sphere;
+		break;
+	case PrimitiveType::ROCK:
+		ret = rock;
+		break;
+	case PrimitiveType::DODECAHEDRON:
+		ret = dodecahedron;
+		break;
+	case PrimitiveType::OCTAHEDRON:
+		ret = octahedron;
+		break;
+	case PrimitiveType::TORUS:
+		ret = torus;
+		break;
+	case PrimitiveType::ICOSAHEDRON:
+		ret = icosahedron;
+		break;
+	default:
+		break;
+	}
+
+	if (ret != nullptr) {
+		if (ret->NeedToLoad()) {
+			CreatePrimitive(type, &ret);
+		}
+		if (App->objects->enable_instancies) {
+			++ret->references;
+		}
+	}
+	return ret;
+}
+
+bool ModuleResources::Exists(const char * path, Resource** resource) const
 {
 	bool exists = false;
 
-	std::vector<Resource*>::iterator item = resources.begin();
-	for (; item != resources.end(); ++item) {
+	std::vector<Resource*>::const_iterator item = resources.cbegin();
+	for (; item != resources.cend(); ++item) {
 		if (*item != nullptr && App->StringCmp(path, (*item)->GetAssetsPath())) {
 			exists = true;
 			if (resource != nullptr)
@@ -298,6 +369,135 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 	App->importer->LoadParShapesMesh(par_mesh, *ret);
 }
 
+void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** ret) const
+{
+	(*ret)->is_primitive = true;
+	par_shapes_mesh* par_mesh = nullptr;
+
+	switch (type)
+	{
+	case PrimitiveType::CUBE: {
+		par_mesh = par_shapes_create_cube();
+		(*ret)->SetName("Cube");
+		break; }
+	case PrimitiveType::SPHERE_ALIEN: {
+		par_mesh = par_shapes_create_subdivided_sphere(5);
+		(*ret)->SetName("Sphere");
+		break; }
+	case PrimitiveType::ROCK: {
+		par_mesh = par_shapes_create_rock(3, 3);
+		(*ret)->SetName("Rock");
+		break; }
+	case PrimitiveType::DODECAHEDRON: {
+		par_mesh = par_shapes_create_dodecahedron();
+		(*ret)->SetName("Dodecahedron");
+		break; }
+	case PrimitiveType::OCTAHEDRON: {
+		par_mesh = par_shapes_create_octahedron();
+		(*ret)->SetName("Octahedron");
+		break; }
+	case PrimitiveType::TORUS: {
+		par_mesh = par_shapes_create_torus(12, 12, 0.5F);
+		(*ret)->SetName("Torus");
+		break; }
+	case PrimitiveType::ICOSAHEDRON: {
+		par_mesh = par_shapes_create_icosahedron();
+		(*ret)->SetName("Icosahedron");
+		break; }
+	default: {
+		break; }
+	}
+
+	App->importer->LoadParShapesMesh(par_mesh, *ret);
+}
+
+void ModuleResources::ReadHeaderFile(const char* path, std::vector<std::string>& current_scripts)
+{
+	ResourceScript* script = new ResourceScript();
+	script->SetAssetsPath(path);
+	script->SetName(App->file_system->GetBaseFileName(path).data());
+	for (auto item = current_scripts.begin(); item != current_scripts.end(); ++item) {
+		if (App->StringCmp(App->file_system->GetBaseFileName(path).data(), App->file_system->GetBaseFileName((*item).data()).data())) {
+			script->ReadBaseInfo((*item).data());
+			current_scripts.erase(item);
+			return;
+		}
+	}
+	// if it goes here it is because it doesnt exist
+	script->CreateMetaData();
+}
+
+void ModuleResources::ReloadScripts()
+{
+	std::vector<std::string> files;
+	std::vector<std::string> directories;
+
+	App->file_system->DiscoverFiles(HEADER_SCRIPTS_FILE, files, directories, true);
+
+	for (uint i = 0; i < files.size(); ++i) {
+		if (files[i].back() == 'h') { // header file found
+			bool exists = false;
+			std::vector<Resource*>::iterator item = resources.begin();
+			for (; item != resources.end(); ++item) {
+				if ((*item) != nullptr && (*item)->GetType() == ResourceType::RESOURCE_SCRIPT) {
+					if (App->StringCmp((*item)->GetLibraryPath(), files[i].data())) {
+						ResourceScript* script = (ResourceScript*)*item;
+						if (script->NeedReload()) {
+							remove(script->GetAssetsPath());
+							script->data_structures.clear();
+							script->SetAssetsPath(script->GetLibraryPath());
+							script->CreateMetaData(script->GetID());
+						}
+						exists = true;
+						script->reload_completed = true;
+						break;
+					}
+				}
+			}
+			if (!exists) {
+				ResourceScript* script = new ResourceScript();
+				script->SetAssetsPath(files[i].data());
+				script->SetName(App->file_system->GetBaseFileName(files[i].data()).data());
+				script->CreateMetaData(); 
+				script->reload_completed = true;
+			}
+		}
+	}
+
+	std::vector<Resource*>::iterator item = resources.begin();
+	while (item != resources.end()) {
+		if ((*item) != nullptr && (*item)->GetType() == ResourceType::RESOURCE_SCRIPT) {
+			ResourceScript* script = (ResourceScript*)*item;
+			if (script->reload_completed) {
+				script->reload_completed = false;
+			}
+			else {
+				remove((*item)->GetAssetsPath());
+				delete* item;
+				(*item) = nullptr;
+				item = resources.erase(item);
+				continue;
+			}
+		}
+		++item;
+	}
+
+	App->ui->panel_project->RefreshAllNodes();
+}
+
+ResourceScene* ModuleResources::GetSceneByName(const char* name)
+{
+	auto item = resources.begin();
+	for (; item != resources.end(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_SCENE) {
+			if (App->StringCmp((*item)->GetName(), name)) {
+				return dynamic_cast<ResourceScene*>(*item);
+			}
+		}
+	}
+	return nullptr;
+}
+
 FileNode* ModuleResources::GetFileNodeByPath(const std::string& path, FileNode* node)
 {
 	FileNode* to_search = nullptr;
@@ -334,11 +534,27 @@ void ModuleResources::ReadAllMetaData()
 	App->file_system->DiscoverFiles(MODELS_FOLDER, files, directories);
 
 	ReadModels(directories, files, MODELS_FOLDER);
+
 	files.clear();
 	directories.clear();
+
 	// Init Prefabs
 	App->file_system->DiscoverFiles(ASSETS_PREFAB_FOLDER, files, directories);
 	ReadPrefabs(directories, files, ASSETS_PREFAB_FOLDER);
+
+	files.clear();
+	directories.clear();
+
+	// Init Scripts
+	ReadScripts();
+
+	// Init Scenes
+	App->file_system->DiscoverFiles(SCENE_FOLDER, files, directories);
+
+	ReadScenes(directories, files, SCENE_FOLDER);
+
+	files.clear();
+	directories.clear();
 }
 
 void ModuleResources::ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
@@ -387,7 +603,7 @@ void ModuleResources::ReadPrefabs(std::vector<std::string> directories, std::vec
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourcePrefab* model = new ResourcePrefab();
 		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
-			LOG("Error while loading %s because has not .alienPrefab", files[i]);
+			LOG_ENGINE("Error while loading %s because has not .alienPrefab", files[i]);
 			delete model;
 		}
 	}
@@ -402,5 +618,92 @@ void ModuleResources::ReadPrefabs(std::vector<std::string> directories, std::vec
 		}
 	}
 }
+
+void ModuleResources::ReadScenes(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
+{
+	for (uint i = 0; i < files.size(); ++i) {
+		if (files[i].find("_meta.alien") == std::string::npos) {
+			ResourceScene* scene = new ResourceScene();
+			if (!scene->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
+				LOG_ENGINE("Error loading %s", files[i].data());
+				delete scene;
+			}
+		}
+	}
+	if (!directories.empty()) {
+		std::vector<std::string> new_files;
+		std::vector<std::string> new_directories;
+
+		for (uint i = 0; i < directories.size(); ++i) {
+			std::string dir = current_folder + directories[i] + "/";
+			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
+			ReadModels(new_directories, new_files, dir);
+		}
+	}
+}
+
+void ModuleResources::ReadScripts()
+{
+#ifndef GAME_VERSION
+	std::vector<std::string> files;
+	std::vector<std::string> directories;
+	std::vector<std::string> scripts;
+
+	App->file_system->DiscoverFiles(SCRIPTS_FOLDER, files, directories, true);
+	GetAllScriptsPath(directories, files, SCRIPTS_FOLDER, &scripts);
+
+	files.clear();
+	directories.clear();
+
+	App->file_system->DiscoverFiles(HEADER_SCRIPTS_FILE, files, directories);
+
+	for (uint i = 0; i < files.size(); ++i) {
+		if (files[i].back() == 'h') { // header file found
+			ReadHeaderFile(std::string(HEADER_SCRIPTS_FILE + files[i]).data(), scripts);
+		}
+	}
+	
+	// if there are still scripts, remove them because it doesnt exists in the project
+	if (!scripts.empty()) {
+		for (uint i = 0; i < scripts.size(); ++i) {
+			remove(scripts[i].data());
+		}
+		scripts.clear();
+	}
+#else
+	std::vector<std::string> files;
+	std::vector<std::string> directories;
+	std::vector<std::string> scripts;
+	
+	App->file_system->DiscoverFiles(SCRIPTS_FOLDER, files, directories, true);
+	GetAllScriptsPath(directories, files, SCRIPTS_FOLDER, &scripts);
+
+	files.clear();
+	directories.clear();
+
+	for (uint i = 0; i < scripts.size(); ++i) {
+		ResourceScript* script = new ResourceScript();
+		script->SetName(App->file_system->GetBaseFileName(scripts[i].data()).data());
+		script->ReadBaseInfo(scripts[i].data());
+	}
+#endif
+}
+
+void ModuleResources::GetAllScriptsPath(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder, std::vector<std::string>* scripts)
+{
+	if (!files.empty())
+		scripts->assign(files.begin(), files.end());
+	if (!directories.empty()) {
+		std::vector<std::string> new_files;
+		std::vector<std::string> new_directories;
+
+		for (uint i = 0; i < directories.size(); ++i) {
+			std::string dir = current_folder + directories[i] + "/";
+			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
+			GetAllScriptsPath(new_directories, new_files, dir, scripts);
+		}
+	}
+}
+
 
 

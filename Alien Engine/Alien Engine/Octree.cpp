@@ -3,6 +3,7 @@
 #include "ModuleObjects.h"
 #include "Application.h"
 #include "ComponentTransform.h"
+#include "ComponentCamera.h"
 
 OctreeNode::OctreeNode(const float3& min, const float3& max)
 {
@@ -47,8 +48,9 @@ void OctreeNode::Insert(GameObject* object, const AABB& sect)
 			}
 		}
 	}
-	else
+	else {
 		App->objects->octree.Recalculate(object);
+	}
 }
 
 void OctreeNode::Regrup()
@@ -198,7 +200,7 @@ bool OctreeNode::AddToChildren(GameObject * obj, const AABB& sect)
 	return ret;
 }
 
-void OctreeNode::SetStaticDrawList(std::map<float, GameObject*>* to_draw, const ComponentCamera* camera)
+void OctreeNode::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
 {
 	if (App->renderer3D->IsInsideFrustum(camera, section)) {
 		if (!game_objects.empty()) {
@@ -210,7 +212,7 @@ void OctreeNode::SetStaticDrawList(std::map<float, GameObject*>* to_draw, const 
 						if (App->renderer3D->IsInsideFrustum(camera, mesh->GetGlobalAABB())) {
 							float3 obj_pos = static_cast<ComponentTransform*>((*item)->GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
 							float distance = camera->frustum.pos.Distance(obj_pos);
-							to_draw->emplace(distance, (*item));
+							to_draw->push_back({ distance, *item });
 						}
 					}
 				}
@@ -384,13 +386,16 @@ void Octree::Recalculate(GameObject* new_object)
 	new_section.SetNegativeInfinity();
 
 	if (new_object != nullptr) {
-		to_save.push_back(new_object);
 		ComponentMesh* mesh = (ComponentMesh*)new_object->GetComponent(ComponentType::MESH);
 		new_section = mesh->GetGlobalAABB();
 	}
 
 	// get all gameobjects in octree and get the min & max points
 	root->SaveGameObjects(&to_save, &new_section);
+
+	if (new_object != nullptr) {
+		to_save.push_back(new_object);
+	}
 
 	// delete the old octree and create it again
 	Init(new_section.minPoint, new_section.maxPoint);
@@ -405,10 +410,11 @@ void Octree::Recalculate(GameObject* new_object)
 	to_save.clear();
 }
 
-void Octree::SetStaticDrawList(std::map<float, GameObject*>* to_draw, const ComponentCamera* camera)
+void Octree::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
 {
-	if (root == nullptr)
+	if (root == nullptr) {
 		return;
+	}
 
 	root->SetStaticDrawList(to_draw, camera);
 }

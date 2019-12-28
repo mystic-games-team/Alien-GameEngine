@@ -5,6 +5,7 @@
 #include "Application.h"
 #include <algorithm>
 #include "ReturnZ.h"
+#include "ComponentTransform.h"
 
 ResourceModel::ResourceModel() : Resource()
 {
@@ -87,7 +88,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 					}
 
 					meshes_paths[item - meshes_attached.begin()] = (*item)->GetLibraryPath();
-					LOG("Created alienMesh file %s", (*item)->GetLibraryPath());
+					LOG_ENGINE("Created alienMesh file %s", (*item)->GetLibraryPath());
 				}
 			}
 			meta->SetArrayString("Model.PathMeshes", meshes_paths, meshes_attached.size());
@@ -96,7 +97,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 				delete[] paths;
 			delete[] meshes_paths;
 			// Create the file
-			LOG("Created alien file %s", meta_data_path.data());
+			LOG_ENGINE("Created alien file %s", meta_data_path.data());
 			
 			meta->FinishSave();
 			alien->FinishSave();
@@ -110,7 +111,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 
 	}
 	else {
-		LOG("Error creating meta with path %s", meta_data_path.data());
+		LOG_ENGINE("Error creating meta with path %s", meta_data_path.data());
 		return false;
 	}
 }
@@ -163,7 +164,7 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 					meshes_attached.push_back(r_mesh);
 				}
 				else {
-					LOG("Error loading %s", mesh_path[i].data());
+					LOG_ENGINE("Error loading %s", mesh_path[i].data());
 					delete r_mesh;
 				}
 			}
@@ -192,8 +193,6 @@ bool ResourceModel::LoadMemory()
 
 bool ResourceModel::DeleteMetaData()
 {
-	// TODO: delete here the .alien
-
 	remove(std::string(LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel").data());
 
 	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
@@ -222,13 +221,19 @@ void ResourceModel::ConvertToGameObjects()
 
 	if (meshes_attached.size() > 1) { // needs an empty gameobject
 		
-		// create the parent
-		GameObject* parent = App->objects->CreateEmptyGameObject(nullptr, false);
-		parent->SetName(name.data());
+		GameObject* parent = nullptr;
+		if (meshes_attached.at(0)->family_number == meshes_attached.at(1)->family_number) {
+			parent = new GameObject(App->objects->GetRoot(false));
+			parent->AddComponent(new ComponentTransform(parent, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
+			parent->SetName(name.data());
+		}
+		else {
+			parent = App->objects->GetRoot(false);
+		}
 		
 		// vector to find the parents
-		std::vector<GameObject*> objects_created;
-		objects_created.push_back(parent);
+		std::vector<std::pair<u64,GameObject*>> objects_created;
+		objects_created.push_back({ 0,parent });
 
 		std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 		for (; item != meshes_attached.end(); ++item) {
@@ -238,16 +243,17 @@ void ResourceModel::ConvertToGameObjects()
 		}
 		objects_created.clear();
 
-		// set it selected
-		App->objects->SetNewSelectedObject(parent);
-		ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, parent);
+		//// set it selected
+		//App->objects->SetNewSelectedObject(parent);
+		//ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, parent);
 	}
 	else { 
 		meshes_attached.at(0)->ConvertToGameObject(nullptr);
-		App->objects->SetNewSelectedObject(App->objects->GetRoot(false)->children.back());
-		ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
 	}
+	App->objects->SetNewSelectedObject(App->objects->GetRoot(false)->children.back());
+	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
 	App->camera->fake_camera->Look(App->objects->GetRoot(false)->children.back()->GetBB().CenterPoint());
+	App->camera->reference = App->objects->GetRoot(false)->children.back()->GetBB().CenterPoint();
 }
 
 bool ResourceModel::SortByFamilyNumber(const ResourceMesh* mesh1, const ResourceMesh* mesh2)

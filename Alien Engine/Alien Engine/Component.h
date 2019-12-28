@@ -11,30 +11,38 @@ enum class ComponentType {
 	MATERIAL,
 	LIGHT,
 	CAMERA,
+	SCRIPT,
 
 	UNKNOWN
 };
 
-class Component {
-
+class __declspec(dllexport) Component {
+	friend class ComponentCamera;
+	friend class ComponentLight;
+	friend class ComponentMaterial;
+	friend class ComponentTransform;
+	friend class ComponentMesh;
+	friend class ComponentMaterial;
+	friend class ComponentScript;
+	friend class GameObject;
+	friend class ReturnZ;
+	friend class Prefab;
+	friend class CompZ;
+	friend class PanelInspector;
+	friend class ModuleObjects;
+	friend class ModuleUI;
 public:
-
 	Component(GameObject* attach);
 	virtual ~Component();
 
-	virtual void OnEnable() {}
-	virtual void OnDisable() {}
-
 	bool IsEnabled();
 	void SetEnable(bool enable);
-	virtual bool DrawInspector() { return true; }
 
-	virtual void PreUpdate() {}
-	virtual void Update() {}
-	virtual void PostUpdate() {}
+protected:
 
 	virtual void Reset() {}
 	virtual void SetComponent(Component* component) {}
+	virtual void Clone(Component* clone) {}
 
 	virtual void SaveComponent(JSONArraypack* to_save) {}
 	virtual void LoadComponent(JSONArraypack* to_load) {}
@@ -43,11 +51,10 @@ public:
 
 	const ComponentType& GetType() const;
 
-public:
+	virtual void OnEnable() {}
+	virtual void OnDisable() {}
 
-	u64 ID = 0;
-	GameObject* game_object_attached = nullptr;
-	bool not_destroy = true;
+	virtual bool DrawInspector() { return true; }
 
 protected:
 
@@ -57,6 +64,8 @@ protected:
 
 	ComponentType type = ComponentType::UNKNOWN;
 	bool enabled = true;
-	
+	u64 ID = 0;
+	GameObject* game_object_attached = nullptr;
+	bool not_destroy = true;
 
 };

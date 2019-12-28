@@ -1,0 +1,19 @@
+#pragma once
+
+#include "Macros/AlienScripts.h"
+#include "..\..\Alien Engine\Alien.h"
+
+struct ALIEN_ENGINE_API DataAlienTypeName {
+
+	DataAlienTypeName();
+	~DataAlienTypeName();
+
+};
+
+ALIEN_FACTORY DataAlienTypeName* CreateDataAlienTypeName() {
+	DataAlienTypeName* alien = new DataAlienTypeName();
+	// To show in inspector here
+	
+	return alien;
+}
+ALIEN_FACTORY void DestroyDataAlienTypeName(DataAlienTypeName* alien) { delete alien; }

@@ -1,0 +1,9 @@
+#include "DataAlienTypeName.h"
+
+DataAlienTypeName::DataAlienTypeName() : Alien()
+{
+}
+
+DataAlienTypeName::~DataAlienTypeName()
+{
+}

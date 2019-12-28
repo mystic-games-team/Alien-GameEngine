@@ -8,7 +8,6 @@
 
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
-#include "ComponentMesh.h"
 #include "GameObject.h"
 #include "ModuleCamera3D.h"
 
@@ -36,7 +35,7 @@ bool ModuleImporter::Init()
 	ilInit();
 	iluInit();
 	ilutInit();
-	LOG("Initing Devil");
+	LOG_ENGINE("Initing Devil");
 
 	return true;
 }
@@ -60,7 +59,7 @@ bool ModuleImporter::LoadModelFile(const char* path)
 {
 	bool ret = true;
 
-	LOG("Loading %s", path);
+	LOG_ENGINE("Loading %s", path);
 
 	// if this file has been already imported just load the .alienModel
 	Resource* model = nullptr;
@@ -71,12 +70,12 @@ bool ModuleImporter::LoadModelFile(const char* path)
 		
 		if (scene != nullptr) {
 			InitScene(path, scene);
-			LOG("Succesfully loaded %s", path);
+			LOG_ENGINE("Succesfully loaded %s", path);
 		}
 		else {
 			ret = false;
-			LOG("Error loading model %s", path);
-			LOG("Error type: %s", aiGetErrorString());
+			LOG_ENGINE("Error loading model %s", path);
+			LOG_ENGINE("Error type: %s", aiGetErrorString());
 		}
 		aiReleaseImport(scene);
 		App->resources->AddNewFileNode(path, true);
@@ -96,7 +95,9 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 	model->path = std::string(path);
 
 	// start recursive function to all nodes
-	LoadSceneNode(scene->mRootNode, scene, nullptr, 1);
+	for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
+		LoadSceneNode(scene->mRootNode->mChildren[i], scene, nullptr, 1);
+	}
 
 	// create the meta data files like .alien
 	if (model->CreateMetaData()) {
@@ -111,49 +112,63 @@ void ModuleImporter::InitScene(const char* path, const aiScene* scene)
 
 void ModuleImporter::LoadSceneNode(const aiNode* node, const aiScene* scene, ResourceMesh* parent, uint family_number)
 {
-	LOG("Loading node with name %s", node->mName.C_Str());
+	LOG_ENGINE("Loading node with name %s", node->mName.C_Str());
 	ResourceMesh* next_parent = nullptr;
 
-	std::string node_name = node->mName.C_Str();
-	if (node_name.find("_$AssimpFbx$_") == std::string::npos && node_name.find("RootNode") == std::string::npos) {
-		if (node->mNumMeshes == 1) {
-			const aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
-			next_parent = LoadNodeMesh(scene, node, mesh, parent);
-			next_parent->family_number = family_number;
-			App->resources->AddResource(next_parent);
-			model->meshes_attached.push_back(next_parent);
-		}
-		else if (node->mNumMeshes > 1) {
-			ResourceMesh* parent_node = new ResourceMesh();
-			parent_node->family_number = family_number;
-			App->resources->AddResource(parent_node);
-			model->meshes_attached.push_back(parent_node);
-			parent_node->SetName(node->mName.C_Str());
-			if (parent != nullptr)
-				parent_node->parent_name = parent->name;
-
-			for (uint i = 0; i < node->mNumMeshes; ++i) {
-				const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-				next_parent = LoadNodeMesh(scene, node, mesh, parent_node);
-				next_parent->name += std::to_string(i);
-				next_parent->family_number = family_number + 1;
-				App->resources->AddResource(next_parent);
-				model->meshes_attached.push_back(next_parent);
-			}
-			next_parent = parent_node;
-		}
-		else if (node->mNumMeshes == 0) {
-			next_parent = new ResourceMesh();
-			next_parent->family_number = family_number;
-			App->resources->AddResource(next_parent);
-			model->meshes_attached.push_back(next_parent);
-			next_parent->SetName(node->mName.C_Str());
-			if (parent != nullptr)
-				next_parent->parent_name = parent->name;
-		}
+	aiMatrix4x4 mat; 
+	while (std::string(node->mName.C_Str()).find("_$AssimpFbx$_") != std::string::npos) { 
+		mat = mat * node->mTransformation;    
+		node = node->mChildren[0];
 	}
+
+	if (node->mNumMeshes == 1) {
+		const aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
+		next_parent = LoadNodeMesh(scene, node, mesh, parent);
+		next_parent->family_number = family_number;
+		App->resources->AddResource(next_parent);
+		model->meshes_attached.push_back(next_parent);
+	}
+	else if (node->mNumMeshes > 1) {
+		ResourceMesh* parent_node = new ResourceMesh();
+		parent_node->family_number = family_number;
+		App->resources->AddResource(parent_node);
+		model->meshes_attached.push_back(parent_node);
+		parent_node->SetName(node->mName.C_Str());
+		if (parent != nullptr)
+			parent_node->parent_name = parent->name;
+
+		for (uint i = 0; i < node->mNumMeshes; ++i) {
+			const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+			next_parent = LoadNodeMesh(scene, node, mesh, parent_node);
+			next_parent->name += std::to_string(i);
+			next_parent->family_number = family_number + 1;
+			App->resources->AddResource(next_parent);
+			model->meshes_attached.push_back(next_parent);
+		}
+		next_parent = parent_node;
+	}
+	else if (node->mNumMeshes == 0) {
+		next_parent = new ResourceMesh();
+		next_parent->family_number = family_number;
+		App->resources->AddResource(next_parent);
+		model->meshes_attached.push_back(next_parent);
+		next_parent->SetName(node->mName.C_Str());
+		if (parent != nullptr)
+			next_parent->parent_name = parent->name;
+	}
+
+	if (next_parent != nullptr) {
+		mat = mat * node->mTransformation;
+		aiVector3D pos, scale;
+		aiQuaternion rot;
+		mat.Decompose(scale, rot, pos);
+		next_parent->pos = { pos.x,pos.y,pos.z };
+		next_parent->scale = { scale.x,scale.y,scale.z };
+		next_parent->rot = { rot.x,rot.y,rot.z,rot.w };
+	}
+
 	for (uint i = 0; i < node->mNumChildren; ++i) {
-		LOG("Loading children of node %s", node->mName.C_Str());
+		LOG_ENGINE("Loading children of node %s", node->mName.C_Str());
 		uint fam_num = 1;
 		if (next_parent != nullptr)
 			fam_num = next_parent->family_number + 1;
@@ -182,7 +197,7 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 			if (ai_mesh->mFaces[i].mNumIndices != 3) {
 				uint non[3] = { 0,0,0 };
 				memcpy(&ret->index[i * 3], non, 3 * sizeof(uint));
-				LOG("WARNING, geometry face with != 3 indices!");
+				LOG_ENGINE("WARNING, geometry face with != 3 indices!");
 			}
 			else {
 				memcpy(&ret->index[i * 3], ai_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
@@ -230,33 +245,40 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	}
 
 	ret->InitBuffers();
-
+	
 	// set the material
 	aiMaterial* ai_material = scene->mMaterials[ai_mesh->mMaterialIndex];
 	aiString path;
 	ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+	aiColor4D col;
+	if (AI_SUCCESS == aiGetMaterialColor(ai_material, AI_MATKEY_COLOR_DIFFUSE, &col)) {
+		ret->material_color.r = col.r;
+		ret->material_color.g = col.g;
+		ret->material_color.b = col.b;
+		ret->material_color.a = col.a;
+	}
 	std::string normal_path = path.C_Str();
 	App->file_system->NormalizePath(normal_path);
 	ret->texture = App->resources->GetTextureByName(normal_path.data());
 
-	// get local transformations
-	aiVector3D translation, scaling;
-	aiQuaternion rotation;
-	// local pos, rot & scale
-	node->mTransformation.Decompose(scaling, rotation, translation);
+	//// get local transformations
+	//aiVector3D translation, scaling;
+	//aiQuaternion rotation;
+	//// local pos, rot & scale
+	//node->mTransformation.Decompose(scaling, rotation, translation);
 
-	// set the scale in value of 1 but keeping the dimensions
-	//float max_ = max(scaling.x, scaling.y);
-	//max_ = max(max_, scaling.z);
+	//// set the scale in value of 1 but keeping the dimensions
+	////float max_ = max(scaling.x, scaling.y);
+	////max_ = max(max_, scaling.z);
 
-	float3 pos(translation.x, translation.y, translation.z);
-	//float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
-	float3 scale(scaling.x, scaling.y, scaling.z);
-	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+	//float3 pos(translation.x, translation.y, translation.z);
+	////float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
+	//float3 scale(scaling.x, scaling.y, scaling.z);
+	//Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	ret->pos = pos;
-	ret->scale = scale;
-	ret->rot = rot;
+	//ret->pos = pos;
+	//ret->scale = scale;
+	//ret->rot = rot;
 	ret->name = std::string(node->mName.C_Str());
 
 	return ret;
@@ -278,10 +300,10 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 
 		texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
 
-		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+		if (has_been_dropped && !App->objects->GetSelectedObjects().empty()) {
 			ApplyTextureToSelectedObject(texture);
 		}
-		LOG("This texture was already loaded");
+		LOG_ENGINE("This texture was already loaded");
 
 		return texture;
 	}
@@ -291,7 +313,7 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		texture->CreateMetaData();
 		App->resources->AddNewFileNode(path, true);
 
-		if (has_been_dropped && App->objects->GetSelectedObject() != nullptr) {
+		if (has_been_dropped && !App->objects->GetSelectedObjects().empty()) {
 			ApplyTextureToSelectedObject(texture);
 		}
 	}
@@ -324,11 +346,11 @@ ResourceTexture* ModuleImporter::LoadEngineTexture(const char* path)
 
 		App->resources->AddResource(texture);
 
-		LOG("Texture successfully loaded: %s", path);
+		LOG_ENGINE("Texture successfully loaded: %s", path);
 	}
 	else {
-		LOG("Error while loading image in %s", path);
-		LOG("Error: %s", ilGetString(ilGetError()));
+		LOG_ENGINE("Error while loading image in %s", path);
+		LOG_ENGINE("Error: %s", ilGetString(ilGetError()));
 	}
 
 	ilDeleteImages(1, &new_image_id);
@@ -361,11 +383,11 @@ void ModuleImporter::LoadTextureToResource(const char* path, ResourceTexture* te
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		LOG("Texture successfully loaded: %s", path);
+		LOG_ENGINE("Texture successfully loaded: %s", path);
 	}
 	else {
-		LOG("Error while loading image in %s", path);
-		LOG("Error: %s", ilGetString(ilGetError()));
+		LOG_ENGINE("Error while loading image in %s", path);
+		LOG_ENGINE("Error: %s", ilGetString(ilGetError()));
 	}
 
 	ilDeleteImages(1, &new_image_id);
@@ -373,22 +395,31 @@ void ModuleImporter::LoadTextureToResource(const char* path, ResourceTexture* te
 
 void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture* texture)
 {
-	GameObject* selected = App->objects->GetSelectedObject();
-	if (selected != nullptr) {
-		ComponentMaterial* material = (ComponentMaterial*)selected->GetComponent(ComponentType::MATERIAL);
+	std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+	auto item = selected.begin();
+	for (; item != selected.end(); ++item) {
+		if (*item != nullptr) {
+			ComponentMaterial* material = (ComponentMaterial*)(*item)->GetComponent(ComponentType::MATERIAL);
 
-		if (selected->HasComponent(ComponentType::MESH)) {
-			if (material == nullptr) {
-				material = new ComponentMaterial(selected);
-				selected->AddComponent(material);
-				ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, material);
+			if ((*item)->HasComponent(ComponentType::MESH)) {
+				bool exists = true;
+				if (material == nullptr) {
+					exists = false;
+					material = new ComponentMaterial((*item));
+					(*item)->AddComponent(material);
+				}
+				material->SetTexture(texture);
+				if (!exists) {
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, material);
+				}
+				else {
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, material);
+				}
 			}
-			material->SetTexture(texture);
+			else
+				LOG_ENGINE("Selected GameObject has no mesh");
 		}
-		else
-			LOG("Selected GameObject has no mesh");
-	}
-	
+	}	
 }
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ResourceMesh* mesh)
@@ -424,15 +455,15 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh* shape, ResourceMesh* mes
 			uint index2 = mesh->index[i + 1] * 3;
 			uint index3 = mesh->index[i + 2] * 3;
 
-			vec3 x0(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
-			vec3 x1(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
-			vec3 x2(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
+			float3 x0(mesh->vertex[index1], mesh->vertex[index1 + 1], mesh->vertex[index1 + 2]);
+			float3 x1(mesh->vertex[index2], mesh->vertex[index2 + 1], mesh->vertex[index2 + 2]);
+			float3 x2(mesh->vertex[index3], mesh->vertex[index3 + 1], mesh->vertex[index3 + 2]);
 
-			vec3 v0 = x0 - x2;
-			vec3 v1 = x1 - x2;
-			vec3 n = cross(v0, v1);
+			float3 v0 = x0 - x2;
+			float3 v1 = x1 - x2;
+			float3 n = v0.Cross(v1);
 
-			vec3 normalized = normalize(n);
+			float3 normalized = n.Normalized();
 
 			mesh->center_point[i] = (x0.x + x1.x + x2.x) / 3;
 			mesh->center_point[i + 1] = (x0.y + x1.y + x2.y) / 3;
@@ -459,7 +490,9 @@ ResourceMesh* ModuleImporter::LoadEngineModels(const char* path)
 	}
 
 	aiReleaseImport(scene);
-
+	if (r_mesh != nullptr) {
+		r_mesh->is_custom = false;
+	}
 	return r_mesh;
 }
 
@@ -474,7 +507,10 @@ bool ModuleImporter::ReImportModel(ResourceModel* model)
 		model->name = App->file_system->GetBaseFileName(model->GetAssetsPath());
 		this->model = model;
 		// start recursive function to all nodes
-		LoadSceneNode(scene->mRootNode, scene, nullptr, 1);
+
+		for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
+			LoadSceneNode(scene->mRootNode->mChildren[i], scene, nullptr, 1);
+		}
 
 		// create the meta data files like .alien
 		if (model->CreateMetaData(model->ID)) {
@@ -485,8 +521,8 @@ bool ModuleImporter::ReImportModel(ResourceModel* model)
 	}
 	else {
 		ret = false;
-		LOG("Error loading model %s", model->GetAssetsPath());
-		LOG("Error type: %s", aiGetErrorString());
+		LOG_ENGINE("Error loading model %s", model->GetAssetsPath());
+		LOG_ENGINE("Error type: %s", aiGetErrorString());
 	}
 	aiReleaseImport(scene);
 

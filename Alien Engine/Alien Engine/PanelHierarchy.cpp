@@ -2,10 +2,12 @@
 #include "ModuleObjects.h"
 #include "GameObject.h"
 #include "PanelCreateObject.h"
+#include "ResourceScene.h"
 #include "ResourcePrefab.h"
 #include "imgui/imgui_internal.h"
 #include "PanelProject.h"
 #include "ResourceTexture.h"
+#include "ComponentTransform.h"
 
 
 PanelHierarchy::PanelHierarchy(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -27,13 +29,34 @@ void PanelHierarchy::PanelLogic()
 		App->camera->is_scene_hovered = false;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DELETE) && App->objects->GetSelectedObject() != nullptr)
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) && !App->objects->GetSelectedObjects().empty())
 	{
-		if (!App->objects->prefab_scene && App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() != App->objects->GetSelectedObject())
-			popup_prefab_restructurate = true;
-		else if (App->objects->prefab_scene && App->objects->GetSelectedObject()->IsPrefab() && App->objects->GetSelectedObject()->FindPrefabRoot() == App->objects->GetSelectedObject())
-			popup_delete_root_prefab_scene = true;
-		else App->objects->GetSelectedObject()->ToDelete();
+		std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+		if (!App->objects->prefab_scene) {
+			auto item = selected.begin();
+			for (; item != selected.end(); ++item) {
+				if (*item != nullptr && (*item)->IsPrefab() && (*item)->FindPrefabRoot() != *item) {
+					popup_prefab_restructurate = true;
+				}
+			}
+		}
+		else {
+			auto item = selected.begin();
+			for (; item != selected.end(); ++item) {
+				if (*item != nullptr && (*item)->IsPrefab() && (*item)->FindPrefabRoot() == *item) {
+					popup_delete_root_prefab_scene = true;
+				}
+			}
+		}
+		if (!popup_prefab_restructurate && !popup_delete_root_prefab_scene) {
+			auto item = selected.begin();
+			for (; item != selected.end(); ++item) {
+				if (*item != nullptr) {
+					(*item)->ToDelete();
+				}
+			}
+			App->objects->DeselectObjects();
+		}
 	}
 	
 	ImGui::Spacing();
@@ -49,7 +72,8 @@ void PanelHierarchy::PanelLogic()
 		}
 	}
 	else {
-		ImGui::Text(std::string("Current Scene: " + App->objects->current_scene.name_without_extension).data());
+		std::string scene_name = "Current Scene: " + std::string((App->objects->current_scene != nullptr) ? App->objects->current_scene->GetName() : "Untitled*");
+		ImGui::Text(scene_name.data());
 	}
 
 	ImGui::Spacing();
@@ -94,7 +118,7 @@ void PanelHierarchy::PanelLogic()
 				else if (!obj->is_static)
 					App->objects->ReparentGameObject(obj, App->objects->GetRoot(false));
 				else
-					LOG("Objects static can not be reparented");
+					LOG_ENGINE("Objects static can not be reparented");
 			}
 			ImGui::ClearDragDrop();
 		}
@@ -154,6 +178,21 @@ void PanelHierarchy::PanelLogic()
 		}
 	}
 
+	if (popup_no_open_prefab) {
+		ImGui::OpenPopup("Prefab View no available");
+		ImGui::SetNextWindowSize({ 245,80 });
+		if (ImGui::BeginPopupModal("Prefab View no available", &popup_no_open_prefab, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::Text("Exit game to see the prefab view");
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(95);
+			if (ImGui::Button("Ok", { 50,0 })) {
+				popup_no_open_prefab = false;
+			}
+			ImGui::EndPopup();
+		}
+	}
+
 	if (popup_leave_prefab_view) {
 		ImGui::OpenPopup("Edit Prefab Options");
 		ImGui::SetNextWindowSize({ 170,100 });
@@ -171,9 +210,9 @@ void PanelHierarchy::PanelLogic()
 			if (ImGui::Button("Don't save")) {
 				popup_leave_prefab_view = false;
 				App->objects->prefab_scene = false;
-				App->objects->enable_instancies = true;
 				App->objects->SwapReturnZ(true, true);
 				App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
+				App->objects->enable_instancies = true;
 				remove("Library/save_prefab_scene.alienScene");
 			}
 			ImGui::PopStyleColor();
@@ -193,6 +232,14 @@ void PanelHierarchy::PanelLogic()
 			ImGui::EndPopup();
 		}
 	}
+
+	if (ImGui::IsWindowFocused()) {
+		is_focused = true;
+	}
+	else {
+		is_focused = false;
+	}
+
 
 	ImGui::End();
 	
@@ -239,7 +286,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		(node->children.empty() ? ImGuiTreeNodeFlags_Leaf : 0), (!node->IsEnabled() || !node->IsParentEnabled()));
 	if (node->IsPrefab() && node->FindPrefabRoot() != node)
 		ImGui::PopStyleColor();
-	if (ImGui::IsItemClicked()) {
+	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(0)) {
 		App->objects->SetNewSelectedObject(node);
 	}
 	if (ImGui::IsItemHovered()) {
@@ -256,7 +303,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 				else if (!obj->is_static)
 					App->objects->ReparentGameObject(obj, node);
 				else
-					LOG("Objects static can not be reparented");
+					LOG_ENGINE("Objects static can not be reparented");
 			}
 			ImGui::ClearDragDrop();
 		}
@@ -293,6 +340,10 @@ void PanelHierarchy::RightClickMenu()
 				App->objects->SetNewSelectedObject(object_menu);
 			}
 		}
+		if (ImGui::MenuItem("Create New Script")) {
+			App->ui->creating_script = true;
+		}
+		ImGui::Separator();
 		if (object_menu != nullptr) {
 
 			bool is_on_top = false;
@@ -369,11 +420,19 @@ void PanelHierarchy::RightClickMenu()
 								ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(obj->GetPrefabID());
 								if (prefab != nullptr) {
 									(*item)->ToDelete();
-									prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin());
+									prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin(), obj->GetComponent<ComponentTransform>()->GetGlobalPosition());
 								}
 								break;
 							}
 						}
+					}
+				}
+
+				if (ImGui::MenuItem("Save Prefab as the Original", nullptr, nullptr, !App->objects->prefab_scene)) {
+					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(object_menu->GetPrefabID());
+					if (prefab != nullptr) {
+						prefab->Save(object_menu->FindPrefabRoot());
+						App->objects->SetNewSelectedObject(object_menu);
 					}
 				}
 
@@ -392,11 +451,15 @@ void PanelHierarchy::RightClickMenu()
 			}
 			if (ImGui::MenuItem("Remove Object"))
 			{
-				if (!App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() != object_menu)
+				if (!App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() != object_menu) {
 					popup_prefab_restructurate = true;
-				else if (App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() == object_menu)
+				}
+				else if (App->objects->prefab_scene && object_menu->IsPrefab() && object_menu->FindPrefabRoot() == object_menu) {
 					popup_delete_root_prefab_scene = true;
-				else object_menu->ToDelete();
+				}
+				else {
+					object_menu->ToDelete();
+				}
 			}
 			ImGui::Separator();
 		}

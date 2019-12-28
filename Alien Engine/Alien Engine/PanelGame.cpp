@@ -9,8 +9,9 @@
 PanelGame::PanelGame(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
+#ifndef GAME_VERSION
 	shortcut = App->shortcut_manager->AddShortCut("Panel Game", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
-
+#endif
 	game_focused = true;
 }
 
@@ -56,19 +57,26 @@ void PanelGame::PanelLogic()
 	ImGui::SetCursorPosX((ImGui::GetWindowWidth() - width) * 0.5f);
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() - height) * 0.5f);
 
+	posX = ImGui::GetWindowPos().x + ImGui::GetCursorPosX();
+	posY = ImGui::GetWindowPos().y + ImGui::GetCursorPosY();
+
 	if (App->renderer3D->actual_game_camera != nullptr)
 	{
 		ImGui::Image((ImTextureID)App->renderer3D->game_tex->id, { width,height }, { 0,1 }, { 1,0 });
 	}
 
+	if (ImGui::IsWindowHovered()) {
+		float2 origin = float2((App->input->GetMousePosition().x - posX), (App->input->GetMousePosition().y - posY) - 19);
+	}
+
 	lastHeight = ImGui::GetWindowHeight();
 
-	if (ImGui::IsWindowFocused())
-	{
+	if (ImGui::IsWindowFocused()) {
 		game_focused = true;
 	}
-	else
+	else {
 		game_focused = false;
+	}
 	
 	ImGui::End();
 }

@@ -7,6 +7,7 @@
 #include "imgui/examples/imgui_impl_opengl3.h"
 #include "Panel.h"
 #include "Time.h"
+#include "TextEdit/TextEditor.h"
 #include <utility>
 
 class Panel;
@@ -22,6 +23,8 @@ class PanelLayout;
 class PanelProject;
 class PanelSceneSelector;
 class PanelGame;
+class PanelBuild;
+class PanelTextEditor;
 
 struct ShortCut;
 
@@ -67,6 +70,10 @@ public:
 	void ReportBug();
 	void ChangeEnableDemo();
 
+	void CreateNewScriptPopUp();
+
+	void SetError();
+
 	// style
 	void ChangeStyle(const int& style_number);
 
@@ -80,7 +87,6 @@ private:
 	// panels
 	void InitPanels();
 	void UpdatePanels();
-	Panel*& GetPanelByName(const std::string& panel_name);
 
 	// shortcuts
 	void InitShortCuts();
@@ -89,6 +95,8 @@ private:
 	void LoadLayouts(); // read all layouts with json
 	void SaveAllLayouts(); // save all layout info again to json
 	void SaveLayoutsActive(); // when closing, save which layout was active
+
+	void CreateScriptFile(const int& type, bool to_export, const char* name);
 
 public:
 
@@ -99,7 +107,7 @@ public:
 	void BackgroundDockspace();
 
 private:
-
+	TextEditor edit;
 	// demo
 	bool show_demo_wndow = false;
 
@@ -108,11 +116,9 @@ private:
 	std::vector<Panel*> panels;
 
 	PanelAbout* panel_about = nullptr;
-	PanelConsole* panel_console = nullptr;
 	PanelRender* panel_render = nullptr;
-	PanelHierarchy* panel_hierarchy = nullptr;
 	PanelInspector* panel_inspector = nullptr;
-
+	PanelBuild* panel_build = nullptr;
 	PanelLayout* panel_layout = nullptr;
 
 	// ShortCuts
@@ -132,9 +138,11 @@ private:
 	ShortCut* shortcut_octree = nullptr;
 	ShortCut* shortcut_cntrlZ = nullptr;
 	ShortCut* shortcut_cntrlY = nullptr;
+	ShortCut* shortcut_duplicate_object = nullptr;
 
 	SDL_Scancode panel_config_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_project_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_build_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_layout_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_scene_selector_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_about_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -142,6 +150,7 @@ private:
 	SDL_Scancode panel_create_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_inspector_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_console_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_text_edit_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_render_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_scene_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_game_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -161,6 +170,7 @@ private:
 	SDL_Scancode shortcut_octree_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_cntrlZ_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_cntrlY_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode shortcut_duplicate_object_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 
 	std::pair<bool, Time::GameState> change_game_state;
 
@@ -168,17 +178,22 @@ public:
 
 	// public panels
 	PanelConfig* panel_config = nullptr;
+	PanelConsole* panel_console = nullptr;
 	PanelCreateObject* panel_create_object = nullptr;
 	PanelProject* panel_project = nullptr;
 	PanelSceneSelector* panel_scene_selector = nullptr;
 	PanelScene* panel_scene = nullptr;
 	PanelGame* panel_game = nullptr;
+	PanelHierarchy* panel_hierarchy = nullptr;
+	PanelTextEditor* panel_text_editor = nullptr;
+
 	// layouts
 	std::vector<Layout*> layouts;
 	Layout* active_layout = nullptr;
 	bool need_to_save_layouts = false;
 	uint number_of_layouts = 0;
-	
+
+	bool creating_script = false;
 	const char* actual_name="";
 };
 

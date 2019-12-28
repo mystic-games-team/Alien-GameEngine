@@ -1,7 +1,10 @@
 #include "Time.h"
 #include "Timer.h"
 #include "Application.h"
+#include "PanelConsole.h"
 #include "ModuleObjects.h"
+#include "PanelGame.h"
+#include "PanelScene.h"
 
 Time::GameState Time::state = Time::GameState::NONE;
 float Time::time_since_start = 0.0F;
@@ -29,9 +32,20 @@ void Time::Update()
 void Time::Play()
 {
 	if (state == GameState::NONE) {
-		App->objects->SaveScene("Library/play_scene.alienScene", false);
+		App->objects->SaveScene(nullptr, "Library/play_scene.alienScene");
 		App->objects->ignore_cntrlZ = true;
+#ifndef GAME_VERSION
+		if (App->ui->panel_console->clear_on_play) {
+			App->game_string_logs.clear();
+			App->engine_string_logs.clear();
+			App->all_engine_logs.clear();
+			App->all_game_logs.clear();
+		}
+		ImGui::SetWindowFocus(App->ui->panel_game->GetPanelName().data());
+		App->ui->panel_console->game_console = true;
+#endif
 		state = GameState::PLAY;
+		App->objects->InitScriptsOnPlay();
 		game_time = 0.0F;
 		game_timer->Start();
 	}
@@ -40,11 +54,17 @@ void Time::Play()
 		game_timer->Resume();
 	}
 	else if (state == GameState::PLAY) {
+		App->objects->CleanUpScriptsOnStop();
 		state = GameState::NONE;
 		game_time = 0.0F;
 		App->objects->LoadScene("Library/play_scene.alienScene", false);
 		App->objects->ignore_cntrlZ = false;
 		remove("Library/play_scene.alienScene");
+#ifndef GAME_VERSION
+		App->objects->errors = false;
+		App->ui->panel_console->game_console = false;
+		ImGui::SetWindowFocus(App->ui->panel_scene->GetPanelName().data());
+#endif
 	}
 }
 
@@ -91,6 +111,21 @@ void Time::SetDT(const float& dt)
 float Time::GetDT()
 {
 	return delta_time * scale_time;
+}
+
+float Time::GetTimeSinceStart()
+{
+	return time_since_start;
+}
+
+float Time::GetGameTime()
+{
+	return game_time;
+}
+
+float Time::GetScaleTime()
+{
+	return scale_time;
 }
 
 bool Time::IsPlaying()

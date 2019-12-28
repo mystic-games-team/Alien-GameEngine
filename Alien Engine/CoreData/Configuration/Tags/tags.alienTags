@@ -1,0 +1,10 @@
+{
+    "Tags": [
+        {
+            "Tag": "Player"
+        },
+        {
+            "Tag": "Enemy"
+        }
+    ]
+}

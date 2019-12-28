@@ -133,7 +133,7 @@ float2 float2::ToPolarCoordinates() const
 	if (radius > 1e-4f)
 		return float2(atan2(y, x), radius);
 	else
-		return float2::zero;
+		return float2::zero();
 }
 
 float float2::AimedAngle() const
@@ -255,7 +255,7 @@ float2 float2::FromString(const char *str)
 	assert(IsNeutralCLocale());
 	assume(str);
 	if (!str)
-		return float2::nan;
+		return float2::nan();
 	if (*str == '(')
 		++str;
 	float2 f;
@@ -799,12 +799,5 @@ std::ostream &operator <<(std::ostream &out, const float2 &rhs)
 	return out;
 }
 #endif
-
-const float2 float2::zero = float2(0, 0);
-const float2 float2::one = float2(1, 1);
-const float2 float2::unitX = float2(1, 0);
-const float2 float2::unitY = float2(0, 1);
-const float2 float2::nan = float2(FLOAT_NAN, FLOAT_NAN);
-const float2 float2::inf = float2(FLOAT_INF, FLOAT_INF);
 
 MATH_END_NAMESPACE

@@ -58,11 +58,14 @@
     <Filter Include="Tools\Guizmos">
       <UniqueIdentifier>{72e23ff2-eba1-4b08-ad4f-1a745f5ff149}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ScriptHelpers">
+      <UniqueIdentifier>{79de4d46-5e7a-45c2-b497-3c132db2193d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\TextEdit">
+      <UniqueIdentifier>{987d3c13-1318-45bd-80aa-53653a15e71f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ModuleSceneIntro.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleWindow.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -110,9 +113,6 @@
     </ClInclude>
     <ClInclude Include="Globals.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="imgui\examples\imgui_impl_opengl3.h">
       <Filter>Tools\ImGui</Filter>
@@ -459,9 +459,6 @@
     <ClInclude Include="ComponentCamera.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="glmath.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Octree.h">
       <Filter>Tools\OurClassHelpers</Filter>
     </ClInclude>
@@ -489,15 +486,66 @@
     <ClInclude Include="ResourcePrefab.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentScript.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticInput.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Alien.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceScript.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="TextEdit\TextEditor.h">
+      <Filter>Tools\TextEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelTextEditor.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="Maths.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="AlienEngine.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCreator.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelBuild.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceScene.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleInput.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleSceneIntro.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleUI.cpp">
@@ -532,9 +580,6 @@
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp">
       <Filter>Tools\ImGui</Filter>
@@ -743,9 +788,6 @@
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="glmath.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Octree.cpp">
       <Filter>Tools\OurClassHelpers</Filter>
     </ClCompile>
@@ -773,6 +815,60 @@
     <ClCompile Include="ResourcePrefab.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentScript.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticInput.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceScript.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Alien.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TextEdit\TextEditor.cpp">
+      <Filter>Tools\TextEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelTextEditor.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="Maths.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmos.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="AlienEngine.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCreator.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>ScriptHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelBuild.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceScene.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
@@ -793,10 +889,10 @@
     <None Include="MathGeoLib\include\Math\Matrix.inl">
       <Filter>Tools\Math</Filter>
     </None>
-    <None Include="Game\Configuration\DefaultConfiguration.json">
+    <None Include="Game\Configuration\LayoutsInfo.json">
       <Filter>JSON</Filter>
     </None>
-    <None Include="Game\Configuration\LayoutsInfo.json">
+    <None Include="..\CoreData\Configuration\DefaultConfiguration.json">
       <Filter>JSON</Filter>
     </None>
   </ItemGroup>

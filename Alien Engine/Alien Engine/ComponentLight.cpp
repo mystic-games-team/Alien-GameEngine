@@ -6,17 +6,23 @@
 #include "Application.h"
 #include "ReturnZ.h"
 #include "ComponentMesh.h"
+#include "Gizmos.h"
 
 ComponentLight::ComponentLight(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::LIGHT;
 
+#ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
+#endif
 }
 
 ComponentLight::~ComponentLight()
 {
+#ifndef GAME_VERSION
+	delete bulb;
+#endif
 	glDisable(light_id);
 }
 
@@ -86,6 +92,7 @@ bool ComponentLight::DrawInspector()
 
 		ImGui::Spacing();
 		ImGui::Separator();
+		ImGui::Spacing();
 	}
 	else
 		RightClickMenu("Light");
@@ -98,10 +105,22 @@ void ComponentLight::OnDisable()
 	glDisable(light_id);
 }
 
+void ComponentLight::Clone(Component* clone)
+{
+	clone->enabled = enabled;
+	clone->not_destroy = not_destroy;
+	ComponentLight* light = (ComponentLight*)clone;
+	light->ambient = ambient;
+	light->diffuse = diffuse;
+	light->light_id = light_id;
+	light->print_icon = print_icon;
+}
+
 void ComponentLight::Reset()
 {
 	ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
 	diffuse = { 0.75f, 0.75f, 0.75f, 1.0f };
+	print_icon = true;
 }
 
 void ComponentLight::SetComponent(Component* component)
@@ -113,6 +132,7 @@ void ComponentLight::SetComponent(Component* component)
 		light_id = light->light_id;
 		diffuse = light->diffuse;
 		ambient = light->ambient;
+		print_icon = light->print_icon;
 	}
 }
 
@@ -140,15 +160,10 @@ void ComponentLight::DrawIconLight()
 	if (bulb != nullptr && print_icon)
 	{
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
-		float3 pos = transform->GetLocalPosition();
-		float3 scale = transform->GetLocalScale();
-		transform->SetLocalScale(0.2f, 0.18f, 0.2f);
-		transform->SetLocalPosition(pos.x - 0.133f, pos.y, pos.z);
+		float3 pos = transform->GetGlobalPosition();
+		float4x4 matrix = float4x4::FromTRS({ pos.x - 0.133f, pos.y, pos.z }, transform->GetGlobalRotation(), { 0.2f, 0.18f, 0.2f });
 		glDisable(GL_LIGHTING);
-		glColor3f(ambient.r, ambient.g, ambient.b);
-		bulb->DrawPolygon();
+		Gizmos::DrawPoly(bulb->mesh, matrix, ambient);
 		glEnable(GL_LIGHTING);
-		transform->SetLocalScale(scale.x, scale.y, scale.z);
-		transform->SetLocalPosition(pos.x, pos.y, pos.z);
 	}
 }

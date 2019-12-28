@@ -46,9 +46,10 @@ bool ComponentMaterial::DrawInspector()
 	if (ImGui::CollapsingHeader("Material", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		RightClickMenu("Material");
-		ImGui::Spacing();
-		if (texture != nullptr)
+		if (texture != nullptr) {
+			ImGui::Spacing();
 			ImGui::Text("Texture References: %i", texture->references);
+		}
 		ImGui::Spacing();
 		static bool set_Z = true;
 		ImGui::Spacing();
@@ -191,6 +192,7 @@ bool ComponentMaterial::DrawInspector()
 		}
 		ImGui::Spacing();
 		ImGui::Separator();
+		ImGui::Spacing();
 	}
 	else
 		RightClickMenu("Material");
@@ -201,8 +203,9 @@ bool ComponentMaterial::DrawInspector()
 void ComponentMaterial::Reset()
 {
 	color = { 1,1,1,1 };
-	if (texture != nullptr)
+	if (texture != nullptr) {
 		texture->DecreaseReferences();
+	}
 	texture = nullptr;
 }
 
@@ -211,11 +214,13 @@ void ComponentMaterial::SetComponent(Component* component)
 	if (component->GetType() == type) {
 
 		ComponentMaterial* material = (ComponentMaterial*)component;
-		if (texture != nullptr)
+		if (texture != nullptr) {
 			texture->DecreaseReferences();
+		}
 		texture = material->texture;
-		if (texture != nullptr)
+		if (texture != nullptr) {
 			texture->IncreaseReferences();
+		}
 
 		color = material->color;
 	}
@@ -248,13 +253,28 @@ void ComponentMaterial::LoadComponent(JSONArraypack* to_load)
 	ID = std::stoull(to_load->GetString("ID"));
 }
 
+void ComponentMaterial::Clone(Component* clone)
+{
+	clone->enabled = enabled;
+	clone->not_destroy = not_destroy;
+	ComponentMaterial* mat = (ComponentMaterial*)clone;
+	mat->color = color;
+	mat->texture = texture;
+	if (texture != nullptr) {
+		++texture->references;
+	}
+	mat->texture_activated = texture_activated;
+}
+
 void ComponentMaterial::SetTexture(ResourceTexture* tex)
 {
-	if (texture != nullptr)
+	if (texture != nullptr) {
 		texture->DecreaseReferences();
+	}
 	texture = tex;
-	if (texture != nullptr)
+	if (texture != nullptr) {
 		texture->IncreaseReferences();
+	}
 }
 
 const ResourceTexture* ComponentMaterial::GetTexture() const

@@ -24,7 +24,7 @@ MATH_BEGIN_NAMESPACE
 
 /// Specifies a triangle through three points in 3D space.
 /** This class stores three member vertices a, b and c to specify the triangle. */
-class Triangle
+class __declspec(dllexport) Triangle
 {
 public:
 	/// The first triangle endpoint.

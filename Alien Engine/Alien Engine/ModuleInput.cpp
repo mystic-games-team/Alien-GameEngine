@@ -24,13 +24,13 @@ ModuleInput::~ModuleInput()
 // Called before render is available
 bool ModuleInput::Init()
 {
-	LOG("Init SDL input event system");
+	LOG_ENGINE("Init SDL input event system");
 	bool ret = true;
 	SDL_Init(0);
 
 	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
-		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
+		LOG_ENGINE("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 
@@ -110,45 +110,47 @@ update_status ModuleInput::PreUpdate(float dt)
 	SDL_Event e;
 	while(SDL_PollEvent(&e))
 	{
+#ifndef GAME_VERSION
 		ImGui_ImplSDL2_ProcessEvent(&e);
+#endif
 		switch(e.type)
 		{
-			case SDL_MOUSEWHEEL:
+		case SDL_MOUSEWHEEL: {
 			mouse_z = e.wheel.y;
-			break;
-			case SDL_KEYDOWN:
+			break; }
+		case SDL_KEYDOWN: {
 			if (first_key) {
 				first_key = false;
 				first_key_pressed = e.key.keysym.scancode;
 			}
-			break;
-			case SDL_MOUSEMOTION:
+			break; }
+		case SDL_MOUSEMOTION: {
 			mouse_x = e.motion.x / SCREEN_SIZE;
 			mouse_y = e.motion.y / SCREEN_SIZE;
 
 			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
 			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
-			break;
-			case SDL_MOUSEBUTTONDOWN:
-				mouse_pressed = true;
-				break;
-			case SDL_QUIT:
+			break; }
+		case SDL_MOUSEBUTTONDOWN: {
+			mouse_pressed = true;
+			break; }
+		case SDL_QUIT: {
 			quit = true;
-			break;
-			case SDL_DROPFILE: {
-				App->file_system->ManageNewDropFile(e.drop.file);
-				SDL_free(e.drop.file);
-				break; }
-			case SDL_WINDOWEVENT:
-			{
-				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
-					App->renderer3D->OnResize(e.window.data1, e.window.data2);
-			}
+			break; }
+		case SDL_DROPFILE: {
+			App->file_system->ManageNewDropFile(e.drop.file);
+			SDL_free(e.drop.file);
+			break; }
+		case SDL_WINDOWEVENT: {
+			if (e.window.event == SDL_WINDOWEVENT_RESIZED)
+				App->renderer3D->OnResize(e.window.data1, e.window.data2);
+			break; }
 		}
 	}
 
-	if(quit == true)
+	if (quit == true) {
 		return UPDATE_STOP;
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -156,7 +158,7 @@ update_status ModuleInput::PreUpdate(float dt)
 // Called before quitting
 bool ModuleInput::CleanUp()
 {
-	LOG("Quitting SDL input event subsystem");
+	LOG_ENGINE("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }

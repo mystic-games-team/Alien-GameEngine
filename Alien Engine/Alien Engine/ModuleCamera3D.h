@@ -1,9 +1,10 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-
-#include "ComponentCamera.h"
 #include "ImGuizmos/ImGuizmo.h"
+
+class ComponentCamera;
+class OctreeNode;
 
 class ModuleCamera3D : public Module
 {
@@ -39,11 +40,11 @@ public:
 
 	ComponentCamera* fake_camera = nullptr;
 
+	float3 reference = float3::zero();
+
 private:
 
-	float3 reference = float3::zero;
-
-	Frustum* frustum=nullptr;
+	Frustum* frustum = nullptr;
 
 	float speed = 0.f;
 	float zoom_speed = 0.f;
@@ -54,5 +55,5 @@ private:
 	SDL_Cursor* cursor = nullptr;
 
 	bool start_lerp = false;
-	float3 point_to_look=(float3::zero);
+	float3 point_to_look = float3::zero();
 };

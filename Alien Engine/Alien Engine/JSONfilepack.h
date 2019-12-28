@@ -6,7 +6,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "SDL/include/SDL_scancode.h"
 
-struct Color;
+class Color;
 class JSONArraypack;
 
 class JSONfilepack {

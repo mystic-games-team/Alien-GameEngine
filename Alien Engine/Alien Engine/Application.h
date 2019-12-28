@@ -5,7 +5,6 @@
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleObjects.h"
@@ -18,12 +17,28 @@
 #include "ModuleFileSystem.h"
 #include "ModuleResources.h"
 
+#include <string>
+#include <vector>
+
+struct LogInfo {
+	LogInfo(const int& line, const char* file, const char* loged) {
+		this->line = line;
+		strcpy(this->file, file);
+		this->loged.push_back({ 1,std::string(loged) });
+		instances = 1;
+	}
+	int line = 0;
+	bool opened = false;
+	int instances = 0;
+	char file[MAX_PATH];
+	std::vector<std::pair<int, std::string>> loged;
+};
+
 class Application
 {
 public:
 	ModuleWindow* window = nullptr;
 	ModuleInput* input = nullptr;
-	ModuleSceneIntro* scene_intro = nullptr;
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;
 	ModuleUI* ui = nullptr;
@@ -36,13 +51,16 @@ public:
 	bool fps_cap = true;
 	uint16_t framerate_cap;
 	int fps_limit = 30;
-	ImGuiTextBuffer log_string; 
-	
-
+	std::vector<LogInfo> engine_string_logs;
+	std::vector<LogInfo> game_string_logs;
+	ImGuiTextBuffer all_engine_logs;
+	ImGuiTextBuffer all_game_logs;
+	HINSTANCE scripts_dll = nullptr;
+	std::string dll;
 private:
 	JSONfilepack* config = nullptr;
 	JSONfilepack* layout = nullptr;
-
+	
 	std::list<JSONfilepack*> json_files;
 
 	std::list<Module*> list_modules;
@@ -61,6 +79,7 @@ private:
 public:
 
 	Application();
+	void LoadDll();
 	~Application();
 
 	void LoadDefaultConfig();
@@ -96,3 +115,5 @@ private:
 };
 
 extern Application* App;
+
+

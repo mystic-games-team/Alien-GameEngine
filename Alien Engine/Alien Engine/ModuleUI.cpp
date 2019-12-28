@@ -7,6 +7,7 @@
 #include <gl/GL.h>
 #include "PanelAbout.h"
 #include "PanelConfig.h"
+#include "PanelBuild.h"
 #include "PanelConsole.h"
 #include "PanelCreateObject.h"
 #include "PanelHierarchy.h"
@@ -23,6 +24,9 @@
 #include <string>
 #include "ResourceTexture.h"
 #include "ReturnZ.h"
+#include "PanelTextEditor.h"
+#include <fstream>
+
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {
@@ -36,7 +40,7 @@ ModuleUI::~ModuleUI()
 // Load assets
 bool ModuleUI::Start()
 {
-	LOG("Loading UI assets");
+	LOG_ENGINE("Loading UI assets");
 	bool ret = true;
 
 	// Setup Dear ImGui context
@@ -48,9 +52,6 @@ bool ModuleUI::Start()
 	io.WantSaveIniSettings = false;
 
 	ChangeStyle(App->window->style);
-
-
-	// Setup Platform/Renderer bindings
 	ImGui_ImplOpenGL3_Init();
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
@@ -67,7 +68,7 @@ bool ModuleUI::Start()
 // Load assets
 bool ModuleUI::CleanUp()
 {
-	LOG("Unloading UI scene");
+	LOG_ENGINE("Unloading UI scene");
 
 	if (!need_to_save_layouts) // just save to know which is active
 		SaveLayoutsActive();
@@ -103,6 +104,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 {
 	for (uint i = 0; i < 3; ++i) {
 		panel_config_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", i);
+		panel_build_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelBuild", i);
 		panel_about_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", i);
 		panel_create_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
 		panel_project_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", i);
@@ -114,6 +116,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		panel_game_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.Game", i);
 		panel_scene_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelScene", i);
 		panel_scene_selector_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelSceneSelector", i);
+		panel_text_edit_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelTextEditor", i);
 		shortcut_demo_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ImGuiDemo", i);
 		shortcut_report_bug_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ReportBug", i);
 		shortcut_view_mesh_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ViewMesh", i);
@@ -130,9 +133,11 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		shortcut_octree_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.ViewOctree", i);
 		shortcut_cntrlZ_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.GoBack", i);
 		shortcut_cntrlY_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.GoFordward", i);
+		shortcut_duplicate_object_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.DuplicateObject", i);
 	}
 	if (panel_about != nullptr) {
 		panel_about->shortcut->SetShortcutKeys(panel_about_codes[0], panel_about_codes[1], panel_about_codes[2]);
+		panel_build->shortcut->SetShortcutKeys(panel_build_codes[0], panel_build_codes[1], panel_build_codes[2]);
 		panel_config->shortcut->SetShortcutKeys(panel_config_codes[0], panel_config_codes[1], panel_config_codes[2]);
 		panel_scene_selector->shortcut->SetShortcutKeys(panel_scene_selector_codes[0], panel_scene_selector_codes[1], panel_scene_selector_codes[2]);
 		panel_project->shortcut->SetShortcutKeys(panel_project_codes[0], panel_project_codes[1], panel_project_codes[2]);
@@ -142,6 +147,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		panel_create_object->shortcut->SetShortcutKeys(panel_create_codes[0], panel_create_codes[1], panel_create_codes[2]);
 		panel_inspector->shortcut->SetShortcutKeys(panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
 		panel_scene->shortcut->SetShortcutKeys(panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
+		panel_text_editor->shortcut->SetShortcutKeys(panel_text_edit_codes[0], panel_text_edit_codes[1], panel_text_edit_codes[2]);
 		panel_game->shortcut->SetShortcutKeys(panel_game_codes[0], panel_game_codes[1], panel_game_codes[2]);
 		panel_layout->shortcut->SetShortcutKeys(panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
 		shortcut_demo->SetShortcutKeys(shortcut_demo_codes[0], shortcut_demo_codes[1], shortcut_demo_codes[2]);
@@ -160,6 +166,7 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 		shortcut_octree->SetShortcutKeys(shortcut_octree_codes[0], shortcut_octree_codes[1], shortcut_octree_codes[2]);
 		shortcut_cntrlZ->SetShortcutKeys(shortcut_cntrlZ_codes[0], shortcut_cntrlZ_codes[1], shortcut_cntrlZ_codes[2]);
 		shortcut_cntrlY->SetShortcutKeys(shortcut_cntrlY_codes[0], shortcut_cntrlY_codes[1], shortcut_cntrlY_codes[2]);
+		shortcut_duplicate_object->SetShortcutKeys(shortcut_duplicate_object_codes[0], shortcut_duplicate_object_codes[1], shortcut_duplicate_object_codes[2]);
 
 		// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 		App->shortcut_manager->OrderShortCuts();
@@ -170,10 +177,12 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 {
 	for (uint i = 0; i < 3; ++i) {
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_config->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_build->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelProject", (uint)panel_project->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelAbout", (uint)panel_about->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelHierarchy", (uint)panel_hierarchy->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelRender", (uint)panel_render->shortcut->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelTextEditor", (uint)panel_text_editor->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelInspector", (uint)panel_inspector->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConsole", (uint)panel_console->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelCreate", (uint)panel_create_object->shortcut->GetScancode(i));
@@ -196,6 +205,7 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 		config->SetArrayNumber("Configuration.UI.ShortCuts.ViewOctree", (uint)shortcut_octree->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.GoBack", (uint)shortcut_cntrlZ->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.GoFordward", (uint)shortcut_cntrlY->GetScancode(i));
+		config->SetArrayNumber("Configuration.UI.ShortCuts.DuplicateObject", (uint)shortcut_duplicate_object->GetScancode(i));
 	}
 }
 void ModuleUI::LoadLayouts()
@@ -314,15 +324,92 @@ void ModuleUI::SaveLayoutsActive()
 	json_layout->FinishSave();
 }
 
+void ModuleUI::CreateScriptFile(const int& type, bool to_export, const char* name)
+{
+	std::string file_output = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".h"));
+	switch (type) {
+	case 1: { // class
+		if (to_export) {
+			App->file_system->Copy(EXPORT_FILE_CLASS_TEMPLATE, file_output.data());
+		}
+		else {
+			App->file_system->Copy(CLASS_FILE_TEMPLATE, file_output.data());
+		}
+		break; }
+	case 2: { // struct
+		if (to_export) {
+			App->file_system->Copy(EXPORT_FILE_STRUCT_TEMPLATE, file_output.data());
+		}
+		else {
+			App->file_system->Copy(STRUCT_FILE_TEMPLATE, file_output.data());
+		}
+		break; }
+	default:
+		break;
+	}
+	
+	// change de .h
+	std::ifstream file(file_output);
+	std::string file_str;
+	if (file.is_open()) {
+		std::string line;
+		while (std::getline(file, line)) {
+			while (line.find("DataAlienTypeName") != std::string::npos) {
+				line.replace(line.find("DataAlienTypeName"), 17, std::string(name));
+			}
+			if (file_str.empty()) {
+				file_str = line;
+			}
+			else {
+				file_str += std::string("\n") + line;
+			}
+		}
+		file.close();
+	}
+	App->file_system->Save(file_output.data(), file_str.data(), file_str.size());
+
+	// change the cpp
+	std::string cpp_path; 
+	if (type == 1 && to_export) {
+		cpp_path = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".cpp"));
+		App->file_system->Copy(CPP_ALIEN_FILE_TEMPLATE, cpp_path.data());
+	}
+	else {
+		cpp_path = std::string(HEADER_SCRIPTS_FILE + std::string(name) + std::string(".cpp"));
+		App->file_system->Copy(CPP_FILE_TEMPLATE, cpp_path.data());
+	}
+
+	std::ifstream cpp(cpp_path);
+	std::string cpp_str;
+	if (cpp.is_open()) {
+		std::string line;
+		while (std::getline(cpp, line)) {
+			while (line.find("DataAlienTypeName") != std::string::npos) {
+				line.replace(line.find("DataAlienTypeName"), 17, std::string(name));
+			}
+			if (cpp_str.empty()) {
+				cpp_str = line;
+			}
+			else {
+				cpp_str += std::string("\n") + line;
+			}
+		}
+		cpp.close();
+	}
+	App->file_system->Save(cpp_path.data(), cpp_str.data(), cpp_str.size());
+
+}
+
 update_status ModuleUI::PreUpdate(float dt)
 {
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	if (Time::state == Time::GameState::PLAY_ONCE)
+	if (Time::state == Time::GameState::PLAY_ONCE) {
 		Time::Pause();
-
+}
 	if (change_game_state.first) {
 		switch (change_game_state.second) {
 		case Time::GameState::NONE: {
@@ -344,17 +431,18 @@ update_status ModuleUI::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ModuleUI::Draw() {
-
-
-	if (show_demo_wndow)
+void ModuleUI::Draw() 
+{
+	if (show_demo_wndow) {
 		ImGui::ShowDemoWindow(&show_demo_wndow);
-
+	}
 	MainMenuBar();
 	BackgroundDockspace();
 	SecondMenuBar();
 	UpdatePanels();
-
+	if (creating_script) {
+		CreateNewScriptPopUp();
+	}
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -384,6 +472,10 @@ void ModuleUI::MainMenuBar()
 		{
 
 		}
+		if (ImGui::MenuItem("Build Settings", panel_build->shortcut->GetNameScancodes()))
+		{
+			panel_build->ChangeEnable();
+		}
 		if (ImGui::MenuItem("Close", "Alt + F4"))
 		{
 			App->QuitApp();
@@ -412,6 +504,10 @@ void ModuleUI::MainMenuBar()
 		if (ImGui::MenuItem("Hierarchy", panel_hierarchy->shortcut->GetNameScancodes()))
 		{
 			panel_hierarchy->ChangeEnable();
+		}
+		if (ImGui::MenuItem("TextEditor", panel_text_editor->shortcut->GetNameScancodes()))
+		{
+			panel_text_editor->ChangeEnable();
 		}
 		if (ImGui::MenuItem("Panel Project", panel_project->shortcut->GetNameScancodes()))
 		{
@@ -515,7 +611,7 @@ void ModuleUI::MainMenuBar()
 		}
 		if (ImGui::MenuItem("Documentation"))
 		{
-			LOG("Put link wiki");
+			App->OpenWebsite("https://contrasnya.wixsite.com/aliengameengine");
 		}
 		if (ImGui::MenuItem("Report a bug", shortcut_report_bug->GetNameScancodes()))
 		{
@@ -531,7 +627,6 @@ void ModuleUI::SecondMenuBar()
 	ImGui::SetNextWindowSize(ImVec2(App->window->width,52));
 	ImGui::Begin("## Tools", (bool*)false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse);
 
-	// TODO: Update Control if we use shortcuts
 	ImGui::SetCursorPosY((ImGui::GetWindowHeight() * 0.5f) - 18);
 	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 	if (ImGui::ImageButton((ImTextureID)App->resources->icons.undo->id, ImVec2(30, 30)))
@@ -541,7 +636,7 @@ void ModuleUI::SecondMenuBar()
 	if (ImGui::IsItemHovered())
 	{
 		ImGui::BeginTooltip();
-		ImGui::Text("Undo (Control+Z)");
+		ImGui::Text(std::string("Undo " + std::string(shortcut_cntrlZ->GetNameScancodes())).data());
 		ImGui::EndTooltip();
 	}
 	ImGui::SameLine();
@@ -554,7 +649,7 @@ void ModuleUI::SecondMenuBar()
 	if (ImGui::IsItemHovered())
 	{
 		ImGui::BeginTooltip();
-		ImGui::Text("Redo (Control+Y)");
+		ImGui::Text(std::string("Redo " + std::string(shortcut_cntrlY->GetNameScancodes())).data());
 		ImGui::EndTooltip();
 	}
 	// Vertical Separator
@@ -858,6 +953,65 @@ void ModuleUI::ChangeEnableDemo()
 	show_demo_wndow = !show_demo_wndow;
 }
 
+void ModuleUI::CreateNewScriptPopUp()
+{
+	static int type = 0;
+	static char _name[MAX_PATH] = "Data Name";
+	static bool _export = true;
+
+	ImGui::OpenPopup("Create New Script");
+	ImGui::SetNextWindowSize({ 320,155 });
+	if (ImGui::BeginPopupModal("Create New Script", &creating_script, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
+		ImGui::PushItemWidth(135);
+		ImGui::SetCursorPosX(28);
+		ImGui::Combo("Select Script Type", &type, "Script Type\0Class\0Struct\0");
+
+		ImGui::Spacing();
+		ImGui::SetCursorPosX(15);
+		ImGui::InputText("Name", _name, MAX_PATH, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue);
+		ImGui::SameLine();
+		ImGui::Checkbox("Export Script", &_export);
+		ImGui::Spacing();
+		ImGui::SetCursorPosX(42);
+		ImGui::Text("Header and Cpp will be genereated,");
+		ImGui::SetCursorPosX(33);
+		ImGui::Text("just add them as an existing element.");
+		ImGui::Spacing();
+		ImGui::SetCursorPosX(90);
+		if (ImGui::Button("Create Script", { 130,25 })) {
+			if (std::string(_name).find(" ") == std::string::npos && type != 0) {
+				CreateScriptFile(type, _export, _name);
+				type = 0;
+				strcpy(_name, "Data Name");
+				_export = true;
+				creating_script = false;
+			}
+		}
+
+		ImGui::EndPopup();
+	}
+	else {
+		type = 0;
+		strcpy(_name, "Data Name");
+		_export = true;
+	}
+}
+
+void ModuleUI::SetError()
+{
+	if (!App->objects->errors) {
+		App->objects->errors = true;
+		panel_console->game_console = false;
+		ImGui::SetWindowFocus(panel_console->GetName().data());
+		if (App->camera->is_scene_focused) {
+			ImGui::SetWindowFocus(panel_scene->GetName().data());
+		}
+		else if (panel_game->game_focused) {
+			ImGui::SetWindowFocus(panel_game->GetName().data());
+		}
+	}
+}
+
 void ModuleUI::DeleteLayout(Layout* layout)
 {
 
@@ -893,8 +1047,10 @@ void ModuleUI::InitPanels()
 	panel_inspector = new PanelInspector("Inspector", panel_inspector_codes[0], panel_inspector_codes[1], panel_inspector_codes[2]);
 	panel_scene = new PanelScene("Scene", panel_scene_codes[0], panel_scene_codes[1], panel_scene_codes[2]);
 	panel_scene_selector = new PanelSceneSelector("Save", panel_scene_selector_codes[0], panel_scene_selector_codes[1], panel_scene_selector_codes[2]);
+	panel_text_editor = new PanelTextEditor("Text Editor", panel_text_edit_codes[0], panel_text_edit_codes[1], panel_text_edit_codes[2]);
 	panel_layout = new PanelLayout("Layout Editor", panel_layout_codes[0], panel_layout_codes[1], panel_layout_codes[2]);
 	panel_game = new PanelGame("Game", panel_game_codes[0], panel_game_codes[1], panel_game_codes[2]);
+	panel_build = new PanelBuild("Build", panel_build_codes[0], panel_build_codes[1], panel_build_codes[2]);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
@@ -908,6 +1064,8 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_scene);
 	panels.push_back(panel_layout);
 	panels.push_back(panel_scene_selector);
+	panels.push_back(panel_text_editor);
+	panels.push_back(panel_build);
 }
 
 void ModuleUI::UpdatePanels()
@@ -920,17 +1078,6 @@ void ModuleUI::UpdatePanels()
 			}
 		}
 	}
-}
-
-Panel*& ModuleUI::GetPanelByName(const std::string& panel_name)
-{
-	std::vector<Panel*>::iterator item = panels.begin();
-	for (; item != panels.end(); ++item) {
-		if (*item != nullptr && (*item)->GetName() == panel_name) {
-			return (*item);
-		}
-	}
-	SDL_assert(1 == 0); //panel name is not correct, revise panels names!!
 }
                   
 void ModuleUI::InitShortCuts()
@@ -951,6 +1098,7 @@ void ModuleUI::InitShortCuts()
 	shortcut_octree = App->shortcut_manager->AddShortCut("Octree", shortcut_octree_codes[0], std::bind(&ModuleObjects::ChangeEnableOctree, App->objects), shortcut_octree_codes[1], shortcut_octree_codes[2]);
 	shortcut_cntrlZ = App->shortcut_manager->AddShortCut("Go Back", shortcut_cntrlZ_codes[0], ReturnZ::GoBackOneAction, shortcut_cntrlZ_codes[1], shortcut_cntrlZ_codes[2]);
 	shortcut_cntrlY = App->shortcut_manager->AddShortCut("Go Forward", shortcut_cntrlY_codes[0], ReturnZ::GoFordwardOneAction, shortcut_cntrlY_codes[1], shortcut_cntrlY_codes[2]);
+	shortcut_duplicate_object = App->shortcut_manager->AddShortCut("Duplicate Object", shortcut_duplicate_object_codes[0], std::bind(&ModuleObjects::DuplicateObjects, App->objects), shortcut_duplicate_object_codes[1], shortcut_duplicate_object_codes[2]);
 	
 	// OrderShortCuts must be called after all shortcuts have been created!! Victor read this...
 	App->shortcut_manager->OrderShortCuts();
