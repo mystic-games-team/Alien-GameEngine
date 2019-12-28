@@ -109,7 +109,11 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 	ID = App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data());
 
 	if (ID != 0) {
-		meta_data_path = LIBRARY_PREFABS_FOLDER + std::to_string(ID) + ".alienPrefab";;
+		meta_data_path = LIBRARY_PREFABS_FOLDER + std::to_string(ID) + ".alienPrefab";
+		if (!App->file_system->Exists(meta_data_path.data())) {
+			App->file_system->Copy(path.data(), meta_data_path.data());
+		}
+
 		SetName(App->file_system->GetBaseFileName(path.data()).data());
 		App->resources->AddResource(this);
 	}
