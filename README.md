@@ -99,6 +99,8 @@ The user can check the editor options activating them in the renderer window.
 
 ### Assigment 3
 
+* With cntrl + k or File->Build Settings user can create an automatic build for the game. Some modules and ImGui is never created.
+
 * Intro Icon Image while opening the engine with a progress bar.
 
 * More than 1 object is supported to be selected, cntrl to select another keeping the others. Also they can be moved/rotated/scaled or deleted and cntrl D clone them. Moving a object with shift pressed, clones it and move the clone.
@@ -107,11 +109,9 @@ The user can check the editor options activating them in the renderer window.
 
 * There is a text editor for the scripts in the engine.
 
-* Clone GameObjects
+* Clone GameObjects (Cntrl + D or shift while moving gizmo)
 
-* Engine can be started with game mode. Some modules and ImGui is never created.
-
-* With cntrl + k or File->Build Settings user can create a automatic build for the game
+* In the scripting, there is OnDrawGizmos and OnDrawGizmos selected, user can use the class Gizmo to draw cube, sphere, line, wire mesh...
 
 * Maybe HotReload?
 
