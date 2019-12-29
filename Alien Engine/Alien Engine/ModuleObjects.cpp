@@ -74,6 +74,8 @@ bool ModuleObjects::Start()
 
 	App->camera->fake_camera->frustum.pos = { 25,25,25 };
 	App->camera->fake_camera->Look(float3(0, 0, 0));
+
+	LoadScene("Assigment3TankScene");
 #else 
 	JSON_Value* value = json_parse_file(BUILD_SETTINGS_PATH);
 	JSON_Object* object = json_value_get_object(value);
