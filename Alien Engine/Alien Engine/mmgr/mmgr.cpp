@@ -247,7 +247,7 @@ static		unsigned int	sourceLine             = 0;
 static		bool		staticDeinitTime       = false;
 static		sAllocUnit	**reservoirBuffer      = NULL;
 static		unsigned int	reservoirBufferSize    = 0;
-static const	char		*memoryLogFile         = "memory.log";
+static const	char		*memoryLogFile         = "DLLs/memory.log";
 static const	char		*memoryLeakLogFile     = "DLLs/memleaks.log";
 static		void		doCleanupLogOnFirstRun();
 
