@@ -8,11 +8,11 @@
 #include "PanelScene.h"
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
+#include "mmgr/mmgr.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Camera3D");
-
 }
 
 ModuleCamera3D::~ModuleCamera3D()

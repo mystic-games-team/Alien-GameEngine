@@ -22,6 +22,7 @@
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 #include "ResourceScript.h"
+#include "mmgr/mmgr.h"
 
 ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 {

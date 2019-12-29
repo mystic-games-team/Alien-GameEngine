@@ -16,6 +16,7 @@
 #include "ResourceModel.h"
 #include "ResourceTexture.h"
 #include "ReturnZ.h"
+#include "mmgr/mmgr.h"
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -482,10 +483,8 @@ ResourceMesh* ModuleImporter::LoadEngineModels(const char* path)
 	const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
 		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
 
-	for (uint i = 0; i < scene->mNumMeshes; ++i)
-	{
-		r_mesh = LoadNodeMesh(scene, scene->mRootNode, scene->mMeshes[i], nullptr);
-	}
+	r_mesh = LoadNodeMesh(scene, scene->mRootNode, scene->mMeshes[0], nullptr);
+
 
 	aiReleaseImport(scene);
 	if (r_mesh != nullptr) {

@@ -12,7 +12,7 @@
 #include "ResourcePrefab.h"
 #include "FileNode.h"
 #include "ResourceScript.h"
-
+#include "mmgr/mmgr.h"
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 {
@@ -103,6 +103,9 @@ bool ModuleResources::CleanUp()
 	delete dodecahedron;
 	delete icosahedron;
 	delete octahedron;
+
+	delete light_mesh;
+	delete camera_mesh;
 
 	return true;
 }

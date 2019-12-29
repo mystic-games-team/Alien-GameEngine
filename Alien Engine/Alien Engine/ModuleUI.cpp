@@ -26,7 +26,7 @@
 #include "ReturnZ.h"
 #include "PanelTextEditor.h"
 #include <fstream>
-
+#include "mmgr/mmgr.h"
 
 ModuleUI::ModuleUI(bool start_enabled) : Module(start_enabled)
 {

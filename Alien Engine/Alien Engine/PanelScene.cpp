@@ -10,6 +10,7 @@
 #include "Prefab.h"
 #include "ReturnZ.h"
 #include "PanelGame.h"
+#include "mmgr/mmgr.h"
 
 PanelScene::PanelScene(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
