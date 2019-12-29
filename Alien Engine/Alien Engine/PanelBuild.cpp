@@ -51,11 +51,7 @@ void PanelBuild::PanelLogic()
 
 		ImGui::SetCursorPosX(10);
 		ImGui::InputText("Game Title", game_name, MAX_PATH, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
-		if (ImGui::IsItemHovered()) {
-			ImGui::BeginTooltip();
-			ImGui::Text("Game Title is working in progress, it will come soon, sorry :(");
-			ImGui::EndTooltip();
-		}
+
 		ImGui::Spacing();
 
 		ImGui::SetCursorPosX(10);
@@ -301,17 +297,30 @@ void PanelBuild::CreateBuild()
 		}
 	}
 
-	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Engine Icons"), std::string(folder_location + "/Configuration/Engine Icons"), std::experimental::filesystem::copy_options::recursive);
-	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Tags"), std::string(folder_location + "/Configuration/Tags"), std::experimental::filesystem::copy_options::recursive);
-	std::experimental::filesystem::copy(std::string(dir + "/Configuration/BuildSettings.alienBuild"), std::string(folder_location + "/Configuration/BuildSettings.alienBuild"));
-	std::experimental::filesystem::copy(std::string(dir + "/Configuration/DefaultConfiguration.json"), std::string(folder_location + "/Configuration/DefaultConfiguration.json"));
-
-	// TODO: change the name for the game name
 	exe_path = std::string(folder_location + "/Dlls/" + "Alien Engine" + ".exe");
 	std::experimental::filesystem::copy(BUILD_EXE_PATH, exe_path.data(), std::experimental::filesystem::copy_options::overwrite_existing);
 
-	//std::string direct = std::string(folder_location + "/Dlls/" + game_name + ".lnk");
-	//std::experimental::filesystem::copy(BUILD_DIRECT_ACCESS_PATH, exe_path.data(), std::experimental::filesystem::copy_options::overwrite_existing);
+	std::string direct = std::string(folder_location + "/" + game_name + ".lnk");
+	std::experimental::filesystem::copy(BUILD_DIRECT_ACCESS_PATH, direct.data(), std::experimental::filesystem::copy_options::overwrite_existing);
+
+	HRESULT hres = NULL;
+	IShellLink* psl = NULL;
+	hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID*)&psl);
+	if (SUCCEEDED(hres))
+	{
+		IPersistFile* ppf;
+		psl->SetPath(exe_path.data());
+		hres = psl->QueryInterface(IID_IPersistFile, (LPVOID*)&ppf);
+
+		if (SUCCEEDED(hres))
+		{
+			WCHAR wsz[MAX_PATH];
+			MultiByteToWideChar(CP_ACP, 0, direct.data(), -1, wsz, MAX_PATH);
+			hres = ppf->Save(wsz, TRUE);
+			ppf->Release();
+		}
+		psl->Release();
+	}
 
 	std::experimental::filesystem::remove(BUILD_SETTINGS_PATH);
 
@@ -329,6 +338,11 @@ void PanelBuild::CreateBuild()
 		build->FinishSave();
 	}
 
+
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Engine Icons"), std::string(folder_location + "/Configuration/Engine Icons"), std::experimental::filesystem::copy_options::recursive);
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Tags"), std::string(folder_location + "/Configuration/Tags"), std::experimental::filesystem::copy_options::recursive);
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/BuildSettings.alienBuild"), std::string(folder_location + "/Configuration/BuildSettings.alienBuild"));
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/DefaultConfiguration.json"), std::string(folder_location + "/Configuration/DefaultConfiguration.json"));
 
 	if (!readme_fullpath.empty()) {
 		std::experimental::filesystem::copy(readme_fullpath.data(), std::string(folder_location + "/" + readme_name).data());
