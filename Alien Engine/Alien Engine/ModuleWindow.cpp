@@ -47,7 +47,7 @@ bool ModuleWindow::Init()
 		else
 		{
 			renderer = SDL_CreateRenderer(window, -1, 0);
-			screen_surface = SDL_LoadBMP("Configuration/EngineTextures/Logo_Name.bmp");
+			screen_surface = SDL_LoadBMP("Configuration/Engine Icons/Logo_Name.bmp");
 			texture = SDL_CreateTextureFromSurface(renderer, screen_surface);
 			SDL_RenderCopy(renderer, texture, NULL, NULL);
 

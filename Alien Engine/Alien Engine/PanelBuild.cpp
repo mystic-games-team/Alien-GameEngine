@@ -279,7 +279,12 @@ void PanelBuild::CreateBuild()
 		}
 	}
 
+	// base folder
 	CreateDirectoryA(folder_location.data(), NULL);
+
+	// Configuration folder
+	CreateDirectoryA(std::string(folder_location + "/Configuration").data(), NULL);
+
 
 	std::vector<std::string> files;
 	std::vector<std::string> directories;
@@ -291,20 +296,22 @@ void PanelBuild::CreateBuild()
 	App->file_system->NormalizePath(dir);
 
 	for (uint i = 0; i < directories.size(); ++i) {
-		if (strcmp(directories[i].data(), "AlienEngineScripts") != 0 && strcmp(directories[i].data(), "Library") != 0) {
+		if (strcmp(directories[i].data(), "AlienEngineScripts") != 0 && strcmp(directories[i].data(), "Assets") != 0 && strcmp(directories[i].data(), "Configuration") != 0) {
 			std::experimental::filesystem::copy(std::string(dir + "/" + directories[i]).data(), std::string(folder_location + "/" + directories[i]).data(), std::experimental::filesystem::copy_options::recursive);
 		}
 	}
 
-	for (uint i = 0; i < files.size(); ++i) {
-		if (strcmp(files[i].data(), "Alien Engine.exe") != 0 && strcmp(files[i].data(), "memleaks.log") != 0 && strcmp(files[i].data(), "memory.log") != 0) {
-			std::experimental::filesystem::copy(std::string(dir + "/" + files[i]).data(), std::string(folder_location + "/" + files[i]).data());
-		}
-	}
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Engine Icons"), std::string(folder_location + "/Configuration/Engine Icons"), std::experimental::filesystem::copy_options::recursive);
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Tags"), std::string(folder_location + "/Configuration/Tags"), std::experimental::filesystem::copy_options::recursive);
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/BuildSettings.alienBuild"), std::string(folder_location + "/Configuration/BuildSettings.alienBuild"));
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/DefaultConfiguration.json"), std::string(folder_location + "/Configuration/DefaultConfiguration.json"));
 
 	// TODO: change the name for the game name
-	exe_path = std::string(folder_location + "/" + "Alien Engine" + ".exe");
-	std::experimental::filesystem::copy(BUILD_EXE_PATH, exe_path.data());
+	exe_path = std::string(folder_location + "/Dlls/" + "Alien Engine" + ".exe");
+	std::experimental::filesystem::copy(BUILD_EXE_PATH, exe_path.data(), std::experimental::filesystem::copy_options::overwrite_existing);
+
+	//std::string direct = std::string(folder_location + "/Dlls/" + game_name + ".lnk");
+	//std::experimental::filesystem::copy(BUILD_DIRECT_ACCESS_PATH, exe_path.data(), std::experimental::filesystem::copy_options::overwrite_existing);
 
 	std::experimental::filesystem::remove(BUILD_SETTINGS_PATH);
 
