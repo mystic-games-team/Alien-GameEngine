@@ -1448,136 +1448,6 @@
                 ]
             },
             {
-                "Name": "City_building_032",
-                "FamilyNumber": 3,
-                "ID": "17900934643390992333",
-                "ParentID": "17009522834697581728",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -29.478403091430664,
-                            21.01409912109375,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "1369189161038435135"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "837930809554439977",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "11815606474620480374",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            0.58799999952316284,
-                            0.58799999952316284,
-                            0.58799999952316284,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "718802412892150446",
-                        "HasTexture": true,
-                        "TextureID": "16062728515270306180",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "City_building_022",
-                "FamilyNumber": 3,
-                "ID": "764600570196055215",
-                "ParentID": "17009522834697581728",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -20.831323623657227,
-                            -27.426488876342773,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            1,
-                            1.9470718370939721e-07
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "6827536692479413223"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "18242738091693571192",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "17120950349560889787",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            0.58823531866073608,
-                            0.58823531866073608,
-                            0.58823531866073608,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "13665380210469234042",
-                        "HasTexture": true,
-                        "TextureID": "12604024196959432982",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
                 "Name": "City_building_030",
                 "FamilyNumber": 3,
                 "ID": "13040040071626095249",
@@ -1967,9 +1837,9 @@
                 ]
             },
             {
-                "Name": "City_building_041",
+                "Name": "City_building_032",
                 "FamilyNumber": 3,
-                "ID": "10912352018770209725",
+                "ID": "17900934643390992333",
                 "ParentID": "17009522834697581728",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -1983,15 +1853,15 @@
                     {
                         "Type": 0,
                         "Position": [
-                            30.695278167724609,
-                            21.612646102905273,
-                            2.1210729528320371e-07
+                            -29.478403091430664,
+                            21.01409912109375,
+                            0
                         ],
                         "Rotation": [
                             0,
                             0,
-                            0.70710676908493042,
-                            0.70710676908493042
+                            0,
+                            1
                         ],
                         "Scale": [
                             1,
@@ -1999,7 +1869,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17020986270495054417"
+                        "ID": "1369189161038435135"
                     },
                     {
                         "Type": 1,
@@ -2009,10 +1879,10 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "14814468222754894917",
+                        "ID": "837930809554439977",
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "16009257564723706839",
+                        "MeshID": "11815606474620480374",
                         "Enabled": true
                     },
                     {
@@ -2024,17 +1894,17 @@
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "15514661101959280682",
+                        "ID": "718802412892150446",
                         "HasTexture": true,
-                        "TextureID": "16982210784927196389",
+                        "TextureID": "16062728515270306180",
                         "Enabled": true
                     }
                 ]
             },
             {
-                "Name": "City_building_033",
+                "Name": "City_building_022",
                 "FamilyNumber": 3,
-                "ID": "2000690296296121770",
+                "ID": "764600570196055215",
                 "ParentID": "17009522834697581728",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -2048,15 +1918,15 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -32.361495971679688,
-                            42.37042236328125,
-                            5.0146070407208754e-07
+                            -20.831323623657227,
+                            -27.426488876342773,
+                            0
                         ],
                         "Rotation": [
                             0,
                             0,
-                            0,
-                            1
+                            1,
+                            1.9470718370939721e-07
                         ],
                         "Scale": [
                             1,
@@ -2064,7 +1934,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18340333308847669818"
+                        "ID": "6827536692479413223"
                     },
                     {
                         "Type": 1,
@@ -2074,24 +1944,24 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": true,
                         "DrawOBB": true,
-                        "ID": "16569090081663101824",
+                        "ID": "18242738091693571192",
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "6214713635904302290",
+                        "MeshID": "17120950349560889787",
                         "Enabled": true
                     },
                     {
                         "Type": 2,
                         "Color": [
-                            0.58799999952316284,
-                            0.58799999952316284,
-                            0.58799999952316284,
+                            0.58823531866073608,
+                            0.58823531866073608,
+                            0.58823531866073608,
                             1
                         ],
                         "TextureEnabled": true,
-                        "ID": "9117623783399815650",
+                        "ID": "13665380210469234042",
                         "HasTexture": true,
-                        "TextureID": "3455884694091217983",
+                        "TextureID": "12604024196959432982",
                         "Enabled": true
                     }
                 ]
@@ -2422,10 +2292,10 @@
                 ]
             },
             {
-                "Name": "Spot001.Target",
-                "FamilyNumber": 2,
-                "ID": "3782725844824779568",
-                "ParentID": "8897112697378256304",
+                "Name": "City_building_041",
+                "FamilyNumber": 3,
+                "ID": "10912352018770209725",
+                "ParentID": "17009522834697581728",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2438,15 +2308,15 @@
                     {
                         "Type": 0,
                         "Position": [
-                            28.890945434570313,
-                            -60.963882446289063,
-                            -2.6648158382158726e-06
+                            30.695278167724609,
+                            21.612646102905273,
+                            2.1210729528320371e-07
                         ],
                         "Rotation": [
-                            5.9604644775390625e-08,
                             0,
                             0,
-                            1
+                            0.70710676908493042,
+                            0.70710676908493042
                         ],
                         "Scale": [
                             1,
@@ -2454,15 +2324,43 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "16660071372085160704"
+                        "ID": "17020986270495054417"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "14814468222754894917",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "16009257564723706839",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.58799999952316284,
+                            0.58799999952316284,
+                            0.58799999952316284,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "15514661101959280682",
+                        "HasTexture": true,
+                        "TextureID": "16982210784927196389",
+                        "Enabled": true
                     }
                 ]
             },
             {
-                "Name": "Camera001.Target",
-                "FamilyNumber": 2,
-                "ID": "9359626370124135713",
-                "ParentID": "8897112697378256304",
+                "Name": "City_building_033",
+                "FamilyNumber": 3,
+                "ID": "2000690296296121770",
+                "ParentID": "17009522834697581728",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2475,23 +2373,51 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -28.132621765136719,
-                            20.873329162597656,
-                            -35.064212799072266
+                            -32.361495971679688,
+                            42.37042236328125,
+                            5.0146070407208754e-07
                         ],
                         "Rotation": [
-                            0.049339786171913147,
-                            0.93228733539581299,
-                            0.13933119177818298,
-                            -0.33014044165611267
+                            0,
+                            0,
+                            0,
+                            1
                         ],
                         "Scale": [
                             1,
-                            0.99999994039535522,
+                            1,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15201774607496119140"
+                        "ID": "18340333308847669818"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "16569090081663101824",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "6214713635904302290",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.58799999952316284,
+                            0.58799999952316284,
+                            0.58799999952316284,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "9117623783399815650",
+                        "HasTexture": true,
+                        "TextureID": "3455884694091217983",
+                        "Enabled": true
                     }
                 ]
             },
@@ -2566,6 +2492,80 @@
                         ],
                         "ScaleNegative": false,
                         "ID": "16654060612284247262"
+                    }
+                ]
+            },
+            {
+                "Name": "Spot001.Target",
+                "FamilyNumber": 2,
+                "ID": "3782725844824779568",
+                "ParentID": "8897112697378256304",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            28.890945434570313,
+                            -60.963882446289063,
+                            -2.6648158382158726e-06
+                        ],
+                        "Rotation": [
+                            5.9604644775390625e-08,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16660071372085160704"
+                    }
+                ]
+            },
+            {
+                "Name": "Camera001.Target",
+                "FamilyNumber": 2,
+                "ID": "9359626370124135713",
+                "ParentID": "8897112697378256304",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -28.132621765136719,
+                            20.873329162597656,
+                            -35.064212799072266
+                        ],
+                        "Rotation": [
+                            0.049339786171913147,
+                            0.93228733539581299,
+                            0.13933119177818298,
+                            -0.33014044165611267
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15201774607496119140"
                     }
                 ]
             },
@@ -2701,7 +2701,7 @@
                             {
                                 "VarType": 3,
                                 "Name": "recoil_velocity",
-                                "float": 6
+                                "float": 4
                             },
                             {
                                 "VarType": 3,
@@ -2962,6 +2962,342 @@
                 ]
             },
             {
+                "Name": "TankTracksRight",
+                "FamilyNumber": 4,
+                "ID": "1236307964825745418",
+                "ParentID": "7573038955582590696",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "9334151117509275969",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            -7.1054273576010019e-15,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16279913099331382295"
+                    }
+                ]
+            },
+            {
+                "Name": "TankTracksRight0",
+                "FamilyNumber": 5,
+                "ID": "13945362854668898778",
+                "ParentID": "1236307964825745418",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "9334151117509275969",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4198932694169612008"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "3767388732360614558",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "6812103188346852185",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.087515890598297119,
+                            0.48627454042434692,
+                            0.085813149809837341,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "18234225478749641395",
+                        "HasTexture": false,
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "TankTracksRight1",
+                "FamilyNumber": 5,
+                "ID": "10767200029073916606",
+                "ParentID": "1236307964825745418",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "9334151117509275969",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13376334951187252893"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "16869860353687165972",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "9598230646652024850",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.12820629775524139,
+                            0.12820629775524139,
+                            0.12820629775524139,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "3911835656038886160",
+                        "HasTexture": false,
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "TankTracksLeft",
+                "FamilyNumber": 4,
+                "ID": "10629470109488124707",
+                "ParentID": "7573038955582590696",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "9334151117509275969",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            -7.1054273576010019e-15,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3940419277659325283"
+                    }
+                ]
+            },
+            {
+                "Name": "TankTracksLeft1",
+                "FamilyNumber": 5,
+                "ID": "12621597907185245682",
+                "ParentID": "10629470109488124707",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "9334151117509275969",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14574647855199899000"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "17971296211450939990",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "3137283523178973172",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.12820629775524139,
+                            0.12820629775524139,
+                            0.12820629775524139,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "14563422480647105342",
+                        "HasTexture": false,
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "TankTracksLeft0",
+                "FamilyNumber": 5,
+                "ID": "11451257821960711768",
+                "ParentID": "10629470109488124707",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "9334151117509275969",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10301446038966615093"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "18198718408641131934",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "3087502241609226189",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.087515890598297119,
+                            0.48627454042434692,
+                            0.085813149809837341,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "10755262145611841202",
+                        "HasTexture": false,
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
                 "Name": "TankChassis",
                 "FamilyNumber": 4,
                 "ID": "17509043171879781341",
@@ -3189,342 +3525,6 @@
                         ],
                         "TextureEnabled": true,
                         "ID": "4737969158854871248",
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "TankTracksRight",
-                "FamilyNumber": 4,
-                "ID": "1236307964825745418",
-                "ParentID": "7573038955582590696",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "9334151117509275969",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            -7.1054273576010019e-15,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "16279913099331382295"
-                    }
-                ]
-            },
-            {
-                "Name": "TankTracksRight0",
-                "FamilyNumber": 5,
-                "ID": "13945362854668898778",
-                "ParentID": "1236307964825745418",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "9334151117509275969",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "4198932694169612008"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "3767388732360614558",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "6812103188346852185",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            0.087515890598297119,
-                            0.48627454042434692,
-                            0.085813149809837341,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "18234225478749641395",
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "TankTracksRight1",
-                "FamilyNumber": 5,
-                "ID": "10767200029073916606",
-                "ParentID": "1236307964825745418",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "9334151117509275969",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "13376334951187252893"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "16869860353687165972",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "9598230646652024850",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            0.12820629775524139,
-                            0.12820629775524139,
-                            0.12820629775524139,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "3911835656038886160",
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "TankTracksLeft",
-                "FamilyNumber": 4,
-                "ID": "10629470109488124707",
-                "ParentID": "7573038955582590696",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "9334151117509275969",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            -7.1054273576010019e-15,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "3940419277659325283"
-                    }
-                ]
-            },
-            {
-                "Name": "TankTracksLeft0",
-                "FamilyNumber": 5,
-                "ID": "11451257821960711768",
-                "ParentID": "10629470109488124707",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "9334151117509275969",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "10301446038966615093"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "18198718408641131934",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "3087502241609226189",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            0.087515890598297119,
-                            0.48627454042434692,
-                            0.085813149809837341,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "10755262145611841202",
-                        "HasTexture": false,
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "TankTracksLeft1",
-                "FamilyNumber": 5,
-                "ID": "12621597907185245682",
-                "ParentID": "10629470109488124707",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "9334151117509275969",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "14574647855199899000"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": true,
-                        "DrawOBB": true,
-                        "ID": "17971296211450939990",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "3137283523178973172",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "Color": [
-                            0.12820629775524139,
-                            0.12820629775524139,
-                            0.12820629775524139,
-                            1
-                        ],
-                        "TextureEnabled": true,
-                        "ID": "14563422480647105342",
                         "HasTexture": false,
                         "Enabled": true
                     }

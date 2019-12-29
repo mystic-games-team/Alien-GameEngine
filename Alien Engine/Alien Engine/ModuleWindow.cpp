@@ -47,8 +47,9 @@ bool ModuleWindow::Init()
 		}
 		else
 		{
+			
 			renderer = SDL_CreateRenderer(window, -1, 0);
-			screen_surface = SDL_LoadBMP("Configuration/Engine Icons/Logo_Name.bmp");
+			screen_surface = SDL_LoadBMP(WINDOW_ICON_PATH);
 			texture = SDL_CreateTextureFromSurface(renderer, screen_surface);
 			SDL_RenderCopy(renderer, texture, NULL, NULL);
 
@@ -187,7 +188,7 @@ void ModuleWindow::IncreaseBar()
 {
 	SDL_Rect r;
 	r.x = BAR_BEGIN_POS + segment_width * current_division;
-	r.y = 280;
+	r.y = WINDOW_ICON_BAR_POSY;
 	r.w = segment_width;
 	r.h = 15;
 	++current_division;

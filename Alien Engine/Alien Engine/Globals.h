@@ -18,7 +18,7 @@ __declspec(dllexport) void log(const char file[], int line, const char* format, 
 
 
 // DISCOMMENT TO START THE ENGINE IN PLAY MODE
-//#define GAME_VERSION
+#define GAME_VERSION
 
 #define RELEASE( x )\
     {\
@@ -51,7 +51,18 @@ enum update_status
 // Configuration -----------
 #define SCREEN_SIZE 1
 #define VSYNC true
+
+#ifndef GAME_VERSION
 #define WINDOW_ICON_WIDTH 457
 #define WINDOW_ICON_HEIGHT 300
+#define WINDOW_ICON_PATH "Configuration/Engine Icons/Logo_Name.bmp"
+#define WINDOW_ICON_BAR_POSY 280
+#else
+#define WINDOW_ICON_WIDTH 457
+#define WINDOW_ICON_HEIGHT 350
+#define WINDOW_ICON_PATH "Configuration/Engine Icons/Logo_Name_madewith.bmp"
+#define WINDOW_ICON_BAR_POSY 330
+#endif
+
 #define BAR_BEGIN_POS 6
 #define BAR_END_POS WINDOW_ICON_WIDTH - BAR_BEGIN_POS
