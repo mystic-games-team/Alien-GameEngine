@@ -15,6 +15,7 @@ void Move2::Start()
 {
 	bullet.ConvertToGameObject(transform->GetGlobalPosition());
 
+
 	time2 = Time::GetGameTime();
 
 	if (test_object != nullptr) {

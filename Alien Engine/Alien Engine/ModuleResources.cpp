@@ -440,12 +440,12 @@ void ModuleResources::ReloadScripts()
 			std::vector<Resource*>::iterator item = resources.begin();
 			for (; item != resources.end(); ++item) {
 				if ((*item) != nullptr && (*item)->GetType() == ResourceType::RESOURCE_SCRIPT) {
-					if (App->StringCmp((*item)->GetLibraryPath(), files[i].data())) {
-						ResourceScript* script = (ResourceScript*)*item;
+					ResourceScript* script = (ResourceScript*)*item;
+					if (App->StringCmp(script->header_path.data(), files[i].data())) {
 						if (script->NeedReload()) {
 							remove(script->GetAssetsPath());
+							remove(script->GetLibraryPath());
 							script->data_structures.clear();
-							script->SetAssetsPath(script->GetLibraryPath());
 							script->CreateMetaData(script->GetID());
 						}
 						exists = true;
