@@ -32,9 +32,9 @@ void Time::Update()
 void Time::Play()
 {
 	if (state == GameState::NONE) {
+#ifndef GAME_VERSION
 		App->objects->SaveScene(nullptr, "Library/play_scene.alienScene");
 		App->objects->ignore_cntrlZ = true;
-#ifndef GAME_VERSION
 		if (App->ui->panel_console->clear_on_play) {
 			App->game_string_logs.clear();
 			App->engine_string_logs.clear();
