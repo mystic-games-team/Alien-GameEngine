@@ -1003,85 +1003,87 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 
 			JSONArraypack* game_objects = scene->GetArray("Scene.GameObjects");
 
+			if (game_objects != nullptr) {
 			// first is family number, second parentID, third is array index in the json file
-			std::vector<std::tuple<uint, u64, uint>> objects_to_create;
+				std::vector<std::tuple<uint, u64, uint>> objects_to_create;
 
-			for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
-				uint family_number = game_objects->GetNumber("FamilyNumber");
-				u64 parentID = std::stoull(game_objects->GetString("ParentID"));
-				objects_to_create.push_back({ family_number,parentID, i });
-				game_objects->GetAnotherNode();
-			}
-			std::sort(objects_to_create.begin(), objects_to_create.end(), ModuleObjects::SortByFamilyNumber);
-			game_objects->GetFirstNode();
-			std::vector<GameObject*> objects_created;
-
-			std::vector<std::tuple<uint, u64, uint>>::iterator item = objects_to_create.begin();
-			for (; item != objects_to_create.end(); ++item) {
-				game_objects->GetNode(std::get<2>(*item));
-				GameObject* obj = new GameObject();
-				if (std::get<0>(*item) == 1) { // family number == 1 so parent is the base game object
-					obj->LoadObject(game_objects, base_game_object);
+				for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
+					uint family_number = game_objects->GetNumber("FamilyNumber");
+					u64 parentID = std::stoull(game_objects->GetString("ParentID"));
+					objects_to_create.push_back({ family_number,parentID, i });
+					game_objects->GetAnotherNode();
 				}
-				else { // search parent
-					std::vector<GameObject*>::iterator objects = objects_created.begin();
-					for (; objects != objects_created.end(); ++objects) {
-						if ((*objects)->ID == std::get<1>(*item)) {
-							obj->LoadObject(game_objects, *objects);
-							break;
+				std::sort(objects_to_create.begin(), objects_to_create.end(), ModuleObjects::SortByFamilyNumber);
+				game_objects->GetFirstNode();
+				std::vector<GameObject*> objects_created;
+
+				std::vector<std::tuple<uint, u64, uint>>::iterator item = objects_to_create.begin();
+				for (; item != objects_to_create.end(); ++item) {
+					game_objects->GetNode(std::get<2>(*item));
+					GameObject* obj = new GameObject();
+					if (std::get<0>(*item) == 1) { // family number == 1 so parent is the base game object
+						obj->LoadObject(game_objects, base_game_object);
+					}
+					else { // search parent
+						std::vector<GameObject*>::iterator objects = objects_created.begin();
+						for (; objects != objects_created.end(); ++objects) {
+							if ((*objects)->ID == std::get<1>(*item)) {
+								obj->LoadObject(game_objects, *objects);
+								break;
+							}
 						}
 					}
+					objects_created.push_back(obj);
 				}
-				objects_created.push_back(obj);
-			}
-			delete scene;
+				delete scene;
 
-			if (change_scene) {
-				struct stat file;
-				stat(path.data(), &file);
+				if (change_scene) {
+					struct stat file;
+					stat(path.data(), &file);
 
-				// refresh prefabs if are not locked
-				std::vector<GameObject*> prefab_roots;
-				base_game_object->GetAllPrefabRoots(prefab_roots);
+					// refresh prefabs if are not locked
+					std::vector<GameObject*> prefab_roots;
+					base_game_object->GetAllPrefabRoots(prefab_roots);
 
-				for (uint i = 0; i < prefab_roots.size(); ++i) {
-					if (prefab_roots[i] != nullptr && !prefab_roots[i]->prefab_locked) {
-						ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab_roots[i]->GetPrefabID());
-						if (prefab != nullptr && prefab->GetID() != 0) {
-							struct stat prefab_file;
-							// TODO: when passing to library change
-							if (stat(prefab->GetAssetsPath(), &prefab_file) == 0) {
-								if (prefab_file.st_mtime > file.st_mtime) {
-									auto find = prefab_roots[i]->parent->children.begin();
-									for (; find != prefab_roots[i]->parent->children.end(); ++find) {
-										if (*find == prefab_roots[i]) {
-											prefab->ConvertToGameObjects(prefab_roots[i]->parent, find - prefab_roots[i]->parent->children.begin(), (*find)->GetComponent<ComponentTransform>()->GetGlobalPosition());
-											prefab_roots[i]->ToDelete();
-											break;
+					for (uint i = 0; i < prefab_roots.size(); ++i) {
+						if (prefab_roots[i] != nullptr && !prefab_roots[i]->prefab_locked) {
+							ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab_roots[i]->GetPrefabID());
+							if (prefab != nullptr && prefab->GetID() != 0) {
+								struct stat prefab_file;
+								// TODO: when passing to library change
+								if (stat(prefab->GetAssetsPath(), &prefab_file) == 0) {
+									if (prefab_file.st_mtime > file.st_mtime) {
+										auto find = prefab_roots[i]->parent->children.begin();
+										for (; find != prefab_roots[i]->parent->children.end(); ++find) {
+											if (*find == prefab_roots[i]) {
+												prefab->ConvertToGameObjects(prefab_roots[i]->parent, find - prefab_roots[i]->parent->children.begin(), (*find)->GetComponent<ComponentTransform>()->GetGlobalPosition());
+												prefab_roots[i]->ToDelete();
+												break;
+											}
 										}
 									}
 								}
 							}
 						}
 					}
+					DeleteReturns();
 				}
-				current_scene = to_load;
-				DeleteReturns();
-			}
 
-			if (!to_add.empty()) {
-				auto item = to_add.begin();
-				for (; item != to_add.end(); ++item) {
-					GameObject* found = GetGameObjectByID((*item).first);
-					if (found != nullptr) {
-						*(*item).second = found;
+				if (!to_add.empty()) {
+					auto item = to_add.begin();
+					for (; item != to_add.end(); ++item) {
+						GameObject* found = GetGameObjectByID((*item).first);
+						if (found != nullptr) {
+							*(*item).second = found;
+						}
 					}
 				}
-			}
 
-			if (!current_scripts.empty() && Time::IsInGameState()) {
-				InitScriptsOnPlay();
+				if (!current_scripts.empty() && Time::IsInGameState()) {
+					InitScriptsOnPlay();
+				}
 			}
+			current_scene = to_load;
 		}
 		else {
 			LOG_ENGINE("Error loading scene %s", path.data());
