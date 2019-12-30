@@ -23,6 +23,11 @@ void Bullet::Update()
 	transform->SetLocalPosition(transform->GetLocalPosition() + bullet_direction.Mul(velocity * Time::GetDT()));
 	if ((time + life_time) < Time::GetGameTime())
 	{
-		GameObject::Destroy(game_object);
+		GameObject::DestroyInstantly(game_object);
 	}
+}
+
+void Bullet::CleanUp()
+{
+	int i = 0;
 }

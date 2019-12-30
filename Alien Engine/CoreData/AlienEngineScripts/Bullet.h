@@ -12,6 +12,7 @@ public:
 
 	void Start();
 	void Update();
+	void CleanUp();
 
 public:
 

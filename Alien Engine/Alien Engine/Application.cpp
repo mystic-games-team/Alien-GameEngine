@@ -368,6 +368,11 @@ void Application::QuitApp()
 	quit = true;
 }
 
+bool Application::IsQuiting() const
+{
+	return quit;
+}
+
 void Application::OpenWebsite(const std::string& website)
 {
 	ShellExecuteA(NULL, "open", website.c_str(), NULL, NULL, SW_SHOWNORMAL);

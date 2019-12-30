@@ -353,6 +353,11 @@ void ModuleObjects::DrawRay()
 bool ModuleObjects::CleanUp()
 {
 	Gizmos::ClearAllCurrentGizmos();
+
+	if (Time::IsInGameState()) {
+		CleanUpScriptsOnStop();
+	}
+
 	delete base_game_object;
 	base_game_object = nullptr;
 	
@@ -486,8 +491,9 @@ void ModuleObjects::DeselectObject(GameObject* obj)
 void ModuleObjects::InitScriptsOnPlay() const
 {
 	// scripts awake
-	std::list<Alien*>::const_iterator item = current_scripts.cbegin();
-	for (; item != current_scripts.cend(); ++item) {
+	auto to_iter = current_scripts;
+	std::list<Alien*>::const_iterator item = to_iter.cbegin();
+	for (; item != to_iter.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 			try {
 				(*item)->Awake();
@@ -532,8 +538,9 @@ void ModuleObjects::InitScriptsOnPlay() const
 void ModuleObjects::ScriptsPreUpdate() const
 {
 	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
-		std::list<Alien*>::const_iterator item = current_scripts.cbegin();
-		for (; item != current_scripts.cend(); ++item) {
+		auto to_iter = current_scripts;
+		std::list<Alien*>::const_iterator item = to_iter.cbegin();
+		for (; item != to_iter.cend(); ++item) {
 			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 				try {
 					(*item)->PreUpdate();
@@ -558,8 +565,9 @@ void ModuleObjects::ScriptsPreUpdate() const
 void ModuleObjects::ScriptsUpdate() const
 {
 	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
-		std::list<Alien*>::const_iterator item = current_scripts.cbegin();
-		for (; item != current_scripts.cend(); ++item) {
+		auto to_iter = current_scripts;
+		std::list<Alien*>::const_iterator item = to_iter.cbegin();
+		for (; item != to_iter.cend(); ++item) {
 			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 				try {
 					(*item)->Update();
@@ -584,8 +592,9 @@ void ModuleObjects::ScriptsUpdate() const
 void ModuleObjects::ScriptsPostUpdate() const
 {
 	if ((Time::state == Time::GameState::PLAY || Time::state == Time::GameState::PLAY_ONCE) && !current_scripts.empty()) {
-		std::list<Alien*>::const_iterator item = current_scripts.cbegin();
-		for (; item != current_scripts.cend(); ++item) {
+		auto to_iter = current_scripts;
+		std::list<Alien*>::const_iterator item = to_iter.cbegin();
+		for (; item != to_iter.cend(); ++item) {
 			if (*item != nullptr && (*item)->game_object != nullptr && (*item)->game_object->parent_enabled && (*item)->game_object->enabled && (*item)->IsScriptEnabled()) {
 				try {
 					(*item)->PostUpdate();
@@ -609,8 +618,9 @@ void ModuleObjects::ScriptsPostUpdate() const
 
 void ModuleObjects::CleanUpScriptsOnStop() const
 {
-	std::list<Alien*>::const_iterator item = current_scripts.cbegin();
-	for (; item != current_scripts.cend(); ++item) {
+	auto to_iter = current_scripts;
+	std::list<Alien*>::const_iterator item = to_iter.cbegin();
+	for (; item != to_iter.cend(); ++item) {
 		if (*item != nullptr && (*item)->game_object != nullptr) {
 			try {
 				(*item)->CleanUp();
@@ -997,6 +1007,9 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 			base_game_object->ID = 0;
 			base_game_object->is_static = true;
 
+			if (Time::IsInGameState()) {
+				CleanUpScriptsOnStop();
+			}
 			current_scripts.clear();
 
 			JSONfilepack* scene = new JSONfilepack(path.data(), object, value);

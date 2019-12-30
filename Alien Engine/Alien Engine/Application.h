@@ -96,6 +96,7 @@ public:
 	bool StringCmp(const char* str1, const char* str2);
 
 	void QuitApp();
+	bool IsQuiting() const;
 
 	void OpenWebsite(const std::string& website);
 

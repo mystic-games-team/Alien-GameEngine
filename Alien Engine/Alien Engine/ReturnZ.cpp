@@ -73,6 +73,7 @@ ReturnZ::~ReturnZ()
 
 void ReturnZ::AddNewAction(const ReturnActions& type, void* data, bool user)
 {
+#ifndef GAME_VERSION
 	if (App->objects->ignore_cntrlZ || App->ui->panel_text_editor->IsFocused())
 		return;
 	if (ReturnZ::eraseY && user) {
@@ -92,19 +93,23 @@ void ReturnZ::AddNewAction(const ReturnActions& type, void* data, bool user)
 	ReturnZ* ret = new ReturnZ();
 	ret->SetAction(type, data);
 	App->objects->return_actions.push(ret);
+#endif
 }
 
 void ReturnZ::AddNewFordwarAction(const ReturnActions& type, void* data)
 {
+#ifndef GAME_VERSION
 	if (App->objects->ignore_cntrlZ || App->ui->panel_text_editor->IsFocused())
 		return;
 	ReturnZ* ret = new ReturnZ();
 	ret->SetAction(type, data);
 	App->objects->fordward_actions.push(ret);
+#endif
 }
 
 void ReturnZ::GoBackOneAction()
 {
+#ifndef GAME_VERSION
 	if (App->objects->return_actions.empty() || Time::IsPlaying() || App->ui->panel_text_editor->IsFocused())
 		return;
 	ReturnZ::eraseY = true;
@@ -118,10 +123,12 @@ void ReturnZ::GoBackOneAction()
 		to_return = App->objects->return_actions.top();
 		App->objects->return_actions.pop();
 	}
+#endif
 }
 
 void ReturnZ::GoFordwardOneAction()
 {
+#ifndef GAME_VERSION
 	if (App->objects->fordward_actions.empty() || Time::IsPlaying() || App->ui->panel_text_editor->IsFocused())
 		return;
 
@@ -135,6 +142,7 @@ void ReturnZ::GoFordwardOneAction()
 		to_return = App->objects->fordward_actions.top();
 		App->objects->fordward_actions.pop();
 	}
+#endif
 }
 
 bool ReturnZ::DoAction(ReturnZ* action, bool is_fordward)

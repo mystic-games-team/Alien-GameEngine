@@ -27,6 +27,9 @@ ComponentScript::~ComponentScript()
 				}
 			}
 			if (alien != nullptr) {
+				if (!App->IsQuiting()) {
+					alien->CleanUp();
+				}
 				delete alien;
 			}
 		}
