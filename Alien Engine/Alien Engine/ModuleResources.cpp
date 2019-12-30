@@ -459,7 +459,7 @@ void ModuleResources::ReloadScripts()
 			}
 			if (!exists) {
 				ResourceScript* script = new ResourceScript();
-				script->SetAssetsPath(files[i].data());
+				script->header_path = std::string(files[i].data());
 				script->SetName(App->file_system->GetBaseFileName(files[i].data()).data());
 				script->CreateMetaData(); 
 				script->reload_completed = true;
