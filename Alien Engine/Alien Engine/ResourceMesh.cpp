@@ -31,10 +31,17 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 
 	uint ranges[9] = { num_index, num_vertex, num_faces, family_number, (normals != nullptr) ? true : false, 
 		(uv_cords != nullptr) ? true : false,  (texture != nullptr) ? true : false, parent_name.size(), name.size() };
-	uint size = sizeof(ranges) + sizeof(uint) * num_index + sizeof(float) * num_vertex * 3  +
-		(normals != nullptr) ? 2 * (sizeof(float) * num_faces * 3) + sizeof(float) * num_vertex * 3 : 0 + 
-		(uv_cords != nullptr) ? sizeof(float) * num_vertex * 3 : 0 + (texture != nullptr) ? sizeof(u64) : 0 +
-		parent_name.size() + name.size() + 13 * sizeof(float);
+
+	uint texture_size = (texture != nullptr) ? sizeof(u64) : 0;
+	uint uv_size = (uv_cords != nullptr) ? sizeof(float) * num_vertex * 3 : 0;
+	uint normals_size = (normals != nullptr) ? sizeof(float) * num_vertex * 3 + sizeof(float) * num_faces * 3 +
+		sizeof(float) * num_faces * 3 : 0;
+	uint vertex_size = sizeof(float) * num_vertex * 3;
+	uint index_size = sizeof(uint) * num_index;
+
+	uint size = sizeof(ranges) + parent_name.size() + name.size() + texture_size +
+		sizeof(float) * 4 + sizeof(float) * 3 + sizeof(float) * 3 + sizeof(float) * 3 + vertex_size +
+		index_size + normals_size + uv_size;
 
 	char* data = new char[size]; 
 	char* cursor = data;
@@ -113,6 +120,16 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 
 	meta_data_path = std::string(meta_file_path);
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_file_path));
+
+	char* data = nullptr;
+	uint size = App->file_system->Load(meta_data_path.data(), &data);
+
+	if (size > 0) {
+
+	}
+	else {
+		return false;
+	}
 
 	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
