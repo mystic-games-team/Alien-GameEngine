@@ -20,88 +20,91 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 	if (parent_name.empty()) {
 		parent_name.assign("null");
 	}
-	if (force_id == 0)
+	if (force_id == 0) {
 		ID = App->resources->GetRandomID();
-	else
+	}
+	else {
 		ID = force_id;
+	}
 
 	meta_data_path = std::string(LIBRARY_MESHES_FOLDER + std::to_string(ID) + ".alienMesh");
 
-	JSON_Value* value = json_value_init_object();
-	JSON_Object* object = json_value_get_object(value);
-	json_serialize_to_file_pretty(value, meta_data_path.data());
+	uint ranges[9] = { num_index, num_vertex, num_faces, family_number, (normals != nullptr) ? true : false, 
+		(uv_cords != nullptr) ? true : false,  (texture != nullptr) ? true : false, parent_name.size(), name.size() };
+	uint size = sizeof(ranges) + sizeof(uint) * num_index + sizeof(float) * num_vertex * 3  +
+		(normals != nullptr) ? 2 * (sizeof(float) * num_faces * 3) + sizeof(float) * num_vertex * 3 : 0 + 
+		(uv_cords != nullptr) ? sizeof(float) * num_vertex * 3 : 0 + (texture != nullptr) ? sizeof(u64) : 0 +
+		parent_name.size() + name.size() + 13 * sizeof(float);
 
-	if (value != nullptr && object != nullptr) {
+	char* data = new char[size]; 
+	char* cursor = data;
 
-		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
+	uint bytes = sizeof(ranges); 
+	memcpy(cursor, ranges, bytes);
+	cursor += bytes; 
 
-		meta->StartSave();
+	bytes = parent_name.size();
+	memcpy(cursor, parent_name.c_str(), bytes);
+	cursor += bytes;
 
-		// names
-		meta->SetString("Mesh.ParentName", parent_name.data());
-		meta->SetString("Mesh.Name", name.data());
-		meta->SetNumber("Mesh.FamilyNumber", family_number);
+	bytes = name.size();
+	memcpy(cursor, name.c_str(), bytes);
+	cursor += bytes;
 
-		// texture path
-		meta->SetBoolean("Mesh.HasTexture", (texture != nullptr) ? true : false);
-
-		if (texture != nullptr) {
-			meta->SetString("Mesh.Texture", std::to_string(texture->GetID()));
-		}
-		meta->SetColor("Mesh.MatColor", material_color);
-		// transformations
-		// pos
-		meta->SetFloat3("Mesh.Position", pos);
-
-		// scale
-		meta->SetFloat3("Mesh.Scale", scale);
-
-		// rot
-		meta->SetQuat("Mesh.Rotation", rot);
-
-		// ranges
-		meta->SetNumber("Mesh.NumVertex", num_vertex);
-		meta->SetNumber("Mesh.NumIndex", num_index);
-		meta->SetNumber("Mesh.NumFaces", num_faces);
-
-		// vertex
-		meta->SetNumberArray("Mesh.Vertex", vertex, num_vertex * 3);
-		
-		// index
-		meta->SetUintArray("Mesh.Index", index, num_index);
-
-		// set a bolean to know if it has normals
-		meta->SetBoolean("Mesh.HasNormals", (normals != nullptr ? true : false));
-
-		// normals
-		if (normals != nullptr) {
-			// normals
-			meta->SetNumberArray("Mesh.Normals", normals, num_vertex * 3);
-
-			// center point
-			meta->SetNumberArray("Mesh.CenterPoint", center_point, num_faces * 3);
-
-			// center point normals
-			meta->SetNumberArray("Mesh.CenterPointNormals", center_point_normal, num_faces * 3);
-		}
-
-		// set a bolean to know if it has uv
-		meta->SetBoolean("Mesh.HasUV", (uv_cords != nullptr ? true : false));
-
-		// uv
-		if (uv_cords != nullptr) {
-			meta->SetNumberArray("Mesh.UV", uv_cords, num_vertex * 3);
-		}
-
-		meta->FinishSave();
-
-		delete meta;
-		return true;
+	if (texture != nullptr) {
+		bytes = sizeof(u64);
+		memcpy(cursor, &texture->GetID(), bytes);
+		cursor += bytes;
 	}
-	else {
-		LOG_ENGINE("Error creating meta with path %s", meta_data_path.data());
-		return false;
+
+	bytes = sizeof(float) * 4;
+	memcpy(cursor, &material_color, bytes);
+	cursor += bytes;
+
+	bytes = sizeof(float) * 3;
+	memcpy(cursor, pos.ptr(), bytes);
+	cursor += bytes;
+
+	bytes = sizeof(float) * 3;
+	memcpy(cursor, rot.ptr(), bytes);
+	cursor += bytes;
+
+	bytes = sizeof(float) * 3;
+	memcpy(cursor, scale.ptr(), bytes);
+	cursor += bytes;
+
+	bytes = sizeof(float) * num_vertex * 3;
+	memcpy(cursor, vertex, bytes);
+	cursor += bytes;
+
+	bytes = sizeof(uint) * num_index;
+	memcpy(cursor, index, bytes);
+	cursor += bytes;
+
+	if (normals != nullptr) {
+		bytes = sizeof(float) * num_vertex * 3;
+		memcpy(cursor, normals, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(float) * num_faces * 3;
+		memcpy(cursor, center_point, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(float) * num_faces * 3;
+		memcpy(cursor, center_point_normal, bytes);
+		cursor += bytes;
 	}
+
+	if (uv_cords != nullptr) {
+		bytes = sizeof(float) * num_vertex * 3;
+		memcpy(cursor, uv_cords, bytes);
+	}
+
+	App->file_system->Save(meta_data_path.data(), data, size);
+
+	delete[] data;
+
+	return true;
 }
 
 bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
