@@ -3,9 +3,13 @@
 #include "Globals.h"
 #include "imgui/imgui.h"
 #include "SDL/include/SDL_scancode.h"
+#include "SDL\include\SDL_haptic.h"
+#include "SDL\include\SDL_gamecontroller.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include <map>
 
 #define MAX_MOUSE_BUTTONS 5
+#define MAX_GAMPAD_BUTTONS 14
 
 enum KEY_STATE
 {
@@ -14,6 +18,21 @@ enum KEY_STATE
 	KEY_REPEAT,
 	KEY_UP
 };
+
+struct GamePad {
+	struct Joystick {
+		float valueX = 0;
+		float valueY = 0;
+		KEY_STATE state = KEY_IDLE;
+	};
+	int number = 0;
+	Joystick joystick_left;
+	Joystick joystick_right;
+	KEY_STATE controller_buttons[MAX_GAMPAD_BUTTONS];
+	SDL_Haptic* haptic = nullptr;
+	SDL_GameController* controller = nullptr;
+};
+
 
 class ModuleInput : public Module
 {
@@ -80,7 +99,7 @@ private:
 	int mouse_z;
 	int mouse_x_motion;
 	int mouse_y_motion;
-	//int mouse_z_motion;
+	std::map<int, GamePad*> game_pads;
 	SDL_Scancode first_key_pressed = SDL_SCANCODE_UNKNOWN;
 	bool mouse_pressed = false;
 public:
