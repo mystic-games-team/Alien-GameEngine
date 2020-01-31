@@ -49,36 +49,44 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 	uint bytes = sizeof(ranges); 
 	memcpy(cursor, ranges, bytes);
 	cursor += bytes; 
+	bytes_moved += bytes;
 
 	bytes = parent_name.size();
 	memcpy(cursor, parent_name.c_str(), bytes);
 	cursor += bytes;
+	bytes_moved += bytes;
 
 	bytes = name.size();
 	memcpy(cursor, name.c_str(), bytes);
 	cursor += bytes;
+	bytes_moved += bytes;
 
 	if (texture != nullptr) {
 		bytes = sizeof(u64);
 		memcpy(cursor, &texture->GetID(), bytes);
 		cursor += bytes;
+		bytes_moved += bytes;
 	}
 
 	bytes = sizeof(float) * 4;
 	memcpy(cursor, &material_color, bytes);
 	cursor += bytes;
+	bytes_moved += bytes;
 
 	bytes = sizeof(float) * 3;
 	memcpy(cursor, pos.ptr(), bytes);
 	cursor += bytes;
+	bytes_moved += bytes;
 
 	bytes = sizeof(float) * 4;
 	memcpy(cursor, rot.ptr(), bytes);
 	cursor += bytes;
+	bytes_moved += bytes;
 
 	bytes = sizeof(float) * 3;
 	memcpy(cursor, scale.ptr(), bytes);
 	cursor += bytes;
+	bytes_moved += bytes;
 
 	if (num_vertex > 0) {
 		bytes = sizeof(float) * num_vertex * 3;
@@ -122,8 +130,74 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 {
 	meta_data_path = std::string(meta_file_path);
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_file_path));
-	App->resources->AddResource(this);
-	return true;
+
+	char* data = nullptr;
+	uint size = App->file_system->Load(meta_data_path.data(), &data);
+
+	if (size > 0) {
+		char* cursor = data;
+		bytes_moved = 0;
+
+		uint ranges[9];
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		family_number = ranges[3];
+
+		char* p_name = new char[ranges[7] + 1];
+		bytes = sizeof(char) * ranges[7];
+		memcpy(p_name, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+		p_name[ranges[7]] = '\0';
+		parent_name = std::string(p_name);
+		delete[] p_name;
+
+		char* m_name = new char[ranges[8] + 1];
+		bytes = sizeof(char) * ranges[8];
+		memcpy(m_name, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+		m_name[ranges[8]] = '\0';
+		name = std::string(m_name);
+		delete[] m_name;
+
+		// texture
+		if (ranges[6]) {
+			bytes = sizeof(u64);
+			memcpy(&texture_id, cursor, bytes);
+			cursor += bytes;
+			bytes_moved += bytes;
+		}
+
+		bytes = sizeof(float) * 4;
+		memcpy(&material_color, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		bytes = sizeof(float) * 3;
+		memcpy(&pos, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		bytes = sizeof(float) * 4;
+		memcpy(&rot, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		bytes = sizeof(float) * 3;
+		memcpy(&scale, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		App->resources->AddResource(this);
+		delete[] data;
+	}
+	else {
+		return false;
+	}
 }
 
 void ResourceMesh::FreeMemory()
@@ -189,50 +263,7 @@ bool ResourceMesh::LoadMemory()
 		uint ranges[9];
 		uint bytes = sizeof(ranges);
 		memcpy(ranges, cursor, bytes);
-		cursor += bytes;
-
-		family_number = ranges[3];
-
-		char* p_name = new char[ranges[7] + 1];
-		bytes = sizeof(char) * ranges[7];
-		memcpy(p_name, cursor, bytes);
-		cursor += bytes;
-		bytes_moved += bytes;
-		p_name[ranges[7]] = '\0';
-		parent_name = std::string(p_name);
-		delete[] p_name;
-
-		char* m_name = new char[ranges[8] + 1];
-		bytes = sizeof(char) * ranges[8];
-		memcpy(m_name, cursor, bytes);
-		cursor += bytes;
-		bytes_moved += bytes;
-		m_name[ranges[8]] = '\0';
-		name = std::string(m_name);
-		delete[] m_name;
-
-		// texture
-		if (ranges[6]) {
-			bytes = sizeof(u64);
-			memcpy(&texture_id, cursor, bytes);
-			cursor += bytes;
-		}
-
-		bytes = sizeof(float) * 4;
-		memcpy(&material_color, cursor, bytes);
-		cursor += bytes;
-
-		bytes = sizeof(float) * 3;
-		memcpy(&pos, cursor, bytes);
-		cursor += bytes;
-
-		bytes = sizeof(float) * 4;
-		memcpy(&rot, cursor, bytes);
-		cursor += bytes;
-
-		bytes = sizeof(float) * 3;
-		memcpy(&scale, cursor, bytes);
-		cursor += bytes;
+		cursor += bytes_moved;
 
 		num_index = ranges[0];
 		num_vertex = ranges[1];
