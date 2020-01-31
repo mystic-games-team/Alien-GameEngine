@@ -40,7 +40,7 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 	uint index_size = sizeof(uint) * num_index;
 
 	uint size = sizeof(ranges) + parent_name.size() + name.size() + texture_size +
-		sizeof(float) * 4 + sizeof(float) * 3 + sizeof(float) * 3 + sizeof(float) * 3 + vertex_size +
+		sizeof(float) * 4 + sizeof(float) * 3 + sizeof(float) * 4 + sizeof(float) * 3 + vertex_size +
 		index_size + normals_size + uv_size;
 
 	char* data = new char[size]; 
@@ -57,7 +57,7 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 	bytes = name.size();
 	memcpy(cursor, name.c_str(), bytes);
 	cursor += bytes;
-	//////////////
+
 	if (texture != nullptr) {
 		bytes = sizeof(u64);
 		memcpy(cursor, &texture->GetID(), bytes);
@@ -72,7 +72,7 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 	memcpy(cursor, pos.ptr(), bytes);
 	cursor += bytes;
 
-	bytes = sizeof(float) * 3;
+	bytes = sizeof(float) * 4;
 	memcpy(cursor, rot.ptr(), bytes);
 	cursor += bytes;
 
@@ -131,9 +131,6 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 		cursor += bytes;
 		bytes_moved += bytes;
 
-		num_index = ranges[0];
-		num_vertex = ranges[1];
-		num_faces = ranges[2];
 		family_number = ranges[3];
 
 		char* p_name = new char[ranges[7] + 1];
@@ -172,7 +169,7 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 		cursor += bytes;
 		bytes_moved += bytes;
 
-		bytes = sizeof(float) * 3;
+		bytes = sizeof(float) * 4;
 		memcpy(&rot, cursor, bytes);
 		cursor += bytes;
 		bytes_moved += bytes;
@@ -240,6 +237,10 @@ void ResourceMesh::FreeMemory()
 
 bool ResourceMesh::LoadMemory()
 {	
+	if (num_vertex != 0) {
+		return true;
+	}
+
 	char* data = nullptr;
 	uint size = App->file_system->Load(meta_data_path.data(), &data);
 
@@ -302,35 +303,6 @@ bool ResourceMesh::LoadMemory()
 	}
 	else {
 		return false;
-	}
-
-	JSONfilepack* meta;
-
-	// vertex
-	vertex = meta->GetNumberArray("Mesh.Vertex");
-
-	// index
-	index = meta->GetUintArray("Mesh.Index");
-
-	// normals
-	bool has_normals = meta->GetBoolean("Mesh.HasNormals");
-
-	if (has_normals) {
-		// normals
-		normals = meta->GetNumberArray("Mesh.Normals");
-
-		// center point
-		center_point = meta->GetNumberArray("Mesh.CenterPoint");
-
-		// center point normal
-		center_point_normal = meta->GetNumberArray("Mesh.CenterPointNormals");
-	}
-
-	// uv
-	bool has_uv = meta->GetBoolean("Mesh.HasUV");
-
-	if (has_uv) {
-		uv_cords = meta->GetNumberArray("Mesh.UV");
 	}
 }
 
