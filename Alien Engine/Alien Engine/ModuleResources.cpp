@@ -85,15 +85,18 @@ update_status ModuleResources::Update(float dt)
 
 bool ModuleResources::CleanUp()
 {
-	std::vector<Resource*>::iterator item = resources.begin();
-	for (; item != resources.end(); ++item) {
-		if (*item != nullptr) {
-			if ((*item)->GetType() == ResourceType::RESOURCE_MODEL)
-				static_cast<ResourceModel*>(*item)->meshes_attached.clear();
-			delete* item;
-			*item = nullptr;
+	try {
+		std::vector<Resource*>::iterator item = resources.begin();
+		for (; item != resources.end(); ++item) {
+			if (*item != nullptr) {
+				if ((*item)->GetType() == ResourceType::RESOURCE_MODEL)
+					static_cast<ResourceModel*>(*item)->meshes_attached.clear();
+				delete* item;
+				*item = nullptr;
+			}
 		}
 	}
+	catch (...) {}
 	resources.clear();
 
 	delete cube;
