@@ -1,0 +1,9 @@
+{
+    "HasData": true,
+    "DataStructure": [
+        {
+            "DataName": "Testtt",
+            "UsesAlien": true
+        }
+    ]
+}

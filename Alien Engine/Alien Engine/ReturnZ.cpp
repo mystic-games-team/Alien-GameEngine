@@ -92,7 +92,12 @@ void ReturnZ::AddNewAction(const ReturnActions& type, void* data, bool user)
 	}
 	ReturnZ* ret = new ReturnZ();
 	ret->SetAction(type, data);
-	App->objects->return_actions.push(ret);
+	if (ret->action != nullptr) {
+		App->objects->return_actions.push(ret);
+	}
+	else {
+		delete ret;
+	}
 #endif
 }
 
@@ -103,7 +108,12 @@ void ReturnZ::AddNewFordwarAction(const ReturnActions& type, void* data)
 		return;
 	ReturnZ* ret = new ReturnZ();
 	ret->SetAction(type, data);
-	App->objects->fordward_actions.push(ret);
+	if (ret->action != nullptr) {
+		App->objects->fordward_actions.push(ret);
+	}
+	else {
+		delete ret;
+	}
 #endif
 }
 
@@ -548,11 +558,16 @@ void CompZ::SetCompZ(Component* component, CompZ** compZ)
 		cameraZ->objectID = camera->game_object_attached->ID;
 		cameraZ->near_plane = camera->near_plane;
 		break; }
+	default: {
+		break;
 	}
-	(*compZ)->type = component->GetType();
-	(*compZ)->objectID = component->game_object_attached->ID;
-	(*compZ)->compID = component->ID;
-	(*compZ)->enabled = component->IsEnabled();
+	}
+	if (*compZ != nullptr) {
+		(*compZ)->type = component->GetType();
+		(*compZ)->objectID = component->game_object_attached->ID;
+		(*compZ)->compID = component->ID;
+		(*compZ)->enabled = component->IsEnabled();
+	}
 }
 
 void CompZ::SetComponent(Component* component, CompZ* compZ)
