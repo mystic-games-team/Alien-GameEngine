@@ -80,13 +80,17 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 	memcpy(cursor, scale.ptr(), bytes);
 	cursor += bytes;
 
-	bytes = sizeof(float) * num_vertex * 3;
-	memcpy(cursor, vertex, bytes);
-	cursor += bytes;
+	if (num_vertex > 0) {
+		bytes = sizeof(float) * num_vertex * 3;
+		memcpy(cursor, vertex, bytes);
+		cursor += bytes;
+	}
 
-	bytes = sizeof(uint) * num_index;
-	memcpy(cursor, index, bytes);
-	cursor += bytes;
+	if (num_index > 0) {
+		bytes = sizeof(uint) * num_index;
+		memcpy(cursor, index, bytes);
+		cursor += bytes;
+	}
 
 	if (normals != nullptr) {
 		bytes = sizeof(float) * num_vertex * 3;
@@ -118,73 +122,8 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 {
 	meta_data_path = std::string(meta_file_path);
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_file_path));
-
-	char* data = nullptr;
-	uint size = App->file_system->Load(meta_data_path.data(), &data);
-
-	if (size > 0) {
-		char* cursor = data;
-
-		uint ranges[9];
-		uint bytes = sizeof(ranges);
-		memcpy(ranges, cursor, bytes);
-		cursor += bytes;
-		bytes_moved += bytes;
-
-		family_number = ranges[3];
-
-		char* p_name = new char[ranges[7] + 1];
-		bytes = sizeof(char) * ranges[7];
-		memcpy(p_name, cursor, bytes);
-		cursor += bytes;
-		bytes_moved += bytes;
-		p_name[ranges[7]] = '\0';
-		parent_name = std::string(p_name);
-		delete[] p_name;
-
-		char* m_name = new char[ranges[8] + 1];
-		bytes = sizeof(char) * ranges[8];
-		memcpy(m_name, cursor, bytes);
-		cursor += bytes;
-		bytes_moved += bytes;
-		m_name[ranges[8]] = '\0';
-		name = std::string(m_name);
-		delete[] m_name;
-
-		// texture
-		if (ranges[6]) {
-			bytes = sizeof(u64);
-			memcpy(&texture_id, cursor, bytes);
-			cursor += bytes;
-			bytes_moved += bytes;
-		}
-
-		bytes = sizeof(float) * 4;
-		memcpy(&material_color, cursor, bytes);
-		cursor += bytes;
-		bytes_moved += bytes;
-
-		bytes = sizeof(float) * 3;
-		memcpy(&pos, cursor, bytes);
-		cursor += bytes;
-		bytes_moved += bytes;
-
-		bytes = sizeof(float) * 4;
-		memcpy(&rot, cursor, bytes);
-		cursor += bytes;
-		bytes_moved += bytes;
-
-		bytes = sizeof(float) * 3;
-		memcpy(&scale, cursor, bytes);
-		cursor += bytes;
-		bytes_moved += bytes;
-
-		App->resources->AddResource(this);
-		delete[] data;
-	}
-	else {
-		return false;
-	}
+	App->resources->AddResource(this);
+	return true;
 }
 
 void ResourceMesh::FreeMemory()
@@ -250,20 +189,67 @@ bool ResourceMesh::LoadMemory()
 		uint ranges[9];
 		uint bytes = sizeof(ranges);
 		memcpy(ranges, cursor, bytes);
-		cursor += bytes_moved;
+		cursor += bytes;
+
+		family_number = ranges[3];
+
+		char* p_name = new char[ranges[7] + 1];
+		bytes = sizeof(char) * ranges[7];
+		memcpy(p_name, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+		p_name[ranges[7]] = '\0';
+		parent_name = std::string(p_name);
+		delete[] p_name;
+
+		char* m_name = new char[ranges[8] + 1];
+		bytes = sizeof(char) * ranges[8];
+		memcpy(m_name, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+		m_name[ranges[8]] = '\0';
+		name = std::string(m_name);
+		delete[] m_name;
+
+		// texture
+		if (ranges[6]) {
+			bytes = sizeof(u64);
+			memcpy(&texture_id, cursor, bytes);
+			cursor += bytes;
+		}
+
+		bytes = sizeof(float) * 4;
+		memcpy(&material_color, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(float) * 3;
+		memcpy(&pos, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(float) * 4;
+		memcpy(&rot, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(float) * 3;
+		memcpy(&scale, cursor, bytes);
+		cursor += bytes;
 
 		num_index = ranges[0];
 		num_vertex = ranges[1];
 		num_faces = ranges[2];
 
 		bytes = sizeof(float) * num_vertex * 3;
-		vertex = new float[num_vertex * 3];
-		memcpy(vertex, cursor, bytes);
+		if (num_vertex > 0) {
+			vertex = new float[num_vertex * 3];
+			memcpy(vertex, cursor, bytes);
+		}
 		cursor += bytes;
 
 		bytes = sizeof(uint) * num_index;
-		index = new uint[num_index];
-		memcpy(index, cursor, bytes);
+		if (num_index > 0) {
+			index = new uint[num_index];
+			memcpy(index, cursor, bytes);
+		}
 		cursor += bytes;
 
 		// normals
@@ -298,6 +284,9 @@ bool ResourceMesh::LoadMemory()
 		if (num_vertex != 0) {
 			InitBuffers();
 		}
+		else {
+			--references;
+		}
 
 		return true;
 	}
@@ -321,9 +310,7 @@ bool ResourceMesh::DeleteMetaData()
 
 void ResourceMesh::ConvertToGameObject(std::vector<std::pair<u64, GameObject*>>* objects_created)
 {
-	// look if is loaded
 	IncreaseReferences();
-
 	// get the parent
 	GameObject* obj = nullptr;
 
@@ -351,6 +338,7 @@ void ResourceMesh::ConvertToGameObject(std::vector<std::pair<u64, GameObject*>>*
 	obj->AddComponent(new ComponentTransform(obj, pos, rot, scale));
 
 	if (num_vertex != 0) {
+
 		ComponentMesh* mesh = new ComponentMesh(obj);
 
 		mesh->mesh = this;
