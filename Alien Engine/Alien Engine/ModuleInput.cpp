@@ -124,10 +124,61 @@ update_status ModuleInput::PreUpdate(float dt)
 				}
 			}
 		}
-		(*item).second->joystick_right.valueX = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_RIGHTX);
-		(*item).second->joystick_right.valueY = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_RIGHTY);
-		(*item).second->joystick_left.valueX = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTX);
-		(*item).second->joystick_left.valueY = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTY);
+		float value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_RIGHTX);
+		if (value < -32767 + DEAD_ZONE) {
+			(*item).second->joystick_right.valueX = -1;
+		}
+		else if (value > 32767 - DEAD_ZONE) {
+			(*item).second->joystick_right.valueX = 1;
+		}
+		else if (value > -DEAD_ZONE && value < DEAD_ZONE) {
+			(*item).second->joystick_right.valueX = 0;
+		}
+		else {
+			(*item).second->joystick_right.valueX = value / 32767;
+		}
+
+		value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_RIGHTY);
+		if (value < -32767 + DEAD_ZONE) {
+			(*item).second->joystick_right.valueY = -1;
+		}
+		else if (value > 32767 - DEAD_ZONE) {
+			(*item).second->joystick_right.valueY = 1;
+		}
+		else if (value > -DEAD_ZONE && value < DEAD_ZONE) {
+			(*item).second->joystick_right.valueY = 0;
+		}
+		else {
+			(*item).second->joystick_right.valueY = value / 32767;
+		}
+
+		value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTX);
+		if (value < -32767 + DEAD_ZONE) {
+			(*item).second->joystick_left.valueX = -1;
+		}
+		else if (value > 32767 - DEAD_ZONE) {
+			(*item).second->joystick_left.valueX = 1;
+		}
+		else if (value > -DEAD_ZONE && value < DEAD_ZONE) {
+			(*item).second->joystick_left.valueX = 0;
+		}
+		else {
+			(*item).second->joystick_left.valueX = value / 32767;
+		}
+
+		value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTY);
+		if (value < -32767 + DEAD_ZONE) {
+			(*item).second->joystick_left.valueY = -1;
+		}
+		else if (value > 32767 - DEAD_ZONE) {
+			(*item).second->joystick_left.valueY = 1;
+		}
+		else if (value > -DEAD_ZONE && value < DEAD_ZONE) {
+			(*item).second->joystick_left.valueY = 0;
+		}
+		else {
+			(*item).second->joystick_left.valueY = value / 32767;
+		}
 	}
 
 	mouse_x_motion = mouse_y_motion = 0;
