@@ -65,4 +65,6 @@ private:
 
 	Color material_color;
 
+	uint bytes_moved = 0;
+
 };

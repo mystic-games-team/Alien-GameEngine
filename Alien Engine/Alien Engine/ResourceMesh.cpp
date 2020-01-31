@@ -57,7 +57,7 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 	bytes = name.size();
 	memcpy(cursor, name.c_str(), bytes);
 	cursor += bytes;
-
+	//////////////
 	if (texture != nullptr) {
 		bytes = sizeof(u64);
 		memcpy(cursor, &texture->GetID(), bytes);
@@ -116,8 +116,6 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 
 bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 {
-	bool ret = true;
-
 	meta_data_path = std::string(meta_file_path);
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_file_path));
 
@@ -125,43 +123,71 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 	uint size = App->file_system->Load(meta_data_path.data(), &data);
 
 	if (size > 0) {
+		char* cursor = data;
 
+		uint ranges[9];
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		num_index = ranges[0];
+		num_vertex = ranges[1];
+		num_faces = ranges[2];
+		family_number = ranges[3];
+
+		char* p_name = new char[ranges[7] + 1];
+		bytes = sizeof(char) * ranges[7];
+		memcpy(p_name, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+		p_name[ranges[7]] = '\0';
+		parent_name = std::string(p_name);
+		delete[] p_name;
+
+		char* m_name = new char[ranges[8] + 1];
+		bytes = sizeof(char) * ranges[8];
+		memcpy(m_name, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+		m_name[ranges[8]] = '\0';
+		name = std::string(m_name);
+		delete[] m_name;
+
+		// texture
+		if (ranges[6]) {
+			bytes = sizeof(u64);
+			memcpy(&texture_id, cursor, bytes);
+			cursor += bytes;
+			bytes_moved += bytes;
+		}
+
+		bytes = sizeof(float) * 4;
+		memcpy(&material_color, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		bytes = sizeof(float) * 3;
+		memcpy(&pos, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		bytes = sizeof(float) * 3;
+		memcpy(&rot, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		bytes = sizeof(float) * 3;
+		memcpy(&scale, cursor, bytes);
+		cursor += bytes;
+		bytes_moved += bytes;
+
+		App->resources->AddResource(this);
+		delete[] data;
 	}
 	else {
 		return false;
 	}
-
-	JSON_Value* value = json_parse_file(meta_data_path.data());
-	JSON_Object* object = json_value_get_object(value);
-
-	if (value != nullptr && object != nullptr)
-	{
-		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
-		// names
-		parent_name = meta->GetString("Mesh.ParentName");
-		name = meta->GetString("Mesh.Name");
-		family_number = meta->GetNumber("Mesh.FamilyNumber");
-		// texture path
-		bool has_texture = meta->GetBoolean("Mesh.HasTexture");
-		if (has_texture) {
-			texture_id = std::stoull(meta->GetString("Mesh.Texture"));
-		}
-		material_color = meta->GetColor("Mesh.MatColor");
-		// transformations
-		// pos
-		pos = meta->GetFloat3("Mesh.Position");
-		// scale
-		scale = meta->GetFloat3("Mesh.Scale");
-		// rot
-		rot = meta->GetQuat("Mesh.Rotation");
-		delete meta;
-		App->resources->AddResource(this);
-	}
-	else {
-		ret = false;
-	}
-
-	return ret;
 }
 
 void ResourceMesh::FreeMemory()
