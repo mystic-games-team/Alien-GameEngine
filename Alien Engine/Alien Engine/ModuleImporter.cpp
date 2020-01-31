@@ -259,25 +259,6 @@ ResourceMesh* ModuleImporter::LoadNodeMesh(const aiScene * scene, const aiNode* 
 	std::string normal_path = path.C_Str();
 	App->file_system->NormalizePath(normal_path);
 	ret->texture = App->resources->GetTextureByName(normal_path.data());
-
-	//// get local transformations
-	//aiVector3D translation, scaling;
-	//aiQuaternion rotation;
-	//// local pos, rot & scale
-	//node->mTransformation.Decompose(scaling, rotation, translation);
-
-	//// set the scale in value of 1 but keeping the dimensions
-	////float max_ = max(scaling.x, scaling.y);
-	////max_ = max(max_, scaling.z);
-
-	//float3 pos(translation.x, translation.y, translation.z);
-	////float3 scale(scaling.x / max_, scaling.y / max_, scaling.z / max_);
-	//float3 scale(scaling.x, scaling.y, scaling.z);
-	//Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
-
-	//ret->pos = pos;
-	//ret->scale = scale;
-	//ret->rot = rot;
 	ret->name = std::string(node->mName.C_Str());
 
 	return ret;
@@ -307,14 +288,14 @@ ResourceTexture* ModuleImporter::LoadTextureFile(const char* path, bool has_been
 		return texture;
 	}
 	else {
-		/*texture = new ResourceTexture(path);
+		texture = new ResourceTexture(path);
 
 		texture->CreateMetaData();
 		App->resources->AddNewFileNode(path, true);
 
 		if (has_been_dropped && !App->objects->GetSelectedObjects().empty()) {
 			ApplyTextureToSelectedObject(texture);
-		}*/
+		}
 	}
 	
 	return texture;
