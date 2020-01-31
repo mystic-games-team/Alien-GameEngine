@@ -240,59 +240,98 @@ void ResourceMesh::FreeMemory()
 
 bool ResourceMesh::LoadMemory()
 {	
-	JSON_Value* value = json_parse_file(meta_data_path.data());
-	JSON_Object* object = json_value_get_object(value);
+	char* data = nullptr;
+	uint size = App->file_system->Load(meta_data_path.data(), &data);
 
-	if (value != nullptr && object != nullptr)
-	{
-		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
+	if (size > 0) {
+		char* cursor = data;
 
-		// ranges
-		num_vertex = meta->GetNumber("Mesh.NumVertex");
-		num_index = meta->GetNumber("Mesh.NumIndex");
-		num_faces = meta->GetNumber("Mesh.NumFaces");
+		uint ranges[9];
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes_moved;
 
-		// vertex
-		vertex = meta->GetNumberArray("Mesh.Vertex");
+		num_index = ranges[0];
+		num_vertex = ranges[1];
+		num_faces = ranges[2];
 
-		// index
-		index = meta->GetUintArray("Mesh.Index");
+		bytes = sizeof(float) * num_vertex * 3;
+		vertex = new float[num_vertex * 3];
+		memcpy(vertex, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(uint) * num_index;
+		index = new uint[num_index];
+		memcpy(index, cursor, bytes);
+		cursor += bytes;
 
 		// normals
-		bool has_normals = meta->GetBoolean("Mesh.HasNormals");
+		if (ranges[4]) {
+			bytes = sizeof(float) * num_vertex * 3;
+			normals = new float[num_vertex * 3];
+			memcpy(normals, cursor, bytes);
+			cursor += bytes;
 
-		if (has_normals) {
-			// normals
-			normals = meta->GetNumberArray("Mesh.Normals");
+			bytes = sizeof(float) * num_faces * 3;
+			center_point = new float[num_faces * 3];
+			memcpy(center_point, cursor, bytes);
+			cursor += bytes;
 
-			// center point
-			center_point = meta->GetNumberArray("Mesh.CenterPoint");
-
-			// center point normal
-			center_point_normal = meta->GetNumberArray("Mesh.CenterPointNormals");
+			bytes = sizeof(float) * num_faces * 3;
+			center_point_normal = new float[num_faces * 3];
+			memcpy(center_point_normal, cursor, bytes);
+			cursor += bytes;
 		}
 
 		// uv
-		bool has_uv = meta->GetBoolean("Mesh.HasUV");
-
-		if (has_uv) {
-			uv_cords = meta->GetNumberArray("Mesh.UV");
+		if (ranges[5]) {
+			bytes = sizeof(float) * num_vertex * 3;
+			uv_cords = new float[num_vertex * 3];
+			memcpy(uv_cords, cursor, bytes);
 		}
 
 		if (texture_id != 0) {
 			texture = (ResourceTexture*)App->resources->GetResourceWithID(texture_id);
 		}
 
-		if (num_vertex != 0)
+		if (num_vertex != 0) {
 			InitBuffers();
+		}
 
-		delete meta;
+		return true;
 	}
 	else {
-		LOG_ENGINE("Error loading %s", meta_data_path.data());
+		return false;
 	}
 
-	return true;
+	JSONfilepack* meta;
+
+	// vertex
+	vertex = meta->GetNumberArray("Mesh.Vertex");
+
+	// index
+	index = meta->GetUintArray("Mesh.Index");
+
+	// normals
+	bool has_normals = meta->GetBoolean("Mesh.HasNormals");
+
+	if (has_normals) {
+		// normals
+		normals = meta->GetNumberArray("Mesh.Normals");
+
+		// center point
+		center_point = meta->GetNumberArray("Mesh.CenterPoint");
+
+		// center point normal
+		center_point_normal = meta->GetNumberArray("Mesh.CenterPointNormals");
+	}
+
+	// uv
+	bool has_uv = meta->GetBoolean("Mesh.HasUV");
+
+	if (has_uv) {
+		uv_cords = meta->GetNumberArray("Mesh.UV");
+	}
 }
 
 bool ResourceMesh::DeleteMetaData()
