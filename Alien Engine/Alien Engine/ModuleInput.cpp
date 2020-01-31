@@ -110,6 +110,25 @@ update_status ModuleInput::PreUpdate(float dt)
 				mouse_buttons[i] = KEY_IDLE;
 		}
 	}
+	
+	auto item = game_pads.begin();
+	for (; item != game_pads.end(); ++item) {
+		for (uint i = 0; i < MAX_GAMPAD_BUTTONS; ++i)
+		{
+			if ((*item).second != nullptr) {
+				if ((*item).second->controller_buttons[i] == KEY_DOWN) {
+					(*item).second->controller_buttons[i] = KEY_REPEAT;
+				}
+				if ((*item).second->controller_buttons[i] == KEY_UP) {
+					(*item).second->controller_buttons[i] = KEY_IDLE;
+				}
+			}
+		}
+		(*item).second->joystick_right.valueX = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_RIGHTX);
+		(*item).second->joystick_right.valueY = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_RIGHTY);
+		(*item).second->joystick_left.valueX = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTX);
+		(*item).second->joystick_left.valueY = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTY);
+	}
 
 	mouse_x_motion = mouse_y_motion = 0;
 
@@ -154,6 +173,26 @@ update_status ModuleInput::PreUpdate(float dt)
 		case SDL_WINDOWEVENT: {
 			if (e.window.event == SDL_WINDOWEVENT_RESIZED)
 				App->renderer3D->OnResize(e.window.data1, e.window.data2);
+			break; }
+		case SDL_CONTROLLERAXISMOTION: {
+			if (e.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT && e.caxis.value > DEAD_ZONE) {
+				game_pads[e.cdevice.which + 1]->controller_buttons[CONTROLLER_BUTTON_RIGHTTRIGGER] = KEY_DOWN;
+			}
+			if (e.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT && e.caxis.value < DEAD_ZONE) {
+				game_pads[e.cdevice.which + 1]->controller_buttons[CONTROLLER_BUTTON_RIGHTTRIGGER] = KEY_UP;
+			}
+			if (e.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT && e.caxis.value > DEAD_ZONE) {
+				game_pads[e.cdevice.which + 1]->controller_buttons[CONTROLLER_BUTTON_LEFTTRIGGER] = KEY_DOWN;
+			}
+			if (e.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT && e.caxis.value < DEAD_ZONE) {
+				game_pads[e.cdevice.which + 1]->controller_buttons[CONTROLLER_BUTTON_LEFTTRIGGER] = KEY_UP;
+			}
+			break; }
+		case SDL_CONTROLLERBUTTONUP: {
+			game_pads[e.cdevice.which + 1]->controller_buttons[e.cbutton.button] = KEY_UP;
+			break; }
+		case SDL_CONTROLLERBUTTONDOWN: {
+			game_pads[e.cdevice.which + 1]->controller_buttons[e.cbutton.button] = KEY_DOWN;
 			break; }
 		case SDL_CONTROLLERDEVICEADDED: {
 			SDL_GameController* controller = SDL_GameControllerOpen(e.cdevice.which);

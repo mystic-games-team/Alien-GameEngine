@@ -8,8 +8,11 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <map>
 
+#define DEAD_ZONE 10000 // 0 - 32767
 #define MAX_MOUSE_BUTTONS 5
-#define MAX_GAMPAD_BUTTONS 14
+#define MAX_GAMPAD_BUTTONS 17
+#define CONTROLLER_BUTTON_LEFTTRIGGER 15
+#define CONTROLLER_BUTTON_RIGHTTRIGGER 16
 
 enum KEY_STATE
 {
@@ -23,7 +26,6 @@ struct GamePad {
 	struct Joystick {
 		float valueX = 0;
 		float valueY = 0;
-		KEY_STATE state = KEY_IDLE;
 	};
 	int number = 0;
 	Joystick joystick_left;
