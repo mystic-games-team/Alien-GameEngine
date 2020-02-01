@@ -8,7 +8,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <map>
 
-#define DEAD_ZONE 4000 // 0 - 32767
+#define DEAD_ZONE 1000 // 0 - 32767
 #define MAX_MOUSE_BUTTONS 5
 #define MAX_GAMPAD_BUTTONS 17
 #define CONTROLLER_BUTTON_LEFTTRIGGER 15
@@ -50,6 +50,19 @@ public:
 	KEY_STATE GetKey(int id) const
 	{
 		return keyboard[id];
+	}
+
+	KEY_STATE GetControllerButton(int controller_index, int button)
+	{
+		return (IsControllerActive(controller_index)) ? game_pads[controller_index]->controller_buttons[button] : KEY_IDLE;
+	}
+
+	// strength 0 - 1 duration 1000 = 1s
+	void PlayRumble(int controller_index, float strength, float duration)
+	{
+		if (IsControllerActive(controller_index)) {
+			SDL_HapticRumblePlay(game_pads[controller_index]->haptic, strength, duration);
+		}
 	}
 
 	KEY_STATE GetMouseButton(int id) const

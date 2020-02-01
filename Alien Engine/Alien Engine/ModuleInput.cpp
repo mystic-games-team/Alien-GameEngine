@@ -135,7 +135,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			(*item).second->joystick_right.valueX = 0;
 		}
 		else {
-			(*item).second->joystick_right.valueX = value / 32767;
+			(*item).second->joystick_right.valueX = (value - ((value > 0) ? DEAD_ZONE : -DEAD_ZONE)) / (32767 - 3 * DEAD_ZONE);
 		}
 
 		value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_RIGHTY);
@@ -148,8 +148,8 @@ update_status ModuleInput::PreUpdate(float dt)
 		else if (value > -DEAD_ZONE && value < DEAD_ZONE) {
 			(*item).second->joystick_right.valueY = 0;
 		}
-		else {
-			(*item).second->joystick_right.valueY = value / 32767;
+		else { // (value - DEAD_ZONE) / (32767 - 3*DEAD_ZONE);
+			(*item).second->joystick_right.valueY = (value - ((value > 0) ? DEAD_ZONE : -DEAD_ZONE)) / (32767 - 3 * DEAD_ZONE);
 		}
 
 		value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTX);
@@ -163,7 +163,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			(*item).second->joystick_left.valueX = 0;
 		}
 		else {
-			(*item).second->joystick_left.valueX = value / 32767;
+			(*item).second->joystick_left.valueX = (value - ((value > 0) ? DEAD_ZONE : -DEAD_ZONE)) / (32767 - 3 * DEAD_ZONE);
 		}
 
 		value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTY);
@@ -177,7 +177,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			(*item).second->joystick_left.valueY = 0;
 		}
 		else {
-			(*item).second->joystick_left.valueY = value / 32767;
+			(*item).second->joystick_left.valueY = (value - ((value > 0) ? DEAD_ZONE : -DEAD_ZONE)) / (32767 - 3 * DEAD_ZONE);
 		}
 	}
 
@@ -240,7 +240,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			}
 			break; }
 		case SDL_CONTROLLERBUTTONUP: {
-			game_pads[e.cdevice.which + 1]->controller_buttons[e.cbutton.button] = KEY_UP;
+			game_pads[e.cdevice.which + 1]->controller_buttons[e.cbutton.button] = KEY_UP; 
 			break; }
 		case SDL_CONTROLLERBUTTONDOWN: {
 			game_pads[e.cdevice.which + 1]->controller_buttons[e.cbutton.button] = KEY_DOWN;

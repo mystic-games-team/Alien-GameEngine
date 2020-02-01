@@ -14,6 +14,26 @@ public:
 		KEY_UP
 	};
 
+	enum CONTROLLER_BUTTONS {
+		CONTROLLER_BUTTON_A,
+		CONTROLLER_BUTTON_B,
+		CONTROLLER_BUTTON_X,
+		CONTROLLER_BUTTON_Y,
+		CONTROLLER_BUTTON_BACK,
+		CONTROLLER_BUTTON_GUIDE,
+		CONTROLLER_BUTTON_START,
+		CONTROLLER_BUTTON_LEFTSTICK,
+		CONTROLLER_BUTTON_RIGHTSTICK,
+		CONTROLLER_BUTTON_LEFTSHOULDER,
+		CONTROLLER_BUTTON_RIGHTSHOULDER,
+		CONTROLLER_BUTTON_DPAD_UP,
+		CONTROLLER_BUTTON_DPAD_DOWN,
+		CONTROLLER_BUTTON_DPAD_LEFT,
+		CONTROLLER_BUTTON_DPAD_RIGHT,
+		CONTROLLER_BUTTON_LEFTTRIGGER,
+		CONTROLLER_BUTTON_RIGHTRIGGER
+	};
+
 	enum MOUSE_BUTTONS {
 		MOUSE_LEFT_BUTTON = 1,
 		MOUSE_MIDDLE_BUTTON = 2,
@@ -21,6 +41,7 @@ public:
 	};
 
 	/*----------KEYBOARD--------------*/
+	static KEY_STATE GetKey(const SDL_Scancode& code);
 	static bool GetKeyDown(const SDL_Scancode& code);
 	static bool GetKeyIdle(const SDL_Scancode& code);
 	static bool GetKeyUp(const SDL_Scancode& code);
@@ -44,9 +65,15 @@ public:
 
 	/*----------CONTROLLER--------------*/
 	static float GetControllerHoritzontalLeftAxis(int controller_index);
+	static float GetControllerVerticalLeftAxis(int controller_index);
+	static float GetControllerHoritzontalRightAxis(int controller_index);
+	static float GetControllerVerticalRightAxis(int controller_index);
+	static KEY_STATE GetControllerButton(int controller_index, const CONTROLLER_BUTTONS& code);
+	static bool GetControllerButtonDown(int controller_index, const CONTROLLER_BUTTONS& code);
+	static bool GetControllerButtonIdle(int controller_index, const CONTROLLER_BUTTONS& code);
+	static bool GetControllerButtonUp(int controller_index, const CONTROLLER_BUTTONS& code);
+	static bool GetControllerButtonRepeat(int controller_index, const CONTROLLER_BUTTONS& code);
 	/*----------CONTROLLER--------------*/
-
-	// TOOD: mouse pos relative to the panel game texture
 
 private:
 

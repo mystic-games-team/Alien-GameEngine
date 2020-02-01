@@ -2,6 +2,11 @@
 #include "Application.h"
 #include "PanelGame.h"
 
+KEY_STATE Input::GetKey(const SDL_Scancode& code)
+{
+	return App->input->GetKey(code);
+}
+
 bool Input::GetKeyDown(const SDL_Scancode& code)
 {
 	return IsInputAvailable() && App->input->GetKey(code) == KEY_DOWN;
@@ -102,6 +107,46 @@ bool Input::GetMouseButtonRepeat(const MOUSE_BUTTONS& button)
 float Input::GetControllerHoritzontalLeftAxis(int controller_index)
 {
 	return (!App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->joystick_left.valueX);
+}
+
+float Input::GetControllerVerticalLeftAxis(int controller_index)
+{
+	return (!App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->joystick_left.valueY);
+}
+
+float Input::GetControllerHoritzontalRightAxis(int controller_index)
+{
+	return (!App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->joystick_right.valueX);
+}
+
+float Input::GetControllerVerticalRightAxis(int controller_index)
+{
+	return (!App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->joystick_right.valueY);
+}
+
+KEY_STATE Input::GetControllerButton(int controller_index, const CONTROLLER_BUTTONS& code)
+{
+	return App->input->GetControllerButton(controller_index, code);
+}
+
+bool Input::GetControllerButtonDown(int controller_index, const CONTROLLER_BUTTONS& code)
+{
+	return App->input->GetControllerButton(controller_index, code) == KEY_DOWN;
+}
+
+bool Input::GetControllerButtonIdle(int controller_index, const CONTROLLER_BUTTONS& code)
+{
+	return App->input->GetControllerButton(controller_index, code) == KEY_IDLE;
+}
+
+bool Input::GetControllerButtonUp(int controller_index, const CONTROLLER_BUTTONS& code)
+{
+	return App->input->GetControllerButton(controller_index, code) == KEY_UP;
+}
+
+bool Input::GetControllerButtonRepeat(int controller_index, const CONTROLLER_BUTTONS& code)
+{
+	return App->input->GetControllerButton(controller_index, code) == KEY_REPEAT;
 }
 
 bool Input::IsInputAvailable()
