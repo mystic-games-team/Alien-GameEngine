@@ -1,0 +1,9 @@
+{
+    "HasData": true,
+    "DataStructure": [
+        {
+            "DataName": "TestMove",
+            "UsesAlien": true
+        }
+    ]
+}

@@ -314,6 +314,17 @@ bool ModuleInput::CleanUp()
 	return true;
 }
 
+bool ModuleInput::IsControllerActive(int controller_index)
+{
+	auto item = game_pads.begin();
+	for (; item != game_pads.end(); ++item) {
+		if ((*item).second != nullptr && (*item).second->number == controller_index) {
+			return true;
+		}
+	}
+	return false;
+}
+
 float3 ModuleInput::GetMousePosition()
 {
 	return float3(mouse_x, mouse_y, mouse_z);

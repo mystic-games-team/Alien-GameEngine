@@ -99,6 +99,11 @@ bool Input::GetMouseButtonRepeat(const MOUSE_BUTTONS& button)
 	return IsInputAvailable() && App->input->GetMouseButton(button) == KEY_REPEAT;
 }
 
+float Input::GetControllerHoritzontalLeftAxis(int controller_index)
+{
+	return (!App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->joystick_left.valueX);
+}
+
 bool Input::IsInputAvailable()
 {
 #ifndef GAME_VERSION

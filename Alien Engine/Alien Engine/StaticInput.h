@@ -42,6 +42,10 @@ public:
 	static bool GetMouseButtonRepeat(const MOUSE_BUTTONS& button);
 	/*----------MOUSE--------------*/
 
+	/*----------CONTROLLER--------------*/
+	static float GetControllerHoritzontalLeftAxis(int controller_index);
+	/*----------CONTROLLER--------------*/
+
 	// TOOD: mouse pos relative to the panel game texture
 
 private:

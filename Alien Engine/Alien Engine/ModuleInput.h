@@ -8,7 +8,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <map>
 
-#define DEAD_ZONE 10000 // 0 - 32767
+#define DEAD_ZONE 4000 // 0 - 32767
 #define MAX_MOUSE_BUTTONS 5
 #define MAX_GAMPAD_BUTTONS 17
 #define CONTROLLER_BUTTON_LEFTTRIGGER 15
@@ -87,6 +87,7 @@ public:
 	bool IsMousePressed() const {
 		return mouse_pressed;
 	}
+	bool IsControllerActive(int controller_index);
 
 	float3 GetMousePosition();
 private:
@@ -101,11 +102,10 @@ private:
 	int mouse_z;
 	int mouse_x_motion;
 	int mouse_y_motion;
-	std::map<int, GamePad*> game_pads;
 	SDL_Scancode first_key_pressed = SDL_SCANCODE_UNKNOWN;
 	bool mouse_pressed = false;
 public:
 
 	ImGuiTextBuffer input;
-
+	std::map<int, GamePad*> game_pads;
 };
