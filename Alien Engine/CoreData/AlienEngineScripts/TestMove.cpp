@@ -25,6 +25,9 @@ void TestMove::Update()
 	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTONS::CONTROLLER_BUTTON_LEFTTRIGGER)) {
 		Y = 1;
 	}
+	if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTONS::CONTROLLER_BUTTON_LEFTSTICK)) {
+		Input::DoRumble(1, 0.8, 2000);
+	}
 	transform->SetLocalPosition(transform->GetLocalPosition() + float3{velocity * Time::GetDT() * X, 0, velocity * Time::GetDT() * Y });
 
 }

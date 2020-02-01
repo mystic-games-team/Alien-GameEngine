@@ -149,6 +149,11 @@ bool Input::GetControllerButtonRepeat(int controller_index, const CONTROLLER_BUT
 	return App->input->GetControllerButton(controller_index, code) == KEY_REPEAT;
 }
 
+void Input::DoRumble(int controller_index, float strength, float duration)
+{
+	App->input->PlayRumble(controller_index, strength, duration);
+}
+
 bool Input::IsInputAvailable()
 {
 #ifndef GAME_VERSION

@@ -73,6 +73,7 @@ public:
 	static bool GetControllerButtonIdle(int controller_index, const CONTROLLER_BUTTONS& code);
 	static bool GetControllerButtonUp(int controller_index, const CONTROLLER_BUTTONS& code);
 	static bool GetControllerButtonRepeat(int controller_index, const CONTROLLER_BUTTONS& code);
+	static void DoRumble(int controller_index, float strength, float duration);
 	/*----------CONTROLLER--------------*/
 
 private:
