@@ -9,6 +9,9 @@ public:
 
 	DataAlienTypeName();
 	virtual ~DataAlienTypeName();
+	
+	void Start();
+	void Update();
 
 };
 

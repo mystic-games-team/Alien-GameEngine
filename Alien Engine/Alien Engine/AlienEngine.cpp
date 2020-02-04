@@ -14,5 +14,7 @@ void AlienEngine::OpenURL(const char* website)
 
 void AlienEngine::QuitApp()
 {
+#ifdef GAME_VERSION
 	App->QuitApp();
+#endif
 }

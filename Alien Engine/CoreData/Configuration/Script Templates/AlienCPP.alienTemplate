@@ -7,3 +7,11 @@ DataAlienTypeName::DataAlienTypeName() : Alien()
 DataAlienTypeName::~DataAlienTypeName()
 {
 }
+
+void DataAlienTypeName::Start()
+{
+}
+
+void DataAlienTypeName::Update()
+{
+}
