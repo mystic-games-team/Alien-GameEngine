@@ -1,6 +1,8 @@
 #ifndef __TIME_H__
 #define __TIME_H__
 
+#include <string>
+
 class Timer;
 
 class __declspec(dllexport) Time {
@@ -45,6 +47,7 @@ private:
 	static float time_since_start;
 	static float game_time;
 	static float scale_time;
+
 
 public:
 

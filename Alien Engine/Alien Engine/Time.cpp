@@ -4,6 +4,8 @@
 #include "PanelConsole.h"
 #include "ModuleObjects.h"
 #include "PanelGame.h"
+#include "ResourceScene.h"
+#include "Resource_.h"
 #include "PanelScene.h"
 
 Time::GameState Time::state = Time::GameState::NONE;
@@ -31,8 +33,10 @@ void Time::Update()
 
 void Time::Play()
 {
+	static std::string actual_scene_name;
 	if (state == GameState::NONE) {
 #ifndef GAME_VERSION
+		actual_scene_name = (App->objects->current_scene != nullptr) ? App->objects->current_scene->GetName() : std::string();
 		App->objects->SaveScene(nullptr, "Library/play_scene.alienScene");
 		App->objects->ignore_cntrlZ = true;
 		if (App->ui->panel_console->clear_on_play) {
@@ -62,6 +66,12 @@ void Time::Play()
 		remove("Library/play_scene.alienScene");
 #ifndef GAME_VERSION
 		App->objects->errors = false;
+		if (!actual_scene_name.empty()) {
+			ResourceScene* scene = App->resources->GetSceneByName(actual_scene_name.data());
+			if (scene != nullptr) {
+				App->objects->current_scene = scene;
+			}
+		}
 		App->ui->panel_console->game_console = false;
 		ImGui::SetWindowFocus(App->ui->panel_scene->GetPanelName().data());
 #endif
