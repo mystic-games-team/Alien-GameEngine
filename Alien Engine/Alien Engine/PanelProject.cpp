@@ -233,6 +233,12 @@ void PanelProject::SeeFiles()
 					break;
 			}
 
+			if (ImGui::IsItemHovered()) {
+				ImGui::BeginTooltip();
+				ImGui::Text(current_active_folder->children[i]->name.data());
+				ImGui::EndTooltip();
+			}
+
 			// right click in file/folder
 			RightClickInFileOrFolder(i, pop_up_item);
 

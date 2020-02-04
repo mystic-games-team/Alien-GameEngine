@@ -106,22 +106,22 @@ bool Input::GetMouseButtonRepeat(const MOUSE_BUTTONS& button)
 
 float Input::GetControllerHoritzontalLeftAxis(int controller_index)
 {
-	return (!App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->joystick_left.valueX);
+	return (!App->input->IsControllerActive(controller_index) ? 0.0f : -App->input->game_pads[controller_index]->joystick_left.valueX);
 }
 
 float Input::GetControllerVerticalLeftAxis(int controller_index)
 {
-	return (!App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->joystick_left.valueY);
+	return (!App->input->IsControllerActive(controller_index) ? 0.0f : -App->input->game_pads[controller_index]->joystick_left.valueY);
 }
 
 float Input::GetControllerHoritzontalRightAxis(int controller_index)
 {
-	return (!App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->joystick_right.valueX);
+	return (!App->input->IsControllerActive(controller_index) ? 0.0f : -App->input->game_pads[controller_index]->joystick_right.valueX);
 }
 
 float Input::GetControllerVerticalRightAxis(int controller_index)
 {
-	return (!App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->joystick_right.valueY);
+	return (!App->input->IsControllerActive(controller_index) ? 0.0f : -App->input->game_pads[controller_index]->joystick_right.valueY);
 }
 
 KEY_STATE Input::GetControllerButton(int controller_index, const CONTROLLER_BUTTONS& code)
