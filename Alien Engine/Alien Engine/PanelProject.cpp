@@ -258,7 +258,7 @@ void PanelProject::SeeFiles()
 			// go into a folder
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && current_active_file != nullptr && !current_active_file->is_file) {
 				change_folder = true;
-				current_active_folder->children[i]->set_open = true;
+				current_active_folder->set_open = true;
 			}
 
 			ImGui::NewLine();
