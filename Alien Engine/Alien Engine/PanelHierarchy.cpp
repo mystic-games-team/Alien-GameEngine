@@ -283,7 +283,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, { (float)222 / 255,(float)100 / 255,1,1 });
 	bool is_tree_open = ImGui::TreeNodeEx(node->GetName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | 
 		ImGuiTreeNodeFlags_OpenOnDoubleClick | (node->IsSelected() ? ImGuiTreeNodeFlags_Selected : 0) | 
-		(node->children.empty() ? ImGuiTreeNodeFlags_Leaf : 0), (!node->IsEnabled() || !node->IsParentEnabled()));
+		(node->children.empty() ? ImGuiTreeNodeFlags_Leaf : 0), (!node->IsEnabled() || !node->IsUpWardsEnabled()));
 	if (node->IsPrefab() && node->FindPrefabRoot() != node)
 		ImGui::PopStyleColor();
 	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(0)) {

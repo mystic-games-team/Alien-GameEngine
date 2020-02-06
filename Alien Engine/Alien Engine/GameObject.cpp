@@ -924,6 +924,18 @@ bool GameObject::IsParentEnabled() const
 	return parent_enabled;
 }
 
+bool GameObject::IsUpWardsEnabled() const
+{
+	GameObject* to_look = parent;
+	while (to_look != nullptr) {
+		if (!to_look->enabled) {
+			return false;
+		}
+		to_look = to_look->parent;
+	}
+	return true;
+}
+
 void GameObject::Destroy(GameObject* object)
 {
 	object->ToDelete();

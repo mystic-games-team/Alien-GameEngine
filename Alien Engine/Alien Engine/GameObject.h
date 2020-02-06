@@ -166,6 +166,7 @@ private:
 	// enabling
 	void SayChildrenParentIsEnabled(const bool& enabled);
 	bool IsParentEnabled() const;
+	bool IsUpWardsEnabled() const;
 
 	// flip poly if scale negative
 	void ScaleNegative(const bool& is_negative);
